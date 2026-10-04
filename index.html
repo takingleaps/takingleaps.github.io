@@ -1,164 +1,320 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="color-scheme" content="light dark" />
-  <link rel="icon" href="data:," />
-  <title>Boiler Room LA · Sunday</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&amp;family=Source+Sans+3:wght@400;500;600&amp;display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg:#0c0c0b;
-      --surface:#151512;
-      --surface-raised:#1c1b17;
-      --text:#f7f3e9;
-      --muted:#b7b2a7;
-      --line:#35332d;
-      --line-strong:#565248;
-      --accent:#e2a43f;
-      --accent-ink:#161109;
-      --success:#a9c9a1;
-      --shadow:0 16px 34px rgba(0,0,0,.28);
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg:#f4f1e9;
-        --surface:#ebe6da;
-        --surface-raised:#fffdf7;
-        --text:#171611;
-        --muted:#635f56;
-        --line:#d0c8b9;
-        --line-strong:#9f9789;
-        --accent:#b66e10;
-        --accent-ink:#fffaf0;
-        --success:#3f7040;
-        --shadow:0 16px 34px rgba(50,40,20,.12);
-      }
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--bg)}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:"Source Sans 3","Helvetica Neue",sans-serif;font-size:16px;line-height:1.55;overflow-x:hidden}
-    button,a{font:inherit;color:inherit} button{cursor:pointer} a{text-underline-offset:4px}
-    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-    ::selection{background:var(--accent);color:var(--accent-ink)}
-    main{width:min(1180px,100%);margin:0 auto;padding:0 clamp(20px,5vw,64px) 96px}
-    .topbar{position:sticky;top:0;z-index:30;margin-inline:calc(clamp(20px,5vw,64px) * -1);padding:0 clamp(20px,5vw,64px);background:color-mix(in srgb,var(--bg) 94%,transparent);border-bottom:1px solid var(--line)}
-    .nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:480px;margin-left:auto}
-    .nav a{min-height:52px;display:grid;place-items:center;padding:0 10px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:600}
-    .nav a:hover,.nav a:active{color:var(--text)}
-    .intro{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:64px;align-items:end;padding:clamp(72px,11vw,132px) 0 64px;border-bottom:1px solid var(--line)}
-    h1,h2,h3{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:600}
-    h1{max-width:760px;margin:0;font-size:clamp(56px,8vw,96px);line-height:.92;letter-spacing:-.02em;text-transform:uppercase;text-wrap:balance}
-    h1 span{display:block;color:var(--accent)}
-    .intro-copy{max-width:58ch;margin:26px 0 0;color:var(--muted);font-size:18px;line-height:1.6}
-    .event-facts{display:grid;gap:0;margin:0}.event-facts div{display:grid;grid-template-columns:72px 1fr;gap:16px;padding:13px 0;border-top:1px solid var(--line)}.event-facts div:last-child{border-bottom:1px solid var(--line)}.event-facts dt{color:var(--muted);font-size:13px}.event-facts dd{margin:0;font-weight:600}
-    section{padding:72px 0;border-bottom:1px solid var(--line);scroll-margin-top:68px}
-    .section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,420px);gap:40px;align-items:end;margin-bottom:36px}
-    .section-head h2{margin:0;font-size:clamp(42px,6vw,64px);line-height:1;letter-spacing:-.01em;text-transform:uppercase}
-    .section-head p{margin:0;color:var(--muted);max-width:50ch}
-    .actions{display:flex;gap:8px;justify-content:flex-end}
-    .quiet-button,.pick-button,.stage-tab{min-height:48px;border:1px solid var(--line-strong);background:transparent;color:var(--text);padding:0 16px;font-weight:600}
-    .quiet-button:hover,.pick-button:hover,.stage-tab:hover{border-color:var(--accent)}
-    .quiet-button:disabled{opacity:.35;cursor:default}.quiet-button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-    .empty{padding:28px 0;color:var(--muted);border-top:1px solid var(--line)}.empty strong{display:block;margin-bottom:6px;color:var(--text);font-size:18px}
-    .plan-list{border-top:1px solid var(--line)}
-    .plan-row{display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
-    .plan-row time{color:var(--accent);font-variant-numeric:tabular-nums;font-weight:600}.plan-row div{display:grid;gap:3px}.plan-row strong{font-size:19px}.plan-row span{color:var(--muted);font-size:14px}.clash{color:var(--accent);font-size:12px;font-weight:600;text-transform:uppercase}.clear{color:var(--success);font-size:12px;font-weight:600;text-transform:uppercase}
-    .stage-tabs{display:none;gap:8px;margin-bottom:22px}.stage-tab{flex:1}.stage-tab[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
-    .schedule-shell{position:relative;background:var(--surface);border:1px solid var(--line-strong);box-shadow:var(--shadow)}
-    .schedule-shell::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,transparent 0,transparent 47px,color-mix(in srgb,var(--line) 45%,transparent) 48px);background-size:100% 48px;opacity:.28}
-    .schedule{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line-strong)}
-    .stage{min-width:0;background:var(--surface)}
-    .stage-head{position:sticky;top:52px;z-index:8;min-height:82px;padding:17px 18px 15px;background:var(--accent);color:var(--accent-ink);border-bottom:1px solid var(--line-strong)}
-    .stage-head strong{display:block;font-family:"Barlow Condensed",sans-serif;font-size:24px;line-height:1;text-transform:uppercase}
-    .stage-head span{display:block;margin-top:7px;font-size:12px;font-weight:600}
-    .slots{padding:0 18px 24px}
-    .slot{position:relative;padding:20px 0 24px;border-bottom:1px solid var(--line)}
-    .slot:last-child{border-bottom:0}
-    .slot.picked{margin-inline:-18px;padding-inline:18px;background:color-mix(in srgb,var(--accent) 10%,transparent)}
-    .slot-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start}
-    .stage-label{display:block;margin:0 0 7px;color:var(--accent);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
-    .slot h3{margin:0;font-family:"Barlow Condensed",sans-serif;font-size:28px;line-height:1;text-transform:uppercase}
-    .genre{display:block;margin-top:8px;color:var(--muted);font-size:13px;line-height:1.35}
-    .pick-button{min-width:72px;padding-inline:12px}
-    .pick-button.selected{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-    .preview{position:relative;aspect-ratio:16/9;margin-top:16px;overflow:hidden;background:var(--surface-raised);border:1px solid var(--line)}
-    .preview iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--surface-raised)}
-    .preview-fallback{position:absolute;inset:0;display:grid;place-items:center;padding:22px;text-align:center;text-decoration:none;color:var(--text);background:linear-gradient(150deg,var(--surface-raised),var(--surface))}
-    .preview-fallback span{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 10px;border:1px solid var(--line-strong);border-radius:50%;font-size:13px}
-    .preview-fallback strong{display:block;font-size:14px}.preview-fallback small{display:block;margin-top:4px;color:var(--muted)}
-    .preview-link{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;color:var(--muted);font-size:13px}
-    .preview-link:hover{color:var(--text)}
-    .no-video{display:grid;align-content:center;min-height:144px;padding:20px}.no-video strong{font-size:15px}.no-video span{margin-top:6px;color:var(--muted);font-size:13px}.no-video a{margin-top:16px;font-weight:600}
-    .venue{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:64px;align-items:end}.venue h2{margin:0 0 20px;font-size:clamp(42px,6vw,64px);line-height:1;text-transform:uppercase}.venue h3{max-width:600px;margin:0;font-size:clamp(30px,4vw,46px);line-height:1.1}.venue address{margin-top:22px;color:var(--muted);font-style:normal}.venue-links{display:grid;gap:10px}.venue-links a{min-height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border:1px solid var(--line-strong);text-decoration:none;font-weight:600}.venue-links a:first-child{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-    footer{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:32px 0 max(32px,env(safe-area-inset-bottom));color:var(--muted);font-size:14px}footer a{min-height:48px;display:flex;align-items:center;color:var(--text)}
-    .toast{position:fixed;z-index:80;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);min-width:min(280px,calc(100vw - 40px));padding:13px 18px;background:var(--accent);color:var(--accent-ink);text-align:center;font-weight:600;box-shadow:var(--shadow)}
-    @media(max-width:900px){.intro{grid-template-columns:1fr;gap:40px}.event-facts{max-width:480px}.section-head{grid-template-columns:1fr}.actions{justify-content:flex-start}.stage-tabs{display:flex}.schedule{grid-template-columns:1fr;background:var(--surface)}.stage{display:none}.stage.active{display:block}.stage-head{top:52px}.slots{padding-inline:clamp(18px,5vw,34px)}.slot.picked{margin-inline:calc(clamp(18px,5vw,34px) * -1);padding-inline:clamp(18px,5vw,34px)}.preview{max-width:640px}.venue{grid-template-columns:1fr;gap:36px}.venue-links{max-width:480px}}
-    @media(max-width:560px){main{padding-inline:20px;padding-bottom:48px}.topbar{margin-inline:-20px;padding:0 12px;background:var(--surface)}.nav{max-width:none}.nav a{min-height:58px;font-size:12px}.intro{padding:56px 0 48px}.intro-copy{font-size:17px}.event-facts div{grid-template-columns:64px 1fr}.section-head{margin-bottom:28px}.section-head h2{font-size:46px}section{padding:56px 0;scroll-margin-top:58px}.plan-row{grid-template-columns:1fr auto;gap:4px 12px}.plan-row time,.plan-row div{grid-column:1}.plan-row .clash,.plan-row .clear{grid-column:2;grid-row:1 / span 2;align-self:center}.stage-tabs{display:grid;grid-template-columns:1fr}.stage-tab{text-align:left}.schedule-shell{margin-inline:-20px;border-inline:0}.stage-head{top:58px;padding-inline:20px}.slots{padding-inline:20px}.slot.picked{margin-inline:-20px;padding-inline:20px}.slot h3{font-size:30px}.preview{margin-top:18px}.venue h3{font-size:34px}footer{align-items:flex-start;flex-direction:column}}
-    @media(max-width:360px){.actions{display:grid;grid-template-columns:1fr 1fr}.quiet-button{width:100%}.slot-top{grid-template-columns:1fr}.pick-button{width:100%}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="description" content="Byyy Studios — festival companion apps. Niteharts '26 live now, Escape Halloween '26 in the works." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 44'%3E%3Crect x='6' y='24' width='8' height='14' fill='%23f5f5f0'/%3E%3Crect x='18' y='16' width='8' height='22' fill='%23f5f5f0'/%3E%3Crect x='30' y='8' width='8' height='30' fill='%23d4f636'/%3E%3Crect x='42' y='20' width='8' height='18' fill='%23f5f5f0'/%3E%3C/svg%3E" />
+<title>Byyy Studios — Festival Apps</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BS4ZWP2X07"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-BS4ZWP2X07');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=Syne+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0a0a0a; --panel:#141412; --panel-2:#1a1a17;
+  --ink:#f5f5f0; --muted:#9a9a92; --faint:#6b6b64;
+  --line:#262624; --line-soft:#1c1c1a;
+  --volt:#d4f636; --volt-dim:rgba(212,246,54,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Syne",system-ui,sans-serif;font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--volt);color:#0a0a0a}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--volt);outline-offset:3px}
+img{display:block;max-width:100%}
+
+/* ---------- loader ---------- */
+#loader{position:fixed;inset:0;z-index:200;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  cursor:pointer;transition:transform .55s cubic-bezier(.7,0,.3,1)}
+#loader.done{transform:translateY(-101%)}
+#loader.done::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--volt)}
+#loader .mark{width:104px;height:auto;overflow:visible}
+#loader .bar{fill:var(--ink);transform:scaleY(0);transform-origin:50% 100%;
+  animation:barup .5s cubic-bezier(.2,.9,.3,1.2) forwards}
+#loader .bar.v{fill:var(--volt)}
+#loader .b1{animation-delay:.05s}#loader .b2{animation-delay:.15s}
+#loader .b3{animation-delay:.25s}#loader .b4{animation-delay:.35s}
+#loader .dot{fill:var(--volt);opacity:0;animation:dotin .4s ease .75s forwards}
+@keyframes barup{to{transform:scaleY(1)}}
+@keyframes dotin{to{opacity:1}}
+#loader .word{font-family:"Syne Mono",monospace;font-size:15px;letter-spacing:.55em;
+  text-indent:.55em;color:var(--ink);opacity:0;animation:wordin .6s ease .55s forwards}
+#loader .sub{font-family:"Syne Mono",monospace;font-size:10px;letter-spacing:.35em;
+  text-indent:.35em;color:var(--faint);opacity:0;animation:wordin .6s ease .8s forwards}
+@keyframes wordin{from{opacity:0;letter-spacing:.8em}to{opacity:1}}
+#loader .skip{position:absolute;bottom:34px;font-family:"Syne Mono",monospace;
+  font-size:11px;letter-spacing:.25em;color:var(--faint)}
+
+/* ---------- shell ---------- */
+.wrap{width:min(1200px,100%);margin:0 auto;padding:0 clamp(20px,5vw,56px)}
+header.site{display:flex;align-items:center;justify-content:space-between;
+  padding:22px 0;border-bottom:1px solid var(--line-soft)}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand svg{width:34px;height:auto}
+.brand b{font-family:"Syne Mono",monospace;font-weight:400;font-size:13px;letter-spacing:.3em}
+.site nav{display:flex;align-items:center;gap:26px}
+.site nav a{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.2em;
+  text-decoration:none;color:var(--muted);min-height:44px;display:inline-flex;align-items:center}
+.site nav a:hover{color:var(--volt)}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(64px,9vw,110px) 0 clamp(8px,1vw,12px)}
+.eyebrow{font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.3em;
+  color:var(--volt);margin:0 0 22px}
+.hero h1{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
+  font-size:clamp(58px,8.6vw,112px);line-height:.9;letter-spacing:.005em;margin:0}
+.hero h1 .row{display:block}
+.hero p.lede{margin:26px 0 0;max-width:46ch;color:var(--muted);font-size:17px}
+.hero p.lede strong{color:var(--ink);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;
+  border-top:1px solid var(--line);margin-top:clamp(36px,4vw,54px);padding:28px 0 6px}
+.stat .n{font-family:"Teko",sans-serif;font-size:52px;line-height:1;color:var(--ink)}
+.stat .n em{font-style:normal;color:var(--volt)}
+.stat .l{font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--muted);margin-top:6px}
+
+/* ---------- ticker ---------- */
+.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  overflow:hidden;white-space:nowrap;padding:13px 0;background:var(--bg)}
+.ticker .track{display:inline-block;animation:tick 30s linear infinite;
+  font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.28em;color:var(--muted)}
+.ticker .track b{color:var(--ink);font-weight:400}
+.ticker .track i{font-style:normal;color:var(--volt);padding:0 18px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- festival cards ---------- */
+.fests{padding:clamp(56px,7vw,96px) 0}
+.fests-head{display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:34px}
+.fests-head h2{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
+  font-size:clamp(40px,5.5vw,64px);line-height:1;margin:0}
+.fests-head span{font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.25em;color:var(--faint)}
+
+.card-live{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  background:var(--panel);border:1px solid var(--line);text-decoration:none;
+  transition:border-color .25s ease,transform .25s ease}
+.card-live:hover{border-color:var(--volt);transform:translateY(-3px)}
+.card-media{background:#000;display:flex;align-items:center;justify-content:center;
+  padding:clamp(36px,5vw,72px);border-right:1px solid var(--line);overflow:hidden}
+.card-media figure{margin:0;display:grid;gap:24px;justify-items:center}
+.card-media img{width:min(340px,80%);height:auto;transition:transform .4s ease}
+.card-live:hover .card-media img{transform:scale(1.04)}
+.card-media figcaption{font-family:"Syne Mono",monospace;font-size:10px;
+  letter-spacing:.3em;color:var(--faint);text-align:center}
+.card-body{padding:clamp(28px,4vw,52px)}
+.tag{display:inline-block;font-family:"Syne Mono",monospace;font-size:11px;
+  letter-spacing:.25em;color:#0a0a0a;background:var(--volt);padding:7px 12px;margin-bottom:20px}
+.card-body h3{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
+  font-size:clamp(48px,6vw,84px);line-height:.9;margin:0 0 10px}
+.card-meta{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.14em;
+  color:var(--muted);margin:0 0 6px}
+.card-meta b{color:var(--ink);font-weight:400}
+.feats{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:11px}
+.feats li{display:flex;gap:12px;align-items:baseline;color:var(--muted);font-size:15px}
+.feats li::before{content:"";flex:none;width:8px;height:8px;background:var(--volt);
+  transform:translateY(-1px)}
+.cta{display:inline-flex;align-items:center;gap:12px;margin-top:30px;
+  font-family:"Syne Mono",monospace;font-size:13px;letter-spacing:.22em;color:var(--ink)}
+.cta .arr{display:inline-grid;place-items:center;width:44px;height:44px;
+  border:1px solid var(--line);color:var(--volt);font-size:18px;
+  transition:background .25s ease,color .25s ease,border-color .25s ease}
+.card-live:hover .cta .arr{background:var(--volt);border-color:var(--volt);color:#0a0a0a}
+
+.card-soon{margin-top:28px;margin-left:auto;width:min(560px,100%);
+  border:1px dashed #3a3a36;background:transparent;padding:clamp(24px,3.5vw,40px);
+  display:grid;gap:16px;opacity:.92}
+.card-soon .tag{background:transparent;color:var(--muted);border:1px solid #3a3a36;
+  padding:6px 11px;margin:0;justify-self:start}
+.card-soon img{width:min(300px,72%);height:auto;filter:grayscale(1) brightness(.85)}
+.card-soon h3{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
+  font-size:clamp(38px,4.5vw,56px);line-height:.95;margin:0;color:var(--ink)}
+.card-soon p{margin:0;color:var(--muted);font-size:15px;max-width:38ch}
+.card-soon .eta{font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.25em;color:var(--faint)}
+
+/* ---------- includes ---------- */
+.includes{border-top:1px solid var(--line);padding:clamp(48px,6vw,80px) 0}
+.includes h2{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
+  font-size:clamp(34px,4.5vw,52px);line-height:1;margin:0 0 30px}
+.includes h2 span{color:var(--volt)}
+.inc-list{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line-soft);
+  border:1px solid var(--line-soft)}
+.inc-list li{background:var(--bg);padding:20px 22px;display:flex;gap:14px;align-items:baseline}
+.inc-list li::before{content:"";flex:none;width:9px;height:9px;background:var(--volt)}
+.inc-list b{display:block;font-weight:600;font-size:16px}
+.inc-list span{color:var(--muted);font-size:14px}
+
+/* ---------- footer ---------- */
+footer.site{border-top:1px solid var(--line);margin-top:0;
+  padding:34px 0 max(34px,env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer.site .fbrand{display:flex;align-items:center;gap:10px;
+  font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.25em;color:var(--muted)}
+footer.site .fbrand svg{width:26px;height:auto}
+footer.site a.mail{font-family:"Syne Mono",monospace;font-size:13px;letter-spacing:.08em;
+  color:var(--ink);text-decoration:none;border-bottom:1px solid var(--volt);padding-bottom:2px}
+footer.site a.mail:hover{color:var(--volt)}
+footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.2em;color:var(--faint)}
+
+@media(max-width:860px){
+  .fests-head{flex-direction:column;align-items:flex-start;gap:8px}
+  .card-live{grid-template-columns:1fr}
+  .card-media{border-right:0;border-bottom:1px solid var(--line)}
+  .card-soon{margin-left:0;width:100%}
+  .inc-list{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  #loader .bar,#loader .dot,#loader .word,#loader .sub{animation:none;opacity:1;transform:none}
+  .ticker .track{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
 </head>
 <body>
-<main>
-  <div class="topbar"><nav class="nav" aria-label="Event sections"><a href="#lineup">My lineup</a><a href="#timetable">Timetable</a><a href="#venue">Map</a></nav></div>
-  <header class="intro">
-    <div><h1>Boiler Room:<span>LA Sunday</span></h1><p class="intro-copy">Scan the official stage schedule, play a set under each artist, and pick your route for the day.</p></div>
-    <dl class="event-facts"><div><dt>Date</dt><dd>Sun, Sep 27</dd></div><div><dt>Hours</dt><dd>3:00–11:00 PM</dd></div><div><dt>Venue</dt><dd>El Pueblo, LA</dd></div><div><dt>Entry</dt><dd>21+</dd></div><div><dt>Set times</dt><dd>Official</dd></div></dl>
+
+<div id="loader" role="button" tabindex="0" aria-label="Skip intro">
+  <svg class="mark" viewBox="0 0 64 48" aria-hidden="true">
+    <rect class="bar b1" x="6"  y="26" width="8" height="14"/>
+    <rect class="bar b2" x="18" y="18" width="8" height="22"/>
+    <rect class="bar b3 v" x="30" y="10" width="8" height="30"/>
+    <rect class="bar b4" x="42" y="22" width="8" height="18"/>
+    <rect class="dot" x="31" y="1" width="6" height="6"/>
+  </svg>
+  <div class="word">BYYY STUDIOS</div>
+  <div class="sub">FESTIVAL TRANSMISSIONS</div>
+  <div class="skip">TAP TO SKIP</div>
+</div>
+
+<div class="wrap">
+  <header class="site">
+    <a class="brand" href="/" aria-label="Byyy Studios home">
+      <svg viewBox="0 0 64 48" aria-hidden="true">
+        <rect x="6" y="26" width="8" height="14" fill="#f5f5f0"/>
+        <rect x="18" y="18" width="8" height="22" fill="#f5f5f0"/>
+        <rect x="30" y="10" width="8" height="30" fill="#d4f636"/>
+        <rect x="42" y="22" width="8" height="18" fill="#f5f5f0"/>
+        <rect x="31" y="1" width="6" height="6" fill="#d4f636"/>
+      </svg>
+      <b>BYYY STUDIOS</b>
+    </a>
+    <nav aria-label="Site">
+      <a href="#festivals">FESTIVALS</a>
+      <a href="mailto:nathanltwong@gmail.com">CONTACT</a>
+    </nav>
   </header>
-  <section id="lineup"><div class="section-head"><div><h2>My lineup</h2></div><div class="actions"><button class="quiet-button primary" id="copyPlan" disabled>Copy lineup</button><button class="quiet-button" id="clearPlan" disabled>Clear</button></div></div><div id="planArea" class="empty"><strong>No sets picked yet.</strong><span>Pick artists directly from the timetable below.</span></div></section>
-  <section id="timetable"><div class="section-head"><h2>Official timetable</h2><p>Three stages, official PDT set times, and a playable set under every verified artist.</p></div><div class="stage-tabs" id="stageTabs" role="group" aria-label="Choose stage"></div><div class="schedule-shell"><div class="schedule" id="schedule"></div></div></section>
-  <section id="venue"><div class="venue"><div><h2>Venue</h2><h3>El Pueblo De Los Angeles Historical Monument</h3><address>125 Paseo De La Plaza<br>Los Angeles, CA 90012</address></div><div class="venue-links"><a href="https://www.google.com/maps/search/?api=1&amp;query=El%20Pueblo%20De%20Los%20Angeles%20Historical%20Monument%2C%20125%20Paseo%20De%20La%20Plaza%2C%20Los%20Angeles%2C%20CA%2090012" target="_blank" rel="noopener noreferrer">Open in maps</a><a href="https://www.google.com/maps/dir/?api=1&amp;destination=El%20Pueblo%20De%20Los%20Angeles%20Historical%20Monument%2C%20125%20Paseo%20De%20La%20Plaza%2C%20Los%20Angeles%2C%20CA%2090012" target="_blank" rel="noopener noreferrer">Get directions</a></div></div></section>
-  <footer><span>Boiler Room LA · Sunday · 21+</span><a href="https://dice.fm/event/q2w9m9-boiler-room-la-sunday-27th-sep-el-pueblo-de-los-angeles-historical-monument-los-angeles-tickets" target="_blank" rel="noopener noreferrer">DICE event</a></footer>
-</main>
-<div class="toast" id="toast" role="status" hidden></div>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">BYYY STUDIOS &middot; LIVE BUILDS</p>
+      <h1><span class="row">Festival apps,</span><span class="row">built for the floor.</span></h1>
+      <p class="lede">Companion apps for the weekends that matter &mdash; real set times, lineup planners, and artist previews, <strong>designed around each festival</strong> instead of a generic template.</p>
+      <div class="stats" aria-label="Build status">
+        <div class="stat"><div class="n">01<em>&thinsp;LIVE</em></div><div class="l">NITEHARTS &rsquo;26</div></div>
+        <div class="stat"><div class="n">01<em>&thinsp;SOON</em></div><div class="l">ESCAPE HALLOWEEN &rsquo;26</div></div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="track" id="tickerTrack"></div>
+    </div>
+
+    <section class="fests" id="festivals">
+      <div class="fests-head">
+        <h2>The festivals</h2>
+        <span>01 LIVE &middot; 01 IN THE WORKS</span>
+      </div>
+
+      <a class="card-live" href="/niteharts/" aria-label="Open the Niteharts 26 companion app">
+        <div class="card-media">
+          <figure>
+            <img src="niteharts/assets/brand/niteharts-logo.png" alt="Niteharts '26 festival logo" width="1250" height="199" />
+            <figcaption>OFFICIAL FESTIVAL IDENTITY &middot; OCT 9&ndash;11</figcaption>
+          </figure>
+        </div>
+        <div class="card-body">
+          <span class="tag">LIVE NOW</span>
+          <h3>Niteharts &rsquo;26</h3>
+          <p class="card-meta"><b>OCT 9&ndash;11</b> &middot; SNAPDRAGON STADIUM, SAN DIEGO</p>
+          <p class="card-meta">ISOXO &amp; KNOCK2&rsquo;S FESTIVAL</p>
+          <ul class="feats">
+            <li>Full 3-day set times across every stage</li>
+            <li>One-tap artist previews</li>
+            <li>Lineup planner with clash detection</li>
+            <li>Shareable lineup links for your crew</li>
+          </ul>
+          <span class="cta"><span class="arr" aria-hidden="true">&rarr;</span> OPEN THE APP</span>
+        </div>
+      </a>
+
+      <div class="card-soon" aria-label="Escape Halloween 26, in the works">
+        <span class="tag">IN THE WORKS</span>
+        <img src="escape-logo.png" alt="Escape Halloween festival logo" width="728" height="240" />
+        <h3>Escape Halloween &rsquo;26</h3>
+        <p>Same treatment, new haunt. The companion app is being built &mdash; set times, previews, and planner, all in the signature style.</p>
+        <span class="eta">NOT LIVE YET &middot; NO LINK &middot; CHECK BACK</span>
+      </div>
+    </section>
+
+    <section class="includes">
+      <h2>Every build <span>ships with</span></h2>
+      <ul class="inc-list">
+        <li><div><b>Real set times</b><span>Every stage, every day &mdash; no screenshots needed.</span></div></li>
+        <li><div><b>Artist previews</b><span>One tap to hear what the undercard sounds like.</span></div></li>
+        <li><div><b>Lineup planner</b><span>Build your weekend, spot the clashes before they happen.</span></div></li>
+        <li><div><b>Shareable links</b><span>One link sends your whole plan to the group chat.</span></div></li>
+        <li><div><b>Venue intel</b><span>Maps and the practical stuff, in your pocket.</span></div></li>
+        <li><div><b>Festival branding</b><span>Designed around the event, never a template.</span></div></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site">
+    <span class="fbrand">
+      <svg viewBox="0 0 64 48" aria-hidden="true">
+        <rect x="6" y="26" width="8" height="14" fill="#9a9a92"/>
+        <rect x="18" y="18" width="8" height="22" fill="#9a9a92"/>
+        <rect x="30" y="10" width="8" height="30" fill="#9a9a92"/>
+        <rect x="42" y="22" width="8" height="18" fill="#9a9a92"/>
+      </svg>
+      &copy; 2026 BYYY STUDIOS
+    </span>
+    <a class="mail" href="mailto:nathanltwong@gmail.com">nathanltwong@gmail.com</a>
+    <span class="dms">DMs ARE OPEN</span>
+  </footer>
+</div>
+
 <script>
 (function(){
-var stages=[{id:'stage-one',name:'Teletech Stage One',short:'Techno · trance · hard dance'},{id:'stage-two',name:'Teletech Stage Two',short:'Techno · trance · hard dance'},{id:'street',name:'Street Party Stage',short:'House · Afro · club'}];
-var artists=[
-['desa-deca','Desa Deca','stage-one','15:00','16:30','Trance · techno · rave',['trance','hard'],'No verified clip. Open the artist profile for more music.','Artist profile','https://ra.co/dj/desadeca',0],
-['strawbry','STRAWBRY','stage-one','16:30','18:00','Euphoric breakbeat · house',['house'],'Breakbeat warmth, house lift and LA after-hours energy.','STRAWBRY · Electric Cleaners Mix EC112','https://www.youtube.com/watch?v=c4g2aDZ9jhc',1],
-['hannah-laing','Hannah Laing','stage-one','18:00','19:00','Hard dance · techno · rave',['hard','trance'],'Clubland hooks pushed through hard-dance drums.','Hannah Laing · Hï Ibiza Club Room 2025','https://www.youtube.com/watch?v=w_WXFQ59r34',1],
-['natte-visstick','NATTE VISSTICK','stage-one','19:00','20:00','Hard dance · schranz · jumpstyle',['hard'],'Fast, chaotic and knowingly playful hard dance.','Natte Visstick · 4 The People Pt. 2','https://www.youtube.com/watch?v=3AJeUCEVPrk',1],
-['jowi','Jowi','stage-one','20:00','21:00','Hard techno · industrial · rave',['hard'],'Fast, groove-heavy techno with industrial weight.','JOWI · Full Set at Audiodrome Club 2026','https://www.youtube.com/watch?v=6owNLbZo0Xs',1],
-['jazzy-irl','JAZZY','stage-one','21:00','22:00','Hard techno · industrial',['hard'],'High-pressure hard techno built for Teletech-scale rooms.','JAZZY · Full Set at Audiodrome Club 2026','https://www.youtube.com/watch?v=8NRFVThm0ao',1],
-['vieze-asbak','Vieze Asbak','stage-one','22:00','23:00','Industrial hard techno · 160+ BPM',['hard'],'Distorted kicks and dark, fast Dutch rave pressure.','Vieze Asbak · Gotec Club 90-minute set','https://www.youtube.com/watch?v=6u94qTncfGw',1],
-['canary-yellow','Canary Yellow','stage-two','15:00','16:30','House · disco · techno',['house'],'A left-field Los Angeles selector moving across the underground spectrum.','Villager with Canary Yellow · Afters Club','https://www.youtube.com/watch?v=jbX8nocGvs8',1],
-['shankz','SHANKZ','stage-two','16:30','18:00','House · techno',['house'],'No verified clip. Open the artist profile for more music.','Artist profile','https://ra.co/dj/shankz',0],
-['faster-horses','Faster Horses','stage-two','18:00','19:30','Trance-techno · bounce',['trance','hard'],'Euphoric trance lift at hard-techno speed.','Faster Horses · Mixmag Lab London','https://www.youtube.com/watch?v=MfQnbHgdDaQ',1],
-['emilija','EMILIJA','stage-two','19:30','21:00','Eurodance · trance · techno',['trance'],'Bright eurodance hooks, trance lift and fast club momentum.','EMILIJA b2b Odymel · Paradise City 2025','https://www.youtube.com/watch?v=A0gOcUGnQvI',1],
-['tdj','TDJ','stage-two','21:00','22:00','Trance · eurodance · club',['trance'],'A bright, emotional trance lane with pop instincts.','TDJ · Boiler Room x Igloofest 2023','https://www.youtube.com/watch?v=COzUk-x_hK8',1],
-['azyr','Azyr','stage-two','22:00','23:00','Hard techno · high-speed rave',['hard'],'Full-throttle Teletech pressure with almost no release valve.','AZYR · Boiler Room x Teletech Festival 2023','https://www.youtube.com/watch?v=UJ6oBCM2GUM',1],
-['starrza','STARRZA','street','15:00','17:00','Afrohouse · amapiano · R&B',['house'],'Afro-fusion selections shaped as a full-room story.','The Magic Hour · STARRZA Afro-Fusion DJ Set','https://www.youtube.com/watch?v=ki_i-QQjhbU',1],
-['kitty-amor','Kitty Amor','street','17:00','18:00','Afro-house · Afro-tech',['house'],'Deep, melodic Afro-house with big-room lift.','Kitty Amor · Sunrise Afro House Set','https://www.youtube.com/watch?v=4zduqaa43dE',1],
-['coco-breezy','Coco & Breezy','street','18:00','19:30','House · R&B · Afro-Latino',['house'],'Uplifting house with soulful vocals and Afro-Latino rhythm.','Coco & Breezy · Live from Defected HQ','https://www.youtube.com/watch?v=qwVq2xVl-BY',1],
-['honeyluv','HoneyLuv','street','19:30','20:30','House · tech house',['house'],'Groove-led, bass-driven house built for a packed floor.','HoneyLuv · Live Mix from ANTS, Ushuaïa Ibiza 2026','https://www.youtube.com/watch?v=sLtNC21myWM',1],
-['floorplan','Floorplan','street','20:30','21:30','Gospel house · techno',['house'],"Robert Hood's soulful, high-impact house and techno project.",'Floorplan · Boiler Room x Dekmantel Festival','https://www.youtube.com/watch?v=4CEo4XvM6Oc',1],
-['kenny-dope','Kenny Dope','street','21:30','23:00','House · disco · Latin groove',['house'],'Masters At Work legend with New York swing and deep crates.','Kenny Dope Gonzalez · Boiler Room London','https://www.youtube.com/watch?v=cwENwGqTukE',1]
-].map(function(x){return{id:x[0],name:x[1],stage:x[2],start:x[3],end:x[4],genre:x[5],tags:x[6],note:x[7],setTitle:x[8],url:x[9],video:!!x[10]}});
-var selected=new Set(),activeStage='stage-one',toastTimer,embedObserver;
-function esc(v){return String(v).replace(/[&<>\"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function stageFor(id){return stages.find(function(s){return s.id===id})}
-function minutes(value){var p=value.split(':');return Number(p[0])*60+Number(p[1])}
-function clock(value){var p=value.split(':'),hour=Number(p[0]),suffix=hour>=12?'PM':'AM';return ((hour+11)%12+1)+':'+p[1]+' '+suffix}
-function ordered(){return artists.filter(function(a){return selected.has(a.id)}).sort(function(a,b){return minutes(a.start)-minutes(b.start)||stages.findIndex(function(s){return s.id===a.stage})-stages.findIndex(function(s){return s.id===b.stage})})}
-function clashes(list){var bad=new Set();for(var i=0;i<list.length;i++){for(var j=i+1;j<list.length;j++){if(list[i].stage!==list[j].stage&&minutes(list[i].start)<minutes(list[j].end)&&minutes(list[j].start)<minutes(list[i].end)){bad.add(list[i].id);bad.add(list[j].id)}}}return bad}
-function youtubeId(url){var match=String(url).match(/[?&]v=([^&#]+)/);return match?match[1]:''}
-function pickButton(a){var on=selected.has(a.id);return '<button class="pick-button'+(on?' selected':'')+'" data-pick="'+a.id+'" aria-pressed="'+on+'" aria-label="'+(on?'Remove ':'Add ')+esc(a.name)+(on?' from':' to')+' my lineup">'+(on?'Picked':'Pick')+'</button>'}
-function previewFor(a){var id=youtubeId(a.url);if(!a.video||!id){return '<div class="preview no-video"><strong>No verified set video</strong><span>Use the artist profile to hear more.</span><a href="'+a.url+'" target="_blank" rel="noopener noreferrer">Open artist profile</a></div>'}var embed='https://www.youtube-nocookie.com/embed/'+id+'?rel=0';return '<div class="preview"><a class="preview-fallback" href="'+a.url+'" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">PLAY</span><strong>'+esc(a.setTitle)+'</strong><small>Open on YouTube</small></a><iframe data-src="'+embed+'" title="'+esc(a.setTitle)+'" loading="lazy" sandbox="allow-scripts allow-same-origin allow-presentation" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><a class="preview-link" href="'+a.url+'" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>'}
-function showToast(text){var t=document.getElementById('toast');t.textContent=text;t.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.hidden=true},1600)}
-function renderPlan(){var list=ordered(),bad=clashes(list),area=document.getElementById('planArea');document.getElementById('copyPlan').disabled=!list.length;document.getElementById('clearPlan').disabled=!list.length;if(!list.length){area.className='empty';area.innerHTML='<strong>No sets picked yet.</strong><span>Pick artists directly from the timetable below.</span>';return}area.className='plan-list';area.innerHTML=list.map(function(a){return '<article class="plan-row"><time>'+clock(a.start)+'–'+clock(a.end)+'</time><div><strong>'+esc(a.name)+'</strong><span>'+esc(stageFor(a.stage).name)+'</span></div><span class="'+(bad.has(a.id)?'clash':'clear')+'">'+(bad.has(a.id)?'Clash':'Clear')+'</span></article>'}).join('')}
-function mountEmbeds(){if(embedObserver){embedObserver.disconnect()}var frames=document.querySelectorAll('iframe[data-src]');if(!('IntersectionObserver' in window)){frames.forEach(function(frame){frame.src=frame.dataset.src});return}embedObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var frame=entry.target;frame.src=frame.dataset.src;frame.removeAttribute('data-src');embedObserver.unobserve(frame)}})},{rootMargin:'280px 0px'});frames.forEach(function(frame){embedObserver.observe(frame)})}
-function renderSchedule(){document.getElementById('stageTabs').innerHTML=stages.map(function(s){return '<button class="stage-tab" data-stage="'+s.id+'" aria-pressed="'+(activeStage===s.id)+'">'+s.name+'</button>'}).join('');document.getElementById('schedule').innerHTML=stages.map(function(s){return '<div class="stage'+(activeStage===s.id?' active':'')+'" aria-label="'+esc(s.name)+'"><header class="stage-head"><strong>'+esc(s.name)+'</strong><span>'+esc(s.short)+'</span></header><div class="slots">'+artists.filter(function(a){return a.stage===s.id}).map(function(a){return '<article class="slot'+(selected.has(a.id)?' picked':'')+'"><div class="slot-top"><div><time class="stage-label">'+clock(a.start)+'–'+clock(a.end)+'</time><h3>'+esc(a.name)+'</h3><span class="genre">'+esc(a.genre)+'</span></div>'+pickButton(a)+'</div>'+previewFor(a)+'</article>'}).join('')+'</div></div>'}).join('');mountEmbeds()}
-function render(){renderPlan();renderSchedule()}
-document.addEventListener('click',function(e){var p=e.target.closest('[data-pick]');if(p){var id=p.dataset.pick;if(selected.has(id)){selected.delete(id);showToast('Removed from lineup')}else{selected.add(id);showToast('Added to lineup')}render();return}var s=e.target.closest('[data-stage]');if(s){activeStage=s.dataset.stage;renderSchedule()}});
-document.getElementById('clearPlan').addEventListener('click',function(){selected.clear();render();showToast('Lineup cleared')});
-document.getElementById('copyPlan').addEventListener('click',function(){var text=['Boiler Room LA · Sunday lineup'].concat(ordered().map(function(a){return a.start+'–'+a.end+' · '+a.name+' · '+stageFor(a.stage).name})).join('\n');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){showToast('Lineup copied')})}});
-render();
+  "use strict";
+  /* ticker content (doubled for the seamless loop) */
+  var items = "NITEHARTS '26 <i>\u2014</i> OCT 9\u201311 <i>\u2014</i> SNAPDRAGON STADIUM <i>\u2014</i> <b>LIVE NOW</b> <i>\u2014</i> ESCAPE HALLOWEEN '26 <i>\u2014</i> IN THE WORKS <i>\u2014</i> ";
+  var t = document.getElementById('tickerTrack');
+  t.innerHTML = items + items;
+
+  /* loader */
+  var loader = document.getElementById('loader');
+  var done = false;
+  function dismiss(){
+    if(done) return; done = true;
+    loader.classList.add('done');
+    setTimeout(function(){ loader.style.display = 'none'; }, 650);
+  }
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ dismiss(); }
+  else{
+    setTimeout(dismiss, 2100);          /* auto: under 2.5s */
+    setTimeout(dismiss, 4000);          /* failsafe */
+    loader.addEventListener('click', dismiss);
+    loader.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); dismiss(); }
+    });
+  }
 })();
 </script>
 </body>
