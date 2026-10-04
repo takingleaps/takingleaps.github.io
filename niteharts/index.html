@@ -14,7 +14,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#191919" />
-  <link rel="icon" href="data:," />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -343,7 +345,6 @@
     #nh-arcade { position: relative; margin: 0 auto; max-width: 720px; padding: 28px 16px 40px; text-align: center; }
     #nh-arcade h2 { font-size: 22px; letter-spacing: 3px; color: #fff; margin: 0 0 4px; }
     #nh-arcade .nh-arcade-sub { color: #8fd8ff; font-size: 13px; letter-spacing: 1px; margin-bottom: 14px; }
-    #nh-arcade .nh-arcade-tag { color: rgba(255,255,255,.65); font-size: 14px; margin: -8px 0 14px; font-style: italic; }
     #nh-arcade-wrap { position: relative; border: 1px solid rgba(143,216,255,.25); border-radius: 18px; overflow: hidden; background: #05070c; }
     #nh-arcade-canvas { display: block; width: 100%; height: 340px; touch-action: none; cursor: pointer; }
     #nh-arcade-hud { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; pointer-events: none; }
@@ -374,7 +375,6 @@
   </style>
   <h2>HEART POP</h2>
   <div class="nh-arcade-sub">NITEHARTS ARCADE · TAP THE HEARTS</div>
-  <div class="nh-arcade-tag">bored waiting between sets? need a dopamine boost?</div>
   <div id="nh-arcade-wrap">
     <canvas id="nh-arcade-canvas"></canvas>
     <div id="nh-arcade-hud">
@@ -1107,7 +1107,7 @@
   <button class="nh-st-close" aria-label="Dismiss">×</button>
   <span class="nh-st-new">NEW</span>
   <div class="nh-st-title"><span class="nh-heart">♥</span> HEART POP</div>
-  <div class="nh-st-sub">TAP TO PLAY ↓</div>
+  <div class="nh-st-sub">bored waiting between sets?<br>need a dopamine boost? lol<br><b>TAP TO PLAY ↓</b></div>
   <script>
   (function () {
     var st = document.getElementById('nh-sticker');
