@@ -391,7 +391,7 @@
     <button id="nh-arcade-mute" aria-label="Toggle sound">SND ON</button>
     <div id="nh-arcade-overlay">
       <p class="nh-big" id="nh-arcade-title">HEART POP</p>
-      <p class="nh-final" id="nh-arcade-msg">Pop the falling sprites in 30 seconds.<br>RED 10 &middot; PINK 20 &middot; STAR 30 &middot; GEM 40 &middot; GOLD 5X</p>
+      <p class="nh-final" id="nh-arcade-msg">Pop the falling hearts in 30 seconds.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X</p>
       <div id="nh-arcade-initials">
         <p class="nh-qual">NEW HIGH SCORE — ENTER INITIALS</p>
         <input id="nh-arcade-name" maxlength="3" placeholder="AAA" autocomplete="off" />
@@ -575,32 +575,11 @@
     '...XXD..',
     '....D...'
   ];
-  var STAR_MAP = [
-    '....X....',
-    '....L....',
-    '...XXX...',
-    'XXXXXXXXX',
-    '.XXXXXXX.',
-    '..XXXXXD.',
-    '..XXXXX..',
-    '.XXX.XXX.',
-    '.DX...XD.'
-  ];
-  var GEM_MAP = [
-    '...XX...',
-    '..XLXX..',
-    '.XLLXXX.',
-    'XXXXXXXX',
-    '.XXXXXD.',
-    '..XXXD..',
-    '...XD...',
-    '........'
-  ];
   var SPRITES = {
-    heart: { map: HEART_MAP, pal: ['#ff3b5c', '#a3122b', '#ff8ba0'], pts: 10, w: 45, freq: 520, label: 'RED 10' },
-    pink:  { map: HEART_MAP, pal: ['#ff7ad9', '#c2439f', '#ffc7ec'], pts: 20, w: 25, freq: 640, label: 'PINK 20' },
-    star:  { map: STAR_MAP,  pal: ['#ffd94a', '#c99420', '#fff3b0'], pts: 30, w: 15, freq: 740, label: 'STAR 30' },
-    gem:   { map: GEM_MAP,   pal: ['#4ad9ff', '#1f7fb8', '#c8f4ff'], pts: 40, w: 10, freq: 840, label: 'GEM 40' },
+    heart: { map: HEART_MAP, pal: ['#241a3a', '#0d0716', '#b14aed'], pts: 10, w: 45, freq: 520, label: 'SHADOW 10' },
+    pink:  { map: HEART_MAP, pal: ['#e01f3d', '#8f0f22', '#ff7a8a'], pts: 20, w: 25, freq: 640, label: 'BLOOD 20' },
+    star:  { map: HEART_MAP, pal: ['#22d3ee', '#0e7fa3', '#b8f4ff'], pts: 30, w: 15, freq: 740, label: 'CYAN 30' },
+    gem:   { map: HEART_MAP, pal: ['#e838d8', '#8f1d86', '#ffb3f0'], pts: 40, w: 10, freq: 840, label: 'TOXIC 40' },
     gold:  { map: HEART_MAP, pal: ['#ffcf3f', '#b57e12', '#fff3b0'], pts: 50, w: 5,  freq: 880, label: 'GOLD 5X', gold: true }
   };
   function drawSprite(sp, x, y, size, t) {
@@ -805,7 +784,7 @@
   }
   function resetOverlayForStart() {
     titleEl.textContent = 'HEART POP';
-    msgEl.innerHTML = 'Pop the falling sprites in 30 seconds.<br>RED 10 &middot; PINK 20 &middot; STAR 30 &middot; GEM 40 &middot; GOLD 5X';
+    msgEl.innerHTML = 'Pop the falling hearts in 30 seconds.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X';
     initialsBox.classList.remove('show');
     var again = document.getElementById('nh-arcade-again');
     if (again) {
