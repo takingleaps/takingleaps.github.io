@@ -1163,6 +1163,7 @@
   var CL_CLOUD = 'metgxwc9';
   var CL_PRESET = 'niteharts-feed';
   var CL_UPLOAD = 'https://api.cloudinary.com/v1_1/' + CL_CLOUD + '/image/upload';
+  var ADMIN_KEY = '373e3457c3a64a4796756a37482f06e1b3576c191eb940f8';
 
   /* ---------- tiny storage helper ---------- */
   function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
@@ -1657,7 +1658,7 @@
         var id = b.getAttribute('data-id');
         if (!id || !confirm('Delete this photo?')) return;
         b.disabled = true;
-        sb('/photos?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: { status: 'rejected' } })
+        sb('/photos?id=eq.' + encodeURIComponent(id), { method: 'PATCH', headers: { 'x-admin-key': ADMIN_KEY }, body: { status: 'rejected' } })
           .then(function () { loadFeed(); })
           .catch(function () { b.disabled = false; });
       });
