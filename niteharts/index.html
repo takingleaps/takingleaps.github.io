@@ -1446,6 +1446,42 @@
       fileInput.value = '';
     });
   }
+  var nsfwModel = null, nsfwLoading = null;
+  function nsfwCheck(canvas) {
+    function loadLibs() {
+      if (nsfwModel) return Promise.resolve();
+      if (nsfwLoading) return nsfwLoading;
+      nsfwLoading = new Promise(function (resolve) {
+        var tf = document.createElement('script');
+        tf.src = 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js';
+        tf.onload = function () {
+          var n = document.createElement('script');
+          n.src = 'https://cdn.jsdelivr.net/npm/nsfwjs@3.0.0/dist/nsfwjs.min.js';
+          n.onload = function () {
+            try { nsfwjs.load().then(function (m) { nsfwModel = m; resolve(); }).catch(function () { resolve(); }); }
+            catch (e) { resolve(); }
+          };
+          n.onerror = function () { resolve(); };
+          document.head.appendChild(n);
+        };
+        tf.onerror = function () { resolve(); };
+        document.head.appendChild(tf);
+      });
+      return nsfwLoading;
+    }
+    return loadLibs().then(function () {
+      if (!nsfwModel) return true;
+      try {
+        return nsfwModel.classify(canvas).then(function (preds) {
+          var bad = 0;
+          (preds || []).forEach(function (p) {
+            if ((p.className === 'Porn' || p.className === 'Hentai') && p.probability > bad) bad = p.probability;
+          });
+          return bad < 0.5;
+        }).catch(function () { return true; });
+      } catch (e) { return true; }
+    });
+  }
   if (postBtn) {
     postBtn.addEventListener('click', function () {
       if (!shotCanvas) return;
@@ -1461,6 +1497,15 @@
       try {
         shotCanvas.toBlob(function (b) {
           if (!b) { fail(); return; }
+          setNote('Checking photo...');
+          nsfwCheck(shotCanvas).then(function (clean) {
+            if (!clean) {
+              setNote("This photo can't be posted — let's keep the feed clean.");
+              postBtn.disabled = false;
+              if (retakeBtn) retakeBtn.disabled = false;
+              return;
+            }
+            setNote('Uploading...');
           var fd = new FormData();
           fd.append('file', b, 'niteharts.jpg');
           fd.append('upload_preset', CL_PRESET);
@@ -1479,6 +1524,7 @@
             postBtn.disabled = false;
             if (retakeBtn) retakeBtn.disabled = false;
           }).catch(function () { fail(); });
+          });
         }, 'image/jpeg', .85);
       } catch (e) { fail(); }
     });
