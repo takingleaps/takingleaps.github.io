@@ -297,6 +297,7 @@
 #nh-lens video{width:100%;height:100%;object-fit:cover;display:block;background:#05070c}
 #nh-lens .lens-off{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;color:var(--mist);font-size:13px;padding:20px}
 #nh-lens .lens-off[hidden]{display:none}
+#nh-lens.lens-live .lens-stage{position:sticky;top:0;z-index:5}
 #nh-lens .lens-off p{margin:0}
 #nh-lens video.mirrored{transform:scaleX(-1)}
 #nh-lens .lens-filters{display:flex;gap:8px;overflow-x:auto;padding:12px 2px;-webkit-overflow-scrolling:touch}
@@ -1314,6 +1315,7 @@
         return video.play().catch(function () {});
       })
       .then(function () {
+        if (lensBox) lensBox.classList.add('lens-live');
         if (lensOff) lensOff.hidden = true;
         if (startBtn) startBtn.hidden = true;
         if (capBtn) capBtn.hidden = false;
@@ -1482,6 +1484,26 @@
     });
   }
   window.addEventListener('pagehide', stopStream);
+  var lensBox = document.getElementById('nh-lens');
+  function lensIdle() {
+    stopStream();
+    if (lensBox) lensBox.classList.remove('lens-live');
+    if (video) { try { video.srcObject = null; } catch (e) {} }
+    if (lensOff) lensOff.hidden = false;
+    if (startBtn) { startBtn.hidden = false; startBtn.disabled = false; }
+    if (capBtn) capBtn.hidden = true;
+    if (flipBtn) flipBtn.hidden = true;
+    if (flashBtn) flashBtn.hidden = true;
+    setNote('');
+  }
+  if (lensBox && 'IntersectionObserver' in window) {
+    var lensSeen = true;
+    new IntersectionObserver(function (entries) {
+      var vis = entries[0].isIntersecting;
+      if (lensSeen && !vis && stream) lensIdle();
+      lensSeen = vis;
+    }, { threshold: 0.05 }).observe(lensBox);
+  }
 
   /* ============================================================
      3. PUBLIC PHOTO FEED
