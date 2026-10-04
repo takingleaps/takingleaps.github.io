@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
 <meta name="description" content="Byyy Studios — festival companion apps. Niteharts '26 live now, Escape Halloween '26 in the works." />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 44'%3E%3Crect x='6' y='24' width='8' height='14' fill='%23f5f5f0'/%3E%3Crect x='18' y='16' width='8' height='22' fill='%23f5f5f0'/%3E%3Crect x='30' y='8' width='8' height='30' fill='%23d4f636'/%3E%3Crect x='42' y='20' width='8' height='18' fill='%23f5f5f0'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 44'%3E%3Crect x='6' y='24' width='8' height='14' fill='%23f5f5f0'/%3E%3Crect x='18' y='16' width='8' height='22' fill='%23f5f5f0'/%3E%3Crect x='30' y='8' width='8' height='30' fill='%23e8a33d'/%3E%3Crect x='42' y='20' width='8' height='18' fill='%23f5f5f0'/%3E%3C/svg%3E" />
 <title>Byyy Studios — Festival Apps</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS4ZWP2X07"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-BS4ZWP2X07');</script>
@@ -17,16 +17,16 @@
   --bg:#0a0a0a; --panel:#141412; --panel-2:#1a1a17;
   --ink:#f5f5f0; --muted:#9a9a92; --faint:#6b6b64;
   --line:#262624; --line-soft:#1c1c1a;
-  --volt:#d4f636; --volt-dim:rgba(212,246,54,.14);
+  --amber:#e8a33d; --amber-dim:rgba(232,163,61,.14);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:"Syne",system-ui,sans-serif;font-size:16px;line-height:1.55;
   -webkit-font-smoothing:antialiased;overflow-x:hidden}
-::selection{background:var(--volt);color:#0a0a0a}
+::selection{background:var(--amber);color:#0a0a0a}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--volt);outline-offset:3px}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 img{display:block;max-width:100%}
 
 /* ---------- loader ---------- */
@@ -34,14 +34,14 @@ img{display:block;max-width:100%}
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
   cursor:pointer;transition:transform .55s cubic-bezier(.7,0,.3,1)}
 #loader.done{transform:translateY(-101%)}
-#loader.done::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--volt)}
+#loader.done::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--amber)}
 #loader .mark{width:104px;height:auto;overflow:visible}
 #loader .bar{fill:var(--ink);transform:scaleY(0);transform-origin:50% 100%;
   animation:barup .5s cubic-bezier(.2,.9,.3,1.2) forwards}
-#loader .bar.v{fill:var(--volt)}
+#loader .bar.v{fill:var(--amber)}
 #loader .b1{animation-delay:.05s}#loader .b2{animation-delay:.15s}
 #loader .b3{animation-delay:.25s}#loader .b4{animation-delay:.35s}
-#loader .dot{fill:var(--volt);opacity:0;animation:dotin .4s ease .75s forwards}
+#loader .dot{fill:var(--amber);opacity:0;animation:dotin .4s ease .75s forwards}
 @keyframes barup{to{transform:scaleY(1)}}
 @keyframes dotin{to{opacity:1}}
 #loader .word{font-family:"Syne Mono",monospace;font-size:15px;letter-spacing:.55em;
@@ -62,12 +62,17 @@ header.site{display:flex;align-items:center;justify-content:space-between;
 .site nav{display:flex;align-items:center;gap:26px}
 .site nav a{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.2em;
   text-decoration:none;color:var(--muted);min-height:44px;display:inline-flex;align-items:center}
-.site nav a:hover{color:var(--volt)}
+.site nav a:hover{color:var(--amber)}
 
 /* ---------- hero ---------- */
-.hero{padding:clamp(64px,9vw,110px) 0 clamp(8px,1vw,12px)}
+.hero{position:relative;padding:clamp(64px,9vw,110px) 0 clamp(8px,1vw,12px)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  animation:grain 1.4s steps(4) infinite}
+@keyframes grain{0%{background-position:0 0}25%{background-position:-42px 28px}
+  50%{background-position:30px -46px}75%{background-position:-24px -18px}100%{background-position:0 0}}
 .eyebrow{font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.3em;
-  color:var(--volt);margin:0 0 22px}
+  color:var(--amber);margin:0 0 22px}
 .hero h1{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
   font-size:clamp(58px,8.6vw,112px);line-height:.9;letter-spacing:.005em;margin:0}
 .hero h1 .row{display:block}
@@ -76,17 +81,22 @@ header.site{display:flex;align-items:center;justify-content:space-between;
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;
   border-top:1px solid var(--line);margin-top:clamp(36px,4vw,54px);padding:28px 0 6px}
 .stat .n{font-family:"Teko",sans-serif;font-size:52px;line-height:1;color:var(--ink)}
-.stat .n em{font-style:normal;color:var(--volt)}
+.stat .n em{font-style:normal;color:var(--amber)}
 .stat .l{font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--muted);margin-top:6px}
+/* kinetic entrance: hidden only when JS is on, revealed as the loader lifts */
+html.js .hero .eyebrow,html.js .hero h1 .row,
+html.js .hero p.lede,html.js .hero .stats{opacity:0;transform:translateY(26px)}
+html.js body.loaded .hero .eyebrow{animation:risein .7s ease .05s forwards}
+html.js body.loaded .hero h1 .row:nth-child(1){animation:risein .85s cubic-bezier(.16,.8,.24,1) .16s forwards}
+html.js body.loaded .hero h1 .row:nth-child(2){animation:risein .85s cubic-bezier(.16,.8,.24,1) .3s forwards}
+html.js body.loaded .hero p.lede{animation:risein .7s ease .48s forwards}
+html.js body.loaded .hero .stats{animation:risein .7s ease .62s forwards}
+@keyframes risein{to{opacity:1;transform:none}}
 
-/* ---------- ticker ---------- */
-.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  overflow:hidden;white-space:nowrap;padding:13px 0;background:var(--bg)}
-.ticker .track{display:inline-block;animation:tick 30s linear infinite;
-  font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.28em;color:var(--muted)}
-.ticker .track b{color:var(--ink);font-weight:400}
-.ticker .track i{font-style:normal;color:var(--volt);padding:0 18px}
-@keyframes tick{to{transform:translateX(-50%)}}
+/* ---------- scroll reveals ---------- */
+html.js .reveal{opacity:0;transform:translateY(28px);
+  transition:opacity .7s ease,transform .75s cubic-bezier(.16,.8,.24,1)}
+html.js .reveal.in{opacity:1;transform:none}
 
 /* ---------- festival cards ---------- */
 .fests{padding:clamp(56px,7vw,96px) 0}
@@ -96,10 +106,14 @@ header.site{display:flex;align-items:center;justify-content:space-between;
   font-size:clamp(40px,5.5vw,64px);line-height:1;margin:0}
 .fests-head span{font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.25em;color:var(--faint)}
 
-.card-live{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+.card-live{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   background:var(--panel);border:1px solid var(--line);text-decoration:none;
-  transition:border-color .25s ease,transform .25s ease}
-.card-live:hover{border-color:var(--volt);transform:translateY(-3px)}
+  transition:border-color .25s ease,transform .12s ease-out;transform-style:preserve-3d}
+.card-live::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  transition:opacity .35s ease;z-index:1;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),var(--amber-dim),transparent 70%)}
+.card-live:hover::before{opacity:1}
+.card-live:hover{border-color:var(--amber);transform:translateY(-3px)}
 .card-media{background:#000;display:flex;align-items:center;justify-content:center;
   padding:clamp(36px,5vw,72px);border-right:1px solid var(--line);overflow:hidden}
 .card-media figure{margin:0;display:grid;gap:24px;justify-items:center}
@@ -108,8 +122,16 @@ header.site{display:flex;align-items:center;justify-content:space-between;
 .card-media figcaption{font-family:"Syne Mono",monospace;font-size:10px;
   letter-spacing:.3em;color:var(--faint);text-align:center}
 .card-body{padding:clamp(28px,4vw,52px)}
-.tag{display:inline-block;font-family:"Syne Mono",monospace;font-size:11px;
-  letter-spacing:.25em;color:#0a0a0a;background:var(--volt);padding:7px 12px;margin-bottom:20px}
+.tag{display:inline-flex;align-items:center;gap:10px;font-family:"Syne Mono",monospace;font-size:11px;
+  letter-spacing:.25em;color:#0a0a0a;background:var(--amber);padding:7px 12px;margin-bottom:20px}
+/* tiny live EQ bars inside the LIVE tag */
+.eq{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
+.eq i{width:3px;background:#0a0a0a;transform-origin:50% 100%;animation:eqb .9s ease-in-out infinite}
+.eq i:nth-child(1){height:55%;animation-delay:0s}
+.eq i:nth-child(2){height:100%;animation-delay:.22s}
+.eq i:nth-child(3){height:40%;animation-delay:.45s}
+.eq i:nth-child(4){height:75%;animation-delay:.12s}
+@keyframes eqb{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 .card-body h3{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
   font-size:clamp(48px,6vw,84px);line-height:.9;margin:0 0 10px}
 .card-meta{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.14em;
@@ -117,18 +139,18 @@ header.site{display:flex;align-items:center;justify-content:space-between;
 .card-meta b{color:var(--ink);font-weight:400}
 .feats{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:11px}
 .feats li{display:flex;gap:12px;align-items:baseline;color:var(--muted);font-size:15px}
-.feats li::before{content:"";flex:none;width:8px;height:8px;background:var(--volt);
+.feats li::before{content:"";flex:none;width:8px;height:8px;background:var(--amber);
   transform:translateY(-1px)}
 .cta{display:inline-flex;align-items:center;gap:12px;margin-top:30px;
   font-family:"Syne Mono",monospace;font-size:13px;letter-spacing:.22em;color:var(--ink)}
 .cta .arr{display:inline-grid;place-items:center;width:44px;height:44px;
-  border:1px solid var(--line);color:var(--volt);font-size:18px;
+  border:1px solid var(--line);color:var(--amber);font-size:18px;
   transition:background .25s ease,color .25s ease,border-color .25s ease}
-.card-live:hover .cta .arr{background:var(--volt);border-color:var(--volt);color:#0a0a0a}
+.card-live:hover .cta .arr{background:var(--amber);border-color:var(--amber);color:#0a0a0a}
 
-.card-soon{margin-top:28px;margin-left:auto;width:min(560px,100%);
+.card-soon{position:relative;margin-top:28px;margin-left:auto;width:min(560px,100%);
   border:1px dashed #3a3a36;background:transparent;padding:clamp(24px,3.5vw,40px);
-  display:grid;gap:16px;opacity:.92}
+  display:grid;gap:16px;opacity:.92;transition:transform .12s ease-out;transform-style:preserve-3d}
 .card-soon .tag{background:transparent;color:var(--muted);border:1px solid #3a3a36;
   padding:6px 11px;margin:0;justify-self:start}
 .card-soon img{width:min(300px,72%);height:auto;filter:grayscale(1) brightness(.85)}
@@ -141,12 +163,12 @@ header.site{display:flex;align-items:center;justify-content:space-between;
 .includes{border-top:1px solid var(--line);padding:clamp(48px,6vw,80px) 0}
 .includes h2{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
   font-size:clamp(34px,4.5vw,52px);line-height:1;margin:0 0 30px}
-.includes h2 span{color:var(--volt)}
+.includes h2 span{color:var(--amber)}
 .inc-list{list-style:none;margin:0;padding:0;display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line-soft);
   border:1px solid var(--line-soft)}
 .inc-list li{background:var(--bg);padding:20px 22px;display:flex;gap:14px;align-items:baseline}
-.inc-list li::before{content:"";flex:none;width:9px;height:9px;background:var(--volt)}
+.inc-list li::before{content:"";flex:none;width:9px;height:9px;background:var(--amber)}
 .inc-list b{display:block;font-weight:600;font-size:16px}
 .inc-list span{color:var(--muted);font-size:14px}
 
@@ -158,8 +180,8 @@ footer.site .fbrand{display:flex;align-items:center;gap:10px;
   font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.25em;color:var(--muted)}
 footer.site .fbrand svg{width:26px;height:auto}
 footer.site a.mail{font-family:"Syne Mono",monospace;font-size:13px;letter-spacing:.08em;
-  color:var(--ink);text-decoration:none;border-bottom:1px solid var(--volt);padding-bottom:2px}
-footer.site a.mail:hover{color:var(--volt)}
+  color:var(--ink);text-decoration:none;border-bottom:1px solid var(--amber);padding-bottom:2px}
+footer.site a.mail:hover{color:var(--amber)}
 footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing:.2em;color:var(--faint)}
 
 @media(max-width:860px){
@@ -171,7 +193,11 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
 }
 @media(prefers-reduced-motion:reduce){
   #loader .bar,#loader .dot,#loader .word,#loader .sub{animation:none;opacity:1;transform:none}
-  .ticker .track{animation:none}
+  html.js .hero .eyebrow,html.js .hero h1 .row,
+  html.js .hero p.lede,html.js .hero .stats{animation:none;opacity:1;transform:none}
+  html.js .reveal{opacity:1;transform:none;transition:none}
+  .eq i{animation:none;transform:scaleY(.7)}
+  .hero::after{animation:none}
   html{scroll-behavior:auto}
 }
 </style>
@@ -197,9 +223,9 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
       <svg viewBox="0 0 64 48" aria-hidden="true">
         <rect x="6" y="26" width="8" height="14" fill="#f5f5f0"/>
         <rect x="18" y="18" width="8" height="22" fill="#f5f5f0"/>
-        <rect x="30" y="10" width="8" height="30" fill="#d4f636"/>
+        <rect x="30" y="10" width="8" height="30" fill="#e8a33d"/>
         <rect x="42" y="22" width="8" height="18" fill="#f5f5f0"/>
-        <rect x="31" y="1" width="6" height="6" fill="#d4f636"/>
+        <rect x="31" y="1" width="6" height="6" fill="#e8a33d"/>
       </svg>
       <b>BYYY STUDIOS</b>
     </a>
@@ -220,17 +246,13 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
       </div>
     </section>
 
-    <div class="ticker" aria-hidden="true">
-      <div class="track" id="tickerTrack"></div>
-    </div>
-
     <section class="fests" id="festivals">
-      <div class="fests-head">
+      <div class="fests-head reveal">
         <h2>The festivals</h2>
         <span>01 LIVE &middot; 01 IN THE WORKS</span>
       </div>
 
-      <a class="card-live" href="/niteharts/" aria-label="Open the Niteharts 26 companion app">
+      <a class="card-live tilt reveal" href="/niteharts/" aria-label="Open the Niteharts 26 companion app">
         <div class="card-media">
           <figure>
             <img src="niteharts/assets/brand/niteharts-logo.png" alt="Niteharts '26 festival logo" width="1250" height="199" />
@@ -238,7 +260,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
           </figure>
         </div>
         <div class="card-body">
-          <span class="tag">LIVE NOW</span>
+          <span class="tag"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>LIVE NOW</span>
           <h3>Niteharts &rsquo;26</h3>
           <p class="card-meta"><b>OCT 9&ndash;11</b> &middot; SNAPDRAGON STADIUM, SAN DIEGO</p>
           <p class="card-meta">ISOXO &amp; KNOCK2&rsquo;S FESTIVAL</p>
@@ -252,7 +274,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
         </div>
       </a>
 
-      <div class="card-soon" aria-label="Escape Halloween 26, in the works">
+      <div class="card-soon tilt reveal" aria-label="Escape Halloween 26, in the works">
         <span class="tag">IN THE WORKS</span>
         <img src="escape-logo.png" alt="Escape Halloween festival logo" width="728" height="240" />
         <h3>Escape Halloween &rsquo;26</h3>
@@ -262,8 +284,8 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
     </section>
 
     <section class="includes">
-      <h2>Every build <span>ships with</span></h2>
-      <ul class="inc-list">
+      <h2 class="reveal">Every build <span>ships with</span></h2>
+      <ul class="inc-list reveal">
         <li><div><b>Real set times</b><span>Every stage, every day &mdash; no screenshots needed.</span></div></li>
         <li><div><b>Artist previews</b><span>One tap to hear what the undercard sounds like.</span></div></li>
         <li><div><b>Lineup planner</b><span>Build your weekend, spot the clashes before they happen.</span></div></li>
@@ -274,7 +296,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
     </section>
   </main>
 
-  <footer class="site">
+  <footer class="site reveal">
     <span class="fbrand">
       <svg viewBox="0 0 64 48" aria-hidden="true">
         <rect x="6" y="26" width="8" height="14" fill="#9a9a92"/>
@@ -292,10 +314,9 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
 <script>
 (function(){
   "use strict";
-  /* ticker content (doubled for the seamless loop) */
-  var items = "NITEHARTS '26 <i>\u2014</i> OCT 9\u201311 <i>\u2014</i> SNAPDRAGON STADIUM <i>\u2014</i> <b>LIVE NOW</b> <i>\u2014</i> ESCAPE HALLOWEEN '26 <i>\u2014</i> IN THE WORKS <i>\u2014</i> ";
-  var t = document.getElementById('tickerTrack');
-  t.innerHTML = items + items;
+  document.documentElement.classList.add('js');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
 
   /* loader */
   var loader = document.getElementById('loader');
@@ -303,16 +324,49 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
   function dismiss(){
     if(done) return; done = true;
     loader.classList.add('done');
+    document.body.classList.add('loaded');   /* triggers the hero kinetic entrance */
     setTimeout(function(){ loader.style.display = 'none'; }, 650);
   }
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){ dismiss(); }
+  if(reduceMotion){ dismiss(); }
   else{
     setTimeout(dismiss, 2100);          /* auto: under 2.5s */
     setTimeout(dismiss, 4000);          /* failsafe */
     loader.addEventListener('click', dismiss);
     loader.addEventListener('keydown', function(e){
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); dismiss(); }
+    });
+  }
+
+  /* scroll-triggered reveals */
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, {threshold:.1, rootMargin:'0px 0px -6% 0px'});
+    revealEls.forEach(function(el, i){ el.style.transitionDelay = Math.min(i * 70, 350) + 'ms'; io.observe(el); });
+  }else{
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* card tilt + cursor-following glow (fine pointers only, no reduced motion) */
+  if(finePointer && !reduceMotion){
+    document.querySelectorAll('.tilt').forEach(function(card){
+      var raf = 0;
+      card.addEventListener('pointermove', function(e){
+        if(raf) return;
+        raf = requestAnimationFrame(function(){
+          raf = 0;
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+          card.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+          card.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+          card.style.transform = 'perspective(950px) rotateX(' + ((0.5 - y) * 4).toFixed(2) +
+            'deg) rotateY(' + ((x - 0.5) * 5).toFixed(2) + 'deg) translateY(-3px)';
+        });
+      });
+      card.addEventListener('pointerleave', function(){ card.style.transform = ''; });
     });
   }
 })();
