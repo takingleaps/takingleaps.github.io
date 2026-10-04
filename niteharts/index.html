@@ -296,11 +296,14 @@
 #nh-lens .lens-preview{margin-top:14px}
 #nh-lens .lens-preview img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
 #nh-lens .lens-preview-actions{display:flex;gap:10px;margin-top:10px}
+#nh-lens .lens-caption{width:100%;box-sizing:border-box;min-height:44px;margin-top:10px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(5,7,12,.6);color:#fff;font-size:15px}
+#nh-lens .lens-caption::placeholder{color:rgba(143,216,255,.4)}
 #nh-lens .lens-note{color:var(--mist);font-size:13px;min-height:20px;margin:8px 0 0}
 #nh-feed .feed-bar{margin-bottom:12px}
 #nh-feed .feed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 #nh-feed .feed-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#05070c;aspect-ratio:1}
 #nh-feed .feed-card img{width:100%;height:100%;object-fit:cover;display:block}
+#nh-feed .feed-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 8px;font-size:12.5px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75));text-align:left}
 #nh-feed .feed-tag{position:absolute;left:6px;bottom:6px;font:400 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(5,7,12,.72);color:var(--ice-strong);padding:5px 8px;border-radius:999px}
 #nh-feed .feed-empty{color:var(--mist);font-size:14px;text-align:center;padding:28px 12px;border:1px dashed var(--line);border-radius:14px}
 #nh-review{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;background:rgba(5,7,12,.88);overflow-y:auto}
@@ -395,7 +398,7 @@
       <button id="nh-arcade-start">▶ &nbsp;PLAY</button>
     </div>
   </div>
-  <div id="nh-arcade-board" aria-label="Local leaderboard">
+  <div id="nh-arcade-board" aria-label="Global leaderboard">
     <h3>TOP SCORES</h3>
     <div id="nh-arcade-list"></div>
   </div>
@@ -427,6 +430,7 @@
           </div>
           <div class="lens-preview" id="lensPreview" hidden>
             <img id="lensPreviewImg" alt="Your filtered photo">
+            <input type="text" id="lensCaption" class="lens-caption" maxlength="120" placeholder="Add a caption..." autocomplete="off" />
             <div class="lens-preview-actions">
               <button type="button" id="lensRetake" class="lens-btn lens-ghost">Retake</button>
               <button type="button" id="lensPost" class="lens-btn">Post to feed</button>
@@ -511,22 +515,14 @@
   var running = false, score = 0, combo = 0, mult = 1, lastPop = 0;
   var timeLeft = 30, spawnTimer = 0, rafId = 0, lastT = 0;
   var muted = false, audioCtx = null;
-  var BOARD_KEY = 'nh-heartpop-board-v1';
+  var SB_LB = 'https://dqcoincagejyowqxqqnz.supabase.co/rest/v1/leaderboard';
+  var SB_LB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxY29pbmNhZ2VqeW93cXhxcW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzY4NTQsImV4cCI6MjEwNjcxMjg1NH0.dG7GwddKfuoq08DX_SgtluxWKAU-hyAjMZcAc320ysI';
   var memBoard = [];
-
-  function loadBoard() {
-    try {
-      var raw = window.localStorage.getItem(BOARD_KEY);
-      if (raw) return JSON.parse(raw) || [];
-    } catch (e) {}
-    return memBoard;
-  }
-  function saveBoard(b) {
-    memBoard = b;
-    try { window.localStorage.setItem(BOARD_KEY, JSON.stringify(b)); } catch (e) {}
+  function lbHeaders() {
+    return { 'apikey': SB_LB_KEY, 'Authorization': 'Bearer ' + SB_LB_KEY, 'Content-Type': 'application/json' };
   }
   function renderBoard() {
-    var b = loadBoard();
+    var b = memBoard;
     if (!b.length) {
       boardList.innerHTML = '<p class="nh-empty">No scores yet — be the first.</p>';
       return;
@@ -537,20 +533,33 @@
         String(e.date || '') + '</span><span class="nh-pts">' + e.score + '</span></li>';
     }).join('') + '</ol>';
   }
+  function refreshBoard() {
+    try {
+      fetch(SB_LB + '?order=score.desc,created_at.asc&limit=5&select=initials,score,created_at', { headers: lbHeaders() })
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (rows) {
+          memBoard = (rows || []).map(function (r) {
+            var d = new Date(r.created_at);
+            return { name: r.initials, score: r.score, date: (d.getMonth() + 1) + '/' + d.getDate() };
+          });
+          renderBoard();
+        }).catch(function () {});
+    } catch (e) {}
+  }
   function qualifies(s) {
     if (s <= 0) return false;
-    var b = loadBoard();
-    return b.length < 5 || s > b[b.length - 1].score;
+    return memBoard.length < 5 || s > memBoard[memBoard.length - 1].score;
   }
   function addScore(name, s) {
-    var b = loadBoard();
-    var d = new Date();
-    var date = (d.getMonth() + 1) + '/' + d.getDate();
-    b.push({ name: (name || 'YOU').toUpperCase().slice(0, 3), score: s, date: date });
-    b.sort(function (a, b2) { return b2.score - a.score; });
-    saveBoard(b.slice(0, 5));
+    var initials = (name || 'YOU').toUpperCase().slice(0, 3) || 'YOU';
+    try {
+      fetch(SB_LB, { method: 'POST', headers: lbHeaders(), body: JSON.stringify({ initials: initials, score: Math.min(10000, Math.max(0, Math.round(s))) }) })
+        .then(function () { refreshBoard(); })
+        .catch(function () { refreshBoard(); });
+    } catch (e) {}
     renderBoard();
   }
+  refreshBoard();
 
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -1514,13 +1523,16 @@
             return r.json();
           }).then(function (j) {
             if (!j || !j.secure_url) throw new Error('no url');
-            return sb('/photos', { method: 'POST', body: { url: j.secure_url, filter: activeFilter, status: 'pending' } })
+            var capEl = document.getElementById('lensCaption');
+            var caption = capEl ? capEl.value.trim().slice(0, 120) : '';
+            return sb('/photos', { method: 'POST', body: { url: j.secure_url, filter: activeFilter, status: 'pending', caption: caption || null } })
               .then(function (r) {
                 if (!r.ok) throw new Error('db ' + r.status);
                 return j.secure_url;
               });
           }).then(function () {
             setNote('Posted. It will show in the feed after a quick review.');
+            var capEl2 = document.getElementById('lensCaption'); if (capEl2) capEl2.value = '';
             postBtn.disabled = false;
             if (retakeBtn) retakeBtn.disabled = false;
           }).catch(function () { fail(); });
@@ -1561,7 +1573,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function loadFeed() {
     if (!feedGrid) return;
-    sb('/photos?status=eq.approved&order=created_at.desc&select=url,filter,created_at&limit=60')
+    sb('/photos?status=eq.approved&order=created_at.desc&select=url,filter,caption,created_at&limit=60')
       .then(function (r) { return r.ok ? r.json() : []; })
       .then(function (rows) {
         rows = rows || [];
@@ -1573,8 +1585,10 @@
         if (feedEmpty) feedEmpty.hidden = true;
         feedGrid.innerHTML = rows.map(function (p) {
           var tag = FILTERS[p.filter] ? FILTERS[p.filter].label : esc(p.filter || '');
+          var cap = p.caption ? esc(p.caption) : '';
           return '<figure class="feed-card"><img loading="lazy" decoding="async" src="' + esc(p.url) + '" alt="Niteharts crowd photo">' +
-            (tag ? '<figcaption class="feed-tag">' + esc(tag) + '</figcaption>' : '') + '</figure>';
+            (tag ? '<figcaption class="feed-tag">' + esc(tag) + '</figcaption>' : '') +
+            (cap ? '<figcaption class="feed-cap">' + cap + '</figcaption>' : '') + '</figure>';
         }).join('');
       })
       .catch(function () {});
