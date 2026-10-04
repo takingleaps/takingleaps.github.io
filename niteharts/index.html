@@ -216,7 +216,7 @@
       </section>
 
       <section class="module lineup-module" data-module-id="lineup" data-module-label="My Lineup" aria-labelledby="myLineupTitle">
-        <div class="module-head"><h2 id="myLineupTitle">My Lineup</h2><span class="module-label">Saved in this link</span></div>
+        <div class="module-head"><h2 id="myLineupTitle">My Lineup</h2><span class="module-label">Saved on this device</span></div>
         <div class="lineup-overview"><div class="lineup-count" id="lineupCount">0 sets</div><div class="lineup-status" id="lineupStatus"><strong>Build your weekend</strong>Tap any set card above to add it here. Your picks stay in the URL, so the same link restores this lineup.</div></div>
         <div class="lineup-save">
           <div class="lineup-save-copy"><strong>Keep your lineup</strong><span>Copy the save code. Paste it after this page’s address later to restore these picks.</span></div>
@@ -566,14 +566,18 @@
 
   /* ============ 8-bit sprites (.=empty X=main D=dark L=light) ============ */
   var HEART_MAP = [
-    '.XX..XX.',
-    'XXXXXXXX',
-    'XLLXXXXX',
-    'XLXXXXXX',
-    '.XXXXXX.',
-    '..XXXXD.',
-    '...XXD..',
-    '....D...'
+    'X.............X',
+    'XX...........XX',
+    'XXX..XX.XX..XXX',
+    '.XXXXXXXXXXXXX.',
+    'XXXXXXXXXXXXXXX',
+    '.XLLXXXXDXXXXX.',
+    '..XXXXXXDXXXX..',
+    '...XXXXXDXXX...',
+    '....XXXXXXX....',
+    '.....XXXXX.....',
+    '......XXX......',
+    '.......X.......'
   ];
   var SPRITES = {
     heart: { map: HEART_MAP, pal: ['#241a3a', '#0d0716', '#b14aed'], pts: 10, w: 45, freq: 520, label: 'SHADOW 10' },
@@ -706,12 +710,45 @@
     rafId = requestAnimationFrame(loop);
   }
 
-  /* ============ chiptune: square lead + triangle bass, 32-step loop ============ */
-  var MUS = { step: 0, nextT: 0, timer: null, stepDur: 60 / 150 / 2 };
-  var LEAD = [72,76,79,84, 83,79,76,79, 81,84,81,79, 76,79,74,76,
-              72,76,79,84, 86,84,83,81, 79,76,74,76, 72,0,67,72];
-  var BASSN = [48,53,45,43, 48,53,45,47];
+  /* ============ 8-bit EDM: distorted saw bass, square lead, 4-floor kick, 64-step build/drop ============ */
+  var MUS = { step: 0, nextT: 0, timer: null, stepDur: 60 / 168 / 2, master: null, noise: null, dist: null };
+  var STEPS = 64;
+  // F# minor: sparse riser stabs (build) -> gallop riff (drop)
+  var LEAD = [
+    78,0,0,0,  0,0,78,0,  0,0,0,0,  76,0,0,0,
+    0,0,0,0,  74,0,0,0,  0,0,0,0,  73,0,76,79,
+    78,0,78,78, 0,78,0,76, 74,0,74,74, 0,73,0,74,
+    78,0,78,78, 0,81,0,79, 78,0,76,74, 73,0,71,73
+  ];
   function mf(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  function mDest() {
+    if (!MUS.master && audioCtx) {
+      try {
+        MUS.master = audioCtx.createGain();
+        MUS.master.gain.value = .8;
+        MUS.master.connect(audioCtx.destination);
+      } catch (e) { MUS.master = null; }
+    }
+    return MUS.master || (audioCtx ? audioCtx.destination : null);
+  }
+  function mNoise() {
+    if (!MUS.noise && audioCtx) {
+      try {
+        var b = audioCtx.createBuffer(1, Math.floor(audioCtx.sampleRate * .08), audioCtx.sampleRate);
+        var d = b.getChannelData(0);
+        for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+        MUS.noise = b;
+      } catch (e) {}
+    }
+    return MUS.noise;
+  }
+  function mDist() {
+    if (!MUS.dist) {
+      MUS.dist = new Float32Array(256);
+      for (var i = 0; i < 256; i++) { var x = i / 128 - 1; MUS.dist[i] = Math.tanh(3.2 * x); }
+    }
+    return MUS.dist;
+  }
   function tone(freq, t, dur, type, vol) {
     try {
       var o = audioCtx.createOscillator(), g = audioCtx.createGain();
@@ -719,9 +756,63 @@
       g.gain.setValueAtTime(.0001, t);
       g.gain.exponentialRampToValueAtTime(vol, t + .015);
       g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-      o.connect(g); g.connect(audioCtx.destination);
+      o.connect(g); g.connect(mDest());
       o.start(t); o.stop(t + dur + .02);
     } catch (e) {}
+  }
+  function kick(t) {
+    try {
+      var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(165, t);
+      o.frequency.exponentialRampToValueAtTime(40, t + .1);
+      g.gain.setValueAtTime(.42, t);
+      g.gain.exponentialRampToValueAtTime(.001, t + .26);
+      o.connect(g); g.connect(mDest());
+      o.start(t); o.stop(t + .3);
+    } catch (e) {}
+  }
+  function snare(t) {
+    try {
+      var nb = mNoise(); if (!nb) return;
+      var s = audioCtx.createBufferSource(); s.buffer = nb;
+      var f = audioCtx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1900; f.Q.value = .8;
+      var g = audioCtx.createGain();
+      g.gain.setValueAtTime(.18, t);
+      g.gain.exponentialRampToValueAtTime(.001, t + .16);
+      s.connect(f); f.connect(g); g.connect(mDest());
+      s.start(t); s.stop(t + .2);
+    } catch (e) {}
+  }
+  function hat(t, vol) {
+    try {
+      var nb = mNoise(); if (!nb) return;
+      var s = audioCtx.createBufferSource(); s.buffer = nb;
+      var f = audioCtx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 7500;
+      var g = audioCtx.createGain();
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(.001, t + .045);
+      s.connect(f); f.connect(g); g.connect(mDest());
+      s.start(t); s.stop(t + .07);
+    } catch (e) {}
+  }
+  function sawBass(freq, t, dur, vol) {
+    try {
+      var o = audioCtx.createOscillator(), w = audioCtx.createWaveShaper(), g = audioCtx.createGain();
+      o.type = 'sawtooth'; o.frequency.value = freq;
+      w.curve = mDist();
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + .02);
+      g.gain.setValueAtTime(vol, t + dur * .7);
+      g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      o.connect(w); w.connect(g); g.connect(mDest());
+      o.start(t); o.stop(t + dur + .02);
+    } catch (e) {}
+  }
+  function bassNote(s) {
+    if (s < 32) return (s % 16 === 0) ? (s < 16 ? 30 : 28) : 0; // build: long F#1, E1
+    var root = (((s - 32) >> 4) === 0) ? 30 : 26;              // drop: F#1 / D1 gallop
+    return ((s % 4) === 3) ? root + 12 : root;
   }
   function schedStep() {
     if (!audioCtx) return;
@@ -729,11 +820,17 @@
       while (MUS.nextT < audioCtx.currentTime + .18) {
         var s = MUS.step, t = MUS.nextT;
         if (!muted) {
+          var drop = s >= 32;
+          if (s % 4 === 0) kick(t);                             // four on the floor
+          if (drop && s % 8 === 4) snare(t);                    // backbeat
+          if (drop) { if (s % 4 === 2) hat(t, .055); else hat(t, .014); }
+          else if (s % 2 === 0) hat(t, .012 + .028 * (s / 32)); // riser hats
+          var bn = bassNote(s);
+          if (bn) sawBass(mf(bn), t, MUS.stepDur * (drop ? .92 : 13), drop ? .1 : .085);
           var L = LEAD[s];
-          if (L) tone(mf(L), t, MUS.stepDur * .9, 'square', .04);
-          if (s % 4 === 0) tone(mf(BASSN[(s / 4) | 0]), t, MUS.stepDur * 3.2, 'triangle', .07);
+          if (L) tone(mf(L), t, MUS.stepDur * .92, 'square', drop ? .042 : .028);
         }
-        MUS.step = (s + 1) % 32;
+        MUS.step = (s + 1) % STEPS;
         MUS.nextT = t + MUS.stepDur;
       }
     } catch (e) {}
@@ -940,9 +1037,11 @@
     var playerTracks=[],previewCache={},previewInflight={},previewRequestToken=0;
     var activeDay="friday",activeStage="all",grid=document.getElementById("scheduleGrid"),empty=document.getElementById("emptyState"),search=document.getElementById("artistSearch"),myLineup=document.getElementById("myLineup"),lineupCount=document.getElementById("lineupCount"),lineupStatus=document.getElementById("lineupStatus"),copyLineupButton=document.getElementById("copyLineupButton"),lineupCopyStatus=document.getElementById("lineupCopyStatus"),lineupCopyFallback=document.getElementById("lineupCopyFallback"),lineupLinkField=document.getElementById("lineupLinkField"),lineupPicks={},copyFeedbackTimer=0;
     function readLineupHash(){var params=new URLSearchParams(window.location.hash.replace(/^#/,"")),value=params.get("lineup"),picks={};if(!value)return picks;value.split(",").forEach(function(id){if(setById[id])picks[id]=true});return picks}
+    function readStoredLineup(){var picks={},raw=null;try{raw=window.localStorage.getItem("nh26-lineup")}catch(e){}if(!raw)return picks;raw.split(",").forEach(function(id){if(setById[id])picks[id]=true});return picks}
+    function persistLineup(){try{var ids=lineupIds();if(ids.length)window.localStorage.setItem("nh26-lineup",ids.join(","));else window.localStorage.removeItem("nh26-lineup")}catch(e){}}
     function lineupIds(){var ids=[];Object.keys(schedules).forEach(function(day){schedules[day].sets.forEach(function(s){if(lineupPicks[s.id])ids.push(s.id)})});return ids}
     function resetCopyFeedback(){window.clearTimeout(copyFeedbackTimer);copyLineupButton.textContent="Show save code";lineupCopyStatus.textContent="";lineupCopyStatus.removeAttribute("data-state");lineupCopyFallback.hidden=true}
-    function writeLineupHash(){var ids=lineupIds(),hash=ids.length?"#lineup="+ids.join(","):"#";history.replaceState(null,"",hash);resetCopyFeedback()}
+    function writeLineupHash(){var ids=lineupIds(),hash=ids.length?"#lineup="+ids.join(","):"#";history.replaceState(null,"",hash);persistLineup();resetCopyFeedback()}
     function clockMinutes(clock){var match=clock.match(/(\d+):(\d+)\s+(AM|PM)/),hour=Number(match[1]),minute=Number(match[2]);if(match[3]==="PM"&&hour!==12)hour+=12;if(match[3]==="AM"&&hour===12)hour=0;return hour*60+minute}
     function clashDetails(ids){var names={},pairs=0;Object.keys(schedules).forEach(function(day){var daySets=ids.map(function(id){return setById[id]}).filter(function(s){return s&&s.day===day});daySets.forEach(function(a,index){for(var i=index+1;i<daySets.length;i++){var b=daySets[i];if(clockMinutes(a.start)<clockMinutes(b.end)&&clockMinutes(b.start)<clockMinutes(a.end)){pairs++;(names[a.id]||(names[a.id]=[])).push(b.artist);(names[b.id]||(names[b.id]=[])).push(a.artist)}}})});return{names:names,pairs:pairs}}
     function paintSchedulePicks(){grid.querySelectorAll("[data-lineup-set]").forEach(function(card){var id=card.getAttribute("data-lineup-set"),planned=!!lineupPicks[id],button=card.querySelector("[data-plan-set]");card.classList.toggle("is-planned",planned);if(button){button.setAttribute("aria-pressed",String(planned));button.textContent=planned?"Added":"Add set";button.setAttribute("aria-label",(planned?"Remove ":"Add ")+setById[id].artist+(planned?" from":" to")+" My Lineup")}})}
@@ -950,7 +1049,7 @@
     function toggleLineup(id){if(!setById[id])return;if(lineupPicks[id])delete lineupPicks[id];else lineupPicks[id]=true;writeLineupHash();paintSchedulePicks();renderMyLineup()}
     function showLineupCopyFallback(code){window.clearTimeout(copyFeedbackTimer);lineupCopyFallback.hidden=false;lineupLinkField.value=code;copyLineupButton.textContent="Code shown";lineupCopyStatus.textContent="Select the code below, then copy it after the page address.";lineupCopyStatus.removeAttribute("data-state");lineupLinkField.focus();lineupLinkField.select();try{lineupLinkField.setSelectionRange(0,code.length)}catch(error){}}
     copyLineupButton.addEventListener("click",function(){var ids=lineupIds(),code=ids.length?"#lineup="+ids.join(","):"#";showLineupCopyFallback(code)});lineupLinkField.addEventListener("focus",function(){this.select()});lineupLinkField.addEventListener("click",function(){this.select()});
-    lineupPicks=readLineupHash();myLineup.addEventListener("click",function(event){var button=event.target.closest("[data-remove-set]");if(button)toggleLineup(button.getAttribute("data-remove-set"))});window.addEventListener("hashchange",function(){lineupPicks=readLineupHash();resetCopyFeedback();paintSchedulePicks();renderMyLineup()});
+    lineupPicks=readLineupHash();if(!Object.keys(lineupPicks).length){lineupPicks=readStoredLineup();if(Object.keys(lineupPicks).length)writeLineupHash()}myLineup.addEventListener("click",function(event){var button=event.target.closest("[data-remove-set]");if(button)toggleLineup(button.getAttribute("data-remove-set"))});window.addEventListener("hashchange",function(){lineupPicks=readLineupHash();persistLineup();resetCopyFeedback();paintSchedulePicks();renderMyLineup()});
     function img(src,alt){return '<img class="artist-photo" src="'+src+'" alt="'+alt+'" loading="lazy" decoding="async" onerror="this.outerHTML=\'<div class=&quot;photo-placeholder&quot; aria-label=&quot;Photo unavailable&quot;>N</div>\'">'}
     function renderSchedule(){var day=schedules[activeDay],q=search.value.trim().toLowerCase(),filtered=day.sets.filter(function(s){return(activeStage==="all"||s.stage===activeStage)&&(!q||(s.artist+" "+s.genre).toLowerCase().indexOf(q)!==-1)});document.getElementById("dayTitle").textContent=day.label;document.getElementById("doorsTime").textContent=day.doors;document.getElementById("endTime").textContent=day.end;grid.innerHTML=filtered.map(function(s){var id="video-"+s.id,artistData=encodeURIComponent(s.artist),keyData=encodeURIComponent(previewKey(s.artist)),planned=!!lineupPicks[s.id],planButton='<button type="button" class="set-plan-button" data-plan-set="'+s.id+'" aria-pressed="'+String(planned)+'" aria-label="'+(planned?'Remove ':'Add ')+s.artist+(planned?' from':' to')+' My Lineup">'+(planned?'Added':'Add set')+'</button>',previewUnavailable=hasNoPreview(s.artist),previewButton=previewUnavailable?'<button type="button" class="preview-button" disabled aria-label="No preview available for '+s.artist+'"><span class="preview-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="preview-label">No preview</span></button>':'<button type="button" class="preview-button" data-preview-artist="'+artistData+'" data-preview-key="'+keyData+'" aria-pressed="false" aria-label="Play '+s.artist+' preview"><span class="preview-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="preview-label">Preview</span></button>',links=s.videos.map(function(v){return '<a href="'+v.url+'" target="_blank" rel="noopener">'+v.title+' on YouTube</a>'}).join(" · "),isFullSet=!!fullSetVideoIds[s.videos[0].id],watchLabel=isFullSet?"Watch full set":"Watch video",closeLabel=isFullSet?"Close set":"Close video";return '<article class="schedule-row"><div class="schedule-card '+s.stage+(planned?' is-planned':'')+'" data-lineup-set="'+s.id+'">'+img(s.photo,s.artist+' artist photo')+'<div class="set-copy"><div class="set-main"><h4 class="artist">'+s.artist+'</h4><p class="set-meta">'+s.start+'–'+s.end+'</p><p class="genre">'+s.genre+'</p></div><div class="set-side"><span class="stage-badge">'+(s.stage==="main"?"Main":"Valorant")+'</span><div class="set-actions">'+planButton+previewButton+'<a class="video-button" href="'+s.videos[0].url+'" target="_blank" rel="noopener" aria-label="'+watchLabel+' for '+s.artist+' on YouTube">'+watchLabel+'</a></div></div></div></div></article>'}).join("");empty.style.display=filtered.length?"none":"block";grid.querySelectorAll("[data-video-id]").forEach(function(b){b.addEventListener("click",function(){var p=document.getElementById(b.getAttribute("aria-controls")),open=b.getAttribute("aria-expanded")!=="true";b.setAttribute("aria-expanded",String(open));b.textContent=open?b.getAttribute("data-close-label"):b.getAttribute("data-watch-label");p.classList.toggle("open",open);if(open&&!p.querySelector("iframe"))p.querySelector(".video-slot").innerHTML='<div class="video-frame"><iframe src="https://www.youtube.com/embed/'+b.getAttribute("data-video-id")+'?autoplay=1&playsinline=1&rel=0" title="YouTube video player" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>'})});grid.querySelectorAll("[data-preview-artist]").forEach(function(b){b.addEventListener("click",function(){startArtistPreviews(decodeURIComponent(b.getAttribute("data-preview-artist")),decodeURIComponent(b.getAttribute("data-preview-key")),b)})});grid.querySelectorAll("[data-plan-set]").forEach(function(b){b.addEventListener("click",function(){toggleLineup(b.getAttribute("data-plan-set"))})});grid.querySelectorAll("[data-lineup-set]").forEach(function(card){card.addEventListener("click",function(event){if(event.target.closest("button,a,input,iframe"))return;toggleLineup(card.getAttribute("data-lineup-set"))})})}
     document.querySelectorAll("[data-day]").forEach(function(b){b.addEventListener("click",function(){activeDay=b.getAttribute("data-day");document.querySelectorAll("[data-day]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});renderSchedule()})});document.querySelectorAll("[data-stage-filter]").forEach(function(b){b.addEventListener("click",function(){activeStage=b.getAttribute("data-stage-filter");document.querySelectorAll("[data-stage-filter]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});renderSchedule()})});search.addEventListener("input",renderSchedule);
