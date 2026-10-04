@@ -288,53 +288,15 @@
         </div>
       </section>
 
-      <section class="module feedback-module" data-module-id="feedback" data-module-label="Feedback" aria-labelledby="feedbackTitle">
-        <div class="module-head"><h2 id="feedbackTitle">Feedback</h2><span class="module-label">Report bugs · Share ideas · Quick survey</span></div>
-        <div class="feedback-grid">
-          <form class="feedback-card" id="bugForm" novalidate>
-            <h3>Report a bug</h3>
-            <div class="fb-body">
-              <div class="fb-fields">
-                <label class="fb-field"><span>Name <i>(optional)</i></span><input type="text" id="fbName" name="name" maxlength="60" placeholder="What should we call you?" autocomplete="name" /></label>
-                <div class="fb-field"><span id="fbCatLabel">Category</span><div class="fb-pills" id="fbCats" role="group" aria-labelledby="fbCatLabel"><button type="button" data-cat="Bug" aria-pressed="true">Bug</button><button type="button" data-cat="Idea" aria-pressed="false">Idea</button><button type="button" data-cat="Question" aria-pressed="false">Question</button></div></div>
-                <label class="fb-field"><span>Message</span><textarea id="fbMessage" name="message" rows="4" maxlength="2000" placeholder="What broke, or what would you love to see?" required></textarea></label>
-              </div>
-              <button class="fb-submit" type="submit">Send feedback</button>
-              <p class="fb-note" id="bugNote" role="status" aria-live="polite"></p>
-            </div>
-            <div class="fb-sent" id="bugSent" hidden>
-              <strong tabindex="-1">Thanks — feedback goes straight to the builder.</strong>
-              <p>Your message is on its way. Thanks for helping make the app better.</p>
-              <button class="fb-again" type="button" id="bugAgain">Send another</button>
-            </div>
-          </form>
-          <form class="feedback-card" id="surveyForm" novalidate>
-            <h3>Quick survey <em>if you feel like it</em></h3>
-            <div class="fb-body">
-              <div class="fb-fields">
-                <div class="fb-field"><span id="svDaysLabel">Which days are you going?</span><div class="fb-days" role="group" aria-labelledby="svDaysLabel"><label><input type="checkbox" name="days" value="Friday" /><span>Fri</span></label><label><input type="checkbox" name="days" value="Saturday" /><span>Sat</span></label><label><input type="checkbox" name="days" value="Sunday" /><span>Sun</span></label></div></div>
-                <label class="fb-field"><span>Favorite stage?</span><select id="svStage" name="stage"><option value="" selected>Pick one…</option><option value="Main">Main</option><option value="Valorant">Valorant</option></select></label>
-                <label class="fb-field"><span>One feature you want added?</span><input type="text" id="svFeature" name="feature" maxlength="140" placeholder="e.g. set-time reminders" /></label>
-                <div class="fb-field"><span id="svRateLabel">Rate the app</span><div class="fb-stars" id="svStars" role="group" aria-labelledby="svRateLabel"><button type="button" data-rating="1" aria-pressed="false" aria-label="Rate 1 out of 5">★</button><button type="button" data-rating="2" aria-pressed="false" aria-label="Rate 2 out of 5">★</button><button type="button" data-rating="3" aria-pressed="false" aria-label="Rate 3 out of 5">★</button><button type="button" data-rating="4" aria-pressed="false" aria-label="Rate 4 out of 5">★</button><button type="button" data-rating="5" aria-pressed="false" aria-label="Rate 5 out of 5">★</button></div></div>
-              </div>
-              <button class="fb-submit" type="submit">Send survey</button>
-              <p class="fb-note" id="surveyNote" role="status" aria-live="polite"></p>
-            </div>
-            <div class="fb-sent" id="surveySent" hidden>
-              <strong tabindex="-1">Thanks — feedback goes straight to the builder.</strong>
-              <p>Your answers help shape what gets built next.</p>
-              <button class="fb-again" type="button" id="surveyAgain">Answer again</button>
-            </div>
-          </form>
-        </div>
-      </section>
 
 <style>
 /* NITEHARTS LENS + FEED + REVIEW (scoped) */
 #nh-lens .lens-stage{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#05070c;aspect-ratio:4/3}
 #nh-lens video{width:100%;height:100%;object-fit:cover;display:block;background:#05070c}
-#nh-lens .lens-off{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--mist);font-size:14px;padding:20px}
+#nh-lens .lens-off{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;color:var(--mist);font-size:13px;padding:20px}
 #nh-lens .lens-off[hidden]{display:none}
+#nh-lens .lens-off p{margin:0}
+#nh-lens video.mirrored{transform:scaleX(-1)}
 #nh-lens .lens-filters{display:flex;gap:8px;overflow-x:auto;padding:12px 2px;-webkit-overflow-scrolling:touch}
 #nh-lens .lens-filters button{flex:0 0 auto;min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font-size:14px;cursor:pointer}
 #nh-lens .lens-filters button[aria-pressed="true"]{border-color:var(--ice);color:var(--ice-strong);background:rgba(159,201,239,.12)}
@@ -442,7 +404,10 @@
         <div id="nh-lens">
           <div class="lens-stage">
             <video id="lensVideo" playsinline muted autoplay aria-label="Camera preview"></video>
-            <div class="lens-off" id="lensOff"><p>Camera is off.<br>Open it to shoot, or upload a photo instead.</p></div>
+            <div class="lens-off" id="lensOff">
+              <button type="button" id="lensStart" class="lens-btn">Open camera</button>
+              <p>or upload a photo below</p>
+            </div>
           </div>
           <div class="lens-filters" id="lensFilters" role="group" aria-label="Choose a filter">
             <button type="button" data-filter="frost" aria-pressed="true">Frost</button>
@@ -452,9 +417,10 @@
             <button type="button" data-filter="vhs" aria-pressed="false">VHS</button>
           </div>
           <div class="lens-actions">
-            <button type="button" id="lensStart" class="lens-btn">Open camera</button>
             <button type="button" id="lensCapture" class="lens-btn" hidden>Capture</button>
-            <label class="lens-btn lens-upload" for="lensFile">Upload photo<input type="file" id="lensFile" accept="image/*" hidden></label>
+            <button type="button" id="lensFlip" class="lens-btn lens-ghost" hidden aria-label="Switch between front and back camera">Flip</button>
+            <button type="button" id="lensFlash" class="lens-btn lens-ghost" hidden aria-pressed="false" aria-label="Toggle camera flash">Flash</button>
+            <label class="lens-btn lens-upload lens-ghost" for="lensFile">Upload photo<input type="file" id="lensFile" accept="image/*" hidden></label>
           </div>
           <div class="lens-preview" id="lensPreview" hidden>
             <img id="lensPreviewImg" alt="Your filtered photo">
@@ -474,6 +440,47 @@
           <div class="feed-bar"><button type="button" id="feedRefresh" class="lens-btn lens-ghost">Refresh</button></div>
           <div class="feed-grid" id="feedGrid" aria-live="polite"></div>
           <p class="feed-empty" id="feedEmpty" hidden>No photos yet. Be the first to post from Niteharts Lens.</p>
+        </div>
+      </section>
+
+      <section class="module feedback-module" data-module-id="feedback" data-module-label="Feedback" aria-labelledby="feedbackTitle">
+        <div class="module-head"><h2 id="feedbackTitle">Feedback</h2><span class="module-label">Report bugs · Share ideas · Quick survey</span></div>
+        <div class="feedback-grid">
+          <form class="feedback-card" id="bugForm" novalidate>
+            <h3>Report a bug</h3>
+            <div class="fb-body">
+              <div class="fb-fields">
+                <label class="fb-field"><span>Name <i>(optional)</i></span><input type="text" id="fbName" name="name" maxlength="60" placeholder="What should we call you?" autocomplete="name" /></label>
+                <div class="fb-field"><span id="fbCatLabel">Category</span><div class="fb-pills" id="fbCats" role="group" aria-labelledby="fbCatLabel"><button type="button" data-cat="Bug" aria-pressed="true">Bug</button><button type="button" data-cat="Idea" aria-pressed="false">Idea</button><button type="button" data-cat="Question" aria-pressed="false">Question</button></div></div>
+                <label class="fb-field"><span>Message</span><textarea id="fbMessage" name="message" rows="4" maxlength="2000" placeholder="What broke, or what would you love to see?" required></textarea></label>
+              </div>
+              <button class="fb-submit" type="submit">Send feedback</button>
+              <p class="fb-note" id="bugNote" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fb-sent" id="bugSent" hidden>
+              <strong tabindex="-1">Thanks — feedback goes straight to the builder.</strong>
+              <p>Your message is on its way. Thanks for helping make the app better.</p>
+              <button class="fb-again" type="button" id="bugAgain">Send another</button>
+            </div>
+          </form>
+          <form class="feedback-card" id="surveyForm" novalidate>
+            <h3>Quick survey <em>if you feel like it</em></h3>
+            <div class="fb-body">
+              <div class="fb-fields">
+                <div class="fb-field"><span id="svDaysLabel">Which days are you going?</span><div class="fb-days" role="group" aria-labelledby="svDaysLabel"><label><input type="checkbox" name="days" value="Friday" /><span>Fri</span></label><label><input type="checkbox" name="days" value="Saturday" /><span>Sat</span></label><label><input type="checkbox" name="days" value="Sunday" /><span>Sun</span></label></div></div>
+                <label class="fb-field"><span>Favorite stage?</span><select id="svStage" name="stage"><option value="" selected>Pick one…</option><option value="Main">Main</option><option value="Valorant">Valorant</option></select></label>
+                <label class="fb-field"><span>One feature you want added?</span><input type="text" id="svFeature" name="feature" maxlength="140" placeholder="e.g. set-time reminders" /></label>
+                <div class="fb-field"><span id="svRateLabel">Rate the app</span><div class="fb-stars" id="svStars" role="group" aria-labelledby="svRateLabel"><button type="button" data-rating="1" aria-pressed="false" aria-label="Rate 1 out of 5">★</button><button type="button" data-rating="2" aria-pressed="false" aria-label="Rate 2 out of 5">★</button><button type="button" data-rating="3" aria-pressed="false" aria-label="Rate 3 out of 5">★</button><button type="button" data-rating="4" aria-pressed="false" aria-label="Rate 4 out of 5">★</button><button type="button" data-rating="5" aria-pressed="false" aria-label="Rate 5 out of 5">★</button></div></div>
+              </div>
+              <button class="fb-submit" type="submit">Send survey</button>
+              <p class="fb-note" id="surveyNote" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fb-sent" id="surveySent" hidden>
+              <strong tabindex="-1">Thanks — feedback goes straight to the builder.</strong>
+              <p>Your answers help shape what gets built next.</p>
+              <button class="fb-again" type="button" id="surveyAgain">Answer again</button>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -1253,7 +1260,9 @@
   var retakeBtn = document.getElementById('lensRetake');
   var postBtn = document.getElementById('lensPost');
   var noteEl = document.getElementById('lensNote');
-  var stream = null, shotCanvas = null;
+  var stream = null, shotCanvas = null, facingMode = 'environment', torchOn = false;
+  var flipBtn = document.getElementById('lensFlip');
+  var flashBtn = document.getElementById('lensFlash');
 
   function setNote(m) { if (noteEl) noteEl.textContent = m || ''; }
   function applyLiveFilter() {
@@ -1275,32 +1284,69 @@
   }
   function stopStream() {
     if (stream) { try { stream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} stream = null; }
+    torchOn = false;
+    if (flashBtn) { flashBtn.hidden = true; flashBtn.setAttribute('aria-pressed', 'false'); }
+  }
+  function videoTrack() {
+    try { return stream ? stream.getVideoTracks()[0] : null; } catch (e) { return null; }
+  }
+  function refreshTorchButton() {
+    if (!flashBtn) return;
+    var t = videoTrack(), caps = {};
+    try { caps = (t && t.getCapabilities) ? t.getCapabilities() : {}; } catch (e) {}
+    if (caps.torch) { flashBtn.hidden = false; }
+    else { flashBtn.hidden = true; }
+  }
+  function startCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setNote('This browser cannot open the camera. Use upload instead.');
+      return;
+    }
+    if (startBtn) startBtn.disabled = true;
+    setNote('Opening camera...');
+    stopStream();
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: facingMode } }, audio: false })
+      .then(function (s) {
+        stream = s;
+        video.srcObject = s;
+        return video.play().catch(function () {});
+      })
+      .then(function () {
+        if (lensOff) lensOff.hidden = true;
+        if (startBtn) startBtn.hidden = true;
+        if (capBtn) capBtn.hidden = false;
+        if (flipBtn) flipBtn.hidden = false;
+        video.classList.toggle('mirrored', facingMode === 'user');
+        refreshTorchButton();
+        applyLiveFilter();
+        setNote('');
+      })
+      .catch(function () {
+        if (startBtn) startBtn.disabled = false;
+        setNote('Camera blocked. You can still upload a photo.');
+      });
   }
   if (startBtn) {
-    startBtn.addEventListener('click', function () {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setNote('This browser cannot open the camera. Use upload instead.');
-        return;
-      }
-      startBtn.disabled = true;
-      setNote('Opening camera...');
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false })
-        .then(function (s) {
-          stream = s;
-          video.srcObject = s;
-          return video.play().catch(function () {});
-        })
-        .then(function () {
-          if (lensOff) lensOff.hidden = true;
-          startBtn.hidden = true;
-          if (capBtn) capBtn.hidden = false;
-          applyLiveFilter();
-          setNote('');
-        })
-        .catch(function () {
-          startBtn.disabled = false;
-          setNote('Camera blocked. You can still upload a photo.');
-        });
+    startBtn.addEventListener('click', startCamera);
+  }
+  if (flipBtn) {
+    flipBtn.addEventListener('click', function () {
+      facingMode = (facingMode === 'environment') ? 'user' : 'environment';
+      setNote('Switching camera...');
+      startCamera();
+    });
+  }
+  if (flashBtn) {
+    flashBtn.addEventListener('click', function () {
+      var t = videoTrack();
+      if (!t || !t.applyConstraints) return;
+      var next = !torchOn;
+      t.applyConstraints({ advanced: [{ torch: next }] }).then(function () {
+        torchOn = next;
+        flashBtn.setAttribute('aria-pressed', String(torchOn));
+      }).catch(function () {
+        flashBtn.hidden = true;
+      });
     });
   }
   function drawHeart(ctx, x, y, s, color) {
@@ -1348,7 +1394,7 @@
       ctx.fillText('PLAY', Math.round(w * .04), Math.round(h * .07));
     }
   }
-  function frameToCanvas(src, sw, sh) {
+  function frameToCanvas(src, sw, sh, mirror) {
     var max = 1600, scale = Math.min(1, max / Math.max(sw, sh));
     var w = Math.round(sw * scale), h = Math.round(sh * scale);
     var c = document.createElement('canvas');
@@ -1356,7 +1402,9 @@
     var ctx = c.getContext('2d');
     var f = FILTERS[activeFilter];
     try { ctx.filter = f.css === 'none' ? 'none' : f.css; } catch (e) {}
+    if (mirror) { ctx.translate(w, 0); ctx.scale(-1, 1); }
     ctx.drawImage(src, 0, 0, w, h);
+    if (mirror) { ctx.setTransform(1, 0, 0, 1, 0, 0); }
     try { ctx.filter = 'none'; } catch (e) {}
     paintFilter(ctx, w, h, activeFilter);
     return c;
@@ -1371,7 +1419,7 @@
   if (capBtn) {
     capBtn.addEventListener('click', function () {
       if (!video || !video.videoWidth) { setNote('Camera is not ready yet.'); return; }
-      showPreview(frameToCanvas(video, video.videoWidth, video.videoHeight));
+      showPreview(frameToCanvas(video, video.videoWidth, video.videoHeight, facingMode === 'user'));
     });
   }
   if (retakeBtn) {
