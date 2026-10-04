@@ -304,6 +304,7 @@
 #nh-feed .feed-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#05070c;aspect-ratio:1}
 #nh-feed .feed-card img{width:100%;height:100%;object-fit:cover;display:block}
 #nh-feed .feed-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 8px;font-size:12.5px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75));text-align:left}
+#nh-feed .feed-del{position:absolute;top:6px;right:6px;z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,120,120,.6);background:rgba(0,0,0,.65);color:#ff8080;font-size:22px;line-height:1;cursor:pointer}
 #nh-feed .feed-tag{position:absolute;left:6px;bottom:6px;font:400 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(5,7,12,.72);color:var(--ice-strong);padding:5px 8px;border-radius:999px}
 #nh-feed .feed-empty{color:var(--mist);font-size:14px;text-align:center;padding:28px 12px;border:1px dashed var(--line);border-radius:14px}
 #nh-review{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;background:rgba(5,7,12,.88);overflow-y:auto}
@@ -767,7 +768,7 @@
 })();
 </script>
     </div>
-    <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a><button type="button" id="reviewLink">Review</button></footer>
+    <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a><button type="button" id="reviewLink">Admin</button></footer>
   </main>
   <aside class="music-player" id="musicPlayer" aria-label="Lineup music player">
     <audio id="previewAudio" preload="auto" playsinline></audio>
@@ -1138,10 +1139,10 @@
 </div>
 <div id="nh-review" hidden role="dialog" aria-modal="true" aria-label="Photo review">
   <div class="review-panel">
-    <h3>Photo review</h3>
+    <h3>Admin</h3>
     <p class="review-count" id="reviewCount"></p>
     <div class="review-gate" id="reviewGate">
-      <p>Enter your 4-digit moderator code.</p>
+      <p>Enter your 4-digit admin code to manage the feed.</p>
       <input id="reviewCode" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Moderator code">
       <button type="button" id="reviewUnlock" class="lens-btn">Unlock</button>
       <p class="review-error" id="reviewError" role="alert" hidden></p>
@@ -1525,13 +1526,13 @@
             if (!j || !j.secure_url) throw new Error('no url');
             var capEl = document.getElementById('lensCaption');
             var caption = capEl ? capEl.value.trim().slice(0, 120) : '';
-            return sb('/photos', { method: 'POST', body: { url: j.secure_url, filter: activeFilter, status: 'pending', caption: caption || null } })
+            return sb('/photos', { method: 'POST', body: { url: j.secure_url, filter: activeFilter, status: 'approved', caption: caption || null } })
               .then(function (r) {
                 if (!r.ok) throw new Error('db ' + r.status);
                 return j.secure_url;
               });
           }).then(function () {
-            setNote('Posted. It will show in the feed after a quick review.');
+            setNote('Posted — it\'s live in the feed.');
             var capEl2 = document.getElementById('lensCaption'); if (capEl2) capEl2.value = '';
             postBtn.disabled = false;
             if (retakeBtn) retakeBtn.disabled = false;
@@ -1573,7 +1574,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function loadFeed() {
     if (!feedGrid) return;
-    sb('/photos?status=eq.approved&order=created_at.desc&select=url,filter,caption,created_at&limit=60')
+    sb('/photos?status=eq.approved&order=created_at.desc&select=id,url,filter,caption,created_at&limit=60')
       .then(function (r) { return r.ok ? r.json() : []; })
       .then(function (rows) {
         rows = rows || [];
@@ -1586,10 +1587,13 @@
         feedGrid.innerHTML = rows.map(function (p) {
           var tag = FILTERS[p.filter] ? FILTERS[p.filter].label : esc(p.filter || '');
           var cap = p.caption ? esc(p.caption) : '';
-          return '<figure class="feed-card"><img loading="lazy" decoding="async" src="' + esc(p.url) + '" alt="Niteharts crowd photo">' +
+          var del = (typeof adminMode !== 'undefined' && adminMode && p.id) ?
+            '<button type="button" class="feed-del" data-id="' + esc(p.id) + '" aria-label="Delete photo">×</button>' : '';
+          return '<figure class="feed-card">' + del + '<img loading="lazy" decoding="async" src="' + esc(p.url) + '" alt="Niteharts crowd photo">' +
             (tag ? '<figcaption class="feed-tag">' + esc(tag) + '</figcaption>' : '') +
             (cap ? '<figcaption class="feed-cap">' + cap + '</figcaption>' : '') + '</figure>';
         }).join('');
+        wireFeedDeletes();
       })
       .catch(function () {});
   }
@@ -1604,8 +1608,9 @@
   } else { loadFeed(); }
 
   /* ============================================================
-     4. REVIEW QUEUE (Nathan)
+     4. ADMIN MODE (Nathan — delete bad photos)
   ============================================================ */
+  var adminMode = false;
   var reviewBox = document.getElementById('nh-review');
   var reviewGate = document.getElementById('reviewGate');
   var reviewList = document.getElementById('reviewList');
@@ -1636,23 +1641,27 @@
     reviewBox.hidden = true;
     document.body.style.overflow = '';
   }
-  function loadPending() {
-    reviewList.innerHTML = '<p class="review-count">Loading...</p>';
-    sb('/photos?status=eq.pending&order=created_at.desc&select=id,url,filter,created_at&limit=50')
-      .then(function (r) { return r.ok ? r.json() : []; })
-      .then(function (rows) {
-        rows = rows || [];
-        if (reviewCount) reviewCount.textContent = rows.length + (rows.length === 1 ? ' photo' : ' photos') + ' waiting';
-        if (!rows.length) { reviewList.innerHTML = '<p class="review-count">All caught up. Nothing waiting.</p>'; return; }
-        reviewList.innerHTML = rows.map(function (p) {
-          var tag = FILTERS[p.filter] ? FILTERS[p.filter].label : esc(p.filter || '');
-          return '<div class="review-item" data-id="' + esc(p.id) + '"><img loading="lazy" src="' + esc(p.url) + '" alt="Photo awaiting review">' +
-            '<div class="review-meta"><span class="review-filter">' + esc(tag) + '</span>' +
-            '<span class="review-btns"><button type="button" class="review-approve" data-act="approved">Approve</button>' +
-            '<button type="button" class="review-reject" data-act="rejected">Reject</button></span></div></div>';
-        }).join('');
-      })
-      .catch(function () { reviewList.innerHTML = '<p class="review-count">Could not load. Check connection.</p>'; });
+  function setAdmin(on) {
+    adminMode = !!on;
+    var link = document.getElementById('reviewLink');
+    if (link) link.textContent = adminMode ? 'Admin ✓' : 'Admin';
+    if (typeof loadFeed === 'function') loadFeed();
+  }
+  function wireFeedDeletes() {
+    if (!feedGrid) return;
+    feedGrid.querySelectorAll('.feed-del').forEach(function (b) {
+      if (b.dataset.wired) return;
+      b.dataset.wired = '1';
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = b.getAttribute('data-id');
+        if (!id || !confirm('Delete this photo?')) return;
+        b.disabled = true;
+        sb('/photos?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: { status: 'rejected' } })
+          .then(function () { loadFeed(); })
+          .catch(function () { b.disabled = false; });
+      });
+    });
   }
   var unlockBtn = document.getElementById('reviewUnlock');
   if (unlockBtn) {
@@ -1662,40 +1671,22 @@
       if (!saved) {
         if (v.length !== 4) { showReviewError('Pick any 4 digits.'); return; }
         lsSet('nh_review_code', v);
-        showReviewError('');
-        reviewGate.hidden = true; reviewList.hidden = false;
-        loadPending();
-      } else {
-        if (v === saved) {
-          showReviewError('');
-          reviewGate.hidden = true; reviewList.hidden = false;
-          loadPending();
-        } else { showReviewError('Wrong code. Try again.'); }
-      }
+      } else if (v !== saved) { showReviewError('Wrong code. Try again.'); return; }
+      showReviewError('');
+      closeReview();
+      setAdmin(true);
     });
   }
-  if (reviewList) {
-    reviewList.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-act]');
-      if (!b) return;
-      var item = b.closest('.review-item');
-      var id = item.getAttribute('data-id');
-      var act = b.getAttribute('data-act');
-      b.disabled = true;
-      sb('/photos?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: { status: act } })
-        .then(function (r) {
-          if (!r.ok) throw new Error('nope');
-          item.parentNode.removeChild(item);
-          loadPending();
-        })
-        .catch(function () { b.disabled = false; });
-    });
-  }
+
   var reviewClose = document.getElementById('reviewClose');
   if (reviewClose) reviewClose.addEventListener('click', closeReview);
   if (reviewBox) reviewBox.addEventListener('click', function (e) { if (e.target === reviewBox) closeReview(); });
   var reviewLink = document.getElementById('reviewLink');
-  if (reviewLink) reviewLink.addEventListener('click', function (e) { e.preventDefault(); openReview(); });
+  if (reviewLink) reviewLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (adminMode) { setAdmin(false); return; }
+    openReview();
+  });
 })();
 </script>
 
