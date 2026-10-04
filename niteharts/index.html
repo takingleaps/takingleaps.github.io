@@ -293,6 +293,261 @@
           </form>
         </div>
       </section>
+<!-- NITEHARTS ARCADE: HEART POP (self-contained, no external deps) -->
+<section id="nh-arcade" class="module arcade-module" data-module-id="arcade" data-module-label="Arcade" aria-labelledby="nhArcadeTitle">
+  <style>
+    #nh-arcade { position: relative; margin: 0 auto; max-width: 720px; padding: 28px 16px 40px; text-align: center; }
+    #nh-arcade h2 { font-size: 22px; letter-spacing: 3px; color: #fff; margin: 0 0 4px; }
+    #nh-arcade .nh-arcade-sub { color: #8fd8ff; font-size: 13px; letter-spacing: 1px; margin-bottom: 14px; }
+    #nh-arcade-wrap { position: relative; border: 1px solid rgba(143,216,255,.25); border-radius: 18px; overflow: hidden; background: #05070c; }
+    #nh-arcade-canvas { display: block; width: 100%; height: 340px; touch-action: none; cursor: pointer; }
+    #nh-arcade-hud { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; pointer-events: none; }
+    #nh-arcade-hud .nh-score, #nh-arcade-hud .nh-time { color: #fff; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-shadow: 0 0 12px rgba(143,216,255,.6); }
+    #nh-arcade-hud .nh-combo { color: #ffd76a; font-weight: 700; font-size: 14px; min-height: 20px; }
+    #nh-arcade-mute { position: absolute; bottom: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(143,216,255,.4); background: rgba(5,7,12,.7); color: #8fd8ff; font-size: 18px; cursor: pointer; z-index: 5; }
+    #nh-arcade-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(5,7,12,.82); z-index: 4; padding: 20px; }
+    #nh-arcade-overlay.hidden { display: none; }
+    #nh-arcade-overlay .nh-big { color: #fff; font-size: 24px; letter-spacing: 2px; margin: 0; }
+    #nh-arcade-overlay .nh-final { color: #8fd8ff; font-size: 16px; margin: 0; }
+    #nh-arcade-start, #nh-arcade-again { min-width: 180px; min-height: 52px; border: none; border-radius: 999px; background: #8fd8ff; color: #05070c; font-size: 17px; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+    #nh-arcade-start:active, #nh-arcade-again:active { transform: scale(.96); }
+  </style>
+  <h2 id="nhArcadeTitle">HEART POP</h2>
+  <div class="nh-arcade-sub">NITEHARTS ARCADE · TAP THE HEARTS</div>
+  <div id="nh-arcade-wrap">
+    <canvas id="nh-arcade-canvas"></canvas>
+    <div id="nh-arcade-hud">
+      <span class="nh-score">0</span>
+      <span class="nh-combo"></span>
+      <span class="nh-time">30</span>
+    </div>
+    <button id="nh-arcade-mute" aria-label="Toggle sound">🔊</button>
+    <div id="nh-arcade-overlay">
+      <p class="nh-big" id="nh-arcade-title">HEART POP</p>
+      <p class="nh-final" id="nh-arcade-msg">Pop as many hearts as you can in 30 seconds.<br>Gold hearts are worth 5x.</p>
+      <button id="nh-arcade-start">▶ &nbsp;PLAY</button>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  'use strict';
+  var canvas = document.getElementById('nh-arcade-canvas');
+  var wrap = document.getElementById('nh-arcade-wrap');
+  var overlay = document.getElementById('nh-arcade-overlay');
+  var titleEl = document.getElementById('nh-arcade-title');
+  var msgEl = document.getElementById('nh-arcade-msg');
+  var startBtn = document.getElementById('nh-arcade-start');
+  var muteBtn = document.getElementById('nh-arcade-mute');
+  var scoreEl = wrap.querySelector('.nh-score');
+  var timeEl = wrap.querySelector('.nh-time');
+  var comboEl = wrap.querySelector('.nh-combo');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = 0, H = 340, DPR = 1;
+  var hearts = [], parts = [], floaters = [], stars = [];
+  var running = false, score = 0, best = 0, combo = 0, mult = 1, lastPop = 0;
+  var timeLeft = 30, spawnTimer = 0, rafId = 0, lastT = 0;
+  var muted = false, audioCtx = null;
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = wrap.clientWidth;
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  function initStars() {
+    stars = [];
+    for (var i = 0; i < 40; i++) {
+      stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.4 + .4, tw: Math.random() * 6.28 });
+    }
+  }
+
+  function ensureAudio() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audioCtx = null; }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  function pop(freq, dur, vol) {
+    if (muted || !audioCtx) return;
+    try {
+      var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(vol, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + dur);
+    } catch (e) {}
+  }
+
+  function drawHeart(x, y, s, color, glow) {
+    ctx.save();
+    ctx.translate(x, y); ctx.scale(s / 32, s / 32);
+    ctx.shadowColor = glow; ctx.shadowBlur = 14;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(0, 10);
+    ctx.bezierCurveTo(-16, -4, -10, -16, 0, -7);
+    ctx.bezierCurveTo(10, -16, 16, -4, 0, 10);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,.55)';
+    ctx.beginPath(); ctx.ellipse(-5, -7, 3.4, 2.2, -.6, 0, 0, 6.29); ctx.fill();
+    ctx.restore();
+  }
+
+  function spawnHeart() {
+    var gold = Math.random() < .12;
+    var s = gold ? 30 + Math.random() * 8 : 34 + Math.random() * 14;
+    hearts.push({
+      x: 30 + Math.random() * (W - 60),
+      y: H + 30,
+      s: s,
+      vy: 55 + Math.random() * 70,
+      sway: Math.random() * 6.28,
+      swayAmp: 14 + Math.random() * 22,
+      swaySpd: 1 + Math.random() * 2,
+      gold: gold,
+      rot: (Math.random() - .5) * .3
+    });
+  }
+
+  function burst(x, y, color, n) {
+    for (var i = 0; i < (n || 10); i++) {
+      var a = Math.random() * 6.28, sp = 60 + Math.random() * 140;
+      parts.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 40, life: .6 + Math.random() * .3, t: 0, color: color, r: 1.5 + Math.random() * 2.5 });
+    }
+  }
+
+  function onTap(px, py) {
+    if (!running) return;
+    for (var i = hearts.length - 1; i >= 0; i--) {
+      var h = hearts[i];
+      var dx = px - h.x, dy = py - h.y;
+      if (dx * dx + dy * dy < (h.s * .85) * (h.s * .85)) {
+        hearts.splice(i, 1);
+        var now = performance.now();
+        combo = (now - lastPop < 1200) ? combo + 1 : 1;
+        lastPop = now;
+        mult = Math.min(1 + Math.floor(combo / 5), 5);
+        var pts = (h.gold ? 50 : 10) * mult;
+        score += pts;
+        burst(h.x, h.y, h.gold ? '#ffd76a' : '#8fd8ff', h.gold ? 18 : 10);
+        floaters.push({ x: h.x, y: h.y - 10, t: 0, txt: '+' + pts });
+        pop(h.gold ? 880 : 520 + Math.min(combo * 18, 320), .12, .18);
+        if (h.gold) setTimeout(function () { pop(1320, .14, .14); }, 70);
+        scoreEl.textContent = score;
+        comboEl.textContent = combo >= 5 ? 'COMBO x' + mult : '';
+        return;
+      }
+    }
+  }
+
+  function loop(t) {
+    if (!running) return;
+    var dt = Math.min((t - lastT) / 1000, .05); lastT = t;
+    timeLeft -= dt;
+    if (timeLeft <= 0) { endGame(); return; }
+    timeEl.textContent = Math.ceil(timeLeft);
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) { spawnHeart(); spawnTimer = Math.max(.28, .75 - (30 - timeLeft) * .015); }
+
+    ctx.clearRect(0, 0, W, H);
+    var i, s;
+    for (i = 0; i < stars.length; i++) {
+      s = stars[i]; s.tw += dt * 2;
+      ctx.globalAlpha = .25 + Math.abs(Math.sin(s.tw)) * .45;
+      ctx.fillStyle = '#8fd8ff';
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.29); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    for (i = hearts.length - 1; i >= 0; i--) {
+      var h = hearts[i];
+      h.sway += dt * h.swaySpd;
+      h.y -= h.vy * dt;
+      var x = h.x + Math.sin(h.sway) * h.swayAmp;
+      drawHeart(x, h.y, h.s, h.gold ? '#ffd76a' : '#8fd8ff', h.gold ? '#ffd76a' : '#8fd8ff');
+      if (h.y < -50) {
+        hearts.splice(i, 1);
+        combo = 0; mult = 1; comboEl.textContent = '';
+      }
+    }
+    for (i = parts.length - 1; i >= 0; i--) {
+      var p = parts[i]; p.t += dt;
+      if (p.t > p.life) { parts.splice(i, 1); continue; }
+      p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 220 * dt;
+      ctx.globalAlpha = 1 - p.t / p.life;
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.29); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'center'; ctx.font = '700 15px system-ui, sans-serif';
+    for (i = floaters.length - 1; i >= 0; i--) {
+      var f = floaters[i]; f.t += dt;
+      if (f.t > .8) { floaters.splice(i, 1); continue; }
+      ctx.globalAlpha = 1 - f.t / .8;
+      ctx.fillStyle = '#fff';
+      ctx.fillText(f.txt, f.x, f.y - f.t * 46);
+    }
+    ctx.globalAlpha = 1;
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function startGame() {
+    ensureAudio();
+    hearts = []; parts = []; floaters = [];
+    score = 0; combo = 0; mult = 1; timeLeft = 30; spawnTimer = 0;
+    scoreEl.textContent = '0'; timeEl.textContent = '30'; comboEl.textContent = '';
+    overlay.classList.add('hidden');
+    running = true; lastT = performance.now();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function endGame() {
+    running = false;
+    cancelAnimationFrame(rafId);
+    best = Math.max(best, score);
+    titleEl.textContent = 'TIME UP';
+    msgEl.innerHTML = 'Score: <b style="color:#fff">' + score + '</b><br>Best this visit: <b style="color:#fff">' + best + '</b>';
+    var btn = document.getElementById('nh-arcade-start');
+    btn.outerHTML = '<button id="nh-arcade-again">↻ &nbsp;PLAY AGAIN</button>';
+    document.getElementById('nh-arcade-again').addEventListener('click', function () {
+      this.outerHTML = '<button id="nh-arcade-start">▶ &nbsp;PLAY</button>';
+      document.getElementById('nh-arcade-start').addEventListener('click', startGame);
+      startGame();
+    });
+    overlay.classList.remove('hidden');
+    pop(300, .3, .15);
+  }
+
+  function canvasPos(e) {
+    var r = canvas.getBoundingClientRect();
+    var cx = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+    var cy = (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+    return { x: cx - r.left, y: cy - r.top };
+  }
+  canvas.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    var p = canvasPos(e);
+    onTap(p.x, p.y);
+  });
+  startBtn.addEventListener('click', startGame);
+  muteBtn.addEventListener('click', function () {
+    muted = !muted;
+    muteBtn.textContent = muted ? '🔇' : '🔊';
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && running) { running = false; cancelAnimationFrame(rafId); }
+  });
+  window.addEventListener('resize', function () { resize(); initStars(); });
+  resize(); initStars();
+})();
+</script>
+
     <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a></footer>
   </main>
   <aside class="music-player" id="musicPlayer" aria-label="Lineup music player">
