@@ -346,40 +346,41 @@
         </div>
       </section>
 <section id="nh-arcade" class="module arcade-module" data-module-id="arcade" data-module-label="Heart Pop" aria-label="Heart Pop mini game">
-  <style>
+    <style>
     #nh-arcade { position: relative; margin: 0 auto; max-width: 720px; padding: 28px 16px 40px; text-align: center; }
-    #nh-arcade h2 { font-size: 22px; letter-spacing: 3px; color: #fff; margin: 0 0 4px; }
-    #nh-arcade .nh-arcade-sub { color: #8fd8ff; font-size: 13px; letter-spacing: 1px; margin-bottom: 14px; }
-    #nh-arcade-wrap { position: relative; border: 1px solid rgba(143,216,255,.25); border-radius: 18px; overflow: hidden; background: #05070c; }
-    #nh-arcade-canvas { display: block; width: 100%; height: 340px; touch-action: none; cursor: pointer; }
-    #nh-arcade-hud { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; pointer-events: none; }
-    #nh-arcade-hud .nh-score, #nh-arcade-hud .nh-time { color: #fff; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-shadow: 0 0 12px rgba(143,216,255,.6); }
-    #nh-arcade-hud .nh-combo { color: #ffd76a; font-weight: 700; font-size: 14px; min-height: 20px; }
-    #nh-arcade-mute { position: absolute; bottom: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(143,216,255,.4); background: rgba(5,7,12,.7); color: #8fd8ff; font-size: 18px; cursor: pointer; z-index: 5; }
-    #nh-arcade-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(5,7,12,.82); z-index: 4; padding: 20px; }
+    #nh-arcade h2 { font-family: 'Courier New', Courier, monospace; font-size: 24px; letter-spacing: 4px; color: #fff; margin: 0 0 4px; text-shadow: 3px 3px 0 #0a0e16; }
+    #nh-arcade .nh-arcade-sub { color: #8fd8ff; font-family: 'Courier New', Courier, monospace; font-size: 12px; letter-spacing: 2px; margin-bottom: 14px; }
+    #nh-arcade-wrap { position: relative; border: 3px solid #1d3a52; border-radius: 6px; overflow: hidden; background: #05070c; box-shadow: 0 0 0 3px #05070c, 0 0 24px rgba(143,216,255,.15); }
+    #nh-arcade-canvas { display: block; width: 100%; height: 340px; touch-action: none; cursor: pointer; image-rendering: pixelated; }
+    #nh-arcade-hud { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; pointer-events: none; font-family: 'Courier New', Courier, monospace; }
+    #nh-arcade-hud .nh-score, #nh-arcade-hud .nh-time { color: #fff; font-weight: 700; font-size: 18px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
+    #nh-arcade-hud .nh-combo { color: #ffd76a; font-weight: 700; font-size: 14px; min-height: 20px; letter-spacing: 1px; text-shadow: 2px 2px 0 #000; }
+    #nh-arcade-mute { position: absolute; bottom: 10px; right: 10px; min-width: 44px; height: 40px; padding: 0 8px; border-radius: 4px; border: 2px solid rgba(143,216,255,.5); background: #05070c; color: #8fd8ff; font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; z-index: 5; }
+    #nh-arcade-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(5,7,12,.88); z-index: 4; padding: 20px; }
     #nh-arcade-overlay.hidden { display: none; }
-    #nh-arcade-overlay .nh-big { color: #fff; font-size: 24px; letter-spacing: 2px; margin: 0; }
-    #nh-arcade-overlay .nh-final { color: #8fd8ff; font-size: 16px; margin: 0; }
-    #nh-arcade-start, #nh-arcade-again { min-width: 180px; min-height: 52px; border: none; border-radius: 999px; background: #8fd8ff; color: #05070c; font-size: 17px; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
-    #nh-arcade-start:active, #nh-arcade-again:active { transform: scale(.96); }
+    #nh-arcade-overlay .nh-big { color: #fff; font-family: 'Courier New', Courier, monospace; font-size: 26px; font-weight: 700; letter-spacing: 3px; margin: 0; text-shadow: 3px 3px 0 #0a0e16; }
+    #nh-arcade-overlay .nh-final { color: #8fd8ff; font-family: 'Courier New', Courier, monospace; font-size: 14px; line-height: 1.8; margin: 0; }
+    #nh-arcade-start, #nh-arcade-again { min-width: 180px; min-height: 52px; border: 3px solid #05070c; border-radius: 4px; background: #8fd8ff; color: #05070c; font-family: 'Courier New', Courier, monospace; font-size: 17px; font-weight: 800; letter-spacing: 2px; cursor: pointer; box-shadow: 0 5px 0 #0a0e16; }
+    #nh-arcade-start:active, #nh-arcade-again:active { transform: translateY(3px); box-shadow: 0 2px 0 #0a0e16; }
     #nh-arcade-initials { display: none; flex-direction: column; align-items: center; gap: 8px; }
     #nh-arcade-initials.show { display: flex; }
-    #nh-arcade-initials .nh-qual { color: #ffd76a; font-size: 14px; font-weight: 700; letter-spacing: 1px; margin: 0; }
-    #nh-arcade-initials input { width: 120px; height: 48px; text-align: center; font-size: 22px; font-weight: 800; letter-spacing: 6px; text-transform: uppercase; background: #0a0e16; border: 1px solid rgba(143,216,255,.5); border-radius: 10px; color: #fff; }
-    #nh-arcade-save { min-width: 140px; min-height: 44px; border: none; border-radius: 999px; background: #ffd76a; color: #05070c; font-size: 15px; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
-    #nh-arcade-board { margin-top: 14px; border: 1px solid rgba(143,216,255,.18); border-radius: 14px; background: rgba(5,7,12,.6); padding: 14px 16px; text-align: left; }
-    #nh-arcade-board h3 { margin: 0 0 10px; color: #8fd8ff; font-size: 13px; letter-spacing: 3px; text-align: center; }
+    #nh-arcade-initials .nh-qual { color: #ffd76a; font-family: 'Courier New', Courier, monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; margin: 0; }
+    #nh-arcade-initials input { width: 120px; height: 48px; text-align: center; font-family: 'Courier New', Courier, monospace; font-size: 22px; font-weight: 800; letter-spacing: 6px; text-transform: uppercase; background: #0a0e16; border: 2px solid rgba(143,216,255,.5); border-radius: 4px; color: #fff; }
+    #nh-arcade-save { min-width: 140px; min-height: 44px; border: 3px solid #05070c; border-radius: 4px; background: #ffd76a; color: #05070c; font-family: 'Courier New', Courier, monospace; font-size: 15px; font-weight: 800; letter-spacing: 2px; cursor: pointer; box-shadow: 0 4px 0 #0a0e16; }
+    #nh-arcade-save:active { transform: translateY(2px); box-shadow: 0 2px 0 #0a0e16; }
+    #nh-arcade-board { margin-top: 14px; border: 2px solid rgba(143,216,255,.22); border-radius: 6px; background: #05070c; padding: 14px 16px; text-align: left; }
+    #nh-arcade-board h3 { margin: 0 0 10px; color: #8fd8ff; font-family: 'Courier New', Courier, monospace; font-size: 13px; letter-spacing: 3px; text-align: center; }
     #nh-arcade-board ol { margin: 0; padding: 0; list-style: none; }
-    #nh-arcade-board li { display: flex; justify-content: space-between; align-items: center; padding: 7px 4px; border-bottom: 1px solid rgba(143,216,255,.08); color: #fff; font-size: 15px; }
+    #nh-arcade-board li { display: flex; justify-content: space-between; align-items: center; padding: 7px 4px; border-bottom: 1px solid rgba(143,216,255,.08); color: #fff; font-size: 15px; font-family: 'Courier New', Courier, monospace; }
     #nh-arcade-board li:last-child { border-bottom: none; }
     #nh-arcade-board li .nh-rank { color: #ffd76a; font-weight: 800; width: 28px; }
     #nh-arcade-board li .nh-name { flex: 1; letter-spacing: 2px; font-weight: 700; }
     #nh-arcade-board li .nh-date { color: rgba(143,216,255,.55); font-size: 12px; margin-right: 10px; }
     #nh-arcade-board li .nh-pts { font-weight: 800; color: #8fd8ff; }
-    #nh-arcade-board .nh-empty { text-align: center; color: rgba(143,216,255,.5); font-size: 14px; padding: 8px 0; margin: 0; }
+    #nh-arcade-board .nh-empty { text-align: center; color: rgba(143,216,255,.5); font-family: 'Courier New', Courier, monospace; font-size: 14px; padding: 8px 0; margin: 0; }
   </style>
   <h2>HEART POP</h2>
-  <div class="nh-arcade-sub">NITEHARTS ARCADE · TAP THE HEARTS</div>
+  <div class="nh-arcade-sub">NITEHARTS ARCADE · TAP 'EM ALL</div>
   <div id="nh-arcade-wrap">
     <canvas id="nh-arcade-canvas"></canvas>
     <div id="nh-arcade-hud">
@@ -387,16 +388,16 @@
       <span class="nh-combo"></span>
       <span class="nh-time">30</span>
     </div>
-    <button id="nh-arcade-mute" aria-label="Toggle sound">🔊</button>
+    <button id="nh-arcade-mute" aria-label="Toggle sound">SND ON</button>
     <div id="nh-arcade-overlay">
       <p class="nh-big" id="nh-arcade-title">HEART POP</p>
-      <p class="nh-final" id="nh-arcade-msg">Pop as many hearts as you can in 30 seconds.<br>Gold hearts are worth 5x.</p>
+      <p class="nh-final" id="nh-arcade-msg">Pop the falling sprites in 30 seconds.<br>RED 10 &middot; PINK 20 &middot; STAR 30 &middot; GEM 40 &middot; GOLD 5X</p>
       <div id="nh-arcade-initials">
         <p class="nh-qual">NEW HIGH SCORE — ENTER INITIALS</p>
         <input id="nh-arcade-name" maxlength="3" placeholder="AAA" autocomplete="off" />
         <button id="nh-arcade-save">SAVE</button>
       </div>
-      <button id="nh-arcade-start">▶ &nbsp;PLAY</button>
+      <button id="nh-arcade-start">PLAY</button>
     </div>
   </div>
   <div id="nh-arcade-board" aria-label="Global leaderboard">
@@ -511,8 +512,9 @@
   var comboEl = wrap.querySelector('.nh-combo');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
   var W = 0, H = 340, DPR = 1;
-  var hearts = [], parts = [], floaters = [], stars = [];
+  var sprites = [], parts = [], floaters = [], bgstars = [];
   var running = false, score = 0, combo = 0, mult = 1, lastPop = 0;
   var timeLeft = 30, spawnTimer = 0, rafId = 0, lastT = 0;
   var muted = false, audioCtx = null;
@@ -562,17 +564,223 @@
   }
   refreshBoard();
 
+  /* ============ 8-bit sprites (.=empty X=main D=dark L=light) ============ */
+  var HEART_MAP = [
+    '.XX..XX.',
+    'XXXXXXXX',
+    'XLLXXXXX',
+    'XLXXXXXX',
+    '.XXXXXX.',
+    '..XXXXD.',
+    '...XXD..',
+    '....D...'
+  ];
+  var STAR_MAP = [
+    '....X....',
+    '....L....',
+    '...XXX...',
+    'XXXXXXXXX',
+    '.XXXXXXX.',
+    '..XXXXXD.',
+    '..XXXXX..',
+    '.XXX.XXX.',
+    '.DX...XD.'
+  ];
+  var GEM_MAP = [
+    '...XX...',
+    '..XLXX..',
+    '.XLLXXX.',
+    'XXXXXXXX',
+    '.XXXXXD.',
+    '..XXXD..',
+    '...XD...',
+    '........'
+  ];
+  var SPRITES = {
+    heart: { map: HEART_MAP, pal: ['#ff3b5c', '#a3122b', '#ff8ba0'], pts: 10, w: 45, freq: 520, label: 'RED 10' },
+    pink:  { map: HEART_MAP, pal: ['#ff7ad9', '#c2439f', '#ffc7ec'], pts: 20, w: 25, freq: 640, label: 'PINK 20' },
+    star:  { map: STAR_MAP,  pal: ['#ffd94a', '#c99420', '#fff3b0'], pts: 30, w: 15, freq: 740, label: 'STAR 30' },
+    gem:   { map: GEM_MAP,   pal: ['#4ad9ff', '#1f7fb8', '#c8f4ff'], pts: 40, w: 10, freq: 840, label: 'GEM 40' },
+    gold:  { map: HEART_MAP, pal: ['#ffcf3f', '#b57e12', '#fff3b0'], pts: 50, w: 5,  freq: 880, label: 'GOLD 5X', gold: true }
+  };
+  function drawSprite(sp, x, y, size, t) {
+    var map = sp.map, n = map.length, w = 0, r, c;
+    for (r = 0; r < n; r++) { if (map[r].length > w) w = map[r].length; }
+    var px = size / Math.max(n, w);
+    var ox = Math.round(x - (w * px) / 2), oy = Math.round(y - (n * px) / 2);
+    for (r = 0; r < n; r++) {
+      var row = map[r];
+      for (c = 0; c < row.length; c++) {
+        var ch = row.charAt(c);
+        if (ch === '.') continue;
+        ctx.fillStyle = ch === 'X' ? sp.pal[0] : (ch === 'D' ? sp.pal[1] : sp.pal[2]);
+        var ux = Math.round(ox + c * px), uy = Math.round(oy + r * px);
+        var up = Math.ceil(px);
+        ctx.fillRect(ux, uy, up + 1, up + 1);
+      }
+    }
+    if (sp.gold && t) {
+      var bl = Math.floor(t * 5) % 2 === 0;
+      ctx.fillStyle = bl ? '#ffffff' : '#fff3b0';
+      var su = Math.max(2, Math.round(px / 2));
+      ctx.fillRect(Math.round(x + size * .28), Math.round(y - size * .3), su, su);
+      ctx.fillRect(Math.round(x - size * .34), Math.round(y + size * .1), su, su);
+    }
+  }
+  function pickType() {
+    var roll = Math.random() * 100, acc = 0, k;
+    for (k in SPRITES) { acc += SPRITES[k].w; if (roll < acc) return k; }
+    return 'heart';
+  }
+  function spawnSprite() {
+    var t = pickType();
+    var size = 44 + Math.random() * 12;
+    sprites.push({
+      type: t,
+      x: 30 + Math.random() * (W - 60),
+      y: H + 40,
+      size: size,
+      hitR: Math.max(size * 0.78, 26),
+      vy: 55 + Math.random() * 70,
+      sway: Math.random() * 6.28,
+      swayAmp: 14 + Math.random() * 22,
+      swaySpd: 1 + Math.random() * 2,
+      tw: Math.random() * 6.28
+    });
+  }
+  function burst(x, y, color, n) {
+    for (var i = 0; i < (n || 10); i++) {
+      var a = Math.random() * 6.28, sp = 60 + Math.random() * 140;
+      parts.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 40, life: .6 + Math.random() * .3, t: 0, color: color, r: 2 + Math.random() * 3 });
+    }
+  }
+  function onTap(px, py) {
+    if (!running) return;
+    for (var i = sprites.length - 1; i >= 0; i--) {
+      var s = sprites[i];
+      var dx = px - s.x, dy = py - s.y;
+      if (dx * dx + dy * dy < s.hitR * s.hitR) {
+        sprites.splice(i, 1);
+        var sp = SPRITES[s.type];
+        var now = performance.now();
+        combo = (now - lastPop < 1200) ? combo + 1 : 1;
+        lastPop = now;
+        mult = Math.min(1 + Math.floor(combo / 5), 5);
+        var pts = sp.pts * mult;
+        score += pts;
+        burst(s.x, s.y, sp.pal[0], sp.gold ? 18 : 10);
+        floaters.push({ x: s.x, y: s.y - 10, t: 0, txt: '+' + pts });
+        pop(sp.freq + Math.min(combo * 18, 320), .12, .18);
+        if (sp.gold) setTimeout(function () { pop(1320, .14, .14); }, 70);
+        scoreEl.textContent = score;
+        comboEl.textContent = combo >= 5 ? 'COMBO x' + mult : '';
+        return;
+      }
+    }
+  }
+  function loop(t) {
+    if (!running) return;
+    var dt = Math.min((t - lastT) / 1000, .05); lastT = t;
+    timeLeft -= dt;
+    if (timeLeft <= 0) { endGame(); return; }
+    timeEl.textContent = Math.ceil(timeLeft);
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) { spawnSprite(); spawnTimer = Math.max(.28, .75 - (30 - timeLeft) * .015); }
+    ctx.clearRect(0, 0, W, H);
+    var i, s;
+    for (i = 0; i < bgstars.length; i++) {
+      s = bgstars[i]; s.tw += dt * 2;
+      ctx.globalAlpha = .2 + Math.abs(Math.sin(s.tw)) * .5;
+      ctx.fillStyle = '#8fd8ff';
+      var pr = Math.max(1, Math.round(s.r));
+      ctx.fillRect(Math.round(s.x), Math.round(s.y), pr, pr);
+    }
+    ctx.globalAlpha = 1;
+    for (i = sprites.length - 1; i >= 0; i--) {
+      var h = sprites[i];
+      h.sway += dt * h.swaySpd;
+      h.tw += dt * 3;
+      h.y -= h.vy * dt;
+      var x = h.x + Math.sin(h.sway) * h.swayAmp;
+      drawSprite(SPRITES[h.type], x, h.y, h.size, h.tw);
+      if (h.y < -60) { sprites.splice(i, 1); combo = 0; mult = 1; comboEl.textContent = ''; }
+    }
+    for (i = parts.length - 1; i >= 0; i--) {
+      var p = parts[i]; p.t += dt;
+      if (p.t > p.life) { parts.splice(i, 1); continue; }
+      p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 220 * dt;
+      ctx.globalAlpha = 1 - p.t / p.life;
+      ctx.fillStyle = p.color;
+      var pr2 = Math.max(1, Math.round(p.r));
+      ctx.fillRect(Math.round(p.x), Math.round(p.y), pr2, pr2);
+    }
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'center'; ctx.font = "700 15px 'Courier New', Courier, monospace";
+    for (i = floaters.length - 1; i >= 0; i--) {
+      var f = floaters[i]; f.t += dt;
+      if (f.t > .8) { floaters.splice(i, 1); continue; }
+      ctx.globalAlpha = 1 - f.t / .8;
+      ctx.fillStyle = '#fff';
+      ctx.fillText(f.txt, Math.round(f.x), Math.round(f.y - f.t * 46));
+    }
+    ctx.globalAlpha = 1;
+    rafId = requestAnimationFrame(loop);
+  }
+
+  /* ============ chiptune: square lead + triangle bass, 32-step loop ============ */
+  var MUS = { step: 0, nextT: 0, timer: null, stepDur: 60 / 150 / 2 };
+  var LEAD = [72,76,79,84, 83,79,76,79, 81,84,81,79, 76,79,74,76,
+              72,76,79,84, 86,84,83,81, 79,76,74,76, 72,0,67,72];
+  var BASSN = [48,53,45,43, 48,53,45,47];
+  function mf(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  function tone(freq, t, dur, type, vol) {
+    try {
+      var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + .015);
+      g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t); o.stop(t + dur + .02);
+    } catch (e) {}
+  }
+  function schedStep() {
+    if (!audioCtx) return;
+    try {
+      while (MUS.nextT < audioCtx.currentTime + .18) {
+        var s = MUS.step, t = MUS.nextT;
+        if (!muted) {
+          var L = LEAD[s];
+          if (L) tone(mf(L), t, MUS.stepDur * .9, 'square', .04);
+          if (s % 4 === 0) tone(mf(BASSN[(s / 4) | 0]), t, MUS.stepDur * 3.2, 'triangle', .07);
+        }
+        MUS.step = (s + 1) % 32;
+        MUS.nextT = t + MUS.stepDur;
+      }
+    } catch (e) {}
+  }
+  function startMusic() {
+    ensureAudio();
+    if (!audioCtx || MUS.timer) return;
+    MUS.step = 0; MUS.nextT = audioCtx.currentTime + .08;
+    MUS.timer = setInterval(schedStep, 50);
+  }
+  function stopMusic() {
+    if (MUS.timer) { clearInterval(MUS.timer); MUS.timer = null; }
+  }
+
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     W = wrap.clientWidth;
     canvas.width = Math.round(W * DPR);
     canvas.height = Math.round(H * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.imageSmoothingEnabled = false;
   }
   function initStars() {
-    stars = [];
+    bgstars = [];
     for (var i = 0; i < 40; i++) {
-      stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.4 + .4, tw: Math.random() * 6.28 });
+      bgstars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 2 + 1, tw: Math.random() * 6.28 });
     }
   }
   function ensureAudio() {
@@ -592,115 +800,16 @@
       o.start(); o.stop(audioCtx.currentTime + dur);
     } catch (e) {}
   }
-  function drawHeart(x, y, s, color, glow) {
-    ctx.save();
-    ctx.translate(x, y); ctx.scale(s / 32, s / 32);
-    ctx.shadowColor = glow; ctx.shadowBlur = 14;
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.moveTo(0, 10);
-    ctx.bezierCurveTo(-16, -4, -10, -16, 0, -7);
-    ctx.bezierCurveTo(10, -16, 16, -4, 0, 10);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = 'rgba(255,255,255,.55)';
-    ctx.beginPath(); ctx.ellipse(-5, -7, 3.4, 2.2, -.6, 0, 0, 6.29); ctx.fill();
-    ctx.restore();
-  }
-  function spawnHeart() {
-    var gold = Math.random() < .12;
-    var s = gold ? 30 + Math.random() * 8 : 34 + Math.random() * 14;
-    hearts.push({
-      x: 30 + Math.random() * (W - 60),
-      y: H + 30, s: s,
-      vy: 55 + Math.random() * 70,
-      sway: Math.random() * 6.28,
-      swayAmp: 14 + Math.random() * 22,
-      swaySpd: 1 + Math.random() * 2,
-      gold: gold
-    });
-  }
-  function burst(x, y, color, n) {
-    for (var i = 0; i < (n || 10); i++) {
-      var a = Math.random() * 6.28, sp = 60 + Math.random() * 140;
-      parts.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 40, life: .6 + Math.random() * .3, t: 0, color: color, r: 1.5 + Math.random() * 2.5 });
-    }
-  }
-  function onTap(px, py) {
-    if (!running) return;
-    for (var i = hearts.length - 1; i >= 0; i--) {
-      var h = hearts[i];
-      var dx = px - h.x, dy = py - h.y;
-      if (dx * dx + dy * dy < (h.s * .85) * (h.s * .85)) {
-        hearts.splice(i, 1);
-        var now = performance.now();
-        combo = (now - lastPop < 1200) ? combo + 1 : 1;
-        lastPop = now;
-        mult = Math.min(1 + Math.floor(combo / 5), 5);
-        var pts = (h.gold ? 50 : 10) * mult;
-        score += pts;
-        burst(h.x, h.y, h.gold ? '#ffd76a' : '#8fd8ff', h.gold ? 18 : 10);
-        floaters.push({ x: h.x, y: h.y - 10, t: 0, txt: '+' + pts });
-        pop(h.gold ? 880 : 520 + Math.min(combo * 18, 320), .12, .18);
-        if (h.gold) setTimeout(function () { pop(1320, .14, .14); }, 70);
-        scoreEl.textContent = score;
-        comboEl.textContent = combo >= 5 ? 'COMBO x' + mult : '';
-        return;
-      }
-    }
-  }
-  function loop(t) {
-    if (!running) return;
-    var dt = Math.min((t - lastT) / 1000, .05); lastT = t;
-    timeLeft -= dt;
-    if (timeLeft <= 0) { endGame(); return; }
-    timeEl.textContent = Math.ceil(timeLeft);
-    spawnTimer -= dt;
-    if (spawnTimer <= 0) { spawnHeart(); spawnTimer = Math.max(.28, .75 - (30 - timeLeft) * .015); }
-    ctx.clearRect(0, 0, W, H);
-    var i, s;
-    for (i = 0; i < stars.length; i++) {
-      s = stars[i]; s.tw += dt * 2;
-      ctx.globalAlpha = .25 + Math.abs(Math.sin(s.tw)) * .45;
-      ctx.fillStyle = '#8fd8ff';
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.29); ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    for (i = hearts.length - 1; i >= 0; i--) {
-      var h = hearts[i];
-      h.sway += dt * h.swaySpd;
-      h.y -= h.vy * dt;
-      var x = h.x + Math.sin(h.sway) * h.swayAmp;
-      drawHeart(x, h.y, h.s, h.gold ? '#ffd76a' : '#8fd8ff', h.gold ? '#ffd76a' : '#8fd8ff');
-      if (h.y < -50) { hearts.splice(i, 1); combo = 0; mult = 1; comboEl.textContent = ''; }
-    }
-    for (i = parts.length - 1; i >= 0; i--) {
-      var p = parts[i]; p.t += dt;
-      if (p.t > p.life) { parts.splice(i, 1); continue; }
-      p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 220 * dt;
-      ctx.globalAlpha = 1 - p.t / p.life;
-      ctx.fillStyle = p.color;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.29); ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    ctx.textAlign = 'center'; ctx.font = '700 15px system-ui, sans-serif';
-    for (i = floaters.length - 1; i >= 0; i--) {
-      var f = floaters[i]; f.t += dt;
-      if (f.t > .8) { floaters.splice(i, 1); continue; }
-      ctx.globalAlpha = 1 - f.t / .8;
-      ctx.fillStyle = '#fff';
-      ctx.fillText(f.txt, f.x, f.y - f.t * 46);
-    }
-    ctx.globalAlpha = 1;
-    rafId = requestAnimationFrame(loop);
+  function syncMuteBtn() {
+    muteBtn.textContent = muted ? 'SND OFF' : 'SND ON';
   }
   function resetOverlayForStart() {
     titleEl.textContent = 'HEART POP';
-    msgEl.innerHTML = 'Pop as many hearts as you can in 30 seconds.<br>Gold hearts are worth 5x.';
+    msgEl.innerHTML = 'Pop the falling sprites in 30 seconds.<br>RED 10 &middot; PINK 20 &middot; STAR 30 &middot; GEM 40 &middot; GOLD 5X';
     initialsBox.classList.remove('show');
     var again = document.getElementById('nh-arcade-again');
     if (again) {
-      again.outerHTML = '<button id="nh-arcade-start">▶ &nbsp;PLAY</button>';
+      again.outerHTML = '<button id="nh-arcade-start">PLAY</button>';
       document.getElementById('nh-arcade-start').addEventListener('click', startGame);
     } else {
       var st = document.getElementById('nh-arcade-start');
@@ -709,7 +818,7 @@
   }
   function startGame() {
     ensureAudio();
-    hearts = []; parts = []; floaters = [];
+    sprites = []; parts = []; floaters = [];
     score = 0; combo = 0; mult = 1; timeLeft = 30; spawnTimer = 0;
     scoreEl.textContent = '0'; timeEl.textContent = '30'; comboEl.textContent = '';
     resetOverlayForStart();
@@ -717,10 +826,12 @@
     running = true; lastT = performance.now();
     cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(loop);
+    if (!muted) startMusic();
   }
   function endGame() {
     running = false;
     cancelAnimationFrame(rafId);
+    stopMusic();
     titleEl.textContent = 'TIME UP';
     var isHigh = qualifies(score);
     msgEl.innerHTML = 'Score: <b style="color:#fff">' + score + '</b>';
@@ -734,12 +845,12 @@
         addScore(nm, score);
         initialsBox.classList.remove('show');
         var st2 = document.getElementById('nh-arcade-start');
-        if (st2) { st2.style.display = ''; st2.innerHTML = '↻ &nbsp;PLAY AGAIN'; }
+        if (st2) { st2.style.display = ''; st2.innerHTML = 'PLAY AGAIN'; }
       };
     } else {
       initialsBox.classList.remove('show');
       var st3 = document.getElementById('nh-arcade-start');
-      if (st3) { st3.style.display = ''; st3.innerHTML = '↻ &nbsp;PLAY AGAIN'; }
+      if (st3) { st3.style.display = ''; st3.innerHTML = 'PLAY AGAIN'; }
     }
     overlay.classList.remove('hidden');
     pop(300, .3, .15);
@@ -758,15 +869,19 @@
   startBtn.addEventListener('click', startGame);
   muteBtn.addEventListener('click', function () {
     muted = !muted;
-    muteBtn.textContent = muted ? '🔇' : '🔊';
+    syncMuteBtn();
+    if (muted) { stopMusic(); }
+    else if (running) { startMusic(); }
   });
+  syncMuteBtn();
   document.addEventListener('visibilitychange', function () {
-    if (document.hidden && running) { running = false; cancelAnimationFrame(rafId); }
+    if (document.hidden && running) { running = false; cancelAnimationFrame(rafId); stopMusic(); }
   });
   window.addEventListener('resize', function () { resize(); initStars(); });
   resize(); initStars();
 })();
 </script>
+
     </div>
     <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a><button type="button" id="reviewLink">Admin</button></footer>
   </main>
