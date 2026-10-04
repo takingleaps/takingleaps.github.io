@@ -148,6 +148,37 @@
     </div>
   </div>
   <main class="app">
+<div id="nh-wristband" role="note" aria-label="Wristband activation reminder">
+  <style>
+    #nh-wristband {
+      position: relative; z-index: 55;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 10px 44px 10px 16px;
+      background: linear-gradient(90deg, rgba(143,216,255,.14), rgba(143,216,255,.05));
+      border-bottom: 1px solid rgba(143,216,255,.35);
+      color: #fff; font-family: system-ui, sans-serif;
+      font-size: 13.5px; letter-spacing: .3px; text-align: center;
+    }
+    #nh-wristband a { color: #8fd8ff; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
+    #nh-wristband .nh-wb-close {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      width: 32px; height: 32px; border-radius: 50%;
+      background: transparent; border: 1px solid rgba(143,216,255,.4);
+      color: #8fd8ff; font-size: 15px; cursor: pointer; padding: 0; line-height: 1;
+    }
+    #nh-wristband.nh-wb-hidden { display: none; }
+    @media (max-width: 420px) { #nh-wristband { font-size: 12.5px; padding-right: 40px; } }
+  </style>
+  <span>&#9888;&#65039; Heading to Niteharts? <a href="https://www.niteharts.com/wristbands" target="_blank" rel="noopener">Activate your wristband before you go &rarr;</a></span>
+  <button class="nh-wb-close" aria-label="Dismiss reminder">&times;</button>
+  <script>
+  (function () {
+    var b = document.getElementById('nh-wristband');
+    if (!b) return;
+    b.querySelector('.nh-wb-close').addEventListener('click', function () { b.classList.add('nh-wb-hidden'); });
+  })();
+  </script>
+</div>
     <header class="hero">
       <div class="ambient-rig" aria-hidden="true"><span class="wire-orbit"></span><span class="signal-beam"></span><span class="signal-beam"></span><span class="signal-beam"></span></div>
       <div class="hero-logo-stage" id="heroLogoStage">
