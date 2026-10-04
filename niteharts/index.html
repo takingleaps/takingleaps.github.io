@@ -353,9 +353,18 @@
     #nh-arcade .nh-arcade-sub { color: #8fd8ff; font-family: 'Courier New', Courier, monospace; font-size: 12px; letter-spacing: 2px; margin-bottom: 14px; }
     #nh-arcade-wrap { position: relative; border: 3px solid #1d3a52; border-radius: 6px; overflow: hidden; background: #05070c; box-shadow: 0 0 0 3px #05070c, 0 0 24px rgba(143,216,255,.15); }
     #nh-arcade-canvas { display: block; width: 100%; height: 340px; touch-action: none; cursor: pointer; image-rendering: pixelated; }
+    #nh-arcade-wrap:fullscreen { border: 0; border-radius: 0; }
+    #nh-arcade-wrap:fullscreen #nh-arcade-canvas { height: 100vh; }
+    #nh-arcade-wrap:-webkit-full-screen { border: 0; border-radius: 0; }
+    #nh-arcade-wrap:-webkit-full-screen #nh-arcade-canvas { height: 100vh; }
+    @keyframes nhBuzz { 0%,100% { transform: translate(0,0); } 20% { transform: translate(-7px,4px); } 40% { transform: translate(6px,-5px); } 60% { transform: translate(-5px,-3px); } 80% { transform: translate(4px,3px); } }
+    #nh-arcade-wrap.nh-buzz { animation: nhBuzz .28s linear; }
     #nh-arcade-hud { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; pointer-events: none; font-family: 'Courier New', Courier, monospace; }
     #nh-arcade-hud .nh-score, #nh-arcade-hud .nh-time { color: #fff; font-weight: 700; font-size: 18px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
     #nh-arcade-hud .nh-combo { color: #ffd76a; font-weight: 700; font-size: 14px; min-height: 20px; letter-spacing: 1px; text-shadow: 2px 2px 0 #000; }
+    #nh-arcade-hud .nh-lives { display: inline-flex; gap: 5px; align-items: center; min-height: 20px; }
+    #nh-arcade-hud .nh-lives svg { width: 15px; height: 15px; display: block; filter: drop-shadow(0 0 3px rgba(255,47,77,.8)); }
+    #nh-arcade-hud .nh-lives svg.lost { opacity: .16; filter: grayscale(1); }
     #nh-arcade-mute { position: absolute; bottom: 10px; right: 10px; min-width: 44px; height: 40px; padding: 0 8px; border-radius: 4px; border: 2px solid rgba(143,216,255,.5); background: #05070c; color: #8fd8ff; font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; z-index: 5; }
     #nh-arcade-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(5,7,12,.88); z-index: 4; padding: 20px; }
     #nh-arcade-overlay.hidden { display: none; }
@@ -386,13 +395,14 @@
     <canvas id="nh-arcade-canvas"></canvas>
     <div id="nh-arcade-hud">
       <span class="nh-score">0</span>
+      <span class="nh-lives" id="nh-arcade-lives" aria-label="Lives remaining"></span>
       <span class="nh-combo"></span>
       <span class="nh-time">30</span>
     </div>
     <button id="nh-arcade-mute" aria-label="Toggle sound">SND ON</button>
     <div id="nh-arcade-overlay">
       <p class="nh-big" id="nh-arcade-title">HEART POP</p>
-      <p class="nh-final" id="nh-arcade-msg">Pop the falling hearts in 30 seconds.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X</p>
+      <p class="nh-final" id="nh-arcade-msg">Pop the falling hearts in 30 seconds. 3 misses and you are out.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X</p>
       <div id="nh-arcade-initials">
         <p class="nh-qual">NEW HIGH SCORE — ENTER INITIALS</p>
         <input id="nh-arcade-name" maxlength="3" placeholder="AAA" autocomplete="off" />
@@ -511,12 +521,13 @@
   var scoreEl = wrap.querySelector('.nh-score');
   var timeEl = wrap.querySelector('.nh-time');
   var comboEl = wrap.querySelector('.nh-combo');
+  var livesEl = document.getElementById('nh-arcade-lives');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   var W = 0, H = 340, DPR = 1;
   var sprites = [], lasers = [], flashes = [], floaters = [], bgstars = [];
-  var running = false, score = 0, combo = 0, mult = 1, lastPop = 0;
+  var running = false, score = 0, combo = 0, mult = 1, lastPop = 0, lives = 3;
   var timeLeft = 30, spawnTimer = 0, rafId = 0, lastT = 0;
   var muted = false, audioCtx = null;
   var SB_LB = 'https://dqcoincagejyowqxqqnz.supabase.co/rest/v1/leaderboard';
@@ -684,6 +695,45 @@
         return;
       }
     }
+    onMiss(px, py);
+  }
+  var HEART_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff2f4d" d="M12 21s-8-5.5-8-11a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3c0 5.5-8 11-8 11z"/></svg>';
+  function renderLives() {
+    if (!livesEl) return;
+    var html = '';
+    for (var i = 0; i < 3; i++) {
+      html += HEART_ICON.replace('<svg', '<svg class="' + (i < lives ? 'on' : 'lost') + '"');
+    }
+    livesEl.innerHTML = html;
+  }
+  function buzzSfx() {
+    pop(140, .16, .22);
+    setTimeout(function () { pop(92, .22, .2); }, 90);
+  }
+  function onMiss(x, y) {
+    if (!running) return;
+    lives--;
+    combo = 0; mult = 1; comboEl.textContent = '';
+    renderLives();
+    flashes.push({ x: W / 2, y: H / 2, t: 0, life: .32, color: '#ff2f4d', full: true });
+    wrap.classList.remove('nh-buzz');
+    void wrap.offsetWidth;
+    wrap.classList.add('nh-buzz');
+    setTimeout(function () { wrap.classList.remove('nh-buzz'); }, 320);
+    buzzSfx();
+    if (lives <= 0) { endGame('OUT OF HEARTS'); }
+  }
+  function requestGameFullscreen() {
+    try {
+      if (wrap.requestFullscreen) wrap.requestFullscreen();
+      else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+    } catch (e) {}
+  }
+  function exitGameFullscreen() {
+    try {
+      if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+    } catch (e) {}
   }
   function loop(t) {
     if (!running) return;
@@ -729,6 +779,13 @@
       var fl = flashes[i]; fl.t += dt;
       if (fl.t > fl.life) { flashes.splice(i, 1); continue; }
       var fk = 1 - fl.t / fl.life;
+      if (fl.full) {
+        ctx.globalAlpha = fk * .5;
+        ctx.fillStyle = fl.color;
+        ctx.shadowBlur = 0;
+        ctx.fillRect(0, 0, W, H);
+        continue;
+      }
       ctx.globalAlpha = fk;
       ctx.fillStyle = '#ffffff';
       ctx.shadowColor = fl.color; ctx.shadowBlur = 18;
@@ -886,11 +943,14 @@
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     W = wrap.clientWidth;
+    H = Math.max(200, Math.round(wrap.clientHeight) || 340);
     canvas.width = Math.round(W * DPR);
     canvas.height = Math.round(H * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     ctx.imageSmoothingEnabled = false;
   }
+  document.addEventListener('fullscreenchange', resize);
+  document.addEventListener('webkitfullscreenchange', resize);
   function initStars() {
     bgstars = [];
     for (var i = 0; i < 40; i++) {
@@ -919,7 +979,7 @@
   }
   function resetOverlayForStart() {
     titleEl.textContent = 'HEART POP';
-    msgEl.innerHTML = 'Pop the falling hearts in 30 seconds.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X';
+    msgEl.innerHTML = 'Pop the falling hearts in 30 seconds. 3 misses and you are out.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X';
     initialsBox.classList.remove('show');
     var again = document.getElementById('nh-arcade-again');
     if (again) {
@@ -932,9 +992,11 @@
   }
   function startGame() {
     ensureAudio();
+    requestGameFullscreen();
     sprites = []; lasers = []; flashes = []; floaters = [];
-    score = 0; combo = 0; mult = 1; timeLeft = 30; spawnTimer = 0;
+    score = 0; combo = 0; mult = 1; lives = 3; timeLeft = 30; spawnTimer = 0;
     scoreEl.textContent = '0'; timeEl.textContent = '30'; comboEl.textContent = '';
+    renderLives();
     resetOverlayForStart();
     overlay.classList.add('hidden');
     running = true; lastT = performance.now();
@@ -942,11 +1004,12 @@
     rafId = requestAnimationFrame(loop);
     if (!muted) startMusic();
   }
-  function endGame() {
+  function endGame(title) {
     running = false;
     cancelAnimationFrame(rafId);
     stopMusic();
-    titleEl.textContent = 'TIME UP';
+    exitGameFullscreen();
+    titleEl.textContent = title || 'TIME UP';
     var isHigh = qualifies(score);
     msgEl.innerHTML = 'Score: <b style="color:#fff">' + score + '</b>';
     if (isHigh) {
@@ -992,7 +1055,7 @@
     if (document.hidden && running) { running = false; cancelAnimationFrame(rafId); stopMusic(); }
   });
   window.addEventListener('resize', function () { resize(); initStars(); });
-  resize(); initStars();
+  resize(); initStars(); renderLives();
 })();
 </script>
 
