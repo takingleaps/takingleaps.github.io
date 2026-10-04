@@ -357,15 +357,11 @@
     #nh-arcade-wrap:fullscreen #nh-arcade-canvas { height: 100vh; }
     #nh-arcade-wrap:-webkit-full-screen { border: 0; border-radius: 0; }
     #nh-arcade-wrap:-webkit-full-screen #nh-arcade-canvas { height: 100vh; }
-    @keyframes nhBuzz { 0%,100% { transform: translate(0,0); } 20% { transform: translate(-7px,4px); } 40% { transform: translate(6px,-5px); } 60% { transform: translate(-5px,-3px); } 80% { transform: translate(4px,3px); } }
-    #nh-arcade-wrap.nh-buzz { animation: nhBuzz .28s linear; }
     #nh-arcade-hud { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; pointer-events: none; font-family: 'Courier New', Courier, monospace; }
     #nh-arcade-hud .nh-score, #nh-arcade-hud .nh-time { color: #fff; font-weight: 700; font-size: 18px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
     #nh-arcade-hud .nh-combo { color: #ffd76a; font-weight: 700; font-size: 14px; min-height: 20px; letter-spacing: 1px; text-shadow: 2px 2px 0 #000; }
-    #nh-arcade-hud .nh-lives { display: inline-flex; gap: 5px; align-items: center; min-height: 20px; }
-    #nh-arcade-hud .nh-lives svg { width: 15px; height: 15px; display: block; filter: drop-shadow(0 0 3px rgba(255,47,77,.8)); }
-    #nh-arcade-hud .nh-lives svg.lost { opacity: .16; filter: grayscale(1); }
-    #nh-arcade-mute { position: absolute; bottom: 10px; right: 10px; min-width: 44px; height: 40px; padding: 0 8px; border-radius: 4px; border: 2px solid rgba(143,216,255,.5); background: #05070c; color: #8fd8ff; font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; z-index: 5; }
+    #nh-arcade-mute { position: absolute; bottom: 10px; right: 10px; width: 44px; height: 40px; padding: 0; border-radius: 4px; border: 2px solid rgba(143,216,255,.5); background: #05070c; cursor: pointer; z-index: 5; display: flex; align-items: center; justify-content: center; }
+    #nh-arcade-mute svg { width: 20px; height: 20px; display: block; }
     #nh-arcade-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(5,7,12,.88); z-index: 4; padding: 20px; }
     #nh-arcade-overlay.hidden { display: none; }
     #nh-arcade-overlay .nh-big { color: #fff; font-family: 'Courier New', Courier, monospace; font-size: 26px; font-weight: 700; letter-spacing: 3px; margin: 0; text-shadow: 3px 3px 0 #0a0e16; }
@@ -395,14 +391,13 @@
     <canvas id="nh-arcade-canvas"></canvas>
     <div id="nh-arcade-hud">
       <span class="nh-score">0</span>
-      <span class="nh-lives" id="nh-arcade-lives" aria-label="Lives remaining"></span>
       <span class="nh-combo"></span>
       <span class="nh-time">30</span>
     </div>
-    <button id="nh-arcade-mute" aria-label="Toggle sound">SND ON</button>
+    <button id="nh-arcade-mute" aria-label="Toggle sound"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8fd8ff" d="M3 9v6h4l5 5V4L7 9H3z"/><path fill="none" stroke="#8fd8ff" stroke-width="2" stroke-linecap="round" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg></button>
     <div id="nh-arcade-overlay">
       <p class="nh-big" id="nh-arcade-title">HEART POP</p>
-      <p class="nh-final" id="nh-arcade-msg">Pop the falling hearts in 30 seconds. 3 misses and you are out.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X</p>
+      <p class="nh-final" id="nh-arcade-msg">Pop the falling hearts in 30 seconds. Faster hearts score more.<br>EMERALD 10 &middot; LIME 15 &middot; TEAL 20 &middot; MINT 25 &middot; GOLD 5X</p>
       <div id="nh-arcade-initials">
         <p class="nh-qual">NEW HIGH SCORE — ENTER INITIALS</p>
         <input id="nh-arcade-name" maxlength="3" placeholder="AAA" autocomplete="off" />
@@ -521,13 +516,12 @@
   var scoreEl = wrap.querySelector('.nh-score');
   var timeEl = wrap.querySelector('.nh-time');
   var comboEl = wrap.querySelector('.nh-combo');
-  var livesEl = document.getElementById('nh-arcade-lives');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   var W = 0, H = 340, DPR = 1;
-  var sprites = [], lasers = [], flashes = [], floaters = [], bgstars = [];
-  var running = false, score = 0, combo = 0, mult = 1, lastPop = 0, lives = 3;
+  var sprites = [], lasers = [], flashes = [], floaters = [], bgstars = [], missMarks = [];
+  var running = false, score = 0, combo = 0, mult = 1, lastPop = 0;
   var timeLeft = 30, spawnTimer = 0, rafId = 0, lastT = 0;
   var muted = false, audioCtx = null;
   var SB_LB = 'https://dqcoincagejyowqxqqnz.supabase.co/rest/v1/leaderboard';
@@ -594,10 +588,10 @@
     '.......X.......'
   ];
   var SPRITES = {
-    heart: { map: HEART_MAP, pal: ['#b14aed', '#7a2bb8', '#e6c2ff'], pts: 10, w: 45, freq: 520, label: 'SHADOW 10' },
-    pink:  { map: HEART_MAP, pal: ['#ff2f4d', '#b3122e', '#ffb3c0'], pts: 20, w: 25, freq: 640, label: 'BLOOD 20' },
-    star:  { map: HEART_MAP, pal: ['#22d3ee', '#0e7fa3', '#c8f7ff'], pts: 30, w: 15, freq: 740, label: 'CYAN 30' },
-    gem:   { map: HEART_MAP, pal: ['#e838d8', '#9c1f96', '#ffc2f7'], pts: 40, w: 10, freq: 840, label: 'TOXIC 40' },
+    heart: { map: HEART_MAP, pal: ['#4ade80', '#16a34a', '#d1fae5'], pts: 10, w: 45, freq: 520, label: 'EMERALD 10' },
+    lime:  { map: HEART_MAP, pal: ['#a3e635', '#65a30d', '#ecfccb'], pts: 15, w: 25, freq: 640, label: 'LIME 15' },
+    teal:  { map: HEART_MAP, pal: ['#2dd4bf', '#0f766e', '#ccfbf1'], pts: 20, w: 15, freq: 740, label: 'TEAL 20' },
+    mint:  { map: HEART_MAP, pal: ['#a7f3d0', '#34d399', '#f0fdf4'], pts: 25, w: 10, freq: 840, label: 'MINT 25' },
     gold:  { map: HEART_MAP, pal: ['#ffcf3f', '#c78f1a', '#fff3b0'], pts: 50, w: 5,  freq: 880, label: 'GOLD 5X', gold: true }
   };
   var spriteCache = {};
@@ -648,19 +642,39 @@
     for (k in SPRITES) { acc += SPRITES[k].w; if (roll < acc) return k; }
     return 'heart';
   }
+  function pickTier() {
+    var r = Math.random();
+    if (r < .15) return { vy: 140 + Math.random() * 60, mult: 2 };
+    if (r < .5) return { vy: 90 + Math.random() * 45, mult: 1.5 };
+    return { vy: 50 + Math.random() * 35, mult: 1 };
+  }
+  function pickPattern() {
+    var r = Math.random();
+    if (r < .15) return 'pulse';
+    if (r < .35) return 'zig';
+    if (r < .7) return 'sine';
+    return 'drift';
+  }
   function spawnSprite() {
     var t = pickType();
+    var sp = SPRITES[t];
+    var tier = pickTier();
+    var pat = pickPattern();
     var size = 44 + Math.random() * 12;
     sprites.push({
       type: t,
       x: 30 + Math.random() * (W - 60),
       y: H + 40,
       size: size,
-      hitR: Math.max(size * 0.78, 26),
-      vy: 55 + Math.random() * 70,
+      pts: Math.round(sp.pts * tier.mult / 5) * 5,
+      hitR: Math.max(size * 0.85, 28),
+      vy: tier.vy,
+      pat: pat,
       sway: Math.random() * 6.28,
-      swayAmp: 14 + Math.random() * 22,
+      swayAmp: pat === 'sine' ? 14 + Math.random() * 16 : pat === 'zig' ? 18 + Math.random() * 12 : Math.random() * 6,
       swaySpd: 1 + Math.random() * 2,
+      zig: Math.random(),
+      zigSpd: .5 + Math.random() * .5,
       tw: Math.random() * 6.28
     });
   }
@@ -684,7 +698,7 @@
         combo = (now - lastPop < 1200) ? combo + 1 : 1;
         lastPop = now;
         mult = Math.min(1 + Math.floor(combo / 5), 5);
-        var pts = sp.pts * mult;
+        var pts = s.pts * mult;
         score += pts;
         laserBurst(s.x, s.y, sp.pal[0], sp.gold ? 10 : 8);
         floaters.push({ x: s.x, y: s.y - 10, t: 0, txt: '+' + pts });
@@ -697,31 +711,10 @@
     }
     onMiss(px, py);
   }
-  var HEART_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff2f4d" d="M12 21s-8-5.5-8-11a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3c0 5.5-8 11-8 11z"/></svg>';
-  function renderLives() {
-    if (!livesEl) return;
-    var html = '';
-    for (var i = 0; i < 3; i++) {
-      html += HEART_ICON.replace('<svg', '<svg class="' + (i < lives ? 'on' : 'lost') + '"');
-    }
-    livesEl.innerHTML = html;
-  }
-  function buzzSfx() {
-    pop(140, .16, .22);
-    setTimeout(function () { pop(92, .22, .2); }, 90);
-  }
   function onMiss(x, y) {
     if (!running) return;
-    lives--;
     combo = 0; mult = 1; comboEl.textContent = '';
-    renderLives();
-    flashes.push({ x: W / 2, y: H / 2, t: 0, life: .32, color: '#ff2f4d', full: true });
-    wrap.classList.remove('nh-buzz');
-    void wrap.offsetWidth;
-    wrap.classList.add('nh-buzz');
-    setTimeout(function () { wrap.classList.remove('nh-buzz'); }, 320);
-    buzzSfx();
-    if (lives <= 0) { endGame('OUT OF HEARTS'); }
+    missMarks.push({ x: x, y: y, t: 0 });
   }
   function requestGameFullscreen() {
     try {
@@ -758,8 +751,12 @@
       h.sway += dt * h.swaySpd;
       h.tw += dt * 3;
       h.y -= h.vy * dt;
-      var x = h.x + Math.sin(h.sway) * h.swayAmp;
-      drawSprite(SPRITES[h.type], x, h.y, h.size, h.tw);
+      var x = h.x, ds = h.size;
+      if (h.pat === 'sine') { x += Math.sin(h.sway) * h.swayAmp; }
+      else if (h.pat === 'zig') { h.zig = (h.zig + dt * h.zigSpd) % 1; x += (h.zig < .5 ? h.zig * 4 - 1 : 3 - h.zig * 4) * h.swayAmp; }
+      else if (h.pat === 'pulse') { ds = h.size * (1 + .07 * Math.sin(h.tw * 1.6)); }
+      else { x += Math.sin(h.sway) * h.swayAmp; }
+      drawSprite(SPRITES[h.type], x, h.y, ds, h.tw);
       if (h.y < -60) { sprites.splice(i, 1); combo = 0; mult = 1; comboEl.textContent = ''; }
     }
     for (i = lasers.length - 1; i >= 0; i--) {
@@ -790,6 +787,21 @@
       ctx.fillStyle = '#ffffff';
       ctx.shadowColor = fl.color; ctx.shadowBlur = 18;
       ctx.beginPath(); ctx.arc(Math.round(fl.x), Math.round(fl.y), 3 + (1 - fk) * 26, 0, 6.283); ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+    for (i = missMarks.length - 1; i >= 0; i--) {
+      var mk = missMarks[i]; mk.t += dt;
+      if (mk.t > .28) { missMarks.splice(i, 1); continue; }
+      var mka = 1 - mk.t / .28;
+      var mkr = 4 + (1 - mka) * 8;
+      ctx.globalAlpha = mka;
+      ctx.strokeStyle = '#ff2f4d'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      ctx.shadowColor = '#ff2f4d'; ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.moveTo(Math.round(mk.x - mkr), Math.round(mk.y - mkr)); ctx.lineTo(Math.round(mk.x + mkr), Math.round(mk.y + mkr));
+      ctx.moveTo(Math.round(mk.x + mkr), Math.round(mk.y - mkr)); ctx.lineTo(Math.round(mk.x - mkr), Math.round(mk.y + mkr));
+      ctx.stroke();
     }
     ctx.shadowBlur = 0;
     ctx.globalAlpha = 1;
@@ -974,12 +986,14 @@
       o.start(); o.stop(audioCtx.currentTime + dur);
     } catch (e) {}
   }
+  var ICON_SND_ON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8fd8ff" d="M3 9v6h4l5 5V4L7 9H3z"/><path fill="none" stroke="#8fd8ff" stroke-width="2" stroke-linecap="round" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg>';
+  var ICON_SND_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8fd8ff" d="M3 9v6h4l5 5V4L7 9H3z"/><path fill="none" stroke="#8fd8ff" stroke-width="2" stroke-linecap="round" d="M16 9l6 6M22 9l-6 6"/></svg>';
   function syncMuteBtn() {
-    muteBtn.textContent = muted ? 'SND OFF' : 'SND ON';
+    muteBtn.innerHTML = muted ? ICON_SND_OFF : ICON_SND_ON;
   }
   function resetOverlayForStart() {
     titleEl.textContent = 'HEART POP';
-    msgEl.innerHTML = 'Pop the falling hearts in 30 seconds. 3 misses and you are out.<br>SHADOW 10 &middot; BLOOD 20 &middot; CYAN 30 &middot; TOXIC 40 &middot; GOLD 5X';
+    msgEl.innerHTML = 'Pop the falling hearts in 30 seconds. Faster hearts score more.<br>EMERALD 10 &middot; LIME 15 &middot; TEAL 20 &middot; MINT 25 &middot; GOLD 5X';
     initialsBox.classList.remove('show');
     var again = document.getElementById('nh-arcade-again');
     if (again) {
@@ -993,10 +1007,9 @@
   function startGame() {
     ensureAudio();
     requestGameFullscreen();
-    sprites = []; lasers = []; flashes = []; floaters = [];
-    score = 0; combo = 0; mult = 1; lives = 3; timeLeft = 30; spawnTimer = 0;
+    sprites = []; lasers = []; flashes = []; floaters = []; missMarks = [];
+    score = 0; combo = 0; mult = 1; timeLeft = 30; spawnTimer = 0;
     scoreEl.textContent = '0'; timeEl.textContent = '30'; comboEl.textContent = '';
-    renderLives();
     resetOverlayForStart();
     overlay.classList.add('hidden');
     running = true; lastT = performance.now();
@@ -1055,7 +1068,7 @@
     if (document.hidden && running) { running = false; cancelAnimationFrame(rafId); stopMusic(); }
   });
   window.addEventListener('resize', function () { resize(); initStars(); });
-  resize(); initStars(); renderLives();
+  resize(); initStars();
 })();
 </script>
 
