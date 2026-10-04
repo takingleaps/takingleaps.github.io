@@ -221,6 +221,10 @@
           <button class="lineup-copy-button" id="copyLineupButton" type="button">Show save code</button>
           <span class="lineup-copy-status" id="lineupCopyStatus" role="status" aria-live="polite"></span>
           <div class="lineup-copy-fallback" id="lineupCopyFallback" hidden><label for="lineupLinkField">Select this code, then copy it</label><input class="lineup-link-field" id="lineupLinkField" type="text" readonly spellcheck="false" /></div>
+        <div class="lineup-cloud-save">
+          <button class="lineup-cloud-button" id="cloudSaveButton" type="button">Save my lineup</button>
+          <span class="lineup-cloud-status" id="cloudSaveStatus" role="status" aria-live="polite"></span>
+        </div>
         </div>
         <div id="myLineup" aria-live="polite"></div>
       </section>
@@ -325,6 +329,53 @@
         </div>
       </section>
 
+<style>
+/* NITEHARTS LENS + FEED + REVIEW (scoped) */
+#nh-lens .lens-stage{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#05070c;aspect-ratio:4/3}
+#nh-lens video{width:100%;height:100%;object-fit:cover;display:block;background:#05070c}
+#nh-lens .lens-off{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--mist);font-size:14px;padding:20px}
+#nh-lens .lens-off[hidden]{display:none}
+#nh-lens .lens-filters{display:flex;gap:8px;overflow-x:auto;padding:12px 2px;-webkit-overflow-scrolling:touch}
+#nh-lens .lens-filters button{flex:0 0 auto;min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font-size:14px;cursor:pointer}
+#nh-lens .lens-filters button[aria-pressed="true"]{border-color:var(--ice);color:var(--ice-strong);background:rgba(159,201,239,.12)}
+#nh-lens .lens-actions{display:flex;gap:10px;flex-wrap:wrap}
+.lens-btn{min-height:44px;padding:12px 22px;border-radius:999px;border:1px solid var(--ice);background:var(--ice);color:#101113;font-weight:700;font-size:15px;cursor:pointer}
+.lens-btn:disabled{opacity:.5;cursor:wait}
+.lens-btn.lens-ghost{background:transparent;color:var(--ice-strong);border-color:var(--line)}
+#nh-lens .lens-upload{cursor:pointer;display:inline-flex;align-items:center}
+#nh-lens .lens-preview{margin-top:14px}
+#nh-lens .lens-preview img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+#nh-lens .lens-preview-actions{display:flex;gap:10px;margin-top:10px}
+#nh-lens .lens-note{color:var(--mist);font-size:13px;min-height:20px;margin:8px 0 0}
+#nh-feed .feed-bar{margin-bottom:12px}
+#nh-feed .feed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#nh-feed .feed-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#05070c;aspect-ratio:1}
+#nh-feed .feed-card img{width:100%;height:100%;object-fit:cover;display:block}
+#nh-feed .feed-tag{position:absolute;left:6px;bottom:6px;font:400 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(5,7,12,.72);color:var(--ice-strong);padding:5px 8px;border-radius:999px}
+#nh-feed .feed-empty{color:var(--mist);font-size:14px;text-align:center;padding:28px 12px;border:1px dashed var(--line);border-radius:14px}
+#nh-review{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;background:rgba(5,7,12,.88);overflow-y:auto}
+#nh-review[hidden]{display:none}
+#nh-review .review-panel{width:100%;max-width:520px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+#nh-review .review-panel h3{font-family:var(--display);font-size:1.8rem;letter-spacing:.02em;margin:0 0 4px;text-transform:uppercase}
+#nh-review .review-count{color:var(--mist);font-size:13px;margin:0 0 12px}
+#nh-review .review-gate input{width:100%;min-height:48px;font-size:20px;text-align:center;letter-spacing:8px;border-radius:10px;border:1px solid var(--line);background:var(--deep);color:var(--paper);margin:8px 0 12px}
+#nh-review .review-error{color:var(--red);font-size:13px;min-height:18px}
+#nh-review .review-item{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px;background:var(--deep)}
+#nh-review .review-item img{width:100%;display:block;max-height:300px;object-fit:cover}
+#nh-review .review-item .review-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}
+#nh-review .review-item .review-filter{font:400 .65rem/1 var(--mono);text-transform:uppercase;color:var(--mist)}
+#nh-review .review-item .review-btns{display:flex;gap:8px}
+#nh-review .review-approve{min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid var(--ice);background:var(--ice);color:#101113;font-weight:700;cursor:pointer}
+#nh-review .review-reject{min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mist);cursor:pointer}
+#nh-review .review-close{margin-top:6px}
+.lineup-cloud-save{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.lineup-cloud-button{min-height:44px;padding:12px 22px;border-radius:999px;border:1px solid var(--ice);background:transparent;color:var(--ice-strong);font-weight:700;font-size:15px;cursor:pointer}
+.lineup-cloud-button:disabled{opacity:.5;cursor:wait}
+.lineup-cloud-status{font-size:13px;color:var(--mist)}
+#reviewLink{background:none;border:none;color:var(--mist);font-size:12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:10px;min-height:44px}
+@media(max-width:600px){#nh-feed .feed-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
 <section id="nh-arcade" class="module arcade-module" data-module-id="arcade" data-module-label="Heart Pop" aria-label="Heart Pop mini game">
   <style>
     #nh-arcade { position: relative; margin: 0 auto; max-width: 720px; padding: 28px 16px 40px; text-align: center; }
@@ -384,6 +435,48 @@
     <div id="nh-arcade-list"></div>
   </div>
 </section>
+
+<!-- NITEHARTS LENS -->
+      <section class="module lens-module" data-module-id="lens" data-module-label="Niteharts Lens" aria-labelledby="lensTitle">
+        <div class="module-head"><h2 id="lensTitle">Niteharts Lens</h2><span class="module-label">Shoot · Filter · Post</span></div>
+        <div id="nh-lens">
+          <div class="lens-stage">
+            <video id="lensVideo" playsinline muted autoplay aria-label="Camera preview"></video>
+            <div class="lens-off" id="lensOff"><p>Camera is off.<br>Open it to shoot, or upload a photo instead.</p></div>
+          </div>
+          <div class="lens-filters" id="lensFilters" role="group" aria-label="Choose a filter">
+            <button type="button" data-filter="frost" aria-pressed="true">Frost</button>
+            <button type="button" data-filter="midnight" aria-pressed="false">Midnight</button>
+            <button type="button" data-filter="heartpop" aria-pressed="false">Heart Pop</button>
+            <button type="button" data-filter="niteharts" aria-pressed="false">Niteharts</button>
+            <button type="button" data-filter="vhs" aria-pressed="false">VHS</button>
+          </div>
+          <div class="lens-actions">
+            <button type="button" id="lensStart" class="lens-btn">Open camera</button>
+            <button type="button" id="lensCapture" class="lens-btn" hidden>Capture</button>
+            <label class="lens-btn lens-upload" for="lensFile">Upload photo<input type="file" id="lensFile" accept="image/*" hidden></label>
+          </div>
+          <div class="lens-preview" id="lensPreview" hidden>
+            <img id="lensPreviewImg" alt="Your filtered photo">
+            <div class="lens-preview-actions">
+              <button type="button" id="lensRetake" class="lens-btn lens-ghost">Retake</button>
+              <button type="button" id="lensPost" class="lens-btn">Post to feed</button>
+            </div>
+            <p class="lens-note" id="lensNote" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHOTO FEED -->
+      <section class="module feed-module" data-module-id="feed" data-module-label="Photo feed" aria-labelledby="feedTitle">
+        <div class="module-head"><h2 id="feedTitle">Photo feed</h2><span class="module-label">From the crowd</span></div>
+        <div id="nh-feed">
+          <div class="feed-bar"><button type="button" id="feedRefresh" class="lens-btn lens-ghost">Refresh</button></div>
+          <div class="feed-grid" id="feedGrid" aria-live="polite"></div>
+          <p class="feed-empty" id="feedEmpty" hidden>No photos yet. Be the first to post from Niteharts Lens.</p>
+        </div>
+      </section>
+
 <script>
 (function () {
   'use strict';
@@ -655,7 +748,7 @@
 })();
 </script>
     </div>
-    <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a></footer>
+    <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a><button type="button" id="reviewLink">Review</button></footer>
   </main>
   <aside class="music-player" id="musicPlayer" aria-label="Lineup music player">
     <audio id="previewAudio" preload="auto" playsinline></audio>
@@ -1024,5 +1117,455 @@
   })();
   </script>
 </div>
+<div id="nh-review" hidden role="dialog" aria-modal="true" aria-label="Photo review">
+  <div class="review-panel">
+    <h3>Photo review</h3>
+    <p class="review-count" id="reviewCount"></p>
+    <div class="review-gate" id="reviewGate">
+      <p>Enter your 4-digit moderator code.</p>
+      <input id="reviewCode" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Moderator code">
+      <button type="button" id="reviewUnlock" class="lens-btn">Unlock</button>
+      <p class="review-error" id="reviewError" role="alert" hidden></p>
+    </div>
+    <div class="review-list" id="reviewList" hidden></div>
+    <button type="button" id="reviewClose" class="lens-btn lens-ghost review-close">Close</button>
+  </div>
+</div>
+
+<script>
+/* NITEHARTS BACKEND: lineup saving, Lens, photo feed, review queue */
+(function () {
+  'use strict';
+
+  /* ---------- config ---------- */
+  var SB_URL = 'https://dqcoincagejyowqxqqnz.supabase.co';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxY29pbmNhZ2VqeW93cXhxcW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzY4NTQsImV4cCI6MjEwNjcxMjg1NH0.dG7GwddKfuoq08DX_SgtluxWKAU-hyAjMZcAc320ysI';
+  var CL_CLOUD = 'metgxwc9';
+  var CL_PRESET = 'niteharts-feed';
+  var CL_UPLOAD = 'https://api.cloudinary.com/v1_1/' + CL_CLOUD + '/image/upload';
+
+  /* ---------- tiny storage helper ---------- */
+  function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+
+  /* ---------- fetch with timeout ---------- */
+  function timedFetch(url, opts, ms) {
+    var ctrl, timer;
+    try { ctrl = new AbortController(); } catch (e) { return window.fetch(url, opts); }
+    timer = setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, ms || 15000);
+    var p = window.fetch(url, opts);
+    function done(r) { clearTimeout(timer); return r; }
+    return p.then(done, function (err) { clearTimeout(timer); throw err; });
+  }
+  function sb(path, opts) {
+    opts = opts || {};
+    opts.headers = opts.headers || {};
+    opts.headers['apikey'] = SB_KEY;
+    opts.headers['Authorization'] = 'Bearer ' + SB_KEY;
+    if (opts.body && typeof opts.body !== 'string') {
+      opts.body = JSON.stringify(opts.body);
+      opts.headers['Content-Type'] = 'application/json';
+    } else if (opts.body) {
+      opts.headers['Content-Type'] = 'application/json';
+    }
+    return timedFetch(SB_URL + '/rest/v1' + path, opts, 15000);
+  }
+
+  /* ============================================================
+     1. PERSISTENT LINEUP SAVING
+  ============================================================ */
+  var memKey = null;
+  function deviceKey() {
+    var k = lsGet('nh_device_key');
+    if (k) return k;
+    if (memKey) return memKey;
+    var id = 'dev-';
+    try {
+      var a = new Uint8Array(16);
+      (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach(function (_, i) { a[i] = Math.floor(Math.random() * 256); });
+      id += Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+    } catch (e) { id += Date.now().toString(36) + Math.floor(Math.random() * 1e9).toString(36); }
+    memKey = id;
+    lsSet('nh_device_key', id);
+    return id;
+  }
+  function hashLineupIds() {
+    try {
+      var p = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      var v = p.get('lineup');
+      return v ? v.split(',').filter(Boolean) : [];
+    } catch (e) { return []; }
+  }
+  var saveBtn = document.getElementById('cloudSaveButton');
+  var saveStatus = document.getElementById('cloudSaveStatus');
+  function setSaveStatus(msg) { if (saveStatus) saveStatus.textContent = msg; }
+  if (saveBtn) {
+    saveBtn.addEventListener('click', function () {
+      var ids = hashLineupIds();
+      if (!ids.length) { setSaveStatus('Add some sets first, then save.'); return; }
+      saveBtn.disabled = true;
+      setSaveStatus('Saving...');
+      sb('/lineup_saves', {
+        method: 'POST',
+        headers: { 'Prefer': 'resolution=merge-duplicates' },
+        body: { device_key: deviceKey(), lineup: ids, updated_at: new Date().toISOString() }
+      }).then(function (r) {
+        if (!r.ok) throw new Error('save failed: ' + r.status);
+        setSaveStatus('Saved. It will be here when you come back.');
+      }).catch(function () {
+        setSaveStatus('Could not save. Check your connection and retry.');
+      }).then(function () { saveBtn.disabled = false; });
+    });
+  }
+  /* restore on load: only when the URL has no lineup of its own */
+  (function restoreLineup() {
+    if (hashLineupIds().length) return;
+    var key = deviceKey();
+    sb('/lineup_saves?device_key=eq.' + encodeURIComponent(key) + '&select=lineup&limit=1')
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        if (rows && rows[0] && rows[0].lineup && rows[0].lineup.length) {
+          window.location.hash = '#lineup=' + rows[0].lineup.join(',');
+          setSaveStatus('Restored your saved lineup.');
+        }
+      })
+      .catch(function () {});
+  })();
+
+  /* ============================================================
+     2. NITEHARTS LENS
+  ============================================================ */
+  var FILTERS = {
+    frost:     { label: 'Frost',     css: 'saturate(.7) hue-rotate(185deg) brightness(1.12)' },
+    midnight:  { label: 'Midnight',  css: 'brightness(.72) contrast(1.4) saturate(.55)' },
+    heartpop:  { label: 'Heart Pop', css: 'saturate(1.25) brightness(1.05)' },
+    niteharts: { label: 'Niteharts', css: 'none' },
+    vhs:       { label: 'VHS',       css: 'saturate(1.45) contrast(1.15)' }
+  };
+  var activeFilter = 'frost';
+  var video = document.getElementById('lensVideo');
+  var lensOff = document.getElementById('lensOff');
+  var startBtn = document.getElementById('lensStart');
+  var capBtn = document.getElementById('lensCapture');
+  var fileInput = document.getElementById('lensFile');
+  var previewBox = document.getElementById('lensPreview');
+  var previewImg = document.getElementById('lensPreviewImg');
+  var retakeBtn = document.getElementById('lensRetake');
+  var postBtn = document.getElementById('lensPost');
+  var noteEl = document.getElementById('lensNote');
+  var stream = null, shotCanvas = null;
+
+  function setNote(m) { if (noteEl) noteEl.textContent = m || ''; }
+  function applyLiveFilter() {
+    if (!video) return;
+    var f = FILTERS[activeFilter];
+    video.style.filter = f.css === 'none' ? '' : f.css;
+  }
+  var filterBar = document.getElementById('lensFilters');
+  if (filterBar) {
+    filterBar.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-filter]');
+      if (!b) return;
+      activeFilter = b.getAttribute('data-filter');
+      filterBar.querySelectorAll('[data-filter]').forEach(function (x) {
+        x.setAttribute('aria-pressed', String(x === b));
+      });
+      applyLiveFilter();
+    });
+  }
+  function stopStream() {
+    if (stream) { try { stream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} stream = null; }
+  }
+  if (startBtn) {
+    startBtn.addEventListener('click', function () {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setNote('This browser cannot open the camera. Use upload instead.');
+        return;
+      }
+      startBtn.disabled = true;
+      setNote('Opening camera...');
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false })
+        .then(function (s) {
+          stream = s;
+          video.srcObject = s;
+          return video.play().catch(function () {});
+        })
+        .then(function () {
+          if (lensOff) lensOff.hidden = true;
+          startBtn.hidden = true;
+          if (capBtn) capBtn.hidden = false;
+          applyLiveFilter();
+          setNote('');
+        })
+        .catch(function () {
+          startBtn.disabled = false;
+          setNote('Camera blocked. You can still upload a photo.');
+        });
+    });
+  }
+  function drawHeart(ctx, x, y, s, color) {
+    ctx.save();
+    ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(0, 3);
+    ctx.bezierCurveTo(-6, -3, -3, -9, 0, -4);
+    ctx.bezierCurveTo(3, -9, 6, -3, 0, 3);
+    ctx.fill();
+    ctx.restore();
+  }
+  function paintFilter(ctx, w, h, name) {
+    var i, x, y;
+    if (name === 'frost') {
+      ctx.fillStyle = 'rgba(159,201,239,.16)'; ctx.fillRect(0, 0, w, h);
+    } else if (name === 'heartpop') {
+      var cols = ['#f26e7b', '#ff8fa3', '#d5ecff'];
+      for (i = 0; i < 14; i++) {
+        x = Math.random() * w; y = Math.random() * h;
+        drawHeart(ctx, x, y, 3 + Math.random() * 7, cols[i % 3]);
+      }
+    } else if (name === 'niteharts') {
+      var d = new Date();
+      var stamp = ('0' + (d.getMonth() + 1)).slice(-2) + '.' + ('0' + d.getDate()).slice(-2) + '.' + String(d.getFullYear()).slice(-2);
+      ctx.fillStyle = 'rgba(5,7,12,.55)';
+      ctx.fillRect(0, h - Math.round(h * .12), w, Math.round(h * .12));
+      ctx.fillStyle = '#d5ecff';
+      ctx.font = '700 ' + Math.round(h * .055) + 'px Arial';
+      ctx.textBaseline = 'middle';
+      ctx.fillText("NITEHARTS '26", Math.round(w * .04), h - Math.round(h * .06));
+      ctx.textAlign = 'right';
+      ctx.fillText(stamp, w - Math.round(w * .04), h - Math.round(h * .06));
+      ctx.textAlign = 'left';
+    } else if (name === 'vhs') {
+      ctx.fillStyle = 'rgba(0,0,0,.16)';
+      for (y = 0; y < h; y += 4) ctx.fillRect(0, y, w, 1);
+      for (i = 0; i < 350; i++) {
+        ctx.fillStyle = 'rgba(255,255,255,' + (Math.random() * .12) + ')';
+        ctx.fillRect(Math.random() * w, Math.random() * h, 1.5, 1.5);
+      }
+      ctx.fillStyle = 'rgba(213,236,255,.9)';
+      ctx.font = Math.round(h * .04) + 'px monospace';
+      ctx.fillText('PLAY', Math.round(w * .04), Math.round(h * .07));
+    }
+  }
+  function frameToCanvas(src, sw, sh) {
+    var max = 1600, scale = Math.min(1, max / Math.max(sw, sh));
+    var w = Math.round(sw * scale), h = Math.round(sh * scale);
+    var c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    var ctx = c.getContext('2d');
+    var f = FILTERS[activeFilter];
+    try { ctx.filter = f.css === 'none' ? 'none' : f.css; } catch (e) {}
+    ctx.drawImage(src, 0, 0, w, h);
+    try { ctx.filter = 'none'; } catch (e) {}
+    paintFilter(ctx, w, h, activeFilter);
+    return c;
+  }
+  function showPreview(canvas) {
+    shotCanvas = canvas;
+    previewImg.src = canvas.toDataURL('image/jpeg', .85);
+    previewBox.hidden = false;
+    setNote('');
+    previewBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  if (capBtn) {
+    capBtn.addEventListener('click', function () {
+      if (!video || !video.videoWidth) { setNote('Camera is not ready yet.'); return; }
+      showPreview(frameToCanvas(video, video.videoWidth, video.videoHeight));
+    });
+  }
+  if (retakeBtn) {
+    retakeBtn.addEventListener('click', function () {
+      previewBox.hidden = true; shotCanvas = null; setNote('');
+    });
+  }
+  if (fileInput) {
+    fileInput.addEventListener('change', function () {
+      var f = fileInput.files && fileInput.files[0];
+      if (!f) return;
+      setNote('Loading photo...');
+      var img = new Image();
+      img.onload = function () {
+        try { (window.URL || window.webkitURL).revokeObjectURL(img.src); } catch (e) {}
+        showPreview(frameToCanvas(img, img.naturalWidth, img.naturalHeight));
+      };
+      img.onerror = function () { setNote('Could not read that file.'); };
+      try { img.src = (window.URL || window.webkitURL).createObjectURL(f); } catch (e) { setNote('Could not read that file.'); }
+      fileInput.value = '';
+    });
+  }
+  if (postBtn) {
+    postBtn.addEventListener('click', function () {
+      if (!shotCanvas) return;
+      postBtn.disabled = true;
+      if (retakeBtn) retakeBtn.disabled = true;
+      setNote('Uploading...');
+      function fail(msg) {
+        setNote(msg || 'Upload failed. Check your connection and retry.');
+        postBtn.disabled = false;
+        if (retakeBtn) retakeBtn.disabled = false;
+      }
+      var blob;
+      try {
+        shotCanvas.toBlob(function (b) {
+          if (!b) { fail(); return; }
+          var fd = new FormData();
+          fd.append('file', b, 'niteharts.jpg');
+          fd.append('upload_preset', CL_PRESET);
+          timedFetch(CL_UPLOAD, { method: 'POST', body: fd }, 30000).then(function (r) {
+            if (!r.ok) throw new Error('cloudinary ' + r.status);
+            return r.json();
+          }).then(function (j) {
+            if (!j || !j.secure_url) throw new Error('no url');
+            return sb('/photos', { method: 'POST', body: { url: j.secure_url, filter: activeFilter, status: 'pending' } })
+              .then(function (r) {
+                if (!r.ok) throw new Error('db ' + r.status);
+                return j.secure_url;
+              });
+          }).then(function () {
+            setNote('Posted. It will show in the feed after a quick review.');
+            postBtn.disabled = false;
+            if (retakeBtn) retakeBtn.disabled = false;
+          }).catch(function () { fail(); });
+        }, 'image/jpeg', .85);
+      } catch (e) { fail(); }
+    });
+  }
+  window.addEventListener('pagehide', stopStream);
+
+  /* ============================================================
+     3. PUBLIC PHOTO FEED
+  ============================================================ */
+  var feedGrid = document.getElementById('feedGrid');
+  var feedEmpty = document.getElementById('feedEmpty');
+  var feedRefresh = document.getElementById('feedRefresh');
+  var feedVisible = false, feedTimer = null;
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function loadFeed() {
+    if (!feedGrid) return;
+    sb('/photos?status=eq.approved&order=created_at.desc&select=url,filter,created_at&limit=60')
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        rows = rows || [];
+        if (!rows.length) {
+          feedGrid.innerHTML = '';
+          if (feedEmpty) feedEmpty.hidden = false;
+          return;
+        }
+        if (feedEmpty) feedEmpty.hidden = true;
+        feedGrid.innerHTML = rows.map(function (p) {
+          var tag = FILTERS[p.filter] ? FILTERS[p.filter].label : esc(p.filter || '');
+          return '<figure class="feed-card"><img loading="lazy" decoding="async" src="' + esc(p.url) + '" alt="Niteharts crowd photo">' +
+            (tag ? '<figcaption class="feed-tag">' + esc(tag) + '</figcaption>' : '') + '</figure>';
+        }).join('');
+      })
+      .catch(function () {});
+  }
+  if (feedRefresh) feedRefresh.addEventListener('click', loadFeed);
+  var feedSection = document.querySelector('[data-module-id="feed"]');
+  if (feedSection && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      var vis = entries[0] && entries[0].isIntersecting;
+      if (vis && !feedVisible) { feedVisible = true; loadFeed(); feedTimer = setInterval(loadFeed, 60000); }
+      else if (!vis && feedVisible) { feedVisible = false; if (feedTimer) clearInterval(feedTimer); feedTimer = null; }
+    }, { threshold: 0.05 }).observe(feedSection);
+  } else { loadFeed(); }
+
+  /* ============================================================
+     4. REVIEW QUEUE (Nathan)
+  ============================================================ */
+  var reviewBox = document.getElementById('nh-review');
+  var reviewGate = document.getElementById('reviewGate');
+  var reviewList = document.getElementById('reviewList');
+  var reviewCode = document.getElementById('reviewCode');
+  var reviewError = document.getElementById('reviewError');
+  var reviewCount = document.getElementById('reviewCount');
+  function showReviewError(m) {
+    if (!reviewError) return;
+    reviewError.textContent = m || '';
+    reviewError.hidden = !m;
+  }
+  function openReview() {
+    if (!reviewBox) return;
+    reviewBox.hidden = false;
+    showReviewError('');
+    var saved = lsGet('nh_review_code');
+    if (saved) {
+      reviewGate.hidden = false; reviewList.hidden = true;
+      if (reviewCode) { reviewCode.value = ''; reviewCode.placeholder = '4-digit code'; }
+    } else {
+      reviewGate.hidden = false; reviewList.hidden = true;
+      if (reviewCode) { reviewCode.value = ''; reviewCode.placeholder = 'Set a 4-digit code'; }
+    }
+    document.body.style.overflow = 'hidden';
+  }
+  function closeReview() {
+    if (!reviewBox) return;
+    reviewBox.hidden = true;
+    document.body.style.overflow = '';
+  }
+  function loadPending() {
+    reviewList.innerHTML = '<p class="review-count">Loading...</p>';
+    sb('/photos?status=eq.pending&order=created_at.desc&select=id,url,filter,created_at&limit=50')
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        rows = rows || [];
+        if (reviewCount) reviewCount.textContent = rows.length + (rows.length === 1 ? ' photo' : ' photos') + ' waiting';
+        if (!rows.length) { reviewList.innerHTML = '<p class="review-count">All caught up. Nothing waiting.</p>'; return; }
+        reviewList.innerHTML = rows.map(function (p) {
+          var tag = FILTERS[p.filter] ? FILTERS[p.filter].label : esc(p.filter || '');
+          return '<div class="review-item" data-id="' + esc(p.id) + '"><img loading="lazy" src="' + esc(p.url) + '" alt="Photo awaiting review">' +
+            '<div class="review-meta"><span class="review-filter">' + esc(tag) + '</span>' +
+            '<span class="review-btns"><button type="button" class="review-approve" data-act="approved">Approve</button>' +
+            '<button type="button" class="review-reject" data-act="rejected">Reject</button></span></div></div>';
+        }).join('');
+      })
+      .catch(function () { reviewList.innerHTML = '<p class="review-count">Could not load. Check connection.</p>'; });
+  }
+  var unlockBtn = document.getElementById('reviewUnlock');
+  if (unlockBtn) {
+    unlockBtn.addEventListener('click', function () {
+      var v = (reviewCode.value || '').replace(/\D/g, '').slice(0, 4);
+      var saved = lsGet('nh_review_code');
+      if (!saved) {
+        if (v.length !== 4) { showReviewError('Pick any 4 digits.'); return; }
+        lsSet('nh_review_code', v);
+        showReviewError('');
+        reviewGate.hidden = true; reviewList.hidden = false;
+        loadPending();
+      } else {
+        if (v === saved) {
+          showReviewError('');
+          reviewGate.hidden = true; reviewList.hidden = false;
+          loadPending();
+        } else { showReviewError('Wrong code. Try again.'); }
+      }
+    });
+  }
+  if (reviewList) {
+    reviewList.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-act]');
+      if (!b) return;
+      var item = b.closest('.review-item');
+      var id = item.getAttribute('data-id');
+      var act = b.getAttribute('data-act');
+      b.disabled = true;
+      sb('/photos?id=eq.' + encodeURIComponent(id), { method: 'PATCH', body: { status: act } })
+        .then(function (r) {
+          if (!r.ok) throw new Error('nope');
+          item.parentNode.removeChild(item);
+          loadPending();
+        })
+        .catch(function () { b.disabled = false; });
+    });
+  }
+  var reviewClose = document.getElementById('reviewClose');
+  if (reviewClose) reviewClose.addEventListener('click', closeReview);
+  if (reviewBox) reviewBox.addEventListener('click', function (e) { if (e.target === reviewBox) closeReview(); });
+  var reviewLink = document.getElementById('reviewLink');
+  if (reviewLink) reviewLink.addEventListener('click', function (e) { e.preventDefault(); openReview(); });
+})();
+</script>
+
 </body>
 </html>
