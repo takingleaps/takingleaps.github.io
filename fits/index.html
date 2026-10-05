@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fit Check</title>
+<meta name="description" content="Photograph your clothes. Build fits. Look right.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fit Check">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{
+  --bg:#0a0a0a; --panel:#141416; --panel2:#1b1b1e; --line:#26262b;
+  --ink:#f5f5f5; --mut:#9a9aa0; --dim:#5c5c62;
+  --acc:#4ade80; --acc-ink:#06270f;
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Arial,sans-serif;
+  overscroll-behavior-y:none;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit}
+/* header */
+header{
+  position:sticky;top:0;z-index:40;
+  padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 12px;
+  background:rgba(10,10,10,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-weight:800;letter-spacing:3px;font-size:17px}
+.brand span{color:var(--acc)}
+.wx{
+  font-size:12.5px;color:var(--mut);font-weight:600;
+  border:1px solid var(--line);border-radius:999px;
+  padding:7px 12px;background:var(--panel);white-space:nowrap;
+}
+.wx b{color:var(--ink)}
+/* main */
+main{padding:0 0 120px;max-width:560px;margin:0 auto}
+.tab{display:none;padding:18px 16px 8px;animation:fade .18s ease}
+.tab.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-t{font-size:13px;font-weight:700;letter-spacing:2.5px;color:var(--mut);text-transform:uppercase;margin:6px 2px 12px}
+.sec-t .n{color:var(--dim);font-weight:600;letter-spacing:1px}
+/* filter chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;padding:10px 16px;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel);
+  font-size:14px;font-weight:600;color:var(--mut);min-height:44px;
+}
+.chip.on{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+/* closet grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.item{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;text-align:left;transition:transform .15s ease;
+}
+.item:active{transform:scale(.97)}
+.item img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#000}
+.item .meta{padding:10px 12px;display:flex;align-items:center;gap:8px}
+.dot{width:14px;height:14px;border-radius:50%;flex:0 0 auto;border:1px solid rgba(255,255,255,.25)}
+.item .nm{font-size:13.5px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .cat{font-size:11px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+.demo-badge{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--acc-ink);background:var(--acc);border-radius:4px;padding:2px 6px}
+/* empty states */
+.empty{text-align:center;padding:56px 24px;color:var(--mut)}
+.empty h3{color:var(--ink);font-size:20px;font-weight:800;margin-bottom:8px;letter-spacing:.5px}
+.empty p{font-size:15px;line-height:1.55;margin-bottom:22px}
+.rowbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:52px;padding:14px 22px;border-radius:14px;
+  font-weight:800;font-size:16px;letter-spacing:.3px;
+  background:var(--acc);color:var(--acc-ink);border:0;
+}
+.btn:active{transform:translateY(2px)}
+.btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
+.btn.block{width:100%}
+.btn.sm{min-height:44px;padding:10px 16px;font-size:14px;border-radius:12px}
+/* fab */
+.fab{
+  position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);
+  width:62px;height:62px;border-radius:50%;
+  background:var(--acc);color:var(--acc-ink);
+  font-size:30px;font-weight:800;line-height:1;z-index:45;
+  box-shadow:0 8px 24px rgba(74,222,128,.28);
+}
+.fab:active{transform:scale(.93)}
+/* build */
+.wxcard{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;
+}
+.wxcard .t{font-size:22px;font-weight:800}
+.wxcard .h{font-size:14px;color:var(--mut);font-weight:600;margin-top:2px}
+.slot{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px;margin-bottom:10px;min-height:76px;
+}
+.slot:active{transform:scale(.99)}
+.slot .th{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#000;flex:0 0 auto;border:1px solid var(--line)}
+.slot .th.ph{display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:22px;font-weight:800}
+.slot .lb{flex:1}
+.slot .lb .s{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+.slot .lb .v{font-size:16px;font-weight:700;margin-top:2px}
+.slot .lb .v.none{color:var(--dim);font-weight:600}
+.slot .go{color:var(--dim);font-size:20px;font-weight:800}
+.build-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.fitcard-wrap{margin-top:6px}
+.fitcard-wrap canvas{width:100%;border-radius:var(--r);border:1px solid var(--line);display:block}
+/* fits */
+.fit{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;text-align:left;margin-bottom:12px}
+.fit img{width:100%;display:block;aspect-ratio:4/5;object-fit:cover;background:#000}
+.fit .meta{padding:10px 14px;font-size:13px;color:var(--mut);font-weight:600}
+/* tab bar */
+nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(14,14,16,.96);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:flex;padding:8px 6px calc(env(safe-area-inset-bottom,0px) + 8px);
+}
+nav button{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:8px 0 4px;color:var(--dim);font-size:11px;font-weight:700;letter-spacing:1px;
+  min-height:56px;
+}
+nav button svg{width:24px;height:24px}
+nav button.on{color:var(--acc)}
+/* sheets */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;max-width:560px;margin:0 auto;
+  background:#151517;border:1px solid var(--line);border-bottom:0;
+  border-radius:20px 20px 0 0;
+  padding:14px 18px calc(env(safe-area-inset-bottom,0px) + 20px);
+  transform:translateY(105%);transition:transform .24s ease;max-height:82vh;overflow-y:auto;
+}
+.sheet.on{transform:none}
+.sheet .grab{width:44px;height:5px;border-radius:3px;background:var(--dim);margin:0 auto 14px}
+.sheet h3{font-size:18px;font-weight:800;margin-bottom:4px}
+.sheet .sub{font-size:14px;color:var(--mut);margin-bottom:14px}
+.pick{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 0;border-bottom:1px solid var(--line);min-height:64px}
+.pick img{width:52px;height:52px;border-radius:10px;object-fit:cover;background:#000}
+.pick .pn{flex:1;font-weight:700;font-size:15px}
+.pick .pc{font-size:12px;color:var(--mut);font-weight:600}
+.pick.danger .pn{color:#ff6b6b}
+/* add-item editor */
+.ed-preview{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);background:#000;border:1px solid var(--line);margin-bottom:14px}
+.ed-row{margin-bottom:14px}
+.ed-row .lab{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
+.colorline{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700}
+.tinput{
+  width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:12px;
+  padding:14px;color:var(--ink);font-size:16px;min-height:52px;
+}
+/* toast */
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 100px);z-index:70;
+  background:#f5f5f5;color:#0a0a0a;font-weight:700;font-size:14.5px;
+  padding:12px 20px;border-radius:999px;transition:all .22s;pointer-events:none;white-space:nowrap;
+}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.linklike{color:var(--mut);font-size:13.5px;font-weight:600;text-decoration:underline;margin-top:14px}
+.center{text-align:center}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">FIT<span>CHECK</span></div>
+  <button class="wx" id="wxChip" aria-label="Weather"><b>--</b></button>
+</header>
+<main>
+  <!-- CLOSET -->
+  <section class="tab on" id="tab-closet" aria-label="Closet">
+    <div class="sec-t">Closet <span class="n" id="closetCount"></span></div>
+    <div class="chips" id="filters"></div>
+    <div class="grid" id="closetGrid"></div>
+    <div class="empty" id="closetEmpty" hidden>
+      <h3>Closet's empty.</h3>
+      <p>Shoot your clothes. Build fits.<br>Look right.</p>
+      <div class="rowbtns">
+        <button class="btn sm" data-add="camera">Camera</button>
+        <button class="btn sm ghost" data-add="upload">Upload</button>
+      </div>
+      <div><button class="linklike" id="demoBtn">or load demo items</button></div>
+    </div>
+    <div class="center"><button class="linklike" id="clearDemo" hidden>remove demo items</button></div>
+    <button class="fab" id="fab" aria-label="Add item">+</button>
+  </section>
+  <!-- BUILD -->
+  <section class="tab" id="tab-build" aria-label="Build">
+    <div class="wxcard">
+      <div><div class="t" id="wxTemp">--</div><div class="h" id="wxHint">checking sky...</div></div>
+      <div style="font-size:28px" aria-hidden="true">&#9728;</div>
+    </div>
+    <div class="sec-t">Build a fit</div>
+    <div id="slots"></div>
+    <div class="build-actions">
+      <button class="btn ghost" id="shuffleBtn">Surprise me</button>
+      <button class="btn ghost" id="saveFitBtn">Save fit</button>
+    </div>
+    <div class="fitcard-wrap"><canvas id="fitCard" width="1080" height="1350" aria-label="Fit preview"></canvas></div>
+    <div style="margin-top:12px"><button class="btn block" id="dlBtn">Download PNG</button></div>
+  </section>
+  <!-- FITS -->
+  <section class="tab" id="tab-fits" aria-label="My fits">
+    <div class="sec-t">My fits <span class="n" id="fitsCount"></span></div>
+    <div id="fitsList"></div>
+    <div class="empty" id="fitsEmpty" hidden>
+      <h3>No fits saved yet.</h3>
+      <p>Build one first. Then it lives here.</p>
+      <div class="rowbtns"><button class="btn sm" id="goBuild">Build a fit</button></div>
+    </div>
+  </section>
+</main>
+<nav aria-label="Tabs">
+  <button data-tab="closet" class="on" aria-label="Closet">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7a2 2 0 1 0-4 0"/><path d="M12 7v1l-8 5v3h16v-3l-8-5"/></svg>
+    CLOSET</button>
+  <button data-tab="build" aria-label="Build">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg>
+    BUILD</button>
+  <button data-tab="fits" aria-label="My fits">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    FITS</button>
+</nav>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileCam" accept="image/*" capture="environment">
+<input type="file" id="fileUp" accept="image/*">
+<script>
+"use strict";
+/* ============ helpers ============ */
+function $(s){return document.querySelector(s)}
+function el(tag,cls,html){var d=document.createElement(tag);if(cls)d.className=cls;if(html!=null)d.innerHTML=html;return d}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+var toastT=null;
+function toast(msg){var t=$("#toast");t.textContent=msg;t.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on")},1800)}
+var CATS=[["layer","Layer"],["top","Top"],["bottoms","Bottoms"],["shoes","Shoes"],["accessory","Accessory"]];
+function catLabel(c){for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][1];return c}
+var K_ITEMS="fc_items_v1",K_FITS="fc_fits_v1";
+function loadItems(){try{return JSON.parse(localStorage.getItem(K_ITEMS))||[]}catch(e){return[]}}
+function saveItems(a){try{localStorage.setItem(K_ITEMS,JSON.stringify(a))}catch(e){toast("Storage full. Delete something.")}}
+function loadFits(){try{return JSON.parse(localStorage.getItem(K_FITS))||[]}catch(e){return[]}}
+function saveFits(a){try{localStorage.setItem(K_FITS,JSON.stringify(a))}catch(e){toast("Storage full. Delete something.")}}
+function getItem(id){var a=loadItems();for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i];return null}
+
+/* ============ color ============ */
+function sampleColor(img){
+  var c=document.createElement("canvas");c.width=c.height=24;
+  var x=c.getContext("2d");x.drawImage(img,0,0,24,24);
+  var d=x.getImageData(0,0,24,24).data,r=0,g=0,b=0,n=0;
+  for(var i=0;i<d.length;i+=16){r+=d[i];g+=d[i+1];b+=d[i+2];n++}
+  r=Math.round(r/n);g=Math.round(g/n);b=Math.round(b/n);
+  return {hex:"#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1),name:colorName(r,g,b)};
+}
+function colorName(r,g,b){
+  var mx=Math.max(r,g,b),mn=Math.min(r,g,b),df=mx-mn;
+  if(mx<38)return"Black"; if(mx>228&&df<28)return"White";
+  if(df<34){return mx<110?"Dark gray":mx>180?"Light gray":"Gray"}
+  var h=0;if(df){if(mx===r)h=((g-b)/df)%6;else if(mx===g)h=(b-r)/df+2;else h=(r-g)/df+4;h*=60;if(h<0)h+=360}
+  var s=df/mx;
+  if(s<0.32){return mx<110?"Dark gray":"Taupe"}
+  if(h<14||h>=344)return"Red"; if(h<40)return"Orange"; if(h<72)return"Yellow";
+  if(h<150)return"Green"; if(h<185)return"Teal"; if(h<255)return"Blue";
+  if(h<295)return"Purple"; return"Pink";
+}
+
+/* ============ image ============ */
+function fileToItemData(file,cb){
+  var rd=new FileReader();
+  rd.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      var max=480,sc=Math.min(1,max/Math.max(img.width,img.height));
+      var w=Math.max(1,Math.round(img.width*sc)),h=Math.max(1,Math.round(img.height*sc));
+      var c=document.createElement("canvas");c.width=w;c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      var col=sampleColor(img);
+      cb({dataUrl:c.toDataURL("image/jpeg",0.78),color:col.hex,colorName:col.name,
+          preview:img.src,w:w,h:h});
+    };
+    img.onerror=function(){toast("Could not read that photo.")};
+    img.src=rd.result;
+  };
+  rd.readAsDataURL(file);
+}
+
+/* ============ demo seed ============ */
+function demoItem(cat,label,bg,fg){
+  var c=document.createElement("canvas");c.width=c.height=480;
+  var x=c.getContext("2d");
+  x.fillStyle=bg;x.fillRect(0,0,480,480);
+  x.fillStyle="rgba(255,255,255,.06)";x.fillRect(0,0,480,120);
+  x.fillStyle=fg||"#f5f5f5";x.font="800 44px Arial";x.textAlign="center";
+  x.fillText(label,240,258);
+  var col=sampleColor(c);
+  return {id:uid(),cat:cat,color:col.hex,colorName:col.name,
+    img:c.toDataURL("image/jpeg",0.8),demo:true,name:label,ts:Date.now()};
+}
+function seedDemo(silent){
+  var items=loadItems().filter(function(i){return!i.demo});
+  var d=[
+    demoItem("top","BLACK TEE","#17171a"),
+    demoItem("top","WHITE TEE","#e8e8e8","#111"),
+    demoItem("bottoms","INDIGO JEANS","#2b3a55"),
+    demoItem("bottoms","BLACK SHORTS","#101012"),
+    demoItem("shoes","WHITE SNEAKERS","#dedede","#111"),
+    demoItem("accessory","BLACK CAP","#141416")
+  ];
+  saveItems(items.concat(d));
+  renderCloset();
+  if(!silent)toast("Demo items added.");
+}
+
+/* ============ sheets ============ */
+var sheet=$("#sheet"),scrim=$("#scrim");
+function openSheet(html){sheet.innerHTML='<div class="grab"></div>'+html;sheet.classList.add("on");scrim.classList.add("on")}
+function closeSheet(){sheet.classList.remove("on");scrim.classList.remove("on")}
+scrim.addEventListener("click",closeSheet);
+
+/* ============ closet ============ */
+var curFilter="all";
+function renderFilters(){
+  var f=$("#filters");f.innerHTML="";
+  var defs=[["all","All"]].concat(CATS.map(function(c){return[c[0],c[1]+"s"]}));
+  defs.forEach(function(d){
+    var b=el("button","chip"+(curFilter===d[0]?" on":""),d[1]);
+    b.addEventListener("click",function(){curFilter=d[0];renderFilters();renderCloset()});
+    f.appendChild(b);
+  });
+}
+function renderCloset(){
+  var items=loadItems();
+  var list=items.filter(function(i){return curFilter==="all"||i.cat===curFilter});
+  var g=$("#closetGrid");g.innerHTML="";
+  $("#closetEmpty").hidden=items.length>0;
+  $("#closetCount").textContent=items.length?items.length+" pieces":"";
+  $("#clearDemo").hidden=!items.some(function(i){return i.demo});
+  list.slice().reverse().forEach(function(it){
+    var b=el("button","item");
+    b.innerHTML='<img alt=""><div class="meta"><span class="dot" style="background:'+it.color+'"></span>'+
+      '<span class="nm">'+(it.name?escapeHtml(it.name):it.colorName)+'</span></div>'+
+      '<div class="meta" style="padding-top:0"><span class="cat">'+catLabel(it.cat)+' · '+it.colorName+(it.demo?' · DEMO':'')+'</span></div>';
+    b.querySelector("img").src=it.img;
+    b.addEventListener("click",function(){itemDetail(it.id)});
+    g.appendChild(b);
+  });
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(m){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})}
+function itemDetail(id){
+  var it=getItem(id);if(!it)return;
+  openSheet('<h3>'+(it.name?escapeHtml(it.name):catLabel(it.cat))+'</h3>'+
+    '<div class="sub">'+catLabel(it.cat)+' · '+it.colorName+(it.demo?' · demo':'')+'</div>'+
+    '<img src="'+it.img+'" class="ed-preview" alt="">'+
+    '<button class="pick danger" id="delItem"><span class="pn">Delete this item</span></button>');
+  $("#delItem").addEventListener("click",function(){
+    saveItems(loadItems().filter(function(i){return i.id!==id}));
+    closeSheet();renderCloset();toast("Deleted.");
+  });
+}
+$("#clearDemo").addEventListener("click",function(){
+  saveItems(loadItems().filter(function(i){return!i.demo}));
+  renderCloset();toast("Demo cleared.");
+});
+$("#demoBtn").addEventListener("click",function(){seedDemo()});
+
+/* ============ add flow ============ */
+function triggerAdd(kind){
+  var inp=kind==="camera"?$("#fileCam"):$("#fileUp");
+  inp.value="";inp.click();
+}
+document.querySelectorAll("[data-add]").forEach(function(b){
+  b.addEventListener("click",function(){triggerAdd(b.getAttribute("data-add"))});
+});
+$("#fab").addEventListener("click",function(){
+  openSheet('<h3>Add to closet</h3><div class="sub">Shoot it or pick a photo.</div>'+
+    '<button class="pick" id="aCam"><span class="pn">Camera</span><span class="pc">snap it now</span></button>'+
+    '<button class="pick" id="aUp"><span class="pn">Photo library</span><span class="pc">upload</span></button>');
+  $("#aCam").addEventListener("click",function(){closeSheet();triggerAdd("camera")});
+  $("#aUp").addEventListener("click",function(){closeSheet();triggerAdd("upload")});
+});
+function onFile(inp){
+  inp.addEventListener("change",function(){
+    if(!inp.files||!inp.files[0])return;
+    fileToItemData(inp.files[0],openEditor);
+  });
+}
+onFile($("#fileCam"));onFile($("#fileUp"));
+function openEditor(res){
+  var cat="top";
+  openSheet('<h3>New piece</h3><div class="sub">Color detected automatically.</div>'+
+    '<img src="'+res.dataUrl+'" class="ed-preview" alt="">'+
+    '<div class="ed-row"><div class="lab">Category</div><div class="chips" id="edCats"></div></div>'+
+    '<div class="ed-row"><div class="lab">Color</div><div class="colorline"><span class="dot" style="background:'+res.color+';width:22px;height:22px"></span>'+res.colorName+'</div></div>'+
+    '<div class="ed-row"><div class="lab">Name (optional)</div><input class="tinput" id="edName" placeholder="e.g. tour tee" maxlength="40"></div>'+
+    '<button class="btn block" id="edSave">Save to closet</button>');
+  var cf=$("#edCats");
+  CATS.forEach(function(c){
+    var b=el("button","chip"+(c[0]===cat?" on":""),c[1]);
+    b.addEventListener("click",function(){cat=c[0];cf.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on")});b.classList.add("on")});
+    cf.appendChild(b);
+  });
+  $("#edSave").addEventListener("click",function(){
+    var name=$("#edName").value.trim();
+    var items=loadItems();
+    items.push({id:uid(),cat:cat,color:res.color,colorName:res.colorName,img:res.dataUrl,
+      name:name||"",ts:Date.now()});
+    saveItems(items);closeSheet();renderCloset();toast("Saved.");
+  });
+}
+</script>
+<script>
+"use strict";
+/* ============ build ============ */
+var SLOTS=[["layer","Layer","optional"],["top","Top",""],["bottoms","Bottoms",""],["shoes","Shoes",""],["accessory","Accessory",""]];
+var slots={layer:null,top:null,bottoms:null,shoes:null,accessory:null};
+function renderSlots(){
+  var w=$("#slots");w.innerHTML="";
+  SLOTS.forEach(function(s){
+    var key=s[0],it=slots[key]?getItem(slots[key]):null;
+    var b=el("button","slot");
+    b.innerHTML=(it?'<img class="th" src="'+it.img+'" alt="">':'<span class="th ph">+</span>')+
+      '<span class="lb"><span class="s">'+s[1]+(s[2]?' · '+s[2]:'')+'</span><br>'+
+      '<span class="v'+(it?'':' none')+'">'+(it?(it.name?escapeHtml(it.name):it.colorName+" "+s[1]):"Tap to pick")+'</span></span>'+
+      '<span class="go">›</span>';
+    b.addEventListener("click",function(){openPicker(key)});
+    w.appendChild(b);
+  });
+  drawFitCard();
+}
+function openPicker(key){
+  var items=loadItems().filter(function(i){return i.cat===key});
+  var h='<h3>Pick '+catLabel(key).toLowerCase()+'</h3><div class="sub">'+items.length+' in closet</div>';
+  if(!items.length)h+='<div class="sub">Nothing here yet. Add some '+catLabel(key).toLowerCase()+'s first.</div>';
+  items.slice().reverse().forEach(function(it){
+    h+='<button class="pick" data-id="'+it.id+'"><img src="'+it.img+'" alt=""><span class="pn">'+
+      (it.name?escapeHtml(it.name):it.colorName)+'</span><span class="pc">'+it.colorName+'</span></button>';
+  });
+  if(slots[key])h+='<button class="pick danger" data-id=""><span class="pn">Clear slot</span></button>';
+  openSheet(h);
+  sheet.querySelectorAll(".pick[data-id]").forEach(function(b){
+    b.addEventListener("click",function(){
+      var id=b.getAttribute("data-id");
+      slots[key]=id||null;closeSheet();renderSlots();
+    });
+  });
+}
+function loadImg(src){return new Promise(function(res,rej){var i=new Image();i.onload=function(){res(i)};i.onerror=rej;i.src=src})}
+/* flat-lay fit card, 1080x1350 */
+async function composeFitCard(){
+  var c=$("#fitCard"),x=c.getContext("2d");
+  x.fillStyle="#0d0d10";x.fillRect(0,0,1080,1350);
+  x.fillStyle="#f5f5f5";x.font="800 34px Arial";x.textAlign="left";
+  x.fillText("FIT CHECK",56,96);
+  x.fillStyle="#5c5c62";x.font="600 28px Arial";x.textAlign="right";
+  var d=new Date();x.fillText((d.getMonth()+1)+"/"+d.getDate()+"/"+d.getFullYear(),1024,96);
+  x.strokeStyle="#26262b";x.lineWidth=2;
+  x.beginPath();x.moveTo(56,130);x.lineTo(1024,130);x.stroke();
+  function drawContain(img,cx,cy,mw,mh){
+    var s=Math.min(mw/img.width,mh/img.height),w=img.width*s,h=img.height*s;
+    x.drawImage(img,cx-w/2,cy-h/2,w,h);
+  }
+  function caption(txt,cx,y){
+    x.fillStyle="#9a9aa0";x.font="700 24px Arial";x.textAlign="center";x.fillText(txt,cx,y);
+  }
+  var topIt=slots.top?getItem(slots.top):null;
+  var layerIt=slots.layer?getItem(slots.layer):null;
+  var botIt=slots.bottoms?getItem(slots.bottoms):null;
+  var shoeIt=slots.shoes?getItem(slots.shoes):null;
+  var accIt=slots.accessory?getItem(slots.accessory):null;
+  try{
+    if(layerIt){var li=await loadImg(layerIt.img);drawContain(li,540,400,560,420);caption("LAYER · "+layerIt.colorName.toUpperCase(),540,640)}
+    if(topIt){var ti=await loadImg(topIt.img);drawContain(ti,layerIt?600:540,layerIt?430:400,500,400);caption("TOP · "+topIt.colorName.toUpperCase(),540,640)}
+    if(!topIt&&!layerIt){x.fillStyle="#1b1b1e";x.fillRect(340,200,400,400);caption("NO TOP PICKED",540,640)}
+    if(botIt){var bi=await loadImg(botIt.img);drawContain(bi,540,830,480,380);caption("BOTTOMS · "+botIt.colorName.toUpperCase(),540,1050)}
+    else{x.fillStyle="#1b1b1e";x.fillRect(340,660,400,360);caption("NO BOTTOMS PICKED",540,1050)}
+    if(shoeIt){var si=await loadImg(shoeIt.img);drawContain(si,400,1180,360,220);caption("SHOES · "+shoeIt.colorName.toUpperCase(),400,1310)}
+    else{x.fillStyle="#1b1b1e";x.fillRect(240,1080,320,200);caption("NO SHOES",400,1310)}
+    if(accIt){var ai=await loadImg(accIt.img);drawContain(ai,830,1180,220,220);caption("ACC · "+accIt.colorName.toUpperCase(),830,1310)}
+  }catch(e){/* image failed, card still renders */}
+  return c.toDataURL("image/png");
+}
+function drawFitCard(){composeFitCard().catch(function(){})}
+function slotsFilled(){return slots.top&&slots.bottoms&&slots.shoes}
+$("#shuffleBtn").addEventListener("click",function(){
+  var items=loadItems();
+  if(!items.length){toast("Closet's empty. Add pieces first.");return}
+  ["top","bottoms","shoes","accessory"].forEach(function(k){
+    var pool=items.filter(function(i){return i.cat===k});
+    slots[k]=pool.length?pool[Math.floor(Math.random()*pool.length)].id:null;
+  });
+  var lp=items.filter(function(i){return i.cat==="layer"});
+  slots.layer=(lp.length&&Math.random()<0.5)?lp[Math.floor(Math.random()*lp.length)].id:null;
+  renderSlots();
+  if(!slotsFilled())toast("Add more pieces to fill every slot.");
+});
+$("#saveFitBtn").addEventListener("click",function(){
+  if(!slotsFilled()){toast("Pick a top, bottoms, and shoes first.");return}
+  composeFitCard().then(function(url){
+    var fits=loadFits();
+    fits.unshift({id:uid(),slots:Object.assign({},slots),ts:Date.now(),thumb:url});
+    saveFits(fits);renderFits();toast("Fit saved.");
+  });
+});
+$("#dlBtn").addEventListener("click",function(){
+  composeFitCard().then(function(url){
+    var a=document.createElement("a");a.href=url;a.download="fitcheck-fit.png";
+    document.body.appendChild(a);a.click();a.remove();toast("Downloading.");
+  });
+});
+
+/* ============ fits ============ */
+function renderFits(){
+  var fits=loadFits(),w=$("#fitsList");w.innerHTML="";
+  $("#fitsEmpty").hidden=fits.length>0;
+  $("#fitsCount").textContent=fits.length?fits.length+" saved":"";
+  fits.forEach(function(f){
+    var b=el("button","fit");
+    var d=new Date(f.ts);
+    b.innerHTML='<img alt="Saved fit"><div class="meta">'+(d.getMonth()+1)+"/"+d.getDate()+" · tap to view</div>";
+    b.querySelector("img").src=f.thumb;
+    b.addEventListener("click",function(){
+      openSheet('<h3>Fit</h3><div class="sub">'+(d.getMonth()+1)+"/"+d.getDate()+"/"+d.getFullYear()+'</div>'+
+        '<img src="'+f.thumb+'" class="ed-preview" style="aspect-ratio:4/5" alt="">'+
+        '<button class="pick danger" id="delFit"><span class="pn">Delete this fit</span></button>');
+      $("#delFit").addEventListener("click",function(){
+        saveFits(loadFits().filter(function(x){return x.id!==f.id}));
+        closeSheet();renderFits();toast("Deleted.");
+      });
+    });
+    w.appendChild(b);
+  });
+}
+$("#goBuild").addEventListener("click",function(){switchTab("build")});
+
+/* ============ weather ============ */
+function wxHint(t){
+  if(t>=78)return"shorts weather."; if(t>=68)return"light layers.";
+  if(t>=58)return"bring a layer."; if(t>=48)return"jacket time."; return"bundle up.";
+}
+function geo(timeout){
+  return new Promise(function(res,rej){
+    if(!navigator.geolocation)return rej("no geo");
+    var to=setTimeout(function(){rej("timeout")},timeout||4000);
+    navigator.geolocation.getCurrentPosition(function(p){clearTimeout(to);res(p)},function(e){clearTimeout(to);rej(e)});
+  });
+}
+async function loadWeather(){
+  var lat=34.05,lon=-118.24,label="Los Angeles";
+  try{var p=await geo(4000);lat=p.coords.latitude.toFixed(2);lon=p.coords.longitude.toFixed(2);label="Right here"}catch(e){}
+  try{
+    var r=await fetch("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current=temperature_2m&temperature_unit=fahrenheit");
+    var j=await r.json(),t=Math.round(j.current.temperature_2m);
+    $("#wxChip").innerHTML="<b>"+t+"°F</b>";
+    $("#wxTemp").textContent=t+"°F · "+label;
+    $("#wxHint").textContent=wxHint(t);
+  }catch(e){
+    $("#wxChip").innerHTML="<b>--</b>";
+    $("#wxTemp").textContent="offline";
+    $("#wxHint").textContent="no sky data. dress how you feel.";
+  }
+}
+
+/* ============ tabs ============ */
+function switchTab(name){
+  document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-tab")===name)});
+  document.querySelectorAll(".tab").forEach(function(s){s.classList.toggle("on",s.id==="tab-"+name)});
+  window.scrollTo(0,0);
+  if(name==="build")drawFitCard();
+}
+document.querySelectorAll("nav button").forEach(function(b){
+  b.addEventListener("click",function(){switchTab(b.getAttribute("data-tab"))});
+});
+$("#wxChip").addEventListener("click",function(){switchTab("build")});
+
+/* ============ pwa ============ */
+if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
+
+/* ============ self test (?selftest=1) ============ */
+async function canvasNonBlank(){
+  var c=$("#fitCard"),x=c.getContext("2d");
+  var d=x.getImageData(0,0,c.width,c.height).data,seen={};
+  for(var i=0;i<d.length;i+=4000){seen[d[i]+","+d[i+1]+","+d[i+2]]=1}
+  return Object.keys(seen).length>4;
+}
+async function selftest(){
+  var out={errors:[],checks:{}};
+  window.addEventListener("error",function(e){out.errors.push("window:"+e.message)});
+  try{
+    var bk1=localStorage.getItem(K_ITEMS),bk2=localStorage.getItem(K_FITS);
+    seedDemo(true);
+    var items=loadItems();
+    out.checks.itemsSeeded=items.length;
+    out.checks.demoColors=items.map(function(i){return i.colorName}).join(",");
+    ["layer","top","bottoms","shoes","accessory"].forEach(function(k){
+      var it=items.find(function(i){return i.cat===k});if(it)slots[k]=it.id;
+    });
+    renderSlots();
+    await composeFitCard();
+    out.checks.cardNonBlank=await canvasNonBlank();
+    shuffleFitSilent();
+    out.checks.shuffleTop=slots.top?"ok":"empty";
+    await composeFitCard().then(function(url){
+      var fits=loadFits();fits.unshift({id:uid(),slots:Object.assign({},slots),ts:Date.now(),thumb:url});
+      saveFits(fits);
+    });
+    out.checks.fitsSaved=loadFits().length;
+    try{var m=await(await fetch("manifest.json")).json();out.checks.manifest=m.name+" / "+m.display}
+    catch(e){out.checks.manifest="FAIL:"+e.message}
+    if("serviceWorker" in navigator){
+      try{await navigator.serviceWorker.register("sw.js");out.checks.sw="registered"}
+      catch(e){out.checks.sw="FAIL:"+e.message}
+    }else out.checks.sw="unsupported";
+    try{await fetch("https://api.open-meteo.com/v1/forecast?latitude=34.05&longitude=-118.24&current=temperature_2m&temperature_unit=fahrenheit");
+      out.checks.weather="ok"}catch(e){out.checks.weather="offline:"+e.message}
+    if(bk1==null)localStorage.removeItem(K_ITEMS);else localStorage.setItem(K_ITEMS,bk1);
+    if(bk2==null)localStorage.removeItem(K_FITS);else localStorage.setItem(K_FITS,bk2);
+  }catch(e){out.errors.push("fatal:"+(e&&e.message||e))}
+  document.body.innerHTML='<pre id="st">'+JSON.stringify(out,null,1)+"</pre>";
+  document.title="SELFTEST_DONE";
+}
+function shuffleFitSilent(){
+  var items=loadItems();
+  ["top","bottoms","shoes","accessory"].forEach(function(k){
+    var pool=items.filter(function(i){return i.cat===k});
+    slots[k]=pool.length?pool[0].id:null;
+  });
+  var lp=items.filter(function(i){return i.cat==="layer"});
+  slots.layer=lp.length?lp[0].id:null;
+}
+
+/* ============ init ============ */
+renderFilters();renderCloset();renderSlots();renderFits();loadWeather();
+(function(){
+  var qs=new URLSearchParams(location.search);
+  if(qs.get("demo")==="1"&&!loadItems().length)seedDemo(true);
+  if(qs.get("tab")==="closet"||qs.get("tab")==="build"||qs.get("tab")==="fits")switchTab(qs.get("tab"));
+  if(qs.get("selftest")==="1")selftest();
+})();
+</script>
+</body>
+</html>
