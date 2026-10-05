@@ -204,6 +204,11 @@ html.js .reveal.in{opacity:1;transform:none}
   font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
 .quote-form button:hover{background:var(--green);color:#141412}
 .q-note{margin:0;font-size:13px;color:var(--faint)}
+.booking{margin-top:36px;border-top:1px solid var(--line);padding-top:30px}
+.book-lede{margin:0 0 20px;font-size:17px;max-width:42ch}
+.calendly-inline-widget{border:1px solid var(--line-soft)}
+.book-fallback{margin:14px 0 0;font-size:13px;color:var(--faint)}
+.book-fallback a{color:var(--green);text-decoration:underline;text-underline-offset:3px}
 .inc-list{list-style:none;margin:0;padding:0;display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line-soft);
   border:1px solid var(--line-soft)}
@@ -350,7 +355,14 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
       </ul>
       <div class="pitch-cta reveal">
         <p>Running a festival or event? Reach out for a call and a quote.</p>
-        <a class="book-call" href="https://calendly.com/nathanltwong/festival-app-quote-call" target="_blank" rel="noopener">Book a call</a>
+        <a class="book-call" href="#booking">Book a call</a>
+      </div>
+      <div class="booking reveal" id="booking">
+        <h3 class="inc-label">Book a call</h3>
+        <p class="book-lede">Pick a time. We talk. 30 minutes.</p>
+        <div class="calendly-inline-widget" data-url="https://calendly.com/nathanltwong/festival-app-quote-call?background_color=0a0a0a&amp;text_color=f5f5f5&amp;primary_color=4ade80" style="min-width:320px;height:700px;"></div>
+        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        <p class="book-fallback">Calendar not loading? <a href="https://calendly.com/nathanltwong/festival-app-quote-call" target="_blank" rel="noopener">Open it in a new tab</a>.</p>
       </div>
       <form class="quote-form reveal" id="quoteForm">
         <div class="q-row">
