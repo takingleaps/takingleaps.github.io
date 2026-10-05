@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,700;6..96,900&family=Public+Sans:wght@500;650;750;900&display=swap" rel="stylesheet" />
-  <title>FLWRPWR Concept 11: Mac Bloom OS</title>
+  <title>flwrpwr.OS</title>
   <style>
     :root {
       color-scheme: light dark;
@@ -847,14 +847,158 @@
       .statusbar { min-height: 31px; flex-basis: 31px; font-size: 9px; }
     }
 
+    @media (max-width: 760px) {
+      :root {
+        --menu-h: calc(44px + env(safe-area-inset-top));
+        --launcher-h: calc(62px + env(safe-area-inset-bottom));
+      }
+      body { font-size: 16px; }
+      .age-gate {
+        padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      }
+      .age-card { width: min(500px, 100%); box-shadow: 7px 9px 0 color-mix(in srgb, var(--pink) 72%, var(--ink)); }
+      .age-titlebar { min-height: 36px; }
+      .age-content { padding: clamp(26px, 8vw, 42px) clamp(18px, 7vw, 36px); }
+      .age-mark { font-size: clamp(4.8rem, 25vw, 6.4rem); }
+      .age-copy { margin: 20px auto; font-size: 1rem; }
+      .age-actions .os-button { min-height: 48px; }
+      .age-note { font-size: 11px; }
+      .menu-bar {
+        padding-top: env(safe-area-inset-top);
+        height: var(--menu-h);
+      }
+      .menu-logo, .theme-toggle, .menu-clock { min-height: 44px; }
+      .menu-logo { padding-inline: max(12px, env(safe-area-inset-left)); font-size: 13px; }
+      .theme-toggle { min-width: 48px; }
+      .menu-clock { padding-right: max(10px, env(safe-area-inset-right)); font-size: 12px; }
+      .window,
+      #welcome-window, #flower-window, #apparel-window, #brand-window, #labs-window, #phone-window, #about-window {
+        left: max(7px, env(safe-area-inset-left)) !important;
+        top: calc(var(--menu-h) + 7px) !important;
+        width: calc(100vw - max(14px, env(safe-area-inset-left) + env(safe-area-inset-right))) !important;
+        height: calc(100dvh - var(--menu-h) - var(--launcher-h) - 14px) !important;
+        min-width: 0;
+        min-height: 0;
+        max-width: none;
+        max-height: none;
+        resize: none;
+        box-shadow: 5px 7px 18px var(--shadow), 2px 2px 0 var(--ink);
+      }
+      .window.maximized {
+        left: max(4px, env(safe-area-inset-left)) !important;
+        top: calc(var(--menu-h) + 4px) !important;
+        width: calc(100vw - max(8px, env(safe-area-inset-left) + env(safe-area-inset-right))) !important;
+        height: calc(100dvh - var(--menu-h) - var(--launcher-h) - 8px) !important;
+      }
+      .titlebar {
+        min-height: 48px;
+        flex-basis: 48px;
+        grid-template-columns: 64px minmax(0, 1fr) 104px;
+        cursor: default;
+      }
+      .window-title { padding-inline: 8px; font-size: 12px; }
+      .window-tools { gap: 8px; padding-inline: 8px; }
+      .win-control { width: 40px; height: 40px; font-size: 18px; }
+      .resize-handle { display: none; }
+      .statusbar { min-height: 32px; flex-basis: 32px; padding-inline: 10px; font-size: 10px; }
+      .statusbar span:nth-child(2) { text-align: right; }
+      .welcome-layout { min-height: auto; }
+      .brand-stage { min-height: clamp(230px, 40dvh, 330px); padding: 24px 22px; }
+      .brand-word { font-size: clamp(3.7rem, 20vw, 5.6rem); }
+      .tagline { margin-top: 18px; font-size: 1rem; }
+      .welcome-panel { padding: 24px 20px 30px; gap: 20px; }
+      .fact-copy span, .strain-strip span, .file-name, .inspector-label, .info-list, .apparel-copy p,
+      .product-facts, .brand-banner p, .brand-notes, .lab-table, .about-shell p { font-size: 12px; }
+      .os-button { min-height: 48px; }
+      .finder-toolbar { min-height: 54px; padding: 6px 8px; }
+      .small-os-btn { min-width: 44px; min-height: 44px; padding: 8px 12px; }
+      .path-chip { padding: 9px; font-size: 12px; }
+      .file-item { min-height: 118px; }
+      .inspector { padding: 20px 16px 28px; }
+      .info-list { grid-template-columns: 92px 1fr; line-height: 1.45; }
+      .pending-note { font-size: 12px; }
+      .garment-stage { min-height: 300px; }
+      .apparel-copy h2 { font-size: clamp(3rem, 16vw, 4.5rem); }
+      .brand-banner { min-height: 210px; }
+      .brand-banner h2 { font-size: clamp(3.8rem, 18vw, 5.5rem); }
+      .brand-details { padding: 22px 18px 30px; }
+      .brand-details h3 { font-size: 13px; }
+      .lab-shell { padding: 18px 14px 26px; }
+      .lab-head h2 { font-size: clamp(2.3rem, 12vw, 3rem); }
+      .lab-head p { font-size: 12px; line-height: 1.55; }
+      .lab-table td { min-height: 44px; align-items: center; padding: 10px 8px; }
+      .phone-shell { min-height: 100%; padding: 12px 10px 24px; align-items: start; }
+      .brick-phone {
+        width: min(238px, 78vw);
+        padding: 14px 14px 17px;
+        border-radius: 30px 30px 42px 42px;
+        box-shadow: 7px 9px 0 color-mix(in srgb, var(--pink-strong) 70%, var(--ink));
+        transform: none;
+      }
+      .phone-speaker { margin-bottom: 10px; }
+      .phone-screen { padding: 10px; }
+      .phone-logo { margin: 10px 0 7px; font-size: 2rem; }
+      .phone-daisy { width: 26px; height: 26px; }
+      .phone-softkeys { margin: 9px 0; }
+      .phone-softkeys button { min-height: 44px; font-size: 10px; }
+      .phone-keypad { gap: 6px; }
+      .phone-keypad button { min-height: 44px; font-size: 14px; }
+      .phone-keypad small { font-size: 7px; }
+      .phone-homebar { margin-top: 11px; }
+      .about-shell { padding: 24px 18px; }
+      .mobile-switcher-toggle {
+        left: max(7px, env(safe-area-inset-left));
+        right: max(7px, env(safe-area-inset-right));
+        bottom: max(7px, env(safe-area-inset-bottom));
+        height: 52px;
+        padding: 0 16px;
+        font-size: 12px;
+      }
+      .mobile-switcher-toggle::after { content: "⌃"; margin-left: 8px; font-size: 16px; }
+      .mobile-switcher-toggle[aria-expanded="true"]::after { content: "⌄"; }
+      .mobile-window-menu {
+        left: max(7px, env(safe-area-inset-left));
+        right: max(7px, env(safe-area-inset-right));
+        bottom: calc(max(7px, env(safe-area-inset-bottom)) + 58px);
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        max-height: min(56dvh, 410px);
+        overflow-y: auto;
+        padding: 7px;
+      }
+      .mobile-window-menu.open { display: grid; }
+      .mobile-window-menu button {
+        min-height: 52px;
+        border: 0;
+        padding: 0 13px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+      .mobile-window-menu button:nth-child(odd) { border-right: 1px solid color-mix(in srgb, var(--ink) 28%, transparent); }
+      .mobile-window-menu button:not(:nth-last-child(-n+2)) { border-bottom: 1px solid color-mix(in srgb, var(--ink) 28%, transparent); }
+      .toast { bottom: calc(var(--launcher-h) + 10px); max-width: calc(100vw - 28px); text-align: center; }
+    }
+
     @media (max-width: 380px) {
       .menu-clock .date-part { display: none; }
       .fact-lockup { gap: 10px; }
-      .fact-number { font-size: 4.5rem; }
+      .fact-number { font-size: 4.2rem; }
       .brand-word { font-size: 3.5rem; }
-      .brand-stage { min-height: 42%; }
-      .welcome-panel { padding: 18px; }
+      .brand-stage { min-height: 220px; }
+      .welcome-panel { padding: 18px 16px 26px; }
       .strain-strip { display: none; }
+      .titlebar { grid-template-columns: 56px minmax(0, 1fr) 96px; }
+      .window-tools { gap: 6px; padding-inline: 6px; }
+      .win-control { width: 38px; height: 38px; }
+      .brick-phone { width: min(224px, 76vw); padding: 12px 13px 15px; }
+      .phone-keypad button { min-height: 42px; }
+      .age-gate { padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
+      .age-card { box-shadow: 6px 8px 0 color-mix(in srgb, var(--pink) 72%, var(--ink)); }
+      .age-content { padding: 26px 18px 24px; }
+      .age-mark { font-size: 4.8rem; }
+      .age-copy { margin: 18px auto; font-size: 1rem; }
+      .age-actions { grid-template-columns: 1fr; gap: 9px; }
+      .age-note { margin-top: 14px; font-size: 11px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -869,7 +1013,7 @@
       <div class="age-titlebar"><span>AGE CHECK</span></div>
       <div class="age-content">
         <div class="age-mark" id="ageHeading">21+</div>
-        <p class="age-copy">You must be 21 or older to enter FLWRPWR Bloom OS.</p>
+        <p class="age-copy">You must be 21 or older to enter flwrpwr.OS.</p>
         <div class="age-actions">
           <button class="os-button primary" type="button" id="ageEnter">I'M 21+</button>
           <button class="os-button" type="button" id="ageExit">NOT YET</button>
@@ -889,7 +1033,7 @@
     </div>
 
     <nav class="menu-bar" aria-label="Desktop menu">
-      <button class="menu-logo" type="button" data-open="about-window"><span class="mini-flower" aria-hidden="true"></span><span>FLWRPWR</span></button>
+      <button class="menu-logo" type="button" data-open="about-window"><span class="mini-flower" aria-hidden="true"></span><span>flwrpwr.OS</span></button>
       <button class="menu-item" type="button" data-menu="file-menu" aria-expanded="false">File</button>
       <button class="menu-item" type="button" data-menu="view-menu" aria-expanded="false">View</button>
       <button class="menu-item" type="button" data-menu="special-menu" aria-expanded="false">Special</button>
@@ -909,7 +1053,7 @@
     </div>
     <div class="menu-dropdown" id="special-menu" role="menu">
       <button type="button" role="menuitem" data-open="about-window"><span>About FLWRPWR</span><span class="key">?</span></button>
-      <button type="button" role="menuitem" data-restart><span>Restart Bloom OS</span><span class="key">R</span></button>
+      <button type="button" role="menuitem" data-restart><span>Restart flwrpwr.OS</span><span class="key">R</span></button>
     </div>
 
     <div class="desktop-icons" aria-label="Desktop files">
@@ -934,13 +1078,13 @@
     <section class="window open active" id="welcome-window" role="dialog" aria-label="FLWRPWR welcome window">
       <header class="titlebar">
         <div class="window-tools"><button class="win-control" type="button" data-close aria-label="Close window">×</button></div>
-        <div class="window-title">FLWRPWR STARTUP</div>
+        <div class="window-title">flwrpwr.OS STARTUP</div>
         <div class="window-tools right"><button class="win-control" type="button" data-minimize aria-label="Minimize window">−</button><button class="win-control" type="button" data-maximize aria-label="Maximize window">□</button></div>
       </header>
       <div class="window-content">
         <div class="welcome-layout">
           <section class="brand-stage">
-            <span class="os-label">BLOOM OS / 11</span>
+            <span class="os-label">flwrpwr.OS / 11</span>
             <h1 class="brand-word" id="brandWord"><span>FLWR</span><span>PWR</span></h1>
             <p class="tagline">GOOD VIBES, GREAT FLOWER.</p>
           </section>
@@ -1074,13 +1218,13 @@
       <footer class="statusbar"><span>FLOWER PHONE</span><span>PRESS A KEY</span><span class="resize-grip" aria-hidden="true"></span></footer>
     </section>
 
-    <section class="window" id="about-window" role="dialog" aria-label="About FLWRPWR window">
+    <section class="window" id="about-window" role="dialog" aria-label="About flwrpwr.OS window">
       <header class="titlebar">
         <div class="window-tools"><button class="win-control" type="button" data-close aria-label="Close window">×</button></div>
-        <div class="window-title">ABOUT FLWRPWR</div>
+        <div class="window-title">ABOUT flwrpwr.OS</div>
         <div class="window-tools right"><button class="win-control" type="button" data-minimize aria-label="Minimize window">−</button><button class="win-control" type="button" data-maximize aria-label="Maximize window">□</button></div>
       </header>
-      <div class="window-content"><div class="about-shell"><div><div class="about-mark">FLWRPWR</div><svg class="about-flower" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><circle cx="50" cy="22" r="20"/><circle cx="77" cy="42" r="20"/><circle cx="67" cy="74" r="20"/><circle cx="33" cy="74" r="20"/><circle cx="23" cy="42" r="20"/></g><circle cx="50" cy="50" r="15" fill="var(--gold)"/></svg><p>Women-owned. Six strains. 4g small-bud flower.</p><div class="system-rule"></div><p>Bloom OS 11 uses the FLWRPWR palette across every window, menu, and file.</p></div></div></div>
+      <div class="window-content"><div class="about-shell"><div><div class="about-mark">FLWRPWR</div><svg class="about-flower" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><circle cx="50" cy="22" r="20"/><circle cx="77" cy="42" r="20"/><circle cx="67" cy="74" r="20"/><circle cx="33" cy="74" r="20"/><circle cx="23" cy="42" r="20"/></g><circle cx="50" cy="50" r="15" fill="var(--gold)"/></svg><p>Women-owned. Six strains. 4g small-bud flower.</p><div class="system-rule"></div><p>flwrpwr.OS 11 uses the FLWRPWR palette across every window, menu, and file.</p></div></div></div>
       <footer class="statusbar"><span>FLWRPWR</span><span>2026</span><span class="resize-grip" aria-hidden="true"></span></footer>
     </section>
 
@@ -1111,6 +1255,7 @@
 
       var zCounter = 30;
       var windows = Array.prototype.slice.call(document.querySelectorAll('.window'));
+      var focusHistory = ['welcome-window'];
       var mobileQuery = window.matchMedia('(max-width: 760px)');
       var toastTimer;
       var interaction = null;
@@ -1144,15 +1289,29 @@
         windows.forEach(function (item) { item.classList.remove('active'); });
         win.classList.add('active');
         win.style.zIndex = String(++zCounter);
+        focusHistory = focusHistory.filter(function (id) { return id !== win.id; });
+        focusHistory.push(win.id);
         updateLauncher(win.id);
       }
 
       function focusTopWindow(excluded) {
-        var candidates = windows.filter(function (item) {
-          return item !== excluded && item.classList.contains('open') && !item.classList.contains('minimized');
-        });
-        candidates.sort(function (a, b) { return (parseInt(a.style.zIndex, 10) || 0) - (parseInt(b.style.zIndex, 10) || 0); });
-        if (candidates.length) focusWindow(candidates[candidates.length - 1]);
+        var next = null;
+        for (var index = focusHistory.length - 1; index >= 0; index -= 1) {
+          var remembered = document.getElementById(focusHistory[index]);
+          if (remembered && remembered !== excluded && remembered.classList.contains('open') && !remembered.classList.contains('minimized')) {
+            next = remembered;
+            break;
+          }
+        }
+        if (!next) {
+          var candidates = windows.filter(function (item) {
+            return item !== excluded && item.classList.contains('open') && !item.classList.contains('minimized');
+          });
+          candidates.sort(function (a, b) { return (parseInt(a.style.zIndex, 10) || 0) - (parseInt(b.style.zIndex, 10) || 0); });
+          next = candidates[candidates.length - 1] || null;
+        }
+        windows.forEach(function (item) { item.classList.remove('active'); });
+        if (next) focusWindow(next);
         else updateLauncher('');
       }
 
@@ -1180,12 +1339,14 @@
       function closeWindow(win) {
         var wasActive = win.classList.contains('active');
         win.classList.remove('open', 'active', 'maximized', 'minimized');
-        if (wasActive) focusTopWindow(win);
+        focusHistory = focusHistory.filter(function (id) { return id !== win.id; });
+        if (wasActive || !document.querySelector('.window.open.active:not(.minimized)')) focusTopWindow(win);
       }
 
       function minimizeWindow(win) {
         win.classList.add('minimized');
         win.classList.remove('active');
+        focusHistory = focusHistory.filter(function (id) { return id !== win.id; });
         focusTopWindow(win);
         showToast('Window minimized');
       }
@@ -1244,6 +1405,7 @@
 
       function beginInteraction(event, win, type, direction) {
         if (event.button !== undefined && event.button !== 0) return;
+        if (isMobile()) return;
         if (win.classList.contains('maximized')) return;
         focusWindow(win);
         var rect = win.getBoundingClientRect();
@@ -1420,6 +1582,7 @@
         closeMenus();
         closeMobileSwitcher();
         windows.forEach(function (win) { win.classList.remove('open', 'active', 'maximized', 'minimized'); });
+        focusHistory = [];
         var boot = document.getElementById('boot');
         boot.classList.remove('done');
         setTimeout(function () {
