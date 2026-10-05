@@ -260,34 +260,29 @@
     <section class="nh-extras-strip" aria-label="Festival extras">
       <style>
         .nh-extras-strip { padding: 8px 16px 30px; text-align: center; }
-        .nh-extras-kicker { font-family: 'Courier New', Courier, monospace; font-size: 12px; letter-spacing: 3px; color: rgba(143,216,255,.6); margin: 0 0 16px; text-transform: uppercase; }
+        .nh-extras-kicker { font-family: 'Courier New', Courier, monospace; font-size: 12px; letter-spacing: 3px; color: rgba(143,216,255,.6); margin: 0 0 6px; text-transform: uppercase; }
+        .nh-extras-sub { font-family: 'Courier New', Courier, monospace; font-size: 12px; letter-spacing: 1px; color: #fff; margin: 0 0 16px; line-height: 1.7; }
         .nh-extras-row { display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; }
         .nh-stk { position: relative; border: 0; background: none; padding: 0; cursor: pointer; font-family: 'Courier New', Courier, monospace; transition: transform .18s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
         .nh-stk:active { transform: scale(.93) rotate(0deg) !important; }
-        .nh-stk-burst { width: 150px; height: 150px; transform: rotate(-6deg); filter: drop-shadow(0 6px 14px rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(143,216,255,.35)); }
-        .nh-stk-burst:hover { transform: rotate(0deg) scale(1.07); }
-        .nh-stk-burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-        .nh-stk-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #05070c; pointer-events: none; padding: 0 26px; }
-        .nh-stk-label .nh-stk-heart { font-size: 20px; line-height: 1; }
-        .nh-stk-label strong { font-size: 17px; font-weight: 800; letter-spacing: 1px; line-height: 1.15; }
-        .nh-stk-label em { font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: 2px; opacity: .7; }
         .nh-stk-cam { transform: rotate(4deg); background: #0a0e16; border: 3px solid #fff; border-radius: 20px; padding: 14px 20px 13px; color: #fff; box-shadow: 0 6px 14px rgba(0,0,0,.55), 0 0 16px rgba(143,216,255,.25); display: flex; align-items: center; gap: 12px; }
         .nh-stk-cam:hover { transform: rotate(0deg) scale(1.05); }
         .nh-stk-cam svg { width: 36px; height: 36px; flex: none; }
         .nh-stk-cam .nh-stk-text { text-align: left; }
         .nh-stk-cam .nh-stk-text strong { display: block; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; }
         .nh-stk-cam .nh-stk-text em { font-style: normal; font-size: 11px; letter-spacing: 1.5px; color: #8fd8ff; }
+        .nh-stk-game { transform: rotate(-4deg); }
+        .nh-stk-game:hover { transform: rotate(0deg) scale(1.05); }
         @media (max-width: 420px) {
           .nh-extras-row { gap: 20px; }
-          .nh-stk-burst { width: 130px; height: 130px; }
-          .nh-stk-label strong { font-size: 15px; }
         }
       </style>
       <p class="nh-extras-kicker">bored between sets?</p>
+      <p class="nh-extras-sub">Tweaking and need a dopamine boost? Lost ur vape?<br>Try out the buttons below!</p>
       <div class="nh-extras-row">
-        <button type="button" id="stickerPlay" class="nh-stk nh-stk-burst" aria-label="Play the Heart Pop game">
-          <svg viewBox="-8 -8 116 116" aria-hidden="true"><polygon points="50.0,0.0 58.0,9.8 69.1,3.8 72.8,15.9 85.4,14.6 84.1,27.2 96.2,30.9 90.2,42.0 100.0,50.0 90.2,58.0 96.2,69.1 84.1,72.8 85.4,85.4 72.8,84.1 69.1,96.2 58.0,90.2 50.0,100.0 42.0,90.2 30.9,96.2 27.2,84.1 14.6,85.4 15.9,72.8 3.8,69.1 9.8,58.0 0.0,50.0 9.8,42.0 3.8,30.9 15.9,27.2 14.6,14.6 27.2,15.9 30.9,3.8 42.0,9.8" fill="#8fd8ff" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/></svg>
-          <span class="nh-stk-label"><span class="nh-stk-heart">♥</span><strong>HEART POP</strong><em>TAP TO PLAY</em></span>
+        <button type="button" id="stickerPlay" class="nh-stk nh-stk-cam nh-stk-game" aria-label="Play the Heart Pop game">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8fd8ff" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span class="nh-stk-text"><strong>HEART POP</strong><em>tap to play</em></span>
         </button>
         <button type="button" id="stickerCamera" class="nh-stk nh-stk-cam" aria-label="Open the Niteharts Lens camera">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8fd8ff" d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="4.2" fill="#0a0e16"/><circle cx="12" cy="13.5" r="2.5" fill="#8fd8ff"/></svg>
