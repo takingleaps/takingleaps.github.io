@@ -142,7 +142,7 @@
       .mobile-quicknav{position:sticky;top:0;z-index:74;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:0 -12px;background:var(--line);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.24)}
       .mobile-quicknav a,.mobile-quicknav button{appearance:none;min-width:0;min-height:48px;display:grid;place-items:center;border:0;background:var(--deep);color:var(--paper);padding:7px 4px;text-decoration:none;text-align:center;font:600 .59rem/1.15 var(--mono);text-transform:uppercase;letter-spacing:.02em;touch-action:manipulation}
       .mobile-quicknav a:active,.mobile-quicknav button:active{background:var(--ice);color:var(--night)}
-      .mobile-quicknav button[aria-expanded="true"]{background:var(--paper);color:var(--night)}
+      .mobile-quicknav .is-active{background:var(--paper);color:var(--night)}
       .hero{min-height:286px;padding:20px 0 18px}
       .hero::after,.ambient-rig,.marquee,.module-dock,.layout-panel,.layout-hint{display:none!important}
       .hero-logo-stage{width:92%}
@@ -2160,7 +2160,7 @@
   });
 })();
 (function stickerCtas(){
-  function reveal(){ if(!document.body.classList.contains('mobile-show-all')){ document.body.classList.add('mobile-show-all'); var t=document.getElementById('mobileMoreToggle'); if(t){ t.setAttribute('aria-expanded','true'); t.textContent='Essentials'; } } }
+  function reveal(){ if(!document.body.classList.contains('mobile-show-all')){ document.body.classList.add('mobile-show-all'); var t=document.getElementById('mobileMoreToggle'); if(t){ t.setAttribute('aria-expanded','true'); t.textContent='Essentials'; if(window.nhSetQuicknav){window.nhSetQuicknav(t);} } } }
   function go(sel, after){ reveal(); var el=document.querySelector(sel); if(!el) return; el.scrollIntoView({behavior:'smooth',block:'start'}); if(after) setTimeout(after, 700); }
   var play=document.getElementById('stickerPlay');
   if(play) play.addEventListener('click', function(){ go('#nh-arcade'); });
@@ -2168,6 +2168,39 @@
   if(cam) cam.addEventListener('click', function(){ go('[data-module-id="lens"]', function(){ var b=document.getElementById('lensStart'); if(b) b.click(); }); });
 })();
 (function mobileFocus(){var toggle=document.getElementById("mobileMoreToggle");if(!toggle)return;toggle.addEventListener("click",function(){var expanded=!document.body.classList.contains("mobile-show-all");document.body.classList.toggle("mobile-show-all",expanded);toggle.setAttribute("aria-expanded",String(expanded));toggle.textContent=expanded?"Essentials":"Extras"})}());
+(function quicknavSpy(){
+  var nav=document.querySelector('.mobile-quicknav');
+  if(!nav)return;
+  var cells=Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"],button'));
+  var toggle=document.getElementById('mobileMoreToggle');
+  function setActive(el){cells.forEach(function(c){c.classList.toggle('is-active',c===el);});}
+  window.nhSetQuicknav=setActive;
+  var ticking=false;
+  var sections=[];
+  Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]')).forEach(function(a){
+    var h=document.getElementById(a.getAttribute('href').slice(1));
+    var mod=h&&h.closest?h.closest('.module'):null;
+    if(mod)sections.push({el:mod,tab:a});
+  });
+  ['first','artists','graphics','info','merch','arcade','lens','feed','feedback'].forEach(function(id){
+    var mod=document.querySelector('[data-module-id="'+id+'"]');
+    if(mod&&toggle)sections.push({el:mod,tab:toggle});
+  });
+  function spy(){
+    var line=window.scrollY+window.innerHeight*0.35,best=null;
+    for(var i=0;i<sections.length;i++){
+      var r=sections[i].el.getBoundingClientRect();
+      var top=r.top+window.scrollY,bottom=r.bottom+window.scrollY;
+      if(top<=line&&line<bottom){best=sections[i];break;}
+    }
+    if(best)setActive(best.tab);
+  }
+  function requestSpy(){if(ticking)return;ticking=true;requestAnimationFrame(function(){ticking=false;spy();});}
+  cells.forEach(function(c){c.addEventListener('click',function(){setActive(c);requestSpy();});});
+  window.addEventListener('scroll',requestSpy,{passive:true});
+  window.addEventListener('resize',requestSpy);
+  spy();
+})();
 </script>
 
 </body>
