@@ -357,6 +357,10 @@
     #nh-arcade-wrap:fullscreen #nh-arcade-canvas { height: 100vh; }
     #nh-arcade-wrap:-webkit-full-screen { border: 0; border-radius: 0; }
     #nh-arcade-wrap:-webkit-full-screen #nh-arcade-canvas { height: 100vh; }
+    #nh-arcade-wrap.nh-pseudo-fullscreen { position: fixed; inset: 0; z-index: 10000; border: 0; border-radius: 0; background: #05070c; }
+    #nh-arcade-wrap.nh-pseudo-fullscreen #nh-arcade-canvas { height: 100vh; height: 100dvh; }
+    #nh-arcade-wrap.nh-pseudo-fullscreen #nh-arcade-hud { padding-top: calc(10px + env(safe-area-inset-top, 0px)); padding-left: calc(14px + env(safe-area-inset-left, 0px)); padding-right: calc(14px + env(safe-area-inset-right, 0px)); }
+    #nh-arcade-wrap.nh-pseudo-fullscreen #nh-arcade-mute { bottom: calc(10px + env(safe-area-inset-bottom, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
     #nh-arcade-hud { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; pointer-events: none; font-family: 'Courier New', Courier, monospace; }
     #nh-arcade-hud .nh-score, #nh-arcade-hud .nh-time { color: #fff; font-weight: 700; font-size: 18px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
     #nh-arcade-hud .nh-combo { color: #ffd76a; font-weight: 700; font-size: 14px; min-height: 20px; letter-spacing: 1px; text-shadow: 2px 2px 0 #000; }
@@ -716,17 +720,38 @@
     combo = 0; mult = 1; comboEl.textContent = '';
     missMarks.push({ x: x, y: y, t: 0 });
   }
+  var wrapHome = null;
+  function enterPseudoFullscreen() {
+    if (wrap.classList.contains('nh-pseudo-fullscreen')) return;
+    wrapHome = { parent: wrap.parentNode, next: wrap.nextSibling };
+    document.body.appendChild(wrap);
+    wrap.classList.add('nh-pseudo-fullscreen');
+    document.body.style.overflow = 'hidden';
+    resize();
+  }
   function requestGameFullscreen() {
     try {
-      if (wrap.requestFullscreen) wrap.requestFullscreen();
-      else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+      if (wrap.requestFullscreen) {
+        var p = wrap.requestFullscreen();
+        if (p && typeof p.catch === 'function') p.catch(enterPseudoFullscreen);
+        return;
+      }
+      if (wrap.webkitRequestFullscreen) { wrap.webkitRequestFullscreen(); return; }
     } catch (e) {}
+    enterPseudoFullscreen();
   }
   function exitGameFullscreen() {
     try {
       if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
       else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
     } catch (e) {}
+    if (wrap.classList.contains('nh-pseudo-fullscreen')) {
+      wrap.classList.remove('nh-pseudo-fullscreen');
+      if (wrapHome && wrapHome.parent) wrapHome.parent.insertBefore(wrap, wrapHome.next);
+      wrapHome = null;
+      document.body.style.overflow = '';
+      resize();
+    }
   }
   function loop(t) {
     if (!running) return;
@@ -963,6 +988,8 @@
   }
   document.addEventListener('fullscreenchange', resize);
   document.addEventListener('webkitfullscreenchange', resize);
+  window.addEventListener('resize', function () { if (wrap.classList.contains('nh-pseudo-fullscreen')) resize(); });
+  window.addEventListener('orientationchange', function () { if (wrap.classList.contains('nh-pseudo-fullscreen')) setTimeout(resize, 120); });
   function initStars() {
     bgstars = [];
     for (var i = 0; i < 40; i++) {
