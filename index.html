@@ -4,9 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
-<meta name="description" content="Byyy Studios — festival companion apps. Niteharts '26 live now, Escape Halloween '26 in the works." />
+<meta name="description" content="Byyy Studios — apps, websites, and marketing for businesses. Client concepts and live builds." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 44'%3E%3Crect x='6' y='24' width='8' height='14' fill='%23f5f5f0'/%3E%3Crect x='18' y='16' width='8' height='22' fill='%23f5f5f0'/%3E%3Crect x='30' y='8' width='8' height='30' fill='%233ecf8e'/%3E%3Crect x='42' y='20' width='8' height='18' fill='%23f5f5f0'/%3E%3C/svg%3E" />
-<title>Byyy Studios — Festival Apps</title>
+<title>Byyy Studios — Design, Development, Marketing</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS4ZWP2X07"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-BS4ZWP2X07');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -238,6 +238,14 @@ html.js .reveal.in{opacity:1;transform:none}
 .quote-form button{justify-self:start;min-height:52px;padding:0 30px;background:transparent;
   border:1px solid var(--green);color:var(--green);font-family:"Syne Mono",monospace;font-size:13px;
   font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+
+/* ---------- niche callout ---------- */
+.niche{margin:44px 0 0;padding:clamp(24px,3.5vw,40px);border:1px solid var(--line);background:var(--panel)}
+.niche .eyebrow{margin-bottom:14px}
+.niche h3{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
+  font-size:clamp(30px,4vw,44px);line-height:1;margin:0 0 10px}
+.niche h3 span{color:var(--green)}
+.niche p{margin:0;color:var(--muted);font-size:16px;max-width:60ch}
 .quote-form button:hover{background:var(--green);color:#141412}
 .q-note{margin:0;font-size:13px;color:var(--faint)}
 .booking{margin-top:36px;border-top:1px solid var(--line);padding-top:30px}
@@ -299,7 +307,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
     <rect class="dot" x="31" y="1" width="6" height="6"/>
   </svg>
   <div class="word">BYYY STUDIOS</div>
-  <div class="sub">FESTIVAL TRANSMISSIONS</div>
+  <div class="sub">DESIGN. BUILD. MARKET.</div>
   <div class="skip">TAP TO SKIP</div>
 </div>
 
@@ -316,7 +324,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
       <b>BYYY STUDIOS</b>
     </a>
     <nav aria-label="Site">
-      <a href="#festivals">FESTIVALS</a>
+      <a href="#work">WORK</a>
       <a href="mailto:nathanltwong@gmail.com">CONTACT</a>
     </nav>
   </header>
@@ -324,12 +332,13 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
   <main>
     <section class="hero">
       <span class="scanbeam" aria-hidden="true"><i></i></span>
-      <p class="eyebrow">BYYY STUDIOS &middot; LIVE BUILDS</p>
-      <h1><span class="row">Festival apps,</span><span class="row">built for the floor.<span class="cursor" aria-hidden="true"></span></span></h1>
-      <p class="lede">Set times, lineup planners, artist previews. <strong>Built around each festival</strong>, not a template.</p>
-      <div class="stats" aria-label="Build status">
-        <div class="stat"><div class="n">01<em>&thinsp;LIVE</em></div><div class="l">NITEHARTS &rsquo;26</div></div>
-        <div class="stat"><div class="n">01<em>&thinsp;SOON</em></div><div class="l">ESCAPE HALLOWEEN &rsquo;26</div></div>
+      <p class="eyebrow">BYYY STUDIOS &middot; DESIGN + BUILD + MARKET</p>
+      <h1><span class="row">Apps and websites,</span><span class="row">built for business.<span class="cursor" aria-hidden="true"></span></span></h1>
+      <p class="lede">I design and build apps and websites for businesses, then help them get seen. <strong>No templates.</strong> No fluff.</p>
+      <div class="stats" aria-label="What I do">
+        <div class="stat"><div class="n">APPS</div><div class="l">DESIGNED + BUILT</div></div>
+        <div class="stat"><div class="n">SITES</div><div class="l">SHIPPED LIVE</div></div>
+        <div class="stat"><div class="n">MARKETING</div><div class="l">THAT GETS SEEN</div></div>
       </div>
       <span class="geo geo-wire1" aria-hidden="true"><svg width="130" height="130" viewBox="0 0 130 130"><rect x="30" y="30" width="70" height="70" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(45 65 65)"/><rect x="46" y="46" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1" transform="rotate(45 65 65)"/></svg></span>
       <span class="geo geo-wire2" aria-hidden="true"><svg width="110" height="100" viewBox="0 0 110 100"><path d="M55 8 L102 88 L8 88 Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="55" cy="62" r="12" fill="none" stroke="currentColor" stroke-width="1"/></svg></span>
@@ -340,13 +349,35 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
 
     <div class="geo-div" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2.8" y="2.8" width="6.4" height="6.4" fill="none" stroke="currentColor" stroke-width="1.2" transform="rotate(45 6 6)"/></svg></div>
 
-    <section class="fests" id="festivals">
+    <section class="fests" id="work">
       <div class="fests-head reveal">
-        <h2>The festivals</h2>
-        <span>01 LIVE &middot; 01 IN THE WORKS</span>
+        <h2>The work</h2>
+        <span>01 CONCEPT &middot; 01 LIVE &middot; 01 IN THE WORKS</span>
       </div>
 
-      <a class="card-live tilt reveal" href="/niteharts/" aria-label="Open the Niteharts 26 companion app">
+      <a class="card-live tilt reveal" href="/flwrpwr-mac-os/" aria-label="Open the FLWRPWR Mac Bloom OS concept">
+        <div class="winbar" aria-hidden="true"><i></i><i></i><i class="on"></i><span class="t">flwrpwr_mac_os // concept</span></div>
+        <div class="card-media">
+          <figure>
+            <div style="font-family:'Teko',sans-serif;font-weight:700;font-size:clamp(64px,8vw,120px);line-height:.9;color:#ff5da2;letter-spacing:.02em;">FLWRPWR</div>
+            <figcaption>MAC BLOOM OS &middot; CLIENT CONCEPT</figcaption>
+          </figure>
+        </div>
+        <div class="card-body">
+          <span class="tag">CONCEPT</span>
+          <h3>Mac Bloom OS</h3>
+          <p class="card-meta"><b>FLWRPWR</b> &middot; CANNABIS BRAND CONCEPT</p>
+          <ul class="feats">
+            <li>Retro Mac OS rebuilt in brand colors</li>
+            <li>Draggable, resizable windows</li>
+            <li>Dark and light mode</li>
+            <li>Strain files, merch drop, 21+ gate</li>
+          </ul>
+          <span class="cta"><span class="arr" aria-hidden="true">&rarr;</span> OPEN THE CONCEPT</span>
+        </div>
+      </a>
+
+      <a class="card-live tilt reveal" style="margin-top:28px" href="/niteharts/" aria-label="Open the Niteharts 26 companion app">
         <div class="winbar" aria-hidden="true"><i></i><i></i><i class="on"></i><span class="t">niteharts_26 // live</span></div>
         <div class="card-media">
           <figure>
@@ -382,20 +413,25 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
     <div class="geo-div" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"><rect x="2.8" y="2.8" width="6.4" height="6.4" fill="none" stroke="currentColor" stroke-width="1.2" transform="rotate(45 6 6)"/></svg></div>
 
     <section class="includes" id="contact">
-      <p class="eyebrow reveal">For festivals and events</p>
-      <h2 class="reveal">Your festival, as an app <span>your crowd actually uses</span></h2>
-      <p class="pitch-sub reveal">Set times, planners, maps, previews. One place for the whole weekend.</p>
-      <h3 class="inc-label reveal">Every festival app comes with</h3>
+      <p class="eyebrow reveal">Services</p>
+      <h2 class="reveal">Apps, websites, marketing. <span>One person, start to finish.</span></h2>
+      <p class="pitch-sub reveal">You bring the business. I design it, build it, and help it get seen.</p>
+      <h3 class="inc-label reveal">What you get</h3>
       <ul class="inc-list reveal">
-        <li><div><b>Real set times</b><span>Every stage, every day. No screenshots needed.</span></div></li>
-        <li><div><b>Artist previews</b><span>One tap to hear what the undercard sounds like.</span></div></li>
-        <li><div><b>Lineup planner</b><span>Build your weekend, spot the clashes before they happen.</span></div></li>
-        <li><div><b>Shareable links</b><span>One link sends your whole plan to the group chat.</span></div></li>
-        <li><div><b>Venue intel</b><span>Maps and the practical stuff, in your pocket.</span></div></li>
-        <li><div><b>Festival branding</b><span>Designed around the event, never a template.</span></div></li>
+        <li><div><b>Real design</b><span>Made for your brand. Never a template.</span></div></li>
+        <li><div><b>Built to ship</b><span>Real code, live fast. No vaporware.</span></div></li>
+        <li><div><b>Mobile first</b><span>Most of your customers are on their phones.</span></div></li>
+        <li><div><b>Marketing baked in</b><span>Launch assets and social content, not an afterthought.</span></div></li>
+        <li><div><b>One contact</b><span>You talk to me. I build it. No telephone game.</span></div></li>
+        <li><div><b>No handoffs</b><span>Design through launch, same hands.</span></div></li>
       </ul>
+      <div class="niche reveal">
+        <p class="eyebrow">Niche I know cold</p>
+        <h3>Festival + rave apps</h3>
+        <p>Lineup planners, set times, artist previews, shareable crew links. Niteharts &rsquo;26 is live. Escape Halloween &rsquo;26 is cooking. If you run events, this is my home turf.</p>
+      </div>
       <div class="pitch-cta reveal">
-        <p>Running a festival or event? Reach out for a call and a quote.</p>
+        <p>Running a business and need an app or a site? Reach out for a call and a quote.</p>
         <a class="book-call" href="#booking">Book a call</a>
       </div>
       <div class="booking reveal" id="booking">
@@ -410,7 +446,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
           <label>Your name<input type="text" name="name" autocomplete="name" required></label>
           <label>Email<input type="email" name="email" autocomplete="email" required></label>
         </div>
-        <label>About your event<textarea name="message" rows="4" required></textarea></label>
+        <label>About your project<textarea name="message" rows="4" required></textarea></label>
         <button type="submit">Send quote request</button>
         <p class="q-note">Opens your mail app with the request ready to send. No account, no spam.</p>
       </form>
@@ -501,7 +537,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
       var name = quoteForm.elements.name.value.trim();
       var email = quoteForm.elements.email.value.trim();
       var msg = quoteForm.elements.message.value.trim();
-      var subject = encodeURIComponent('Festival app quote request');
+      var subject = encodeURIComponent('Project quote request');
       var body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + msg);
       window.location.href = 'mailto:nathanltwong@gmail.com?subject=' + subject + '&body=' + body;
     });
