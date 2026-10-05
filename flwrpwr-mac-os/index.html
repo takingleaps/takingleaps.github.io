@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#91ddc5" />
-  <link rel="icon" href="data:," />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cg%20fill='%23f14f9a'%3E%3Cellipse%20cx='32'%20cy='12'%20rx='8'%20ry='12'/%3E%3Cellipse%20cx='32'%20cy='52'%20rx='8'%20ry='12'/%3E%3Cellipse%20cx='12'%20cy='32'%20rx='12'%20ry='8'/%3E%3Cellipse%20cx='52'%20cy='32'%20rx='12'%20ry='8'/%3E%3Cellipse%20cx='18'%20cy='18'%20rx='8'%20ry='12'%20transform='rotate(-45%2018%2018)'/%3E%3Cellipse%20cx='46'%20cy='18'%20rx='8'%20ry='12'%20transform='rotate(45%2046%2018)'/%3E%3Cellipse%20cx='18'%20cy='46'%20rx='8'%20ry='12'%20transform='rotate(45%2018%2046)'/%3E%3Cellipse%20cx='46'%20cy='46'%20rx='8'%20ry='12'%20transform='rotate(-45%2046%2046)'/%3E%3C/g%3E%3Ccircle%20cx='32'%20cy='32'%20r='11'%20fill='%23fff8e8'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,700;6..96,900&family=Public+Sans:wght@500;650;750;900&display=swap" rel="stylesheet" />
@@ -246,6 +246,7 @@
     }
     .mini-flower::after { content: ""; position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); left: 5.5px; top: 5.5px; }
     .menu-item:hover, .menu-item[aria-expanded="true"] { background: var(--pink); color: #fff; }
+    .menu-hub { color: inherit; cursor: pointer; text-decoration: none; }
     .menu-clock { font-variant-numeric: tabular-nums; cursor: default; }
     .menu-dropdown {
       position: fixed;
@@ -763,7 +764,18 @@
       .theme-toggle { margin-left: auto; min-width: 46px; padding-inline: 9px; font-size: 0; }
       .theme-toggle::before { content: "◐"; font-size: 19px; }
       .menu-clock { padding-inline: 8px; font-size: 11px; }
-      .desktop-icons { display: none; }
+      .desktop-icons {
+        display: grid;
+        left: max(14px, env(safe-area-inset-left));
+        right: auto;
+        top: calc(var(--menu-h) + 18px);
+        width: min(208px, calc(100vw - 28px));
+        grid-template-columns: repeat(2, minmax(82px, 1fr));
+        gap: 20px 14px;
+      }
+      .desktop-icon { min-height: 78px; }
+      .desktop-icon .icon-art { width: 54px; height: 46px; }
+      .desktop-icon span:last-child { max-width: 94px; font-size: 11px; line-height: 1.2; }
       .window,
       #welcome-window, #flower-window, #apparel-window, #brand-window, #labs-window, #phone-window, #about-window {
         position: fixed;
@@ -954,7 +966,8 @@
         padding: 0 16px;
         font-size: 12px;
       }
-      .mobile-switcher-toggle::after { content: "⌃"; margin-left: 8px; font-size: 16px; }
+      .mobile-switcher-toggle::after { content: "⌃"; margin-left: auto; font-size: 16px; }
+      .mobile-switcher-toggle #mobileCurrent { display: none; }
       .mobile-switcher-toggle[aria-expanded="true"]::after { content: "⌄"; }
       .mobile-window-menu {
         left: max(7px, env(safe-area-inset-left));
@@ -1037,6 +1050,7 @@
       <button class="menu-item" type="button" data-menu="file-menu" aria-expanded="false">File</button>
       <button class="menu-item" type="button" data-menu="view-menu" aria-expanded="false">View</button>
       <button class="menu-item" type="button" data-menu="special-menu" aria-expanded="false">Special</button>
+      <a class="menu-item menu-hub" href="https://byyystudio.me/" aria-label="Return to Byyy Studios">Byyy Studios</a>
       <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color mode">DARK MODE</button>
       <div class="menu-clock" aria-label="Current local time"><span class="date-part" id="dateText"></span><span id="timeText"></span></div>
     </nav>
