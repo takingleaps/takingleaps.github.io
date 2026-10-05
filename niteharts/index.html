@@ -136,6 +136,56 @@
     @keyframes bootStageIn{from{opacity:0;transform:translate3d(0,18px,0) scale(.975)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}@keyframes bootGrid{from{opacity:0;transform:perspective(700px) rotateX(66deg) translateY(34%) scale(1.08)}to{opacity:1;transform:perspective(700px) rotateX(66deg) translateY(18%) scale(1)}}@keyframes bootSweep{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}@keyframes bootLoad{0%{transform:scaleX(0)}68%{transform:scaleX(.72)}100%{transform:scaleX(1)}}@keyframes bootPixelSignal{0%,22%,48%,70%,100%{opacity:0;clip-path:inset(0 0 100% 0);transform:translate3d(0,0,0)}24%{opacity:.42;clip-path:inset(8% 0 62% 0);transform:translate3d(-9px,0,0)}50%{opacity:.3;clip-path:inset(40% 0 28% 0);transform:translate3d(7px,0,0)}72%{opacity:.24;clip-path:inset(72% 0 5% 0);transform:translate3d(-5px,0,0)}}@keyframes bootScanline{0%,20%,44%,68%,100%{opacity:0;transform:translateY(-46px)}22%{opacity:.72;transform:translateY(-22px)}46%{opacity:.58;transform:translateY(12px)}70%{opacity:.48;transform:translateY(38px)}}
     @media(max-width:600px){.boot-stage{width:88vw;gap:32px}.boot-meta{font-size:.56rem}.boot-screen::before{background-size:26px 26px}}
     @media(prefers-reduced-motion:reduce){.boot-screen::before,.boot-screen::after,.boot-stage,.boot-logo-pixel,.boot-logo-stack::after,.boot-fill{animation:none!important}.boot-fill{transform:scaleX(1)}.boot-screen.is-exiting,.boot-screen.is-exiting .boot-stage{transition-duration:.12s;filter:none;transform:none}}
+    /* Phone view: keep the festival essentials up front and put secondary sections on demand. */
+    .mobile-quicknav{display:none}
+    @media(max-width:600px){
+      .mobile-quicknav{position:sticky;top:0;z-index:74;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:0 -12px;background:var(--line);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.24)}
+      .mobile-quicknav a,.mobile-quicknav button{appearance:none;min-width:0;min-height:48px;display:grid;place-items:center;border:0;background:var(--deep);color:var(--paper);padding:7px 4px;text-decoration:none;text-align:center;font:600 .59rem/1.15 var(--mono);text-transform:uppercase;letter-spacing:.02em;touch-action:manipulation}
+      .mobile-quicknav a:active,.mobile-quicknav button:active{background:var(--ice);color:var(--night)}
+      .mobile-quicknav button[aria-expanded="true"]{background:var(--paper);color:var(--night)}
+      .hero{min-height:286px;padding:20px 0 18px}
+      .hero::after,.ambient-rig,.marquee,.module-dock,.layout-panel,.layout-hint{display:none!important}
+      .hero-logo-stage{width:92%}
+      .hero-bottom{gap:18px}
+      .dates{font-size:3.55rem}
+      .lead-meta{gap:9px 14px;font-size:.63rem}
+      .lead-meta div{padding-top:7px}
+      .lead-meta span{margin-bottom:2px}
+      .module-grid{gap:26px;padding-top:22px}
+      .module{padding-top:11px}
+      .module-head{margin-bottom:11px}
+      .module h2{font-size:2.2rem}
+      .module-label{max-width:44%;font-size:.57rem;text-align:right}
+      #nh-sticker{display:none!important}
+      body:not(.mobile-show-all) [data-module-id="first"],body:not(.mobile-show-all) [data-module-id="artists"],body:not(.mobile-show-all) [data-module-id="graphics"],body:not(.mobile-show-all) [data-module-id="feedback"],body:not(.mobile-show-all) [data-module-id="arcade"],body:not(.mobile-show-all) [data-module-id="feed"],body:not(.mobile-show-all) [data-module-id="lens"],body:not(.mobile-show-all) .prohibited-block{display:none}
+      body.mobile-show-all [data-module-id="first"]:not([hidden]),body.mobile-show-all [data-module-id="artists"]:not([hidden]),body.mobile-show-all [data-module-id="graphics"]:not([hidden]),body.mobile-show-all [data-module-id="feedback"]:not([hidden]),body.mobile-show-all [data-module-id="arcade"]:not([hidden]),body.mobile-show-all [data-module-id="feed"]:not([hidden]),body.mobile-show-all [data-module-id="lens"]:not([hidden]),body.mobile-show-all .prohibited-block{display:block}
+      .schedule-toolbar{gap:10px;padding-bottom:14px}
+      .day-intro{gap:8px;padding-bottom:12px}
+      .day-title{font-size:3.65rem}
+      .stage-filter{padding-bottom:12px}
+      .schedule-grid{gap:6px}
+      .schedule-card{grid-template-columns:76px minmax(0,1fr);min-height:152px}
+      .set-copy{padding:10px}
+      .artist{font-size:1.45rem}
+      .genre{display:none}
+      .set-meta{margin-top:4px;font-size:.72rem}
+      .set-side{gap:6px}
+      .stage-badge{font-size:.52rem}
+      .set-actions{width:100%;justify-content:space-between;gap:5px}
+      .set-plan-button{min-width:58px;min-height:46px;font-size:.52rem}
+      .preview-button{width:42px;min-height:46px}
+      .preview-disc{width:32px;height:32px}
+      .video-button{min-width:58px;min-height:46px;max-width:76px;font-size:.61rem}
+      .map-frame,#venueMap,.map-fallback{height:300px;min-height:300px}
+      .map-note{font-size:.78rem}
+      .merch-copy{padding:22px 20px 78px}
+      .merch-watch h3,.merch-copy h3{font-size:2.2rem}
+      .info-stack{gap:14px}
+      .info-grid>div,.parking-option{padding:15px}
+      .parking-option p,.info-grid p,.day-times dd{font-size:.78rem}
+      footer{margin-top:30px}
+    }
+    @media(max-width:360px){.mobile-quicknav{margin-inline:-10px}.mobile-quicknav a,.mobile-quicknav button{font-size:.55rem}.hero{min-height:270px}.dates{font-size:3.22rem}.schedule-card{grid-template-columns:68px minmax(0,1fr)}.set-copy{padding:9px}.artist{font-size:1.31rem}.set-plan-button{min-width:54px}.video-button{min-width:54px;max-width:66px}}
   </style>
 </head>
 <body class="is-booting">
@@ -196,6 +246,12 @@
     <div class="next-banner" aria-live="polite">
       <div class="next-banner-inner"><span class="next-status" id="nextStatus">Up next</span><time class="next-time" id="nextTime">Fri · 4:00 PM</time><span class="next-artist" id="nextArtist">Knock2 &amp; Friends · Main</span><button class="next-jump" id="nextJump" type="button">View set</button></div>
     </div>
+    <nav class="mobile-quicknav" aria-label="Festival quick links">
+      <a href="#scheduleTitle">Set times</a>
+      <a href="#myLineupTitle">My lineup</a>
+      <a href="#mapTitle">Venue</a>
+      <button id="mobileMoreToggle" type="button" aria-expanded="false">Extras</button>
+    </nav>
     <div class="marquee" aria-label="Featured Niteharts artists"><div class="marquee-track"><div class="marquee-group"><span>ISOKNOCK</span><span>Porter Robinson</span><span>RL Grime</span><span>2hollis</span><span>Flava D</span><span>Hamdi</span><span>DJ Snake</span><span>Jane Remover</span></div><div class="marquee-group" aria-hidden="true"><span>ISOKNOCK</span><span>Porter Robinson</span><span>RL Grime</span><span>2hollis</span><span>Flava D</span><span>Hamdi</span><span>DJ Snake</span><span>Jane Remover</span></div></div></div>
 
     <div class="module-dock"><span class="layout-note">Arrange for this visit</span><button class="layout-trigger" id="layoutTrigger" type="button" aria-expanded="false" aria-controls="layoutPanel"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l4 4h-3v4h-4V6H6l6-4zm0 20l-4-4h3v-4h4v4h3l-6 4zM2 12l4-4v3h4v4H6v3l-4-6zm20 0l-4 4v-3h-4v-4h4V6l4 6z"/></svg>Rearrange</button></div>
@@ -2030,6 +2086,7 @@
     openReview();
   });
 })();
+(function mobileFocus(){var toggle=document.getElementById("mobileMoreToggle");if(!toggle)return;toggle.addEventListener("click",function(){var expanded=!document.body.classList.contains("mobile-show-all");document.body.classList.toggle("mobile-show-all",expanded);toggle.setAttribute("aria-expanded",String(expanded));toggle.textContent=expanded?"Essentials":"Extras"})}());
 </script>
 
 </body>
