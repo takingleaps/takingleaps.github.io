@@ -356,6 +356,24 @@
 #nh-lens .lens-caption{width:100%;box-sizing:border-box;min-height:44px;margin-top:10px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(5,7,12,.6);color:#fff;font-size:15px}
 #nh-lens .lens-caption::placeholder{color:rgba(143,216,255,.4)}
 #nh-lens .lens-note{color:var(--mist);font-size:13px;min-height:20px;margin:8px 0 0}
+#nh-lens .lens-step{margin:14px 2px 0;font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mist)}
+#nh-lens .lens-step b{color:var(--ice-strong);font-weight:700}
+#nh-lens .lens-frames{display:flex;gap:8px;overflow-x:auto;padding:12px 2px;-webkit-overflow-scrolling:touch}
+#nh-lens .lens-frames button{flex:0 0 auto;min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font-size:14px;cursor:pointer;touch-action:manipulation}
+#nh-lens .lens-frames button[aria-pressed="true"]{border-color:var(--ice);color:var(--ice-strong);background:rgba(159,201,239,.12)}
+#nh-lens .lens-frame-layer{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+#nh-lens .lens-frame-layer svg{position:absolute;width:clamp(30px,9vw,64px);height:auto;overflow:visible;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+#nh-lens .lens-frame-layer .heart-a{left:4%;top:3%;transform:rotate(-12deg)}
+#nh-lens .lens-frame-layer .heart-b{right:4%;top:4%;transform:rotate(11deg) scale(.82)}
+#nh-lens .lens-frame-layer .heart-c{left:4%;bottom:4%;transform:rotate(10deg) scale(.76)}
+#nh-lens .lens-frame-layer .heart-d{right:4%;bottom:3%;transform:rotate(-9deg)}
+#nh-lens .lens-frame-layer .frame-edge{position:absolute;inset:8px;border:2px solid rgba(213,236,255,.9)}
+#nh-lens .lens-frame-layer .frame-edge::before,#nh-lens .lens-frame-layer .frame-edge::after{content:"";position:absolute;width:40px;height:40px;border-color:#f26e7b;border-style:solid}
+#nh-lens .lens-frame-layer .frame-edge::before{left:-2px;top:-2px;border-width:5px 0 0 5px}
+#nh-lens .lens-frame-layer .frame-edge::after{right:-2px;bottom:-2px;border-width:0 5px 5px 0}
+#nh-lens .lens-frame-layer .frame-ticket{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding:12px 14px;background:rgba(16,17,19,.92);border-top:2px solid var(--ice);color:#ececec;text-align:left}
+#nh-lens .lens-frame-layer .frame-ticket strong{font:700 1.5rem/1 var(--display),Arial,sans-serif;letter-spacing:.01em;text-transform:uppercase}
+#nh-lens .lens-frame-layer .frame-ticket span{font:400 .6rem/1.4 var(--mono);text-transform:uppercase;color:var(--ice-strong);text-align:right}
 #nh-feed .feed-bar{margin-bottom:12px}
 #nh-feed .feed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 #nh-feed .feed-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#05070c;aspect-ratio:1}
@@ -482,7 +500,16 @@
               <button type="button" id="lensStart" class="lens-btn">Open camera</button>
               <p>or upload a photo below</p>
             </div>
+            <div class="lens-frame-layer" id="lensFrameLayer" aria-hidden="true"></div>
           </div>
+          <p class="lens-step"><b>1 · Frames</b> — edges &amp; overlays</p>
+          <div class="lens-frames" id="lensFrames" role="group" aria-label="Choose a frame">
+            <button type="button" data-frame="none" aria-pressed="false">None</button>
+            <button type="button" data-frame="hearts" aria-pressed="true">Heart burst</button>
+            <button type="button" data-frame="ice" aria-pressed="false">Ice signal</button>
+            <button type="button" data-frame="ticket" aria-pressed="false">Ticket stub</button>
+          </div>
+          <p class="lens-step"><b>2 · Filters</b> — color</p>
           <div class="lens-filters" id="lensFilters" role="group" aria-label="Choose a filter">
             <button type="button" data-filter="frost" aria-pressed="true">Frost</button>
             <button type="button" data-filter="midnight" aria-pressed="false">Midnight</button>
@@ -1693,6 +1720,82 @@
       applyLiveFilter();
     });
   }
+  /* Frames come before filters: overlay on the live stage + baked into captures. */
+  var activeFrame = 'hearts';
+  var frameLayer = document.getElementById('lensFrameLayer');
+  var HEART_SVG = '<svg viewBox="0 0 64 58" aria-hidden="true"><path fill="#9fc9ef" stroke="#d5ecff" stroke-width="2" d="M32 54C19 43 7 34 7 20 7 10 14 4 23 4c4 0 7 2 9 6 2-4 5-6 9-6 9 0 16 6 16 16 0 14-12 23-25 34Z"/><path fill="none" stroke="#f26e7b" stroke-width="3" d="M13 17c3-7 10-9 16-3"/></svg>';
+  function paintFrameLayer() {
+    if (!frameLayer) return;
+    if (activeFrame === 'hearts') {
+      frameLayer.innerHTML = HEART_SVG.replace('<svg', '<svg class="heart-a"') + HEART_SVG.replace('<svg', '<svg class="heart-b"') + HEART_SVG.replace('<svg', '<svg class="heart-c"') + HEART_SVG.replace('<svg', '<svg class="heart-d"');
+    } else if (activeFrame === 'ice') {
+      frameLayer.innerHTML = '<span class="frame-edge"></span>';
+    } else if (activeFrame === 'ticket') {
+      frameLayer.innerHTML = '<span class="frame-ticket"><strong>Niteharts \u201926</strong><span>Oct 9\u201311<br>San Diego, CA</span></span>';
+    } else {
+      frameLayer.innerHTML = '';
+    }
+  }
+  var frameBar = document.getElementById('lensFrames');
+  if (frameBar) {
+    frameBar.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-frame]');
+      if (!b) return;
+      activeFrame = b.getAttribute('data-frame');
+      frameBar.querySelectorAll('[data-frame]').forEach(function (x) {
+        x.setAttribute('aria-pressed', String(x === b));
+      });
+      paintFrameLayer();
+    });
+  }
+  function heartAt(ctx, x, y, px, rot, color) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    drawHeart(ctx, 0, 0, px / 12, color);
+    ctx.restore();
+  }
+  function drawFrameOverlay(ctx, w, h, frame) {
+    var u = Math.min(w, h);
+    if (frame === 'hearts') {
+      heartAt(ctx, w * 0.09, h * 0.075, u * 0.105, -0.2, '#9fc9ef');
+      heartAt(ctx, w * 0.91, h * 0.085, u * 0.09, 0.18, '#f26e7b');
+      heartAt(ctx, w * 0.085, h * 0.925, u * 0.082, 0.15, '#f26e7b');
+      heartAt(ctx, w * 0.915, h * 0.92, u * 0.105, -0.14, '#9fc9ef');
+    } else if (frame === 'ice') {
+      ctx.save();
+      var m = Math.round(w * 0.028);
+      ctx.strokeStyle = '#d5ecff';
+      ctx.lineWidth = Math.max(3, Math.round(w * 0.006));
+      ctx.strokeRect(m, m, w - m * 2, h - m * 2);
+      ctx.strokeStyle = '#f26e7b';
+      ctx.lineWidth = Math.max(8, Math.round(w * 0.016));
+      var c = Math.round(u * 0.1);
+      ctx.beginPath();
+      ctx.moveTo(m, m + c); ctx.lineTo(m, m); ctx.lineTo(m + c, m);
+      ctx.moveTo(w - m - c, h - m); ctx.lineTo(w - m, h - m); ctx.lineTo(w - m, h - m - c);
+      ctx.stroke();
+      ctx.restore();
+    } else if (frame === 'ticket') {
+      var th = Math.round(h * 0.13);
+      ctx.save();
+      ctx.fillStyle = 'rgba(16,17,19,.93)';
+      ctx.fillRect(0, h - th, w, th);
+      ctx.fillStyle = '#9fc9ef';
+      ctx.fillRect(0, h - th, w, Math.max(3, Math.round(h * 0.006)));
+      ctx.textBaseline = 'alphabetic';
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#ececec';
+      ctx.font = '700 ' + Math.round(th * 0.44) + 'px Arial, sans-serif';
+      ctx.fillText("NITEHARTS '26", Math.round(w * 0.05), Math.round(h - th * 0.3));
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#d5ecff';
+      ctx.font = '400 ' + Math.round(th * 0.2) + 'px monospace';
+      ctx.fillText('OCT 9-11 \u00B7 SAN DIEGO, CA', Math.round(w * 0.95), Math.round(h - th * 0.3));
+      ctx.restore();
+    }
+  }
+  paintFrameLayer();
   function stopStream() {
     if (stream) { try { stream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} stream = null; }
     torchOn = false;
@@ -1819,6 +1922,7 @@
     if (mirror) { ctx.setTransform(1, 0, 0, 1, 0, 0); }
     try { ctx.filter = 'none'; } catch (e) {}
     paintFilter(ctx, w, h, activeFilter);
+    drawFrameOverlay(ctx, w, h, activeFrame);
     return c;
   }
   function showPreview(canvas) {
