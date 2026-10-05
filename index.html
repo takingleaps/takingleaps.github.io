@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
 <meta name="description" content="Byyy Studios — festival companion apps. Niteharts '26 live now, Escape Halloween '26 in the works." />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 44'%3E%3Crect x='6' y='24' width='8' height='14' fill='%23f5f5f0'/%3E%3Crect x='18' y='16' width='8' height='22' fill='%23f5f5f0'/%3E%3Crect x='30' y='8' width='8' height='30' fill='%234ade80'/%3E%3Crect x='42' y='20' width='8' height='18' fill='%23f5f5f0'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 44'%3E%3Crect x='6' y='24' width='8' height='14' fill='%23f5f5f0'/%3E%3Crect x='18' y='16' width='8' height='22' fill='%23f5f5f0'/%3E%3Crect x='30' y='8' width='8' height='30' fill='%236fae8d'/%3E%3Crect x='42' y='20' width='8' height='18' fill='%23f5f5f0'/%3E%3C/svg%3E" />
 <title>Byyy Studios — Festival Apps</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS4ZWP2X07"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-BS4ZWP2X07');</script>
@@ -14,10 +14,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=Syne+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --bg:#0a0a0a; --panel:#141412; --panel-2:#1a1a17;
+  --bg:#1c1f24; --panel:#23272e; --panel-2:#282d35;
   --ink:#f5f5f0; --muted:#9a9a92; --faint:#6b6b64;
-  --line:#262624; --line-soft:#1c1c1a;
-  --green:#4ade80; --green-dim:rgba(74,222,128,.14);
+  --line:#333943; --line-soft:#272c34;
+  --green:#6fae8d; --green-dim:rgba(111,174,141,.14);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg)}
@@ -73,7 +73,7 @@ header.site{display:flex;align-items:center;justify-content:space-between;
   50%{background-position:30px -46px}75%{background-position:-24px -18px}100%{background-position:0 0}}
 /* ---------- geometric layer ---------- */
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
-  background-image:repeating-linear-gradient(115deg,transparent 0 26px,rgba(74,222,128,.05) 26px 27px);
+  background-image:repeating-linear-gradient(115deg,transparent 0 26px,rgba(111,174,141,.05) 26px 27px);
   animation:gridDrift 28s linear infinite}
 @keyframes gridDrift{to{transform:translateX(54px)}}
 .geo{position:absolute;pointer-events:none;color:var(--green);z-index:0}
@@ -130,7 +130,7 @@ html.js .reveal.in{opacity:1;transform:none}
   background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),var(--green-dim),transparent 70%)}
 .card-live:hover::before{opacity:1}
 .card-live:hover{border-color:var(--green);transform:translateY(-3px)}
-.card-media{background:#000;display:flex;align-items:center;justify-content:center;
+.card-media{background:#14171b;display:flex;align-items:center;justify-content:center;
   padding:clamp(36px,5vw,72px);border-right:1px solid var(--line);overflow:hidden}
 .card-media figure{margin:0;display:grid;gap:24px;justify-items:center}
 .card-media img{width:min(340px,80%);height:auto;transition:transform .4s ease}
@@ -165,9 +165,9 @@ html.js .reveal.in{opacity:1;transform:none}
 .card-live:hover .cta .arr{background:var(--green);border-color:var(--green);color:#0a0a0a}
 
 .card-soon{position:relative;margin-top:28px;margin-left:auto;width:min(560px,100%);
-  border:1px dashed #3a3a36;background:transparent;padding:clamp(24px,3.5vw,40px);
+  border:1px dashed var(--line);background:transparent;padding:clamp(24px,3.5vw,40px);
   display:grid;gap:16px;opacity:.92;transition:transform .12s ease-out;transform-style:preserve-3d}
-.card-soon .tag{background:transparent;color:var(--muted);border:1px solid #3a3a36;
+.card-soon .tag{background:transparent;color:var(--muted);border:1px solid var(--line);
   padding:6px 11px;margin:0;justify-self:start}
 .card-soon img{width:min(300px,72%);height:auto;filter:grayscale(1) brightness(.85)}
 .card-soon h3{font-family:"Teko",sans-serif;font-weight:600;text-transform:uppercase;
@@ -271,9 +271,9 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
       <svg viewBox="0 0 64 48" aria-hidden="true">
         <rect x="6" y="26" width="8" height="14" fill="#f5f5f0"/>
         <rect x="18" y="18" width="8" height="22" fill="#f5f5f0"/>
-        <rect x="30" y="10" width="8" height="30" fill="#4ade80"/>
+        <rect x="30" y="10" width="8" height="30" fill="#6fae8d"/>
         <rect x="42" y="22" width="8" height="18" fill="#f5f5f0"/>
-        <rect x="31" y="1" width="6" height="6" fill="#4ade80"/>
+        <rect x="31" y="1" width="6" height="6" fill="#6fae8d"/>
       </svg>
       <b>BYYY STUDIOS</b>
     </a>
@@ -360,7 +360,7 @@ footer.site .dms{font-family:"Syne Mono",monospace;font-size:12px;letter-spacing
       <div class="booking reveal" id="booking">
         <h3 class="inc-label">Book a call</h3>
         <p class="book-lede">Pick a time. We talk. 30 minutes.</p>
-        <div class="calendly-inline-widget" data-url="https://calendly.com/nathanltwong/festival-app-quote-call?background_color=0a0a0a&amp;text_color=f5f5f5&amp;primary_color=4ade80" style="min-width:320px;height:700px;"></div>
+        <div class="calendly-inline-widget" data-url="https://calendly.com/nathanltwong/festival-app-quote-call?background_color=1c1f24&amp;text_color=f5f5f5&amp;primary_color=6fae8d" style="min-width:320px;height:700px;"></div>
         <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
         <p class="book-fallback">Calendar not loading? <a href="https://calendly.com/nathanltwong/festival-app-quote-call" target="_blank" rel="noopener">Open it in a new tab</a>.</p>
       </div>
