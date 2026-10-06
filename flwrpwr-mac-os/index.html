@@ -374,6 +374,7 @@
       max-width: 100%;
     }
     .window-tools { display: flex; align-items: center; gap: 7px; padding: 0 7px; }
+    .window-tools:first-child { position: relative; z-index: 12; }
     .window-tools.right { justify-content: flex-end; }
     .win-control {
       width: 17px;
@@ -1033,6 +1034,15 @@
     .window-content h1, .window-content h2, .window-content h3 { overflow-wrap: normal; word-break: normal; }
     .statusbar > * { min-width: 0; }
     .statusbar > span:not(.resize-grip) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .statusbar > span.status-hint:not(.resize-grip) {
+      flex: 1 1 auto;
+      overflow: visible;
+      text-overflow: clip;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.15;
+      font-size: clamp(7px, 1.3cqi, 10px);
+    }
 
     /* Apparel keeps the vertical wordmark and garment in separate tracks. */
     .garment-stage {
@@ -1283,7 +1293,7 @@
           </section>
         </div>
       </div>
-      <footer class="statusbar"><span>READY</span><span>DRAG THE TITLE BAR · RESIZE THE CORNER</span><span class="resize-grip" aria-hidden="true"></span></footer>
+      <footer class="statusbar"><span>READY</span><span class="status-hint">DRAG THE TITLE BAR · RESIZE THE CORNER</span><span class="resize-grip" aria-hidden="true"></span></footer>
     </section>
 
     <section class="window" id="flower-window" role="dialog" aria-label="Flower collection window">
