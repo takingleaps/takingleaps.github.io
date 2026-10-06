@@ -320,6 +320,9 @@ html.js .reveal.in{opacity:1;transform:none}
 .niche h3 span{color:var(--green)}
 .niche p{margin:0;color:var(--muted);font-size:16px;max-width:60ch}
 
+/* ---------- neon XP cursor ---------- */
+html{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cfilter id='g' x='-60%25' y='-60%25' width='220%25' height='220%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='2.2' flood-color='%233ecf8e' flood-opacity='0.85'/%3E%3C/filter%3E%3Cpath d='M7 3l15 10-8.5 1.8L10 23z' fill='%233ecf8e' stroke='%230a0f0a' stroke-width='1.6' filter='url(%23g)'/%3E%3C/svg%3E") 7 3, auto}
+a,button,[role="button"],.tilt{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cfilter id='g' x='-60%25' y='-60%25' width='220%25' height='220%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='2.2' flood-color='%233ecf8e' flood-opacity='0.85'/%3E%3C/filter%3E%3Cpath d='M10.5 12.5v-6a1.6 1.6 0 0 1 3.2 0v4.4m0-6.2a1.6 1.6 0 0 1 3.2 0V11m0-4.2a1.6 1.6 0 0 1 3.2 0v5c0 3.4-2.2 6-5.4 6-2.2 0-3.4-1.1-4.6-2.8l-2.6-3.9a1.5 1.5 0 0 1 2.5-1.6l1.3 1.6z' fill='%233ecf8e' stroke='%230a0f0a' stroke-width='1.3' filter='url(%23g)'/%3E%3C/svg%3E") 11 6, pointer}
 /* ---------- taskbar footer ---------- */
 .taskbar{margin-top:clamp(30px,5vw,56px);margin-bottom:clamp(20px,3vw,36px);
   border:2px solid var(--bevel-lo);outline:1px solid var(--bevel-hi);
@@ -712,7 +715,7 @@ html.js .reveal.in{opacity:1;transform:none}
     var pr = null;
     try{ pr = ambientAudio.play(); }catch(e){}
     if(pr && typeof pr.catch === 'function'){ pr.catch(function(){}); }
-    fadeAudioTo(0.12, 2500);
+    fadeAudioTo(0.22, 2500);
   }
   function stopAmbient(){
     if(!ambientAudio || ambientAudio.paused) return;
@@ -736,6 +739,29 @@ html.js .reveal.in{opacity:1;transform:none}
       window.addEventListener('keydown', kick);
     }
   }
+
+  /* hover blips on interactive elements (only when sound is on) */
+  var hoverAudio = null, lastBlip = 0;
+  function blip(){
+    if(!soundOn) return;
+    var now = Date.now();
+    if(now - lastBlip < 90) return;
+    lastBlip = now;
+    try{
+      if(!hoverAudio){
+        hoverAudio = new Audio('assets/hover.mp3');
+        hoverAudio.volume = 0.2;
+        hoverAudio.preload = 'auto';
+      }
+      hoverAudio.currentTime = 0;
+      var hpr = hoverAudio.play();
+      if(hpr && typeof hpr.catch === 'function'){ hpr.catch(function(){}); }
+    }catch(e){}
+  }
+  document.addEventListener('mouseover', function(e){
+    var t = (e.target && e.target.closest) ? e.target.closest('a,button,[role="button"]') : null;
+    if(t) blip();
+  });
 
   /* scroll-triggered reveals */
   var revealEls = document.querySelectorAll('.reveal');
