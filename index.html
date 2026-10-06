@@ -3,10 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="color-scheme" content="dark" />
+<meta name="color-scheme" content="dark light" />
 <meta name="description" content="Byyy Studios — apps, websites, and marketing for businesses. Client concepts and live builds." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 44'%3E%3Crect x='6' y='24' width='8' height='14' fill='%23f5f5f0'/%3E%3Crect x='18' y='16' width='8' height='22' fill='%23f5f5f0'/%3E%3Crect x='30' y='8' width='8' height='30' fill='%233ecf8e'/%3E%3Crect x='42' y='20' width='8' height='18' fill='%23f5f5f0'/%3E%3C/svg%3E" />
 <title>Byyy Studios — Design, Development, Marketing</title>
+<script>
+/* theme boot: localStorage wins, then OS preference; runs before first paint */
+(function(){try{var t=localStorage.getItem('byyy-theme');
+if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS4ZWP2X07"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-BS4ZWP2X07');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,9 +24,38 @@
   --panel:#161b23; --panel-2:#1b212b;
   --ink:#f5f5f0; --muted:#9a9a92; --faint:#6b6b64;
   --line:#2b323d; --line-soft:#1f2530;
-  --green:#3ecf8e; --green-dim:rgba(62,207,142,.14);
+  --green:#3ecf8e; --green-fill:#3ecf8e; --green-dim:rgba(62,207,142,.14);
   --bevel-hi:#4b555f; --bevel-lo:#05070a;
+  --window-bg:rgba(13,16,21,.8); --winbar-bg:linear-gradient(#262d38,#161b23);
+  --sunken:#0b0e13; --media-bg:#10141a; --field-bg:#0a0d12;
+  --taskbar-bg:linear-gradient(#222932,#141920); --btn-bg:#20262f;
+  --bevel-glow:rgba(245,245,240,.14); --hard-shadow:rgba(0,0,0,.28);
 }
+/* ---------- light theme ---------- */
+[data-theme="light"]{
+  --bg:#f3efe3; --bg-deep:#e6e0cd;
+  --panel:#faf7ed; --panel-2:#efe8d5;
+  --ink:#1a1c12; --muted:#5b5d51; --faint:#5f6156;
+  --line:#d2cbb4; --line-soft:#e0d9c3;
+  --green:#116639; --green-fill:#35bd7f; --green-dim:rgba(17,102,57,.12);
+  --bevel-hi:#ffffff; --bevel-lo:#b3a98f;
+  --window-bg:rgba(250,247,238,.92); --winbar-bg:linear-gradient(#ece5d2,#d8cfb6);
+  --sunken:#e9e2cd; --media-bg:#e8e1cc; --field-bg:#fffdf6;
+  --taskbar-bg:linear-gradient(#e3dac2,#d2c7ab); --btn-bg:#d8d0b6;
+  --bevel-glow:rgba(255,255,255,.7); --hard-shadow:rgba(74,63,38,.22);
+}
+[data-theme="light"] body{
+  background:
+    radial-gradient(1100px 560px at 12% 0%, #fbf8f0 0%, transparent 60%),
+    radial-gradient(900px 520px at 88% 24%, #f5f0e1 0%, transparent 55%),
+    radial-gradient(1300px 820px at 50% 112%, #eae3cf 0%, transparent 60%),
+    linear-gradient(#f3efe3, #e6e0cd)}
+[data-theme="light"] .page-grid{background-image:
+    repeating-linear-gradient(0deg, rgba(17,102,57,.10) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(90deg, rgba(17,102,57,.10) 0 1px, transparent 1px 48px)}
+[data-theme="light"] body::before{background:radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(74,63,38,.13) 100%)}
+[data-theme="light"] body::after{background:repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.05) 2px 4px)}
+[data-theme="light"] .scanbeam i{background:linear-gradient(transparent,rgba(17,102,57,.08),transparent)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg-deep)}
 body{margin:0;color:var(--ink);
@@ -42,7 +77,7 @@ body::before{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;
 /* faint CRT scanlines */
 body::after{content:"";position:fixed;inset:0;z-index:91;pointer-events:none;opacity:.5;
   background:repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.13) 2px 4px)}
-::selection{background:var(--green);color:#0a0a0a}
+::selection{background:var(--green-fill);color:#0a0a0a}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--green);outline-offset:3px}
 img{display:block;max-width:100%}
@@ -84,10 +119,10 @@ header.site{display:flex;align-items:center;justify-content:space-between;
 
 /* ---------- neo-retro window chrome ---------- */
 .window{border:2px solid var(--bevel-lo);outline:1px solid var(--bevel-hi);
-  background:rgba(13,16,21,.8);box-shadow:8px 8px 0 rgba(0,0,0,.28);
+  background:var(--window-bg);box-shadow:8px 8px 0 var(--hard-shadow);
   margin-top:clamp(30px,5vw,56px)}
 .winbar{display:flex;align-items:center;gap:10px;padding:8px 14px;
-  background:linear-gradient(#262d38,#161b23);
+  background:var(--winbar-bg);
   border-bottom:2px solid var(--bevel-lo);
   font-family:"VT323","Syne Mono",monospace;font-size:21px;line-height:1;
   letter-spacing:.03em;color:var(--green)}
@@ -95,12 +130,12 @@ header.site{display:flex;align-items:center;justify-content:space-between;
   box-shadow:inset -2px -2px 0 rgba(0,0,0,.4)}
 .winbar .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .winbar .btns{margin-left:auto;display:flex;gap:6px;flex:none}
-.winbar .btns i{width:13px;height:13px;background:#20262f;
+.winbar .btns i{width:13px;height:13px;background:var(--btn-bg);
   border:2px solid;border-color:var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi)}
 .winbody{position:relative;z-index:1;padding:clamp(40px,6vw,72px) clamp(20px,4.5vw,56px) clamp(36px,5vw,60px)}
 /* beveled press-down for anything clickable */
 .bevel{border:2px solid;border-color:var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi);
-  box-shadow:inset 1px 1px 0 rgba(245,245,240,.14);border-radius:0}
+  box-shadow:inset 1px 1px 0 var(--bevel-glow);border-radius:0}
 
 /* ---------- hero ---------- */
 .hero{position:relative}
@@ -143,7 +178,7 @@ header.site{display:flex;align-items:center;justify-content:space-between;
 .hero p.lede strong{color:var(--ink);font-weight:600}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
   margin-top:clamp(36px,4vw,54px)}
-.stat{padding:20px 22px;background:#0b0e13;
+.stat{padding:20px 22px;background:var(--sunken);
   border:2px solid;border-color:var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo)}
 .stat .n{font-family:"Teko",sans-serif;font-size:52px;line-height:1;color:var(--ink)}
 .stat .n em{font-style:normal;color:var(--green)}
@@ -173,7 +208,7 @@ html.js .reveal.in{opacity:1;transform:none}
 .card-live{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   grid-template-rows:auto 1fr;
   background:var(--panel);border:2px solid var(--bevel-lo);outline:1px solid var(--bevel-hi);
-  text-decoration:none;box-shadow:6px 6px 0 rgba(0,0,0,.3);
+  text-decoration:none;box-shadow:6px 6px 0 var(--hard-shadow);
   transition:border-color .25s ease,transform .12s ease-out;transform-style:preserve-3d}
 .card-live .winbar{grid-column:1/-1}
 .card-live::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
@@ -181,7 +216,7 @@ html.js .reveal.in{opacity:1;transform:none}
   background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),var(--green-dim),transparent 70%)}
 .card-live:hover::before{opacity:1}
 .card-live:hover{border-color:var(--green);transform:translateY(-3px)}
-.card-media{background:#10141a;display:flex;align-items:center;justify-content:center;
+.card-media{background:var(--media-bg);display:flex;align-items:center;justify-content:center;
   padding:clamp(36px,5vw,72px);border-right:2px solid var(--bevel-lo);overflow:hidden}
 .card-media figure{margin:0;display:grid;gap:24px;justify-items:center}
 .card-media img{width:min(340px,80%);height:auto;transition:transform .4s ease}
@@ -190,7 +225,7 @@ html.js .reveal.in{opacity:1;transform:none}
   letter-spacing:.3em;color:var(--faint);text-align:center}
 .card-body{padding:clamp(28px,4vw,52px)}
 .tag{display:inline-flex;align-items:center;gap:10px;font-family:"Syne Mono",monospace;font-size:11px;
-  letter-spacing:.25em;color:#0a0a0a;background:var(--green);padding:7px 12px;margin-bottom:20px}
+  letter-spacing:.25em;color:#0a0a0a;background:var(--green-fill);padding:7px 12px;margin-bottom:20px}
 /* tiny live EQ bars inside the LIVE tag */
 .eq{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
 .eq i{width:3px;background:#0a0a0a;transform-origin:50% 100%;animation:eqb .9s ease-in-out infinite}
@@ -211,13 +246,13 @@ html.js .reveal.in{opacity:1;transform:none}
 .cta{display:inline-flex;align-items:center;gap:12px;margin-top:30px;
   font-family:"Syne Mono",monospace;font-size:13px;letter-spacing:.22em;color:var(--ink)}
 .cta .arr{display:inline-grid;place-items:center;width:44px;height:44px;
-  background:#20262f;color:var(--green);font-size:18px;
+  background:var(--btn-bg);color:var(--green);font-size:18px;
   border:2px solid;border-color:var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi);
   transition:background .25s ease,color .25s ease,border-color .25s ease}
-.card-live:hover .cta .arr{background:var(--green);border-color:var(--green);color:#0a0a0a}
+.card-live:hover .cta .arr{background:var(--green-fill);border-color:var(--green);color:#0a0a0a}
 
 .card-soon{position:relative;margin-top:28px;margin-left:auto;width:min(560px,100%);
-  border:2px dashed var(--line);background:rgba(13,16,21,.6);padding:clamp(24px,3.5vw,40px);
+  border:2px dashed var(--line);background:var(--window-bg);padding:clamp(24px,3.5vw,40px);
   display:grid;gap:16px;opacity:.92;transition:transform .12s ease-out;transform-style:preserve-3d}
 .card-soon .winbar{margin:calc(clamp(24px,3.5vw,40px) * -1) calc(clamp(24px,3.5vw,40px) * -1) 8px;
   border:2px dashed var(--line);border-bottom-style:solid}
@@ -240,7 +275,7 @@ html.js .reveal.in{opacity:1;transform:none}
 .pitch-cta{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
   margin:44px 0 0;padding:28px 0;border-top:2px solid var(--bevel-lo)}
 .pitch-cta p{margin:0;font-size:17px;max-width:42ch}
-.book-call{display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:var(--green);
+.book-call{display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:var(--green-fill);
   color:#141412;font-family:"Syne Mono",monospace;font-size:13px;font-weight:700;letter-spacing:.12em;
   text-transform:uppercase;text-decoration:none}
 .book-call:hover{filter:brightness(1.08)}
@@ -248,15 +283,15 @@ html.js .reveal.in{opacity:1;transform:none}
 .q-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .quote-form label{display:grid;gap:9px;font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--muted)}
-.quote-form input,.quote-form textarea{background:#0a0d12;color:var(--ink);
+.quote-form input,.quote-form textarea{background:var(--field-bg);color:var(--ink);
   border:2px solid;border-color:var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo);
   padding:14px;font-size:16px;font-family:"Syne",sans-serif;border-radius:0;width:100%;min-height:52px}
 .quote-form textarea{min-height:120px;resize:vertical}
 .quote-form input:focus,.quote-form textarea:focus{outline:none;border-color:var(--green)}
-.quote-form button{justify-self:start;min-height:52px;padding:0 30px;background:#20262f;
+.quote-form button{justify-self:start;min-height:52px;padding:0 30px;background:var(--btn-bg);
   color:var(--green);font-family:"Syne Mono",monospace;font-size:13px;
   font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
-.quote-form button:hover{background:var(--green);color:#141412}
+.quote-form button:hover{background:var(--green-fill);color:#141412}
 .q-note{margin:0;font-size:13px;color:var(--faint)}
 .booking{margin-top:36px;border-top:2px solid var(--bevel-lo);padding-top:30px}
 .book-lede{margin:0 0 20px;font-size:17px;max-width:42ch}
@@ -283,10 +318,10 @@ html.js .reveal.in{opacity:1;transform:none}
 /* ---------- taskbar footer ---------- */
 .taskbar{margin-top:clamp(30px,5vw,56px);margin-bottom:clamp(20px,3vw,36px);
   border:2px solid var(--bevel-lo);outline:1px solid var(--bevel-hi);
-  background:linear-gradient(#222932,#141920);
+  background:var(--taskbar-bg);
   display:flex;align-items:stretch;flex-wrap:wrap;
   font-family:"VT323","Syne Mono",monospace}
-.taskbar .start{display:flex;align-items:center;gap:10px;background:var(--green);color:#0d0f0c;
+.taskbar .start{display:flex;align-items:center;gap:10px;background:var(--green-fill);color:#0d0f0c;
   padding:10px 20px;text-decoration:none;font-size:24px;letter-spacing:.04em;line-height:1;
   border-right:2px solid var(--bevel-lo)}
 .taskbar .start svg{width:26px;height:auto}
@@ -297,7 +332,7 @@ html.js .reveal.in{opacity:1;transform:none}
 .taskbar .dms{font-size:19px;letter-spacing:.14em;color:var(--faint)}
 .taskbar .tray-right{margin-left:auto;display:flex;align-items:center;gap:18px;padding:8px 18px}
 .taskbar .copy{font-size:19px;letter-spacing:.1em;color:var(--muted)}
-.taskbar .clock{font-size:22px;color:var(--green);background:#0a0d12;padding:2px 14px;
+.taskbar .clock{font-size:22px;color:var(--green);background:var(--sunken);padding:2px 14px;
   border:2px solid;border-color:var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo)}
 
 @media(max-width:860px){
@@ -309,7 +344,7 @@ html.js .reveal.in{opacity:1;transform:none}
   .q-row{grid-template-columns:1fr}
   .pitch-cta{align-items:flex-start;flex-direction:column}
   .winbar{font-size:18px}
-  .window{box-shadow:5px 5px 0 rgba(0,0,0,.28)}
+  .window{box-shadow:5px 5px 0 var(--hard-shadow)}
   .taskbar .tray-right{margin-left:0;width:100%;border-top:2px solid var(--bevel-lo)}
 }
 @media(prefers-reduced-motion:reduce){
@@ -347,11 +382,11 @@ html.js .reveal.in{opacity:1;transform:none}
   <header class="site">
     <a class="brand" href="/" aria-label="Byyy Studios home">
       <svg viewBox="0 0 64 48" aria-hidden="true">
-        <rect x="6" y="26" width="8" height="14" fill="#f5f5f0"/>
-        <rect x="18" y="18" width="8" height="22" fill="#f5f5f0"/>
-        <rect x="30" y="10" width="8" height="30" fill="#3ecf8e"/>
-        <rect x="42" y="22" width="8" height="18" fill="#f5f5f0"/>
-        <rect x="31" y="1" width="6" height="6" fill="#3ecf8e"/>
+        <rect x="6" y="26" width="8" height="14" fill="var(--ink)"/>
+        <rect x="18" y="18" width="8" height="22" fill="var(--ink)"/>
+        <rect x="30" y="10" width="8" height="30" fill="var(--green-fill)"/>
+        <rect x="42" y="22" width="8" height="18" fill="var(--ink)"/>
+        <rect x="31" y="1" width="6" height="6" fill="var(--green-fill)"/>
       </svg>
       <b>BYYY STUDIOS</b>
     </a>
@@ -512,6 +547,11 @@ html.js .reveal.in{opacity:1;transform:none}
     </span>
     <span class="tray-right">
       <span class="copy">&copy; 2026 BYYY STUDIOS</span>
+      <button id="themeToggle" class="theme-toggle bevel" aria-pressed="false" aria-label="Switch to light mode">
+        <svg class="ic-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.6 9.6A5.9 5.9 0 1 1 6.4 2.4a4.7 4.7 0 0 0 7.2 7.2z" fill="currentColor"/></svg>
+        <svg class="ic-sun" viewBox="0 0 16 16" aria-hidden="true"><g fill="currentColor"><rect x="6" y="6" width="4" height="4"/><rect x="7" y="1" width="2" height="3"/><rect x="7" y="12" width="2" height="3"/><rect x="1" y="7" width="3" height="2"/><rect x="12" y="7" width="3" height="2"/></g></svg>
+        <span class="tt-label">DARK</span>
+      </button>
       <span class="clock" id="taskclock" aria-label="Current time">--:--</span>
     </span>
   </footer>
@@ -552,6 +592,29 @@ html.js .reveal.in{opacity:1;transform:none}
     clock.textContent = h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
   }
   tick(); setInterval(tick, 15000);
+
+  /* theme toggle: localStorage wins, OS preference on first visit (set pre-paint in <head>) */
+  var themeMeta = document.querySelector('meta[name="color-scheme"]');
+  var themeToggle = document.getElementById('themeToggle');
+  function paintTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    if(themeMeta) themeMeta.setAttribute('content', t === 'light' ? 'light dark' : 'dark light');
+    if(themeToggle){
+      var light = (t === 'light');
+      themeToggle.setAttribute('aria-pressed', light ? 'true' : 'false');
+      themeToggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+      var lbl = themeToggle.querySelector('.tt-label');
+      if(lbl) lbl.textContent = light ? 'LIGHT' : 'DARK';
+    }
+    try{ localStorage.setItem('byyy-theme', t); }catch(e){}
+  }
+  if(themeToggle){
+    themeToggle.addEventListener('click', function(){
+      var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      paintTheme(cur === 'light' ? 'dark' : 'light');
+    });
+    paintTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  }
 
   /* scroll-triggered reveals */
   var revealEls = document.querySelectorAll('.reveal');
