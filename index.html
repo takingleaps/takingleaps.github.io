@@ -219,6 +219,8 @@ html.js .reveal.in{opacity:1;transform:none}
   background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),var(--green-dim),transparent 70%)}
 .card-live:hover::before{opacity:1}
 .card-live:hover{border-color:var(--green);transform:translateY(-3px)}
+.card-live.card-spotlight{border-color:#3b82f6;box-shadow:6px 6px 0 var(--hard-shadow),0 0 36px rgba(59,130,246,.35)}
+.card-live.card-spotlight:hover{border-color:#60a5fa}
 .card-media{background:var(--media-bg);display:flex;align-items:center;justify-content:center;
   padding:clamp(36px,5vw,72px);border-right:2px solid var(--bevel-lo);overflow:hidden}
 .card-media figure{margin:0;display:grid;gap:24px;justify-items:center}
@@ -429,32 +431,10 @@ html.js .reveal.in{opacity:1;transform:none}
       <div class="winbody">
       <div class="fests-head reveal">
         <h2>The work</h2>
-        <span>01 CONCEPT &middot; 01 LIVE &middot; 01 IN THE WORKS</span>
+        <span>01 CONCEPT &middot; 02 LIVE</span>
       </div>
 
-      <a class="card-live tilt reveal" href="/flwrpwr-mac-os/" aria-label="Open the flwrpwr.OS concept">
-        <div class="winbar" aria-hidden="true"><span class="sq"></span><span class="t">flwrpwr_mac_os // concept</span><span class="btns"><i></i><i></i><i></i></span></div>
-        <div class="card-media">
-          <figure>
-            <div style="font-family:'Teko',sans-serif;font-weight:700;font-size:clamp(48px,5vw,72px);line-height:.9;color:#ff5da2;letter-spacing:.02em;max-width:100%;overflow-wrap:anywhere;">FLWRPWR</div>
-            <figcaption>FLWRPWR.OS &middot; CLIENT CONCEPT</figcaption>
-          </figure>
-        </div>
-        <div class="card-body">
-          <span class="tag">CONCEPT</span>
-          <h3>flwrpwr.OS</h3>
-          <p class="card-meta"><b>FLWRPWR</b> &middot; CANNABIS BRAND CONCEPT</p>
-          <ul class="feats">
-            <li>Retro desktop OS rebuilt in brand colors</li>
-            <li>Draggable, resizable windows</li>
-            <li>Dark and light mode</li>
-            <li>Strain files, merch drop, 21+ gate</li>
-          </ul>
-          <span class="cta"><span class="arr" aria-hidden="true">&rarr;</span> OPEN THE CONCEPT</span>
-        </div>
-      </a>
-
-      <a class="card-live tilt reveal" style="margin-top:28px" href="/niteharts/" aria-label="Open the Niteharts 26 companion app">
+      <a class="card-live tilt reveal card-spotlight" href="/niteharts/" aria-label="Open the Niteharts 26 companion app">
         <div class="winbar" aria-hidden="true"><span class="sq"></span><span class="t">niteharts_26 // live</span><span class="btns"><i></i><i></i><i></i></span></div>
         <div class="card-media">
           <figure>
@@ -474,6 +454,28 @@ html.js .reveal.in{opacity:1;transform:none}
             <li>Shareable lineup links for your crew</li>
           </ul>
           <span class="cta"><span class="arr" aria-hidden="true">&rarr;</span> OPEN THE APP</span>
+        </div>
+      </a>
+
+      <a class="card-live tilt reveal" style="margin-top:28px" href="/flwrpwr-mac-os/" aria-label="Open the flwrpwr.OS concept">
+        <div class="winbar" aria-hidden="true"><span class="sq"></span><span class="t">flwrpwr_mac_os // concept</span><span class="btns"><i></i><i></i><i></i></span></div>
+        <div class="card-media">
+          <figure>
+            <div style="font-family:'Teko',sans-serif;font-weight:700;font-size:clamp(48px,5vw,72px);line-height:.9;color:#ff5da2;letter-spacing:.02em;max-width:100%;overflow-wrap:anywhere;">FLWRPWR</div>
+            <figcaption>FLWRPWR.OS &middot; CLIENT CONCEPT</figcaption>
+          </figure>
+        </div>
+        <div class="card-body">
+          <span class="tag">CONCEPT</span>
+          <h3>flwrpwr.OS</h3>
+          <p class="card-meta"><b>FLWRPWR</b> &middot; CANNABIS BRAND CONCEPT</p>
+          <ul class="feats">
+            <li>Retro desktop OS rebuilt in brand colors</li>
+            <li>Draggable, resizable windows</li>
+            <li>Dark and light mode</li>
+            <li>Strain files, merch drop, 21+ gate</li>
+          </ul>
+          <span class="cta"><span class="arr" aria-hidden="true">&rarr;</span> OPEN THE CONCEPT</span>
         </div>
       </a>
 
