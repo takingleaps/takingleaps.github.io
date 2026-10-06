@@ -499,9 +499,13 @@
     .fact-copy { padding-bottom: 4px; }
     .fact-copy strong { display: block; font-size: clamp(1.7rem, 3vw, 2.7rem); line-height: .9; letter-spacing: -.045em; }
     .fact-copy span { display: block; margin-top: 7px; color: var(--ink-soft); font-size: 11px; letter-spacing: .08em; }
-    .welcome-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .welcome-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .os-button {
       min-height: 43px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
       border: 2px solid var(--ink);
       border-radius: 5px;
       background: var(--paper);
@@ -1288,6 +1292,7 @@
             <div class="welcome-actions">
               <button class="os-button primary" type="button" data-open="flower-window">OPEN FLOWER</button>
               <button class="os-button" type="button" data-open="apparel-window">OPEN APPAREL</button>
+              <a class="os-button" href="/flwrpwr-room/">flwrpwr.room</a>
             </div>
             <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>THAI STICK</span><span>NORTHERN LIGHTS</span><span>MAUI WOWIE</span><span>BLOOMING SOON</span><span>THAI STICK</span><span>NORTHERN LIGHTS</span><span>MAUI WOWIE</span><span>BLOOMING SOON</span></div></div>
           </section>
