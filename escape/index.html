@@ -451,6 +451,56 @@
   seekers.forEach(function(s){s.addEventListener('pointerdown',function(){isScrubbing=true});s.addEventListener('input',function(){isScrubbing=true;seekTo(s.value)});s.addEventListener('change',function(){seekTo(s.value);isScrubbing=false;updateProgress()});s.addEventListener('pointerup',function(){seekTo(s.value);isScrubbing=false;updateProgress()});s.addEventListener('pointercancel',function(){isScrubbing=false;updateProgress()})});
   document.getElementById('lineupEntry').addEventListener('click',openMyLineup);document.getElementById('myLineupClose').addEventListener('click',closeMyLineup);document.getElementById('myLineup').addEventListener('click',function(e){if(e.target===this)closeMyLineup()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('myLineup').classList.contains('open'))closeMyLineup()});
   renderMyLineup();render();
+/* ============================================================
+   ESCAPE BACKEND PATCH — My Lineup persistence (Supabase)
+   Source of truth: ~/workspace/escape/hidden_files/backend-patch.js
+   Re-apply after every artifact re-export to escape/index.html,
+   inserted INSIDE the main IIFE right after `renderMyLineup();render();`
+   (the artifact sandbox cannot persist; byyystudio.me can).
+   Reuses the shared `lineup_saves` table; device keys are namespaced
+   `escape-dev-…` so they never collide with Niteharts `dev-…` keys.
+   Anon key is the same public one embedded in the Niteharts site.
+   ============================================================ */
+  var ESC_SB_URL='https://dqcoincagejyowqxqqnz.supabase.co';
+  var ESC_SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxY29pbmNhZ2VqeW93cXhxcW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzY4NTQsImV4cCI6MjEwNjcxMjg1NH0.dG7GwddKfuoq08DX_SgtluxWKAU-hyAjMZcAc320ysI';
+  function escLsGet(k){try{return window.localStorage.getItem(k)}catch(e){return null}}
+  function escLsSet(k,v){try{window.localStorage.setItem(k,v)}catch(e){}}
+  function escDeviceKey(){
+    var k=escLsGet('escape_device_key');
+    if(k)return k;
+    var id='escape-dev-'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+    escLsSet('escape_device_key',id);
+    return id;
+  }
+  function escSb(path,opts){
+    opts=opts||{};opts.headers=opts.headers||{};
+    opts.headers['apikey']=ESC_SB_KEY;
+    opts.headers['Authorization']='Bearer '+ESC_SB_KEY;
+    if(opts.body&&typeof opts.body!=='string'){opts.body=JSON.stringify(opts.body);opts.headers['Content-Type']='application/json';}
+    return window.fetch(ESC_SB_URL+'/rest/v1'+path,opts);
+  }
+  var escRestoring=true;
+  function escPersist(){
+    try{
+      var names=myLineup.map(function(a){return a.name});
+      escSb('/lineup_saves',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates'},body:{device_key:escDeviceKey(),lineup:names,updated_at:new Date().toISOString()}})['catch'](function(){});
+    }catch(e){}
+  }
+  var escBaseRender=renderMyLineup;
+  renderMyLineup=function(){escBaseRender();if(!escRestoring)escPersist();};
+  escSb('/lineup_saves?device_key=eq.'+encodeURIComponent(escDeviceKey())+'&select=lineup&limit=1')
+    .then(function(r){return r.ok?r.json():[]})
+    .then(function(rows){
+      var names=rows&&rows[0]&&rows[0].lineup;
+      if(names&&names.length){
+        names.forEach(function(n){
+          if(!myLineup.some(function(a){return a.name===n})){var a=findArtist(n);if(a)myLineup.push(a);}
+        });
+        escBaseRender();
+      }
+    })
+    .catch(function(){})
+    .then(function(){escRestoring=false;});
 })();
 </script>
 </body>
