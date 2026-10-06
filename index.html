@@ -339,6 +339,14 @@ html.js .reveal.in{opacity:1;transform:none}
 .taskbar .copy{font-size:19px;letter-spacing:.1em;color:var(--muted)}
 .taskbar .clock{font-size:22px;color:var(--green);background:var(--sunken);padding:2px 14px;
   border:2px solid;border-color:var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo)}
+.sound-toggle{display:flex;align-items:center;gap:8px;background:var(--btn-bg);color:var(--ink);
+  font-family:"VT323",monospace;font-size:19px;letter-spacing:.1em;padding:2px 14px;cursor:pointer}
+.sound-toggle svg{width:16px;height:16px;flex:none}
+.sound-toggle .ic-snd-off{display:none}
+.sound-toggle[aria-pressed="false"] .ic-snd-on{display:none}
+.sound-toggle[aria-pressed="false"] .ic-snd-off{display:block}
+.sound-toggle:active{transform:translateY(2px);
+  border-color:var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo)}
 
 @media(max-width:860px){
   .fests-head{flex-direction:column;align-items:flex-start;gap:8px}
@@ -573,6 +581,11 @@ html.js .reveal.in{opacity:1;transform:none}
         <svg class="ic-sun" viewBox="0 0 16 16" aria-hidden="true"><g fill="currentColor"><rect x="6" y="6" width="4" height="4"/><rect x="7" y="1" width="2" height="3"/><rect x="7" y="12" width="2" height="3"/><rect x="1" y="7" width="3" height="2"/><rect x="12" y="7" width="3" height="2"/></g></svg>
         <span class="tt-label">DARK</span>
       </button>
+      <button id="soundToggle" class="sound-toggle bevel" aria-pressed="true" aria-label="Turn ambient sound off">
+        <svg class="ic-snd-on" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3.5v11L5 10H2z" fill="currentColor"/><path d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.8a6 6 0 0 1 0 8.4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        <svg class="ic-snd-off" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3.5v11L5 10H2z" fill="currentColor"/><path d="M11 6l4 4M15 6l-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span class="tt-label">SOUND</span>
+      </button>
       <span class="clock" id="taskclock" aria-label="Current time">--:--</span>
     </span>
   </footer>
@@ -657,6 +670,61 @@ html.js .reveal.in{opacity:1;transform:none}
     paintTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
   }
 
+  /* ambient sound: on by default, fades in after first user gesture (browser autoplay policy),
+     toggle lives in the taskbar, choice persists */
+  var ambientAudio = document.getElementById('ambientAudio');
+  var soundToggle = document.getElementById('soundToggle');
+  var SOUND_KEY = 'byyy-sound';
+  var soundOn = true;
+  try{ soundOn = localStorage.getItem(SOUND_KEY) !== 'off'; }catch(e){}
+  function paintSound(){
+    if(!soundToggle) return;
+    soundToggle.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+    soundToggle.setAttribute('aria-label', soundOn ? 'Turn ambient sound off' : 'Turn ambient sound on');
+  }
+  function fadeAudioTo(target, ms, done){
+    if(!ambientAudio) return;
+    var from = ambientAudio.volume, t0 = null;
+    function step(ts){
+      if(t0 === null) t0 = ts;
+      var p = Math.min((ts - t0) / ms, 1);
+      ambientAudio.volume = from + (target - from) * p;
+      if(p < 1){ requestAnimationFrame(step); }
+      else if(typeof done === 'function'){ done(); }
+    }
+    requestAnimationFrame(step);
+  }
+  function startAmbient(){
+    if(!soundOn || !ambientAudio || !ambientAudio.paused) return;
+    ambientAudio.volume = 0;
+    var pr = null;
+    try{ pr = ambientAudio.play(); }catch(e){}
+    if(pr && typeof pr.catch === 'function'){ pr.catch(function(){}); }
+    fadeAudioTo(0.12, 2500);
+  }
+  function stopAmbient(){
+    if(!ambientAudio || ambientAudio.paused) return;
+    fadeAudioTo(0, 500, function(){ ambientAudio.pause(); });
+  }
+  if(soundToggle){
+    paintSound();
+    soundToggle.addEventListener('click', function(){
+      soundOn = !soundOn;
+      try{ localStorage.setItem(SOUND_KEY, soundOn ? 'on' : 'off'); }catch(e){}
+      paintSound();
+      if(soundOn){ startAmbient(); } else { stopAmbient(); }
+    });
+    if(soundOn){
+      var kick = function(){
+        startAmbient();
+        window.removeEventListener('pointerdown', kick);
+        window.removeEventListener('keydown', kick);
+      };
+      window.addEventListener('pointerdown', kick);
+      window.addEventListener('keydown', kick);
+    }
+  }
+
   /* scroll-triggered reveals */
   var revealEls = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window && !reduceMotion){
@@ -705,5 +773,6 @@ html.js .reveal.in{opacity:1;transform:none}
   }
 })();
 </script>
+<audio id="ambientAudio" loop preload="auto" src="assets/ambient.mp3"></audio>
 </body>
 </html>
