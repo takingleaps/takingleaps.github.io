@@ -1014,6 +1014,173 @@
       .age-note { margin-top: 14px; font-size: 11px; }
     }
 
+    /* Window contents respond to the window itself, not only the viewport. */
+    .window,
+    #welcome-window, #flower-window, #apparel-window, #brand-window,
+    #labs-window, #phone-window, #about-window { min-width: 260px; }
+    .window {
+      container-name: app-window;
+      container-type: inline-size;
+    }
+    .window-content {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .window-content *, .window-content *::before, .window-content *::after { min-width: 0; }
+    .window-content img, .window-content svg { max-width: 100%; }
+    .window-content p, .window-content li, .window-content dd, .window-content dt,
+    .window-content strong, .window-content span { overflow-wrap: break-word; }
+    .window-content h1, .window-content h2, .window-content h3 { overflow-wrap: normal; word-break: normal; }
+    .statusbar > * { min-width: 0; }
+    .statusbar > span:not(.resize-grip) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Apparel keeps the vertical wordmark and garment in separate tracks. */
+    .garment-stage {
+      grid-template-columns: minmax(54px, 18%) minmax(0, 1fr);
+      padding: clamp(12px, 3cqi, 24px);
+    }
+    .garment-stage::before {
+      position: static;
+      inset: auto;
+      align-self: center;
+      justify-self: center;
+      max-height: 90%;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      transform-origin: center;
+      font-size: clamp(2.2rem, 10cqi, 6.5rem);
+      line-height: .76;
+      white-space: nowrap;
+    }
+    .hoodie {
+      grid-column: 2;
+      width: min(88%, 360px);
+      justify-self: center;
+    }
+    .apparel-copy h2,
+    .inspector h2,
+    .brand-banner h2,
+    .lab-head h2,
+    .about-mark { max-width: 100%; }
+    .apparel-copy h2 { font-size: clamp(2.5rem, 8cqi, 5rem); }
+    .inspector h2 { font-size: clamp(1.8rem, 12cqi, 2.4rem); }
+    .brand-banner h2 { font-size: clamp(3rem, 18cqi, 6.3rem); }
+    .lab-head h2 { font-size: clamp(2rem, 10cqi, 2.8rem); }
+    .about-mark { font-size: clamp(2rem, 15cqi, 3.3rem); }
+    .brick-phone { max-width: calc(100% - 20px); }
+
+    @container app-window (max-width: 680px) {
+      .welcome-layout,
+      .apparel-layout { grid-template-columns: 1fr; }
+      .brand-stage { min-height: clamp(240px, 52cqi, 390px); padding: clamp(20px, 7cqi, 38px); }
+      .brand-word { font-size: clamp(3.6rem, 22cqi, 7rem); }
+      .welcome-panel { padding: clamp(20px, 7cqi, 38px); gap: 22px; }
+      .fact-lockup { align-items: center; }
+      .fact-number { font-size: clamp(4.2rem, 22cqi, 7rem); }
+      .fact-copy strong { font-size: clamp(1.45rem, 8cqi, 2.2rem); }
+      .garment-stage { min-height: clamp(280px, 78cqi, 430px); border-right: 0; border-bottom: 1px solid var(--ink); }
+      .apparel-copy { padding: clamp(20px, 7cqi, 36px); }
+    }
+
+    @container app-window (max-width: 600px) {
+      .finder-toolbar { flex-wrap: wrap; }
+      .path-chip { flex: 1 1 160px; margin-left: 0; min-width: 0; }
+      .finder-body { display: block; }
+      .file-grid { grid-template-columns: repeat(auto-fit, minmax(min(108px, 100%), 1fr)); padding: clamp(12px, 5cqi, 24px); gap: 20px 10px; }
+      .inspector { border-left: 0; border-top: 1px solid var(--ink); padding: clamp(16px, 5cqi, 24px); }
+      .strain-preview { max-height: 280px; object-fit: cover; }
+      .brand-details { grid-template-columns: 1fr; padding: clamp(18px, 6cqi, 32px); gap: 24px; }
+      .brand-gallery { grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr)); }
+      .lab-head { align-items: flex-start; flex-direction: column; }
+      .lab-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+      .lab-table, .lab-table tbody, .lab-table tr, .lab-table td { display: block; width: 100%; }
+      .lab-table tr { margin-bottom: 12px; border: 1px solid var(--ink); }
+      .lab-table td { border: 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); display: grid; grid-template-columns: minmax(76px, 34%) minmax(0, 1fr); gap: 10px; }
+      .lab-table td:last-child { border-bottom: 0; }
+      .lab-table td::before { content: attr(data-label); color: var(--ink-soft); }
+    }
+
+    @container app-window (max-width: 420px) {
+      .brand-stage { min-height: 220px; }
+      .brand-word { font-size: clamp(3.25rem, 25cqi, 5rem); }
+      .welcome-actions { grid-template-columns: 1fr; }
+      .fact-lockup { grid-template-columns: 1fr; align-items: start; gap: 8px; }
+      .fact-copy strong br { display: none; }
+      .strain-strip { display: none; }
+      .garment-stage {
+        min-height: 260px;
+        grid-template-columns: minmax(42px, 17%) minmax(0, 1fr);
+        padding: 10px;
+      }
+      .garment-stage::before { font-size: clamp(1.75rem, 10cqi, 2.7rem); }
+      .hoodie { width: min(94%, 280px); filter: drop-shadow(7px 9px 0 color-mix(in srgb, var(--pink) 55%, transparent)); }
+      .apparel-copy h2 { font-size: clamp(2.35rem, 19cqi, 4rem); }
+      .product-facts div { align-items: start; gap: 8px; }
+      .product-facts strong { text-align: right; }
+      .swatches { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .swatch { min-height: 62px; padding: 4px 2px; font-size: 8px; writing-mode: vertical-rl; }
+      .lab-shell { padding: 14px 10px 22px; }
+      .lab-table td { grid-template-columns: 72px minmax(0, 1fr); padding: 9px 7px; }
+      .phone-shell { padding: 12px 6px 22px; }
+      .brick-phone { width: min(230px, calc(100% - 12px)); padding: 12px; box-shadow: 6px 7px 0 color-mix(in srgb, var(--pink-strong) 70%, var(--ink)); }
+      .phone-keypad { gap: 5px; }
+      .phone-keypad button { min-height: 40px; }
+      .about-shell { padding: 20px 14px; }
+    }
+
+    /* ResizeObserver fallback mirrors the container-query breakpoints. */
+    .window.window-narrow .welcome-layout,
+    .window.window-narrow .apparel-layout { grid-template-columns: 1fr; }
+    .window.window-narrow .brand-stage { min-height: 300px; padding: 30px; }
+    .window.window-narrow .brand-word { font-size: 5rem; }
+    .window.window-narrow .welcome-panel { padding: 30px; gap: 22px; }
+    .window.window-narrow .fact-lockup { align-items: center; }
+    .window.window-narrow .fact-number { font-size: 6rem; }
+    .window.window-narrow .fact-copy strong { font-size: 1.8rem; }
+    .window.window-narrow .garment-stage { min-height: 360px; border-right: 0; border-bottom: 1px solid var(--ink); }
+    .window.window-narrow .apparel-copy { padding: 30px; }
+
+    .window.window-compact .finder-toolbar { flex-wrap: wrap; }
+    .window.window-compact .path-chip { flex: 1 1 160px; margin-left: 0; min-width: 0; }
+    .window.window-compact .finder-body { display: block; }
+    .window.window-compact .file-grid { grid-template-columns: repeat(auto-fit, minmax(min(108px, 100%), 1fr)); padding: 18px; gap: 20px 10px; }
+    .window.window-compact .inspector { border-left: 0; border-top: 1px solid var(--ink); padding: 20px; }
+    .window.window-compact .strain-preview { max-height: 280px; object-fit: cover; }
+    .window.window-compact .brand-details { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
+    .window.window-compact .brand-gallery { grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr)); }
+    .window.window-compact .lab-head { align-items: flex-start; flex-direction: column; }
+    .window.window-compact .lab-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .window.window-compact .lab-table,
+    .window.window-compact .lab-table tbody,
+    .window.window-compact .lab-table tr,
+    .window.window-compact .lab-table td { display: block; width: 100%; }
+    .window.window-compact .lab-table tr { margin-bottom: 12px; border: 1px solid var(--ink); }
+    .window.window-compact .lab-table td { border: 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); display: grid; grid-template-columns: minmax(76px, 34%) minmax(0, 1fr); gap: 10px; }
+    .window.window-compact .lab-table td:last-child { border-bottom: 0; }
+    .window.window-compact .lab-table td::before { content: attr(data-label); color: var(--ink-soft); }
+
+    .window.window-tight .brand-stage { min-height: 220px; }
+    .window.window-tight .brand-word { font-size: 3.5rem; }
+    .window.window-tight .welcome-actions { grid-template-columns: 1fr; }
+    .window.window-tight .fact-lockup { grid-template-columns: 1fr; align-items: start; gap: 8px; }
+    .window.window-tight .fact-copy strong br { display: none; }
+    .window.window-tight .strain-strip { display: none; }
+    .window.window-tight .garment-stage { min-height: 260px; grid-template-columns: minmax(42px, 17%) minmax(0, 1fr); padding: 10px; }
+    .window.window-tight .garment-stage::before { font-size: 2.1rem; }
+    .window.window-tight .hoodie { width: min(94%, 280px); filter: drop-shadow(7px 9px 0 color-mix(in srgb, var(--pink) 55%, transparent)); }
+    .window.window-tight .apparel-copy h2 { font-size: 3rem; }
+    .window.window-tight .product-facts div { align-items: start; gap: 8px; }
+    .window.window-tight .product-facts strong { text-align: right; }
+    .window.window-tight .swatches { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .window.window-tight .swatch { min-height: 62px; padding: 4px 2px; font-size: 8px; writing-mode: vertical-rl; }
+    .window.window-tight .lab-shell { padding: 14px 10px 22px; }
+    .window.window-tight .lab-table td { grid-template-columns: 72px minmax(0, 1fr); padding: 9px 7px; }
+    .window.window-tight .phone-shell { padding: 12px 6px 22px; }
+    .window.window-tight .brick-phone { width: min(230px, calc(100% - 12px)); padding: 12px; box-shadow: 6px 7px 0 color-mix(in srgb, var(--pink-strong) 70%, var(--ink)); }
+    .window.window-tight .phone-keypad { gap: 5px; }
+    .window.window-tight .phone-keypad button { min-height: 40px; }
+    .window.window-tight .about-shell { padding: 20px 14px; }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
       .boot { display: none; }
@@ -1282,6 +1449,19 @@
       function menuHeight() { return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--menu-h')) || 31; }
       function bottomReserve() { return isMobile() ? 66 : 4; }
 
+      function updateWindowWidthState(win) {
+        var width = win.getBoundingClientRect().width;
+        if (!width) width = parseFloat(getComputedStyle(win).width) || 0;
+        if (!width) return;
+        win.classList.toggle('window-narrow', width <= 680);
+        win.classList.toggle('window-compact', width <= 600);
+        win.classList.toggle('window-tight', width <= 420);
+      }
+
+      function syncWindowWidthStates() {
+        windows.forEach(updateWindowWidthState);
+      }
+
       function showToast(message) {
         var toast = document.getElementById('toast');
         toast.textContent = message;
@@ -1344,6 +1524,7 @@
         placeForMobile(win);
         win.classList.remove('minimized');
         win.classList.add('open');
+        updateWindowWidthState(win);
         focusWindow(win);
         closeMenus();
         closeMobileSwitcher();
@@ -1367,6 +1548,8 @@
 
       function toggleMaximize(win) {
         win.classList.toggle('maximized');
+        updateWindowWidthState(win);
+        requestAnimationFrame(function () { updateWindowWidthState(win); });
         focusWindow(win);
         showToast(win.classList.contains('maximized') ? 'Window maximized' : 'Window restored');
       }
@@ -1417,6 +1600,14 @@
       }
       windows.forEach(addResizeHandles);
 
+      var windowSizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(function (entries) {
+        entries.forEach(function (entry) { updateWindowWidthState(entry.target); });
+      }) : null;
+      windows.forEach(function (win) {
+        if (windowSizeObserver) windowSizeObserver.observe(win);
+        updateWindowWidthState(win);
+      });
+
       function beginInteraction(event, win, type, direction) {
         if (event.button !== undefined && event.button !== 0) return;
         if (isMobile()) return;
@@ -1451,7 +1642,7 @@
         var dy = event.clientY - state.originY;
         var win = state.win;
         var minVisible = isMobile() ? 72 : 120;
-        var minWidth = Math.min(isMobile() ? 280 : 300, window.innerWidth - 8);
+        var minWidth = Math.min(isMobile() ? 260 : 260, window.innerWidth - 8);
         var minHeight = Math.min(220, window.innerHeight - menuHeight() - bottomReserve());
         var left = state.left;
         var top = state.top;
@@ -1480,6 +1671,7 @@
         if (state.type === 'resize') {
           win.style.width = Math.round(width) + 'px';
           win.style.height = Math.round(height) + 'px';
+          updateWindowWidthState(win);
         }
       }
 
@@ -1588,6 +1780,7 @@
           win.style.width = '';
           win.style.height = '';
         });
+        requestAnimationFrame(syncWindowWidthStates);
         if (openWins.length) focusWindow(openWins[openWins.length - 1]);
         showToast('Windows arranged');
       }
@@ -1653,6 +1846,7 @@
           if (rect.left > window.innerWidth - 72) win.style.left = (window.innerWidth - 72) + 'px';
           if (rect.top > window.innerHeight - 54) win.style.top = (window.innerHeight - 54) + 'px';
         });
+        syncWindowWidthStates();
       }
       window.addEventListener('resize', normalizeViewport);
 
@@ -1679,6 +1873,7 @@
       document.getElementById('ageEnter').addEventListener('click', function () {
         document.getElementById('ageGate').hidden = true;
         document.body.classList.remove('age-locked');
+        requestAnimationFrame(syncWindowWidthStates);
         var boot = document.getElementById('boot');
         boot.classList.remove('done');
         setTimeout(function () { boot.classList.add('done'); }, 720);
