@@ -82,28 +82,31 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--green);outline-offset:3px}
 img{display:block;max-width:100%}
 
-/* ---------- loader ---------- */
+/* ---------- loader: XP boot window ---------- */
 #loader{position:fixed;inset:0;z-index:200;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
-  cursor:pointer;transition:transform .55s cubic-bezier(.7,0,.3,1)}
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  cursor:pointer;transition:transform .45s cubic-bezier(.7,0,.3,1)}
 #loader.done{transform:translateY(-101%)}
-#loader.done::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--green)}
-#loader .mark{width:104px;height:auto;overflow:visible}
-#loader .bar{fill:var(--ink);transform:scaleY(0);transform-origin:50% 100%;
-  animation:barup .5s cubic-bezier(.2,.9,.3,1.2) forwards}
-#loader .bar.v{fill:var(--green)}
-#loader .b1{animation-delay:.05s}#loader .b2{animation-delay:.15s}
-#loader .b3{animation-delay:.25s}#loader .b4{animation-delay:.35s}
-#loader .dot{fill:var(--green);opacity:0;animation:dotin .4s ease .75s forwards}
-@keyframes barup{to{transform:scaleY(1)}}
-@keyframes dotin{to{opacity:1}}
-#loader .word{font-family:"Syne Mono",monospace;font-size:15px;letter-spacing:.55em;
-  text-indent:.55em;color:var(--ink);opacity:0;animation:wordin .6s ease .55s forwards}
-#loader .sub{font-family:"Syne Mono",monospace;font-size:10px;letter-spacing:.35em;
-  text-indent:.35em;color:var(--faint);opacity:0;animation:wordin .6s ease .8s forwards}
-@keyframes wordin{from{opacity:0;letter-spacing:.8em}to{opacity:1}}
-#loader .skip{position:absolute;bottom:34px;font-family:"Syne Mono",monospace;
-  font-size:11px;letter-spacing:.25em;color:var(--faint)}
+html:not(.js) #loader{animation:loaderfade .6s ease 2.4s forwards}
+@keyframes loaderfade{to{opacity:0;visibility:hidden}}
+.bootwin{width:min(360px,100%);border:2px solid var(--bevel-lo);outline:1px solid var(--bevel-hi);
+  background:var(--window-bg);box-shadow:8px 8px 0 var(--hard-shadow)}
+.bootwin .winbody{padding:26px 24px 24px}
+.bootword{font-family:"Syne Mono",monospace;font-size:17px;letter-spacing:.4em;
+  text-indent:.4em;color:var(--ink);text-align:center;margin:0 0 4px}
+.bootsub{font-family:"Syne Mono",monospace;font-size:10px;letter-spacing:.35em;
+  text-indent:.35em;color:var(--faint);text-align:center;margin:0 0 20px}
+.segbar{display:flex;gap:4px;margin:0 0 16px}
+.segbar i{flex:1;height:18px;background:var(--sunken);
+  border:2px solid;border-color:var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo)}
+.segbar i.on{background:var(--green-fill);border-color:var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi)}
+.bootstatus{font-family:"VT323","Syne Mono",monospace;font-size:19px;line-height:1.2;
+  letter-spacing:.04em;color:var(--green);min-height:1.2em;margin:0}
+.bootstatus .cur{display:inline-block;width:.6em;height:1em;background:var(--green);
+  vertical-align:-.12em;margin-left:4px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#loader .skip{position:absolute;bottom:30px;left:0;right:0;text-align:center;
+  font-family:"Syne Mono",monospace;font-size:11px;letter-spacing:.25em;color:var(--faint)}
 
 /* ---------- shell ---------- */
 .wrap{position:relative;z-index:1;width:min(1200px,100%);margin:0 auto;padding:0 clamp(20px,5vw,56px)}
@@ -348,7 +351,7 @@ html.js .reveal.in{opacity:1;transform:none}
   .taskbar .tray-right{margin-left:0;width:100%;border-top:2px solid var(--bevel-lo)}
 }
 @media(prefers-reduced-motion:reduce){
-  #loader .bar,#loader .dot,#loader .word,#loader .sub{animation:none;opacity:1;transform:none}
+  #loader .bootstatus .cur{animation:none}
   html.js .hero .eyebrow,html.js .hero h1 .row,
   html.js .hero p.lede,html.js .hero .stats{animation:none;opacity:1;transform:none}
   html.js .reveal{opacity:1;transform:none;transition:none}
@@ -366,15 +369,17 @@ html.js .reveal.in{opacity:1;transform:none}
 <div class="page-grid" aria-hidden="true"></div>
 
 <div id="loader" role="button" tabindex="0" aria-label="Skip intro">
-  <svg class="mark" viewBox="0 0 64 48" aria-hidden="true">
-    <rect class="bar b1" x="6"  y="26" width="8" height="14"/>
-    <rect class="bar b2" x="18" y="18" width="8" height="22"/>
-    <rect class="bar b3 v" x="30" y="10" width="8" height="30"/>
-    <rect class="bar b4" x="42" y="22" width="8" height="18"/>
-    <rect class="dot" x="31" y="1" width="6" height="6"/>
-  </svg>
-  <div class="word">BYYY STUDIOS</div>
-  <div class="sub">DESIGN. BUILD. MARKET.</div>
+  <div class="bootwin" aria-hidden="true">
+    <div class="winbar"><span class="sq"></span><span class="t">byyy_studios // boot</span></div>
+    <div class="winbody">
+      <p class="bootword">BYYY STUDIOS</p>
+      <p class="bootsub">DESIGN. BUILD. MARKET.</p>
+      <div class="segbar" id="segbar">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <p class="bootstatus"><span id="bootmsg">LOADING MODULES</span><span class="cur"></span></p>
+    </div>
+  </div>
   <div class="skip">TAP TO SKIP</div>
 </div>
 
@@ -564,19 +569,39 @@ html.js .reveal.in{opacity:1;transform:none}
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var finePointer = window.matchMedia('(pointer: fine)').matches;
 
-  /* loader */
+  /* loader: boot progress */
   var loader = document.getElementById('loader');
-  var done = false;
+  var segs = document.getElementById('segbar').getElementsByTagName('i');
+  var bootmsg = document.getElementById('bootmsg');
+  var done = false, prog = 0, pageLoaded = false, NS = segs.length;
+  function paint(){
+    var n = Math.round(prog / 100 * NS), k;
+    for(k = 0; k < NS; k++){ segs[k].className = k < n ? 'on' : ''; }
+    bootmsg.textContent = prog >= 100 ? 'READY'
+      : prog >= 70 ? 'CALIBRATING PHOSPHOR'
+      : prog >= 35 ? 'PAINTING GRID' : 'LOADING MODULES';
+  }
   function dismiss(){
     if(done) return; done = true;
+    prog = 100; paint();
     loader.classList.add('done');
     document.body.classList.add('loaded');   /* triggers the hero kinetic entrance */
-    setTimeout(function(){ loader.style.display = 'none'; }, 650);
+    setTimeout(function(){ loader.style.display = 'none'; }, 550);
   }
   if(reduceMotion){ dismiss(); }
   else{
-    setTimeout(dismiss, 2100);          /* auto: under 2.5s */
-    setTimeout(dismiss, 4000);          /* failsafe */
+    var t0 = Date.now();
+    var tick = setInterval(function(){
+      var el = Date.now() - t0;
+      /* ~1s minimum sweep; jumps to full the moment the page loads */
+      var target = pageLoaded ? 100 : Math.min(92, el / 1000 * 100);
+      prog = Math.min(100, Math.max(prog, target));
+      if(prog >= 100){ clearInterval(tick); setTimeout(dismiss, 180); }
+      else paint();
+    }, 60);
+    setTimeout(dismiss, 2500);            /* hard max: never traps the page */
+    window.addEventListener('load', function(){ pageLoaded = true; });
+    if(document.readyState === 'complete'){ pageLoaded = true; }
     loader.addEventListener('click', dismiss);
     loader.addEventListener('keydown', function(e){
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); dismiss(); }
