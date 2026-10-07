@@ -22,7 +22,7 @@
     .experience{position:fixed;inset:0;isolation:isolate;background:#07100c}
     .game-viewport{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:crosshair;background:linear-gradient(#3f3028 0 44%,#241b17 100%)}
     .game-viewport.locked{cursor:none}
-    .scene-canvas{display:block;width:100%;height:100%;filter:saturate(1.16) contrast(1.08) brightness(.97) sepia(.1) hue-rotate(-2deg)}
+    .scene-canvas{display:block;width:100%;height:100%;filter:saturate(1.2) contrast(1.11) brightness(.91) sepia(.16) hue-rotate(-4deg)}
     .vhs-texture,.vhs-texture::before,.vhs-texture::after,.vignette{position:fixed;inset:0;pointer-events:none}
     .vhs-texture{z-index:4}
     .vhs-texture::before{content:"";background:repeating-linear-gradient(to bottom,rgba(255,255,255,.52) 0 1px,transparent 1px 4px);opacity:.05}
@@ -99,7 +99,7 @@
 
   <main class="experience" id="experience" aria-hidden="true">
     <div class="game-viewport" id="gameViewport" role="application" tabindex="0" aria-label="First-person FLWRPWR store. Click to lock the mouse, look freely, and use WASD or arrow keys to walk. Face a display and press E or click to interact. Mobile visitors use the joystick and drag to look.">
-      <canvas class="scene-canvas" id="scene" aria-label="A detailed modern FLWRPWR dispensary with glass storefront windows, product displays, green shelving, plants, a menu board and warm sunlight"></canvas>
+      <canvas class="scene-canvas" id="scene" aria-label="A detailed modern FLWRPWR dispensary at night, glowing with amber string lights around product displays, green shelving, plants and a menu board"></canvas>
       <div id="hotspotLayer" aria-hidden="true"></div>
     </div>
     <div class="vhs-texture" aria-hidden="true"></div>
@@ -125,7 +125,7 @@
             </div></section>
             <section class="phone-page" id="phone-about" role="tabpanel" aria-labelledby="tab-about" hidden><h2>About FLWRPWR</h2><p class="phone-lede">Store details.</p><div class="phone-card"><strong>Good vibes, great flower.</strong><p>FLWRPWR is women-owned.</p><ul class="brand-facts"><li>@flwrpwr_co</li><li>FLWRPWR 4g Smalls</li><li>Three strains revealed</li><li>Three more blooming soon</li></ul></div></section>
             <section class="phone-page" id="phone-posters" role="tabpanel" aria-labelledby="tab-posters" hidden><h2>Posters</h2><p class="phone-lede">Prints from the store walls.</p><div class="phone-gallery"><div class="phone-poster">FLWR<br>PWR<small>GOOD VIBES,<br>GREAT FLOWER</small></div><div class="phone-poster">FLOWER<br>POWER<small>4g SMALLS</small></div><div class="phone-poster">WOMEN-OWNED<small>FLWRPWR</small></div></div></section>
-            <section class="phone-page" id="phone-vibe" role="tabpanel" aria-labelledby="tab-vibe" hidden><h2>Vibe</h2><p class="phone-lede">Shift the store lighting after dark.</p><div class="vibe-card"><h3>Afterglow</h3><p>Warm window light and richer store color.</p><button class="phone-vibe" id="phoneVibe" type="button" aria-pressed="false">TURN ON</button></div></section>
+            <section class="phone-page" id="phone-vibe" role="tabpanel" aria-labelledby="tab-vibe" hidden><h2>Vibe</h2><p class="phone-lede">Turn up the warmth after dark.</p><div class="vibe-card"><h3>Afterglow</h3><p>Deeper amber light and richer store color.</p><button class="phone-vibe" id="phoneVibe" type="button" aria-pressed="false">TURN ON</button></div></section>
           </div>
           <nav class="phone-tabs" role="tablist" aria-label="Phone pages"><button class="phone-tab" id="tab-lineup" type="button" role="tab" aria-selected="true" aria-controls="phone-lineup" data-phone-tab="lineup">LINEUP</button><button class="phone-tab" id="tab-about" type="button" role="tab" aria-selected="false" aria-controls="phone-about" data-phone-tab="about">ABOUT</button><button class="phone-tab" id="tab-posters" type="button" role="tab" aria-selected="false" aria-controls="phone-posters" data-phone-tab="posters">POSTERS</button><button class="phone-tab" id="tab-vibe" type="button" role="tab" aria-selected="false" aria-controls="phone-vibe" data-phone-tab="vibe">VIBE</button></nav>
         </div>
@@ -140,6 +140,6 @@
   </main>
   <script src="assets/three.min.js"></script>
   <script src="assets/GLTFLoader.js?v=texture-loader-fix-2"></script>
-  <script src="assets/game.js?v=wall-mount-clearance-11"></script>
+  <script src="assets/game.js?v=night-cozy-12"></script>
 </body>
 </html>
