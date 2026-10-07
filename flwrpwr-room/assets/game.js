@@ -225,9 +225,9 @@
     addModel(m.display_case,[-2.2,0,.25],0);addModel(m.display_case,[2.2,0,.25],0);
     addModel(m.wall_shelf,[-4.5,0,5.48],0);addModel(m.wall_shelf,[4.5,0,5.48],0);addModel(m.wall_shelf,[-7.52,0,1.55],-Math.PI/2);
     addModel(m.checkout_counter,[5.55,0,3.45],-Math.PI/2);
-    addModel(m.logo_sign,[0,1.55,5.86],0);
-    addModel(m.menu_board,[7.86,1.18,0],Math.PI/2);
-    addModel(m.poster_frame,[-7.86,1.42,-1.8],-Math.PI/2);
+    addModel(m.logo_sign,[0,1.55,5.62],0);
+    addModel(m.menu_board,[7.62,1.18,0],Math.PI/2);
+    addModel(m.poster_frame,[-7.62,1.42,-1.8],-Math.PI/2);
     addModel(m.plant_large,[-6.9,0,-4.8],0);addModel(m.plant_large,[6.85,0,-4.8],0);
     addModel(m.plant_hanging,[-3.1,3.05,2.45],0);addModel(m.plant_hanging,[3.1,3.05,2.45],0);
     addModel(m.pendant_light,[-2.2,3.9,.25],0);addModel(m.pendant_light,[2.2,3.9,.25],0);addModel(m.pendant_light,[0,3.9,-3.05],0);
