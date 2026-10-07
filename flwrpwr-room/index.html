@@ -23,7 +23,11 @@
     .game-viewport{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:crosshair;background:linear-gradient(#3f3028 0 44%,#241b17 100%)}
     .game-viewport.locked{cursor:none}
     .scene-canvas{display:block;width:100%;height:100%;filter:saturate(1.16) contrast(1.08) brightness(.97) sepia(.1) hue-rotate(-2deg)}
-    .vignette{position:fixed;inset:0;pointer-events:none;z-index:4;background:radial-gradient(ellipse at 50% 45%,transparent 38%,rgba(35,18,10,.15) 72%,rgba(15,7,5,.62) 100%),linear-gradient(118deg,rgba(255,137,63,.07),transparent 48%,rgba(243,72,145,.055));mix-blend-mode:multiply}
+    .vhs-texture,.vhs-texture::before,.vhs-texture::after,.vignette{position:fixed;inset:0;pointer-events:none}
+    .vhs-texture{z-index:4}
+    .vhs-texture::before{content:"";background:repeating-linear-gradient(to bottom,rgba(255,255,255,.52) 0 1px,transparent 1px 4px);opacity:.05}
+    .vhs-texture::after{content:"";background:url("assets/vhs-grain.png") repeat;opacity:.02;mix-blend-mode:soft-light}
+    .vignette{z-index:5;background:radial-gradient(ellipse at 50% 45%,transparent 48%,rgba(22,10,8,.08) 76%,rgba(12,6,5,.42) 100%);mix-blend-mode:multiply}
     .look-prompt{position:fixed;z-index:26;left:50%;top:50%;width:min(430px,calc(100% - 42px));padding:26px 26px 22px;transform:translate(-50%,-50%);border:2px solid rgba(255,248,223,.72);background:rgba(15,29,21,.92);box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 5px rgba(243,72,145,.08);color:var(--ink);font-family:"Courier New",monospace;text-align:center;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
     .look-prompt.show{opacity:1;visibility:visible}.look-prompt.hidden{opacity:0;visibility:hidden}
     .mouse-icon{position:relative;display:block;width:44px;height:62px;margin:0 auto 15px;border:3px solid var(--mint);border-radius:22px}.mouse-icon::before{content:"";position:absolute;left:50%;top:8px;width:3px;height:14px;background:var(--pink);transform:translateX(-50%)}.mouse-icon::after{content:"";position:absolute;left:7px;right:7px;top:27px;height:2px;background:rgba(255,248,223,.32)}
@@ -98,7 +102,8 @@
       <canvas class="scene-canvas" id="scene" aria-label="A detailed modern FLWRPWR dispensary with glass storefront windows, product displays, green shelving, plants, a menu board and warm sunlight"></canvas>
       <div id="hotspotLayer" aria-hidden="true"></div>
     </div>
-    <div class="vignette"></div>
+    <div class="vhs-texture" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
     <div class="hud" aria-hidden="true"><div class="play"><i></i> PLAY · STORE CAM 13</div><div class="timestamp" id="timestamp">03:20:27<br><span>17:42:12</span></div><div class="brand-hud">GOOD VIBES, GREAT FLOWER</div><div class="rec"><i></i> FLWRPWR</div></div>
     <div class="look-prompt" id="lookPrompt" aria-hidden="true"><i class="mouse-icon" aria-hidden="true"></i><strong>CLICK TO LOOK AROUND</strong><span>Mouse to look · WASD to walk · Space to jump</span></div>
     <a class="studio-credit" href="https://byyystudio.me/" target="_blank" rel="noopener noreferrer">made by byyy studio</a>
@@ -135,6 +140,6 @@
   </main>
   <script src="assets/three.min.js"></script>
   <script src="assets/GLTFLoader.js?v=texture-loader-fix-2"></script>
-  <script src="assets/game.js?v=real-jump-clean-9"></script>
+  <script src="assets/game.js?v=lively-vhs-walls-10"></script>
 </body>
 </html>
