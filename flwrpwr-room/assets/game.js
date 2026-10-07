@@ -50,6 +50,9 @@
     {id:'case-right',label:'DISPLAY CASE',action:'lineup',x:2.2,y:1.25,z:-.65,r:1.25},
     {id:'menu',label:'STRAIN MENU',action:'lineup',x:7.0,y:2.45,z:0,r:1.15},
     {id:'poster',label:'POSTERS',action:'poster',x:-7.0,y:2.45,z:-1.8,r:1.15},
+    {id:'poster-mindbodysoul',label:'MIND · BODY · SOUL',action:'poster',x:-6.95,y:2.35,z:3.75,r:1.15},
+    {id:'poster-goodvibes',label:'GOOD VIBES',action:'poster',x:6.95,y:2.35,z:-2.7,r:1.15},
+    {id:'poster-est2026',label:'FLWRPWR EST. 2026',action:'poster',x:-6.55,y:2.35,z:5.05,r:1.15},
     {id:'checkout',label:'FLWRPWR COUNTER',action:'brand',x:4.55,y:1.45,z:3.45,r:1.3}
   ];
   var hotState={};
@@ -196,6 +199,20 @@
     lavaBlobs.forEach(function(b,i){b.position.y=b.userData.baseY+Math.sin(t*(.55+i*.08)+b.userData.phase)*.075;});dirtyFrames=Math.max(dirtyFrames,1);
   }
 
+  function prepTexture(texture,flipY){texture.encoding=T.sRGBEncoding;texture.flipY=flipY;texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());texture.needsUpdate=true;return texture;}
+  function loadTexture(path,flipY){return new Promise(function(resolve,reject){new T.TextureLoader().load(path,function(texture){resolve(prepTexture(texture,flipY));},undefined,reject);});}
+  function applyLogoTexture(template,texture){
+    template.traverse(function(o){if(!o.isMesh||!o.material)return;var mats=Array.isArray(o.material)?o.material:[o.material];mats=mats.map(function(mat){if(!/logo_sign/.test((mat.name||'').toLowerCase()))return mat;var replacement=mat.clone();replacement.map=texture;replacement.emissiveMap=texture;replacement.emissive=new T.Color(0xffffff);replacement.emissiveIntensity=.28;replacement.color.setHex(0xffffff);replacement.roughness=.86;replacement.metalness=0;replacement.needsUpdate=true;return replacement;});o.material=Array.isArray(o.material)?mats:mats[0];});
+  }
+  function createFramedPoster(texture,width,height,position,rotationY){
+    var root=new T.Group(),frameMat=material(0x6f432d,.64,.04),backMat=material(0x241714,.82,0);
+    var frame=mesh(new T.BoxGeometry(width+.18,height+.18,.1),frameMat,true,true);frame.position.z=0;root.add(frame);
+    var inset=mesh(new T.BoxGeometry(width+.055,height+.055,.035),backMat,true,true);inset.position.z=.057;root.add(inset);
+    var artMat=new T.MeshStandardMaterial({map:texture,color:0xffffff,roughness:.88,metalness:0,emissive:0xffffff,emissiveMap:texture,emissiveIntensity:.1,side:T.DoubleSide});
+    var art=mesh(new T.PlaneGeometry(width,height),artMat,false,false);art.position.z=.078;root.add(art);
+    root.position.set(position[0],position[1],position[2]);root.rotation.y=rotationY;modelRoot.add(root);return root;
+  }
+
   var manager=new T.LoadingManager();
   var modelPaths={
     room_shell:'assets/models/room_shell.glb',
@@ -220,8 +237,15 @@
     function loaded(g){try{updateLoadProgress();resolve(prepareModel(g.scene));}catch(error){reject(error);}}
     loader.load(primary,loaded,undefined,function(){loader.load(fallback,loaded,undefined,function(){reject(new Error(name+': GLB load failed'));});});
   });});
-  Promise.all(files.map(function(n){return promises[n];})).then(function(models){
-    var m={};files.forEach(function(n,i){m[n]=models[i];});
+  var artworkPromise=Promise.all([
+    loadTexture('assets/posters/logo-fixed.webp',false),
+    loadTexture('assets/posters/poster-mindbodysoul.webp',true),
+    loadTexture('assets/posters/poster-goodvibes.webp',true),
+    loadTexture('assets/posters/poster-est2026.webp',true)
+  ]);
+  Promise.all([Promise.all(files.map(function(n){return promises[n];})),artworkPromise]).then(function(results){
+    var models=results[0],artwork=results[1],m={};files.forEach(function(n,i){m[n]=models[i];});
+    applyLogoTexture(m.logo_sign,artwork[0]);
     var shell=addModel(m.room_shell,[0,0,0],0);shell.userData.topHidden=[];shell.traverse(function(o){if(o.name==='ceiling'||o.name.indexOf('panel_')===0)shell.userData.topHidden.push(o);});modelRoot.userData.shell=shell;
     addModel(m.display_case,[-2.2,0,.25],0);addModel(m.display_case,[2.2,0,.25],0);
     addModel(m.wall_shelf,[-4.5,0,5.48],0);addModel(m.wall_shelf,[4.5,0,5.48],0);addModel(m.wall_shelf,[-7.52,0,1.55],-Math.PI/2);
@@ -229,6 +253,9 @@
     addModel(m.logo_sign,[0,1.55,5.62],0);
     addModel(m.menu_board,[7.62,1.18,0],Math.PI/2);
     addModel(m.poster_frame,[-7.62,1.42,-1.8],-Math.PI/2);
+    createFramedPoster(artwork[1],1.05,1.58,[-7.58,2.25,3.55],Math.PI/2);
+    createFramedPoster(artwork[2],2.1,1.4,[7.58,2.35,-2.7],-Math.PI/2);
+    createFramedPoster(artwork[3],1.02,1.36,[-6.65,2.3,5.6],Math.PI);
     addModel(m.plant_large,[-6.9,0,-4.8],0);addModel(m.plant_large,[6.85,0,-4.8],0);
     addModel(m.plant_hanging,[-3.1,3.05,2.45],0);addModel(m.plant_hanging,[3.1,3.05,2.45],0);
     addModel(m.pendant_light,[-2.2,3.9,.25],0);addModel(m.pendant_light,[2.2,3.9,.25],0);addModel(m.pendant_light,[0,3.9,-3.05],0);
