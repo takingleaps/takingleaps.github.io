@@ -242,19 +242,7 @@
         <div class="lead-meta" aria-label="Festival details"><div><span>Venue</span><strong>Snapdragon Stadium</strong></div><div><span>City</span><strong>San Diego, CA</strong></div><div><span>Entry</span><strong>18+ GA · 21+ VIP</strong></div><div><span>Stages</span><strong>Main · Valorant</strong></div></div>
       </div>
     </header>
-    <div class="next-banner" aria-live="polite">
-      <div class="next-banner-inner"><span class="next-status" id="nextStatus">Up next</span><time class="next-time" id="nextTime">Fri · 4:00 PM</time><span class="next-artist" id="nextArtist">Knock2 &amp; Friends · Main</span><button class="next-jump" id="nextJump" type="button">View set</button></div>
-    </div>
-    <nav class="mobile-quicknav" aria-label="Festival quick links">
-      <a href="#scheduleTitle">Set times</a>
-      <a href="#myLineupTitle">My lineup</a>
-      <a href="#mapTitle">Venue</a>
-      <button id="mobileMoreToggle" type="button" aria-expanded="false">Extras</button>
-    </nav>
-    <div class="marquee" aria-label="Featured Niteharts artists"><div class="marquee-track"><div class="marquee-group"><span>ISOKNOCK</span><span>Porter Robinson</span><span>RL Grime</span><span>2hollis</span><span>Flava D</span><span>Hamdi</span><span>DJ Snake</span><span>Jane Remover</span></div><div class="marquee-group" aria-hidden="true"><span>ISOKNOCK</span><span>Porter Robinson</span><span>RL Grime</span><span>2hollis</span><span>Flava D</span><span>Hamdi</span><span>DJ Snake</span><span>Jane Remover</span></div></div></div>
 
-    <div class="module-dock"><span class="layout-note">Arrange for this visit</span><button class="layout-trigger" id="layoutTrigger" type="button" aria-expanded="false" aria-controls="layoutPanel"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l4 4h-3v4h-4V6H6l6-4zm0 20l-4-4h3v-4h4v4h3l-6 4zM2 12l4-4v3h4v4H6v3l-4-6zm20 0l-4 4v-3h-4v-4h4V6l4 6z"/></svg>Rearrange</button></div>
-    <div class="layout-hint" id="layoutHint" hidden><span>Tip: tap <b>Rearrange</b> to reorder these sections.</span><button type="button" id="layoutHintClose" aria-label="Dismiss tip">&times;</button></div>
     <!-- NITEHARTS EXTRAS STICKERS: game + camera, hot-sticker style -->
     <section class="nh-extras-strip" aria-label="Festival extras">
       <style>
@@ -289,6 +277,19 @@
         </button>
       </div>
     </section>
+    <div class="next-banner" aria-live="polite">
+      <div class="next-banner-inner"><span class="next-status" id="nextStatus">Up next</span><time class="next-time" id="nextTime">Fri · 4:00 PM</time><span class="next-artist" id="nextArtist">Knock2 &amp; Friends · Main</span><button class="next-jump" id="nextJump" type="button">View set</button></div>
+    </div>
+    <nav class="mobile-quicknav" aria-label="Festival quick links">
+      <a href="#scheduleTitle">Set times</a>
+      <a href="#myLineupTitle">My lineup</a>
+      <a href="#mapTitle">Venue</a>
+      <button id="mobileMoreToggle" type="button" aria-expanded="false">Extras</button>
+    </nav>
+    <div class="marquee" aria-label="Featured Niteharts artists"><div class="marquee-track"><div class="marquee-group"><span>ISOKNOCK</span><span>Porter Robinson</span><span>RL Grime</span><span>2hollis</span><span>Flava D</span><span>Hamdi</span><span>DJ Snake</span><span>Jane Remover</span></div><div class="marquee-group" aria-hidden="true"><span>ISOKNOCK</span><span>Porter Robinson</span><span>RL Grime</span><span>2hollis</span><span>Flava D</span><span>Hamdi</span><span>DJ Snake</span><span>Jane Remover</span></div></div></div>
+
+    <div class="module-dock"><span class="layout-note">Arrange for this visit</span><button class="layout-trigger" id="layoutTrigger" type="button" aria-expanded="false" aria-controls="layoutPanel"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l4 4h-3v4h-4V6H6l6-4zm0 20l-4-4h3v-4h4v4h3l-6 4zM2 12l4-4v3h4v4H6v3l-4-6zm20 0l-4 4v-3h-4v-4h4V6l4 6z"/></svg>Rearrange</button></div>
+    <div class="layout-hint" id="layoutHint" hidden><span>Tip: tap <b>Rearrange</b> to reorder these sections.</span><button type="button" id="layoutHintClose" aria-label="Dismiss tip">&times;</button></div>
     <div class="layout-panel" id="layoutPanel" aria-label="Arrange page sections"></div>
 
     <div class="module-grid" id="moduleGrid">
@@ -401,18 +402,21 @@
 #nh-lens .lens-frames button{flex:0 0 auto;min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font-size:14px;cursor:pointer;touch-action:manipulation}
 #nh-lens .lens-frames button[aria-pressed="true"]{border-color:var(--ice);color:var(--ice-strong);background:rgba(159,201,239,.12)}
 #nh-lens .lens-frame-layer{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
-#nh-lens .lens-frame-layer svg{position:absolute;width:clamp(30px,9vw,64px);height:auto;overflow:visible;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
-#nh-lens .lens-frame-layer .heart-a{left:4%;top:3%;transform:rotate(-12deg)}
-#nh-lens .lens-frame-layer .heart-b{right:4%;top:4%;transform:rotate(11deg) scale(.82)}
-#nh-lens .lens-frame-layer .heart-c{left:4%;bottom:4%;transform:rotate(10deg) scale(.76)}
-#nh-lens .lens-frame-layer .heart-d{right:4%;bottom:3%;transform:rotate(-9deg)}
-#nh-lens .lens-frame-layer .frame-edge{position:absolute;inset:8px;border:2px solid rgba(213,236,255,.9)}
-#nh-lens .lens-frame-layer .frame-edge::before,#nh-lens .lens-frame-layer .frame-edge::after{content:"";position:absolute;width:40px;height:40px;border-color:#f26e7b;border-style:solid}
-#nh-lens .lens-frame-layer .frame-edge::before{left:-2px;top:-2px;border-width:5px 0 0 5px}
-#nh-lens .lens-frame-layer .frame-edge::after{right:-2px;bottom:-2px;border-width:0 5px 5px 0}
-#nh-lens .lens-frame-layer .frame-ticket{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding:12px 14px;background:rgba(16,17,19,.92);border-top:2px solid var(--ice);color:#ececec;text-align:left}
-#nh-lens .lens-frame-layer .frame-ticket strong{font:700 1.5rem/1 var(--display),Arial,sans-serif;letter-spacing:.01em;text-transform:uppercase}
-#nh-lens .lens-frame-layer .frame-ticket span{font:400 .6rem/1.4 var(--mono);text-transform:uppercase;color:var(--ice-strong);text-align:right}
+#nh-lens .lens-frame-layer img.tribal-heart{position:absolute;width:clamp(72px,24vw,150px);height:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
+#nh-lens .lens-frame-layer .th-a{left:3%;top:2.5%;transform:rotate(-10deg)}
+#nh-lens .lens-frame-layer .th-b{right:3%;top:3.5%;transform:rotate(9deg) scale(.85)}
+#nh-lens .lens-frame-layer .th-c{left:3%;bottom:3%;transform:rotate(8deg) scale(.8)}
+#nh-lens .lens-frame-layer .th-d{right:3%;bottom:2.5%;transform:rotate(-8deg) scale(1.04)}
+#nh-lens .lens-frame-layer .tribal-corner{position:absolute;width:clamp(84px,26vw,150px);height:auto}
+#nh-lens .lens-frame-layer .tribal-corner svg{display:block;width:100%;height:auto;overflow:visible}
+#nh-lens .lens-frame-layer .tc-tl{top:6px;left:6px}
+#nh-lens .lens-frame-layer .tc-tr{top:6px;right:6px;transform:scaleX(-1)}
+#nh-lens .lens-frame-layer .tc-bl{bottom:6px;left:6px;transform:scaleY(-1)}
+#nh-lens .lens-frame-layer .tc-br{bottom:6px;right:6px;transform:scale(-1,-1)}
+#nh-lens .lens-frame-layer .frame-ticket{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;background:rgba(10,13,20,.94);border-top:2px solid #488ad9;color:#ececec;text-align:left}
+#nh-lens .lens-frame-layer .frame-ticket img.frame-logo{height:clamp(30px,9vw,52px);width:auto}
+#nh-lens .lens-frame-layer .frame-ticket span{font:400 .6rem/1.4 var(--mono);text-transform:uppercase;color:#d5ecff;text-align:right}
+#nh-lens #lensFlashOverlay{position:absolute;inset:0;z-index:4;background:#fff;opacity:0;pointer-events:none}
 #nh-feed .feed-bar{margin-bottom:12px}
 #nh-feed .feed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 #nh-feed .feed-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#05070c;aspect-ratio:1}
@@ -547,13 +551,14 @@
               <p>or upload a photo below</p>
             </div>
             <div class="lens-frame-layer" id="lensFrameLayer" aria-hidden="true"></div>
+            <div id="lensFlashOverlay" aria-hidden="true"></div>
           </div>
           <p class="lens-step"><b>1 · Frames</b> — edges &amp; overlays</p>
           <div class="lens-frames" id="lensFrames" role="group" aria-label="Choose a frame">
-            <button type="button" data-frame="none" aria-pressed="false">None</button>
-            <button type="button" data-frame="hearts" aria-pressed="true">Heart burst</button>
-            <button type="button" data-frame="ice" aria-pressed="false">Ice signal</button>
-            <button type="button" data-frame="ticket" aria-pressed="false">Ticket stub</button>
+            <button type="button" data-frame="none" aria-pressed="false">none</button>
+            <button type="button" data-frame="hearts" aria-pressed="true">tribal hearts</button>
+            <button type="button" data-frame="ice" aria-pressed="false">tribal lines</button>
+            <button type="button" data-frame="ticket" aria-pressed="false">logo stamp</button>
           </div>
           <p class="lens-step"><b>2 · Filters</b> — color</p>
           <div class="lens-filters" id="lensFilters" role="group" aria-label="Choose a filter">
@@ -562,6 +567,10 @@
             <button type="button" data-filter="heartpop" aria-pressed="false">Heart Pop</button>
             <button type="button" data-filter="niteharts" aria-pressed="false">Niteharts</button>
             <button type="button" data-filter="vhs" aria-pressed="false">VHS</button>
+            <button type="button" data-filter="goldhour" aria-pressed="false">gold hour</button>
+            <button type="button" data-filter="afterdark" aria-pressed="false">after dark</button>
+            <button type="button" data-filter="ultraviolet" aria-pressed="false">ultraviolet</button>
+            <button type="button" data-filter="film" aria-pressed="false">film</button>
           </div>
           <div class="lens-actions">
             <button type="button" id="lensCapture" class="lens-btn" hidden>Capture</button>
@@ -1753,7 +1762,11 @@
     midnight:  { label: 'Midnight',  css: 'brightness(.72) contrast(1.4) saturate(.55)' },
     heartpop:  { label: 'Heart Pop', css: 'saturate(1.25) brightness(1.05)' },
     niteharts: { label: 'Niteharts', css: 'none' },
-    vhs:       { label: 'VHS',       css: 'saturate(1.45) contrast(1.15)' }
+    vhs:       { label: 'VHS',       css: 'saturate(1.45) contrast(1.15)' },
+    goldhour:  { label: 'gold hour',   css: 'sepia(.32) saturate(1.35) brightness(1.06)' },
+    afterdark: { label: 'after dark',  css: 'brightness(.78) contrast(1.35) saturate(1.15)' },
+    ultraviolet: { label: 'ultraviolet', css: 'hue-rotate(250deg) saturate(1.5) brightness(.95)' },
+    film:      { label: 'film',      css: 'grayscale(1) contrast(1.25)' }
   };
   var activeFilter = 'frost';
   var video = document.getElementById('lensVideo');
@@ -1788,18 +1801,35 @@
       applyLiveFilter();
     });
   }
-  /* Frames come before filters: overlay on the live stage + baked into captures. */
+  /* Frames: overlay on the live stage + baked into captures. Filter + frame stay on together. */
   var activeFrame = 'hearts';
   var frameLayer = document.getElementById('lensFrameLayer');
-  var HEART_SVG = '<svg viewBox="0 0 64 58" aria-hidden="true"><path fill="#9fc9ef" stroke="#d5ecff" stroke-width="2" d="M32 54C19 43 7 34 7 20 7 10 14 4 23 4c4 0 7 2 9 6 2-4 5-6 9-6 9 0 16 6 16 16 0 14-12 23-25 34Z"/><path fill="none" stroke="#f26e7b" stroke-width="3" d="M13 17c3-7 10-9 16-3"/></svg>';
+  var TRIBAL_SRC = 'assets/brand/niteharts-tribal-heart.webp';
+  var LOGO_SRC = 'assets/brand/niteharts-logo.png';
+  var tribalImg = new Image(); tribalImg.crossOrigin = 'anonymous'; tribalImg.src = TRIBAL_SRC;
+  var logoImg = new Image(); logoImg.crossOrigin = 'anonymous'; logoImg.src = LOGO_SRC;
+  var TRIBAL_CORNER_SVG = '<svg viewBox="0 0 160 160" aria-hidden="true">'
+    + '<path d="M4 156 C 46 122, 66 84, 62 34 C 61 20, 58 10, 52 2 L 62 2 C 70 12, 75 24, 76 40 C 78 90, 56 128, 12 158 Z" fill="#488ad9"/>'
+    + '<path d="M4 156 C 60 140, 100 118, 124 82 C 138 60, 144 40, 144 24 L 152 24 C 152 44, 145 68, 130 92 C 104 130, 62 150, 12 158 Z" fill="#488ad9"/>'
+    + '<path d="M22 156 C 44 134, 58 112, 62 86" stroke="#d5ecff" stroke-width="3" fill="none" stroke-linecap="round"/>'
+    + '<path d="M132 6 L 146 6 L 136 22 Z" fill="#d5ecff"/>'
+    + '</svg>';
   function paintFrameLayer() {
     if (!frameLayer) return;
     if (activeFrame === 'hearts') {
-      frameLayer.innerHTML = HEART_SVG.replace('<svg', '<svg class="heart-a"') + HEART_SVG.replace('<svg', '<svg class="heart-b"') + HEART_SVG.replace('<svg', '<svg class="heart-c"') + HEART_SVG.replace('<svg', '<svg class="heart-d"');
+      frameLayer.innerHTML =
+        '<img class="tribal-heart th-a" src="' + TRIBAL_SRC + '" alt="">' +
+        '<img class="tribal-heart th-b" src="' + TRIBAL_SRC + '" alt="">' +
+        '<img class="tribal-heart th-c" src="' + TRIBAL_SRC + '" alt="">' +
+        '<img class="tribal-heart th-d" src="' + TRIBAL_SRC + '" alt="">';
     } else if (activeFrame === 'ice') {
-      frameLayer.innerHTML = '<span class="frame-edge"></span>';
+      frameLayer.innerHTML =
+        '<span class="tribal-corner tc-tl">' + TRIBAL_CORNER_SVG + '</span>' +
+        '<span class="tribal-corner tc-tr">' + TRIBAL_CORNER_SVG + '</span>' +
+        '<span class="tribal-corner tc-bl">' + TRIBAL_CORNER_SVG + '</span>' +
+        '<span class="tribal-corner tc-br">' + TRIBAL_CORNER_SVG + '</span>';
     } else if (activeFrame === 'ticket') {
-      frameLayer.innerHTML = '<span class="frame-ticket"><strong>Niteharts \u201926</strong><span>Oct 9\u201311<br>San Diego, CA</span></span>';
+      frameLayer.innerHTML = '<span class="frame-ticket"><img class="frame-logo" src="' + LOGO_SRC + '" alt="Niteharts"><span>Oct 9\u201311<br>San Diego, CA</span></span>';
     } else {
       frameLayer.innerHTML = '';
     }
@@ -1816,46 +1846,73 @@
       paintFrameLayer();
     });
   }
-  function heartAt(ctx, x, y, px, rot, color) {
+  function drawTribalHeart(ctx, x, y, wdt, rot) {
+    if (!tribalImg || !tribalImg.naturalWidth) return;
+    var hgt = wdt * tribalImg.naturalHeight / tribalImg.naturalWidth;
     ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    drawHeart(ctx, 0, 0, px / 12, color);
+    ctx.translate(x, y); ctx.rotate(rot);
+    ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 12; ctx.shadowOffsetY = 4;
+    ctx.drawImage(tribalImg, -wdt / 2, -hgt / 2, wdt, hgt);
+    ctx.restore();
+  }
+  var TRIBAL_BLADE_1 = 'M4 156 C 46 122, 66 84, 62 34 C 61 20, 58 10, 52 2 L 62 2 C 70 12, 75 24, 76 40 C 78 90, 56 128, 12 158 Z';
+  var TRIBAL_BLADE_2 = 'M4 156 C 60 140, 100 118, 124 82 C 138 60, 144 40, 144 24 L 152 24 C 152 44, 145 68, 130 92 C 104 130, 62 150, 12 158 Z';
+  var TRIBAL_ACCENT = 'M22 156 C 44 134, 58 112, 62 86';
+  var TRIBAL_SPIKE = 'M132 6 L 146 6 L 136 22 Z';
+  function drawTribalCorner(ctx, x, y, sx, sy, size) {
+    var s = size / 160;
+    ctx.save();
+    ctx.translate(x, y); ctx.scale(sx * s, sy * s);
+    ctx.fillStyle = '#488ad9';
+    try {
+      ctx.fill(new Path2D(TRIBAL_BLADE_1));
+      ctx.fill(new Path2D(TRIBAL_BLADE_2));
+      ctx.strokeStyle = '#d5ecff'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      ctx.stroke(new Path2D(TRIBAL_ACCENT));
+      ctx.fillStyle = '#d5ecff';
+      ctx.fill(new Path2D(TRIBAL_SPIKE));
+    } catch (e) {
+      /* Path2D string ctor unsupported: fall back to simple corner ticks */
+      ctx.strokeStyle = '#488ad9'; ctx.lineWidth = 10; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(8, 150); ctx.quadraticCurveTo(60, 120, 70, 40); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(8, 150); ctx.quadraticCurveTo(90, 130, 130, 60); ctx.stroke();
+    }
     ctx.restore();
   }
   function drawFrameOverlay(ctx, w, h, frame) {
     var u = Math.min(w, h);
     if (frame === 'hearts') {
-      heartAt(ctx, w * 0.09, h * 0.075, u * 0.105, -0.2, '#9fc9ef');
-      heartAt(ctx, w * 0.91, h * 0.085, u * 0.09, 0.18, '#f26e7b');
-      heartAt(ctx, w * 0.085, h * 0.925, u * 0.082, 0.15, '#f26e7b');
-      heartAt(ctx, w * 0.915, h * 0.92, u * 0.105, -0.14, '#9fc9ef');
+      var hw = u * 0.27;
+      drawTribalHeart(ctx, w * 0.145, h * 0.07, hw, -0.18);
+      drawTribalHeart(ctx, w * 0.855, h * 0.075, hw * 0.85, 0.16);
+      drawTribalHeart(ctx, w * 0.14, h * 0.93, hw * 0.8, 0.14);
+      drawTribalHeart(ctx, w * 0.86, h * 0.925, hw * 1.02, -0.12);
     } else if (frame === 'ice') {
-      ctx.save();
-      var m = Math.round(w * 0.028);
-      ctx.strokeStyle = '#d5ecff';
-      ctx.lineWidth = Math.max(3, Math.round(w * 0.006));
-      ctx.strokeRect(m, m, w - m * 2, h - m * 2);
-      ctx.strokeStyle = '#f26e7b';
-      ctx.lineWidth = Math.max(8, Math.round(w * 0.016));
-      var c = Math.round(u * 0.1);
-      ctx.beginPath();
-      ctx.moveTo(m, m + c); ctx.lineTo(m, m); ctx.lineTo(m + c, m);
-      ctx.moveTo(w - m - c, h - m); ctx.lineTo(w - m, h - m); ctx.lineTo(w - m, h - m - c);
-      ctx.stroke();
-      ctx.restore();
+      var cs = u * 0.30, pad = Math.round(w * 0.02);
+      drawTribalCorner(ctx, pad, pad, 1, 1, cs);
+      drawTribalCorner(ctx, w - pad, pad, -1, 1, cs);
+      drawTribalCorner(ctx, pad, h - pad, 1, -1, cs);
+      drawTribalCorner(ctx, w - pad, h - pad, -1, -1, cs);
     } else if (frame === 'ticket') {
       var th = Math.round(h * 0.13);
       ctx.save();
-      ctx.fillStyle = 'rgba(16,17,19,.93)';
+      ctx.fillStyle = 'rgba(10,13,20,.94)';
       ctx.fillRect(0, h - th, w, th);
-      ctx.fillStyle = '#9fc9ef';
+      ctx.fillStyle = '#488ad9';
       ctx.fillRect(0, h - th, w, Math.max(3, Math.round(h * 0.006)));
+      if (logoImg && logoImg.naturalWidth) {
+        var lh = th * 0.52;
+        var lw = lh * logoImg.naturalWidth / logoImg.naturalHeight;
+        var lx = Math.round(w * 0.05), ly = Math.round(h - th + (th - lh) / 2);
+        ctx.drawImage(logoImg, lx, ly, lw, lh);
+      } else {
+        ctx.textBaseline = 'alphabetic';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#ececec';
+        ctx.font = '700 ' + Math.round(th * 0.44) + 'px Arial, sans-serif';
+        ctx.fillText("NITEHARTS '26", Math.round(w * 0.05), Math.round(h - th * 0.3));
+      }
       ctx.textBaseline = 'alphabetic';
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#ececec';
-      ctx.font = '700 ' + Math.round(th * 0.44) + 'px Arial, sans-serif';
-      ctx.fillText("NITEHARTS '26", Math.round(w * 0.05), Math.round(h - th * 0.3));
       ctx.textAlign = 'right';
       ctx.fillStyle = '#d5ecff';
       ctx.font = '400 ' + Math.round(th * 0.2) + 'px monospace';
@@ -1872,12 +1929,27 @@
   function videoTrack() {
     try { return stream ? stream.getVideoTracks()[0] : null; } catch (e) { return null; }
   }
-  function refreshTorchButton() {
+  var flashOverlay = document.getElementById('lensFlashOverlay');
+  var screenFlashOn = true;
+  function refreshFlashButton() {
     if (!flashBtn) return;
-    var t = videoTrack(), caps = {};
-    try { caps = (t && t.getCapabilities) ? t.getCapabilities() : {}; } catch (e) {}
-    if (caps.torch) { flashBtn.hidden = false; }
-    else { flashBtn.hidden = true; }
+    if (facingMode === 'user') {
+      /* front camera has no torch hardware: offer screen flash instead */
+      flashBtn.hidden = false;
+      flashBtn.setAttribute('data-flashmode', 'screen');
+      flashBtn.setAttribute('aria-pressed', String(screenFlashOn));
+    } else {
+      var t = videoTrack(), caps = {};
+      try { caps = (t && t.getCapabilities) ? t.getCapabilities() : {}; } catch (e) {}
+      if (caps.torch) {
+        flashBtn.hidden = false;
+        flashBtn.setAttribute('data-flashmode', 'torch');
+        flashBtn.setAttribute('aria-pressed', String(torchOn));
+      } else {
+        flashBtn.hidden = true;
+        flashBtn.setAttribute('data-flashmode', '');
+      }
+    }
   }
   function startCamera() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -1900,7 +1972,7 @@
         if (capBtn) capBtn.hidden = false;
         if (flipBtn) flipBtn.hidden = false;
         video.classList.toggle('mirrored', facingMode === 'user');
-        refreshTorchButton();
+        refreshFlashButton();
         applyLiveFilter();
         setNote('');
       })
@@ -1921,15 +1993,22 @@
   }
   if (flashBtn) {
     flashBtn.addEventListener('click', function () {
-      var t = videoTrack();
-      if (!t || !t.applyConstraints) return;
-      var next = !torchOn;
-      t.applyConstraints({ advanced: [{ torch: next }] }).then(function () {
-        torchOn = next;
-        flashBtn.setAttribute('aria-pressed', String(torchOn));
-      }).catch(function () {
-        flashBtn.hidden = true;
-      });
+      var mode = flashBtn.getAttribute('data-flashmode');
+      if (mode === 'screen') {
+        screenFlashOn = !screenFlashOn;
+        flashBtn.setAttribute('aria-pressed', String(screenFlashOn));
+        setNote(screenFlashOn ? 'Selfie flash on.' : 'Selfie flash off.');
+      } else if (mode === 'torch') {
+        var t = videoTrack();
+        if (!t || !t.applyConstraints) return;
+        var next = !torchOn;
+        t.applyConstraints({ advanced: [{ torch: next }] }).then(function () {
+          torchOn = next;
+          flashBtn.setAttribute('aria-pressed', String(torchOn));
+        }).catch(function () {
+          flashBtn.hidden = true;
+        });
+      }
     });
   }
   function drawHeart(ctx, x, y, s, color) {
@@ -1975,6 +2054,17 @@
       ctx.fillStyle = 'rgba(213,236,255,.9)';
       ctx.font = Math.round(h * .04) + 'px monospace';
       ctx.fillText('PLAY', Math.round(w * .04), Math.round(h * .07));
+    } else if (name === 'goldhour') {
+      ctx.fillStyle = 'rgba(255,176,84,.10)'; ctx.fillRect(0, 0, w, h);
+    } else if (name === 'afterdark') {
+      ctx.fillStyle = 'rgba(16,32,96,.20)'; ctx.fillRect(0, 0, w, h);
+    } else if (name === 'ultraviolet') {
+      ctx.fillStyle = 'rgba(110,50,200,.12)'; ctx.fillRect(0, 0, w, h);
+    } else if (name === 'film') {
+      for (i = 0; i < 220; i++) {
+        ctx.fillStyle = 'rgba(255,255,255,' + (Math.random() * .14) + ')';
+        ctx.fillRect(Math.random() * w, Math.random() * h, 1.5, 1.5);
+      }
     }
   }
   function frameToCanvas(src, sw, sh, mirror) {
@@ -2003,7 +2093,21 @@
   if (capBtn) {
     capBtn.addEventListener('click', function () {
       if (!video || !video.videoWidth) { setNote('Camera is not ready yet.'); return; }
-      showPreview(frameToCanvas(video, video.videoWidth, video.videoHeight, facingMode === 'user'));
+      var snap = function () {
+        showPreview(frameToCanvas(video, video.videoWidth, video.videoHeight, facingMode === 'user'));
+      };
+      if (facingMode === 'user' && screenFlashOn && flashOverlay) {
+        /* Snapchat-style screen flash: light the face first, then grab the frame */
+        flashOverlay.style.transition = 'none';
+        flashOverlay.style.opacity = '1';
+        setTimeout(function () {
+          snap();
+          flashOverlay.style.transition = 'opacity .4s ease';
+          flashOverlay.style.opacity = '0';
+        }, 200);
+      } else {
+        snap();
+      }
     });
   }
   if (retakeBtn) {
