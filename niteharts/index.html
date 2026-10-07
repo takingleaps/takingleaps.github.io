@@ -306,7 +306,7 @@
       </section>
 
       <section class="module lineup-module" data-module-id="lineup" data-module-label="My Lineup" aria-labelledby="myLineupTitle">
-        <div class="module-head"><h2 id="myLineupTitle">My Lineup</h2><span class="module-label">Saved on this device</span></div>
+        <div class="module-head"><h2 id="myLineupTitle">My Lineup</h2><span class="module-label">Saved to your account</span></div>
         <div class="lineup-overview"><div class="lineup-count" id="lineupCount">0 sets</div><div class="lineup-status" id="lineupStatus"><strong>Build your weekend</strong>Tap any set card above to add it here. Your picks stay in the URL, so the same link restores this lineup.</div></div>
         <div class="lineup-save">
           <div class="lineup-save-copy"><strong>Keep your lineup</strong><span>Copy the save code. Paste it after this page’s address later to restore these picks.</span></div>
@@ -314,7 +314,13 @@
           <span class="lineup-copy-status" id="lineupCopyStatus" role="status" aria-live="polite"></span>
           <div class="lineup-copy-fallback" id="lineupCopyFallback" hidden><label for="lineupLinkField">Select this code, then copy it</label><input class="lineup-link-field" id="lineupLinkField" type="text" readonly spellcheck="false" /></div>
         <div class="lineup-cloud-save">
-          <button class="lineup-cloud-button" id="cloudSaveButton" type="button">Save my lineup</button>
+          <div class="lineup-save-copy"><strong>Your name, your lineup</strong><span>Username + 4-digit PIN saves your lineup to the cloud. Survives site updates, works on any device.</span></div>
+          <div class="lineup-account-row">
+            <input class="lineup-account-input" id="acctName" type="text" placeholder="username" autocomplete="username" maxlength="20" spellcheck="false" />
+            <input class="lineup-account-input" id="acctPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="PIN" autocomplete="current-password" />
+            <button class="lineup-cloud-button" id="acctSaveButton" type="button">Save</button>
+            <button class="lineup-cloud-button lineup-cloud-button--ghost" id="acctLoadButton" type="button">Load</button>
+          </div>
           <span class="lineup-cloud-status" id="cloudSaveStatus" role="status" aria-live="polite"></span>
         </div>
         </div>
@@ -433,6 +439,13 @@
 .lineup-cloud-save{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
 .lineup-cloud-button{min-height:44px;padding:12px 22px;border-radius:999px;border:1px solid var(--ice);background:transparent;color:var(--ice-strong);font-weight:700;font-size:15px;cursor:pointer}
 .lineup-cloud-button:disabled{opacity:.5;cursor:wait}
+.lineup-account-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;width:100%;margin-top:10px}
+.lineup-account-input{min-height:44px;border:1px solid #111;background:transparent;color:#111;padding:10px 14px;font:400 16px/1.3 var(--mono);border-radius:999px;min-width:0;width:100%}
+.lineup-account-input::placeholder{color:rgba(17,17,17,.45)}
+#acctName{grid-column:1;grid-row:1}
+#acctPin{grid-column:2;grid-row:1;max-width:104px;text-align:center}
+#acctSaveButton{grid-column:1;grid-row:2;background:#111;color:var(--ice-strong);border-color:#111}
+#acctLoadButton{grid-column:2;grid-row:2;border-color:#111;color:#111;background:transparent}
 .lineup-cloud-status{font-size:13px;color:var(--mist)}
 #reviewLink{background:none;border:none;color:var(--mist);font-size:12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:10px;min-height:44px}
 @media(max-width:600px){#nh-feed .feed-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1283,7 +1296,8 @@
     };
     var festivalDates={friday:"2026-10-09",saturday:"2026-10-10",sunday:"2026-10-11"},dayShort={friday:"Fri",saturday:"Sat",sunday:"Sun"},bannerMoments=[],setById={};
     function festivalMoment(day,s){function stamp(clock){var match=clock.match(/(\d+):(\d+)\s+(AM|PM)/),hour=Number(match[1]),minute=match[2];if(match[3]==="PM"&&hour!==12)hour+=12;if(match[3]==="AM"&&hour===12)hour=0;return new Date(festivalDates[day]+"T"+String(hour).padStart(2,"0")+":"+minute+":00-07:00")}return{day:day,set:s,startAt:stamp(s.start),endAt:stamp(s.end)}}
-    Object.keys(schedules).forEach(function(day){schedules[day].sets.forEach(function(s,index){s.id=day+"-"+index;s.day=day;setById[s.id]=s;bannerMoments.push(festivalMoment(day,s))})});bannerMoments.sort(function(a,b){return a.startAt-b.startAt});
+    function slugifyArtist(name){return String(name||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48)||"set"}
+    Object.keys(schedules).forEach(function(day){schedules[day].sets.forEach(function(s){var base=day+"-"+slugifyArtist(s.artist),id=base,n=2;while(setById[id]){id=base+"-"+(n++)}s.id=id;s.day=day;setById[id]=s;bannerMoments.push(festivalMoment(day,s))})});bannerMoments.sort(function(a,b){return a.startAt-b.startAt});
     function updateNextBanner(){var now=new Date(),current=bannerMoments.find(function(item){return now>=item.startAt&&now<item.endAt}),next=bannerMoments.find(function(item){return item.startAt>now}),moment=current||next,status=document.getElementById("nextStatus"),time=document.getElementById("nextTime"),artist=document.getElementById("nextArtist"),jump=document.getElementById("nextJump");if(!moment){status.textContent="Festival wrapped";time.textContent="Oct 11 · 10:00 PM";artist.textContent="Replay the lineup previews";jump.textContent="Browse artists";jump.dataset.day="sunday";return}status.textContent=current?"On now":"Up next";time.textContent=dayShort[moment.day]+" · "+moment.set.start+(current?"–"+moment.set.end:"");artist.textContent=moment.set.artist+" · "+(moment.set.stage==="main"?"Main":"Valorant");jump.textContent=current?"View now":"View set";jump.dataset.day=moment.day}
     var fallbackTracks=[
       {key:"Knock2",artist:"Knock2",track:"Dashstar* VIP",src:"assets/previews/knock2.mp3",art:A+"knock2.jpg"},{key:"Yaego",artist:"Yaego",track:"ketamina",src:"assets/previews/yaego.mp3",art:A+"yaego.jpg"},{key:"Acyan",artist:"Acyan",track:"ONE TWO",src:"assets/previews/acyan.mp3",art:A+"acyan.jpg"},{key:"Frost Children",artist:"Frost Children",track:"Satellites",src:"assets/previews/frost-children.mp3",art:A+"frost-children.jpg"},{key:"Silcrow",artist:"Silcrow",track:"Future·Sight",src:"assets/previews/silcrow.mp3",art:A+"silcrow.jpg"},{key:"Devault",artist:"Devault",track:"Feels Like Us",src:"assets/previews/devault.mp3",art:A+"devault.jpg"},{key:"Beastboi",artist:"Beastboi",track:"CHOKE",src:"assets/previews/beastboi.mp3",art:A+"beastboi.jpg"},{key:"Jane Remover",artist:"Jane Remover",track:"Beauty Sleep",src:"assets/previews/jane-remover.mp3",art:A+"jane-remover.jpg"},{key:"Porter Robinson",artist:"Porter Robinson",track:"WannaCry",src:"assets/previews/porter-robinson.mp3",art:A+"porter-robinson.jpg"},{key:"ISOxo",artist:"ISOxo",track:"how2fly",src:"assets/previews/isoxo.mp3",art:A+"isoxo.jpg"},{key:"KIMJ",artist:"KIMJ",track:"R U READY 가시나야 VIP",src:"assets/previews/kimj.mp3",art:A+"kimj.jpg"},{key:"ASDEK",artist:"ASDEK",track:"Back",src:"assets/previews/asdek.mp3",art:A+"asdek.jpg"},{key:"Daine",artist:"Daine",track:"It's You",src:"assets/previews/daine.mp3",art:A+"daine.jpg"},{key:"Flava D",artist:"Flava D",track:"Pump It Up",src:"assets/previews/flava-d.mp3",art:A+"flava-d.jpg"},{key:"ALRT",artist:"ALRT",track:"DOPAMINE HIT",src:"assets/previews/alrt.mp3",art:A+"alrt.jpg"},{key:"Thaiboy Digital",artist:"Thaiboy Digital",track:"Destiny",src:"assets/previews/thaiboy-digital.mp3",art:A+"thaiboy.jpg"},{key:"Rad Cat",artist:"Rad Cat",track:"what u want!",src:"assets/previews/rad-cat.mp3",art:A+"rad-cat.jpg"},{key:"LYNY",artist:"LYNY",track:"Hollow",src:"assets/previews/lyny.mp3",art:A+"lyny.jpg"},{key:"2hollis",artist:"2hollis",track:"cliche",src:"assets/previews/2hollis.mp3",art:A+"2hollis.jpg"},{key:"ISOKNOCK",artist:"ISOKNOCK",track:"4EVR",src:"assets/previews/isoknock.mp3",art:A+"isoxo.jpg"},{key:"Blurr0 Vzn",artist:"Blurr0 Vzn",track:"Brunch Vzn",src:"assets/previews/blurr0-vzn.mp3",art:A+"blurr0-vzn.jpg"},{key:"Borne",artist:"Borne",track:"Want It",src:"assets/previews/borne.mp3",art:A+"borne.jpg"},{key:"Yojas",artist:"Yojas",track:"Showme.",src:"assets/previews/yojas.mp3",art:A+"yojas.jpg"},{key:"Nitepunk",artist:"Nitepunk",track:"Soma",src:"assets/previews/nitepunk.mp3",art:A+"nitepunk.jpg"},{key:"Cheyenne Giles",artist:"Cheyenne Giles",track:"Make Me Feel",src:"assets/previews/cheyenne-giles.mp3",art:A+"cheyenne-giles.jpg"},{key:"Underscores",artist:"Underscores",track:"The Peace",src:"assets/previews/underscores.mp3",art:A+"underscores.jpg"},{key:"Leotrix",artist:"Leotrix",track:"Can't Sleep Alone at Night",src:"assets/previews/leotrix.mp3",art:A+"leotrix.jpg"},{key:"Hamdi",artist:"Hamdi",track:"Push",src:"assets/previews/hamdi.mp3",art:A+"hamdi.jpg"},{key:"RL Grime",artist:"RL Grime",track:"Core",src:"assets/previews/rl-grime.mp3",art:A+"rl-grime.jpg"},{key:"DJ Snake",artist:"DJ Snake",track:"You Know You Like It",src:"assets/previews/dj-snake.mp3",art:A+"dj-snake.jpg"}
@@ -1295,8 +1309,9 @@
     function artistNameMatches(resultArtist,lineupArtist){var result=String(resultArtist||"").trim().toLowerCase(),lineup=String(lineupArtist||"").trim().toLowerCase();return !!result&&!!lineup&&(result.indexOf(lineup)!==-1||lineup.indexOf(result)!==-1)}
     var playerTracks=[],previewCache={},previewInflight={},previewRequestToken=0;
     var activeDay="friday",activeStage="all",grid=document.getElementById("scheduleGrid"),empty=document.getElementById("emptyState"),search=document.getElementById("artistSearch"),myLineup=document.getElementById("myLineup"),lineupCount=document.getElementById("lineupCount"),lineupStatus=document.getElementById("lineupStatus"),copyLineupButton=document.getElementById("copyLineupButton"),lineupCopyStatus=document.getElementById("lineupCopyStatus"),lineupCopyFallback=document.getElementById("lineupCopyFallback"),lineupLinkField=document.getElementById("lineupLinkField"),lineupPicks={},copyFeedbackTimer=0;
-    function readLineupHash(){var params=new URLSearchParams(window.location.hash.replace(/^#/,"")),value=params.get("lineup"),picks={};if(!value)return picks;value.split(",").forEach(function(id){if(setById[id])picks[id]=true});return picks}
-    function readStoredLineup(){var picks={},raw=null;try{raw=window.localStorage.getItem("nh26-lineup")}catch(e){}if(!raw)return picks;raw.split(",").forEach(function(id){if(setById[id])picks[id]=true});return picks}
+    function migrateLineupId(raw){if(!raw)return null;if(setById[raw])return raw;var m=/^(friday|saturday|sunday)-(\d+)$/.exec(raw);if(!m||!schedules[m[1]])return null;var s=schedules[m[1]].sets[parseInt(m[2],10)];return s?s.id:null}
+    function readLineupHash(){var params=new URLSearchParams(window.location.hash.replace(/^#/,"")),value=params.get("lineup"),picks={};if(!value)return picks;value.split(",").forEach(function(raw){var id=migrateLineupId(raw);if(id)picks[id]=true});return picks}
+    function readStoredLineup(){var picks={},raw=null;try{raw=window.localStorage.getItem("nh26-lineup")}catch(e){}if(!raw)return picks;raw.split(",").forEach(function(r){var id=migrateLineupId(r);if(id)picks[id]=true});return picks}
     function persistLineup(){try{var ids=lineupIds();if(ids.length)window.localStorage.setItem("nh26-lineup",ids.join(","));else window.localStorage.removeItem("nh26-lineup")}catch(e){}}
     function lineupIds(){var ids=[];Object.keys(schedules).forEach(function(day){schedules[day].sets.forEach(function(s){if(lineupPicks[s.id])ids.push(s.id)})});return ids}
     function resetCopyFeedback(){window.clearTimeout(copyFeedbackTimer);copyLineupButton.textContent="Show save code";lineupCopyStatus.textContent="";lineupCopyStatus.removeAttribute("data-state");lineupCopyFallback.hidden=true}
@@ -1609,30 +1624,115 @@
       return v ? v.split(',').filter(Boolean) : [];
     } catch (e) { return []; }
   }
-  var saveBtn = document.getElementById('cloudSaveButton');
+  /* ---------- lineup accounts: username + 4-digit PIN ---------- */
+  var acctNameEl = document.getElementById('acctName');
+  var acctPinEl = document.getElementById('acctPin');
+  var acctSaveBtn = document.getElementById('acctSaveButton');
+  var acctLoadBtn = document.getElementById('acctLoadButton');
   var saveStatus = document.getElementById('cloudSaveStatus');
   function setSaveStatus(msg) { if (saveStatus) saveStatus.textContent = msg; }
-  if (saveBtn) {
-    saveBtn.addEventListener('click', function () {
-      var ids = hashLineupIds();
-      if (!ids.length) { setSaveStatus('Add some sets first, then save.'); return; }
-      saveBtn.disabled = true;
-      setSaveStatus('Saving...');
-      sb('/lineup_saves', {
-        method: 'POST',
-        headers: { 'Prefer': 'resolution=merge-duplicates' },
-        body: { device_key: deviceKey(), lineup: ids, updated_at: new Date().toISOString() }
-      }).then(function (r) {
-        if (!r.ok) throw new Error('save failed: ' + r.status);
-        setSaveStatus('Saved. It will be here when you come back.');
-      }).catch(function () {
-        setSaveStatus('Could not save. Check your connection and retry.');
-      }).then(function () { saveBtn.disabled = false; });
-    });
+  function acctUserKey(name) { return 'user:' + String(name || '').trim().toLowerCase(); }
+  function readAcct() {
+    var n = String(acctNameEl && acctNameEl.value || '').trim();
+    var p = String(acctPinEl && acctPinEl.value || '').trim();
+    if (!/^[a-zA-Z0-9_-]{3,20}$/.test(n)) { setSaveStatus('Username: 3-20 chars, letters/numbers/_/-.'); return null; }
+    if (!/^\d{4}$/.test(p)) { setSaveStatus('PIN must be exactly 4 digits.'); return null; }
+    return { name: n, key: acctUserKey(n), pin: p };
   }
+  function sha256hex(str) {
+    function toHex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
+    try {
+      if (window.crypto && crypto.subtle) {
+        return crypto.subtle.digest('SHA-256', new TextEncoder().encode('nh-lineup:' + str)).then(toHex);
+      }
+    } catch (e) {}
+    var h1 = 0xdeadbeef, h2 = 0x41c6ce57, s = String(str);
+    for (var i = 0; i < s.length; i++) { var ch = s.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return Promise.resolve('fb' + (h2 >>> 0).toString(16) + (h1 >>> 0).toString(16));
+  }
+  function fetchAcctRow(key) {
+    return sb('/lineup_saves?device_key=eq.' + encodeURIComponent(key) + '&select=lineup&limit=1')
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) { return (rows && rows[0] && rows[0].lineup) || null; });
+  }
+  function applyPicks(ids, who) {
+    var clean = (ids || []).filter(function (id) { return typeof id === 'string' && id; });
+    if (!clean.length) { setSaveStatus('That account has no saved sets yet.'); return; }
+    window.location.hash = '#lineup=' + clean.join(',');
+    setSaveStatus(who ? ('Loaded ' + who + ' lineup.') : 'Loaded. Your lineup is back.');
+  }
+  function linkAccount(name, pinHash) { lsSet('nh_account', name); lsSet('nh_account_hash', pinHash); }
+  function acctBody(a, ph, ids) {
+    return { device_key: a.key, lineup: { pin_hash: ph, picks: ids, admin: a.name.toLowerCase() === 'nathan', updated_at: new Date().toISOString() }, updated_at: new Date().toISOString() };
+  }
+  function saveAccount() {
+    var a = readAcct();
+    if (!a) return;
+    var ids = hashLineupIds();
+    if (!ids.length) { setSaveStatus('Add some sets first, then save.'); return; }
+    acctSaveBtn.disabled = true;
+    setSaveStatus('Saving...');
+    sha256hex(a.pin).then(function (ph) {
+      return fetchAcctRow(a.key).then(function (row) {
+        var existed = !!(row && row.pin_hash);
+        if (existed && row.pin_hash !== ph) throw new Error('pin');
+        return sb('/lineup_saves?on_conflict=device_key', { method: 'POST', headers: { 'Prefer': 'resolution=merge-duplicates' }, body: acctBody(a, ph, ids) })
+          .then(function (r) { if (!r.ok) throw new Error('save failed: ' + r.status); return existed; });
+      }).then(function (existed) {
+        linkAccount(a.name, ph);
+        setSaveStatus(existed ? 'Saved. It auto-saves from here.' : 'Account created. Lineup saved.');
+      });
+    }).catch(function (err) {
+      setSaveStatus(err && err.message === 'pin' ? 'Wrong PIN for that username.' : 'Could not save. Check your connection and retry.');
+    }).then(function () { acctSaveBtn.disabled = false; });
+  }
+  function loadAccount() {
+    var a = readAcct();
+    if (!a) return;
+    acctLoadBtn.disabled = true;
+    setSaveStatus('Loading...');
+    sha256hex(a.pin).then(function (ph) {
+      return fetchAcctRow(a.key).then(function (row) {
+        if (!row || !row.pin_hash) throw new Error('nouser');
+        if (row.pin_hash !== ph) throw new Error('pin');
+        linkAccount(a.name, ph);
+        applyPicks(row.picks, a.name + '\u2019s');
+      });
+    }).catch(function (err) {
+      setSaveStatus(err && err.message === 'pin' ? 'Wrong PIN for that username.' : (err && err.message === 'nouser' ? 'No saved lineup under that name yet. Hit Save first.' : 'Could not load. Check your connection and retry.'));
+    }).then(function () { acctLoadBtn.disabled = false; });
+  }
+  if (acctSaveBtn) acctSaveBtn.addEventListener('click', saveAccount);
+  if (acctLoadBtn) acctLoadBtn.addEventListener('click', loadAccount);
+  function autoSaveAccount() {
+    var name = lsGet('nh_account'), ph = lsGet('nh_account_hash');
+    if (!name || !ph) return;
+    var ids = hashLineupIds();
+    if (!ids.length) return;
+    try { sb('/lineup_saves?on_conflict=device_key', { method: 'POST', headers: { 'Prefer': 'resolution=merge-duplicates' }, body: acctBody({ name: name, key: acctUserKey(name) }, ph, ids) }).catch(function () {}); } catch (e) {}
+  }
+  document.addEventListener('visibilitychange', function () { if (document.hidden) autoSaveAccount(); });
+  window.addEventListener('pagehide', autoSaveAccount);
+  (function restoreAccount() {
+    if (hashLineupIds().length) return;
+    var name = lsGet('nh_account'), ph = lsGet('nh_account_hash');
+    if (!name || !ph) return;
+    if (acctNameEl) acctNameEl.value = name;
+    fetchAcctRow(acctUserKey(name)).then(function (row) {
+      if (row && row.pin_hash === ph && row.picks && row.picks.length && !hashLineupIds().length) {
+        window.location.hash = '#lineup=' + row.picks.join(',');
+        setSaveStatus('Restored ' + name + ' saved lineup.');
+      } else if (!hashLineupIds().length) {
+        setSaveStatus('Welcome back, ' + name + '. Enter your PIN and hit Load.');
+      }
+    }).catch(function () {});
+  })();
   /* restore on load: only when the URL has no lineup of its own */
   (function restoreLineup() {
     if (hashLineupIds().length) return;
+    if (lsGet('nh_account')) return;
     var key = deviceKey();
     sb('/lineup_saves?device_key=eq.' + encodeURIComponent(key) + '&select=lineup&limit=1')
       .then(function (r) { return r.ok ? r.json() : []; })
