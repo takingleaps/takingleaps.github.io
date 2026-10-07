@@ -195,7 +195,7 @@
   function lerp(a,b,t){return a+(b-a)*t;}
   function updateCamera(dt,snap){
     var ease=snap?1:Math.min(1,dt*18);
-    cameraState.yaw+=angleDelta(cameraState.yaw,cameraState.targetYaw)*ease;
+    cameraState.yaw+=(cameraState.targetYaw-cameraState.yaw)*ease;
     cameraState.pitch=lerp(cameraState.pitch,cameraState.targetPitch,ease);
     camera.position.set(player.x,PLAYER_EYE_HEIGHT+player.y,player.z);
     var cp=Math.cos(cameraState.pitch);
