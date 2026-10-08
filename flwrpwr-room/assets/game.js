@@ -351,8 +351,8 @@
   }
   function addToBag(name,source){
     bag[name]=(bag[name]||0)+1;bagTotal++;renderBag();
-    var r=(source||els.lineup).getBoundingClientRect(),fly=document.createElement('div');fly.className='bag-fly';fly.textContent=name;fly.style.left=(r.left+r.width/2-48)+'px';fly.style.top=(r.top+r.height/2-27)+'px';document.body.appendChild(fly);setTimeout(function(){fly.remove();},680);
-    els.bagLaunch.classList.remove('bump');void els.bagLaunch.offsetWidth;els.bagLaunch.classList.add('bump');setTimeout(function(){els.bagLaunch.classList.remove('bump');},460);
+    var r=(source||els.lineup).getBoundingClientRect(),br=els.bagLaunch.getBoundingClientRect(),fly=document.createElement('div');fly.className='bag-fly';fly.textContent=name;fly.style.left=(r.left+r.width/2-48)+'px';fly.style.top=(r.top+r.height/2-27)+'px';fly.style.setProperty('--bag-dest-x',(br.left+br.width/2)+'px');fly.style.setProperty('--bag-dest-y',(br.top+br.height/2)+'px');document.body.appendChild(fly);setTimeout(function(){fly.remove();},680);
+    els.bagLaunch.classList.remove('bump');void els.bagLaunch.offsetWidth;els.bagLaunch.classList.add('bump');setTimeout(function(){els.bagLaunch.classList.remove('bump');},780);
     els.proximity.textContent=name.toUpperCase()+' ADDED';els.proximity.classList.add('show');setTimeout(function(){if(!activeHotspot)els.proximity.classList.remove('show');},900);
   }
 
