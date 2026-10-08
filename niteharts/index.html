@@ -312,6 +312,9 @@
     .nhc-copy{margin:0 0 24px;font:400 1.04rem/1.55 var(--body);color:var(--paper)}
     .nhc-card button{appearance:none;min-height:52px;padding:14px 32px;background:var(--ice);border:0;border-radius:2px;color:#101113;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.08em;cursor:pointer;touch-action:manipulation}
     @media(max-width:600px){.omap-viewer{height:380px}.omap-toolbar{gap:8px}.omap-from select{max-width:170px}.omap-tilt input{width:90px}}
+    #omapThreeWrap{position:absolute;inset:0;z-index:1}
+    #omapThreeWrap canvas{display:block;width:100%;height:100%;touch-action:none}
+    #lineupTourBtn{flex:none}
     @media(prefers-reduced-motion:reduce){#omap3RouteLineB,.omap3-gps-pulse{animation:none}.o3-post{transition:none}}
 
   </style>
@@ -2110,431 +2113,356 @@
       };
       window.__fmapDbg={data:D,route:function(a,b){return nhRoute(D,a,b);},steps:function(r){return nhSteps(D,r);}};
     })();
-    /* ---------- our 3d map view: official artwork + true css-3d scene ----------
-       Same NH26_FMAP_DATA geography as the official tab (1920x1200 image
-       space). Scene graph: .omap-viewer (perspective) > .omap-cam (2d
-       pan/zoom) > .omap-world (tilt + rotate, preserve-3d) > ground img,
-       route svg (floats 14px), billboarded pins (float 68px, labels above).
-       Gestures: 1-finger pan, pinch zoom, 2-finger vertical = tilt,
-       2-finger twist = rotate, shift+drag / shift+wheel = tilt (desktop),
-       right-drag = rotate (desktop). Compass resets north. */
-    (function initOurMap3D(){
-      var D=NH26_FMAP_DATA;
-      var viewer=document.getElementById('omapViewer'),cam=document.getElementById('omapCam'),world=document.getElementById('omapWorld'),
-          ground=document.getElementById('omapGround'),
-          info=document.getElementById('omapInfo'),debug=document.getElementById('omapDebug'),
-          originSel=document.getElementById('omapOrigin'),locateBtn=document.getElementById('omapLocate'),
-          routeG=document.getElementById('omap3RouteG'),gpsG=document.getElementById('omap3GpsG'),
-          pinsEl=document.getElementById('omapPins'),compass=document.getElementById('omapCompass'),
-          toggle3d=document.getElementById('omap3dToggle'),tiltRange=document.getElementById('omapTiltRange');
-      if(!viewer||!cam||!world||!D)return;
-      var W=1920,H=1200;
-      var NS='http://www.w3.org/2000/svg';
-      function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
-      function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
-      var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* ---------- our 3d map view: THREE.js real-3d scene ----------
+       Replaces the CSS-3D attempt. The scene itself lives in
+       assets/js/nh3dmap.js (module, exposes window.NH3D.create).
+       Same NH26_FMAP_DATA geography (1920x1200 image space, 1:1 world
+       units). This IIFE owns the DOM: toolbar, info panel, GPS,
+       routing display, tour mode, and the map tab switcher. */
+    (function initOurMapThree(){
+      var D = NH26_FMAP_DATA;
+      var viewer = document.getElementById('omapViewer'),
+          info = document.getElementById('omapInfo'),
+          debug = document.getElementById('omapDebug'),
+          originSel = document.getElementById('omapOrigin'),
+          locateBtn = document.getElementById('omapLocate'),
+          compass = document.getElementById('omapCompass'),
+          toggle3d = document.getElementById('omap3dToggle'),
+          tiltRange = document.getElementById('omapTiltRange');
+      if(!viewer || !D) return;
+      function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 
-      /* ----- camera state ----- */
-      var scale=1,minScale=1,tx=0,ty=0,vw=0,vh=0,tilt=0,rot=0,is3d=false;
-      var MAX_TILT=65,TILT_3D=48;
-      var raf=0,velX=0,velY=0,animating=false,tween=null,lastOTilt=null,lastORot=null;
-      function paint(){
-        raf=0;
-        cam.style.transform='translate3d('+tx+'px,'+ty+'px,0) scale('+scale+')';
-        var tS=tilt.toFixed(2),rS=rot.toFixed(2);
-        world.style.transform='rotateX('+tS+'deg) rotateZ('+rS+'deg)';
-        var needle=compass.firstElementChild;
-        if(needle&&rS!==lastORot)needle.style.transform='rotate('+(-rot).toFixed(2)+'deg)';
-        if(tS!==lastOTilt||rS!==lastORot){
-          world.style.setProperty('--otilt',tS);
-          world.style.setProperty('--orot',rS);
-          lastOTilt=tS;lastORot=rS;
+      /* hide the old css-3d guts, mount the three canvas */
+      var oldCam = document.getElementById('omapCam');
+      if(oldCam) oldCam.style.display = 'none';
+      var wrap = document.getElementById('omapThreeWrap');
+      if(!wrap){
+        wrap = document.createElement('div');
+        wrap.id = 'omapThreeWrap';
+        viewer.insertBefore(wrap, viewer.firstChild);
+      }
+      var canvas = document.getElementById('omapThreeCanvas');
+      if(!canvas){
+        canvas = document.createElement('canvas');
+        canvas.id = 'omapThreeCanvas';
+        canvas.setAttribute('aria-label', 'Interactive 3D festival map');
+        wrap.appendChild(canvas);
+      }
+      compass.hidden = false;
+
+      /* tour-my-lineup button in the map toolbar */
+      var tourBtn = document.getElementById('omapTour');
+      if(!tourBtn){
+        tourBtn = document.createElement('button');
+        tourBtn.type = 'button'; tourBtn.className = 'way-link'; tourBtn.id = 'omapTour';
+        tourBtn.textContent = 'tour my lineup';
+        var tb = viewer.parentElement.querySelector('.omap-toolbar');
+        if(tb) tb.appendChild(tourBtn);
+      }
+      /* show-my-night button in the My Lineup head */
+      var nightBtn = document.getElementById('lineupTourBtn');
+      if(!nightBtn){
+        var lh = document.querySelector('.lineup-module .module-head');
+        if(lh){
+          nightBtn = document.createElement('button');
+          nightBtn.type = 'button'; nightBtn.className = 'way-link'; nightBtn.id = 'lineupTourBtn';
+          nightBtn.textContent = 'show my night';
+          lh.appendChild(nightBtn);
         }
       }
-      function apply(){if(!raf)raf=requestAnimationFrame(paint);}
-      function baseSize(){
-        vw=viewer.clientWidth;vh=viewer.clientHeight;
-        if(vw<=0||vh<=0)return false;
-        minScale=Math.min(vw/W,vh/H);
-        scale=minScale;tx=(vw-W*scale)/2;ty=(vh-H*scale)/2;velX=0;velY=0;
-        paint();return true;
-      }
-      function maxScale(){return minScale*8;}
-      function clamp(rubber){
-        var sw=W*scale,sh=H*scale,m=rubber?60:0;
-        tx=sw<=vw?(vw-sw)/2:Math.min(m,Math.max(vw-sw-m,tx));
-        ty=sh<=vh?(vh-sh)/2:Math.min(m,Math.max(vh-sh-m,ty));
-      }
-      function zoomAt(cx,cy,f){
-        var ns=Math.min(maxScale(),Math.max(minScale,scale*f));
-        if(Math.abs(ns-scale)<1e-9)return false;
-        var sx=(cx-tx)/scale,sy=(cy-ty)/scale;
-        scale=ns;tx=cx-sx*scale;ty=cy-sy*scale;clamp(true);apply();return true;
-      }
-      function setTilt(v){
-        tilt=Math.max(0,Math.min(MAX_TILT,v));
-        if(tiltRange)tiltRange.value=String(Math.round(tilt));
-        apply();
-      }
-      function setRot(v){rot=v;apply();}
-      function tweenCam(toTilt,toRot,dur,toScale){
-        if(tween){cancelAnimationFrame(tween);tween=null;}
-        var fT=tilt,dR=((toRot-rot)%360+540)%360-180,fR=rot;
-        var fS=scale,tS=(typeof toScale==='number')?Math.min(maxScale(),Math.max(minScale,toScale)):fS;
-        var cx=vw/2,cy=vh*0.58,fTx=tx,fTy=ty;
-        var tTx=cx-((cx-fTx)/fS)*tS,tTy=cy-((cy-fTy)/fS)*tS;
-        if(reduceMotion||!dur){setTilt(toTilt);setRot(fR+dR);scale=tS;tx=tTx;ty=tTy;clamp(false);apply();return;}
-        var t0=performance.now();
-        var step=function(t){
-          var p=Math.min(1,(t-t0)/dur),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
-          setTilt(fT+(toTilt-fT)*e);setRot(fR+dR*e);
-          scale=fS+(tS-fS)*e;tx=fTx+(tTx-fTx)*e;ty=fTy+(tTy-fTy)*e;
-          clamp(true);apply();
-          if(p<1)tween=requestAnimationFrame(step);else{tween=null;clamp(false);apply();}
-        };
-        tween=requestAnimationFrame(step);
-      }
-      function set3D(on){
-        is3d=on;
-        toggle3d.setAttribute('aria-pressed',String(on));
-        viewer.classList.toggle('is-3d',on);
-        compass.hidden=!on;
-        if(on){
-          var zS=(scale<=minScale*1.05)?minScale*1.5:scale;
-          tweenCam(TILT_3D,rot,650,zS);
-        }else tweenCam(0,0,650);
-      }
-      function inertia(){
-        animating=false;
-        var step=function(){
-          if(!animating)return;
-          if(Math.abs(velX)<0.4&&Math.abs(velY)<0.4){animating=false;clamp(false);apply();return;}
-          tx+=velX;ty+=velY;velX*=0.92;velY*=0.92;
-          clamp(false);apply();
-          requestAnimationFrame(step);
-        };
-        animating=true;requestAnimationFrame(step);
-      }
 
-      /* ----- pins: billboarded 3d markers, 12 recalibrated spots ----- */
-      var PIN_IDS=['main_stage','the_crescent','the_mirror','the_terminal','half_court','ga_entrance','vip_entrance','trolley','merch','lockers','rideshare','ga_parking'];
-      PIN_IDS.forEach(function(id){
-        var n=D.nodes[id];if(!n)return;
-        var b=document.createElement('button');
-        b.type='button';b.className='o3-pin';b.setAttribute('data-node',id);
-        b.setAttribute('aria-label',n.label);b.setAttribute('aria-expanded','false');
-        b.style.left=n.x+'px';b.style.top=n.y+'px';
-        b.style.setProperty('--pin',D.catColors[n.cat]||'#9fc9ef');
-        b.innerHTML='<span class="o3-shadow" aria-hidden="true"></span>'+
-          '<span class="o3-post" aria-hidden="true"></span><span class="o3-post p2" aria-hidden="true"></span>'+
-          '<span class="o3-head" aria-hidden="true"><span class="o3-tag">'+esc(n.label)+'</span><span class="o3-dot"></span></span>';
-        pinsEl.appendChild(b);
-      });
-      var pins=pinsEl.querySelectorAll('.o3-pin');
-      function closePins(){for(var j=0;j<pins.length;j++)pins[j].setAttribute('aria-expanded','false');}
-
-      /* ----- info panel + routing (dijkstra on the same waypoint graph) ----- */
-      var routeA=document.getElementById('omap3RouteLineA'),
-          routeB=document.getElementById('omap3RouteLineB'),
-          routeHit=document.getElementById('omap3RouteLineHit');
-      var activeRoute=null;
-      function drawRoute(route){
-        if(!route||!route.nodes.length){routeG.setAttribute('hidden','');return;}
-        var pts=route.nodes.map(function(id){return D.nodes[id].x+','+D.nodes[id].y;}).join(' ');
-        routeA.setAttribute('points',pts);routeB.setAttribute('points',pts);routeHit.setAttribute('points',pts);
-        routeG.removeAttribute('hidden');
-      }
-      function catName(c){return ({stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit'}[c])||c;}
-      function upcomingSetsHtml(schedStage){
-        if(typeof schedules==='undefined')return '';
-        var day=(typeof activeDay!=='undefined')?activeDay:'friday';
-        var sets=schedules[day].sets.filter(function(s){return s.stage===schedStage;}).slice(0,4);
-        if(!sets.length)return '<p class="omap-note">no sets listed for this stage '+esc(schedules[day].label.toLowerCase())+'.</p>';
-        return '<ul class="omap-sets">'+sets.map(function(s){
-          return '<li><span>'+esc(s.artist)+'</span><time>'+esc(s.start)+' - '+esc(s.end)+'</time></li>';
-        }).join('')+'</ul>';
-      }
-      function openInfo(html){info.innerHTML=html;info.hidden=false;}
-      function closeInfo(){info.hidden=true;info.innerHTML='';}
-      function showNodeInfo(id){
-        var n=D.nodes[id];if(!n)return;
-        var h='<div class="omap-info-head"><h3>'+esc(n.label)+'</h3><span class="omap-info-cat">'+catName(n.cat)+(n.approx?' · location approx':'')+'</span></div>';
-        h+='<p>'+esc(n.info)+'</p>';
-        if(n.sched)h+=upcomingSetsHtml(n.sched);
-        h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-route-to="'+id+'">route here</button><button type="button" class="set-btn omap-close">close</button></div>';
-        openInfo(h);
-      }
-      function toggleSteps(){var ol=info.querySelector('.omap-steps');if(ol)ol.hidden=!ol.hidden;}
-      function showRoute(fromId,toId,title){
-        var fromN=D.nodes[fromId],toN=D.nodes[toId];
-        if(!fromN||!toN)return;
-        var r=nhRoute(D,fromId,toId);
-        activeRoute={from:fromId,to:toId,title:title||'',route:r};
-        if(!r){drawRoute(null);openInfo('<div class="omap-info-head"><h3>no route</h3></div><p>could not find a walking route between those two spots.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');return;}
-        if(r.same){drawRoute(null);openInfo('<div class="omap-info-head"><h3>'+esc(toN.label)+'</h3></div><p>you are already here.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');return;}
-        drawRoute(r);
-        var steps=nhSteps(D,r);
-        var h='<div class="omap-info-head"><h3>'+esc(fromN.label)+' → '+esc(toN.label)+'</h3><span class="omap-info-cat">~'+r.mins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</span></div>';
-        if(title)h+='<p>'+esc(title)+'</p>';
-        h+='<button type="button" class="way-link omap-steps-toggle">steps ('+steps.length+')</button>';
-        h+='<ol class="omap-steps">'+steps.map(function(s){
-          return '<li>head '+s.dir+' on '+esc(s.via)+' <span class="st-min">~'+s.mins+' min</span>'+(s.approx?' <span class="st-min">approx</span>':'')+'</li>';
-        }).join('')+'</ol>';
-        h+='<div class="omap-info-actions"><button type="button" class="set-btn omap-clear-route">clear route</button><button type="button" class="set-btn omap-close">close</button></div>';
-        openInfo(h);
-      }
-      function clearRoute(){activeRoute=null;drawRoute(null);closeInfo();}
-      [routeA,routeB,routeHit].forEach(function(l){if(l)l.addEventListener('click',function(e){e.stopPropagation();toggleSteps();});});
-      info.addEventListener('click',function(e){
-        if(!e.target.closest)return;
-        var rt=e.target.closest('[data-route-to]');
-        if(rt){showRoute(currentOrigin(),rt.getAttribute('data-route-to'),'');return;}
-        if(e.target.closest('.omap-close')){closeInfo();return;}
-        if(e.target.closest('.omap-clear-route')){clearRoute();return;}
-        if(e.target.closest('.omap-steps-toggle')){toggleSteps();return;}
-      });
-      pinsEl.addEventListener('click',function(e){
-        if(!e.target.closest)return;
-        var pin=e.target.closest('.o3-pin');
-        if(!pin)return;
-        e.stopPropagation();
-        if(dragged)return;
-        var id=pin.getAttribute('data-node');
-        var wasOpen=pin.getAttribute('aria-expanded')==='true';
-        closePins();
-        if(wasOpen){pin.setAttribute('aria-expanded','false');closeInfo();}
-        else{pin.setAttribute('aria-expanded','true');if(id)showNodeInfo(id);}
-      });
-      cam.addEventListener('click',function(e){if(dragged){e.preventDefault();e.stopPropagation();}},true);
-
-      /* ----- gps blue dot (opt-in) ----- */
-      var gpsWatch=null,gpsNode=null;
-      function currentOrigin(){
-        if(originSel.value==='__gps'&&gpsNode)return gpsNode;
-        return originSel.value||'ga_entrance';
-      }
-      originSel.addEventListener('change',function(){
-        if(activeRoute&&activeRoute.route&&!activeRoute.route.same)showRoute(currentOrigin(),activeRoute.to,activeRoute.title);
-      });
-      function gpsNote(t){debug.hidden=false;debug.textContent=t;}
-      function drawGps(x,y,accM){
-        gpsG.innerHTML='';
-        var accU=Math.min(400,Math.max(30,accM/D.meta.metersPerUnit));
-        el('circle',{cx:x,cy:y,r:accU,class:'omap3-gps-acc'},gpsG);
-        if(!reduceMotion)el('circle',{cx:x,cy:y,r:22,class:'omap3-gps-pulse'},gpsG);
-        el('circle',{cx:x,cy:y,r:13,class:'omap3-gps-dot'},gpsG);
-        gpsG.removeAttribute('hidden');
-      }
-      locateBtn.addEventListener('click',function(){
-        if(gpsWatch!==null){
-          navigator.geolocation.clearWatch(gpsWatch);
-          gpsWatch=null;gpsNode=null;gpsG.setAttribute('hidden','');gpsG.innerHTML='';
-          debug.hidden=true;locateBtn.textContent='locate me';
-          var offOpt=originSel.querySelector('option[value="__gps"]');if(offOpt)offOpt.disabled=true;
-          if(originSel.value==='__gps')originSel.value='ga_entrance';
+      var api = null, initTries = 0, is3d = true, activeRoute = null, activeTour = null;
+      function ensureInit(cb){
+        if(api){ if(cb) cb(api); return; }
+        if(!window.NH3D || !window.NH3D.create){
+          if(++initTries < 24){ setTimeout(function(){ ensureInit(cb); }, 250); }
+          else { debug.hidden = false; debug.textContent = '3d map failed to load. the official map tab works fine.'; }
           return;
         }
-        if(!('geolocation' in navigator)){gpsNote('geolocation not supported on this device');return;}
-        gpsNote('asking for location…');
-        locateBtn.textContent='stop';
         try{
-          gpsWatch=navigator.geolocation.watchPosition(function(p){
-            var pt=nhGpsToSchematic(D,p.coords.latitude,p.coords.longitude);
-            var nn=nhNearest(D,pt.x,pt.y);
-            gpsNode=nn.id;
-            drawGps(pt.x,pt.y,p.coords.accuracy||0);
-            gpsNote('gps ±'+Math.round(p.coords.accuracy||0)+'m · nearest: '+D.nodes[nn.id].label+' · '+Math.round(nn.meters)+'m away');
-            var onOpt=originSel.querySelector('option[value="__gps"]');if(onOpt)onOpt.disabled=false;
-            if(originSel.value==='__gps'&&activeRoute&&activeRoute.route&&!activeRoute.route.same){
-              showRoute(nn.id,activeRoute.to,activeRoute.title);
+          api = window.NH3D.create(canvas, {
+            data: D,
+            textureUrl: 'assets/map/nh26-sitemap.webp',
+            onPinTap: function(id){ if(id) showNodeInfo(id); }
+          });
+        }catch(e){ api = null; }
+        if(!api){
+          debug.hidden = false;
+          debug.textContent = '3d needs WebGL. the official map tab works fine.';
+          return;
+        }
+        api.bindTiltInput(tiltRange);
+        setTimeout(function(){ set3D(true); }, 400); // cinematic entry
+        if(cb) cb(api);
+      }
+      function set3D(on){
+        is3d = on;
+        toggle3d.setAttribute('aria-pressed', String(on));
+        toggle3d.textContent = on ? '2d' : '3d';
+        if(!api) return;
+        if(on) api.cinematic(); else api.flatten();
+      }
+
+      /* ----- info panel (same classes as before) ----- */
+      function openInfo(html){ info.innerHTML = html; info.hidden = false; }
+      function closeInfo(){ info.hidden = true; info.innerHTML = ''; }
+      function catName(c){ return ({stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit'}[c]) || c; }
+      function upcomingSetsHtml(schedStage){
+        if(typeof schedules === 'undefined') return '';
+        var day = (typeof activeDay !== 'undefined') ? activeDay : 'friday';
+        var sets = schedules[day].sets.filter(function(s){ return s.stage === schedStage; }).slice(0,4);
+        if(!sets.length) return '<p class="omap-note">no sets listed for this stage ' + esc(schedules[day].label.toLowerCase()) + '.</p>';
+        return '<ul class="omap-sets">' + sets.map(function(s){
+          return '<li><span>' + esc(s.artist) + '</span><time>' + esc(s.start) + ' - ' + esc(s.end) + '</time></li>';
+        }).join('') + '</ul>';
+      }
+      function showNodeInfo(id){
+        var n = D.nodes[id]; if(!n) return;
+        var h = '<div class="omap-info-head"><h3>' + esc(n.label) + '</h3><span class="omap-info-cat">' + catName(n.cat) + (n.approx ? ' · location approx' : '') + '</span></div>';
+        h += '<p>' + esc(n.info) + '</p>';
+        if(n.sched) h += upcomingSetsHtml(n.sched);
+        h += '<div class="omap-info-actions"><button type="button" class="set-btn" data-route-to="' + id + '">route here</button><button type="button" class="set-btn omap-close">close</button></div>';
+        openInfo(h);
+        ensureInit(function(a){ a.focusNode(id); });
+      }
+      function toggleSteps(){ var ol = info.querySelector('.omap-steps'); if(ol) ol.hidden = !ol.hidden; }
+      function showRoute(fromId, toId, title){
+        var fromN = D.nodes[fromId], toN = D.nodes[toId];
+        if(!fromN || !toN) return;
+        var r = nhRoute(D, fromId, toId);
+        activeRoute = {from:fromId, to:toId, title:title || '', route:r};
+        activeTour = null;
+        if(api) api.clearTour();
+        if(!r){
+          if(api) api.clearRoute();
+          openInfo('<div class="omap-info-head"><h3>no route</h3></div><p>could not find a walking route between those two spots.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');
+          return;
+        }
+        if(r.same){
+          if(api) api.clearRoute();
+          openInfo('<div class="omap-info-head"><h3>' + esc(toN.label) + '</h3></div><p>you are already here.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');
+          return;
+        }
+        ensureInit(function(a){ a.drawRoute(r.nodes, '~' + r.mins + ' min walk'); a.focusNode(toId); });
+        var steps = nhSteps(D, r);
+        var h = '<div class="omap-info-head"><h3>' + esc(fromN.label) + ' → ' + esc(toN.label) + '</h3><span class="omap-info-cat">~' + r.mins + ' min walk · ' + r.meters + ' m' + (r.approx ? ' · part of this route is approximate' : '') + '</span></div>';
+        if(title) h += '<p>' + esc(title) + '</p>';
+        h += '<button type="button" class="way-link omap-steps-toggle">steps (' + steps.length + ')</button>';
+        h += '<ol class="omap-steps">' + steps.map(function(s){
+          return '<li>head ' + s.dir + ' on ' + esc(s.via) + ' <span class="st-min">~' + s.mins + ' min</span>' + (s.approx ? ' <span class="st-min">approx</span>' : '') + '</li>';
+        }).join('') + '</ol>';
+        h += '<div class="omap-info-actions"><button type="button" class="set-btn omap-clear-route">clear route</button><button type="button" class="set-btn omap-close">close</button></div>';
+        openInfo(h);
+      }
+      function clearAll(){ activeRoute = null; activeTour = null; if(api){ api.clearRoute(); api.clearTour(); } closeInfo(); }
+      info.addEventListener('click', function(e){
+        if(!e.target.closest) return;
+        var rt = e.target.closest('[data-route-to]');
+        if(rt){ showRoute(currentOrigin(), rt.getAttribute('data-route-to'), ''); return; }
+        if(e.target.closest('.omap-close')){ closeInfo(); return; }
+        if(e.target.closest('.omap-clear-route')){ clearAll(); return; }
+        if(e.target.closest('.omap-clear-tour')){ clearAll(); return; }
+        if(e.target.closest('.omap-steps-toggle')){ toggleSteps(); return; }
+      });
+
+      /* ----- origin select + gps blue dot ----- */
+      var gpsWatch = null, gpsNode = null;
+      function currentOrigin(){
+        if(originSel.value === '__gps' && gpsNode) return gpsNode;
+        return originSel.value || 'ga_entrance';
+      }
+      originSel.addEventListener('change', function(){
+        if(activeTour){ window.nhTourLineup(); return; }
+        if(activeRoute && activeRoute.route && !activeRoute.route.same) showRoute(currentOrigin(), activeRoute.to, activeRoute.title);
+      });
+      function gpsNote(t){ debug.hidden = false; debug.textContent = t; }
+      function gpsToWorld(lat, lon){
+        var a = D.gpsAnchor;
+        var dx = (lon - a.lon) * 111320 * Math.cos(a.lat * Math.PI/180);
+        var dy = (lat - a.lat) * 110540;
+        return { x: a.x + dx / D.meta.metersPerUnit, y: a.y - dy / D.meta.metersPerUnit };
+      }
+      locateBtn.addEventListener('click', function(){
+        if(gpsWatch !== null){
+          navigator.geolocation.clearWatch(gpsWatch);
+          gpsWatch = null; gpsNode = null;
+          ensureInit(function(a){ a.clearGps(); });
+          debug.hidden = true; locateBtn.textContent = 'locate me';
+          var offOpt = originSel.querySelector('option[value="__gps"]'); if(offOpt) offOpt.disabled = true;
+          if(originSel.value === '__gps') originSel.value = 'ga_entrance';
+          return;
+        }
+        if(!('geolocation' in navigator)){ gpsNote('geolocation not supported on this device'); return; }
+        gpsNote('asking for location…');
+        locateBtn.textContent = 'stop';
+        try{
+          gpsWatch = navigator.geolocation.watchPosition(function(p){
+            var pt = gpsToWorld(p.coords.latitude, p.coords.longitude);
+            var nn = nhNearest(D, pt.x, pt.y);
+            gpsNode = nn.id;
+            ensureInit(function(a){ a.setGps(pt.x, pt.y, p.coords.accuracy || 0); });
+            gpsNote('gps ±' + Math.round(p.coords.accuracy || 0) + 'm · nearest: ' + D.nodes[nn.id].label + ' · ' + Math.round(nn.meters) + 'm away');
+            var onOpt = originSel.querySelector('option[value="__gps"]'); if(onOpt) onOpt.disabled = false;
+            if(originSel.value === '__gps'){
+              if(activeTour) window.nhTourLineup();
+              else if(activeRoute && activeRoute.route && !activeRoute.route.same) showRoute(nn.id, activeRoute.to, activeRoute.title);
             }
-          },function(){
+          }, function(){
             gpsNote('location blocked. enable it in your browser settings to use the blue dot.');
-            locateBtn.textContent='locate me';gpsWatch=null;
-          },{enableHighAccuracy:true,timeout:15000,maximumAge:5000});
-        }catch(e){gpsNote('geolocation failed to start');locateBtn.textContent='locate me';gpsWatch=null;}
+            locateBtn.textContent = 'locate me'; gpsWatch = null;
+          }, {enableHighAccuracy:true, timeout:15000, maximumAge:5000});
+        }catch(e){ gpsNote('geolocation failed to start'); locateBtn.textContent = 'locate me'; gpsWatch = null; }
       });
 
-      /* ----- gestures: pan / pinch / tilt / rotate ----- */
-      var pointers={},dragged=false,lastTap=0;
-      var gesture=null; // active two-pointer gesture snapshot
-      function snap(){var p0,p1;for(var k in pointers){if(!p0)p0=pointers[k];else{p1=pointers[k];break;}}
-        if(!p0||!p1)return null;
-        return {d:Math.hypot(p1.x-p0.x,p1.y-p0.y),a:Math.atan2(p1.y-p0.y,p1.x-p0.x),mx:(p0.x+p1.x)/2,my:(p0.y+p1.y)/2,scale0:scale,tilt0:tilt,rot0:rot,tx0:tx,ty0:ty};}
-      viewer.addEventListener('pointerdown',function(e){
-        dragged=false;
-        var t=e.target;
-        var onPin=t.closest&&(t.closest('.o3-pin')||t.closest('#omap3RouteG'));
-        var onCtl=t.closest&&t.closest('#omapCompass');
-        if(e.pointerType==='mouse'&&e.button!==2&&(onPin||onCtl))return;
-        if(e.pointerType==='mouse'&&e.button!==0&&e.button!==2)return;
-        if(e.pointerType==='touch'&&(onPin||onCtl))return;
-        e.preventDefault();
-        try{viewer.setPointerCapture(e.pointerId);}catch(err){}
-        if(animating)animating=false;
-        if(tween){cancelAnimationFrame(tween);tween=null;}
-        dragged=false;gesture=null;
-        pointers[e.pointerId]={x:e.clientX,y:e.clientY,button:e.button,shift:e.shiftKey,
-          px:e.clientX,py:e.clientY,lastMove:performance.now(),moved:0};
-        viewer.classList.add('dragging');
-        if(e.pointerType==='mouse'&&e.button===2)viewer.setAttribute('data-rmb','1');
-      });
-      viewer.addEventListener('pointermove',function(e){
-        var p=pointers[e.pointerId];if(!p)return;
-        var dx=e.clientX-p.x,dy=e.clientY-p.y;
-        var dist=Math.hypot(dx,dy);
-        p.moved+=dist;
-        if(p.moved>6)dragged=true;
-        p.px=p.x;p.py=p.y;p.x=e.clientX;p.y=e.clientY;p.lastMove=performance.now();
-        var ids=Object.keys(pointers);
-        if(ids.length>=2){
-          var g=snap();if(!g)return;
-          if(!gesture)gesture=g;
-          var G=gesture;
-          var f=g.d/Math.max(20,G.d);
-          if(f>0.2&&f<5){
-            var ns=Math.min(maxScale(),Math.max(minScale,G.scale0*f));
-            var sx=(G.mx-G.tx0)/G.scale0,sy=(G.my-G.ty0)/G.scale0;
-            scale=ns;tx=G.mx-sx*ns;ty=G.my-sy*ns;
-          }
-          var dAng=(g.a-G.a)*180/Math.PI;
-          if(dAng>180)dAng-=360;if(dAng<-180)dAng+=360;
-          setRot(G.rot0+dAng);
-          var dy2=g.my-G.my;
-          if(Math.abs(dy2)>2)setTilt(G.tilt0+dy2*0.45);
-          clamp(true);apply();
-          velX=0;velY=0;
-        }else if(ids.length===1){
-          if(p.shift&&p.button===0){
-            setTilt(tilt+dy*0.5);
-          }else if(p.button===2||viewer.getAttribute('data-rmb')==='1'){
-            setRot(rot+dx*0.5);
-            if(!is3d&&tilt<1){is3d=true;toggle3d.setAttribute('aria-pressed','true');viewer.classList.add('is-3d');compass.hidden=false;}
-            setTilt(Math.max(tilt,14));
-          }else{
-            tx+=dx;ty+=dy;
-            var now=performance.now();
-            if(now-p.lastMove<50){velX=dx;velY=dy;}
-            clamp(true);apply();
-          }
-        }
-      });
-      function endPointer(e){
-        var p=pointers[e.pointerId];
-        delete pointers[e.pointerId];
-        var ids=Object.keys(pointers);
-        if(ids.length<2)gesture=null;
-        if(e.pointerType==='mouse'&&e.button===2)viewer.removeAttribute('data-rmb');
-        if(ids.length===0){
-          viewer.classList.remove('dragging');
-          if(dragged&&p&&p.moved>40)inertia();else{clamp(false);apply();}
-        }
+      /* ----- lineup tour mode ----- */
+      function fmtClock(mins){
+        mins = ((mins % 1440) + 1440) % 1440;
+        var h = Math.floor(mins/60), m = mins % 60, ap = h >= 12 ? 'PM' : 'AM', hh = h % 12;
+        if(hh === 0) hh = 12;
+        return hh + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
       }
-      viewer.addEventListener('pointerup',endPointer);
-      viewer.addEventListener('pointercancel',endPointer);
-      viewer.addEventListener('contextmenu',function(e){e.preventDefault();});
-      viewer.addEventListener('click',function(e){
-        if(!e.target.closest)return;
-        if(e.target.closest('.o3-pin')||e.target.closest('#omap3RouteG'))return;
-        var now=performance.now();
-        if(now-lastTap<320&&!dragged){
-          var r=viewer.getBoundingClientRect();
-          zoomAt(e.clientX-r.left,e.clientY-r.top,2);
-          lastTap=0;return;
-        }
-        lastTap=now;
-        if(dragged)return;
-        closePins();closeInfo();
-      });
-      viewer.addEventListener('wheel',function(e){
-        e.preventDefault();
-        var r=viewer.getBoundingClientRect();
-        var cx=e.clientX-r.left,cy=e.clientY-r.top;
-        if(e.shiftKey){setTilt(tilt+(e.deltaY>0?4:-4));}
-        else zoomAt(cx,cy,Math.pow(1.0015,-e.deltaY));
-      },{passive:false});
-
-      /* ----- controls ----- */
-      document.getElementById('omapZoomIn').addEventListener('click',function(){zoomAt(vw/2,vh/2,1.5);});
-      document.getElementById('omapZoomOut').addEventListener('click',function(){zoomAt(vw/2,vh/2,1/1.5);});
-      document.getElementById('omapReset').addEventListener('click',function(){
-        clearRoute();closePins();
-        scale=minScale;tx=(vw-W*scale)/2;ty=(vh-H*scale)/2;velX=0;velY=0;apply();
-        if(is3d)set3D(false);else tweenCam(0,0,500);
-      });
-      compass.addEventListener('click',function(){tweenCam(tilt,0,500);});
-      toggle3d.addEventListener('click',function(){set3D(!is3d);});
-      tiltRange.addEventListener('input',function(){
-        var v=Math.max(0,Math.min(MAX_TILT,parseFloat(tiltRange.value)||0));
-        if(tween){cancelAnimationFrame(tween);tween=null;}
-        if(v>0.5){
-          if(!is3d){is3d=true;toggle3d.setAttribute('aria-pressed','true');viewer.classList.add('is-3d');compass.hidden=false;}
-          setTilt(v);
-        }else if(is3d){set3D(false);}else{setTilt(0);}
-      });
-
-      /* ----- init + tab switching ----- */
-      window.addEventListener('resize',function(){if(!viewer.closest('[hidden]'))baseSize();});
-      function refresh(){if(baseSize()){drawRoute(activeRoute&&activeRoute.route);}}
-      function init(){
-        var gpsOpt=originSel.querySelector('option[value="__gps"]');if(gpsOpt)gpsOpt.disabled=true;
-        if(ground.complete&&ground.naturalWidth){if(!viewer.closest('[hidden]'))refresh();}
-        ground.addEventListener('load',function(){if(!viewer.closest('[hidden]'))refresh();},{once:true});
+      function planTour(){
+        var ids = lineupIds();
+        var sets = ids.map(function(id){ return setById[id]; }).filter(Boolean);
+        if(!sets.length) return {empty:true};
+        var byDay = {};
+        sets.forEach(function(s){ (byDay[s.day] = byDay[s.day] || []).push(s); });
+        var day = (byDay[activeDay] && byDay[activeDay].length) ? activeDay :
+          Object.keys(byDay).sort(function(a,b){ return byDay[b].length - byDay[a].length; })[0];
+        var stops = byDay[day].slice().sort(function(a,b){ return clockMinutes(a.start) - clockMinutes(b.start); });
+        var originId = currentOrigin();
+        var legs = [], prev = originId, totalMins = 0;
+        stops.forEach(function(s){
+          var nodeId = s.stage === 'valorant' ? 'valorant_stage' : 'main_stage';
+          var r = nhRoute(D, prev, nodeId);
+          if(r && !r.same) totalMins += r.mins;
+          legs.push({from:prev, to:nodeId, route:r, set:s});
+          prev = nodeId;
+        });
+        return {empty:false, day:day, stops:stops, legs:legs, origin:originId, totalMins:totalMins,
+                tour3d:{ stops:stops.map(function(s){ return {nodeId: s.stage === 'valorant' ? 'valorant_stage' : 'main_stage'}; }),
+                         legs:legs.map(function(l){ return {route:l.route}; }) }};
       }
-      init();
-      window.__nhMapViewers=window.__nhMapViewers||{};
-      window.__nhMapViewers.ours={refresh:refresh};
+      window.nhTourLineup = function(){
+        window.nhSetMapView('ours');
+        if(window.nhExpandModule) window.nhExpandModule('#mapTitle');
+        setTimeout(function(){
+          var t = document.getElementById('mapTitle');
+          if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+        }, 80);
+        ensureInit(function(a){
+          var plan = planTour();
+          if(plan.empty){
+            openInfo('<div class="omap-info-head"><h3>no lineup yet</h3></div><p>add some sets to my lineup first, then come back and tour your night.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');
+            return;
+          }
+          activeTour = plan; activeRoute = null;
+          a.clearRoute();
+          a.drawTour(plan.tour3d);
+          a.focusNode(plan.stops[0].stage === 'valorant' ? 'valorant_stage' : 'main_stage');
+          var dayLabel = {friday:'Friday', saturday:'Saturday', sunday:'Sunday'}[plan.day] || plan.day;
+          var h = '<div class="omap-info-head"><h3>your night · ' + esc(dayLabel.toLowerCase()) + '</h3><span class="omap-info-cat">' + plan.stops.length + (plan.stops.length === 1 ? ' stop' : ' stops') + ' · ~' + plan.totalMins + ' min walking total</span></div>';
+          h += '<ol class="omap-steps">';
+          plan.legs.forEach(function(leg, i){
+            var s = leg.set, nodeId = s.stage === 'valorant' ? 'valorant_stage' : 'main_stage';
+            var fromLabel = i === 0 ? D.nodes[plan.origin].label : plan.stops[i-1].artist;
+            var walkBit = (leg.route && !leg.route.same) ? 'walk ~' + leg.route.mins + ' min from ' + esc(fromLabel) : 'starting here';
+            var leaveBy = (leg.route && !leg.route.same) ? ' · leave by ' + fmtClock(clockMinutes(s.start) - leg.route.mins - 5) : '';
+            h += '<li><strong>' + (i+1) + ' · ' + esc(s.artist) + '</strong><br>' +
+                 '<span class="st-min">' + esc(D.nodes[nodeId].label) + ' · ' + esc(s.start) + ' – ' + esc(s.end) + '</span><br>' +
+                 '<span class="st-min">' + walkBit + leaveBy + '</span></li>';
+          });
+          h += '</ol>';
+          h += '<div class="omap-info-actions"><button type="button" class="set-btn omap-clear-tour">clear tour</button><button type="button" class="set-btn omap-close">close</button></div>';
+          openInfo(h);
+        });
+      };
+      tourBtn.addEventListener('click', window.nhTourLineup);
+      if(nightBtn) nightBtn.addEventListener('click', window.nhTourLineup);
+
+      /* ----- toolbar controls ----- */
+      tiltRange.addEventListener('input', function(){
+        var v = Math.max(0, Math.min(65, parseFloat(tiltRange.value) || 0));
+        ensureInit(function(a){
+          a.setTilt(v);
+          var on = v > 0.5;
+          if(on !== is3d){
+            is3d = on;
+            toggle3d.setAttribute('aria-pressed', String(on));
+            toggle3d.textContent = on ? '2d' : '3d';
+          }
+        });
+      });
+      toggle3d.addEventListener('click', function(){ ensureInit(function(){ set3D(!is3d); }); });
+      compass.addEventListener('click', function(){ ensureInit(function(a){ a.resetNorth(); }); });
+      document.getElementById('omapZoomIn').addEventListener('click', function(){ ensureInit(function(a){ a.zoomBy(1.5); }); });
+      document.getElementById('omapZoomOut').addEventListener('click', function(){ ensureInit(function(a){ a.zoomBy(1/1.5); }); });
+      document.getElementById('omapReset').addEventListener('click', function(){
+        clearAll();
+        ensureInit(function(a){ a.resetView(); set3D(false); });
+      });
+      window.addEventListener('resize', function(){ if(api) api.resize(); });
 
       /* ----- map switcher (official is the default view) ----- */
-      var mapViewKey='nh26-map-view-v2';
-      window.nhSetMapView=function(v,skipSave){
-        var ours=v!=='official';
+      var mapViewKey = 'nh26-map-view-v2';
+      window.nhSetMapView = function(v, skipSave){
+        var ours = v !== 'official';
         document.querySelectorAll('[data-mapview]').forEach(function(b){
-          b.setAttribute('aria-pressed',String(b.getAttribute('data-mapview')===(ours?'ours':'official')));
+          b.setAttribute('aria-pressed', String(b.getAttribute('data-mapview') === (ours ? 'ours' : 'official')));
         });
-        document.getElementById('mapViewOurs').hidden=!ours;
-        document.getElementById('mapViewOfficial').hidden=ours;
-        if(!skipSave){ try{ localStorage.setItem(mapViewKey,ours?'ours':'official'); }catch(e){} }
-        var vs=window.__nhMapViewers;
-        if(ours&&vs.ours) vs.ours.refresh();
-        if(!ours&&vs.official) vs.official.refresh();
+        document.getElementById('mapViewOurs').hidden = !ours;
+        document.getElementById('mapViewOfficial').hidden = ours;
+        if(!skipSave){ try{ localStorage.setItem(mapViewKey, ours ? 'ours' : 'official'); }catch(e){} }
+        if(ours) ensureInit(function(a){ a.resize(); });
+        var vs = window.__nhMapViewers;
+        if(vs){
+          if(ours && vs.ours && vs.ours.refresh) vs.ours.refresh();
+          if(!ours && vs.official && vs.official.refresh) vs.official.refresh();
+        }
       };
       document.querySelectorAll('[data-mapview]').forEach(function(b){
-        b.addEventListener('click',function(){ window.nhSetMapView(b.getAttribute('data-mapview')); });
+        b.addEventListener('click', function(){ window.nhSetMapView(b.getAttribute('data-mapview')); });
       });
       (function(){
-        var v='official';
-        try{ v=localStorage.getItem(mapViewKey)||'official'; }catch(e){}
-        window.nhSetMapView(v==='official'?'official':'ours',true);
+        var v = 'official';
+        try{ v = localStorage.getItem(mapViewKey) || 'official'; }catch(e){}
+        window.nhSetMapView(v === 'official' ? 'official' : 'ours', true);
       })();
+      window.__nhMapViewers = window.__nhMapViewers || {};
+      window.__nhMapViewers.ours = {refresh:function(){ ensureInit(function(a){ a.resize(); }); }};
 
       /* ----- find my way (routes on the official map) ----- */
-      window.nhFindWay=function(setId){
-        if(typeof setById==='undefined'||!setById[setId]) return;
-        var s=setById[setId];
-        var dest=s.stage==='valorant'?'valorant_stage':'main_stage';
+      window.nhFindWay = function(setId){
+        if(typeof setById === 'undefined' || !setById[setId]) return;
+        var s = setById[setId];
+        var dest = s.stage === 'valorant' ? 'valorant_stage' : 'main_stage';
         window.nhSetMapView('official');
         if(window.nhExpandModule) window.nhExpandModule('#mapTitle');
-        if(window.nhFmapRoute) window.nhFmapRoute(null,dest,s.artist+' · '+s.start+'–'+s.end);
+        if(window.nhFmapRoute) window.nhFmapRoute(null, dest, s.artist + ' · ' + s.start + '–' + s.end);
         setTimeout(function(){
-          var t=document.getElementById('mapTitle');
-          if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
-        },80);
+          var t = document.getElementById('mapTitle');
+          if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+        }, 80);
       };
-      document.addEventListener('click',function(e){
-        var b=e.target.closest?e.target.closest('[data-find-way]'):null;
+      document.addEventListener('click', function(e){
+        var b = e.target.closest ? e.target.closest('[data-find-way]') : null;
         if(b){ window.nhFindWay(b.getAttribute('data-find-way')); }
       });
 
-      window.__omap3Dbg={data:D,route:function(a,b){return nhRoute(D,a,b);},showRoute:showRoute,set3D:set3D,
-        debug:function(){return {scale:scale,tx:tx,ty:ty,tilt:tilt,rot:rot,is3d:is3d};}};
+      window.__nh3dDbg = {data:D, route:function(a,b){ return nhRoute(D,a,b); }, tour:planTour,
+        api:function(){ return api; }, set3D:set3D};
     })();
+
 
     /* initial renders (restored: the declutter pass dropped these with the old venue map) */
     renderMyLineup();renderSchedule();
 
   }());
   </script>
+  <script type="importmap">
+  {"imports":{"three":"./assets/vendor/three.module.js"}}
+  </script>
+  <script type="module" src="assets/js/nh3dmap.js"></script>
 <script>
   /* ============================================================
      FEEDBACK & SURVEY — delivery configuration
