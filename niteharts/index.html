@@ -69,6 +69,8 @@
 .fmap-pin[data-cat="merch"]{--pin:#7ed321}
 .fmap-pin[data-cat="lockers"]{--pin:#ff6fd8}
 .fmap-pin[data-cat="transit"]{--pin:#b8b8b8}
+.fmap-pin[data-cat="art"]{--pin:#c9a6ff}
+.fmap-pin[data-cat="activity"]{--pin:#6ee7a0}
 .fmap-pin-dot{display:block;width:14px;height:14px;border-radius:50%;background:var(--pin,var(--ice));border:2px solid #0b0c0d;box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,var(--ice)) 35%,transparent),0 2px 8px rgba(0,0,0,.55);transition:background .2s ease}
 .fmap-pin::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid var(--pin,var(--ice));opacity:0;pointer-events:none;animation:pinPulse 2.6s ease-out infinite}
 .fmap-pin[aria-expanded="true"] .fmap-pin-dot{background:var(--paper)}
@@ -88,13 +90,13 @@
 .fmap-chip[data-cat="merch"]{--pin:#7ed321}
 .fmap-chip[data-cat="lockers"]{--pin:#ff6fd8}
 .fmap-chip[data-cat="transit"]{--pin:#b8b8b8}
+.fmap-chip[data-cat="art"]{--pin:#c9a6ff}
+.fmap-chip[data-cat="activity"]{--pin:#6ee7a0}
 @keyframes pinPulse{0%{opacity:.75;transform:scale(1)}70%{opacity:0;transform:scale(2.8)}100%{opacity:0;transform:scale(2.8)}}
 @media (prefers-reduced-motion:reduce){.fmap-pin::after{animation:none;display:none}}
     /* official map: routing toolbar, svg overlay, 3d tilt */
     .fmap-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
     .fmap-tilt{position:absolute;inset:0;transform-origin:50% 50%;transition:transform .5s var(--ease, ease)}
-    .fmap-viewer.tilt3d{perspective:1400px}
-    .fmap-viewer.tilt3d .fmap-tilt{transform:rotateX(16deg)}
     .fmap-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
     #fmapRouteG[hidden]{display:none}
     #fmapRouteLineA{fill:none;stroke:#9fc9ef;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;opacity:.95;pointer-events:stroke;cursor:pointer}
@@ -238,84 +240,46 @@
       footer{margin-top:30px}
     }
     @media(max-width:360px){.mobile-quicknav{margin-inline:-10px}.mobile-quicknav a,.mobile-quicknav button{font-size:.55rem}.hero{min-height:270px}.dates{font-size:3.22rem}.schedule-card{grid-template-columns:68px minmax(0,1fr)}.set-copy{padding:9px}.artist{font-size:1.31rem}}
-    /* ---- 3d festival map (our view): official artwork + true css-3d scene ---- */
+    /* ---- festival map tabs ---- */
     .map-switch{margin:2px 0 14px}
     .map-wip{font-size:11px;letter-spacing:.08em;opacity:.55;margin-left:8px;white-space:nowrap}
-    #mapViewOurs[hidden],#mapViewOfficial[hidden]{display:none!important}
-    .omap{border:1px solid var(--line);border-radius:3px;overflow:hidden;background:#0d0e10;margin-bottom:18px}
-    .omap-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
-    .omap-from{display:inline-flex;align-items:center;gap:8px;font:400 .62rem var(--mono);text-transform:uppercase;color:var(--mist)}
-    .omap-from select{appearance:none;min-height:44px;background:var(--panel);border:1px solid var(--line);color:var(--paper);border-radius:2px;padding:10px 12px;font:400 .7rem var(--mono);text-transform:uppercase;max-width:230px;cursor:pointer}
-    .omap-note{margin:0;font:400 .6rem/1.5 var(--mono);text-transform:uppercase;color:var(--mist)}
-    .omap-tilt{display:inline-flex;align-items:center;gap:8px;font:400 .62rem var(--mono);text-transform:uppercase;color:var(--mist)}
-    .omap-tilt input{width:120px;accent-color:var(--ice);min-height:44px;cursor:pointer}
-    .omap-viewer{position:relative;height:520px;overflow:hidden;touch-action:none;cursor:grab;background:#0b0c0d;user-select:none;-webkit-user-select:none;perspective:1400px}
-    .omap-viewer.dragging{cursor:grabbing}
-    .omap-cam{position:absolute;left:0;top:0;width:1920px;height:1200px;transform-origin:0 0;transform-style:preserve-3d;will-change:transform}
-    .omap-world{position:absolute;left:0;top:0;width:1920px;height:1200px;transform-origin:960px 600px;transform-style:preserve-3d;will-change:transform}
-    .omap-ground{display:block;width:1920px;height:1200px;pointer-events:none;user-select:none;-webkit-user-drag:none}
-    .omap-routes{position:absolute;left:0;top:0;width:1920px;height:1200px;transform:translateZ(14px);pointer-events:none;overflow:visible}
-    .omap-pins{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
-    .o3-pin{position:absolute;width:0;height:0;padding:26px;margin:-26px 0 0 -26px;transform-style:preserve-3d;background:none;border:0;cursor:pointer;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-    .o3-pin:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
-    .o3-shadow{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;transform:translateZ(2px);background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,0) 72%);border-radius:50%;pointer-events:none}
-    .o3-post{position:absolute;left:50%;bottom:50%;width:5px;height:68px;margin-left:-2.5px;transform-origin:50% 100%;transform:rotateX(-90deg);background:linear-gradient(to top,transparent 8%,var(--pin,#9fc9ef) 88%);opacity:0;transition:opacity .3s ease;pointer-events:none;border-radius:3px}
-    .o3-post.p2{transform:rotateX(-90deg) rotateY(90deg)}
-    .omap-viewer.is-3d .o3-post{opacity:.85}
-    .o3-head{position:absolute;left:50%;bottom:50%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,0) translateZ(68px) rotateZ(calc(var(--orot,0)*-1deg)) rotateX(calc(var(--otilt,0)*-1deg));pointer-events:auto;cursor:pointer}
-    .o3-head span{pointer-events:none}
-    .o3-tag{margin-bottom:7px;white-space:nowrap;background:rgba(11,12,13,.93);border:1px solid var(--pin,#9fc9ef);color:var(--paper);font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:7px 11px;border-radius:2px;opacity:0;transition:opacity .18s ease}
-    .o3-pin[aria-expanded="true"] .o3-tag{opacity:1}
-    .o3-dot{display:block;width:15px;height:15px;border-radius:50%;background:var(--pin,#9fc9ef);border:2.5px solid #0b0c0d;box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,#9fc9ef) 40%,transparent),0 3px 10px rgba(0,0,0,.6)}
-    .o3-pin[aria-expanded="true"] .o3-dot{background:#fff}
-    .omap-compass{position:absolute;top:12px;right:12px;width:48px;height:48px;border-radius:50%;background:rgba(13,14,16,.9);border:1px solid var(--line);color:var(--paper);cursor:pointer;z-index:6;touch-action:manipulation;display:grid;place-items:center}
-    .omap-compass[hidden]{display:none}
-    .omap-compass span{display:block;font:700 .82rem var(--mono);color:var(--ice);width:100%;text-align:center}
-    .omap-debug{position:absolute;left:10px;bottom:8px;max-width:calc(100% - 20px);margin:0;font:400 .58rem/1.5 var(--mono);color:var(--ice);background:rgba(13,14,16,.85);border:1px solid var(--line);padding:6px 9px;border-radius:2px;pointer-events:none}
-    .omap-debug[hidden]{display:none}
-    .omap-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-top:1px solid var(--line)}
-    .omap-info{border-top:1px solid var(--line);padding:16px 14px;background:var(--deep)}
-    .omap-info[hidden]{display:none}
-    .omap-info-head h3{margin:0 0 4px;font:700 1.7rem/.9 var(--display);text-transform:uppercase;letter-spacing:-.01em}
-    .omap-info-cat{display:block;font:400 .58rem var(--mono);text-transform:uppercase;color:var(--mist);letter-spacing:.08em}
-    .omap-info>p{margin:10px 0 0;color:var(--mist);font-size:.84rem;max-width:62ch}
-    .omap-info-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-    .omap-sets{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:7px}
-    .omap-sets li{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;color:var(--paper);border-top:1px dashed var(--line);padding-top:7px}
-    .omap-sets time{font-family:var(--mono);font-size:.68rem;color:var(--mist);white-space:nowrap}
-    .omap-steps{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px;counter-reset:ostep}
-    .omap-steps[hidden]{display:none}
-    .omap-steps li{position:relative;padding-left:32px;font-size:.84rem;color:var(--paper)}
-    .omap-steps li::before{counter-increment:ostep;content:counter(ostep);position:absolute;left:0;top:1px;width:21px;height:21px;border:1px solid var(--ice);border-radius:50%;font:400 .6rem/21px var(--mono);text-align:center;color:var(--ice)}
-    .omap-steps .st-min{color:var(--mist);font-family:var(--mono);font-size:.68rem}
-    .omap-steps-toggle{margin-top:10px}
-    #omap3RouteG[hidden]{display:none}
-    #omap3RouteLineA{fill:none;stroke:#9fc9ef;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;opacity:.95;pointer-events:stroke;cursor:pointer}
-    #omap3RouteLineB{fill:none;stroke:#fff;stroke-width:3.5;stroke-dasharray:3 22;stroke-linecap:round;opacity:.9;pointer-events:stroke;cursor:pointer;animation:routeMarch 1.2s linear infinite}
-    #omap3RouteLineHit{fill:none;stroke:#fff;stroke-opacity:0;stroke-width:56;stroke-linecap:round;stroke-linejoin:round;pointer-events:stroke;cursor:pointer}
-    @keyframes routeMarch{to{stroke-dashoffset:-32}}
-    #omap3GpsG[hidden]{display:none}
-    .omap3-gps-dot{fill:#2f9dff;stroke:#fff;stroke-width:3}
-    .omap3-gps-acc{fill:rgba(47,157,255,.18);stroke:rgba(47,157,255,.5);stroke-width:1.5}
-    .omap3-gps-pulse{fill:none;stroke:#2f9dff;stroke-width:2;opacity:.7;transform-box:fill-box;transform-origin:center;animation:gpsPulse 2s ease-out infinite}
-    @keyframes gpsPulse{0%{opacity:.8;transform:scale(1)}70%{opacity:0;transform:scale(3)}100%{opacity:0;transform:scale(3)}}
-    .way-link{appearance:none;background:none;border:0;padding:12px 4px;min-height:44px;color:var(--ice);font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;touch-action:manipulation}
-    /* ghost-drag kill + gesture ownership, both viewers */
-    .fmap-viewer,.omap-viewer{touch-action:none;user-select:none;-webkit-user-select:none}
-    .fmap-viewer img,.omap-ground{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
-    .fmap-viewer img{pointer-events:none}
-    /* construction splash */
-    #nhConstruction{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:rgba(13,14,16,.97);padding:24px}
-    #nhConstruction[hidden]{display:none}
-    .nhc-card{max-width:430px;text-align:center;border:1px solid var(--line);background:var(--deep);padding:36px 28px;border-radius:4px}
-    .nhc-kicker{margin:0 0 12px;font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.24em;color:var(--ice)}
-    .nhc-copy{margin:0 0 24px;font:400 1.04rem/1.55 var(--body);color:var(--paper)}
-    .nhc-card button{appearance:none;min-height:52px;padding:14px 32px;background:var(--ice);border:0;border-radius:2px;color:#101113;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.08em;cursor:pointer;touch-action:manipulation}
-    @media(max-width:600px){.omap-viewer{height:380px}.omap-toolbar{gap:8px}.omap-from select{max-width:170px}.omap-tilt input{width:90px}}
-    #omapThreeWrap{position:absolute;inset:0;z-index:1}
-    #omapThreeWrap canvas{display:block;width:100%;height:100%;touch-action:none}
-    #lineupTourBtn{flex:none}
-    @media(prefers-reduced-motion:reduce){#omap3RouteLineB,.omap3-gps-pulse{animation:none}.o3-post{transition:none}}
+    #mapViewInteractive[hidden],#mapViewStill[hidden]{display:none!important}
+    .still-map{overflow:auto;border:1px solid var(--line);border-radius:3px;background:#0b0c0d;margin-bottom:18px}
+    .still-map img{display:block;min-width:900px;width:100%;height:auto;-webkit-user-drag:none;user-select:none}
+    /* ---- festival guide ---- */
+    .guide-sticker{display:flex;align-items:center;justify-content:center;gap:14px;width:min(560px,calc(100% - 32px));margin:6px auto 4px;padding:16px 22px;background:#0a0e16;border:2px solid #8fd8ff;border-radius:18px;color:#fff;cursor:pointer;font-family:'Courier New',Courier,monospace;box-shadow:0 0 22px rgba(143,216,255,.35),0 6px 18px rgba(0,0,0,.5);transition:transform .18s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    .guide-sticker:active{transform:scale(.96)}
+    .guide-sticker-text{text-align:left}
+    .guide-sticker-text strong{display:block;font-size:17px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+    .guide-sticker-text em{font-style:normal;font-size:11px;letter-spacing:2px;color:#8fd8ff;text-transform:uppercase}
+    .guide-sticker-arrow{font-size:26px;color:#8fd8ff;animation:guideNudge 2.2s ease-in-out infinite}
+    @keyframes guideNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(7px)}}
+    @media(prefers-reduced-motion:reduce){.guide-sticker-arrow{animation:none}}
+    .guide-panel{border:1px solid var(--line);border-radius:3px;background:#0d0e10;margin:0 0 18px;overflow:hidden}
+    .guide-tabs{display:flex;border-bottom:1px solid var(--line)}
+    .guide-tabs button{flex:1;background:none;border:0;color:var(--mist);font:400 .68rem var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:14px 8px;cursor:pointer;min-height:48px}
+    .guide-tabs button[aria-pressed="true"]{color:#8fd8ff;box-shadow:inset 0 -2px 0 #8fd8ff}
+    .guide-body{padding:16px}
+    .guide-status{margin:0 0 10px;font:400 .72rem/1.6 var(--mono);color:var(--mist)}
+    .guide-hint{margin:0 0 12px;font:400 .66rem/1.6 var(--mono);color:var(--mist)}
+    .guide-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:12px}
+    .guide-row label{display:grid;gap:6px;font:400 .62rem var(--mono);text-transform:uppercase;color:var(--mist)}
+    .guide-row select{appearance:none;min-height:44px;background:var(--panel);border:1px solid var(--line);color:var(--paper);border-radius:2px;padding:10px 12px;font:400 .7rem var(--mono);text-transform:uppercase;max-width:200px;cursor:pointer}
+    .guide-leg{border-left:2px solid #8fd8ff;padding:8px 0 8px 14px;margin:0 0 12px}
+    .guide-leg h4{margin:0 0 4px;font:400 1rem var(--display);text-transform:uppercase;color:var(--paper)}
+    .guide-leg p{margin:2px 0;font:400 .68rem/1.6 var(--mono);color:var(--mist)}
+    .guide-leg .leave{color:#8fd8ff}
+    .guide-stop-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .guide-stop-row select{flex:1;appearance:none;min-height:44px;background:var(--panel);border:1px solid var(--line);color:var(--paper);border-radius:2px;padding:10px 12px;font:400 .7rem var(--mono);text-transform:uppercase;cursor:pointer}
+    .guide-stop-row .stop-n{font:400 .8rem var(--mono);color:#8fd8ff;min-width:22px}
+    /* ---- ar-lite ---- */
+    .ar-overlay{position:fixed;inset:0;z-index:9999;background:#000}
+    .ar-overlay[hidden]{display:none}
+    #arVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .ar-hud{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:14px;background:radial-gradient(circle at 50% 42%,transparent 30%,rgba(0,0,0,.55) 78%);text-align:center;padding:24px}
+    #arArrow{width:110px;height:110px;filter:drop-shadow(0 0 14px rgba(143,216,255,.8));transition:transform .18s linear}
+    .ar-readout{margin:0;font:400 1rem/1.6 var(--mono);color:#fff;text-transform:uppercase;letter-spacing:.06em}
+    .ar-beta{margin:0;font:400 .62rem var(--mono);color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em}
 
   </style>
 </head>
@@ -383,6 +347,11 @@
       </div>
     </header>
 
+    <!-- FESTIVAL GUIDE STICKER: promo banner for the map guide -->
+    <button type="button" class="guide-sticker" id="guideSticker" aria-label="Open the festival guide — your night, mapped">
+      <span class="guide-sticker-text"><strong>your night, mapped</strong><em>tap for the festival guide</em></span>
+      <span class="guide-sticker-arrow" aria-hidden="true">&rarr;</span>
+    </button>
     <!-- NITEHARTS EXTRAS STICKERS: game + camera, hot-sticker style -->
     <section class="nh-extras-strip" aria-label="Festival extras">
       <style>
@@ -472,56 +441,10 @@
             <section class="module map-module" data-module-id="map" data-module-label="Festival map" aria-labelledby="mapTitle">
         <div class="module-head"><h2 id="mapTitle">Festival map</h2><span class="module-label">Interactive grounds map</span></div>
         <div class="map-switch segmented" role="group" aria-label="Map style">
-          <button type="button" data-mapview="official" aria-pressed="true">Official map</button>
-          <button type="button" data-mapview="ours" aria-pressed="false">[TRY OUT] 3D MAP</button><span class="map-wip">-&gt; still under construction</span>
+          <button type="button" data-mapview="interactive" aria-pressed="true">Interactive map</button><span class="map-wip">-&gt; still under construction</span>
+          <button type="button" data-mapview="still" aria-pressed="false">official still map</button>
         </div>
-        <div id="mapViewOurs" class="omap" hidden>
-          <div class="omap-toolbar">
-            <label class="omap-from">from
-              <select id="omapOrigin" aria-label="Route start">
-                <option value="ga_entrance">ga entrance</option>
-                <option value="vip_entrance">vip entrance</option>
-                <option value="trolley">trolley</option>
-                <option value="rideshare">rideshare</option>
-                <option value="ga_parking">ga parking</option>
-                <option value="__gps">my location</option>
-              </select>
-            </label>
-            <button type="button" class="way-link" id="omapLocate">locate me</button>
-            <label class="omap-tilt">tilt
-              <input type="range" id="omapTiltRange" min="0" max="65" step="1" value="0" aria-label="Map tilt angle">
-            </label>
-            <button type="button" class="way-link" id="omap3dToggle" aria-pressed="false">3d</button>
-          </div>
-          <div class="omap-viewer" id="omapViewer">
-            <div class="omap-cam" id="omapCam">
-              <div class="omap-world" id="omapWorld">
-                <img class="omap-ground" id="omapGround" src="assets/map/nh26-sitemap.webp" alt="Niteharts 2026 festival grounds map" draggable="false">
-                <svg class="omap-routes" id="omap3Routes" viewBox="0 0 1920 1200" aria-hidden="true">
-                  <g id="omap3RouteG" hidden>
-                    <polyline id="omap3RouteLineA" points=""/>
-                    <polyline id="omap3RouteLineB" points=""/>
-                    <polyline id="omap3RouteLineHit" points=""/>
-                  </g>
-                  <g id="omap3GpsG" hidden></g>
-                </svg>
-                <div class="omap-pins" id="omapPins"></div>
-              </div>
-            </div>
-            <button type="button" class="omap-compass" id="omapCompass" hidden aria-label="Reset north"><span>N</span></button>
-            <p class="omap-debug" id="omapDebug" hidden></p>
-          </div>
-          <div class="omap-bar">
-            <p class="omap-note">drag to explore · pinch to zoom · two fingers tilt + rotate in 3d · tap a pin for details</p>
-            <div class="omap-bar-btns">
-              <button type="button" class="way-link" id="omapZoomOut">−</button>
-              <button type="button" class="way-link" id="omapZoomIn">+</button>
-              <button type="button" class="way-link" id="omapReset">reset</button>
-            </div>
-          </div>
-          <div class="omap-info" id="omapInfo" hidden></div>
-        </div>
-        <div id="mapViewOfficial">
+        <div id="mapViewInteractive">
         <div class="fmap" id="festivalMap">
           <div class="fmap-toolbar">
             <label class="omap-from">From
@@ -546,16 +469,18 @@
               </select>
             </label>
             <button type="button" class="set-btn" id="fmapLocate">my location</button>
+            <button type="button" class="set-btn" id="fmapGuide" aria-pressed="false">guide</button>
+            <button type="button" class="set-btn" id="fmapAR" aria-pressed="false">ar</button>
           </div>
           <div class="fmap-viewer" id="fmapViewer">
             <div class="fmap-canvas" id="fmapCanvas">
               <div class="fmap-tilt" id="fmapTilt">
               <img id="fmapImage" src="assets/map/nh26-sitemap.webp" alt="Official Niteharts 2026 festival grounds map at Snapdragon Stadium, showing Main Stage, The Mirror, The Crescent, The Terminal, and Half Court stages, plus GA and VIP entrances" width="1920" height="1200" loading="lazy" decoding="async" draggable="false">
               <button type="button" class="fmap-pin" data-cat="stage" data-node="main_stage" style="left:48.4%;top:65.8%" aria-label="Main Stage" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Main Stage</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" data-node="the_crescent" style="left:33.1%;top:62.5%" aria-label="The Crescent" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Crescent</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" data-node="the_mirror" style="left:32.8%;top:69.2%" aria-label="The Mirror" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Mirror</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" data-node="the_terminal" style="left:20.6%;top:45.8%" aria-label="The Terminal" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Terminal</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" data-node="half_court" style="left:21.9%;top:45.4%" aria-label="Half Court" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Half Court</span></button>
+              <button type="button" class="fmap-pin" data-cat="art" data-node="the_crescent" style="left:33.1%;top:62.5%" aria-label="The Crescent" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Crescent</span></button>
+              <button type="button" class="fmap-pin" data-cat="art" data-node="the_mirror" style="left:32.8%;top:69.2%" aria-label="The Mirror" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Mirror</span></button>
+              <button type="button" class="fmap-pin" data-cat="art" data-node="the_terminal" style="left:20.6%;top:45.8%" aria-label="The Terminal" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Terminal</span></button>
+              <button type="button" class="fmap-pin" data-cat="activity" data-node="half_court" style="left:21.9%;top:45.4%" aria-label="Half Court" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Half Court</span></button>
               <button type="button" class="fmap-pin" data-cat="entrance" data-node="ga_entrance" style="left:37.0%;top:47.5%" aria-label="GA Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Entrance</span></button>
               <button type="button" class="fmap-pin" data-cat="entrance" data-node="vip_entrance" style="left:51.0%;top:90.8%" aria-label="VIP Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">VIP Entrance</span></button>
               <button type="button" class="fmap-pin" data-cat="transit" data-node="trolley" style="left:62.0%;top:85.0%" aria-label="Trolley Stop" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Trolley Stop</span></button>
@@ -578,7 +503,6 @@
           <div class="fmap-bar">
             <p class="fmap-hint">tap a pin for info · tap the route for steps</p>
             <div class="fmap-controls" role="group" aria-label="Map zoom controls">
-              <button type="button" id="fmapTilt3d" aria-pressed="false" aria-label="Toggle 3D tilt">3D</button>
               <button type="button" id="fmapZoomIn" aria-label="Zoom in">+</button>
               <button type="button" id="fmapZoomOut" aria-label="Zoom out">−</button>
               <button type="button" id="fmapReset" class="fmap-reset">Reset</button>
@@ -591,11 +515,57 @@
             <span class="fmap-chip" data-cat="merch"><i aria-hidden="true"></i>Merch</span>
             <span class="fmap-chip" data-cat="lockers"><i aria-hidden="true"></i>Lockers</span>
             <span class="fmap-chip" data-cat="transit"><i aria-hidden="true"></i>Transit</span>
+            <span class="fmap-chip" data-cat="art"><i aria-hidden="true"></i>Art</span>
+            <span class="fmap-chip" data-cat="activity"><i aria-hidden="true"></i>Activity</span>
           </div>
         </div>
         </div>
-        <div class="map-note"><p>The official grounds map, made interactive. Tap any pin for info, or get walking routes between stages. Distances and walk times are approximate. Our experimental 3D map is one tap away above.</p><a id="directionsLink" class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=2101+Stadium+Way%2C+San+Diego%2C+CA+92108" target="_blank" rel="noopener">Directions ↗</a></div>
+        <div class="guide-panel" id="guidePanel" hidden>
+          <div class="guide-tabs" role="group" aria-label="Guide modes">
+            <button type="button" data-guide-mode="auto" aria-pressed="true">right now</button>
+            <button type="button" data-guide-mode="custom" aria-pressed="false">custom</button>
+            <button type="button" data-guide-mode="plan" aria-pressed="false">plan night</button>
+          </div>
+          <div class="guide-body">
+            <div data-guide-pane="auto">
+              <p class="guide-status" id="guideAutoStatus">turn the guide on to see your route.</p>
+              <div id="guideAutoOut"></div>
+            </div>
+            <div data-guide-pane="custom" hidden>
+              <div class="guide-row">
+                <label>from <select id="guideFrom" aria-label="Custom route start"></select></label>
+                <label>to <select id="guideTo" aria-label="Custom route destination"></select></label>
+                <button type="button" class="set-btn" id="guideCustomGo">how long</button>
+              </div>
+              <div id="guideCustomOut"></div>
+            </div>
+            <div data-guide-pane="plan" hidden>
+              <p class="guide-hint">pick your stops in order. start wherever, chain as many as you want.</p>
+              <div class="guide-stops" id="guidePlanStops"></div>
+              <div class="guide-row">
+                <button type="button" class="set-btn" id="guidePlanAdd">+ add stop</button>
+                <button type="button" class="set-btn" id="guidePlanGo">map my night</button>
+                <button type="button" class="set-btn" id="guidePlanClear">clear</button>
+              </div>
+              <div id="guidePlanOut"></div>
+            </div>
+          </div>
+        </div>
+        <div id="mapViewStill" hidden>
+          <div class="still-map"><img src="assets/map/nh26-sitemap.webp" alt="Official Niteharts 2026 festival grounds map" width="1920" height="1200" loading="lazy" decoding="async" draggable="false"></div>
+        </div>
+        <div class="map-note"><p>The official grounds map, made interactive. Tap any pin for info, or get walking routes between stages. Distances and walk times are approximate.</p><a id="directionsLink" class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=2101+Stadium+Way%2C+San+Diego%2C+CA+92108" target="_blank" rel="noopener">Directions ↗</a></div>
       </section>
+    <!-- AR-LITE: camera feed + compass arrow prototype -->
+    <div class="ar-overlay" id="arOverlay" hidden>
+      <video id="arVideo" playsinline muted aria-hidden="true"></video>
+      <div class="ar-hud">
+        <svg id="arArrow" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 8 L78 62 L50 50 L22 62 Z" fill="#8fd8ff"/></svg>
+        <p class="ar-readout" id="arReadout">finding you…</p>
+        <p class="ar-beta">ar beta · compass + gps only, no live anchoring</p>
+        <button type="button" class="set-btn" id="arClose">close</button>
+      </div>
+    </div>
 
 
 
@@ -1706,14 +1676,24 @@
        Dijkstra helpers below. */
     var NH26_FMAP_DATA = {
       meta: { name: "Niteharts '26 · official map", metersPerUnit: 0.6, walkMPerMin: 80 },
-      gpsAnchor: { x: 635, y: 420, lat: 32.78444, lon: -117.12278 },
-      catColors: { stage:"#9fc9ef", entrance:"#ffffff", merch:"#7ed321", lockers:"#ff6fd8", transit:"#b8b8b8" },
+      /* GPS anchors: image pixels -> real world.
+         Honest notes: only the stadium-center anchor comes from a published source
+         (Snapdragon Stadium ~32.7844,-117.1228). The others are estimated from the
+         map geometry relative to that anchor, so treat their uncertainty as real.
+         Phone GPS itself is usually +/-5-15m, which dominates the error budget anyway.
+         The on-map debug readout exists so Nathan can calibrate on site. */
+      gpsAnchors: [
+        {x:635,  y:420, lat:32.78444, lon:-117.12278, unc:15, src:"stadium center, published coords"},
+        {x:710,  y:570, lat:32.78363, lon:-117.12230, unc:35, src:"estimated: GA entrance ~110m SSE of center"},
+        {x:1825, y:875, lat:32.78120, lon:-117.11390, unc:40, src:"estimated: gate 3, far SE parking"}
+      ],
+      catColors: { stage:"#9fc9ef", entrance:"#ffffff", merch:"#7ed321", lockers:"#ff6fd8", transit:"#b8b8b8", art:"#c9a6ff", activity:"#6ee7a0" },
       nodes: {
         main_stage:   {x:930,y:790,label:"Main Stage",cat:"stage",sched:"main",info:"the big one. headliners close every night here."},
-        the_mirror:   {x:630,y:830,label:"The Mirror",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
-        the_crescent: {x:635,y:750,label:"The Crescent",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
-        the_terminal: {x:395,y:550,label:"The Terminal",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
-        half_court:   {x:420,y:545,label:"Half Court",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
+        the_mirror:   {x:630,y:830,label:"The Mirror",cat:"art",info:"art installation. big crystal piece by the crescent, good photo spot."},
+        the_crescent: {x:635,y:750,label:"The Crescent",cat:"art",info:"art installation. crescent moon piece next to the mirror."},
+        the_terminal: {x:395,y:550,label:"The Terminal",cat:"art",info:"landmark art piece on the west walkway by the entrance tunnel."},
+        half_court:   {x:420,y:545,label:"Half Court",cat:"activity",info:"half basketball court. shoot around between sets."},
         valorant_stage:{x:950,y:420,label:"Valorant Stage",cat:"stage",sched:"valorant",approx:true,info:"gaming stage. its exact spot wasn't on the official map, so this pin is approximate. we'll move it when the location is announced."},
         ga_entrance:  {x:710,y:570,label:"GA Entrance",cat:"entrance",info:"main way in. have your ticket and id ready."},
         vip_entrance: {x:980,y:1090,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry."},
@@ -1822,7 +1802,7 @@
       return { id:best, units:bd, meters:bd*data.meta.metersPerUnit };
     }
     function nhGpsToSchematic(data, lat, lon){
-      var a=data.gpsAnchor;
+      var a=(data.gpsAnchors&&data.gpsAnchors[0])||data.gpsAnchor;
       var dx=(lon-a.lon)*111320*Math.cos(a.lat*Math.PI/180);
       var dy=(lat-a.lat)*110540;
       return { x:a.x+dx/data.meta.metersPerUnit, y:a.y-dy/data.meta.metersPerUnit };
@@ -1976,8 +1956,7 @@
       var viewer=document.getElementById('fmapViewer'),canvas=document.getElementById('fmapCanvas'),
           info=document.getElementById('fmapInfo'),debug=document.getElementById('fmapDebug'),
           originSel=document.getElementById('fmapOrigin'),locateBtn=document.getElementById('fmapLocate'),
-          routeG=document.getElementById('fmapRouteG'),gpsG=document.getElementById('fmapGpsG'),
-          tiltBtn=document.getElementById('fmapTilt3d');
+          routeG=document.getElementById('fmapRouteG'),gpsG=document.getElementById('fmapGpsG');
       if(!viewer||!canvas||!D||!routeG) return;
       var NS='http://www.w3.org/2000/svg';
       function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
@@ -1993,7 +1972,7 @@
         routeG.removeAttribute('hidden');
       }
       var activeRoute=null;
-      function catName(c){return {stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit'}[c]||c;}
+      function catName(c){return {stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit',art:'art',activity:'activity'}[c]||c;}
       function upcomingSetsHtml(schedStage){
         if(typeof schedules==='undefined') return '';
         var day=(typeof activeDay!=='undefined')?activeDay:'friday';
@@ -2098,13 +2077,7 @@
           },{enableHighAccuracy:true,timeout:15000,maximumAge:5000});
         }catch(e){gpsNote('geolocation failed to start');locateBtn.textContent='my location';gpsWatch=null;}
       });
-      /* ---------- 3d tilt (opt-in, off by default) ---------- */
-      if(tiltBtn){
-        tiltBtn.addEventListener('click',function(){
-          var on=viewer.classList.toggle('tilt3d');
-          tiltBtn.setAttribute('aria-pressed',String(on));
-        });
-      }
+
       /* ---------- reset clears the route too ---------- */
       document.getElementById('fmapReset').addEventListener('click',function(){clearRoute();});
       /* ---------- public: find-my-way entry ---------- */
@@ -2112,357 +2085,388 @@
         showRoute(fromId||currentOrigin(),toId,title||'');
       };
       window.__fmapDbg={data:D,route:function(a,b){return nhRoute(D,a,b);},steps:function(r){return nhSteps(D,r);}};
-    })();
-    /* ---------- our 3d map view: THREE.js real-3d scene ----------
-       Replaces the CSS-3D attempt. The scene itself lives in
-       assets/js/nh3dmap.js (module, exposes window.NH3D.create).
-       Same NH26_FMAP_DATA geography (1920x1200 image space, 1:1 world
-       units). This IIFE owns the DOM: toolbar, info panel, GPS,
-       routing display, tour mode, and the map tab switcher. */
-    (function initOurMapThree(){
-      var D = NH26_FMAP_DATA;
-      var viewer = document.getElementById('omapViewer'),
-          info = document.getElementById('omapInfo'),
-          debug = document.getElementById('omapDebug'),
-          originSel = document.getElementById('omapOrigin'),
-          locateBtn = document.getElementById('omapLocate'),
-          compass = document.getElementById('omapCompass'),
-          toggle3d = document.getElementById('omap3dToggle'),
-          tiltRange = document.getElementById('omapTiltRange');
-      if(!viewer || !D) return;
-      function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
-
-      /* hide the old css-3d guts, mount the three canvas */
-      var oldCam = document.getElementById('omapCam');
-      if(oldCam) oldCam.style.display = 'none';
-      var wrap = document.getElementById('omapThreeWrap');
-      if(!wrap){
-        wrap = document.createElement('div');
-        wrap.id = 'omapThreeWrap';
-        viewer.insertBefore(wrap, viewer.firstChild);
-      }
-      var canvas = document.getElementById('omapThreeCanvas');
-      if(!canvas){
-        canvas = document.createElement('canvas');
-        canvas.id = 'omapThreeCanvas';
-        canvas.setAttribute('aria-label', 'Interactive 3D festival map');
-        wrap.appendChild(canvas);
-      }
-      compass.hidden = false;
-
-      /* tour-my-lineup button in the map toolbar */
-      var tourBtn = document.getElementById('omapTour');
-      if(!tourBtn){
-        tourBtn = document.createElement('button');
-        tourBtn.type = 'button'; tourBtn.className = 'way-link'; tourBtn.id = 'omapTour';
-        tourBtn.textContent = 'tour my lineup';
-        var tb = viewer.parentElement.querySelector('.omap-toolbar');
-        if(tb) tb.appendChild(tourBtn);
-      }
-      /* show-my-night button in the My Lineup head */
-      var nightBtn = document.getElementById('lineupTourBtn');
-      if(!nightBtn){
-        var lh = document.querySelector('.lineup-module .module-head');
-        if(lh){
-          nightBtn = document.createElement('button');
-          nightBtn.type = 'button'; nightBtn.className = 'way-link'; nightBtn.id = 'lineupTourBtn';
-          nightBtn.textContent = 'show my night';
-          lh.appendChild(nightBtn);
-        }
-      }
-
-      var api = null, initTries = 0, is3d = true, activeRoute = null, activeTour = null;
-      function ensureInit(cb){
-        if(api){ if(cb) cb(api); return; }
-        if(!window.NH3D || !window.NH3D.create){
-          if(++initTries < 24){ setTimeout(function(){ ensureInit(cb); }, 250); }
-          else { debug.hidden = false; debug.textContent = '3d map failed to load. the official map tab works fine.'; }
-          return;
-        }
-        try{
-          api = window.NH3D.create(canvas, {
-            data: D,
-            textureUrl: 'assets/map/nh26-sitemap.webp',
-            onPinTap: function(id){ if(id) showNodeInfo(id); }
-          });
-        }catch(e){ api = null; }
-        if(!api){
-          debug.hidden = false;
-          debug.textContent = '3d needs WebGL. the official map tab works fine.';
-          return;
-        }
-        api.bindTiltInput(tiltRange);
-        setTimeout(function(){ set3D(true); }, 400); // cinematic entry
-        if(cb) cb(api);
-      }
-      function set3D(on){
-        is3d = on;
-        toggle3d.setAttribute('aria-pressed', String(on));
-        toggle3d.textContent = on ? '2d' : '3d';
-        if(!api) return;
-        if(on) api.cinematic(); else api.flatten();
-      }
-
-      /* ----- info panel (same classes as before) ----- */
-      function openInfo(html){ info.innerHTML = html; info.hidden = false; }
-      function closeInfo(){ info.hidden = true; info.innerHTML = ''; }
-      function catName(c){ return ({stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit'}[c]) || c; }
-      function upcomingSetsHtml(schedStage){
-        if(typeof schedules === 'undefined') return '';
-        var day = (typeof activeDay !== 'undefined') ? activeDay : 'friday';
-        var sets = schedules[day].sets.filter(function(s){ return s.stage === schedStage; }).slice(0,4);
-        if(!sets.length) return '<p class="omap-note">no sets listed for this stage ' + esc(schedules[day].label.toLowerCase()) + '.</p>';
-        return '<ul class="omap-sets">' + sets.map(function(s){
-          return '<li><span>' + esc(s.artist) + '</span><time>' + esc(s.start) + ' - ' + esc(s.end) + '</time></li>';
-        }).join('') + '</ul>';
-      }
-      function showNodeInfo(id){
-        var n = D.nodes[id]; if(!n) return;
-        var h = '<div class="omap-info-head"><h3>' + esc(n.label) + '</h3><span class="omap-info-cat">' + catName(n.cat) + (n.approx ? ' · location approx' : '') + '</span></div>';
-        h += '<p>' + esc(n.info) + '</p>';
-        if(n.sched) h += upcomingSetsHtml(n.sched);
-        h += '<div class="omap-info-actions"><button type="button" class="set-btn" data-route-to="' + id + '">route here</button><button type="button" class="set-btn omap-close">close</button></div>';
-        openInfo(h);
-        ensureInit(function(a){ a.focusNode(id); });
-      }
-      function toggleSteps(){ var ol = info.querySelector('.omap-steps'); if(ol) ol.hidden = !ol.hidden; }
-      function showRoute(fromId, toId, title){
-        var fromN = D.nodes[fromId], toN = D.nodes[toId];
-        if(!fromN || !toN) return;
-        var r = nhRoute(D, fromId, toId);
-        activeRoute = {from:fromId, to:toId, title:title || '', route:r};
-        activeTour = null;
-        if(api) api.clearTour();
-        if(!r){
-          if(api) api.clearRoute();
-          openInfo('<div class="omap-info-head"><h3>no route</h3></div><p>could not find a walking route between those two spots.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');
-          return;
-        }
-        if(r.same){
-          if(api) api.clearRoute();
-          openInfo('<div class="omap-info-head"><h3>' + esc(toN.label) + '</h3></div><p>you are already here.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');
-          return;
-        }
-        ensureInit(function(a){ a.drawRoute(r.nodes, '~' + r.mins + ' min walk'); a.focusNode(toId); });
-        var steps = nhSteps(D, r);
-        var h = '<div class="omap-info-head"><h3>' + esc(fromN.label) + ' → ' + esc(toN.label) + '</h3><span class="omap-info-cat">~' + r.mins + ' min walk · ' + r.meters + ' m' + (r.approx ? ' · part of this route is approximate' : '') + '</span></div>';
-        if(title) h += '<p>' + esc(title) + '</p>';
-        h += '<button type="button" class="way-link omap-steps-toggle">steps (' + steps.length + ')</button>';
-        h += '<ol class="omap-steps">' + steps.map(function(s){
-          return '<li>head ' + s.dir + ' on ' + esc(s.via) + ' <span class="st-min">~' + s.mins + ' min</span>' + (s.approx ? ' <span class="st-min">approx</span>' : '') + '</li>';
-        }).join('') + '</ol>';
-        h += '<div class="omap-info-actions"><button type="button" class="set-btn omap-clear-route">clear route</button><button type="button" class="set-btn omap-close">close</button></div>';
-        openInfo(h);
-      }
-      function clearAll(){ activeRoute = null; activeTour = null; if(api){ api.clearRoute(); api.clearTour(); } closeInfo(); }
-      info.addEventListener('click', function(e){
-        if(!e.target.closest) return;
-        var rt = e.target.closest('[data-route-to]');
-        if(rt){ showRoute(currentOrigin(), rt.getAttribute('data-route-to'), ''); return; }
-        if(e.target.closest('.omap-close')){ closeInfo(); return; }
-        if(e.target.closest('.omap-clear-route')){ clearAll(); return; }
-        if(e.target.closest('.omap-clear-tour')){ clearAll(); return; }
-        if(e.target.closest('.omap-steps-toggle')){ toggleSteps(); return; }
-      });
-
-      /* ----- origin select + gps blue dot ----- */
-      var gpsWatch = null, gpsNode = null;
-      function currentOrigin(){
-        if(originSel.value === '__gps' && gpsNode) return gpsNode;
-        return originSel.value || 'ga_entrance';
-      }
-      originSel.addEventListener('change', function(){
-        if(activeTour){ window.nhTourLineup(); return; }
-        if(activeRoute && activeRoute.route && !activeRoute.route.same) showRoute(currentOrigin(), activeRoute.to, activeRoute.title);
-      });
-      function gpsNote(t){ debug.hidden = false; debug.textContent = t; }
-      function gpsToWorld(lat, lon){
-        var a = D.gpsAnchor;
-        var dx = (lon - a.lon) * 111320 * Math.cos(a.lat * Math.PI/180);
-        var dy = (lat - a.lat) * 110540;
-        return { x: a.x + dx / D.meta.metersPerUnit, y: a.y - dy / D.meta.metersPerUnit };
-      }
-      locateBtn.addEventListener('click', function(){
-        if(gpsWatch !== null){
-          navigator.geolocation.clearWatch(gpsWatch);
-          gpsWatch = null; gpsNode = null;
-          ensureInit(function(a){ a.clearGps(); });
-          debug.hidden = true; locateBtn.textContent = 'locate me';
-          var offOpt = originSel.querySelector('option[value="__gps"]'); if(offOpt) offOpt.disabled = true;
-          if(originSel.value === '__gps') originSel.value = 'ga_entrance';
-          return;
-        }
-        if(!('geolocation' in navigator)){ gpsNote('geolocation not supported on this device'); return; }
-        gpsNote('asking for location…');
-        locateBtn.textContent = 'stop';
-        try{
-          gpsWatch = navigator.geolocation.watchPosition(function(p){
-            var pt = gpsToWorld(p.coords.latitude, p.coords.longitude);
-            var nn = nhNearest(D, pt.x, pt.y);
-            gpsNode = nn.id;
-            ensureInit(function(a){ a.setGps(pt.x, pt.y, p.coords.accuracy || 0); });
-            gpsNote('gps ±' + Math.round(p.coords.accuracy || 0) + 'm · nearest: ' + D.nodes[nn.id].label + ' · ' + Math.round(nn.meters) + 'm away');
-            var onOpt = originSel.querySelector('option[value="__gps"]'); if(onOpt) onOpt.disabled = false;
-            if(originSel.value === '__gps'){
-              if(activeTour) window.nhTourLineup();
-              else if(activeRoute && activeRoute.route && !activeRoute.route.same) showRoute(nn.id, activeRoute.to, activeRoute.title);
-            }
-          }, function(){
-            gpsNote('location blocked. enable it in your browser settings to use the blue dot.');
-            locateBtn.textContent = 'locate me'; gpsWatch = null;
-          }, {enableHighAccuracy:true, timeout:15000, maximumAge:5000});
-        }catch(e){ gpsNote('geolocation failed to start'); locateBtn.textContent = 'locate me'; gpsWatch = null; }
-      });
-
-      /* ----- lineup tour mode ----- */
-      function fmtClock(mins){
-        mins = ((mins % 1440) + 1440) % 1440;
-        var h = Math.floor(mins/60), m = mins % 60, ap = h >= 12 ? 'PM' : 'AM', hh = h % 12;
-        if(hh === 0) hh = 12;
-        return hh + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
-      }
-      function planTour(){
-        var ids = lineupIds();
-        var sets = ids.map(function(id){ return setById[id]; }).filter(Boolean);
-        if(!sets.length) return {empty:true};
-        var byDay = {};
-        sets.forEach(function(s){ (byDay[s.day] = byDay[s.day] || []).push(s); });
-        var day = (byDay[activeDay] && byDay[activeDay].length) ? activeDay :
-          Object.keys(byDay).sort(function(a,b){ return byDay[b].length - byDay[a].length; })[0];
-        var stops = byDay[day].slice().sort(function(a,b){ return clockMinutes(a.start) - clockMinutes(b.start); });
-        var originId = currentOrigin();
-        var legs = [], prev = originId, totalMins = 0;
-        stops.forEach(function(s){
-          var nodeId = s.stage === 'valorant' ? 'valorant_stage' : 'main_stage';
-          var r = nhRoute(D, prev, nodeId);
-          if(r && !r.same) totalMins += r.mins;
-          legs.push({from:prev, to:nodeId, route:r, set:s});
-          prev = nodeId;
-        });
-        return {empty:false, day:day, stops:stops, legs:legs, origin:originId, totalMins:totalMins,
-                tour3d:{ stops:stops.map(function(s){ return {nodeId: s.stage === 'valorant' ? 'valorant_stage' : 'main_stage'}; }),
-                         legs:legs.map(function(l){ return {route:l.route}; }) }};
-      }
-      window.nhTourLineup = function(){
-        window.nhSetMapView('ours');
-        if(window.nhExpandModule) window.nhExpandModule('#mapTitle');
-        setTimeout(function(){
-          var t = document.getElementById('mapTitle');
-          if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
-        }, 80);
-        ensureInit(function(a){
-          var plan = planTour();
-          if(plan.empty){
-            openInfo('<div class="omap-info-head"><h3>no lineup yet</h3></div><p>add some sets to my lineup first, then come back and tour your night.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');
-            return;
-          }
-          activeTour = plan; activeRoute = null;
-          a.clearRoute();
-          a.drawTour(plan.tour3d);
-          a.focusNode(plan.stops[0].stage === 'valorant' ? 'valorant_stage' : 'main_stage');
-          var dayLabel = {friday:'Friday', saturday:'Saturday', sunday:'Sunday'}[plan.day] || plan.day;
-          var h = '<div class="omap-info-head"><h3>your night · ' + esc(dayLabel.toLowerCase()) + '</h3><span class="omap-info-cat">' + plan.stops.length + (plan.stops.length === 1 ? ' stop' : ' stops') + ' · ~' + plan.totalMins + ' min walking total</span></div>';
-          h += '<ol class="omap-steps">';
-          plan.legs.forEach(function(leg, i){
-            var s = leg.set, nodeId = s.stage === 'valorant' ? 'valorant_stage' : 'main_stage';
-            var fromLabel = i === 0 ? D.nodes[plan.origin].label : plan.stops[i-1].artist;
-            var walkBit = (leg.route && !leg.route.same) ? 'walk ~' + leg.route.mins + ' min from ' + esc(fromLabel) : 'starting here';
-            var leaveBy = (leg.route && !leg.route.same) ? ' · leave by ' + fmtClock(clockMinutes(s.start) - leg.route.mins - 5) : '';
-            h += '<li><strong>' + (i+1) + ' · ' + esc(s.artist) + '</strong><br>' +
-                 '<span class="st-min">' + esc(D.nodes[nodeId].label) + ' · ' + esc(s.start) + ' – ' + esc(s.end) + '</span><br>' +
-                 '<span class="st-min">' + walkBit + leaveBy + '</span></li>';
-          });
-          h += '</ol>';
-          h += '<div class="omap-info-actions"><button type="button" class="set-btn omap-clear-tour">clear tour</button><button type="button" class="set-btn omap-close">close</button></div>';
-          openInfo(h);
-        });
+      /* public api for the guide feature */
+      window.__fmapApi={
+        data:D, showRoute:showRoute, clearRoute:clearRoute, currentOrigin:currentOrigin,
+        drawRoute:drawRoute, openInfo:openInfo, closeInfo:closeInfo,
+        gpsNode:function(){return gpsNode;}, setOrigin:function(id){originSel.value=id;}
       };
-      tourBtn.addEventListener('click', window.nhTourLineup);
-      if(nightBtn) nightBtn.addEventListener('click', window.nhTourLineup);
-
-      /* ----- toolbar controls ----- */
-      tiltRange.addEventListener('input', function(){
-        var v = Math.max(0, Math.min(65, parseFloat(tiltRange.value) || 0));
-        ensureInit(function(a){
-          a.setTilt(v);
-          var on = v > 0.5;
-          if(on !== is3d){
-            is3d = on;
-            toggle3d.setAttribute('aria-pressed', String(on));
-            toggle3d.textContent = on ? '2d' : '3d';
-          }
-        });
-      });
-      toggle3d.addEventListener('click', function(){ ensureInit(function(){ set3D(!is3d); }); });
-      compass.addEventListener('click', function(){ ensureInit(function(a){ a.resetNorth(); }); });
-      document.getElementById('omapZoomIn').addEventListener('click', function(){ ensureInit(function(a){ a.zoomBy(1.5); }); });
-      document.getElementById('omapZoomOut').addEventListener('click', function(){ ensureInit(function(a){ a.zoomBy(1/1.5); }); });
-      document.getElementById('omapReset').addEventListener('click', function(){
-        clearAll();
-        ensureInit(function(a){ a.resetView(); set3D(false); });
-      });
-      window.addEventListener('resize', function(){ if(api) api.resize(); });
-
-      /* ----- map switcher (official is the default view) ----- */
-      var mapViewKey = 'nh26-map-view-v2';
-      window.nhSetMapView = function(v, skipSave){
-        var ours = v !== 'official';
+    })();
+    /* ============================================================
+       MAP VIEW SWITCHER — interactive (default) vs official still
+       ============================================================ */
+    (function initMapSwitcher(){
+      var key='nh26-map-view-v3';
+      window.nhSetMapView=function(v,skipSave){
+        var interactive=v!=='still';
         document.querySelectorAll('[data-mapview]').forEach(function(b){
-          b.setAttribute('aria-pressed', String(b.getAttribute('data-mapview') === (ours ? 'ours' : 'official')));
+          b.setAttribute('aria-pressed',String(b.getAttribute('data-mapview')===(interactive?'interactive':'still')));
         });
-        document.getElementById('mapViewOurs').hidden = !ours;
-        document.getElementById('mapViewOfficial').hidden = ours;
-        if(!skipSave){ try{ localStorage.setItem(mapViewKey, ours ? 'ours' : 'official'); }catch(e){} }
-        if(ours) ensureInit(function(a){ a.resize(); });
-        var vs = window.__nhMapViewers;
-        if(vs){
-          if(ours && vs.ours && vs.ours.refresh) vs.ours.refresh();
-          if(!ours && vs.official && vs.official.refresh) vs.official.refresh();
-        }
+        document.getElementById('mapViewInteractive').hidden=!interactive;
+        document.getElementById('mapViewStill').hidden=interactive;
+        if(!skipSave){try{localStorage.setItem(key,interactive?'interactive':'still');}catch(e){}}
       };
       document.querySelectorAll('[data-mapview]').forEach(function(b){
-        b.addEventListener('click', function(){ window.nhSetMapView(b.getAttribute('data-mapview')); });
+        b.addEventListener('click',function(){window.nhSetMapView(b.getAttribute('data-mapview'));});
       });
-      (function(){
-        var v = 'official';
-        try{ v = localStorage.getItem(mapViewKey) || 'official'; }catch(e){}
-        window.nhSetMapView(v === 'official' ? 'official' : 'ours', true);
-      })();
-      window.__nhMapViewers = window.__nhMapViewers || {};
-      window.__nhMapViewers.ours = {refresh:function(){ ensureInit(function(a){ a.resize(); }); }};
-
-      /* ----- find my way (routes on the official map) ----- */
-      window.nhFindWay = function(setId){
-        if(typeof setById === 'undefined' || !setById[setId]) return;
-        var s = setById[setId];
-        var dest = s.stage === 'valorant' ? 'valorant_stage' : 'main_stage';
-        window.nhSetMapView('official');
-        if(window.nhExpandModule) window.nhExpandModule('#mapTitle');
-        if(window.nhFmapRoute) window.nhFmapRoute(null, dest, s.artist + ' · ' + s.start + '–' + s.end);
-        setTimeout(function(){
-          var t = document.getElementById('mapTitle');
-          if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
-        }, 80);
-      };
-      document.addEventListener('click', function(e){
-        var b = e.target.closest ? e.target.closest('[data-find-way]') : null;
-        if(b){ window.nhFindWay(b.getAttribute('data-find-way')); }
+      (function(){var v='interactive';try{v=localStorage.getItem(key)||'interactive';}catch(e){}
+        window.nhSetMapView(v==='still'?'still':'interactive',true);})();
+    })();
+    /* ---------- public: find-my-way entry (routes on the interactive map) ---------- */
+    window.nhFindWay=function(setId){
+      if(typeof setById==='undefined'||!setById[setId])return;
+      var s=setById[setId];
+      var dest=s.stage==='valorant'?'valorant_stage':'main_stage';
+      window.nhSetMapView('interactive');
+      if(window.nhExpandModule)window.nhExpandModule('#mapTitle');
+      if(window.__fmapApi)window.__fmapApi.showRoute(null,dest,s.artist+' \u00b7 '+s.start+'\u2013'+s.end);
+      setTimeout(function(){var t=document.getElementById('mapTitle');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},80);
+    };
+    document.addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('[data-find-way]'):null;
+      if(b){window.nhFindWay(b.getAttribute('data-find-way'));}
+    });
+    /* ============================================================
+       FESTIVAL GUIDE — time-aware, lineup-aware routing.
+       The whole point: based on the clock + your My Lineup, it figures
+       out where you are and where you're going next, and draws ONLY that
+       walkway route. Never straight lines, never every route at once.
+       ============================================================ */
+    (function initGuide(){
+      var D=NH26_FMAP_DATA;
+      var api=function(){return window.__fmapApi||null;};
+      var panel=document.getElementById('guidePanel'),
+          guideBtn=document.getElementById('fmapGuide'),
+          sticker=document.getElementById('guideSticker');
+      if(!panel||!guideBtn||!D)return;
+      function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+      /* ---------- crowd-aware walk times ----------
+         Honest note: Google does not expose live phone-density or crowd data
+         through any public API, so real-time crowd sensing is not possible.
+         This is a time-of-day math estimate: the later it gets, the denser
+         the grounds, the slower you walk. Calibrate against real walks. */
+      function crowdMult(d){
+        var h=d.getHours()+d.getMinutes()/60;
+        if(h<18)return 1.0;    /* afternoon, grounds open */
+        if(h<20)return 1.25;   /* evening, filling in */
+        if(h<23)return 1.5;    /* peak 8-11pm, densest */
+        return 1.15;           /* late, thinning out */
+      }
+      function crowdMins(baseMins,d){
+        return Math.max(1,Math.round(baseMins*crowdMult(d||new Date())));
+      }
+      function fmtClock(mins){
+        mins=((mins%1440)+1440)%1440;
+        var h=Math.floor(mins/60),m=mins%60,ap=h>=12?'PM':'AM',hh=h%12;
+        if(hh===0)hh=12;
+        return hh+':'+(m<10?'0':'')+m+' '+ap;
+      }
+      /* ---------- which festival day is it? ---------- */
+      function festivalDay(d){
+        d=d||new Date();
+        var ymd=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+        if(ymd==='2026-10-09')return 'friday';
+        if(ymd==='2026-10-10')return 'saturday';
+        if(ymd==='2026-10-11')return 'sunday';
+        return (typeof activeDay!=='undefined')?activeDay:'friday';
+      }
+      function stageNode(stage){return stage==='valorant'?'valorant_stage':'main_stage';}
+      function lineupSets(day){
+        if(typeof lineupIds==='undefined')return [];
+        return lineupIds().map(function(id){return setById[id];})
+          .filter(function(x){return x&&x.day===day;})
+          .sort(function(a,b){return clockMinutes(a.start)-clockMinutes(b.start);});
+      }
+      /* current set (playing now) + next set, from lineup + clock */
+      function currentAndNext(now){
+        now=now||new Date();
+        var day=festivalDay(now),sets=lineupSets(day),nowM=now.getHours()*60+now.getMinutes();
+        var cur=null,nxt=null;
+        for(var i=0;i<sets.length;i++){
+          var st=clockMinutes(sets[i].start),en=clockMinutes(sets[i].end);
+          if(nowM>=st&&nowM<en)cur=sets[i];
+          else if(nowM<st&&!nxt)nxt=sets[i];
+        }
+        return {day:day,current:cur,next:nxt,sets:sets};
+      }
+      var guideOn=false,guideMode='auto',autoTimer=null;
+      function setGuide(on){
+        guideOn=on;
+        guideBtn.setAttribute('aria-pressed',String(on));
+        panel.hidden=!on;
+        if(on){window.nhSetMapView('interactive');refreshAuto();}
+        else{stopAuto();var a=api();if(a)a.clearRoute();}
+      }
+      function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}}
+      /* ----- auto mode: you're here -> you're going there ----- */
+      function refreshAuto(){
+        var out=document.getElementById('guideAutoOut'),status=document.getElementById('guideAutoStatus');
+        var a=api();if(!a||!out)return;
+        var cn=currentAndNext(),now=new Date();
+        if(!cn.sets.length){
+          status.textContent='no sets in your lineup yet. add some, then the guide knows where you are headed.';
+          out.innerHTML='';a.clearRoute();return;
+        }
+        var destSet=cn.next||cn.current;
+        if(!destSet){
+          status.textContent='nothing left on your lineup today. enjoy the night.';
+          out.innerHTML='';a.clearRoute();return;
+        }
+        var fromId,fromLabel;
+        if(cn.current){
+          fromId=stageNode(cn.current.stage);
+          fromLabel=cn.current.artist+' ('+D.nodes[fromId].label+')';
+        }else{
+          fromId=a.currentOrigin();
+          fromLabel=D.nodes[fromId]?D.nodes[fromId].label:fromId;
+        }
+        var toId=stageNode(destSet.stage);
+        var r=nhRoute(D,fromId,toId);
+        if(!r||r.same){
+          status.textContent='you are already at '+esc(D.nodes[toId].label)+'.';
+          out.innerHTML='';a.clearRoute();return;
+        }
+        var mins=crowdMins(r.mins,now);
+        var leaveBy=fmtClock(clockMinutes(destSet.start)-mins-5);
+        a.showRoute(fromId,toId,'');
+        status.textContent=cn.current
+          ?'right now: '+cn.current.artist+' → next up: '+destSet.artist
+          :'next up: '+destSet.artist+' at '+destSet.start;
+        out.innerHTML='<div class="guide-leg"><h4>'+esc(fromLabel)+' → '+esc(destSet.artist)+'</h4>'+
+          '<p>~'+mins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</p>'+
+          '<p class="leave">leave by '+leaveBy+' to make '+esc(destSet.start)+'</p></div>';
+        /* keep it fresh: re-check every minute while the guide is on */
+        stopAuto();
+        autoTimer=setInterval(function(){if(guideOn&&guideMode==='auto')refreshAuto();},60000);
+      }
+      /* ----- custom mode: any from/to ----- */
+      function namedNodes(){
+        return Object.keys(D.nodes).filter(function(id){return D.nodes[id].label;})
+          .sort(function(a,b){return D.nodes[a].label.localeCompare(D.nodes[b].label);});
+      }
+      function fillSelect(sel,keepVal){
+        var ids=namedNodes(),v=keepVal||sel.value;
+        sel.innerHTML=ids.map(function(id){
+          return '<option value="'+id+'"'+(id===v?' selected':'')+'>'+esc(D.nodes[id].label)+'</option>';
+        }).join('');
+      }
+      var gFrom=document.getElementById('guideFrom'),gTo=document.getElementById('guideTo');
+      if(gFrom&&gTo){
+        fillSelect(gFrom,'main_stage');fillSelect(gTo,'valorant_stage');
+        document.getElementById('guideCustomGo').addEventListener('click',function(){
+          var a=api(),out=document.getElementById('guideCustomOut');if(!a)return;
+          var r=nhRoute(D,gFrom.value,gTo.value),now=new Date();
+          if(!r){out.innerHTML='<p class="guide-status">no walking route between those two.</p>';a.clearRoute();return;}
+          if(r.same){out.innerHTML='<p class="guide-status">same spot. you are already there.</p>';a.clearRoute();return;}
+          var mins=crowdMins(r.mins,now);
+          a.showRoute(gFrom.value,gTo.value,'');
+          out.innerHTML='<div class="guide-leg"><h4>'+esc(D.nodes[gFrom.value].label)+' → '+esc(D.nodes[gTo.value].label)+'</h4>'+
+            '<p>~'+mins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</p></div>';
+        });
+      }
+      /* ----- plan mode: multi-leg night ----- */
+      var planBox=document.getElementById('guidePlanStops'),planOut=document.getElementById('guidePlanOut');
+      function addPlanStop(val){
+        var row=document.createElement('div');row.className='guide-stop-row';
+        var n=planBox.children.length+1;
+        row.innerHTML='<span class="stop-n">'+n+'</span>';
+        var sel=document.createElement('select');sel.setAttribute('aria-label','Plan stop '+n);
+        fillSelect(sel,val||'main_stage');
+        var rm=document.createElement('button');rm.type='button';rm.className='set-btn';rm.textContent='x';
+        rm.setAttribute('aria-label','Remove stop '+n);
+        rm.addEventListener('click',function(){row.remove();renumberPlan();});
+        row.appendChild(sel);row.appendChild(rm);planBox.appendChild(row);
+      }
+      function renumberPlan(){
+        Array.prototype.forEach.call(planBox.children,function(row,i){
+          row.querySelector('.stop-n').textContent=i+1;
+        });
+      }
+      function planStops(){
+        var ids=[];
+        Array.prototype.forEach.call(planBox.querySelectorAll('select'),function(sel){ids.push(sel.value);});
+        return ids;
+      }
+      if(planBox){
+        addPlanStop('main_stage');addPlanStop('valorant_stage');
+        document.getElementById('guidePlanAdd').addEventListener('click',function(){addPlanStop();});
+        document.getElementById('guidePlanClear').addEventListener('click',function(){
+          planBox.innerHTML='';planOut.innerHTML='';addPlanStop('main_stage');
+          var a=api();if(a)a.clearRoute();
+        });
+        document.getElementById('guidePlanGo').addEventListener('click',function(){
+          var a=api();if(!a)return;
+          var stops=planStops(),now=new Date();
+          if(stops.length<2){planOut.innerHTML='<p class="guide-status">add at least two stops.</p>';return;}
+          var legs=[],totalMins=0,ok=true,allNodes=[];
+          for(var i=0;i<stops.length-1;i++){
+            var r=nhRoute(D,stops[i],stops[i+1]);
+            if(!r){ok=false;break;}
+            var mins=r.same?0:crowdMins(r.mins,now);
+            totalMins+=mins;
+            legs.push({from:stops[i],to:stops[i+1],route:r,mins:mins});
+            var nodes=r.nodes.slice(i===0?0:1);
+            allNodes=allNodes.concat(nodes);
+          }
+          if(!ok){planOut.innerHTML='<p class="guide-status">could not route one of those legs.</p>';a.clearRoute();return;}
+          /* draw the chained route as one walkway path */
+          a.drawRoute({nodes:allNodes});
+          var h='<div class="guide-leg"><h4>your night · '+legs.length+(legs.length===1?' leg':' legs')+' · ~'+totalMins+' min walking</h4></div>';
+          legs.forEach(function(leg,i){
+            h+='<div class="guide-leg"><h4>'+(i+1)+' · '+esc(D.nodes[leg.from].label)+' → '+esc(D.nodes[leg.to].label)+'</h4>'+
+               '<p>'+(leg.mins===0?'same spot':('~'+leg.mins+' min walk · '+leg.route.meters+' m'))+(leg.route.approx?' · part approx':'')+'</p></div>';
+          });
+          planOut.innerHTML=h;
+        });
+      }
+      /* ----- mode tabs ----- */
+      panel.querySelectorAll('[data-guide-mode]').forEach(function(b){
+        b.addEventListener('click',function(){
+          guideMode=b.getAttribute('data-guide-mode');
+          panel.querySelectorAll('[data-guide-mode]').forEach(function(x){
+            x.setAttribute('aria-pressed',String(x===b));});
+          panel.querySelectorAll('[data-guide-pane]').forEach(function(pn){
+            pn.hidden=pn.getAttribute('data-guide-pane')!==guideMode;});
+          stopAuto();
+          var a=api();if(a)a.clearRoute();
+          if(guideMode==='auto')refreshAuto();
+        });
       });
-
-      window.__nh3dDbg = {data:D, route:function(a,b){ return nhRoute(D,a,b); }, tour:planTour,
-        api:function(){ return api; }, set3D:set3D};
+      /* ----- toggle + sticker ----- */
+      guideBtn.addEventListener('click',function(){setGuide(!guideOn);});
+      if(sticker)sticker.addEventListener('click',function(){
+        window.nhSetMapView('interactive');
+        if(window.nhExpandModule)window.nhExpandModule('#mapTitle');
+        if(!guideOn)setGuide(true);
+        setTimeout(function(){var t=document.getElementById('mapTitle');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});},80);
+      });
+      window.__nhGuide={setGuide:setGuide,refreshAuto:refreshAuto,currentAndNext:currentAndNext,crowdMult:crowdMult,isOn:function(){return guideOn;}};
     })();
 
 
+
+    /* ============================================================
+       AR-LITE (prototype, beta): camera feed + compass arrow.
+       Honest scope: true VPS-style anchoring is not possible on the open
+       web, so this is compass + GPS only — an arrow that rotates toward
+       your next stop and a distance readout. No live 3d anchoring.
+       ============================================================ */
+    (function initARLite(){
+      var overlay=document.getElementById('arOverlay'),video=document.getElementById('arVideo'),
+          arrow=document.getElementById('arArrow'),readout=document.getElementById('arReadout'),
+          openBtn=document.getElementById('fmapAR'),closeBtn=document.getElementById('arClose');
+      if(!overlay||!openBtn)return;
+      var stream=null,watchId=null,heading=null,target=null,rafId=null;
+      function nodeToGps(id){
+        var D=NH26_FMAP_DATA,n=D.nodes[id];if(!n)return null;
+        var a=(D.gpsAnchors&&D.gpsAnchors[0])||D.gpsAnchor;
+        var mU=D.metersPerUnit||0.6;
+        var dx=(n.x-a.x)*mU,dy=(a.y-n.y)*mU;
+        return {lat:a.lat+dy/110540,lon:a.lon+dx/(111320*Math.cos(a.lat*Math.PI/180))};
+      }
+      function bearingTo(a,b){
+        var dLon=(b.lon-a.lon)*Math.PI/180,
+            la1=a.lat*Math.PI/180,la2=b.lat*Math.PI/180;
+        var y=Math.sin(dLon)*Math.cos(la2),
+            x=Math.cos(la1)*Math.sin(la2)-Math.sin(la1)*Math.cos(la2)*Math.cos(dLon);
+        return (Math.atan2(y,x)*180/Math.PI+360)%360;
+      }
+      function distM(a,b){
+        var R=6371000,dLa=(b.lat-a.lat)*Math.PI/180,dLo=(b.lon-a.lon)*Math.PI/180;
+        var s1=Math.sin(dLa/2),s2=Math.sin(dLo/2);
+        var h=s1*s1+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*s2*s2;
+        return 2*R*Math.asin(Math.sqrt(h));
+      }
+      function compass8(deg){
+        return ['north','northeast','east','southeast','south','southwest','west','northwest'][Math.round(deg/45)%8];
+      }
+      function pickTarget(){
+        /* prefer the guide's next set, else the current origin selection */
+        if(window.__nhGuide){
+          var cn=window.__nhGuide.currentAndNext();
+          var destSet=cn.next||cn.current;
+          if(destSet){
+            var node=destSet.stage==='valorant'?'valorant_stage':'main_stage';
+            var g=nodeToGps(node);
+            if(g)return {gps:g,label:destSet.artist+' · '+NH26_FMAP_DATA.nodes[node].label};
+          }
+        }
+        return null;
+      }
+      function tick(){
+        if(overlay.hidden)return;
+        if(!target||heading===null||!lastPos){
+          readout.textContent=!target?'no target set. pick a set in your lineup first.'
+            :(heading===null?'waiting for compass…':'waiting for gps…');
+          rafId=requestAnimationFrame(tick);return;
+        }
+        var b=bearingTo(lastPos,target.gps);
+        var rel=(b-heading+360)%360;
+        arrow.style.transform='rotate('+rel+'deg)';
+        var m=Math.round(distM(lastPos,target.gps));
+        readout.textContent=m+'m — head '+compass8(b)+' toward '+target.label;
+        rafId=requestAnimationFrame(tick);
+      }
+      var lastPos=null;
+      function onOrientation(e){
+        if(typeof e.webkitCompassHeading==='number')heading=e.webkitCompassHeading;
+        else if(typeof e.alpha==='number')heading=(360-e.alpha)%360;
+      }
+      function stop(){
+        overlay.hidden=true;
+        if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}
+        if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
+        window.removeEventListener('deviceorientation',onOrientation);
+        if(rafId)cancelAnimationFrame(rafId);
+        lastPos=null;heading=null;
+      }
+      openBtn.addEventListener('click',function(){
+        target=pickTarget();
+        if(!target){
+          readout.textContent='no target set. add sets to your lineup first, then open ar.';
+        }
+        /* camera */
+        if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+          readout.textContent='camera not available on this device or browser.';
+        }
+        /* compass permission (ios needs an explicit ask) */
+        var needPerm=window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function';
+        function startAll(){
+          window.addEventListener('deviceorientation',onOrientation);
+          if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+            navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
+              .then(function(st){stream=st;video.srcObject=st;video.play().catch(function(){});})
+              .catch(function(){readout.textContent='camera blocked. compass + distance still work if you allow sensors.';});
+          }
+          if(navigator.geolocation){
+            watchId=navigator.geolocation.watchPosition(function(p){
+              lastPos={lat:p.coords.latitude,lon:p.coords.longitude};
+            },function(){},{enableHighAccuracy:true});
+          }else{
+            readout.textContent='gps not available on this device.';
+          }
+          overlay.hidden=false;
+          tick();
+        }
+        if(needPerm){
+          DeviceOrientationEvent.requestPermission().then(function(r){
+            if(r==='granted')startAll();
+            else{readout.textContent='compass permission denied. ar needs the compass to point.';overlay.hidden=false;}
+          }).catch(function(){readout.textContent='compass not available on this device.';overlay.hidden=false;});
+        }else{
+          if(!window.DeviceOrientationEvent)readout.textContent='this device has no compass sensor. ar needs one.';
+          startAll();
+        }
+      });
+      closeBtn.addEventListener('click',stop);
+      window.__nhAR={open:function(){openBtn.click();},close:stop};
+    })();
     /* initial renders (restored: the declutter pass dropped these with the old venue map) */
     renderMyLineup();renderSchedule();
 
   }());
   </script>
-  <script type="importmap">
-  {"imports":{"three":"./assets/vendor/three.module.js"}}
-  </script>
-  <script type="module" src="assets/js/nh3dmap.js"></script>
+
 <script>
   /* ============================================================
      FEEDBACK & SURVEY — delivery configuration
