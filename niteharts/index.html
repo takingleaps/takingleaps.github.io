@@ -90,6 +90,22 @@
 .fmap-chip[data-cat="transit"]{--pin:#b8b8b8}
 @keyframes pinPulse{0%{opacity:.75;transform:scale(1)}70%{opacity:0;transform:scale(2.8)}100%{opacity:0;transform:scale(2.8)}}
 @media (prefers-reduced-motion:reduce){.fmap-pin::after{animation:none;display:none}}
+    /* official map: routing toolbar, svg overlay, 3d tilt */
+    .fmap-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+    .fmap-tilt{position:absolute;inset:0;transform-origin:50% 50%;transition:transform .5s var(--ease, ease)}
+    .fmap-viewer.tilt3d{perspective:1400px}
+    .fmap-viewer.tilt3d .fmap-tilt{transform:rotateX(16deg)}
+    .fmap-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    #fmapRouteG[hidden]{display:none}
+    #fmapRouteLineA{fill:none;stroke:#9fc9ef;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;opacity:.95;pointer-events:stroke;cursor:pointer}
+    #fmapRouteLineB{fill:none;stroke:#fff;stroke-width:3.5;stroke-dasharray:3 22;stroke-linecap:round;opacity:.9;pointer-events:stroke;cursor:pointer;animation:routeMarch 1.2s linear infinite}
+    #fmapRouteLineHit{fill:none;stroke:#fff;stroke-opacity:0;stroke-width:56;stroke-linecap:round;stroke-linejoin:round;pointer-events:stroke;cursor:pointer}
+    .fmap-gps-dot{fill:#2f9dff;stroke:#fff;stroke-width:3}
+    .fmap-gps-acc{fill:rgba(47,157,255,.18);stroke:rgba(47,157,255,.5);stroke-width:1.5}
+    .fmap-gps-pulse{fill:none;stroke:#2f9dff;stroke-width:2;opacity:.7;animation:gpsPulse 2s ease-out infinite}
+    .fmap-controls button[aria-pressed="true"]{background:var(--paper);color:var(--night);border-color:var(--paper);font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;padding:0 14px}
+    @media (prefers-reduced-motion:reduce){#fmapRouteLineB,.fmap-gps-pulse{animation:none}.fmap-tilt{transition:none}}
+    @media(max-width:600px){.fmap-toolbar .omap-from select{max-width:170px}}
     .quick-schedule{display:grid;gap:6px}.quick-set{display:grid;grid-template-columns:75px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;background:var(--panel);border-radius:2px}.quick-set time{font:400 .7rem var(--mono);color:var(--mist)}.quick-set strong{text-transform:uppercase;font-size:.92rem}.quick-set span{font:400 .63rem var(--mono);color:var(--ice);text-transform:uppercase}.quick-set.valorant{background:color-mix(in srgb,var(--panel) 82%,var(--red));box-shadow:inset 4px 0 0 var(--red)}.quick-set.valorant span{color:var(--red);font-weight:700}
     .merch-watch{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);background:var(--paper);color:var(--night);overflow:hidden}.merch-photo{display:block;width:100%;height:100%;min-height:500px;object-fit:cover;object-position:center;background:#0e0e10}.merch-copy{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(24px,4vw,56px);overflow:hidden}.merch-copy::after{content:"V26";position:absolute;right:-14px;top:-25px;font:400 9rem/1 var(--display);opacity:.06}.merch-watch h3{position:relative;z-index:1;font:400 clamp(2.4rem,5vw,5rem)/.85 var(--display);text-transform:uppercase;margin:0 0 18px;letter-spacing:-.02em}.merch-watch p{position:relative;z-index:1;margin:0;max-width:42ch}.merch-watch .mono{position:relative;z-index:1;display:block;margin-top:22px;font:400 .68rem var(--mono);text-transform:uppercase;opacity:.7}.merch-source{position:relative;z-index:1;display:inline-flex;align-items:center;align-self:flex-start;min-height:44px;margin-top:14px;color:var(--night);font-weight:800}
     .merch-module,.schedule-module,.lineup-module,.artists-module,.graphics-module,.info-module{grid-column:1/-1}.schedule-toolbar{display:grid;gap:12px;padding:4px 0 20px}.toolbar-row{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center}.stage-filter--compact button{padding:10px 14px;font-size:.62rem}.segmented,.stage-filter{display:flex;gap:7px;flex-wrap:wrap}.segmented button,.stage-filter button,.poster-switch button{appearance:none;min-height:44px;border:1px solid var(--line);background:transparent;border-radius:2px;padding:10px 14px;cursor:pointer;font:400 .7rem var(--mono);text-transform:uppercase;touch-action:manipulation;transition:transform .2s var(--ease)}.segmented button[aria-pressed=true],.stage-filter button[aria-pressed=true],.poster-switch button[aria-pressed=true]{background:var(--paper);color:var(--night);border-color:var(--paper)}.stage-filter button[data-stage-filter="valorant"][aria-pressed=true]{background:var(--red);color:#101113;border-color:var(--red)}.segmented button:active,.stage-filter button:active{transform:translateY(2px)}
@@ -450,10 +466,10 @@
             <section class="module map-module" data-module-id="map" data-module-label="Festival map" aria-labelledby="mapTitle">
         <div class="module-head"><h2 id="mapTitle">Festival map</h2><span class="module-label">Interactive grounds map</span></div>
         <div class="map-switch segmented" role="group" aria-label="Map style">
-          <button type="button" data-mapview="ours" aria-pressed="true">Our map</button>
-          <button type="button" data-mapview="official" aria-pressed="false">Official map</button>
+          <button type="button" data-mapview="official" aria-pressed="true">Official map</button>
+          <button type="button" data-mapview="ours" aria-pressed="false">Our map (beta)</button>
         </div>
-        <div id="mapViewOurs">
+        <div id="mapViewOurs" hidden>
           <div class="omap" id="ourMap">
             <div class="omap-toolbar">
               <label class="omap-from">From
@@ -510,33 +526,70 @@
             </div>
           </div>
         </div>
-        <div id="mapViewOfficial" hidden>
+        <div id="mapViewOfficial">
         <div class="fmap" id="festivalMap">
+          <div class="fmap-toolbar">
+            <label class="omap-from">From
+              <select id="fmapOrigin" aria-label="Route starting point">
+                <option value="ga_entrance" selected>GA Entrance</option>
+                <option value="vip_entrance">VIP Entrance</option>
+                <option value="entrance_tunnel">Entrance Tunnel</option>
+                <option value="main_stage">Main Stage</option>
+                <option value="the_mirror">The Mirror</option>
+                <option value="the_crescent">The Crescent</option>
+                <option value="the_terminal">The Terminal</option>
+                <option value="half_court">Half Court</option>
+                <option value="valorant_stage">Valorant Stage</option>
+                <option value="merch">Merch</option>
+                <option value="lockers">Lockers</option>
+                <option value="trolley">Trolley Stop</option>
+                <option value="rideshare">Ride Share</option>
+                <option value="ga_parking">GA Parking</option>
+                <option value="gate2">Gate 2</option>
+                <option value="gate3">Gate 3</option>
+                <option value="__gps" disabled>My location</option>
+              </select>
+            </label>
+            <button type="button" class="set-btn" id="fmapLocate">my location</button>
+          </div>
           <div class="fmap-viewer" id="fmapViewer">
             <div class="fmap-canvas" id="fmapCanvas">
+              <div class="fmap-tilt" id="fmapTilt">
               <img id="fmapImage" src="assets/map/nh26-sitemap.webp" alt="Official Niteharts 2026 festival grounds map at Snapdragon Stadium, showing Main Stage, The Mirror, The Crescent, The Terminal, and Half Court stages, plus GA and VIP entrances" width="1920" height="1200" loading="lazy" decoding="async" draggable="false">
-              <button type="button" class="fmap-pin" data-cat="stage" style="left:59.5%;top:68.5%" aria-label="Main Stage" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Main Stage</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" style="left:38.8%;top:63.3%" aria-label="The Crescent" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Crescent</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" style="left:38.8%;top:67.5%" aria-label="The Mirror" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Mirror</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" style="left:29%;top:52%" aria-label="The Terminal" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Terminal</span></button>
-              <button type="button" class="fmap-pin" data-cat="stage" style="left:32.5%;top:52.5%" aria-label="Half Court" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Half Court</span></button>
-              <button type="button" class="fmap-pin" data-cat="entrance" style="left:52%;top:53.5%" aria-label="GA Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Entrance</span></button>
-              <button type="button" class="fmap-pin" data-cat="entrance" style="left:57.8%;top:87%" aria-label="VIP Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">VIP Entrance</span></button>
-              <button type="button" class="fmap-pin" data-cat="transit" style="left:75%;top:83.5%" aria-label="Trolley Stop" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Trolley Stop</span></button>
-              <button type="button" class="fmap-pin" data-cat="merch" style="left:46%;top:84.5%" aria-label="Merch" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Merch</span></button>
-              <button type="button" class="fmap-pin" data-cat="lockers" style="left:51.3%;top:84%" aria-label="Lockers" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Lockers</span></button>
-              <button type="button" class="fmap-pin" data-cat="transit" style="left:57%;top:8%" aria-label="Ride Share lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Ride Share</span></button>
-              <button type="button" class="fmap-pin" data-cat="transit" style="left:75.5%;top:25%" aria-label="GA Parking lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Parking</span></button>
+              <button type="button" class="fmap-pin" data-cat="stage" data-node="main_stage" style="left:48.4%;top:65.8%" aria-label="Main Stage" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Main Stage</span></button>
+              <button type="button" class="fmap-pin" data-cat="stage" data-node="the_crescent" style="left:33.1%;top:62.5%" aria-label="The Crescent" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Crescent</span></button>
+              <button type="button" class="fmap-pin" data-cat="stage" data-node="the_mirror" style="left:32.8%;top:69.2%" aria-label="The Mirror" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Mirror</span></button>
+              <button type="button" class="fmap-pin" data-cat="stage" data-node="the_terminal" style="left:20.6%;top:45.8%" aria-label="The Terminal" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Terminal</span></button>
+              <button type="button" class="fmap-pin" data-cat="stage" data-node="half_court" style="left:21.9%;top:45.4%" aria-label="Half Court" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Half Court</span></button>
+              <button type="button" class="fmap-pin" data-cat="entrance" data-node="ga_entrance" style="left:37.0%;top:47.5%" aria-label="GA Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Entrance</span></button>
+              <button type="button" class="fmap-pin" data-cat="entrance" data-node="vip_entrance" style="left:51.0%;top:90.8%" aria-label="VIP Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">VIP Entrance</span></button>
+              <button type="button" class="fmap-pin" data-cat="transit" data-node="trolley" style="left:62.0%;top:85.0%" aria-label="Trolley Stop" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Trolley Stop</span></button>
+              <button type="button" class="fmap-pin" data-cat="merch" data-node="merch" style="left:34.9%;top:95.0%" aria-label="Merch" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Merch</span></button>
+              <button type="button" class="fmap-pin" data-cat="lockers" data-node="lockers" style="left:53.1%;top:94.2%" aria-label="Lockers" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Lockers</span></button>
+              <button type="button" class="fmap-pin" data-cat="transit" data-node="rideshare" style="left:57.0%;top:5.0%" aria-label="Ride Share lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Ride Share</span></button>
+              <button type="button" class="fmap-pin" data-cat="transit" data-node="ga_parking" style="left:80.7%;top:18.8%" aria-label="GA Parking lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Parking</span></button>
+              <svg id="fmapSvg" class="fmap-svg" viewBox="0 0 1920 1200" aria-hidden="true" focusable="false">
+                <g id="fmapRouteG" hidden>
+                  <polyline id="fmapRouteLineA" points=""/>
+                  <polyline id="fmapRouteLineB" points=""/>
+                  <polyline id="fmapRouteLineHit" points=""/>
+                </g>
+                <g id="fmapGpsG" hidden></g>
+              </svg>
+              </div>
             </div>
+            <p class="omap-debug" id="fmapDebug" hidden></p>
           </div>
           <div class="fmap-bar">
-            <p class="fmap-hint">Drag to explore · pinch or scroll to zoom · tap a pin</p>
+            <p class="fmap-hint">tap a pin for info · tap the route for steps</p>
             <div class="fmap-controls" role="group" aria-label="Map zoom controls">
+              <button type="button" id="fmapTilt3d" aria-pressed="false" aria-label="Toggle 3D tilt">3D</button>
               <button type="button" id="fmapZoomIn" aria-label="Zoom in">+</button>
               <button type="button" id="fmapZoomOut" aria-label="Zoom out">−</button>
               <button type="button" id="fmapReset" class="fmap-reset">Reset</button>
             </div>
           </div>
+          <div class="omap-info" id="fmapInfo" hidden></div>
           <div class="fmap-legend" aria-label="Map legend">
             <span class="fmap-chip" data-cat="stage"><i aria-hidden="true"></i>Stage</span>
             <span class="fmap-chip" data-cat="entrance"><i aria-hidden="true"></i>Entrance</span>
@@ -546,7 +599,7 @@
           </div>
         </div>
         </div>
-        <div class="map-note"><p>Our interactive map, built for wayfinding. Distances and walk times are approximate. The official grounds map is one tap away above.</p><a id="directionsLink" class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=2101+Stadium+Way%2C+San+Diego%2C+CA+92108" target="_blank" rel="noopener">Directions ↗</a></div>
+        <div class="map-note"><p>The official grounds map, made interactive. Tap any pin for info, or get walking routes between stages. Distances and walk times are approximate. Our experimental schematic is one tap away above.</p><a id="directionsLink" class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=2101+Stadium+Way%2C+San+Diego%2C+CA+92108" target="_blank" rel="noopener">Directions ↗</a></div>
       </section>
 
 
@@ -1498,6 +1551,7 @@
         try{ sessionStorage.setItem('nhc-seen','1'); }catch(e){}
         ov.hidden=true;
         document.body.style.overflow=prevOverflow;
+        try{ window.dispatchEvent(new Event('nhc:dismissed')); }catch(e){}
       }
       var btn=document.getElementById('nhcEnter');
       if(btn) btn.addEventListener('click',dismiss);
@@ -1726,6 +1780,63 @@
         {x:242,y:165,label:"Lockers",cat:"lockers",info:"rent a locker, stash your stuff."},
         {x:357,y:365,label:"ADA Viewing",cat:"ada",info:"accessible viewing area."},
         {x:380,y:425,label:"ADA Viewing",cat:"ada",info:"accessible viewing area."}
+      ]
+    };
+
+    /* ---------- official-map waypoint graph ----------
+       Node positions recalibrated by reading the actual official artwork
+       (assets/map/nh26-sitemap.webp, 1920x1200). Units are image pixels.
+       metersPerUnit 0.6 ≈ Snapdragon Stadium footprint (~350px ≈ 210m).
+       Every route on the official map comes from this graph via the shared
+       Dijkstra helpers below. */
+    var NH26_FMAP_DATA = {
+      meta: { name: "Niteharts '26 · official map", metersPerUnit: 0.6, walkMPerMin: 80 },
+      gpsAnchor: { x: 635, y: 420, lat: 32.78444, lon: -117.12278 },
+      catColors: { stage:"#9fc9ef", entrance:"#ffffff", merch:"#7ed321", lockers:"#ff6fd8", transit:"#b8b8b8" },
+      nodes: {
+        main_stage:   {x:930,y:790,label:"Main Stage",cat:"stage",sched:"main",info:"the big one. headliners close every night here."},
+        the_mirror:   {x:630,y:830,label:"The Mirror",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
+        the_crescent: {x:635,y:750,label:"The Crescent",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
+        the_terminal: {x:395,y:550,label:"The Terminal",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
+        half_court:   {x:420,y:545,label:"Half Court",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
+        valorant_stage:{x:950,y:420,label:"Valorant Stage",cat:"stage",sched:"valorant",approx:true,info:"gaming stage. its exact spot wasn't on the official map, so this pin is approximate. we'll move it when the location is announced."},
+        ga_entrance:  {x:710,y:570,label:"GA Entrance",cat:"entrance",info:"main way in. have your ticket and id ready."},
+        vip_entrance: {x:980,y:1090,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry."},
+        entrance_tunnel:{x:440,y:810,label:"Entrance Tunnel",cat:"entrance",info:"tunnel walkway into the grounds."},
+        gate2:        {x:1170,y:75,label:"Gate 2",cat:"entrance",info:"parking entrance."},
+        gate3:        {x:1825,y:875,label:"Gate 3",cat:"entrance",info:"parking entrance, southeast side."},
+        merch:        {x:670,y:1140,label:"Merch",cat:"merch",info:"official merch booth."},
+        lockers:      {x:1020,y:1130,label:"Lockers",cat:"lockers",info:"rent a locker, stash your stuff."},
+        trolley:      {x:1190,y:1020,label:"Trolley Stop",cat:"transit",info:"San Diego Trolley Green Line. easiest way out after the show."},
+        rideshare:    {x:1095,y:60,label:"Ride Share",cat:"transit",info:"pickup and dropoff lot."},
+        ga_parking:   {x:1550,y:225,label:"GA Parking",cat:"transit",info:"orange lot. general admission parking."},
+        w_north1:{x:480,y:210,wp:1}, w_north2:{x:745,y:210,wp:1}, w_north3:{x:1010,y:210,wp:1},
+        w_blue:{x:950,y:360,wp:1}, w_walkway:{x:920,y:480,wp:1},
+        w_west1:{x:430,y:250,wp:1}, w_west2:{x:400,y:450,wp:1}, w_west3:{x:390,y:640,wp:1},
+        w_central:{x:550,y:640,wp:1}, w_tunnel:{x:440,y:780,wp:1},
+        w_grounds_e:{x:700,y:640,wp:1}, w_main_w:{x:800,y:700,wp:1},
+        w_vip_n:{x:800,y:900,wp:1}, w_vip_w:{x:600,y:1050,wp:1}, w_vip_e:{x:900,y:1050,wp:1},
+        w_trolley_j:{x:1100,y:1050,wp:1}, w_park_rd:{x:1200,y:400,wp:1}, w_rs_rd:{x:1050,y:140,wp:1}
+      },
+      edges: [
+        ["w_north1","w_north2","North Walk"],["w_north2","w_north3","North Walk"],
+        ["w_north3","w_blue","Innovation Walkway"],["w_blue","w_walkway","Innovation Walkway"],
+        ["w_walkway","ga_entrance","GA Entry"],["ga_entrance","w_central","GA Entry"],
+        ["w_north1","w_west1","West Walk"],["w_west1","w_west2","West Walk"],["w_west2","w_west3","West Walk"],
+        ["w_west1","the_terminal","Terminal path"],["the_terminal","half_court","Terminal path"],
+        ["w_west3","w_central","Central Walk"],["w_central","the_crescent","stage spur"],
+        ["the_crescent","the_mirror","stage spur"],["w_west3","w_tunnel","West Walk"],
+        ["w_tunnel","entrance_tunnel","Tunnel path"],["w_tunnel","the_mirror","stage spur"],
+        ["w_central","w_grounds_e","Central Walk"],["w_grounds_e","w_main_w","Central Walk"],
+        ["w_main_w","main_stage","stage spur"],["w_main_w","w_vip_n","VIP Walk"],
+        ["w_vip_n","w_vip_e","VIP Walk"],["w_vip_e","vip_entrance","VIP Walk"],
+        ["w_vip_n","w_vip_w","Merch Row"],["w_vip_w","merch","Merch Row"],
+        ["w_vip_e","lockers","Merch Row"],["w_vip_e","w_trolley_j","East path"],
+        ["w_trolley_j","trolley","Trolley path"],["w_trolley_j","gate3","East path"],
+        ["ga_entrance","w_park_rd","Parking link"],["w_park_rd","ga_parking","Parking link"],
+        ["w_north3","w_rs_rd","Ride Share path"],["w_rs_rd","rideshare","Ride Share path"],
+        ["w_rs_rd","gate2","Gate 2 path"],
+        ["ga_entrance","valorant_stage","stadium concourse",1]
       ]
     };
 
@@ -1989,7 +2100,7 @@
       viewer.addEventListener('pointerdown',function(e){
         moved=0;dragged=false;
         var nPtr=Object.keys(pointers).length;
-        if(e.target.closest&&e.target.closest('.fmap-pin')&&nPtr===0)return;
+        if(e.target.closest&&e.target.closest('.fmap-pin,#fmapRouteG')&&nPtr===0)return;
         if(animating){animating=false;}
         try{viewer.setPointerCapture(e.pointerId);}catch(err){}
         pointers[e.pointerId]={x:e.clientX,y:e.clientY,t:performance.now()};
@@ -2031,7 +2142,7 @@
         zoomAt(e.clientX-r.left,e.clientY-r.top,f);
       },{passive:false});
       viewer.addEventListener('click',function(e){
-        if(e.target.closest&&e.target.closest('.fmap-pin'))return;
+        if(e.target.closest&&e.target.closest('.fmap-pin,#fmapRouteG'))return;
         var now=Date.now();
         if(now-lastTap<320&&!dragged){
           var r=viewer.getBoundingClientRect();
@@ -2062,7 +2173,153 @@
       var rT;window.addEventListener('resize',function(){clearTimeout(rT);rT=setTimeout(init,150);});
       window.__nhMapViewers.official={refresh:init};
     })();
-    /* ---------- our schematic map (the default view) ---------- */
+    /* ---------- official map: routing, geolocation, 3d tilt ----------
+       Reuses the shared Dijkstra helpers (nhRoute/nhSteps/nhNearest/
+       nhGpsToSchematic) with NH26_FMAP_DATA, whose node positions were
+       recalibrated from the actual official artwork. */
+    (function initFmapRouting(){
+      var D=NH26_FMAP_DATA;
+      var viewer=document.getElementById('fmapViewer'),canvas=document.getElementById('fmapCanvas'),
+          info=document.getElementById('fmapInfo'),debug=document.getElementById('fmapDebug'),
+          originSel=document.getElementById('fmapOrigin'),locateBtn=document.getElementById('fmapLocate'),
+          routeG=document.getElementById('fmapRouteG'),gpsG=document.getElementById('fmapGpsG'),
+          tiltBtn=document.getElementById('fmapTilt3d');
+      if(!viewer||!canvas||!D||!routeG) return;
+      var NS='http://www.w3.org/2000/svg';
+      function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+      function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+      var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var routeA=document.getElementById('fmapRouteLineA'),
+          routeB=document.getElementById('fmapRouteLineB'),
+          routeHit=document.getElementById('fmapRouteLineHit');
+      function drawRoute(route){
+        if(!route||!route.nodes.length){routeG.setAttribute('hidden','');return;}
+        var pts=route.nodes.map(function(id){return D.nodes[id].x+','+D.nodes[id].y;}).join(' ');
+        routeA.setAttribute('points',pts);routeB.setAttribute('points',pts);routeHit.setAttribute('points',pts);
+        routeG.removeAttribute('hidden');
+      }
+      var activeRoute=null;
+      function catName(c){return {stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit'}[c]||c;}
+      function upcomingSetsHtml(schedStage){
+        if(typeof schedules==='undefined') return '';
+        var day=(typeof activeDay!=='undefined')?activeDay:'friday';
+        var sets=schedules[day].sets.filter(function(s){return s.stage===schedStage;}).slice(0,4);
+        if(!sets.length) return '<p class="omap-note">no sets listed for this stage '+esc(schedules[day].label.toLowerCase())+'.</p>';
+        return '<ul class="omap-sets">'+sets.map(function(s){
+          return '<li><span>'+esc(s.artist)+'</span><time>'+esc(s.start)+' - '+esc(s.end)+'</time></li>';
+        }).join('')+'</ul>';
+      }
+      function openInfo(html){info.innerHTML=html;info.hidden=false;}
+      function closeInfo(){info.hidden=true;info.innerHTML='';}
+      function showNodeInfo(id){
+        var n=D.nodes[id]; if(!n) return;
+        var h='<div class="omap-info-head"><h3>'+esc(n.label)+'</h3><span class="omap-info-cat">'+catName(n.cat)+(n.approx?' · location approx':'')+'</span></div>';
+        h+='<p>'+esc(n.info)+'</p>';
+        if(n.sched) h+=upcomingSetsHtml(n.sched);
+        h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-froute-to="'+id+'">route here</button><button type="button" class="set-btn fmap-close">close</button></div>';
+        openInfo(h);
+      }
+      function showRoute(fromId,toId,title){
+        var fromN=D.nodes[fromId], toN=D.nodes[toId];
+        if(!fromN||!toN) return;
+        var r=nhRoute(D,fromId,toId);
+        activeRoute={from:fromId,to:toId,title:title||'',route:r};
+        if(!r){drawRoute(null);openInfo('<div class="omap-info-head"><h3>no route</h3></div><p>could not find a walking route between those two spots.</p><div class="omap-info-actions"><button type="button" class="set-btn fmap-close">close</button></div>');return;}
+        if(r.same){drawRoute(null);openInfo('<div class="omap-info-head"><h3>'+esc(toN.label)+'</h3></div><p>you are already here.</p><div class="omap-info-actions"><button type="button" class="set-btn fmap-close">close</button></div>');return;}
+        drawRoute(r);
+        var steps=nhSteps(D,r);
+        var h='<div class="omap-info-head"><h3>'+esc(fromN.label)+' → '+esc(toN.label)+'</h3><span class="omap-info-cat">~'+r.mins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</span></div>';
+        if(title) h+='<p>'+esc(title)+'</p>';
+        h+='<button type="button" class="way-link fmap-steps-toggle">steps ('+steps.length+')</button>';
+        h+='<ol class="omap-steps">'+steps.map(function(s){
+          return '<li>head '+s.dir+' on '+esc(s.via)+' <span class="st-min">~'+s.mins+' min</span>'+(s.approx?' <span class="st-min">approx</span>':'')+'</li>';
+        }).join('')+'</ol>';
+        h+='<div class="omap-info-actions"><button type="button" class="set-btn fmap-clear-route">clear route</button><button type="button" class="set-btn fmap-close">close</button></div>';
+        openInfo(h);
+      }
+      function clearRoute(){activeRoute=null;drawRoute(null);closeInfo();}
+      function toggleSteps(){var ol=info.querySelector('.omap-steps');if(ol)ol.hidden=!ol.hidden;}
+      [routeA,routeB,routeHit].forEach(function(l){
+        l.addEventListener('click',function(e){e.stopPropagation();toggleSteps();});
+      });
+      info.addEventListener('click',function(e){
+        var rt=e.target.closest?e.target.closest('[data-froute-to]'):null;
+        if(rt){showRoute(currentOrigin(),rt.getAttribute('data-froute-to'),'');return;}
+        if(e.target.closest&&e.target.closest('.fmap-close')){closeInfo();return;}
+        if(e.target.closest&&e.target.closest('.fmap-clear-route')){clearRoute();return;}
+        if(e.target.closest&&e.target.closest('.fmap-steps-toggle')){toggleSteps();return;}
+      });
+      canvas.querySelectorAll('.fmap-pin').forEach(function(pin){
+        pin.addEventListener('click',function(){
+          var id=pin.getAttribute('data-node');
+          if(id) showNodeInfo(id);
+        });
+      });
+      /* ---------- origin + geolocation ---------- */
+      var gpsWatch=null, gpsNode=null;
+      function currentOrigin(){
+        if(originSel.value==='__gps'&&gpsNode) return gpsNode;
+        return originSel.value||'ga_entrance';
+      }
+      originSel.addEventListener('change',function(){
+        if(activeRoute&&activeRoute.route&&!activeRoute.route.same){
+          showRoute(currentOrigin(),activeRoute.to,activeRoute.title);
+        }
+      });
+      function gpsNote(t){debug.hidden=false;debug.textContent=t;}
+      function drawGps(x,y,accM){
+        gpsG.innerHTML='';
+        var accU=Math.min(400,Math.max(30,accM/D.meta.metersPerUnit));
+        el('circle',{cx:x,cy:y,r:accU,class:'fmap-gps-acc'},gpsG);
+        if(!reduceMotion) el('circle',{cx:x,cy:y,r:22,class:'fmap-gps-pulse'},gpsG);
+        el('circle',{cx:x,cy:y,r:13,class:'fmap-gps-dot'},gpsG);
+        gpsG.removeAttribute('hidden');
+      }
+      locateBtn.addEventListener('click',function(){
+        if(gpsWatch!==null){
+          try{navigator.geolocation.clearWatch(gpsWatch);}catch(e){}
+          gpsWatch=null;gpsNode=null;gpsG.setAttribute('hidden','');gpsG.innerHTML='';
+          debug.hidden=true;locateBtn.textContent='my location';
+          var opt=originSel.querySelector('option[value="__gps"]');if(opt)opt.disabled=true;
+          if(originSel.value==='__gps')originSel.value='ga_entrance';
+          return;
+        }
+        if(!navigator.geolocation){gpsNote('geolocation not supported on this device');return;}
+        gpsNote('asking for location…');
+        locateBtn.textContent='stop';
+        try{
+          gpsWatch=navigator.geolocation.watchPosition(function(p){
+            var pt=nhGpsToSchematic(D,p.coords.latitude,p.coords.longitude);
+            var nn=nhNearest(D,pt.x,pt.y);
+            gpsNode=nn.id;
+            drawGps(pt.x,pt.y,p.coords.accuracy||0);
+            gpsNote('gps ±'+Math.round(p.coords.accuracy||0)+'m · nearest: '+D.nodes[nn.id].label+' · '+Math.round(nn.meters)+'m away');
+            var opt=originSel.querySelector('option[value="__gps"]');if(opt)opt.disabled=false;
+            if(originSel.value==='__gps'&&activeRoute&&activeRoute.route&&!activeRoute.route.same){
+              showRoute(nn.id,activeRoute.to,activeRoute.title);
+            }
+          },function(){
+            gpsNote('location blocked. enable it in your browser settings to use the blue dot.');
+            locateBtn.textContent='my location';gpsWatch=null;
+          },{enableHighAccuracy:true,timeout:15000,maximumAge:5000});
+        }catch(e){gpsNote('geolocation failed to start');locateBtn.textContent='my location';gpsWatch=null;}
+      });
+      /* ---------- 3d tilt (opt-in, off by default) ---------- */
+      if(tiltBtn){
+        tiltBtn.addEventListener('click',function(){
+          var on=viewer.classList.toggle('tilt3d');
+          tiltBtn.setAttribute('aria-pressed',String(on));
+        });
+      }
+      /* ---------- reset clears the route too ---------- */
+      document.getElementById('fmapReset').addEventListener('click',function(){clearRoute();});
+      /* ---------- public: find-my-way entry ---------- */
+      window.nhFmapRoute=function(fromId,toId,title){
+        showRoute(fromId||currentOrigin(),toId,title||'');
+      };
+      window.__fmapDbg={data:D,route:function(a,b){return nhRoute(D,a,b);},steps:function(r){return nhSteps(D,r);}};
+    })();
+    /* ---------- our schematic map (beta view) ---------- */
     (function initOurMap(){
       var D=NH26_MAP_DATA;
       var viewer=document.getElementById('omapViewer'),canvas=document.getElementById('omapCanvas'),
@@ -2278,8 +2535,8 @@
       });
       window.__nhMapViewers.ours={refresh:function(){ api.refresh(); }};
 
-      /* ---------- map switcher ---------- */
-      var mapViewKey='nh26-map-view';
+      /* ---------- map switcher (official is the default view) ---------- */
+      var mapViewKey='nh26-map-view-v2';
       window.nhSetMapView=function(v,skipSave){
         var ours=v!=='official';
         document.querySelectorAll('[data-mapview]').forEach(function(b){
@@ -2296,19 +2553,19 @@
         b.addEventListener('click',function(){ window.nhSetMapView(b.getAttribute('data-mapview')); });
       });
       (function(){
-        var v='ours';
-        try{ v=localStorage.getItem(mapViewKey)||'ours'; }catch(e){}
+        var v='official';
+        try{ v=localStorage.getItem(mapViewKey)||'official'; }catch(e){}
         window.nhSetMapView(v==='official'?'official':'ours',true);
       })();
 
-      /* ---------- find my way ---------- */
+      /* ---------- find my way (routes on the official map) ---------- */
       window.nhFindWay=function(setId){
         if(typeof setById==='undefined'||!setById[setId]) return;
         var s=setById[setId];
         var dest=s.stage==='valorant'?'valorant_stage':'main_stage';
-        window.nhSetMapView('ours');
+        window.nhSetMapView('official');
         if(window.nhExpandModule) window.nhExpandModule('#mapTitle');
-        showRoute(currentOrigin(),dest,s.artist+' · '+s.start+'–'+s.end);
+        if(window.nhFmapRoute) window.nhFmapRoute(null,dest,s.artist+' · '+s.start+'–'+s.end);
         setTimeout(function(){
           var t=document.getElementById('mapTitle');
           if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
@@ -2485,11 +2742,23 @@
   </script>
   <script>
   (function(){
-    var boot=document.getElementById("bootScreen"),started=performance.now(),reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches,revealed=false;
+    var boot=document.getElementById("bootScreen"),started=performance.now(),reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches,revealed=false,deferredByConstruction=false;
+    function constructionUp(){
+      if(!window.NH_CONSTRUCTION) return false;
+      var c=document.getElementById("nhConstruction");
+      return !!(c&&!c.hidden);
+    }
     function reveal(){
       if(revealed)return;
+      if(constructionUp()){
+        /* construction splash goes first; the boot splash plays after the user enters */
+        deferredByConstruction=true;
+        window.addEventListener("nhc:dismissed",function(){window.setTimeout(reveal,60);},{once:true});
+        return;
+      }
       revealed=true;
-      var wait=Math.max(0,(reduce?120:2200)-(performance.now()-started));
+      var target=reduce?120:(deferredByConstruction?1400:2200);
+      var wait=Math.max(0,target-(performance.now()-started));
       window.setTimeout(function(){
         boot.classList.add("is-exiting");
         document.body.classList.remove("is-booting");
