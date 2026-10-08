@@ -91,7 +91,37 @@
 .fmap-chip[data-cat="transit"]{--pin:#b8b8b8}
 .fmap-chip[data-cat="art"]{--pin:#c9a6ff}
 .fmap-chip[data-cat="activity"]{--pin:#6ee7a0}
-100%{opacity:0;transform:scale(2.8)}}
+.fmap-pin[data-cat="water"]{--pin:#29b6f6}
+.fmap-pin[data-cat="restroom"]{--pin:#a678e8}
+.fmap-pin[data-cat="firstaid"]{--pin:#ff5252}
+.fmap-pin[data-cat="food"]{--pin:#ff9800}
+.fmap-pin[data-cat="bar"]{--pin:#26c6da}
+.fmap-pin[data-cat="info"]{--pin:#f5f0dc}
+/* utility POIs: smaller, subtler dots so 30+ of them don't turn the map into confetti */
+.fmap-pin-util{padding:16px;opacity:.8}
+.fmap-pin-util .fmap-pin-dot{width:8px;height:8px;border-width:1px;box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 30%,transparent)}
+.fmap-pin-util[aria-expanded="true"]{opacity:1}
+.fmap-pin-util[aria-expanded="true"] .fmap-pin-dot{width:12px;height:12px;background:var(--paper)}
+.fmap-pin-flash .fmap-pin-dot{outline:2px solid #fff;outline-offset:3px}
+.fmap-chip[data-cat="water"]{--pin:#29b6f6}
+.fmap-chip[data-cat="restroom"]{--pin:#a678e8}
+.fmap-chip[data-cat="firstaid"]{--pin:#ff5252}
+.fmap-chip[data-cat="food"]{--pin:#ff9800}
+.fmap-chip[data-cat="bar"]{--pin:#26c6da}
+.fmap-chip[data-cat="info"]{--pin:#f5f0dc}
+.fmap-legend[hidden]{display:none}
+.fmap-legend-toggle{margin:0}
+/* map search */
+.fmap-search{position:relative;flex:1 1 180px;min-width:140px}
+.fmap-search input{width:100%;height:44px;border:1px solid var(--line);border-radius:2px;background:var(--panel);padding:0 12px;color:var(--paper);font:400 16px var(--mono)}
+.fmap-search input::placeholder{color:var(--mist)}
+.fmap-results{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:30;max-height:280px;overflow:auto;background:#0b0c0d;border:1px solid var(--line);border-radius:2px}
+.fmap-results[hidden]{display:none}
+.fmap-results button{display:flex;width:100%;align-items:center;gap:10px;min-height:44px;padding:8px 12px;background:none;border:0;border-bottom:1px solid var(--line);color:var(--paper);font:400 .68rem var(--mono);text-transform:uppercase;cursor:pointer;text-align:left}
+.fmap-results button:last-child{border-bottom:0}
+.fmap-results button i{width:9px;height:9px;flex:none;border-radius:50%;background:var(--pin,#888)}
+.fmap-results button small{margin-left:auto;color:var(--mist);font-size:.58rem}
+.fmap-results .fmap-nohit{padding:12px;color:var(--mist);font:400 .68rem var(--mono)}
 @media (prefers-reduced-motion:reduce){}
     /* official map: routing toolbar, svg overlay, 3d tilt */
     .fmap-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
@@ -470,6 +500,7 @@
             <button type="button" class="set-btn" id="fmapLocate">my location</button>
             <button type="button" class="set-btn" id="fmapGuide" aria-pressed="false">guide</button>
             <button type="button" class="set-btn" id="fmapAR" aria-pressed="false">ar</button>
+            <label class="fmap-search"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search the map</span><input id="fmapSearch" type="search" placeholder="search water, bathrooms..." autocomplete="off" aria-label="Search map for water, bathrooms, first aid"><div class="fmap-results" id="fmapResults" hidden></div></label>
           </div>
           <div class="fmap-viewer" id="fmapViewer">
             <div class="fmap-canvas" id="fmapCanvas">
@@ -508,7 +539,10 @@
             </div>
           </div>
           <div class="omap-info" id="fmapInfo" hidden></div>
-          <div class="fmap-legend" aria-label="Map legend">
+          <div class="fmap-bar">
+            <button type="button" class="set-btn fmap-legend-toggle" id="fmapLegendToggle" aria-pressed="false" aria-expanded="false">legend</button>
+          </div>
+          <div class="fmap-legend" id="fmapLegend" aria-label="Map legend" hidden>
             <span class="fmap-chip" data-cat="stage"><i aria-hidden="true"></i>Stage</span>
             <span class="fmap-chip" data-cat="entrance"><i aria-hidden="true"></i>Entrance</span>
             <span class="fmap-chip" data-cat="merch"><i aria-hidden="true"></i>Merch</span>
@@ -516,6 +550,12 @@
             <span class="fmap-chip" data-cat="transit"><i aria-hidden="true"></i>Transit</span>
             <span class="fmap-chip" data-cat="art"><i aria-hidden="true"></i>Art</span>
             <span class="fmap-chip" data-cat="activity"><i aria-hidden="true"></i>Activity</span>
+            <span class="fmap-chip" data-cat="water"><i aria-hidden="true"></i>Water</span>
+            <span class="fmap-chip" data-cat="restroom"><i aria-hidden="true"></i>Restrooms</span>
+            <span class="fmap-chip" data-cat="firstaid"><i aria-hidden="true"></i>First Aid</span>
+            <span class="fmap-chip" data-cat="food"><i aria-hidden="true"></i>Food &amp; Beverage</span>
+            <span class="fmap-chip" data-cat="bar"><i aria-hidden="true"></i>Bar</span>
+            <span class="fmap-chip" data-cat="info"><i aria-hidden="true"></i>Guest Info</span>
           </div>
         </div>
         </div>
@@ -1686,7 +1726,7 @@
         {x:890,  y:570, lat:32.78374, lon:-117.12156, unc:35, src:"estimated: GA entrance ~114m E, 78m S of center"},
         {x:1780, y:792, lat:32.78165, lon:-117.11419, unc:40, src:"estimated: gate 3, far SE parking"}
       ],
-      catColors: { stage:"#9fc9ef", entrance:"#ffffff", merch:"#7ed321", lockers:"#ff6fd8", transit:"#b8b8b8", art:"#c9a6ff", activity:"#6ee7a0" },
+      catColors: { stage:"#9fc9ef", entrance:"#ffffff", merch:"#7ed321", lockers:"#ff6fd8", transit:"#b8b8b8", art:"#c9a6ff", activity:"#6ee7a0", water:"#29b6f6", restroom:"#a678e8", firstaid:"#ff5252", food:"#ff9800", bar:"#26c6da", info:"#f5f0dc" },
       /* pins re-measured 2026-10-08 against the official artwork at full res
          with visual grounding. every pin now sits on its actual feature. */
       nodes: {
@@ -1697,15 +1737,47 @@
         half_court:   {x:430,y:605,label:"Half Court",cat:"activity",info:"half basketball court. shoot around between sets."},
         valorant_stage:{x:950,y:420,label:"Valorant Stage",cat:"stage",sched:"valorant",approx:true,info:"gaming stage. its exact spot wasn't on the official map, so this pin is approximate. we'll move it when the location is announced."},
         ga_entrance:  {x:890,y:570,label:"GA Entrance",cat:"entrance",info:"main way in. have your ticket and id ready."},
-        vip_entrance: {x:794,y:1014,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry."},
+        vip_entrance: {x:794,y:1014,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry. separate bars, viewing decks and shorter lines inside."},
         entrance_tunnel:{x:459,y:841,label:"Entrance Tunnel",cat:"entrance",info:"tunnel walkway into the grounds."},
-        gate2:        {x:1321,y:76,label:"Gate 2",cat:"entrance",info:"parking entrance."},
+        gate2:        {x:1321,y:76,label:"Gate 2",cat:"entrance",info:"parking entrance off friars rd. ride share uses the purple lot just south."},
         gate3:        {x:1780,y:792,label:"Gate 3",cat:"entrance",info:"parking entrance, southeast side."},
-        merch:        {x:670,y:1035,label:"Merch",cat:"merch",info:"official merch booth."},
-        lockers:      {x:695,y:1033,label:"Lockers",cat:"lockers",info:"rent a locker, stash your stuff."},
+        merch:        {x:670,y:1035,label:"Merch",cat:"merch",info:"official merch booth. lines are shortest right when doors open."},
+        lockers:      {x:695,y:1033,label:"Lockers",cat:"lockers",info:"rent a locker for the day. stash layers for after dark."},
         trolley:      {x:1085,y:935,label:"Trolley Stop",cat:"transit",info:"San Diego Trolley Green Line. easiest way out after the show."},
-        rideshare:    {x:1105,y:135,label:"Ride Share",cat:"transit",info:"pickup and dropoff lot."},
+        rideshare:    {x:1105,y:135,label:"Ride Share",cat:"transit",info:"purple lot pickup and dropoff. expect surge after the show, the trolley is faster."},
         ga_parking:   {x:1410,y:304,label:"GA Parking",cat:"transit",info:"orange lot. general admission parking."},
+        u_water_0:{x:411,y:229,label:"Water - north walkway",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_1:{x:649,y:300,label:"Water - north walkway east",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_2:{x:918,y:286,label:"Water - innovation walkway",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_3:{x:433,y:478,label:"Water - west walk",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_4:{x:431,y:511,label:"Water - west walk south",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_5:{x:911,y:606,label:"Water - GA entrance",cat:"water",util:1,info:"free water refill station, right by the entrance. fill up on the way in."},
+        u_water_6:{x:423,y:690,label:"Water - central walk",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_7:{x:508,y:692,label:"Water - near the crescent",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_8:{x:608,y:857,label:"Water - VIP area",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_9:{x:480,y:1138,label:"Water - south grounds",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_restroom_10:{x:460,y:335,label:"Restrooms - north walkway",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_restroom_11:{x:467,y:882,label:"Restrooms - VIP west",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_restroom_12:{x:798,y:890,label:"Restrooms - main stage",cat:"restroom",util:1,info:"restrooms by the main stage. busiest spot, plan ahead."},
+        u_restroom_13:{x:537,y:1129,label:"Restrooms - south grounds",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_firstaid_14:{x:431,y:446,label:"First Aid - west walk",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_firstaid_15:{x:929,y:438,label:"First Aid - innovation walkway",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_firstaid_16:{x:738,y:694,label:"First Aid - central grounds",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_firstaid_17:{x:380,y:791,label:"First Aid - entrance tunnel",cat:"firstaid",util:1,info:"first aid tent by the tunnel. open all night, staffed by medics."},
+        u_firstaid_18:{x:751,y:919,label:"First Aid - VIP",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_food_19:{x:313,y:505,label:"Food - west walk",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_food_20:{x:467,y:994,label:"Food - south grounds",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_food_21:{x:444,y:1074,label:"Food - near VIP entrance",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_food_22:{x:677,y:994,label:"Food - VIP",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_bar_23:{x:433,y:515,label:"Bar - west walk",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_24:{x:598,y:713,label:"Bar - central grounds",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_25:{x:782,y:710,label:"Bar - near main stage",cat:"bar",util:1,info:"bar by the main stage. 21+ with valid id."},
+        u_bar_26:{x:477,y:750,label:"Bar - central walk",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_27:{x:572,y:898,label:"Bar - VIP west",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_28:{x:560,y:994,label:"Bar - south grounds",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_29:{x:720,y:950,label:"Bar - VIP",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_info_30:{x:480,y:703,label:"Guest Info - central walk",cat:"info",util:1,info:"guest info. lost & found, questions, accessibility help."},
+        u_info_31:{x:692,y:965,label:"Guest Info - VIP",cat:"info",util:1,info:"guest info. lost & found, questions, accessibility help."},
         w_north1:{x:480,y:210,wp:1}, w_north2:{x:745,y:210,wp:1}, w_north3:{x:1010,y:210,wp:1},
         w_blue:{x:950,y:360,wp:1}, w_walkway:{x:920,y:480,wp:1},
         w_west1:{x:430,y:250,wp:1}, w_west2:{x:400,y:450,wp:1}, w_west3:{x:390,y:640,wp:1},
@@ -1732,7 +1804,23 @@
         ["ga_entrance","w_park_rd","Parking link"],["w_park_rd","ga_parking","Parking link"],
         ["w_north3","w_rs_rd","Ride Share path"],["w_rs_rd","rideshare","Ride Share path"],
         ["w_rs_rd","gate2","Gate 2 path"],
-        ["ga_entrance","valorant_stage","stadium concourse",1]
+        ["ga_entrance","valorant_stage","stadium concourse",1],
+        ["w_west1","u_water_0","walkway"],["w_north2","u_water_1","walkway"],
+        ["w_blue","u_water_2","walkway"],["w_west2","u_water_3","walkway"],
+        ["w_west2","u_water_4","walkway"],["w_walkway","u_water_5","walkway"],
+        ["w_west3","u_water_6","walkway"],["w_central","u_water_7","walkway"],
+        ["w_tunnel","u_water_8","walkway"],["w_vip_w","u_water_9","walkway"],
+        ["w_west1","u_restroom_10","walkway"],["w_tunnel","u_restroom_11","walkway"],
+        ["w_vip_n","u_restroom_12","walkway"],["w_vip_w","u_restroom_13","walkway"],
+        ["w_west2","u_firstaid_14","walkway"],["w_walkway","u_firstaid_15","walkway"],
+        ["w_main_w","u_firstaid_16","walkway"],["w_tunnel","u_firstaid_17","walkway"],
+        ["w_vip_n","u_firstaid_18","walkway"],["w_west2","u_food_19","walkway"],
+        ["w_vip_w","u_food_20","walkway"],["w_vip_w","u_food_21","walkway"],
+        ["w_vip_w","u_food_22","walkway"],["w_west2","u_bar_23","walkway"],
+        ["w_central","u_bar_24","walkway"],["w_main_w","u_bar_25","walkway"],
+        ["w_tunnel","u_bar_26","walkway"],["w_vip_w","u_bar_27","walkway"],
+        ["w_vip_w","u_bar_28","walkway"],["w_vip_n","u_bar_29","walkway"],
+        ["w_tunnel","u_info_30","walkway"],["w_vip_w","u_info_31","walkway"],
       ]
     };
 
@@ -1973,7 +2061,7 @@
         routeG.removeAttribute('hidden');
       }
       var activeRoute=null;
-      function catName(c){return {stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit',art:'art',activity:'activity'}[c]||c;}
+      function catName(c){return {stage:'Stage',entrance:'Entrance',merch:'Merch',lockers:'Lockers',transit:'Transit',art:'Art',activity:'Activity',water:'Water',restroom:'Restrooms',firstaid:'First Aid',food:'Food & Beverage',bar:'Bar',info:'Guest Info'}[c]||c;}
       function upcomingSetsHtml(schedStage){
         if(typeof schedules==='undefined') return '';
         var day=(typeof activeDay!=='undefined')?activeDay:'friday';
@@ -1984,13 +2072,19 @@
         }).join('')+'</ul>';
       }
       function openInfo(html){info.innerHTML=html;info.hidden=false;}
-      function closeInfo(){info.hidden=true;info.innerHTML='';}
+      function closeInfo(){info.hidden=true;info.innerHTML='';canvas.querySelectorAll('.fmap-pin').forEach(function(p){p.setAttribute('aria-expanded','false');});}
+      function crowdAdj(mins){
+        try{if(window.__nhGuide&&window.__nhGuide.crowdMult)return Math.max(1,Math.round(mins*window.__nhGuide.crowdMult(new Date())));}catch(e){}
+        return mins;
+      }
       function showNodeInfo(id){
         var n=D.nodes[id]; if(!n) return;
-        var h='<div class="omap-info-head"><h3>'+esc(n.label)+'</h3><span class="omap-info-cat">'+catName(n.cat)+(n.approx?' · location approx':'')+'</span></div>';
+        /* mark this pin expanded, collapse others */
+        canvas.querySelectorAll('.fmap-pin').forEach(function(p){p.setAttribute('aria-expanded',String(p.getAttribute('data-node')===id));});
+        var h='<div class="omap-info-head"><h3>'+esc(n.label)+'</h3><span class="omap-info-cat">'+esc(catName(n.cat))+(n.approx?' · location approx':'')+'</span></div>';
         h+='<p>'+esc(n.info)+'</p>';
         if(n.sched) h+=upcomingSetsHtml(n.sched);
-        h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-froute-to="'+id+'">route here</button><button type="button" class="set-btn fmap-close">close</button></div>';
+        h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-froute-to="'+id+'">route here</button><button type="button" class="set-btn" data-far-to="'+id+'">ar directions</button><button type="button" class="set-btn fmap-close">close</button></div>';
         openInfo(h);
       }
       function showRoute(fromId,toId,title){
@@ -2002,11 +2096,12 @@
         if(r.same){drawRoute(null);openInfo('<div class="omap-info-head"><h3>'+esc(toN.label)+'</h3></div><p>you are already here.</p><div class="omap-info-actions"><button type="button" class="set-btn fmap-close">close</button></div>');return;}
         drawRoute(r);
         var steps=nhSteps(D,r);
-        var h='<div class="omap-info-head"><h3>'+esc(fromN.label)+' → '+esc(toN.label)+'</h3><span class="omap-info-cat">~'+r.mins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</span></div>';
+        var walkMins=crowdAdj(r.mins);
+        var h='<div class="omap-info-head"><h3>'+esc(fromN.label)+' → '+esc(toN.label)+'</h3><span class="omap-info-cat">~'+walkMins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</span></div>';
         if(title) h+='<p>'+esc(title)+'</p>';
         h+='<button type="button" class="way-link fmap-steps-toggle">steps ('+steps.length+')</button>';
         h+='<ol class="omap-steps">'+steps.map(function(s){
-          return '<li>head '+s.dir+' on '+esc(s.via)+' <span class="st-min">~'+s.mins+' min</span>'+(s.approx?' <span class="st-min">approx</span>':'')+'</li>';
+          return '<li>head '+s.dir+' on '+esc(s.via)+' <span class="st-min">~'+crowdAdj(s.mins)+' min</span>'+(s.approx?' <span class="st-min">approx</span>':'')+'</li>';
         }).join('')+'</ol>';
         h+='<div class="omap-info-actions"><button type="button" class="set-btn fmap-clear-route">clear route</button><button type="button" class="set-btn fmap-close">close</button></div>';
         openInfo(h);
@@ -2019,6 +2114,8 @@
       info.addEventListener('click',function(e){
         var rt=e.target.closest?e.target.closest('[data-froute-to]'):null;
         if(rt){showRoute(currentOrigin(),rt.getAttribute('data-froute-to'),'');return;}
+        var ar=e.target.closest?e.target.closest('[data-far-to]'):null;
+        if(ar){var aid=ar.getAttribute('data-far-to');if(window.__nhAR){if(window.__nhAR.setTarget)window.__nhAR.setTarget(aid);window.__nhAR.open();}return;}
         if(e.target.closest&&e.target.closest('.fmap-close')){closeInfo();return;}
         if(e.target.closest&&e.target.closest('.fmap-clear-route')){clearRoute();return;}
         if(e.target.closest&&e.target.closest('.fmap-steps-toggle')){toggleSteps();return;}
@@ -2029,6 +2126,87 @@
           if(id) showNodeInfo(id);
         });
       });
+      /* ---------- utility POIs: rendered from data, smaller subtler dots ---------- */
+      var tilt=document.getElementById('fmapTilt');
+      Object.keys(D.nodes).forEach(function(id){
+        var n=D.nodes[id];
+        if(!n.util||!tilt) return;
+        var b=document.createElement('button');
+        b.type='button';
+        b.className='fmap-pin fmap-pin-util';
+        b.setAttribute('data-cat',n.cat);
+        b.setAttribute('data-node',id);
+        b.style.left=(n.x/1920*100).toFixed(2)+'%';
+        b.style.top=(n.y/1200*100).toFixed(2)+'%';
+        b.setAttribute('aria-label',n.label);
+        b.setAttribute('aria-expanded','false');
+        b.innerHTML='<span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">'+esc(n.label)+'</span>';
+        b.addEventListener('click',function(){showNodeInfo(id);});
+        tilt.appendChild(b);
+      });
+      /* ---------- center the map on a node (search) ---------- */
+      function centerOnNode(id){
+        var n=D.nodes[id]; if(!n) return;
+        baseSize();
+        if(cw<=0) return;
+        var s=Math.max(scale,2.2);
+        if(s!==scale){scale=Math.min(maxScale,s);}
+        var px=n.x/1920*cw, py=n.y/1200*ch;
+        tx=vw/2-px*scale; ty=vh/2-py*scale;
+        clamp(false); apply();
+        var pin=canvas.querySelector('[data-node="'+id+'"]');
+        if(pin){pin.classList.add('fmap-pin-flash');setTimeout(function(){pin.classList.remove('fmap-pin-flash');},2200);}
+      }
+      /* ---------- map search ---------- */
+      var searchInput=document.getElementById('fmapSearch'),searchResults=document.getElementById('fmapResults');
+      var searchAliases={bathroom:'restroom',bathrooms:'restroom',toilet:'restroom',toilets:'restroom',wc:'restroom',drink:'water',drinks:'water',hydration:'water',refill:'water',medic:'firstaid',medical:'firstaid',help:'info',lost:'info',eat:'food',eats:'food',dinner:'food',lunch:'food',snack:'food',cocktail:'bar',beer:'bar',drinks2:'bar'};
+      function searchLabel(c){return catName(c);}
+      if(searchInput&&searchResults){
+        searchInput.addEventListener('input',function(){
+          var q=searchInput.value.trim().toLowerCase();
+          if(q.length<2){searchResults.hidden=true;searchResults.innerHTML='';return;}
+          var terms=q.split(/\s+/).map(function(t){return searchAliases[t]||t;});
+          var hits=[];
+          Object.keys(D.nodes).forEach(function(id){
+            var n=D.nodes[id];
+            if(n.wp||!n.label) return;
+            var hay=(n.label+' '+n.cat+' '+searchLabel(n.cat)).toLowerCase();
+            var ok=terms.every(function(t){return hay.indexOf(t)>-1;});
+            if(ok) hits.push({id:id,n:n,util:!!n.util});
+          });
+          hits.sort(function(a,b){return (a.util?1:0)-(b.util?1:0);});
+          hits=hits.slice(0,8);
+          if(!hits.length){searchResults.innerHTML='<div class="fmap-nohit">nothing found. try water, bathrooms, food.</div>';searchResults.hidden=false;return;}
+          searchResults.innerHTML=hits.map(function(h){
+            return '<button type="button" data-snode="'+h.id+'" style="--pin:'+esc((D.catColors||{})[h.n.cat]||'#888')+'"><i aria-hidden="true"></i>'+esc(h.n.label)+'<small>'+esc(searchLabel(h.n.cat))+'</small></button>';
+          }).join('');
+          searchResults.hidden=false;
+        });
+        searchResults.addEventListener('click',function(e){
+          var b=e.target.closest?e.target.closest('[data-snode]'):null;
+          if(!b) return;
+          var id=b.getAttribute('data-snode');
+          searchResults.hidden=true;searchResults.innerHTML='';searchInput.value='';searchInput.blur();
+          centerOnNode(id);showNodeInfo(id);
+        });
+        document.addEventListener('click',function(e){
+          if(!searchResults.hidden&&!(e.target.closest&&e.target.closest('.fmap-search')))searchResults.hidden=true;
+        });
+        searchInput.addEventListener('keydown',function(e){
+          if(e.key==='Enter'){var f=searchResults.querySelector('[data-snode]');if(f)f.click();}
+          if(e.key==='Escape'){searchResults.hidden=true;searchInput.blur();}
+        });
+      }
+      /* ---------- legend toggle ---------- */
+      var legendToggle=document.getElementById('fmapLegendToggle'),legend=document.getElementById('fmapLegend');
+      if(legendToggle&&legend){
+        legendToggle.addEventListener('click',function(){
+          var show=legend.hidden;
+          legend.hidden=!show;
+          legendToggle.setAttribute('aria-pressed',String(show));
+          legendToggle.setAttribute('aria-expanded',String(show));
+        });
+      }
       /* ---------- origin + geolocation ---------- */
       var gpsWatch=null, gpsNode=null;
       function currentOrigin(){
@@ -2089,7 +2267,7 @@
       /* public api for the guide feature */
       window.__fmapApi={
         data:D, showRoute:showRoute, clearRoute:clearRoute, currentOrigin:currentOrigin,
-        drawRoute:drawRoute, openInfo:openInfo, closeInfo:closeInfo,
+        drawRoute:drawRoute, openInfo:openInfo, closeInfo:closeInfo, centerOnNode:centerOnNode, showNodeInfo:showNodeInfo,
         gpsNode:function(){return gpsNode;}, setOrigin:function(id){originSel.value=id;}
       };
     })();
@@ -2357,7 +2535,8 @@
           arrow=document.getElementById('arArrow'),readout=document.getElementById('arReadout'),
           openBtn=document.getElementById('fmapAR'),closeBtn=document.getElementById('arClose');
       if(!overlay||!openBtn)return;
-      var stream=null,watchId=null,heading=null,target=null,rafId=null;
+      var stream=null,watchId=null,heading=null,target=null,rafId=null,manualTarget=null;
+      window.__nhARSetTarget=function(id){manualTarget=id;};
       function nodeToGps(id){
         var D=NH26_FMAP_DATA,n=D.nodes[id];if(!n)return null;
         var a=(D.gpsAnchors&&D.gpsAnchors[0])||D.gpsAnchor;
@@ -2382,6 +2561,11 @@
         return ['north','northeast','east','southeast','south','southwest','west','northwest'][Math.round(deg/45)%8];
       }
       function pickTarget(){
+        /* manual pin target (from "ar directions" on a pin) wins */
+        if(manualTarget&&NH26_FMAP_DATA.nodes[manualTarget]){
+          var mg=nodeToGps(manualTarget);
+          if(mg)return {gps:mg,label:NH26_FMAP_DATA.nodes[manualTarget].label};
+        }
         /* prefer the guide's next set, else the current origin selection */
         if(window.__nhGuide){
           var cn=window.__nhGuide.currentAndNext();
@@ -2414,7 +2598,7 @@
         else if(typeof e.alpha==='number')heading=(360-e.alpha)%360;
       }
       function stop(){
-        overlay.hidden=true;
+        overlay.hidden=true;manualTarget=null;
         if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}
         if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
         window.removeEventListener('deviceorientation',onOrientation);
@@ -2460,7 +2644,7 @@
         }
       });
       closeBtn.addEventListener('click',stop);
-      window.__nhAR={open:function(){openBtn.click();},close:stop};
+      window.__nhAR={open:function(){openBtn.click();},close:stop,setTarget:function(id){manualTarget=id;}};
     })();
     /* initial renders (restored: the declutter pass dropped these with the old venue map) */
     renderMyLineup();renderSchedule();
