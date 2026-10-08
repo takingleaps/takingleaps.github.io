@@ -22,12 +22,12 @@
     .experience{position:fixed;inset:0;isolation:isolate;background:#02070a}
     .game-viewport{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:crosshair;background:linear-gradient(#071216 0 44%,#050807 100%)}
     .game-viewport.locked{cursor:none}
-    .scene-canvas{display:block;width:100%;height:100%;filter:saturate(1.12) contrast(1.17) brightness(.86) sepia(.06)}
+    .scene-canvas{display:block;width:100%;height:100%;filter:saturate(1.08) contrast(1.06) brightness(1.04) sepia(.045)}
     .vhs-texture,.vhs-texture::before,.vhs-texture::after,.vignette{position:fixed;inset:0;pointer-events:none}
     .vhs-texture{z-index:4}
     .vhs-texture::before{content:"";background:repeating-linear-gradient(to bottom,rgba(255,238,205,.34) 0 1px,rgba(8,30,33,.07) 1px 2px,transparent 2px 4px);opacity:.11;mix-blend-mode:overlay}
     .vhs-texture::after{content:"";background:url("assets/vhs-grain.png") repeat;opacity:.055;mix-blend-mode:soft-light}
-    .vignette{z-index:5;background:radial-gradient(ellipse at 50% 43%,transparent 40%,rgba(3,13,15,.1) 68%,rgba(0,3,5,.7) 100%);mix-blend-mode:multiply}
+    .vignette{z-index:5;background:radial-gradient(ellipse at 50% 43%,transparent 44%,rgba(20,13,10,.035) 72%,rgba(3,8,8,.38) 100%);mix-blend-mode:multiply}
     .look-prompt{position:fixed;z-index:26;left:50%;top:50%;width:min(430px,calc(100% - 42px));padding:26px 26px 22px;transform:translate(-50%,-50%);border:2px solid rgba(255,248,223,.72);background:rgba(15,29,21,.92);box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 5px rgba(243,72,145,.08);color:var(--ink);font-family:"Courier New",monospace;text-align:center;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
     .look-prompt.show{opacity:1;visibility:visible}.look-prompt.hidden{opacity:0;visibility:hidden}
     .mouse-icon{position:relative;display:block;width:44px;height:62px;margin:0 auto 15px;border:3px solid var(--mint);border-radius:22px}.mouse-icon::before{content:"";position:absolute;left:50%;top:8px;width:3px;height:14px;background:var(--pink);transform:translateX(-50%)}.mouse-icon::after{content:"";position:absolute;left:7px;right:7px;top:27px;height:2px;background:rgba(255,248,223,.32)}
@@ -140,6 +140,6 @@
   </main>
   <script src="assets/three.min.js"></script>
   <script src="assets/GLTFLoader.js?v=texture-loader-fix-2"></script>
-  <script src="assets/game.js?v=night-vhs-14"></script>
+  <script src="assets/game.js?v=warm-evening-15"></script>
 </body>
 </html>
