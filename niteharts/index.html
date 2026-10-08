@@ -467,7 +467,7 @@
         <div class="module-head"><h2 id="mapTitle">Festival map</h2><span class="module-label">Interactive grounds map</span></div>
         <div class="map-switch segmented" role="group" aria-label="Map style">
           <button type="button" data-mapview="official" aria-pressed="true">Official map</button>
-          <button type="button" data-mapview="ours" aria-pressed="false">Our map (beta)</button>
+          <button type="button" data-mapview="ours" aria-pressed="false">[try out] interactive map</button>
         </div>
         <div id="mapViewOurs" hidden>
           <div class="omap" id="ourMap">
@@ -669,6 +669,24 @@
 #nh-lens .lens-caption{width:100%;box-sizing:border-box;min-height:44px;margin-top:10px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(5,7,12,.6);color:#fff;font-size:15px}
 #nh-lens .lens-caption::placeholder{color:rgba(143,216,255,.4)}
 #nh-lens .lens-note{color:var(--mist);font-size:13px;min-height:20px;margin:8px 0 0}
+#nh-lens .lens-mode{display:flex;gap:8px}
+#nh-lens .lens-mode-btn{min-height:44px;padding:12px 20px;border-radius:999px}
+#nh-lens .lens-mode-btn[aria-pressed="true"]{background:var(--ice);border-color:var(--ice);color:#101113;font-weight:700}
+#nh-lens .lens-rec{background:#e5484d;border-color:#e5484d;color:#fff;font-weight:700}
+#nh-lens .lens-rec[aria-pressed="true"]{background:transparent;color:#e5484d}
+#nh-lens .lens-recbar{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(229,72,77,.08)}
+#nh-lens .lens-recbar[hidden]{display:none}
+#nh-lens .lens-recdot{width:12px;height:12px;border-radius:50%;background:#e5484d;animation:lensblink 1s steps(2) infinite}
+@keyframes lensblink{50%{opacity:.25}}
+#nh-lens .lens-rectime{font:700 1rem var(--mono);color:#fff}
+#nh-lens .lens-recmax{font:400 .68rem var(--mono);color:var(--mist);text-transform:uppercase}
+#nh-lens .lens-recbar .lens-btn{margin-left:auto;min-height:44px}
+#nh-lens #lensPreviewVid{width:100%;border-radius:14px;border:1px solid var(--line);display:block;background:#000}
+#nh-lens #lensPreviewVid[hidden]{display:none}
+#nh-lens .review-queue-note{color:var(--mist);font-size:13px;margin:8px 0 0}
+#nh-review .review-item video{width:100%;display:block;max-height:300px;background:#000}
+#nh-review .review-flags{font:400 .68rem/1.5 var(--mono);color:#ffb4a2;padding:0 12px 4px;white-space:pre-wrap}
+#nh-review .review-time{font:400 .65rem/1 var(--mono);color:var(--mist);text-transform:uppercase}
 #nh-lens .lens-step{margin:14px 2px 0;font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mist)}
 #nh-lens .lens-step b{color:var(--ice-strong);font-weight:700}
 #nh-lens .lens-frames{display:flex;gap:8px;overflow-x:auto;padding:12px 2px;-webkit-overflow-scrolling:touch}
@@ -694,6 +712,7 @@
 #nh-feed .feed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 #nh-feed .feed-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#05070c;aspect-ratio:1}
 #nh-feed .feed-card img{width:100%;height:100%;object-fit:cover;display:block}
+#nh-feed .feed-card video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
 #nh-feed .feed-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 8px;font-size:12.5px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75));text-align:left}
 #nh-feed .feed-del{position:absolute;top:6px;right:6px;z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,120,120,.6);background:rgba(0,0,0,.65);color:#ff8080;font-size:22px;line-height:1;cursor:pointer}
 #nh-feed .feed-tag{position:absolute;left:6px;bottom:6px;font:400 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(5,7,12,.72);color:var(--ice-strong);padding:5px 8px;border-radius:999px}
@@ -815,13 +834,13 @@
 
 <!-- NITEHARTS LENS -->
       <section class="module lens-module" data-module-id="lens" data-module-label="Niteharts Lens" aria-labelledby="lensTitle">
-        <div class="module-head"><h2 id="lensTitle">Niteharts Lens</h2><span class="module-label">Shoot · Filter · Post</span></div>
+        <div class="module-head"><h2 id="lensTitle">Niteharts Lens</h2><span class="module-label">Shoot · Video · Post</span></div>
         <div id="nh-lens">
           <div class="lens-stage">
             <video id="lensVideo" playsinline muted autoplay aria-label="Camera preview"></video>
             <div class="lens-off" id="lensOff">
               <button type="button" id="lensStart" class="lens-btn">Open camera</button>
-              <p>or upload a photo below</p>
+              <p>or upload a photo below (private save only)</p>
             </div>
             <div class="lens-frame-layer" id="lensFrameLayer" aria-hidden="true"></div>
             <div id="lensFlashOverlay" aria-hidden="true"></div>
@@ -846,15 +865,27 @@
             <button type="button" data-filter="film" aria-pressed="false">film</button>
           </div>
           <div class="lens-actions">
+            <div class="lens-mode" role="group" aria-label="Camera mode">
+              <button type="button" id="lensModePhoto" class="lens-btn lens-ghost lens-mode-btn" aria-pressed="true">Photo</button>
+              <button type="button" id="lensModeVideo" class="lens-btn lens-ghost lens-mode-btn" aria-pressed="false">Video</button>
+            </div>
             <button type="button" id="lensCapture" class="lens-btn" hidden>Capture</button>
+            <button type="button" id="lensRecord" class="lens-btn lens-rec" hidden aria-pressed="false">Record</button>
             <button type="button" id="lensFlip" class="lens-btn lens-ghost" hidden aria-label="Switch between front and back camera">Flip</button>
             <button type="button" id="lensFlash" class="lens-btn lens-ghost" hidden aria-pressed="false" aria-label="Toggle camera flash">Flash</button>
             <label class="lens-btn lens-upload lens-ghost" for="lensFile">Upload photo<input type="file" id="lensFile" accept="image/*" hidden></label>
           </div>
+          <div class="lens-recbar" id="lensRecbar" hidden>
+            <span class="lens-recdot" aria-hidden="true"></span>
+            <span class="lens-rectime" id="lensRecTime">0:00</span>
+            <span class="lens-recmax">max 0:30</span>
+            <button type="button" id="lensStop" class="lens-btn lens-ghost">Stop</button>
+          </div>
           <div class="lens-preview" id="lensPreview" hidden>
             <img id="lensPreviewImg" alt="Your filtered photo">
+            <video id="lensPreviewVid" controls playsinline preload="metadata" hidden aria-label="Your recorded video"></video>
             <input type="text" id="lensCaption" class="lens-caption" maxlength="120" placeholder="Add a caption..." autocomplete="off" />
-            <p class="lens-choice-title">nice shot. what next?</p>
+            <p class="lens-choice-title" id="lensChoiceTitle">nice shot. what next?</p>
             <div class="lens-preview-actions">
               <button type="button" id="lensPost" class="lens-btn lens-choice">post to the board</button>
               <button type="button" id="lensSave" class="lens-btn lens-ghost lens-choice">save to my phone</button>
@@ -1539,16 +1570,13 @@
   (function nhConstruction(){
     try{
       if(!window.NH_CONSTRUCTION) return;
-      var seen=false;
-      try{ seen=!!sessionStorage.getItem('nhc-seen'); }catch(e){}
-      if(seen) return;
+      /* every full page load shows the splash while construction is on: no session bypass */
       var ov=document.getElementById('nhConstruction');
       if(!ov) return;
       ov.hidden=false;
       var prevOverflow=document.body.style.overflow;
       document.body.style.overflow='hidden';
       function dismiss(){
-        try{ sessionStorage.setItem('nhc-seen','1'); }catch(e){}
         ov.hidden=true;
         document.body.style.overflow=prevOverflow;
         try{ window.dispatchEvent(new Event('nhc:dismissed')); }catch(e){}
@@ -3000,6 +3028,31 @@
   var stream = null, shotCanvas = null, facingMode = 'environment', torchOn = false;
   var flipBtn = document.getElementById('lensFlip');
   var flashBtn = document.getElementById('lensFlash');
+  /* video mode + provenance */
+  var modePhotoBtn = document.getElementById('lensModePhoto');
+  var modeVideoBtn = document.getElementById('lensModeVideo');
+  var recBtn = document.getElementById('lensRecord');
+  var stopBtn = document.getElementById('lensStop');
+  var recbar = document.getElementById('lensRecbar');
+  var recTimeEl = document.getElementById('lensRecTime');
+  var previewVid = document.getElementById('lensPreviewVid');
+  var lensMode = 'photo';            /* 'photo' | 'video' */
+  var shotSource = null;             /* 'camera' | 'upload' — only camera shots may post publicly */
+  var shotVideoBlob = null;          /* recorded video blob for the current preview */
+  var recorder = null, recChunks = [], recCanvas = null, recRAF = 0, recTimer = 0, recStart = 0;
+  var REC_MAX_MS = 30000;
+  function setMode(m) {
+    lensMode = m;
+    var isV = (m === 'video');
+    if (modePhotoBtn) modePhotoBtn.setAttribute('aria-pressed', String(!isV));
+    if (modeVideoBtn) modeVideoBtn.setAttribute('aria-pressed', String(isV));
+    if (capBtn) capBtn.hidden = isV || !stream;
+    if (recBtn) { recBtn.hidden = !isV || !stream; recBtn.setAttribute('aria-pressed', 'false'); }
+    refreshFlashButton();
+    setNote(isV ? 'Video mode — up to 30 seconds, filters and frames baked in.' : '');
+  }
+  if (modePhotoBtn) modePhotoBtn.addEventListener('click', function () { if (recorder) return; setMode('photo'); });
+  if (modeVideoBtn) modeVideoBtn.addEventListener('click', function () { if (recorder) return; setMode('video'); });
 
   function setNote(m) { if (noteEl) noteEl.textContent = m || ''; }
   function applyLiveFilter() {
@@ -3152,7 +3205,9 @@
   function refreshFlashButton() {
     if (!flashBtn) return;
     if (facingMode === 'user') {
-      /* front camera has no torch hardware: offer screen flash instead */
+      /* front camera has no torch hardware: screen flash is photo-only, so hide it in video mode */
+      if (lensMode === 'video') { flashBtn.hidden = true; flashBtn.setAttribute('data-flashmode', ''); return; }
+      /* offer screen flash instead */
       flashBtn.hidden = false;
       flashBtn.setAttribute('data-flashmode', 'screen');
       flashBtn.setAttribute('aria-pressed', String(screenFlashOn));
@@ -3187,7 +3242,8 @@
         if (lensBox) lensBox.classList.add('lens-live');
         if (lensOff) lensOff.hidden = true;
         if (startBtn) startBtn.hidden = true;
-        if (capBtn) capBtn.hidden = false;
+        if (capBtn) capBtn.hidden = (lensMode === 'video');
+        if (recBtn) { recBtn.hidden = (lensMode !== 'video'); recBtn.setAttribute('aria-pressed', 'false'); }
         if (flipBtn) flipBtn.hidden = false;
         video.classList.toggle('mirrored', facingMode === 'user');
         refreshFlashButton();
@@ -3301,12 +3357,48 @@
     drawFrameOverlay(ctx, w, h, activeFrame);
     return c;
   }
-  function showPreview(canvas) {
+  function showPreview(canvas, src) {
     shotCanvas = canvas;
+    shotVideoBlob = null;
+    shotSource = src || 'camera';
+    if (previewVid) { try { previewVid.pause(); } catch (e) {} previewVid.hidden = true; previewVid.removeAttribute('src'); }
+    if (previewImg) { previewImg.hidden = false; }
     previewImg.src = canvas.toDataURL('image/jpeg', .85);
     previewBox.hidden = false;
+    var ct2 = document.getElementById('lensChoiceTitle');
+    if (ct2) ct2.textContent = 'nice shot. what next?';
+    applyProvenanceUI();
     setNote('');
     previewBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  /* Camera-only rule: only in-app camera shots may post publicly. Uploads are private-save only. */
+  var provenanceNote = null;
+  function applyProvenanceUI() {
+    if (!provenanceNote) {
+      provenanceNote = document.createElement('p');
+      provenanceNote.className = 'lens-privacy';
+      provenanceNote.id = 'lensProvenanceNote';
+      var priv = previewBox.querySelector('.lens-privacy');
+      if (priv && priv.parentNode) priv.parentNode.insertBefore(provenanceNote, priv);
+      else previewBox.appendChild(provenanceNote);
+    }
+    if (shotSource === 'upload') {
+      if (postBtn) postBtn.style.display = 'none';
+      provenanceNote.textContent = 'this came from your camera roll, so it stays private — only shots taken in the lens can go on the public board.';
+      provenanceNote.style.display = '';
+    } else {
+      if (postBtn) postBtn.style.display = '';
+      provenanceNote.style.display = 'none';
+    }
+  }
+  if (retakeBtn) {
+    retakeBtn.addEventListener('click', function () {
+      if (recorder) stopRecording();
+      previewBox.hidden = true; shotCanvas = null; shotVideoBlob = null; shotSource = null;
+      if (previewVid) { try { previewVid.pause(); } catch (e) {} previewVid.hidden = true; previewVid.removeAttribute('src'); }
+      if (previewImg) previewImg.hidden = false;
+      setNote('');
+    });
   }
   if (capBtn) {
     capBtn.addEventListener('click', function () {
@@ -3328,10 +3420,102 @@
       }
     });
   }
-  if (retakeBtn) {
-    retakeBtn.addEventListener('click', function () {
-      previewBox.hidden = true; shotCanvas = null; setNote('');
-    });
+  /* ---------- video recording: composite canvas -> MediaRecorder ----------
+     Filters + frames are baked into every recorded frame (not the raw feed). */
+  function paintVideoFrame(ctx, w, h) {
+    var f = FILTERS[activeFilter];
+    var mirror = (facingMode === 'user');
+    ctx.save();
+    try { ctx.filter = f.css === 'none' ? 'none' : f.css; } catch (e) {}
+    if (mirror) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(video, 0, 0, w, h);
+    ctx.restore();
+    try { ctx.filter = 'none'; } catch (e) {}
+    paintFilter(ctx, w, h, activeFilter);
+    drawFrameOverlay(ctx, w, h, activeFrame);
+  }
+  function pickMime() {
+    var cands = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
+    try {
+      for (var i = 0; i < cands.length; i++) {
+        if (window.MediaRecorder && MediaRecorder.isTypeSupported(cands[i])) return cands[i];
+      }
+    } catch (e) {}
+    return '';
+  }
+  function fmtTime(ms) {
+    var s = Math.floor(ms / 1000);
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+  function startRecording() {
+    if (recorder || !video || !video.videoWidth) { setNote('Camera is not ready yet.'); return; }
+    if (!window.MediaRecorder || !recCanvas) { /* recCanvas sized lazily below */ }
+    try {
+      var vw = video.videoWidth, vh = video.videoHeight;
+      var max = 1280, scale = Math.min(1, max / Math.max(vw, vh));
+      recCanvas = document.createElement('canvas');
+      recCanvas.width = Math.round(vw * scale); recCanvas.height = Math.round(vh * scale);
+      var rctx = recCanvas.getContext('2d');
+      var render = function () {
+        if (!recorder) return;
+        try { paintVideoFrame(rctx, recCanvas.width, recCanvas.height); } catch (e) {}
+        recRAF = requestAnimationFrame(render);
+      };
+      var streamOut;
+      try { streamOut = recCanvas.captureStream(30); }
+      catch (e) { setNote('This browser cannot record video.'); return; }
+      var mime = pickMime();
+      recorder = new MediaRecorder(streamOut, mime ? { mimeType: mime, videoBitsPerSecond: 2500000 } : undefined);
+      recChunks = [];
+      recorder.ondataavailable = function (e) { if (e.data && e.data.size) recChunks.push(e.data); };
+      recorder.onstop = function () {
+        cancelAnimationFrame(recRAF); recRAF = 0;
+        clearInterval(recTimer); recTimer = 0;
+        var type = (recorder && recorder.mimeType) || 'video/webm';
+        var blob = new Blob(recChunks, { type: type.split(';')[0] });
+        var wasRec = recorder; recorder = null;
+        if (recbar) recbar.hidden = true;
+        if (recBtn) { recBtn.setAttribute('aria-pressed', 'false'); recBtn.hidden = false; }
+        if (stopBtn) stopBtn.hidden = false;
+        if (blob.size < 1000) { setNote('Recording was too short. Try again.'); return; }
+        shotVideoBlob = blob;
+        shotSource = 'camera';
+        showVideoPreview(blob);
+      };
+      recorder.start(250);
+      recStart = Date.now();
+      if (recbar) recbar.hidden = false;
+      if (recBtn) { recBtn.setAttribute('aria-pressed', 'true'); }
+      if (recTimeEl) recTimeEl.textContent = '0:00';
+      recTimer = setInterval(function () {
+        var el = Date.now() - recStart;
+        if (recTimeEl) recTimeEl.textContent = fmtTime(el);
+        if (el >= REC_MAX_MS) stopRecording();
+      }, 250);
+      render();
+      setNote('');
+    } catch (e) { recorder = null; setNote('Could not start recording.'); }
+  }
+  function stopRecording() {
+    if (!recorder) return;
+    try { recorder.stop(); } catch (e) { recorder = null; }
+    clearInterval(recTimer); recTimer = 0;
+  }
+  if (recBtn) recBtn.addEventListener('click', startRecording);
+  if (stopBtn) stopBtn.addEventListener('click', stopRecording);
+  function showVideoPreview(blob) {
+    shotCanvas = null;
+    if (previewImg) { previewImg.hidden = true; previewImg.removeAttribute('src'); }
+    if (previewVid) {
+      try { previewVid.src = (window.URL || window.webkitURL).createObjectURL(blob); } catch (e) {}
+      previewVid.hidden = false;
+    }
+    previewBox.hidden = false;
+    var ct = document.getElementById('lensChoiceTitle');
+    if (ct) ct.textContent = 'nice clip. what next?';
+    applyProvenanceUI();
+    setNote('');
+    previewBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
   if (fileInput) {
     fileInput.addEventListener('change', function () {
@@ -3341,126 +3525,236 @@
       var img = new Image();
       img.onload = function () {
         try { (window.URL || window.webkitURL).revokeObjectURL(img.src); } catch (e) {}
-        showPreview(frameToCanvas(img, img.naturalWidth, img.naturalHeight));
+        showPreview(frameToCanvas(img, img.naturalWidth, img.naturalHeight), 'upload');
       };
       img.onerror = function () { setNote('Could not read that file.'); };
       try { img.src = (window.URL || window.webkitURL).createObjectURL(f); } catch (e) { setNote('Could not read that file.'); }
       fileInput.value = '';
     });
   }
+  /* ---------- pending review queue (lineup_saves: RLS is open; photos INSERT only allows 'approved') ----------
+     Queue row: device_key='nh-review-queue', lineup={items:[{qid,url,filter,caption,media,flagged,reason,created_at}]}.
+     Approve -> insert into photos as 'approved' (allowed) + drop from queue. Deny -> drop from queue. */
+  var REVIEW_QUEUE_KEY = 'nh-review-queue';
   var nsfwModel = null, nsfwLoading = null;
-  function nsfwCheck(canvas) {
-    function loadLibs() {
-      if (nsfwModel) return Promise.resolve();
-      if (nsfwLoading) return nsfwLoading;
-      nsfwLoading = new Promise(function (resolve) {
-        var tf = document.createElement('script');
-        tf.src = 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js';
-        tf.onload = function () {
-          var n = document.createElement('script');
-          n.src = 'https://cdn.jsdelivr.net/npm/nsfwjs@3.0.0/dist/nsfwjs.min.js';
-          n.onload = function () {
-            try { nsfwjs.load().then(function (m) { nsfwModel = m; resolve(); }).catch(function () { resolve(); }); }
-            catch (e) { resolve(); }
-          };
-          n.onerror = function () { resolve(); };
-          document.head.appendChild(n);
-        };
-        tf.onerror = function () { resolve(); };
-        document.head.appendChild(tf);
-      });
-      return nsfwLoading;
-    }
-    return loadLibs().then(function () {
-      if (!nsfwModel) return true;
-      try {
-        return nsfwModel.classify(canvas).then(function (preds) {
-          var bad = 0;
-          (preds || []).forEach(function (p) {
-            if ((p.className === 'Porn' || p.className === 'Hentai') && p.probability > bad) bad = p.probability;
-          });
-          return bad < 0.5;
-        }).catch(function () { return true; });
-      } catch (e) { return true; }
+  function queueGet() {
+    return sb('/lineup_saves?device_key=eq.' + REVIEW_QUEUE_KEY + '&select=lineup&limit=1')
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        var l = rows && rows[0] && rows[0] && rows[0].lineup;
+        return (l && l.items) || [];
+      }).catch(function () { return []; });
+  }
+  function queueSet(items) {
+    return sb('/lineup_saves?on_conflict=device_key', {
+      method: 'POST',
+      headers: { 'Prefer': 'resolution=merge-duplicates,return=representation' },
+      body: { device_key: REVIEW_QUEUE_KEY, lineup: { items: items, updated_at: new Date().toISOString() }, updated_at: new Date().toISOString() }
+    }).then(function (r) { if (!r.ok) throw new Error('queue ' + r.status); });
+  }
+  function queueAdd(item) {
+    return queueGet().then(function (items) { items.push(item); return queueSet(items); });
+  }
+  function queueRemove(qid) {
+    return queueGet().then(function (items) {
+      return queueSet(items.filter(function (x) { return x.qid !== qid; }));
     });
   }
+  /* moderation triage thresholds (max of Porn/Hentai probability) */
+  var MOD_CLEAN_MAX = 0.35;   /* below: posts straight to the board */
+  var MOD_BLOCK_MIN = 0.85;   /* at/above: hard block, plain explanation */
+  /* between: suspicious -> pending review queue. model unavailable -> pending too (fail safe). */
+  function nsfwLoad() {
+    if (nsfwModel) return Promise.resolve(nsfwModel);
+    if (nsfwLoading) return nsfwLoading;
+    nsfwLoading = new Promise(function (resolve) {
+      var tf = document.createElement('script');
+      tf.src = 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js';
+      tf.onload = function () {
+        var n = document.createElement('script');
+        n.src = 'https://cdn.jsdelivr.net/npm/nsfwjs@3.0.0/dist/nsfwjs.min.js';
+        n.onload = function () {
+          try { nsfwjs.load().then(function (m) { nsfwModel = m; resolve(m); }).catch(function () { resolve(null); }); }
+          catch (e) { resolve(null); }
+        };
+        n.onerror = function () { resolve(null); };
+        document.head.appendChild(n);
+      };
+      tf.onerror = function () { resolve(null); };
+      document.head.appendChild(tf);
+    });
+    return nsfwLoading;
+  }
+  /* -> {score, flagged:[{label,prob}], unavailable}. score = max(Porn, Hentai). */
+  function nsfwScore(canvas) {
+    return nsfwLoad().then(function (m) {
+      if (!m) return { score: 0, flagged: [], unavailable: true };
+      try {
+        return m.classify(canvas).then(function (preds) {
+          var score = 0, flagged = [];
+          (preds || []).forEach(function (p) {
+            if ((p.className === 'Porn' || p.className === 'Hentai') && p.probability > score) score = p.probability;
+            if (p.probability >= 0.2) flagged.push({ label: p.className, prob: Math.round(p.probability * 100) / 100 });
+          });
+          flagged.sort(function (a, b) { return b.prob - a.prob; });
+          return { score: score, flagged: flagged.slice(0, 4), unavailable: false };
+        }).catch(function () { return { score: 0, flagged: [], unavailable: true }; });
+      } catch (e) { return { score: 0, flagged: [], unavailable: true }; }
+    });
+  }
+  /* video: score frames at 15/50/85% of duration, return the worst */
+  function nsfwScoreVideo(blob) {
+    return new Promise(function (resolve) {
+      var url = null;
+      try { url = (window.URL || window.webkitURL).createObjectURL(blob); }
+      catch (e) { resolve({ score: 0, flagged: [], unavailable: true }); return; }
+      var done = false;
+      function finish(r) {
+        if (done) return; done = true;
+        try { (window.URL || window.webkitURL).revokeObjectURL(url); } catch (e) {}
+        resolve(r);
+      }
+      var v = document.createElement('video');
+      v.muted = true; v.playsInline = true; v.preload = 'auto';
+      v.onerror = function () { finish({ score: 0, flagged: [], unavailable: true }); };
+      var fracs = [0.15, 0.5, 0.85], i = 0;
+      var worst = { score: 0, flagged: [], unavailable: false };
+      v.onloadedmetadata = function () {
+        var dur = v.duration || 1;
+        var c = document.createElement('canvas');
+        (function next() {
+          if (i >= fracs.length) { finish(worst); return; }
+          var t = Math.min(dur * fracs[i], Math.max(0, dur - 0.15));
+          i++;
+          var onSeek = function () {
+            v.removeEventListener('seeked', onSeek);
+            try {
+              c.width = v.videoWidth || 320; c.height = v.videoHeight || 240;
+              c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+            } catch (e) { next(); return; }
+            nsfwScore(c).then(function (r) {
+              if (r.unavailable) worst.unavailable = true;
+              if (r.score > worst.score) worst = r;
+              next();
+            });
+          };
+          v.addEventListener('seeked', onSeek);
+          try { v.currentTime = t; } catch (e) { next(); }
+        })();
+      };
+      try { v.src = url; } catch (e) { finish({ score: 0, flagged: [], unavailable: true }); }
+      setTimeout(function () { finish({ score: 0, flagged: [], unavailable: true }); }, 45000);
+    });
+  }
+  /* triage -> 'approved' | 'pending' | 'blocked' */
+  function modTriage(res) {
+    if (res.unavailable) return { verdict: 'pending', reason: 'auto-check unavailable' };
+    if (res.score >= MOD_BLOCK_MIN) return { verdict: 'blocked', reason: 'score ' + Math.round(res.score * 100) + '%', flagged: res.flagged };
+    if (res.score >= MOD_CLEAN_MAX) return { verdict: 'pending', reason: 'score ' + Math.round(res.score * 100) + '%', flagged: res.flagged };
+    return { verdict: 'approved', reason: 'clean', flagged: res.flagged };
+  }
+  var CL_VIDEO_UPLOAD = 'https://api.cloudinary.com/v1_1/' + CL_CLOUD + '/video/upload';
   if (postBtn) {
     postBtn.addEventListener('click', function () {
-      if (!shotCanvas) return;
+      var isVideo = !!shotVideoBlob;
+      if (!isVideo && !shotCanvas) return;
+      if (shotSource !== 'camera') return; /* uploads never post publicly */
       postBtn.disabled = true;
       if (retakeBtn) retakeBtn.disabled = true;
       if (saveBtn) saveBtn.disabled = true;
-      setNote('Uploading...');
-      function fail(msg) {
-        setNote(msg || 'Upload failed. Check your connection and retry.');
+      function unlock() {
         postBtn.disabled = false;
         if (retakeBtn) retakeBtn.disabled = false;
         if (saveBtn) saveBtn.disabled = false;
       }
-      var blob;
-      try {
-        shotCanvas.toBlob(function (b) {
+      function fail(msg) {
+        setNote(msg || 'Upload failed. Check your connection and retry.');
+        unlock();
+      }
+      setNote(isVideo ? 'Checking video...' : 'Checking photo...');
+      var checkP = isVideo ? nsfwScoreVideo(shotVideoBlob) : nsfwScore(shotCanvas);
+      checkP.then(function (res) {
+        var t = modTriage(res);
+        if (t.verdict === 'blocked') {
+          setNote("couldn't post this one — it looks like it breaks the no-nudity rule. keep the feed clean.");
+          unlock();
+          return;
+        }
+        var status = (t.verdict === 'pending') ? 'pending' : 'approved';
+        setNote('Uploading...');
+        var getBlob = isVideo
+          ? function (cb) { cb(shotVideoBlob); }
+          : function (cb) { try { shotCanvas.toBlob(function (b) { cb(b); }, 'image/jpeg', .85); } catch (e) { cb(null); } };
+        getBlob(function (b) {
           if (!b) { fail(); return; }
-          setNote('Checking photo...');
-          nsfwCheck(shotCanvas).then(function (clean) {
-            if (!clean) {
-              setNote("This photo can't be posted — let's keep the feed clean.");
-              postBtn.disabled = false;
-              if (retakeBtn) retakeBtn.disabled = false;
-              return;
-            }
-            setNote('Uploading...');
           var fd = new FormData();
-          fd.append('file', b, 'niteharts.jpg');
+          var fname = isVideo ? ('niteharts.' + (String(b.type || '').indexOf('mp4') >= 0 ? 'mp4' : 'webm')) : 'niteharts.jpg';
+          fd.append('file', b, fname);
           fd.append('upload_preset', CL_PRESET);
-          timedFetch(CL_UPLOAD, { method: 'POST', body: fd }, 30000).then(function (r) {
+          timedFetch(isVideo ? CL_VIDEO_UPLOAD : CL_UPLOAD, { method: 'POST', body: fd }, isVideo ? 90000 : 30000).then(function (r) {
             if (!r.ok) throw new Error('cloudinary ' + r.status);
             return r.json();
           }).then(function (j) {
             if (!j || !j.secure_url) throw new Error('no url');
             var capEl = document.getElementById('lensCaption');
             var caption = capEl ? capEl.value.trim().slice(0, 120) : '';
+            if (status === 'pending') {
+              return queueAdd({
+                qid: 'q' + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36),
+                url: j.secure_url, filter: activeFilter, caption: caption || null,
+                media: isVideo ? 'video' : 'photo',
+                flagged: (t && t.flagged) || [], reason: (t && t.reason) || '',
+                created_at: new Date().toISOString()
+              });
+            }
             return sb('/photos', { method: 'POST', body: { url: j.secure_url, filter: activeFilter, status: 'approved', caption: caption || null } })
               .then(function (r) {
                 if (!r.ok) throw new Error('db ' + r.status);
                 return j.secure_url;
               });
           }).then(function () {
-            setNote("Posted — it's live on the board.");
+            if (status === 'pending') {
+              setNote("sent for review — it'll hit the board once it's cleared.");
+            } else {
+              setNote("Posted — it's live on the board.");
+            }
             var capEl2 = document.getElementById('lensCaption'); if (capEl2) capEl2.value = '';
-            postBtn.disabled = false;
-            if (retakeBtn) retakeBtn.disabled = false;
-            if (saveBtn) saveBtn.disabled = false;
+            unlock();
           }).catch(function () { fail(); });
-          });
-        }, 'image/jpeg', .85);
-      } catch (e) { fail(); }
+        });
+      }).catch(function () { fail(); });
     });
   }
   if (saveBtn) {
     saveBtn.addEventListener('click', function () {
-      if (!shotCanvas) return;
+      var isVideo = !!shotVideoBlob;
+      if (!isVideo && !shotCanvas) return;
       saveBtn.disabled = true;
       setNote('Saving...');
+      function dlBlob(b, name) {
+        saveBtn.disabled = false;
+        if (!b) { setNote(isVideo ? 'Could not save that video. Try again.' : 'Could not save that photo. Try again.'); return; }
+        var url = (window.URL || window.webkitURL).createObjectURL(b);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+          try { document.body.removeChild(a); } catch (e) {}
+          try { (window.URL || window.webkitURL).revokeObjectURL(url); } catch (e) {}
+        }, 4000);
+        setNote('Saved to your phone. Not posted anywhere.');
+      }
       try {
-        shotCanvas.toBlob(function (b) {
-          saveBtn.disabled = false;
-          if (!b) { setNote('Could not save that photo. Try again.'); return; }
-          var url = (window.URL || window.webkitURL).createObjectURL(b);
-          var a = document.createElement('a');
-          a.href = url;
-          a.download = 'niteharts.jpg';
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(function () {
-            try { document.body.removeChild(a); } catch (e) {}
-            try { (window.URL || window.webkitURL).revokeObjectURL(url); } catch (e) {}
-          }, 4000);
-          setNote('Saved to your phone. Not posted anywhere.');
-        }, 'image/jpeg', .92);
+        if (isVideo) {
+          dlBlob(shotVideoBlob, 'niteharts.' + (String(shotVideoBlob.type || '').indexOf('mp4') >= 0 ? 'mp4' : 'webm'));
+        } else {
+          shotCanvas.toBlob(function (b) { dlBlob(b, 'niteharts.jpg'); }, 'image/jpeg', .92);
+        }
       } catch (e) {
         saveBtn.disabled = false;
-        setNote('Could not save that photo. Try again.');
+        setNote('Could not save. Try again.');
       }
     });
   }
@@ -3511,7 +3805,11 @@
           var cap = p.caption ? esc(p.caption) : '';
           var del = (typeof adminMode !== 'undefined' && adminMode && p.id) ?
             '<button type="button" class="feed-del" data-id="' + esc(p.id) + '" aria-label="Delete photo">×</button>' : '';
-          return '<figure class="feed-card">' + del + '<img loading="lazy" decoding="async" src="' + esc(p.url) + '" alt="Niteharts crowd photo">' +
+          var isVid = /\.(mp4|webm|mov)(\?|$)/i.test(p.url || '');
+          var media = isVid
+            ? '<video controls muted loop playsinline preload="metadata" src="' + esc(p.url) + '" aria-label="Niteharts crowd video"></video>'
+            : '<img loading="lazy" decoding="async" src="' + esc(p.url) + '" alt="Niteharts crowd photo">';
+          return '<figure class="feed-card">' + del + media +
             (tag ? '<figcaption class="feed-tag">' + esc(tag) + '</figcaption>' : '') +
             (cap ? '<figcaption class="feed-cap">' + cap + '</figcaption>' : '') + '</figure>';
         }).join('');
@@ -3595,8 +3893,112 @@
         lsSet('nh_review_code', v);
       } else if (v !== saved) { showReviewError('Wrong code. Try again.'); return; }
       showReviewError('');
-      closeReview();
+      if (reviewGate) reviewGate.hidden = true;
       setAdmin(true);
+      loadReviewQueue();
+    });
+  }
+  function fmtReviewTime(iso) {
+    try { return new Date(iso).toLocaleString(); } catch (e) { return ''; }
+  }
+  function isVideoUrl(u) { return /\.(mp4|webm|mov)(\?|$)/i.test(u || ''); }
+  function loadReviewQueue() {
+    if (!reviewList) return;
+    reviewList.hidden = false;
+    if (reviewGate) reviewGate.hidden = true;
+    reviewList.innerHTML = '<p class="review-count">loading the queue...</p>';
+    queueGet()
+      .then(function (rows) {
+        rows = (rows || []).slice().reverse(); /* newest first */
+        if (reviewCount) reviewCount.textContent = rows.length ? (rows.length + ' waiting on you') : 'queue is clear. nothing waiting.';
+        if (!rows.length) { reviewList.innerHTML = ''; return; }
+        reviewList.innerHTML = rows.map(function (p) {
+          var isVid = p.media === 'video' || isVideoUrl(p.url);
+          var media = isVid
+            ? '<video controls muted loop playsinline preload="metadata" src="' + esc(p.url) + '" aria-label="pending video"></video>'
+            : '<img loading="lazy" src="' + esc(p.url) + '" alt="pending photo">';
+          var tag = FILTERS[p.filter] ? FILTERS[p.filter].label : esc(p.filter || '');
+          var why = (p.flagged && p.flagged.length)
+            ? 'submitted as: ' + p.flagged.map(function (f) { return esc(f.label) + ' ' + Math.round(f.prob * 100) + '%'; }).join(' · ')
+            : ('submitted as: ' + esc(p.reason || 'borderline'));
+          return '<div class="review-item" data-rid="' + esc(p.qid) + '">' + media +
+            '<div class="review-flags" data-flags data-why="' + esc(why) + '">checking...</div>' +
+            '<div class="review-meta"><span><span class="review-time">' + esc(fmtReviewTime(p.created_at)) + '</span><br>' +
+            '<span class="review-filter">' + (isVid ? 'video' : 'photo') + (tag ? ' · ' + esc(tag) : '') + '</span>' +
+            (p.caption ? '<br><span class="review-filter">&ldquo;' + esc(p.caption) + '&rdquo;</span>' : '') + '</span>' +
+            '<span class="review-btns"><button type="button" class="review-approve" data-act="approve">Approve</button>' +
+            '<button type="button" class="review-reject" data-act="deny">Deny</button></span></div></div>';
+        }).join('');
+        wireReviewItems(rows);
+      })
+      .catch(function () { reviewList.innerHTML = '<p class="review-count">could not load the queue. check your connection.</p>'; });
+  }
+  function checkReviewMedia(item, url, isVid) {
+    var flagEl = item.querySelector('[data-flags]');
+    var why = flagEl ? (flagEl.getAttribute('data-why') || '') : '';
+    function show(res) {
+      if (!flagEl) return;
+      var live;
+      if (res.unavailable) { live = 're-check unavailable — your call'; }
+      else if (!res.flagged.length) { live = 're-check came back clean (' + Math.round(res.score * 100) + '%)'; }
+      else { live = 're-check flagged: ' + res.flagged.map(function (f) { return f.label + ' ' + Math.round(f.prob * 100) + '%'; }).join(' · '); }
+      flagEl.textContent = (why ? why + '\n' : '') + live;
+    }
+    function cant() { if (flagEl) flagEl.textContent = (why ? why + '\n' : '') + 'could not re-check — trust your eyes on this one'; }
+    if (isVid) {
+      timedFetch(url, {}, 30000).then(function (r) { if (!r.ok) throw new Error('fetch'); return r.blob(); })
+        .then(function (b) { return nsfwScoreVideo(b); }).then(show).catch(cant);
+    } else {
+      var img = new Image(); img.crossOrigin = 'anonymous';
+      img.onload = function () {
+        try {
+          var c = document.createElement('canvas');
+          var s = Math.min(1, 512 / Math.max(img.naturalWidth || 1, img.naturalHeight || 1));
+          c.width = Math.max(1, Math.round(img.naturalWidth * s));
+          c.height = Math.max(1, Math.round(img.naturalHeight * s));
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          nsfwScore(c).then(show);
+        } catch (e) { cant(); }
+      };
+      img.onerror = cant;
+      try { img.src = url; } catch (e) { cant(); }
+    }
+  }
+  var reviewItemsByQid = {};
+  function reviewSetStatus(qid, approve, item) {
+    var btns = item.querySelectorAll('button');
+    Array.prototype.forEach.call(btns, function (b) { b.disabled = true; });
+    var done = function () {
+      try { item.parentNode.removeChild(item); } catch (e) {}
+      delete reviewItemsByQid[qid];
+      if (typeof loadFeed === 'function') loadFeed();
+      var left = reviewList ? reviewList.querySelectorAll('.review-item').length : 0;
+      if (reviewCount) reviewCount.textContent = left ? (left + ' waiting on you') : 'queue is clear. nothing waiting.';
+    };
+    var drop = function () { return queueRemove(qid).then(done); };
+    if (!approve) { drop().catch(function () { Array.prototype.forEach.call(btns, function (b) { b.disabled = false; }); }); return; }
+    var p = reviewItemsByQid[qid] || {};
+    sb('/photos', { method: 'POST', body: { url: p.url, filter: p.filter || 'frost', status: 'approved', caption: p.caption || null } })
+      .then(function (r) { if (!r.ok) throw new Error('db ' + r.status); })
+      .then(drop)
+      .catch(function () { Array.prototype.forEach.call(btns, function (b) { b.disabled = false; }); });
+  }
+  function wireReviewItems(rows) {
+    if (!reviewList) return;
+    reviewItemsByQid = {};
+    (rows || []).forEach(function (p) { if (p && p.qid) reviewItemsByQid[p.qid] = p; });
+    Array.prototype.forEach.call(reviewList.querySelectorAll('.review-item'), function (item) {
+      var qid = item.getAttribute('data-rid');
+      var mediaEl = item.querySelector('video, img');
+      var url = mediaEl ? (mediaEl.getAttribute('src') || '') : '';
+      checkReviewMedia(item, url, !!item.querySelector('video'));
+      Array.prototype.forEach.call(item.querySelectorAll('[data-act]'), function (b) {
+        b.addEventListener('click', function () {
+          var act = b.getAttribute('data-act');
+          if (act === 'deny' && !confirm('Deny this upload? It will not go on the board.')) return;
+          reviewSetStatus(qid, act === 'approve', item);
+        });
+      });
     });
   }
 
@@ -3609,6 +4011,15 @@
     if (adminMode) { setAdmin(false); return; }
     openReview();
   });
+  /* discreet entry: https://byyystudio.me/niteharts/?review=1 opens the review panel */
+  try {
+    var _qp = new URLSearchParams(window.location.search);
+    if (_qp.get('review') === '1') {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', openReview);
+      } else { openReview(); }
+    }
+  } catch (e) {}
 })();
 (function collapsibleModules(){
   var KEY='nh26-collapsed-modules';
