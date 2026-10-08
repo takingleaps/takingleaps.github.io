@@ -1683,28 +1683,30 @@
          Phone GPS itself is usually +/-5-15m, which dominates the error budget anyway.
          The on-map debug readout exists so Nathan can calibrate on site. */
       gpsAnchors: [
-        {x:635,  y:420, lat:32.78444, lon:-117.12278, unc:15, src:"stadium center, published coords"},
-        {x:710,  y:570, lat:32.78363, lon:-117.12230, unc:35, src:"estimated: GA entrance ~110m SSE of center"},
-        {x:1825, y:875, lat:32.78120, lon:-117.11390, unc:40, src:"estimated: gate 3, far SE parking"}
+        {x:700,  y:440, lat:32.78444, lon:-117.12278, unc:15, src:"stadium center, published coords (re-measured 2026-10-08)"},
+        {x:890,  y:570, lat:32.78374, lon:-117.12156, unc:35, src:"estimated: GA entrance ~114m E, 78m S of center"},
+        {x:1780, y:792, lat:32.78165, lon:-117.11419, unc:40, src:"estimated: gate 3, far SE parking"}
       ],
       catColors: { stage:"#9fc9ef", entrance:"#ffffff", merch:"#7ed321", lockers:"#ff6fd8", transit:"#b8b8b8", art:"#c9a6ff", activity:"#6ee7a0" },
+      /* pins re-measured 2026-10-08 against the official artwork at full res
+         with visual grounding. every pin now sits on its actual feature. */
       nodes: {
-        main_stage:   {x:930,y:790,label:"Main Stage",cat:"stage",sched:"main",info:"the big one. headliners close every night here."},
-        the_mirror:   {x:630,y:830,label:"The Mirror",cat:"art",info:"art installation. big crystal piece by the crescent, good photo spot."},
-        the_crescent: {x:635,y:750,label:"The Crescent",cat:"art",info:"art installation. crescent moon piece next to the mirror."},
-        the_terminal: {x:395,y:550,label:"The Terminal",cat:"art",info:"landmark art piece on the west walkway by the entrance tunnel."},
-        half_court:   {x:420,y:545,label:"Half Court",cat:"activity",info:"half basketball court. shoot around between sets."},
+        main_stage:   {x:770,y:800,label:"Main Stage",cat:"stage",sched:"main",info:"the big one. headliners close every night here."},
+        the_mirror:   {x:520,y:834,label:"The Mirror",cat:"art",info:"art installation. big crystal piece by the crescent, good photo spot."},
+        the_crescent: {x:524,y:763,label:"The Crescent",cat:"art",info:"art installation. crescent moon piece next to the mirror."},
+        the_terminal: {x:376,y:593,label:"The Terminal",cat:"art",info:"landmark art piece on the west walkway by the entrance tunnel."},
+        half_court:   {x:430,y:605,label:"Half Court",cat:"activity",info:"half basketball court. shoot around between sets."},
         valorant_stage:{x:950,y:420,label:"Valorant Stage",cat:"stage",sched:"valorant",approx:true,info:"gaming stage. its exact spot wasn't on the official map, so this pin is approximate. we'll move it when the location is announced."},
-        ga_entrance:  {x:710,y:570,label:"GA Entrance",cat:"entrance",info:"main way in. have your ticket and id ready."},
-        vip_entrance: {x:980,y:1090,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry."},
-        entrance_tunnel:{x:440,y:810,label:"Entrance Tunnel",cat:"entrance",info:"tunnel walkway into the grounds."},
-        gate2:        {x:1170,y:75,label:"Gate 2",cat:"entrance",info:"parking entrance."},
-        gate3:        {x:1825,y:875,label:"Gate 3",cat:"entrance",info:"parking entrance, southeast side."},
-        merch:        {x:670,y:1140,label:"Merch",cat:"merch",info:"official merch booth."},
-        lockers:      {x:1020,y:1130,label:"Lockers",cat:"lockers",info:"rent a locker, stash your stuff."},
-        trolley:      {x:1190,y:1020,label:"Trolley Stop",cat:"transit",info:"San Diego Trolley Green Line. easiest way out after the show."},
-        rideshare:    {x:1095,y:60,label:"Ride Share",cat:"transit",info:"pickup and dropoff lot."},
-        ga_parking:   {x:1550,y:225,label:"GA Parking",cat:"transit",info:"orange lot. general admission parking."},
+        ga_entrance:  {x:890,y:570,label:"GA Entrance",cat:"entrance",info:"main way in. have your ticket and id ready."},
+        vip_entrance: {x:794,y:1014,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry."},
+        entrance_tunnel:{x:459,y:841,label:"Entrance Tunnel",cat:"entrance",info:"tunnel walkway into the grounds."},
+        gate2:        {x:1321,y:76,label:"Gate 2",cat:"entrance",info:"parking entrance."},
+        gate3:        {x:1780,y:792,label:"Gate 3",cat:"entrance",info:"parking entrance, southeast side."},
+        merch:        {x:670,y:1035,label:"Merch",cat:"merch",info:"official merch booth."},
+        lockers:      {x:695,y:1033,label:"Lockers",cat:"lockers",info:"rent a locker, stash your stuff."},
+        trolley:      {x:1085,y:935,label:"Trolley Stop",cat:"transit",info:"San Diego Trolley Green Line. easiest way out after the show."},
+        rideshare:    {x:1105,y:135,label:"Ride Share",cat:"transit",info:"pickup and dropoff lot."},
+        ga_parking:   {x:1410,y:304,label:"GA Parking",cat:"transit",info:"orange lot. general admission parking."},
         w_north1:{x:480,y:210,wp:1}, w_north2:{x:745,y:210,wp:1}, w_north3:{x:1010,y:210,wp:1},
         w_blue:{x:950,y:360,wp:1}, w_walkway:{x:920,y:480,wp:1},
         w_west1:{x:430,y:250,wp:1}, w_west2:{x:400,y:450,wp:1}, w_west3:{x:390,y:640,wp:1},
@@ -2664,6 +2666,7 @@
       <input id="reviewCode" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Moderator code">
       <button type="button" id="reviewUnlock" class="lens-btn">Unlock</button>
       <p class="review-error" id="reviewError" role="alert" hidden></p>
+      <p class="review-reset"><button type="button" id="reviewReset" class="lens-ghost lens-btn">forgot your code? reset it</button></p>
     </div>
     <div class="review-list" id="reviewList" hidden></div>
     <button type="button" id="reviewClose" class="lens-btn lens-ghost review-close">Close</button>
@@ -3753,6 +3756,16 @@
       if (reviewGate) reviewGate.hidden = true;
       setAdmin(true);
       loadReviewQueue();
+    });
+  }
+  var resetBtn = document.getElementById('reviewReset');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      if (!confirm('Reset your admin code? You will set a new 4-digit code next.')) return;
+      try { window.localStorage.removeItem('nh_review_code'); } catch (e) {}
+      showReviewError('');
+      if (reviewCode) { reviewCode.value = ''; reviewCode.placeholder = 'Set a new 4-digit code'; }
+      if (reviewCode) reviewCode.focus();
     });
   }
   function fmtReviewTime(iso) {
