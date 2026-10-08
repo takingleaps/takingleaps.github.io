@@ -238,7 +238,7 @@
       footer{margin-top:30px}
     }
     @media(max-width:360px){.mobile-quicknav{margin-inline:-10px}.mobile-quicknav a,.mobile-quicknav button{font-size:.55rem}.hero{min-height:270px}.dates{font-size:3.22rem}.schedule-card{grid-template-columns:68px minmax(0,1fr)}.set-copy{padding:9px}.artist{font-size:1.31rem}}
-      /* ---- interactive festival map v1: switcher + our schematic ---- */
+    /* ---- 3d festival map (our view): official artwork + true css-3d scene ---- */
     .map-switch{margin:2px 0 14px}
     .map-wip{font-size:11px;letter-spacing:.08em;opacity:.55;margin-left:8px;white-space:nowrap}
     #mapViewOurs[hidden],#mapViewOfficial[hidden]{display:none!important}
@@ -247,10 +247,30 @@
     .omap-from{display:inline-flex;align-items:center;gap:8px;font:400 .62rem var(--mono);text-transform:uppercase;color:var(--mist)}
     .omap-from select{appearance:none;min-height:44px;background:var(--panel);border:1px solid var(--line);color:var(--paper);border-radius:2px;padding:10px 12px;font:400 .7rem var(--mono);text-transform:uppercase;max-width:230px;cursor:pointer}
     .omap-note{margin:0;font:400 .6rem/1.5 var(--mono);text-transform:uppercase;color:var(--mist)}
-    .omap-viewer{position:relative;height:520px;overflow:hidden;touch-action:none;cursor:grab;background:#0d0e10;user-select:none;-webkit-user-select:none}
+    .omap-tilt{display:inline-flex;align-items:center;gap:8px;font:400 .62rem var(--mono);text-transform:uppercase;color:var(--mist)}
+    .omap-tilt input{width:120px;accent-color:var(--ice);min-height:44px;cursor:pointer}
+    .omap-viewer{position:relative;height:520px;overflow:hidden;touch-action:none;cursor:grab;background:#0b0c0d;user-select:none;-webkit-user-select:none;perspective:1400px}
     .omap-viewer.dragging{cursor:grabbing}
-    .omap-canvas{position:absolute;left:0;top:0;width:960px;height:600px;transform-origin:0 0;will-change:transform;-webkit-user-drag:none}
-    .omap-canvas svg{display:block;width:960px;height:600px;overflow:visible}
+    .omap-cam{position:absolute;left:0;top:0;width:1920px;height:1200px;transform-origin:0 0;transform-style:preserve-3d;will-change:transform}
+    .omap-world{position:absolute;left:0;top:0;width:1920px;height:1200px;transform-origin:960px 600px;transform-style:preserve-3d;will-change:transform}
+    .omap-ground{display:block;width:1920px;height:1200px;pointer-events:none;user-select:none;-webkit-user-drag:none}
+    .omap-routes{position:absolute;left:0;top:0;width:1920px;height:1200px;transform:translateZ(14px);pointer-events:none;overflow:visible}
+    .omap-pins{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
+    .o3-pin{position:absolute;width:0;height:0;padding:26px;margin:-26px 0 0 -26px;transform-style:preserve-3d;background:none;border:0;cursor:pointer;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    .o3-pin:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
+    .o3-shadow{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;transform:translateZ(2px);background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,0) 72%);border-radius:50%;pointer-events:none}
+    .o3-post{position:absolute;left:50%;bottom:50%;width:5px;height:68px;margin-left:-2.5px;transform-origin:50% 100%;transform:rotateX(-90deg);background:linear-gradient(to top,transparent 8%,var(--pin,#9fc9ef) 88%);opacity:0;transition:opacity .3s ease;pointer-events:none;border-radius:3px}
+    .o3-post.p2{transform:rotateX(-90deg) rotateY(90deg)}
+    .omap-viewer.is-3d .o3-post{opacity:.85}
+    .o3-head{position:absolute;left:50%;bottom:50%;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,0) translateZ(68px) rotateZ(calc(var(--orot,0)*-1deg)) rotateX(calc(var(--otilt,0)*-1deg));pointer-events:auto;cursor:pointer}
+    .o3-head span{pointer-events:none}
+    .o3-tag{margin-bottom:7px;white-space:nowrap;background:rgba(11,12,13,.93);border:1px solid var(--pin,#9fc9ef);color:var(--paper);font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:7px 11px;border-radius:2px;opacity:0;transition:opacity .18s ease}
+    .o3-pin[aria-expanded="true"] .o3-tag{opacity:1}
+    .o3-dot{display:block;width:15px;height:15px;border-radius:50%;background:var(--pin,#9fc9ef);border:2.5px solid #0b0c0d;box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,#9fc9ef) 40%,transparent),0 3px 10px rgba(0,0,0,.6)}
+    .o3-pin[aria-expanded="true"] .o3-dot{background:#fff}
+    .omap-compass{position:absolute;top:12px;right:12px;width:48px;height:48px;border-radius:50%;background:rgba(13,14,16,.9);border:1px solid var(--line);color:var(--paper);cursor:pointer;z-index:6;touch-action:manipulation;display:grid;place-items:center}
+    .omap-compass[hidden]{display:none}
+    .omap-compass span{display:block;font:700 .82rem var(--mono);color:var(--ice);width:100%;text-align:center}
     .omap-debug{position:absolute;left:10px;bottom:8px;max-width:calc(100% - 20px);margin:0;font:400 .58rem/1.5 var(--mono);color:var(--ice);background:rgba(13,14,16,.85);border:1px solid var(--line);padding:6px 9px;border-radius:2px;pointer-events:none}
     .omap-debug[hidden]{display:none}
     .omap-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-top:1px solid var(--line)}
@@ -269,38 +289,20 @@
     .omap-steps li::before{counter-increment:ostep;content:counter(ostep);position:absolute;left:0;top:1px;width:21px;height:21px;border:1px solid var(--ice);border-radius:50%;font:400 .6rem/21px var(--mono);text-align:center;color:var(--ice)}
     .omap-steps .st-min{color:var(--mist);font-family:var(--mono);font-size:.68rem}
     .omap-steps-toggle{margin-top:10px}
-    .omap-walkway{fill:none;stroke:#333a44;stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
-    .omap-walkway.approx{stroke-dasharray:10 8;stroke:#3d4450}
-    .omap-stadium{fill:#121418;stroke:#2b2f36;stroke-width:2}
-    .omap-stadium-label{font-family:var(--display);font-size:17px;letter-spacing:.14em;fill:#4a5058;text-transform:uppercase}
-    .omap-node{cursor:pointer;outline:none}
-    .omap-node .hit{fill:transparent;stroke:none;pointer-events:all}
-    .omap-node text{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;fill:#c2c6d0;paint-order:stroke;stroke:#0d0e10;stroke-width:4px;pointer-events:none}
-    .omap-node.stage .dot{stroke:#0d0e10;stroke-width:2}
-    .omap-node.stage text{font-size:21px;fill:#ececec}
-    .omap-node.entrance text{font-size:15px}
-    .omap-node.poi text{font-size:14px}
-    .omap-node .wp{fill:#454b55;pointer-events:none}
-    .omap-node:focus-visible .dot{stroke:#fff;stroke-width:3}
-    .omap-poi{cursor:pointer;outline:none}
-    .omap-poi .hit{fill:transparent;pointer-events:all}
-    .omap-poi:focus-visible circle:last-child{stroke:#fff;stroke-width:2.5}
-    #omapRouteG[hidden]{display:none}
-    #omapRouteLineA{fill:none;stroke:#9fc9ef;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
-    #omapRouteLineB{fill:none;stroke:#fff;stroke-width:2;stroke-dasharray:2 14;stroke-linecap:round;opacity:.85;pointer-events:stroke;cursor:pointer}
-    #omapRouteLineA{pointer-events:stroke;cursor:pointer}
-    #omapRouteLineHit{fill:none;stroke:#fff;stroke-opacity:0;stroke-width:34;stroke-linecap:round;stroke-linejoin:round;pointer-events:stroke;cursor:pointer}
+    #omap3RouteG[hidden]{display:none}
+    #omap3RouteLineA{fill:none;stroke:#9fc9ef;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;opacity:.95;pointer-events:stroke;cursor:pointer}
+    #omap3RouteLineB{fill:none;stroke:#fff;stroke-width:3.5;stroke-dasharray:3 22;stroke-linecap:round;opacity:.9;pointer-events:stroke;cursor:pointer;animation:routeMarch 1.2s linear infinite}
+    #omap3RouteLineHit{fill:none;stroke:#fff;stroke-opacity:0;stroke-width:56;stroke-linecap:round;stroke-linejoin:round;pointer-events:stroke;cursor:pointer}
     @keyframes routeMarch{to{stroke-dashoffset:-32}}
-    #omapRouteLineB{animation:routeMarch 1.2s linear infinite}
-    .omap-gps-dot{fill:#4da3ff;stroke:#fff;stroke-width:2.5}
-    .omap-gps-acc{fill:rgba(77,163,255,.13);stroke:rgba(77,163,255,.4);stroke-width:1}
-    .omap-gps-pulse{fill:none;stroke:#4da3ff;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center;animation:gpsPulse 2.2s ease-out infinite}
+    #omap3GpsG[hidden]{display:none}
+    .omap3-gps-dot{fill:#2f9dff;stroke:#fff;stroke-width:3}
+    .omap3-gps-acc{fill:rgba(47,157,255,.18);stroke:rgba(47,157,255,.5);stroke-width:1.5}
+    .omap3-gps-pulse{fill:none;stroke:#2f9dff;stroke-width:2;opacity:.7;transform-box:fill-box;transform-origin:center;animation:gpsPulse 2s ease-out infinite}
     @keyframes gpsPulse{0%{opacity:.8;transform:scale(1)}70%{opacity:0;transform:scale(3)}100%{opacity:0;transform:scale(3)}}
-    #omapGpsG[hidden]{display:none}
     .way-link{appearance:none;background:none;border:0;padding:12px 4px;min-height:44px;color:var(--ice);font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;touch-action:manipulation}
     /* ghost-drag kill + gesture ownership, both viewers */
     .fmap-viewer,.omap-viewer{touch-action:none;user-select:none;-webkit-user-select:none}
-    .fmap-viewer img,.fmap-canvas img,.omap-canvas{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
+    .fmap-viewer img,.omap-ground{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
     .fmap-viewer img{pointer-events:none}
     /* construction splash */
     #nhConstruction{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:rgba(13,14,16,.97);padding:24px}
@@ -309,8 +311,8 @@
     .nhc-kicker{margin:0 0 12px;font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.24em;color:var(--ice)}
     .nhc-copy{margin:0 0 24px;font:400 1.04rem/1.55 var(--body);color:var(--paper)}
     .nhc-card button{appearance:none;min-height:52px;padding:14px 32px;background:var(--ice);border:0;border-radius:2px;color:#101113;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.08em;cursor:pointer;touch-action:manipulation}
-    @media(max-width:600px){.omap-viewer{height:380px}.omap-toolbar{gap:8px}.omap-from select{max-width:170px}}
-    @media(prefers-reduced-motion:reduce){#omapRouteLineB,.omap-gps-pulse{animation:none}}
+    @media(max-width:600px){.omap-viewer{height:380px}.omap-toolbar{gap:8px}.omap-from select{max-width:170px}.omap-tilt input{width:90px}}
+    @media(prefers-reduced-motion:reduce){#omap3RouteLineB,.omap3-gps-pulse{animation:none}.o3-post{transition:none}}
 
   </style>
 </head>
@@ -468,64 +470,53 @@
         <div class="module-head"><h2 id="mapTitle">Festival map</h2><span class="module-label">Interactive grounds map</span></div>
         <div class="map-switch segmented" role="group" aria-label="Map style">
           <button type="button" data-mapview="official" aria-pressed="true">Official map</button>
-          <button type="button" data-mapview="ours" aria-pressed="false">[try out] interactive map</button><span class="map-wip">-&gt; still under construction</span>
+          <button type="button" data-mapview="ours" aria-pressed="false">[TRY OUT] 3D MAP</button><span class="map-wip">-&gt; still under construction</span>
         </div>
-        <div id="mapViewOurs" hidden>
-          <div class="omap" id="ourMap">
-            <div class="omap-toolbar">
-              <label class="omap-from">From
-                <select id="omapOrigin" aria-label="Route starting point">
-                  <option value="ga_entrance" selected>GA Entrance</option>
-                  <option value="vip_entrance">VIP Entrance</option>
-                  <option value="main_stage">Main Stage</option>
-                  <option value="the_mirror">The Mirror</option>
-                  <option value="the_crescent">The Crescent</option>
-                  <option value="the_terminal">The Terminal</option>
-                  <option value="half_court">Half Court</option>
-                  <option value="valorant_stage">Valorant Stage</option>
-                  <option value="merch">Merch</option>
-                  <option value="lockers">Lockers</option>
-                  <option value="trolley">Trolley Stop</option>
-                  <option value="rideshare">Ride Share</option>
-                  <option value="ga_parking">GA Parking</option>
-                  <option value="gate1">Gate 1</option>
-                  <option value="gate2">Gate 2</option>
-                  <option value="gate3">Gate 3</option>
-                  <option value="__gps" disabled>My location</option>
-                </select>
-              </label>
-              <button type="button" class="set-btn" id="omapLocate">my location</button>
-            </div>
-            <div class="omap-viewer" id="omapViewer">
-              <div class="omap-canvas" id="omapCanvas">
-                <svg id="omapSvg" viewBox="0 0 960 600" role="img" aria-label="Interactive Niteharts festival map with walking routes">
-                  <g id="omapWalkG"></g>
-                  <g id="omapStadG"></g>
-                  <g id="omapRouteG" hidden></g>
-                  <g id="omapPoiG"></g>
-                  <g id="omapNodeG"></g>
-                  <g id="omapGpsG" hidden></g>
+        <div id="mapViewOurs" class="omap" hidden>
+          <div class="omap-toolbar">
+            <label class="omap-from">from
+              <select id="omapOrigin" aria-label="Route start">
+                <option value="ga_entrance">ga entrance</option>
+                <option value="vip_entrance">vip entrance</option>
+                <option value="trolley">trolley</option>
+                <option value="rideshare">rideshare</option>
+                <option value="ga_parking">ga parking</option>
+                <option value="__gps">my location</option>
+              </select>
+            </label>
+            <button type="button" class="way-link" id="omapLocate">locate me</button>
+            <label class="omap-tilt">tilt
+              <input type="range" id="omapTiltRange" min="0" max="65" step="1" value="0" aria-label="Map tilt angle">
+            </label>
+            <button type="button" class="way-link" id="omap3dToggle" aria-pressed="false">3d</button>
+          </div>
+          <div class="omap-viewer" id="omapViewer">
+            <div class="omap-cam" id="omapCam">
+              <div class="omap-world" id="omapWorld">
+                <img class="omap-ground" id="omapGround" src="assets/map/nh26-sitemap.webp" alt="Niteharts 2026 festival grounds map" draggable="false">
+                <svg class="omap-routes" id="omap3Routes" viewBox="0 0 1920 1200" aria-hidden="true">
+                  <g id="omap3RouteG" hidden>
+                    <polyline id="omap3RouteLineA" points=""/>
+                    <polyline id="omap3RouteLineB" points=""/>
+                    <polyline id="omap3RouteLineHit" points=""/>
+                  </g>
+                  <g id="omap3GpsG" hidden></g>
                 </svg>
-              </div>
-              <p class="omap-debug" id="omapDebug" hidden></p>
-            </div>
-            <div class="omap-bar">
-              <p class="fmap-hint">tap a stop for info · tap the route for steps</p>
-              <div class="fmap-controls" role="group" aria-label="Map zoom controls">
-                <button type="button" id="omapZoomIn" aria-label="Zoom in">+</button>
-                <button type="button" id="omapZoomOut" aria-label="Zoom out">−</button>
-                <button type="button" id="omapReset" class="fmap-reset">Reset</button>
+                <div class="omap-pins" id="omapPins"></div>
               </div>
             </div>
-            <div class="omap-info" id="omapInfo" hidden></div>
-            <div class="fmap-legend" aria-label="Map legend">
-              <span class="fmap-chip" data-cat="stage"><i aria-hidden="true"></i>Stage</span>
-              <span class="fmap-chip" data-cat="entrance"><i aria-hidden="true"></i>Entrance</span>
-              <span class="fmap-chip" data-cat="merch"><i aria-hidden="true"></i>Merch</span>
-              <span class="fmap-chip" data-cat="lockers"><i aria-hidden="true"></i>Lockers</span>
-              <span class="fmap-chip" data-cat="transit"><i aria-hidden="true"></i>Transit</span>
+            <button type="button" class="omap-compass" id="omapCompass" hidden aria-label="Reset north"><span>N</span></button>
+            <p class="omap-debug" id="omapDebug" hidden></p>
+          </div>
+          <div class="omap-bar">
+            <p class="omap-note">drag to explore · pinch to zoom · two fingers tilt + rotate in 3d · tap a pin for details</p>
+            <div class="omap-bar-btns">
+              <button type="button" class="way-link" id="omapZoomOut">−</button>
+              <button type="button" class="way-link" id="omapZoomIn">+</button>
+              <button type="button" class="way-link" id="omapReset">reset</button>
             </div>
           </div>
+          <div class="omap-info" id="omapInfo" hidden></div>
         </div>
         <div id="mapViewOfficial">
         <div class="fmap" id="festivalMap">
@@ -600,7 +591,7 @@
           </div>
         </div>
         </div>
-        <div class="map-note"><p>The official grounds map, made interactive. Tap any pin for info, or get walking routes between stages. Distances and walk times are approximate. Our experimental schematic is one tap away above.</p><a id="directionsLink" class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=2101+Stadium+Way%2C+San+Diego%2C+CA+92108" target="_blank" rel="noopener">Directions ↗</a></div>
+        <div class="map-note"><p>The official grounds map, made interactive. Tap any pin for info, or get walking routes between stages. Distances and walk times are approximate. Our experimental 3D map is one tap away above.</p><a id="directionsLink" class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=2101+Stadium+Way%2C+San+Diego%2C+CA+92108" target="_blank" rel="noopener">Directions ↗</a></div>
       </section>
 
 
@@ -1702,115 +1693,7 @@
 
     (function kineticMotion(){var logo=document.getElementById("heroLogoStage"),hero=document.querySelector(".hero"),merchVisual=document.getElementById("merchVisual"),fine=window.matchMedia&&window.matchMedia("(hover: hover) and (pointer: fine)").matches,scrollY=window.scrollY||0,targetY=scrollY,raf=0;function tick(){scrollY+=(targetY-scrollY)*.12;var heroRect=hero.getBoundingClientRect(),heroProgress=Math.max(-1,Math.min(1,-heroRect.top/Math.max(1,heroRect.height)));logo.style.transform="translate3d(0,"+(heroProgress*18).toFixed(2)+"px,"+(heroProgress*-10).toFixed(2)+"px) rotateX("+(heroProgress*-1.8).toFixed(2)+"deg)";if(Math.abs(targetY-scrollY)>.1)raf=requestAnimationFrame(tick);else{scrollY=targetY;raf=0}}function onScroll(){targetY=window.scrollY||0;if(!raf)raf=requestAnimationFrame(tick)}if(!reduceMotion){window.addEventListener("scroll",onScroll,{passive:true});onScroll();document.addEventListener("visibilitychange",function(){if(document.hidden&&raf){cancelAnimationFrame(raf);raf=0}else if(!document.hidden&&!raf)raf=requestAnimationFrame(tick)});if(fine){hero.addEventListener("pointermove",function(e){var r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;logo.style.setProperty("--logo-shift-x",(-x*8).toFixed(2)+"px");logo.style.setProperty("--logo-shift-y",(-y*5).toFixed(2)+"px")});hero.addEventListener("pointerleave",function(){logo.style.setProperty("--logo-shift-x","0px");logo.style.setProperty("--logo-shift-y","0px")});document.addEventListener("pointermove",function(e){if(merchVisual&&merchVisual.contains(e.target)){var m=merchVisual.getBoundingClientRect();merchVisual.style.setProperty("--merch-x",(((e.clientX-m.left)/m.width-.5)*3).toFixed(2)+"deg");merchVisual.style.setProperty("--merch-y",((((e.clientY-m.top)/m.height-.5)*-3).toFixed(2))+"deg")}})}}var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add("motion-seen");observer.unobserve(entry.target)}})},{rootMargin:"0px 0px -8% 0px",threshold:.08});document.querySelectorAll(".module").forEach(function(module){observer.observe(module)});document.addEventListener("click",function(e){var control=e.target.closest("button");if(!control)return;var module=control.closest(".module");if(module){module.classList.remove("motion-pop");void module.offsetWidth;module.classList.add("motion-pop")}})}());
 
-    /* Festival grounds map: buttery pan + pinch/wheel zoom + pins */
-    /* ============================================================
-       NITEHARTS INTERACTIVE MAP v1 — "Google Maps for the festival"
-       Data-first: NH26_MAP_DATA is the whole festival in one object.
-       A future festival (Beyond, Hard Summer) swaps the data object;
-       the engine (graph, Dijkstra, pan/zoom, routing UI) is untouched.
-       Schematic space is 960x600 = half of the official 1920x1200
-       grounds map, so node positions carry real geography.
-       Calibration: METERS_PER_UNIT ~1.1, estimated from the Snapdragon
-       Stadium footprint (~200m across ~180 schematic units). Every walk
-       time is labeled with ~ and is approximate.
-       ============================================================ */
-    var NH26_MAP_DATA = {
-      meta: { name: "Niteharts '26", metersPerUnit: 1.1, walkMPerMin: 80 },
-      gpsAnchor: { x: 412, y: 227, lat: 32.78444, lon: -117.12278 },
-      catColors: { stage:"#9fc9ef", entrance:"#ffffff", merch:"#7ed321", lockers:"#ff6fd8",
-        transit:"#b8b8b8", water:"#35c4dc", firstaid:"#f26e7b", food:"#f5a623",
-        bar:"#2dd4bf", restrooms:"#a78bfa", guestinfo:"#e8e4d8", ada:"#5b8def" },
-      nodes: {
-        main_stage:    {x:570,y:415,label:"Main Stage",cat:"stage",sched:"main",info:"the big one. headliners close every night here."},
-        the_mirror:    {x:372,y:422,label:"The Mirror",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
-        the_crescent:  {x:372,y:378,label:"The Crescent",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
-        the_terminal:  {x:277,y:312,label:"The Terminal",cat:"stage",lab:"above",labx:-40,info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
-        half_court:    {x:312,y:317,label:"Half Court",cat:"stage",info:"festival stage. the app doesn't carry set times for this stage yet, check the official set times poster."},
-        valorant_stage:{x:465,y:295,label:"Valorant Stage",cat:"stage",labx:-50,sched:"valorant",approx:true,info:"gaming stage. its exact spot wasn't on the official map, so this pin is approximate. we'll move it when the location is announced."},
-        ga_entrance:   {x:500,y:320,label:"GA Entrance",cat:"entrance",lab:"above",labx:60,info:"main way in. have your ticket and id ready."},
-        vip_entrance:  {x:555,y:522,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry."},
-        gate1:         {x:367,y:57,label:"Gate 1",cat:"entrance",lab:"above",info:"parking entrance off Friars Rd."},
-        gate2:         {x:665,y:30,label:"Gate 2",cat:"entrance",info:"parking entrance."},
-        gate3:         {x:885,y:455,label:"Gate 3",cat:"entrance",lab:"above",info:"parking entrance, southeast side."},
-        merch:         {x:442,y:505,label:"Merch",cat:"merch",lab:"above",info:"official merch booth."},
-        lockers:       {x:492,y:505,label:"Lockers",cat:"lockers",info:"rent a locker, stash your stuff."},
-        trolley:       {x:720,y:505,label:"Trolley Stop",cat:"transit",info:"San Diego Trolley Green Line. easiest way out after the show."},
-        rideshare:     {x:545,y:45,label:"Ride Share",cat:"transit",lab:"above",info:"pickup and dropoff lot."},
-        ga_parking:    {x:725,y:150,label:"GA Parking",cat:"transit",info:"orange lot. general admission parking."},
-        w_nw:{x:165,y:117,wp:1}, w_nm:{x:367,y:117,wp:1}, w_ne:{x:545,y:117,wp:1}, w_g2:{x:665,y:117,wp:1},
-        w_em:{x:545,y:210,wp:1}, w_es:{x:545,y:282,wp:1},
-        w_wm:{x:145,y:258,wp:1}, w_ws:{x:145,y:400,wp:1},
-        w_tun:{x:240,y:400,wp:1}, w_term:{x:277,y:360,wp:1},
-        w_cw:{x:300,y:400,wp:1}, w_cm:{x:372,y:400,wp:1}, w_ce:{x:500,y:400,wp:1},
-        w_cmain:{x:570,y:400,wp:1}, w_cse:{x:620,y:400,wp:1},
-        w_vipm:{x:620,y:470,wp:1}, w_vipj:{x:555,y:470,wp:1}, w_mrow:{x:480,y:470,wp:1},
-        w_tj:{x:720,y:470,wp:1}, w_g3j:{x:885,y:470,wp:1}, w_pk:{x:725,y:210,wp:1}
-      },
-      edges: [
-        ["gate1","w_nm","Gate 1 path"],["w_nw","w_nm","North Walk"],["w_nm","w_ne","North Walk"],
-        ["w_g2","w_ne","North Walk"],["gate2","w_g2","Gate 2 path"],["rideshare","w_ne","Ride Share path"],
-        ["w_ne","w_em","East Walk"],["w_em","w_es","East Walk"],
-        ["w_es","ga_entrance","GA Entry"],["ga_entrance","w_ce","GA Entry"],
-        ["ga_entrance","valorant_stage","stadium concourse",1],
-        ["w_nw","w_wm","West Walk"],["w_wm","w_ws","West Walk"],["w_ws","w_tun","West Walk"],
-        ["w_tun","w_term","Terminal path"],["w_term","the_terminal","Terminal path"],["the_terminal","half_court","Terminal path"],
-        ["w_tun","w_cw","South Concourse"],["w_cw","w_cm","South Concourse"],["w_cm","w_ce","South Concourse"],
-        ["w_ce","w_cmain","South Concourse"],["w_cmain","w_cse","South Concourse"],
-        ["w_cm","the_crescent","stage spur"],["w_cm","the_mirror","stage spur"],["w_cmain","main_stage","stage spur"],
-        ["w_cse","w_vipm","VIP Walk"],["w_vipm","w_vipj","VIP Walk"],["w_vipj","vip_entrance","VIP Walk"],
-        ["w_vipm","w_mrow","Merch Row"],["w_mrow","merch","Merch Row"],["w_mrow","lockers","Merch Row"],
-        ["w_vipm","w_tj","East path"],["w_tj","trolley","Trolley path"],
-        ["w_tj","w_g3j","East path"],["w_g3j","gate3","Gate 3 path"],
-        ["w_em","w_pk","Parking link"],["w_pk","ga_parking","Parking link"]
-      ],
-      walkways: [
-        {pts:["w_nw","w_nm","w_ne","w_g2"]},
-        {pts:["w_ne","w_em","w_es","ga_entrance","w_ce"]},
-        {pts:["w_nw","w_wm","w_ws","w_tun"]},
-        {pts:["w_tun","w_term","the_terminal","half_court"]},
-        {pts:["w_tun","w_cw","w_cm","w_ce","w_cmain","w_cse"]},
-        {pts:["the_crescent","w_cm","the_mirror"]},
-        {pts:["w_cmain","main_stage"]},
-        {pts:["w_cse","w_vipm","w_vipj","vip_entrance"]},
-        {pts:["w_vipm","w_mrow","merch"]},
-        {pts:["w_mrow","lockers"]},
-        {pts:["w_vipm","w_tj","w_g3j"]},
-        {pts:["w_tj","trolley"]},
-        {pts:["w_g3j","gate3"]},
-        {pts:["w_em","w_pk","ga_parking"]},
-        {pts:["gate1","w_nm"]},
-        {pts:["gate2","w_g2"]},
-        {pts:["rideshare","w_ne"]},
-        {pts:["ga_entrance","valorant_stage"],approx:true}
-      ],
-      pois: [
-        {x:200,y:95,label:"Water",cat:"water",info:"free water refill station."},
-        {x:360,y:135,label:"Water",cat:"water",info:"free water refill station."},
-        {x:247,y:292,label:"Water",cat:"water",info:"free water refill station."},
-        {x:280,y:362,label:"Water",cat:"water",info:"free water refill station."},
-        {x:365,y:455,label:"Water",cat:"water",info:"free water refill station."},
-        {x:545,y:320,label:"Water",cat:"water",info:"free water refill station."},
-        {x:247,y:270,label:"First Aid",cat:"firstaid",info:"medical tent. go here if you or a friend need help."},
-        {x:390,y:362,label:"First Aid",cat:"firstaid",info:"medical tent. go here if you or a friend need help."},
-        {x:467,y:477,label:"First Aid",cat:"firstaid",info:"medical tent. go here if you or a friend need help."},
-        {x:540,y:235,label:"First Aid",cat:"firstaid",info:"medical tent. go here if you or a friend need help."},
-        {x:185,y:280,label:"Food",cat:"food",info:"food and drinks."},
-        {x:330,y:515,label:"Food",cat:"food",info:"food and drinks."},
-        {x:425,y:492,label:"Food",cat:"food",info:"food and drinks."},
-        {x:227,y:287,label:"Bar",cat:"bar",info:"21+ with id."},
-        {x:330,y:365,label:"Bar",cat:"bar",info:"21+ with id."},
-        {x:407,y:362,label:"Bar",cat:"bar",info:"21+ with id."},
-        {x:452,y:477,label:"Bar",cat:"bar",info:"21+ with id."},
-        {x:330,y:445,label:"Restrooms",cat:"restrooms",info:"restrooms."},
-        {x:415,y:435,label:"Restrooms",cat:"restrooms",info:"restrooms."},
-        {x:297,y:362,label:"Guest Info",cat:"guestinfo",info:"questions, lost and found."},
-        {x:437,y:477,label:"Guest Info",cat:"guestinfo",info:"questions, lost and found."},
-        {x:170,y:150,label:"Merch",cat:"merch",info:"official merch booth."},
-        {x:242,y:165,label:"Lockers",cat:"lockers",info:"rent a locker, stash your stuff."},
-        {x:357,y:365,label:"ADA Viewing",cat:"ada",info:"accessible viewing area."},
-        {x:380,y:425,label:"ADA Viewing",cat:"ada",info:"accessible viewing area."}
-      ]
-    };
+    /* ---------- official festival map data + routing (shared by both tabs) ----------
 
     /* ---------- official-map waypoint graph ----------
        Node positions recalibrated by reading the actual official artwork
@@ -1942,137 +1825,16 @@
       return { x:a.x+dx/data.meta.metersPerUnit, y:a.y-dy/data.meta.metersPerUnit };
     }
     window.NHMap = {
-      data: NH26_MAP_DATA,
-      route: function(f,t){ return nhRoute(NH26_MAP_DATA,f,t); },
-      steps: function(r){ return nhSteps(NH26_MAP_DATA,r); },
-      nearest: function(x,y){ return nhNearest(NH26_MAP_DATA,x,y); },
-      gpsToSchematic: function(lat,lon){ return nhGpsToSchematic(NH26_MAP_DATA,lat,lon); }
+      data: NH26_FMAP_DATA,
+      route: function(f,t){ return nhRoute(NH26_FMAP_DATA,f,t); },
+      steps: function(r){ return nhSteps(NH26_FMAP_DATA,r); },
+      nearest: function(x,y){ return nhNearest(NH26_FMAP_DATA,x,y); },
+      gpsToSchematic: function(lat,lon){ return nhGpsToSchematic(NH26_FMAP_DATA,lat,lon); }
     };
     /* ---------- shared pan/zoom engine (both map viewers) ----------
        Fixes baked in: dragstart is killed (no ghost-image drag), wheel
        never traps page scroll at min zoom on desktop, pinch/wheel/
        double-tap all anchored, pins must opt out via pinSelector. */
-    function nhPanZoom(viewer, canvas, opts){
-      var contentW=opts.contentW, contentH=opts.contentH;
-      var maxMul=opts.maxScaleMul||6;
-      var scale=1, minScale=1, tx=0, ty=0, vw=0, vh=0;
-      var raf=0, velX=0, velY=0, animating=false;
-      var pinSel=opts.pinSelector;
-      function baseSize(){
-        vw=viewer.clientWidth; vh=viewer.clientHeight;
-        if(vw<=0||vh<=0) return false;
-        minScale=Math.min(vw/contentW, vh/contentH);
-        scale=minScale;
-        tx=(vw-contentW*scale)/2; ty=(vh-contentH*scale)/2;
-        velX=0; velY=0;
-        paint();
-        return true;
-      }
-      function maxScale(){ return minScale*maxMul; }
-      function clamp(rubber){
-        var sw=contentW*scale, sh=contentH*scale, m=rubber?60:0;
-        tx=sw<=vw?(vw-sw)/2:Math.min(m,Math.max(vw-sw-m,tx));
-        ty=sh<=vh?(vh-sh)/2:Math.min(m,Math.max(vh-sh-m,ty));
-      }
-      function paint(){
-        raf=0;
-        canvas.style.transform='translate3d('+tx+'px,'+ty+'px,0) scale('+scale+')';
-        if(opts.onPaint) opts.onPaint(scale,tx,ty);
-      }
-      function apply(){ if(!raf) raf=requestAnimationFrame(paint); }
-      function zoomAt(cx,cy,f){
-        var ns=Math.min(maxScale(),Math.max(minScale,scale*f));
-        if(Math.abs(ns-scale)<1e-9) return false;
-        var sx=(cx-tx)/scale, sy=(cy-ty)/scale;
-        scale=ns; tx=cx-sx*scale; ty=cy-sy*scale; clamp(true); apply();
-        return true;
-      }
-      function inertia(){
-        animating=false;
-        var step=function(){
-          if(!animating) return;
-          if(Math.abs(velX)<0.4&&Math.abs(velY)<0.4){ animating=false; clamp(false); apply(); return; }
-          tx+=velX; ty+=velY; velX*=0.92; velY*=0.92;
-          clamp(false); apply();
-          requestAnimationFrame(step);
-        };
-        animating=true; requestAnimationFrame(step);
-      }
-      var pointers={}, dragged=false, moved=0, lastPinch=0, lastTap=0;
-      viewer.addEventListener('dragstart',function(e){ e.preventDefault(); });
-      viewer.addEventListener('pointerdown',function(e){
-        moved=0; dragged=false;
-        var nPtr=Object.keys(pointers).length;
-        if(pinSel&&e.target.closest&&e.target.closest(pinSel)&&nPtr===0) return;
-        if(animating) animating=false;
-        try{ viewer.setPointerCapture(e.pointerId); }catch(err){}
-        pointers[e.pointerId]={x:e.clientX,y:e.clientY,t:performance.now()};
-        velX=0; velY=0;
-        viewer.classList.add('dragging');
-      });
-      viewer.addEventListener('pointermove',function(e){
-        var p=pointers[e.pointerId]; if(!p) return;
-        var dx=e.clientX-p.x, dy=e.clientY-p.y, dt=Math.max(1,performance.now()-p.t);
-        velX=0.7*velX+0.3*(dx/dt*16); velY=0.7*velY+0.3*(dy/dt*16);
-        p.x=e.clientX; p.y=e.clientY; p.t=performance.now();
-        moved+=Math.abs(dx)+Math.abs(dy);
-        if(moved>8) dragged=true;
-        var ids=Object.keys(pointers);
-        if(ids.length===2){
-          var a=pointers[ids[0]], b=pointers[ids[1]];
-          var dist=Math.hypot(a.x-b.x,a.y-b.y);
-          var r=viewer.getBoundingClientRect();
-          if(lastPinch>0&&dist>0) zoomAt((a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top,dist/lastPinch);
-          lastPinch=dist; velX=0; velY=0;
-        }else if(ids.length===1){ tx+=dx; ty+=dy; clamp(true); apply(); }
-      });
-      function endPointer(e){
-        delete pointers[e.pointerId];
-        if(Object.keys(pointers).length<2) lastPinch=0;
-        if(!Object.keys(pointers).length){
-          viewer.classList.remove('dragging');
-          clamp(false);
-          if(dragged&&(Math.abs(velX)>0.8||Math.abs(velY)>0.8)) inertia(); else apply();
-        }
-      }
-      viewer.addEventListener('pointerup',endPointer);
-      viewer.addEventListener('pointercancel',endPointer);
-      viewer.addEventListener('wheel',function(e){
-        var zoomIn=e.deltaY<0;
-        if(!e.ctrlKey&&!e.metaKey&&scale<=minScale+1e-9&&!zoomIn) return; /* let the page scroll */
-        e.preventDefault();
-        var r=viewer.getBoundingClientRect();
-        var f=(e.ctrlKey||e.metaKey)?Math.pow(1.0015,-e.deltaY):(zoomIn?1.18:1/1.18);
-        zoomAt(e.clientX-r.left,e.clientY-r.top,f);
-      },{passive:false});
-      viewer.addEventListener('click',function(e){
-        if(pinSel&&e.target.closest&&e.target.closest(pinSel)) return;
-        var now=Date.now();
-        if(now-lastTap<320&&!dragged){
-          var r=viewer.getBoundingClientRect();
-          zoomAt(e.clientX-r.left,e.clientY-r.top,1.9);
-          lastTap=0; return;
-        }
-        lastTap=now;
-        if(opts.onBackgroundTap) opts.onBackgroundTap();
-      });
-      canvas.addEventListener('click',function(e){
-        if(dragged){ e.preventDefault(); e.stopPropagation(); }
-      },true);
-      function reset(){
-        scale=minScale; tx=(vw-contentW*scale)/2; ty=(vh-contentH*scale)/2;
-        velX=0; velY=0; clamp(false); apply();
-        if(opts.onReset) opts.onReset();
-      }
-      if(opts.zoomInBtn) opts.zoomInBtn.addEventListener('click',function(){ zoomAt(vw/2,vh/2,1.5); });
-      if(opts.zoomOutBtn) opts.zoomOutBtn.addEventListener('click',function(){ zoomAt(vw/2,vh/2,1/1.5); });
-      if(opts.resetBtn) opts.resetBtn.addEventListener('click',reset);
-      var rT;
-      window.addEventListener('resize',function(){ clearTimeout(rT); rT=setTimeout(baseSize,150); });
-      baseSize();
-      return { refresh:baseSize, reset:reset, zoomAt:zoomAt,
-               debug:function(){ return {scale:scale,minScale:minScale,tx:tx,ty:ty,vw:vw,vh:vh}; } };
-    }
     window.__nhMapViewers=window.__nhMapViewers||{};
 
     /* ---------- official map viewer (patched) ----------
@@ -2348,139 +2110,172 @@
       };
       window.__fmapDbg={data:D,route:function(a,b){return nhRoute(D,a,b);},steps:function(r){return nhSteps(D,r);}};
     })();
-    /* ---------- our schematic map (beta view) ---------- */
-    (function initOurMap(){
-      var D=NH26_MAP_DATA;
-      var viewer=document.getElementById('omapViewer'),canvas=document.getElementById('omapCanvas'),
-          svg=document.getElementById('omapSvg'),info=document.getElementById('omapInfo'),
-          debug=document.getElementById('omapDebug'),originSel=document.getElementById('omapOrigin'),
-          locateBtn=document.getElementById('omapLocate');
-      if(!viewer||!canvas||!svg) return;
+    /* ---------- our 3d map view: official artwork + true css-3d scene ----------
+       Same NH26_FMAP_DATA geography as the official tab (1920x1200 image
+       space). Scene graph: .omap-viewer (perspective) > .omap-cam (2d
+       pan/zoom) > .omap-world (tilt + rotate, preserve-3d) > ground img,
+       route svg (floats 14px), billboarded pins (float 68px, labels above).
+       Gestures: 1-finger pan, pinch zoom, 2-finger vertical = tilt,
+       2-finger twist = rotate, shift+drag / shift+wheel = tilt (desktop),
+       right-drag = rotate (desktop). Compass resets north. */
+    (function initOurMap3D(){
+      var D=NH26_FMAP_DATA;
+      var viewer=document.getElementById('omapViewer'),cam=document.getElementById('omapCam'),world=document.getElementById('omapWorld'),
+          ground=document.getElementById('omapGround'),
+          info=document.getElementById('omapInfo'),debug=document.getElementById('omapDebug'),
+          originSel=document.getElementById('omapOrigin'),locateBtn=document.getElementById('omapLocate'),
+          routeG=document.getElementById('omap3RouteG'),gpsG=document.getElementById('omap3GpsG'),
+          pinsEl=document.getElementById('omapPins'),compass=document.getElementById('omapCompass'),
+          toggle3d=document.getElementById('omap3dToggle'),tiltRange=document.getElementById('omapTiltRange');
+      if(!viewer||!cam||!world||!D)return;
+      var W=1920,H=1200;
       var NS='http://www.w3.org/2000/svg';
-      function el(tag,attrs,parent){
-        var e=document.createElementNS(NS,tag);
-        for(var k in attrs) e.setAttribute(k,attrs[k]);
-        if(parent) parent.appendChild(e);
-        return e;
-      }
-      var walkG=document.getElementById('omapWalkG'), stadG=document.getElementById('omapStadG'),
-          routeG=document.getElementById('omapRouteG'), poiG=document.getElementById('omapPoiG'),
-          nodeG=document.getElementById('omapNodeG'), gpsG=document.getElementById('omapGpsG');
-      /* stadium footprint */
-      el('rect',{x:320,y:145,width:185,height:165,rx:26,class:'omap-stadium'},stadG);
-      var st=el('text',{x:412,y:232,class:'omap-stadium-label','text-anchor':'middle'},stadG);
-      st.textContent='Snapdragon';
-      var st2=el('text',{x:412,y:252,class:'omap-stadium-label','text-anchor':'middle'},stadG);
-      st2.textContent='Stadium';
-      /* walkways */
-      D.walkways.forEach(function(w){
-        var pts=w.pts.map(function(id){return D.nodes[id].x+','+D.nodes[id].y;}).join(' ');
-        el('polyline',{points:pts,class:'omap-walkway'+(w.approx?' approx':'')},walkG);
-      });
-      /* waypoint dots */
-      Object.keys(D.nodes).forEach(function(id){
-        var n=D.nodes[id];
-        if(!n.wp) return;
-        el('circle',{cx:n.x,cy:n.y,r:2.6,class:'wp'},nodeG);
-      });
-      /* routable nodes */
-      var nodeEls={};
-      Object.keys(D.nodes).forEach(function(id){
-        var n=D.nodes[id];
-        if(n.wp) return;
-        var g=el('g',{class:'omap-node '+n.cat,'data-node':id,tabindex:'0',role:'button','aria-label':n.label},nodeG);
-        var hitR=n.cat==='stage'?30:26;
-        el('circle',{cx:n.x,cy:n.y,r:hitR,class:'hit'},g);
-        if(n.cat==='entrance'){
-          el('rect',{x:n.x-9,y:n.y-9,width:18,height:18,rx:4,class:'dot',fill:D.catColors[n.cat]||'#fff'},g);
-        }else{
-          var r=n.cat==='stage'?11:8;
-          el('circle',{cx:n.x,cy:n.y,r:r,class:'dot',fill:D.catColors[n.cat]||'#9fc9ef'},g);
-          if(n.approx) el('circle',{cx:n.x,cy:n.y,r:r+5,fill:'none',stroke:'#9fc9ef','stroke-width':1.5,'stroke-dasharray':'4 3',opacity:.7},g);
+      function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+      function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+      var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ----- camera state ----- */
+      var scale=1,minScale=1,tx=0,ty=0,vw=0,vh=0,tilt=0,rot=0,is3d=false;
+      var MAX_TILT=65,TILT_3D=48;
+      var raf=0,velX=0,velY=0,animating=false,tween=null,lastOTilt=null,lastORot=null;
+      function paint(){
+        raf=0;
+        cam.style.transform='translate3d('+tx+'px,'+ty+'px,0) scale('+scale+')';
+        var tS=tilt.toFixed(2),rS=rot.toFixed(2);
+        world.style.transform='rotateX('+tS+'deg) rotateZ('+rS+'deg)';
+        var needle=compass.firstElementChild;
+        if(needle&&rS!==lastORot)needle.style.transform='rotate('+(-rot).toFixed(2)+'deg)';
+        if(tS!==lastOTilt||rS!==lastORot){
+          world.style.setProperty('--otilt',tS);
+          world.style.setProperty('--orot',rS);
+          lastOTilt=tS;lastORot=rS;
         }
-        var above=n.lab==='above';
-        var t=el('text',{x:n.x+(n.labx||0),y:above?n.y-22:n.y+26,'text-anchor':'middle'},g);
-        t.textContent=n.label;
-        nodeEls[id]=g;
-        g.addEventListener('click',function(e){ e.stopPropagation(); showNodeInfo(id); });
-        g.addEventListener('keydown',function(e){
-          if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showNodeInfo(id); }
-        });
+      }
+      function apply(){if(!raf)raf=requestAnimationFrame(paint);}
+      function baseSize(){
+        vw=viewer.clientWidth;vh=viewer.clientHeight;
+        if(vw<=0||vh<=0)return false;
+        minScale=Math.min(vw/W,vh/H);
+        scale=minScale;tx=(vw-W*scale)/2;ty=(vh-H*scale)/2;velX=0;velY=0;
+        paint();return true;
+      }
+      function maxScale(){return minScale*8;}
+      function clamp(rubber){
+        var sw=W*scale,sh=H*scale,m=rubber?60:0;
+        tx=sw<=vw?(vw-sw)/2:Math.min(m,Math.max(vw-sw-m,tx));
+        ty=sh<=vh?(vh-sh)/2:Math.min(m,Math.max(vh-sh-m,ty));
+      }
+      function zoomAt(cx,cy,f){
+        var ns=Math.min(maxScale(),Math.max(minScale,scale*f));
+        if(Math.abs(ns-scale)<1e-9)return false;
+        var sx=(cx-tx)/scale,sy=(cy-ty)/scale;
+        scale=ns;tx=cx-sx*scale;ty=cy-sy*scale;clamp(true);apply();return true;
+      }
+      function setTilt(v){
+        tilt=Math.max(0,Math.min(MAX_TILT,v));
+        if(tiltRange)tiltRange.value=String(Math.round(tilt));
+        apply();
+      }
+      function setRot(v){rot=v;apply();}
+      function tweenCam(toTilt,toRot,dur,toScale){
+        if(tween){cancelAnimationFrame(tween);tween=null;}
+        var fT=tilt,dR=((toRot-rot)%360+540)%360-180,fR=rot;
+        var fS=scale,tS=(typeof toScale==='number')?Math.min(maxScale(),Math.max(minScale,toScale)):fS;
+        var cx=vw/2,cy=vh*0.58,fTx=tx,fTy=ty;
+        var tTx=cx-((cx-fTx)/fS)*tS,tTy=cy-((cy-fTy)/fS)*tS;
+        if(reduceMotion||!dur){setTilt(toTilt);setRot(fR+dR);scale=tS;tx=tTx;ty=tTy;clamp(false);apply();return;}
+        var t0=performance.now();
+        var step=function(t){
+          var p=Math.min(1,(t-t0)/dur),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+          setTilt(fT+(toTilt-fT)*e);setRot(fR+dR*e);
+          scale=fS+(tS-fS)*e;tx=fTx+(tTx-fTx)*e;ty=fTy+(tTy-fTy)*e;
+          clamp(true);apply();
+          if(p<1)tween=requestAnimationFrame(step);else{tween=null;clamp(false);apply();}
+        };
+        tween=requestAnimationFrame(step);
+      }
+      function set3D(on){
+        is3d=on;
+        toggle3d.setAttribute('aria-pressed',String(on));
+        viewer.classList.toggle('is-3d',on);
+        compass.hidden=!on;
+        if(on){
+          var zS=(scale<=minScale*1.05)?minScale*1.5:scale;
+          tweenCam(TILT_3D,rot,650,zS);
+        }else tweenCam(0,0,650);
+      }
+      function inertia(){
+        animating=false;
+        var step=function(){
+          if(!animating)return;
+          if(Math.abs(velX)<0.4&&Math.abs(velY)<0.4){animating=false;clamp(false);apply();return;}
+          tx+=velX;ty+=velY;velX*=0.92;velY*=0.92;
+          clamp(false);apply();
+          requestAnimationFrame(step);
+        };
+        animating=true;requestAnimationFrame(step);
+      }
+
+      /* ----- pins: billboarded 3d markers, 12 recalibrated spots ----- */
+      var PIN_IDS=['main_stage','the_crescent','the_mirror','the_terminal','half_court','ga_entrance','vip_entrance','trolley','merch','lockers','rideshare','ga_parking'];
+      PIN_IDS.forEach(function(id){
+        var n=D.nodes[id];if(!n)return;
+        var b=document.createElement('button');
+        b.type='button';b.className='o3-pin';b.setAttribute('data-node',id);
+        b.setAttribute('aria-label',n.label);b.setAttribute('aria-expanded','false');
+        b.style.left=n.x+'px';b.style.top=n.y+'px';
+        b.style.setProperty('--pin',D.catColors[n.cat]||'#9fc9ef');
+        b.innerHTML='<span class="o3-shadow" aria-hidden="true"></span>'+
+          '<span class="o3-post" aria-hidden="true"></span><span class="o3-post p2" aria-hidden="true"></span>'+
+          '<span class="o3-head" aria-hidden="true"><span class="o3-tag">'+esc(n.label)+'</span><span class="o3-dot"></span></span>';
+        pinsEl.appendChild(b);
       });
-      /* poi markers */
-      D.pois.forEach(function(p,idx){
-        var g=el('g',{class:'omap-poi','data-poi':idx,tabindex:'0',role:'button','aria-label':p.label},poiG);
-        el('circle',{cx:p.x,cy:p.y,r:16,class:'hit'},g);
-        el('circle',{cx:p.x,cy:p.y,r:5,fill:D.catColors[p.cat]||'#888',stroke:'#0d0e10','stroke-width':1.5},g);
-        g.addEventListener('click',function(e){ e.stopPropagation(); showPoiInfo(idx); });
-        g.addEventListener('keydown',function(e){
-          if(e.key==='Enter'||e.key===' '){ e.preventDefault(); showPoiInfo(idx); }
-        });
-      });
-      /* route line */
-      var routeLine=el('polyline',{id:'omapRouteLine',points:''},routeG);
-      var routeDash=el('polyline',{id:'omapRouteLine',class:'dash',points:''},routeG);
-      var routeHit=el('polyline',{id:'omapRouteLineHit',points:''},routeG);
-      routeLine.id='omapRouteLineA'; routeDash.id='omapRouteLineB';
+      var pins=pinsEl.querySelectorAll('.o3-pin');
+      function closePins(){for(var j=0;j<pins.length;j++)pins[j].setAttribute('aria-expanded','false');}
+
+      /* ----- info panel + routing (dijkstra on the same waypoint graph) ----- */
+      var routeA=document.getElementById('omap3RouteLineA'),
+          routeB=document.getElementById('omap3RouteLineB'),
+          routeHit=document.getElementById('omap3RouteLineHit');
+      var activeRoute=null;
       function drawRoute(route){
-        if(!route||!route.nodes.length){ routeG.setAttribute('hidden',''); return; }
+        if(!route||!route.nodes.length){routeG.setAttribute('hidden','');return;}
         var pts=route.nodes.map(function(id){return D.nodes[id].x+','+D.nodes[id].y;}).join(' ');
-        routeLine.setAttribute('points',pts); routeDash.setAttribute('points',pts); routeHit.setAttribute('points',pts);
+        routeA.setAttribute('points',pts);routeB.setAttribute('points',pts);routeHit.setAttribute('points',pts);
         routeG.removeAttribute('hidden');
       }
-      function toggleSteps(){
-        var ol=info.querySelector('.omap-steps');
-        if(ol) ol.hidden=!ol.hidden;
-      }
-      routeLine.addEventListener('click',function(e){ e.stopPropagation(); toggleSteps(); });
-      routeDash.addEventListener('click',function(e){ e.stopPropagation(); toggleSteps(); });
-      routeHit.addEventListener('click',function(e){ e.stopPropagation(); toggleSteps(); });
-
-      /* ---------- info panel ---------- */
-      var activeRoute=null;
-      function catName(c){
-        return {stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit',
-                water:'water',firstaid:'first aid',food:'food + bev',bar:'bar',
-                restrooms:'restrooms',guestinfo:'guest info',ada:'ada viewing'}[c]||c;
-      }
-      function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+      function catName(c){return ({stage:'stage',entrance:'entrance',merch:'merch',lockers:'lockers',transit:'transit'}[c])||c;}
       function upcomingSetsHtml(schedStage){
+        if(typeof schedules==='undefined')return '';
         var day=(typeof activeDay!=='undefined')?activeDay:'friday';
         var sets=schedules[day].sets.filter(function(s){return s.stage===schedStage;}).slice(0,4);
-        if(!sets.length) return '<p class="omap-note">no sets listed for this stage '+schedules[day].label.toLowerCase()+'.</p>';
+        if(!sets.length)return '<p class="omap-note">no sets listed for this stage '+esc(schedules[day].label.toLowerCase())+'.</p>';
         return '<ul class="omap-sets">'+sets.map(function(s){
           return '<li><span>'+esc(s.artist)+'</span><time>'+esc(s.start)+' - '+esc(s.end)+'</time></li>';
         }).join('')+'</ul>';
       }
-      function openInfo(html){ info.innerHTML=html; info.hidden=false; }
-      function closeInfo(){ info.hidden=true; info.innerHTML=''; }
+      function openInfo(html){info.innerHTML=html;info.hidden=false;}
+      function closeInfo(){info.hidden=true;info.innerHTML='';}
       function showNodeInfo(id){
-        var n=D.nodes[id]; if(!n) return;
+        var n=D.nodes[id];if(!n)return;
         var h='<div class="omap-info-head"><h3>'+esc(n.label)+'</h3><span class="omap-info-cat">'+catName(n.cat)+(n.approx?' · location approx':'')+'</span></div>';
         h+='<p>'+esc(n.info)+'</p>';
-        if(n.sched) h+=upcomingSetsHtml(n.sched);
+        if(n.sched)h+=upcomingSetsHtml(n.sched);
         h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-route-to="'+id+'">route here</button><button type="button" class="set-btn omap-close">close</button></div>';
         openInfo(h);
       }
-      function showPoiInfo(idx){
-        var p=D.pois[idx]; if(!p) return;
-        var nn=nhNearest(D,p.x,p.y);
-        var h='<div class="omap-info-head"><h3>'+esc(p.label)+'</h3><span class="omap-info-cat">'+catName(p.cat)+'</span></div>';
-        h+='<p>'+esc(p.info)+'</p>';
-        h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-route-to="'+nn.id+'">route here</button><button type="button" class="set-btn omap-close">close</button></div>';
-        openInfo(h);
-      }
+      function toggleSteps(){var ol=info.querySelector('.omap-steps');if(ol)ol.hidden=!ol.hidden;}
       function showRoute(fromId,toId,title){
-        var fromN=D.nodes[fromId], toN=D.nodes[toId];
-        if(!fromN||!toN) return;
+        var fromN=D.nodes[fromId],toN=D.nodes[toId];
+        if(!fromN||!toN)return;
         var r=nhRoute(D,fromId,toId);
         activeRoute={from:fromId,to:toId,title:title||'',route:r};
-        if(!r){ drawRoute(null); openInfo('<div class="omap-info-head"><h3>no route</h3></div><p>could not find a walking route between those two spots.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>'); return; }
-        if(r.same){ drawRoute(null); openInfo('<div class="omap-info-head"><h3>'+esc(toN.label)+'</h3></div><p>you are already here.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>'); return; }
+        if(!r){drawRoute(null);openInfo('<div class="omap-info-head"><h3>no route</h3></div><p>could not find a walking route between those two spots.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');return;}
+        if(r.same){drawRoute(null);openInfo('<div class="omap-info-head"><h3>'+esc(toN.label)+'</h3></div><p>you are already here.</p><div class="omap-info-actions"><button type="button" class="set-btn omap-close">close</button></div>');return;}
         drawRoute(r);
         var steps=nhSteps(D,r);
         var h='<div class="omap-info-head"><h3>'+esc(fromN.label)+' → '+esc(toN.label)+'</h3><span class="omap-info-cat">~'+r.mins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</span></div>';
-        if(title) h+='<p>'+esc(title)+'</p>';
+        if(title)h+='<p>'+esc(title)+'</p>';
         h+='<button type="button" class="way-link omap-steps-toggle">steps ('+steps.length+')</button>';
         h+='<ol class="omap-steps">'+steps.map(function(s){
           return '<li>head '+s.dir+' on '+esc(s.via)+' <span class="st-min">~'+s.mins+' min</span>'+(s.approx?' <span class="st-min">approx</span>':'')+'</li>';
@@ -2488,37 +2283,58 @@
         h+='<div class="omap-info-actions"><button type="button" class="set-btn omap-clear-route">clear route</button><button type="button" class="set-btn omap-close">close</button></div>';
         openInfo(h);
       }
-      function clearRoute(){ activeRoute=null; drawRoute(null); closeInfo(); }
+      function clearRoute(){activeRoute=null;drawRoute(null);closeInfo();}
+      [routeA,routeB,routeHit].forEach(function(l){if(l)l.addEventListener('click',function(e){e.stopPropagation();toggleSteps();});});
       info.addEventListener('click',function(e){
+        if(!e.target.closest)return;
         var rt=e.target.closest('[data-route-to]');
-        if(rt){ var from=currentOrigin(); showRoute(from,rt.getAttribute('data-route-to'),''); return; }
-        if(e.target.closest('.omap-close')){ closeInfo(); return; }
-        if(e.target.closest('.omap-clear-route')){ clearRoute(); return; }
-        if(e.target.closest('.omap-steps-toggle')){ toggleSteps(); return; }
+        if(rt){showRoute(currentOrigin(),rt.getAttribute('data-route-to'),'');return;}
+        if(e.target.closest('.omap-close')){closeInfo();return;}
+        if(e.target.closest('.omap-clear-route')){clearRoute();return;}
+        if(e.target.closest('.omap-steps-toggle')){toggleSteps();return;}
       });
+      pinsEl.addEventListener('click',function(e){
+        if(!e.target.closest)return;
+        var pin=e.target.closest('.o3-pin');
+        if(!pin)return;
+        e.stopPropagation();
+        if(dragged)return;
+        var id=pin.getAttribute('data-node');
+        var wasOpen=pin.getAttribute('aria-expanded')==='true';
+        closePins();
+        if(wasOpen){pin.setAttribute('aria-expanded','false');closeInfo();}
+        else{pin.setAttribute('aria-expanded','true');if(id)showNodeInfo(id);}
+      });
+      cam.addEventListener('click',function(e){if(dragged){e.preventDefault();e.stopPropagation();}},true);
 
-      /* ---------- origin + geolocation ---------- */
-      var gpsWatch=null, gpsNode=null;
+      /* ----- gps blue dot (opt-in) ----- */
+      var gpsWatch=null,gpsNode=null;
       function currentOrigin(){
-        if(originSel.value==='__gps'&&gpsNode) return gpsNode;
+        if(originSel.value==='__gps'&&gpsNode)return gpsNode;
         return originSel.value||'ga_entrance';
       }
       originSel.addEventListener('change',function(){
-        if(activeRoute&&activeRoute.route&&!activeRoute.route.same){
-          showRoute(currentOrigin(),activeRoute.to,activeRoute.title);
-        }
+        if(activeRoute&&activeRoute.route&&!activeRoute.route.same)showRoute(currentOrigin(),activeRoute.to,activeRoute.title);
       });
-      function gpsNote(t){ debug.hidden=false; debug.textContent=t; }
+      function gpsNote(t){debug.hidden=false;debug.textContent=t;}
+      function drawGps(x,y,accM){
+        gpsG.innerHTML='';
+        var accU=Math.min(400,Math.max(30,accM/D.meta.metersPerUnit));
+        el('circle',{cx:x,cy:y,r:accU,class:'omap3-gps-acc'},gpsG);
+        if(!reduceMotion)el('circle',{cx:x,cy:y,r:22,class:'omap3-gps-pulse'},gpsG);
+        el('circle',{cx:x,cy:y,r:13,class:'omap3-gps-dot'},gpsG);
+        gpsG.removeAttribute('hidden');
+      }
       locateBtn.addEventListener('click',function(){
         if(gpsWatch!==null){
-          try{ navigator.geolocation.clearWatch(gpsWatch); }catch(e){}
-          gpsWatch=null; gpsNode=null; gpsG.setAttribute('hidden','');
-          debug.hidden=true; locateBtn.textContent='my location';
-          var opt=originSel.querySelector('option[value="__gps"]'); if(opt) opt.disabled=true;
-          if(originSel.value==='__gps') originSel.value='ga_entrance';
+          navigator.geolocation.clearWatch(gpsWatch);
+          gpsWatch=null;gpsNode=null;gpsG.setAttribute('hidden','');gpsG.innerHTML='';
+          debug.hidden=true;locateBtn.textContent='locate me';
+          var offOpt=originSel.querySelector('option[value="__gps"]');if(offOpt)offOpt.disabled=true;
+          if(originSel.value==='__gps')originSel.value='ga_entrance';
           return;
         }
-        if(!navigator.geolocation){ gpsNote('geolocation not supported on this device'); return; }
+        if(!('geolocation' in navigator)){gpsNote('geolocation not supported on this device');return;}
         gpsNote('asking for location…');
         locateBtn.textContent='stop';
         try{
@@ -2528,43 +2344,148 @@
             gpsNode=nn.id;
             drawGps(pt.x,pt.y,p.coords.accuracy||0);
             gpsNote('gps ±'+Math.round(p.coords.accuracy||0)+'m · nearest: '+D.nodes[nn.id].label+' · '+Math.round(nn.meters)+'m away');
-            var opt=originSel.querySelector('option[value="__gps"]'); if(opt) opt.disabled=false;
+            var onOpt=originSel.querySelector('option[value="__gps"]');if(onOpt)onOpt.disabled=false;
             if(originSel.value==='__gps'&&activeRoute&&activeRoute.route&&!activeRoute.route.same){
               showRoute(nn.id,activeRoute.to,activeRoute.title);
             }
-          },function(err){
+          },function(){
             gpsNote('location blocked. enable it in your browser settings to use the blue dot.');
-            locateBtn.textContent='my location'; gpsWatch=null;
+            locateBtn.textContent='locate me';gpsWatch=null;
           },{enableHighAccuracy:true,timeout:15000,maximumAge:5000});
-        }catch(e){ gpsNote('geolocation failed to start'); locateBtn.textContent='my location'; gpsWatch=null; }
+        }catch(e){gpsNote('geolocation failed to start');locateBtn.textContent='locate me';gpsWatch=null;}
       });
-      function drawGps(x,y,accM){
-        gpsG.innerHTML='';
-        var accU=Math.min(120,Math.max(8,accM/D.meta.metersPerUnit));
-        el('circle',{cx:x,cy:y,r:accU,class:'omap-gps-acc'},gpsG);
-        if(!reduceMotion) el('circle',{cx:x,cy:y,r:14,class:'omap-gps-pulse'},gpsG);
-        el('circle',{cx:x,cy:y,r:8,class:'omap-gps-dot'},gpsG);
-        gpsG.removeAttribute('hidden');
-      }
 
-      /* ---------- viewer ---------- */
-      function sizeHits(scale){
-        var r=Math.max(26,24/Math.max(scale,0.05));
-        nodeG.querySelectorAll('.hit').forEach(function(h){ h.setAttribute('r',r.toFixed(1)); });
-        poiG.querySelectorAll('.hit').forEach(function(h){ h.setAttribute('r',Math.max(16,15/Math.max(scale,0.05)).toFixed(1)); });
-      }
-      var api=nhPanZoom(viewer,canvas,{
-        contentW:960, contentH:600, maxScaleMul:8, pinSelector:'.omap-node,.omap-poi,#omapRouteLineHit',
-        onPaint:function(scale){ sizeHits(scale); },
-        onBackgroundTap:function(){ closeInfo(); },
-        onReset:function(){ clearRoute(); },
-        zoomInBtn:document.getElementById('omapZoomIn'),
-        zoomOutBtn:document.getElementById('omapZoomOut'),
-        resetBtn:document.getElementById('omapReset')
+      /* ----- gestures: pan / pinch / tilt / rotate ----- */
+      var pointers={},dragged=false,lastTap=0;
+      var gesture=null; // active two-pointer gesture snapshot
+      function snap(){var p0,p1;for(var k in pointers){if(!p0)p0=pointers[k];else{p1=pointers[k];break;}}
+        if(!p0||!p1)return null;
+        return {d:Math.hypot(p1.x-p0.x,p1.y-p0.y),a:Math.atan2(p1.y-p0.y,p1.x-p0.x),mx:(p0.x+p1.x)/2,my:(p0.y+p1.y)/2,scale0:scale,tilt0:tilt,rot0:rot,tx0:tx,ty0:ty};}
+      viewer.addEventListener('pointerdown',function(e){
+        dragged=false;
+        var t=e.target;
+        var onPin=t.closest&&(t.closest('.o3-pin')||t.closest('#omap3RouteG'));
+        var onCtl=t.closest&&t.closest('#omapCompass');
+        if(e.pointerType==='mouse'&&e.button!==2&&(onPin||onCtl))return;
+        if(e.pointerType==='mouse'&&e.button!==0&&e.button!==2)return;
+        if(e.pointerType==='touch'&&(onPin||onCtl))return;
+        e.preventDefault();
+        try{viewer.setPointerCapture(e.pointerId);}catch(err){}
+        if(animating)animating=false;
+        if(tween){cancelAnimationFrame(tween);tween=null;}
+        dragged=false;gesture=null;
+        pointers[e.pointerId]={x:e.clientX,y:e.clientY,button:e.button,shift:e.shiftKey,
+          px:e.clientX,py:e.clientY,lastMove:performance.now(),moved:0};
+        viewer.classList.add('dragging');
+        if(e.pointerType==='mouse'&&e.button===2)viewer.setAttribute('data-rmb','1');
       });
-      window.__nhMapViewers.ours={refresh:function(){ api.refresh(); }};
+      viewer.addEventListener('pointermove',function(e){
+        var p=pointers[e.pointerId];if(!p)return;
+        var dx=e.clientX-p.x,dy=e.clientY-p.y;
+        var dist=Math.hypot(dx,dy);
+        p.moved+=dist;
+        if(p.moved>6)dragged=true;
+        p.px=p.x;p.py=p.y;p.x=e.clientX;p.y=e.clientY;p.lastMove=performance.now();
+        var ids=Object.keys(pointers);
+        if(ids.length>=2){
+          var g=snap();if(!g)return;
+          if(!gesture)gesture=g;
+          var G=gesture;
+          var f=g.d/Math.max(20,G.d);
+          if(f>0.2&&f<5){
+            var ns=Math.min(maxScale(),Math.max(minScale,G.scale0*f));
+            var sx=(G.mx-G.tx0)/G.scale0,sy=(G.my-G.ty0)/G.scale0;
+            scale=ns;tx=G.mx-sx*ns;ty=G.my-sy*ns;
+          }
+          var dAng=(g.a-G.a)*180/Math.PI;
+          if(dAng>180)dAng-=360;if(dAng<-180)dAng+=360;
+          setRot(G.rot0+dAng);
+          var dy2=g.my-G.my;
+          if(Math.abs(dy2)>2)setTilt(G.tilt0+dy2*0.45);
+          clamp(true);apply();
+          velX=0;velY=0;
+        }else if(ids.length===1){
+          if(p.shift&&p.button===0){
+            setTilt(tilt+dy*0.5);
+          }else if(p.button===2||viewer.getAttribute('data-rmb')==='1'){
+            setRot(rot+dx*0.5);
+            if(!is3d&&tilt<1){is3d=true;toggle3d.setAttribute('aria-pressed','true');viewer.classList.add('is-3d');compass.hidden=false;}
+            setTilt(Math.max(tilt,14));
+          }else{
+            tx+=dx;ty+=dy;
+            var now=performance.now();
+            if(now-p.lastMove<50){velX=dx;velY=dy;}
+            clamp(true);apply();
+          }
+        }
+      });
+      function endPointer(e){
+        var p=pointers[e.pointerId];
+        delete pointers[e.pointerId];
+        var ids=Object.keys(pointers);
+        if(ids.length<2)gesture=null;
+        if(e.pointerType==='mouse'&&e.button===2)viewer.removeAttribute('data-rmb');
+        if(ids.length===0){
+          viewer.classList.remove('dragging');
+          if(dragged&&p&&p.moved>40)inertia();else{clamp(false);apply();}
+        }
+      }
+      viewer.addEventListener('pointerup',endPointer);
+      viewer.addEventListener('pointercancel',endPointer);
+      viewer.addEventListener('contextmenu',function(e){e.preventDefault();});
+      viewer.addEventListener('click',function(e){
+        if(!e.target.closest)return;
+        if(e.target.closest('.o3-pin')||e.target.closest('#omap3RouteG'))return;
+        var now=performance.now();
+        if(now-lastTap<320&&!dragged){
+          var r=viewer.getBoundingClientRect();
+          zoomAt(e.clientX-r.left,e.clientY-r.top,2);
+          lastTap=0;return;
+        }
+        lastTap=now;
+        if(dragged)return;
+        closePins();closeInfo();
+      });
+      viewer.addEventListener('wheel',function(e){
+        e.preventDefault();
+        var r=viewer.getBoundingClientRect();
+        var cx=e.clientX-r.left,cy=e.clientY-r.top;
+        if(e.shiftKey){setTilt(tilt+(e.deltaY>0?4:-4));}
+        else zoomAt(cx,cy,Math.pow(1.0015,-e.deltaY));
+      },{passive:false});
 
-      /* ---------- map switcher (official is the default view) ---------- */
+      /* ----- controls ----- */
+      document.getElementById('omapZoomIn').addEventListener('click',function(){zoomAt(vw/2,vh/2,1.5);});
+      document.getElementById('omapZoomOut').addEventListener('click',function(){zoomAt(vw/2,vh/2,1/1.5);});
+      document.getElementById('omapReset').addEventListener('click',function(){
+        clearRoute();closePins();
+        scale=minScale;tx=(vw-W*scale)/2;ty=(vh-H*scale)/2;velX=0;velY=0;apply();
+        if(is3d)set3D(false);else tweenCam(0,0,500);
+      });
+      compass.addEventListener('click',function(){tweenCam(tilt,0,500);});
+      toggle3d.addEventListener('click',function(){set3D(!is3d);});
+      tiltRange.addEventListener('input',function(){
+        var v=Math.max(0,Math.min(MAX_TILT,parseFloat(tiltRange.value)||0));
+        if(tween){cancelAnimationFrame(tween);tween=null;}
+        if(v>0.5){
+          if(!is3d){is3d=true;toggle3d.setAttribute('aria-pressed','true');viewer.classList.add('is-3d');compass.hidden=false;}
+          setTilt(v);
+        }else if(is3d){set3D(false);}else{setTilt(0);}
+      });
+
+      /* ----- init + tab switching ----- */
+      window.addEventListener('resize',function(){if(!viewer.closest('[hidden]'))baseSize();});
+      function refresh(){if(baseSize()){drawRoute(activeRoute&&activeRoute.route);}}
+      function init(){
+        var gpsOpt=originSel.querySelector('option[value="__gps"]');if(gpsOpt)gpsOpt.disabled=true;
+        if(ground.complete&&ground.naturalWidth){if(!viewer.closest('[hidden]'))refresh();}
+        ground.addEventListener('load',function(){if(!viewer.closest('[hidden]'))refresh();},{once:true});
+      }
+      init();
+      window.__nhMapViewers=window.__nhMapViewers||{};
+      window.__nhMapViewers.ours={refresh:refresh};
+
+      /* ----- map switcher (official is the default view) ----- */
       var mapViewKey='nh26-map-view-v2';
       window.nhSetMapView=function(v,skipSave){
         var ours=v!=='official';
@@ -2587,7 +2508,7 @@
         window.nhSetMapView(v==='official'?'official':'ours',true);
       })();
 
-      /* ---------- find my way (routes on the official map) ---------- */
+      /* ----- find my way (routes on the official map) ----- */
       window.nhFindWay=function(setId){
         if(typeof setById==='undefined'||!setById[setId]) return;
         var s=setById[setId];
@@ -2604,6 +2525,9 @@
         var b=e.target.closest?e.target.closest('[data-find-way]'):null;
         if(b){ window.nhFindWay(b.getAttribute('data-find-way')); }
       });
+
+      window.__omap3Dbg={data:D,route:function(a,b){return nhRoute(D,a,b);},showRoute:showRoute,set3D:set3D,
+        debug:function(){return {scale:scale,tx:tx,ty:ty,tilt:tilt,rot:rot,is3d:is3d};}};
     })();
 
     /* initial renders (restored: the declutter pass dropped these with the old venue map) */
