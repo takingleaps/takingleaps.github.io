@@ -2,12 +2,12 @@
   'use strict';
   var T=window.THREE;
   var els={
-    experience:document.getElementById('experience'),gate:document.getElementById('ageGate'),enter:document.getElementById('ageEnter'),leave:document.getElementById('ageLeave'),ageNote:document.getElementById('ageNote'),ageLoad:document.getElementById('ageLoad'),viewport:document.getElementById('gameViewport'),canvas:document.getElementById('scene'),loading:document.getElementById('loading'),loadingFill:document.getElementById('loadingFill'),proximity:document.getElementById('proximity'),lookPrompt:document.getElementById('lookPrompt'),hotspotLayer:document.getElementById('hotspotLayer'),scrim:document.getElementById('scrim'),lineup:document.getElementById('lineupPanel'),brand:document.getElementById('brandPanel'),poster:document.getElementById('posterPanel'),joystick:document.getElementById('joystick'),stick:document.getElementById('stick'),phoneLaunch:document.getElementById('phoneLaunch'),phoneOverlay:document.getElementById('phoneOverlay'),phoneClose:document.getElementById('phoneClose'),phoneVibe:document.getElementById('phoneVibe'),vibeStatus:document.getElementById('vibeStatus'),layoutTag:document.getElementById('layoutTag'),bagLaunch:document.getElementById('bagLaunch'),bagCount:document.getElementById('bagCount'),bagPanel:document.getElementById('bagPanel'),bagContents:document.getElementById('bagContents')
+    experience:document.getElementById('experience'),gate:document.getElementById('ageGate'),enter:document.getElementById('ageEnter'),leave:document.getElementById('ageLeave'),ageNote:document.getElementById('ageNote'),ageLoad:document.getElementById('ageLoad'),viewport:document.getElementById('gameViewport'),canvas:document.getElementById('scene'),loading:document.getElementById('loading'),loadingFill:document.getElementById('loadingFill'),proximity:document.getElementById('proximity'),lookPrompt:document.getElementById('lookPrompt'),hotspotLayer:document.getElementById('hotspotLayer'),scrim:document.getElementById('scrim'),lineup:document.getElementById('lineupPanel'),brand:document.getElementById('brandPanel'),poster:document.getElementById('posterPanel'),joystick:document.getElementById('joystick'),stick:document.getElementById('stick'),phoneLaunch:document.getElementById('phoneLaunch'),phoneOverlay:document.getElementById('phoneOverlay'),phoneClose:document.getElementById('phoneClose'),phoneVibe:document.getElementById('phoneVibe'),vibeStatus:document.getElementById('vibeStatus'),layoutTag:document.getElementById('layoutTag'),bagLaunch:document.getElementById('bagLaunch'),bagCount:document.getElementById('bagCount'),bagPanel:document.getElementById('bagPanel'),bagContents:document.getElementById('bagContents'),checkoutPanel:document.getElementById('checkoutPanel'),checkoutTitle:document.getElementById('checkoutTitle'),checkoutTag:document.getElementById('checkoutTag'),checkoutLede:document.getElementById('checkoutLede'),checkoutContents:document.getElementById('checkoutContents'),receiptCount:document.getElementById('receiptCount'),demoCheckout:document.getElementById('demoCheckout'),checkoutConfirmation:document.getElementById('checkoutConfirmation'),feedbackForm:document.getElementById('feedbackForm'),feedbackStatus:document.getElementById('feedbackStatus'),feedbackThanks:document.getElementById('feedbackThanks')
   };
   els.experience.inert=true;
   var enteredAge=false,ready=false,lastTrigger=null,activePanel=null,activeHotspot=null,coarse=matchMedia('(pointer:coarse)').matches,motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var keys={},joy={x:0,y:0,pointer:null},vibeOn=false,dirtyFrames=12,bag={},bagTotal=0,touchLook={pointer:null,x:0,y:0,moved:false};
-  var stats={steps:0,collisions:0,triggers:{lineup:0,poster:0,brand:0},loaded:0,total:11};
+  var keys={},joy={x:0,y:0,pointer:null},vibeOn=false,dirtyFrames=12,bag={},bagTotal=0,checkoutComplete=false,feedbackRating=0,feedbackSubmitted=false,touchLook={pointer:null,x:0,y:0,moved:false};
+  var stats={steps:0,collisions:0,triggers:{lineup:0,poster:0,brand:0,checkout:0,feedback:0},loaded:0,total:11};
 
   function fail(message){els.ageLoad.textContent=message;els.loading.innerHTML='<div class="loading-box">'+message+'</div>';els.loading.classList.remove('ready');}
   if(!T||!T.GLTFLoader){fail('STORE VIEWER COULD NOT LOAD');return;}
@@ -63,7 +63,8 @@
     {id:'poster-mindbodysoul',label:'MIND · BODY · SOUL',action:'poster',x:-6.95,y:2.35,z:3.75,r:1.15},
     {id:'poster-goodvibes',label:'GOOD VIBES',action:'poster',x:6.95,y:2.35,z:-2.7,r:1.15},
     {id:'poster-est2026',label:'FLWRPWR EST. 2026',action:'poster',x:-6.55,y:2.35,z:5.05,r:1.15},
-    {id:'checkout',label:'FLWRPWR COUNTER',action:'brand',x:4.55,y:1.45,z:3.45,r:1.3}
+    {id:'checkout',label:'CHECKOUT',action:'checkout',x:4.55,y:1.45,z:3.45,r:1.3},
+    {id:'feedback',label:'FEEDBACK',action:'feedback',x:-4.85,y:1.35,z:-4.55,r:1.25}
   ];
   var hotState={};
   hotspots.forEach(function(h){var e=document.createElement('div');e.className='hotspot-marker';e.textContent=h.label;e.dataset.hotspotId=h.id;els.hotspotLayer.appendChild(e);h.el=e;hotState[h.id]=false;});
@@ -332,13 +333,26 @@
   }
 
   function setOpen(panel,open,trigger){
-    [els.lineup,els.brand,els.poster,els.bagPanel].forEach(function(p){p.classList.remove('open');p.setAttribute('aria-hidden','true');});
+    [els.lineup,els.brand,els.poster,els.bagPanel,els.checkoutPanel].forEach(function(p){p.classList.remove('open');p.setAttribute('aria-hidden','true');});
     activePanel=open?panel:null;
     if(open){if(document.pointerLockElement===els.viewport)document.exitPointerLock();panel.classList.add('open');panel.setAttribute('aria-hidden','false');lastTrigger=trigger||lastTrigger;var close=panel.querySelector('[data-close]');if(close)close.focus();}
     els.scrim.classList.toggle('open',!!open);
   }
   function closePanels(){setOpen(els.lineup,false);closePhone();if(lastTrigger&&document.body.contains(lastTrigger))els.viewport.focus();dirtyFrames=4;}
-  function activate(action,trigger,label){stats.triggers[action]=(stats.triggers[action]||0)+1;if(action==='lineup')setOpen(els.lineup,true,trigger);if(action==='poster')setOpen(els.poster,true,trigger);if(action==='brand')setOpen(els.brand,true,trigger);}
+  function renderCheckout(){
+    var names=['Thai Stick','Northern Lights','Maui Wowie'];
+    els.receiptCount.textContent=bagTotal+' ITEM'+(bagTotal===1?'':'S');
+    els.demoCheckout.disabled=!bagTotal;els.demoCheckout.textContent=checkoutComplete?'CHECKED OUT':'CHECKOUT';
+    if(!bagTotal){els.checkoutContents.innerHTML='<p class="receipt-empty">Your bag is empty. Add a revealed strain before checking out.</p>';return;}
+    var html='<ul class="receipt-list">';names.forEach(function(name){if(bag[name])html+='<li><span>'+name+'<small>FLWRPWR 4g Smalls</small></span><span>× '+bag[name]+'</span></li>';});html+='</ul>';els.checkoutContents.innerHTML=html;
+  }
+  function openCheckout(trigger){
+    els.checkoutPanel.classList.remove('feedback-only');els.checkoutTag.textContent='COUNTER · CONCEPT DEMO';els.checkoutTitle.textContent='Ready at checkout.';els.checkoutLede.textContent='Review your bag, then try the demo checkout. No payment details are collected.';els.checkoutConfirmation.hidden=!checkoutComplete;els.feedbackForm.hidden=!checkoutComplete||feedbackSubmitted;els.feedbackThanks.hidden=!checkoutComplete||!feedbackSubmitted;els.feedbackStatus.textContent='';renderCheckout();setOpen(els.checkoutPanel,true,trigger);
+  }
+  function openFeedback(trigger){
+    els.checkoutPanel.classList.add('feedback-only');els.checkoutTag.textContent='FEEDBACK · CONCEPT DEMO';els.checkoutTitle.textContent='Your take.';els.checkoutLede.textContent='Rate this exact store concept. Your notes stay in this session and are not saved.';els.feedbackForm.hidden=feedbackSubmitted;els.feedbackThanks.hidden=!feedbackSubmitted;els.feedbackStatus.textContent='';setOpen(els.checkoutPanel,true,trigger);
+  }
+  function activate(action,trigger,label){stats.triggers[action]=(stats.triggers[action]||0)+1;if(action==='lineup')setOpen(els.lineup,true,trigger);if(action==='poster')setOpen(els.poster,true,trigger);if(action==='brand')setOpen(els.brand,true,trigger);if(action==='checkout')openCheckout(trigger);if(action==='feedback')openFeedback(trigger);}
   function switchPhonePage(name){document.querySelectorAll('[data-phone-tab]').forEach(function(tab){var on=tab.dataset.phoneTab===name;tab.setAttribute('aria-selected',String(on));tab.tabIndex=on?0:-1;});document.querySelectorAll('.phone-page').forEach(function(page){var on=page.id==='phone-'+name;page.classList.toggle('active',on);page.hidden=!on;});var pages=document.querySelector('.phone-pages');if(pages)pages.scrollTop=0;}
   function openPhone(){setOpen(els.lineup,false);if(document.pointerLockElement===els.viewport)document.exitPointerLock();document.body.classList.add('phone-open');els.phoneOverlay.classList.add('open');els.phoneOverlay.setAttribute('aria-hidden','false');els.phoneClose.focus();}
   function closePhone(){if(!els.phoneOverlay.classList.contains('open'))return;els.phoneOverlay.classList.remove('open');els.phoneOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('phone-open');dirtyFrames=4;}
@@ -350,7 +364,7 @@
     var html='<ul class="bag-list">';names.forEach(function(name){if(bag[name])html+='<li><span>'+name+'<small>FLWRPWR 4g Smalls</small></span><span class="qty">× '+bag[name]+'</span></li>';});html+='</ul><p class="bag-summary">'+bagTotal+' item'+(bagTotal===1?'':'s')+' in bag · concept only</p>';els.bagContents.innerHTML=html;
   }
   function addToBag(name,source){
-    bag[name]=(bag[name]||0)+1;bagTotal++;renderBag();
+    bag[name]=(bag[name]||0)+1;bagTotal++;checkoutComplete=false;els.checkoutConfirmation.hidden=true;if(!feedbackSubmitted)els.feedbackForm.hidden=true;renderBag();renderCheckout();
     var r=(source||els.lineup).getBoundingClientRect(),br=els.bagLaunch.getBoundingClientRect(),fly=document.createElement('div');fly.className='bag-fly';fly.textContent=name;fly.style.left=(r.left+r.width/2-48)+'px';fly.style.top=(r.top+r.height/2-27)+'px';fly.style.setProperty('--bag-dest-x',(br.left+br.width/2)+'px');fly.style.setProperty('--bag-dest-y',(br.top+br.height/2)+'px');document.body.appendChild(fly);setTimeout(function(){fly.remove();},680);
     els.bagLaunch.classList.remove('bump');void els.bagLaunch.offsetWidth;els.bagLaunch.classList.add('bump');setTimeout(function(){els.bagLaunch.classList.remove('bump');},780);
     els.proximity.textContent=name.toUpperCase()+' ADDED';els.proximity.classList.add('show');setTimeout(function(){if(!activeHotspot)els.proximity.classList.remove('show');},900);
@@ -366,7 +380,7 @@
     if(activePanel){if(e.key==='Escape')closePanels();return;}
     if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','w','a','s','d'].indexOf(k)>-1){e.preventDefault();keys[k]=true;if(!e.repeat){var f=new T.Vector3(Math.sin(cameraState.yaw),0,Math.cos(cameraState.yaw)),r=new T.Vector3(-Math.cos(cameraState.yaw),0,Math.sin(cameraState.yaw)),dx=0,dz=0;if(k==='ArrowUp'||k==='w'){dx+=f.x;dz+=f.z;}if(k==='ArrowDown'||k==='s'){dx-=f.x;dz-=f.z;}if(k==='ArrowLeft'||k==='a'){dx-=r.x;dz-=r.z;}if(k==='ArrowRight'||k==='d'){dx+=r.x;dz+=r.z;}move(dx*.14,dz*.14);}}
     if(k===' '||e.code==='Space'){e.preventDefault();if(!e.repeat)startJump();}
-    if(k==='e'){e.preventDefault();checkHotspots();interact();}if(k==='b'){e.preventDefault();setOpen(els.bagPanel,true,els.bagLaunch);}if(k==='v')setVibe(!vibeOn);
+    if(k==='e'){e.preventDefault();checkHotspots();interact();}if(k==='b'){e.preventDefault();setOpen(els.bagPanel,true,els.bagLaunch);}if(k==='c'){e.preventDefault();openCheckout(els.viewport);}if(k==='f'){e.preventDefault();openFeedback(els.viewport);}if(k==='v')setVibe(!vibeOn);
     if(e.key==='Escape'&&document.pointerLockElement!==els.viewport)closePanels();dirtyFrames=5;
   });
   document.addEventListener('keyup',function(e){var k=e.key.length===1?e.key.toLowerCase():e.key;keys[k]=false;});
@@ -379,21 +393,25 @@
   els.joystick.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();joy.pointer=e.pointerId;els.joystick.setPointerCapture(e.pointerId);moveStick(e);});els.joystick.addEventListener('pointermove',function(e){if(joy.pointer===e.pointerId)moveStick(e);});function releaseStick(e){if(joy.pointer!==e.pointerId)return;joy.pointer=null;joy.x=0;joy.y=0;els.stick.style.transform='translate3d(0,0,0)';}els.joystick.addEventListener('pointerup',releaseStick);els.joystick.addEventListener('pointercancel',releaseStick);
   els.phoneLaunch.addEventListener('click',openPhone);els.phoneClose.addEventListener('click',closePhone);els.phoneOverlay.addEventListener('click',function(e){if(e.target===els.phoneOverlay)closePhone();});els.phoneVibe.addEventListener('click',function(){setVibe(!vibeOn);});document.querySelectorAll('[data-phone-tab]').forEach(function(t){t.addEventListener('click',function(){switchPhonePage(t.dataset.phoneTab);});});
   els.bagLaunch.addEventListener('click',function(){setOpen(els.bagPanel,true,els.bagLaunch);});
+  els.demoCheckout.addEventListener('click',function(){if(!bagTotal)return;checkoutComplete=true;els.checkoutConfirmation.hidden=false;els.demoCheckout.textContent='CHECKED OUT';if(feedbackSubmitted){els.feedbackThanks.hidden=false;}else{els.feedbackForm.hidden=false;var firstStar=els.feedbackForm.querySelector('.star');if(firstStar)firstStar.focus();}els.checkoutConfirmation.scrollIntoView({block:'nearest',behavior:motionReduced?'auto':'smooth'});});
+  document.querySelectorAll('.star').forEach(function(star){star.addEventListener('click',function(){feedbackRating=Number(star.dataset.rating)||0;document.querySelectorAll('.star').forEach(function(item){var selected=Number(item.dataset.rating)<=feedbackRating;item.classList.toggle('selected',selected);item.setAttribute('aria-pressed',String(selected));});els.feedbackStatus.textContent=feedbackRating+' STAR'+(feedbackRating===1?'':'S')+' SELECTED';});});
+  els.feedbackForm.addEventListener('submit',function(e){e.preventDefault();if(!feedbackRating){els.feedbackStatus.textContent='PICK A STAR RATING FIRST.';var firstStar=els.feedbackForm.querySelector('.star');if(firstStar)firstStar.focus();return;}feedbackSubmitted=true;els.feedbackForm.hidden=true;els.feedbackThanks.hidden=false;els.feedbackThanks.focus&&els.feedbackThanks.focus();});
   document.addEventListener('click',function(e){if(e.target.closest('[data-close]')||e.target===els.scrim)closePanels();var strain=e.target.closest('.strain[data-product]');if(strain)addToBag(strain.dataset.product,strain);});
   function resize(){renderer.setPixelRatio(softwareRenderer ? .62 : Math.min(devicePixelRatio||1,coarse?1.25:1.75));renderer.setSize(innerWidth,innerHeight,false);renderer.getDrawingBufferSize(renderSize);sceneTarget.setSize(Math.max(1,renderSize.x),Math.max(1,renderSize.y));gradeMaterial.uniforms.uTexel.value.set(1/renderSize.x,1/renderSize.y);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();cameraState.ready=false;dirtyFrames=10;}addEventListener('resize',resize);
   function tickClock(){var d=new Date(),time=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0');}).join(':');document.getElementById('timestamp').innerHTML='03:20:27<br><span>'+time+'</span>';var h=d.getHours()%12||12,m=String(d.getMinutes()).padStart(2,'0');document.getElementById('phoneClock').textContent=h+':'+m+' '+(d.getHours()>=12?'PM':'AM');}tickClock();setInterval(tickClock,1000);switchPhonePage('lineup');setVibe(false);
 
   window.__gameDebug={
-    getState:function(){return{ready:ready,player:{x:player.x,y:player.y,z:player.z,grounded:player.grounded,velocityY:player.velocityY},camera:{mode:'first-person',yaw:cameraState.yaw,pitch:cameraState.pitch},pointerLocked:document.pointerLockElement===els.viewport,activeHotspot:activeHotspot&&activeHotspot.id,stats:JSON.parse(JSON.stringify(stats)),open:activePanel?activePanel.id:null,phone:els.phoneOverlay.classList.contains('open'),phonePage:(document.querySelector('.phone-page.active')||{}).id||null,vibe:vibeOn,bag:Object.assign({},bag),bagTotal:bagTotal,walkBounds:Object.assign({},WALK_BOUNDS),people:people.map(function(p){return{employee:p.employee,inside:p.inside,x:p.root.position.x,z:p.root.position.z,walking:p.walking};}),collisions:collisions.map(function(c){return Object.assign({},c);}),hotspots:hotspots.map(function(h){return{id:h.id,label:h.label,action:h.action,x:h.x,z:h.z,r:h.r};})};},
+    getState:function(){return{ready:ready,player:{x:player.x,y:player.y,z:player.z,grounded:player.grounded,velocityY:player.velocityY},camera:{mode:'first-person',yaw:cameraState.yaw,pitch:cameraState.pitch},pointerLocked:document.pointerLockElement===els.viewport,activeHotspot:activeHotspot&&activeHotspot.id,stats:JSON.parse(JSON.stringify(stats)),open:activePanel?activePanel.id:null,phone:els.phoneOverlay.classList.contains('open'),phonePage:(document.querySelector('.phone-page.active')||{}).id||null,vibe:vibeOn,bag:Object.assign({},bag),bagTotal:bagTotal,checkoutComplete:checkoutComplete,feedbackRating:feedbackRating,feedbackSubmitted:feedbackSubmitted,walkBounds:Object.assign({},WALK_BOUNDS),people:people.map(function(p){return{employee:p.employee,inside:p.inside,x:p.root.position.x,z:p.root.position.z,walking:p.walking};}),collisions:collisions.map(function(c){return Object.assign({},c);}),hotspots:hotspots.map(function(h){return{id:h.id,label:h.label,action:h.action,x:h.x,z:h.z,r:h.r};})};},
     jump:startJump,
     setPlayer:function(x,z){if(!blocked(x,z)){player.x=x;player.z=z;cameraState.ready=false;dirtyFrames=8;return true;}return false;},
     setCamera:function(yaw,pitch){cameraState.yaw=cameraState.targetYaw=yaw;cameraState.pitch=cameraState.targetPitch=Math.max(-1.08,Math.min(1.08,pitch));cameraState.ready=false;dirtyFrames=8;return true;},
     lookAtHotspot:function(id){var h=hotspots.filter(function(item){return item.id===id;})[0];if(!h)return false;cameraState.yaw=cameraState.targetYaw=Math.atan2(h.x-player.x,h.z-player.z);cameraState.pitch=cameraState.targetPitch=Math.atan2(h.y-(PLAYER_EYE_HEIGHT+player.y),Math.hypot(h.x-player.x,h.z-player.z));cameraState.ready=false;dirtyFrames=8;return true;},
     interact:interact,
     verifyLayout:function(){var overlaps=[];for(var i=0;i<collisions.length;i++){for(var j=i+1;j<collisions.length;j++){var a=collisions[i],b=collisions[j];if(Math.abs(a.x-b.x)<(a.w+b.w)/2&&Math.abs(a.z-b.z)<(a.d+b.d)/2)overlaps.push([a.name,b.name]);}}return{clear:overlaps.length===0,overlaps:overlaps,walkLaneMinimum:1.2,footprints:collisions.map(function(c){return{name:c.name,x:c.x,z:c.z,width:c.w,depth:c.d};})};},
-    activate:function(action){activate(action,els.viewport,action==='lineup'?'PRODUCT DISPLAY':action==='poster'?'POSTERS':'FLWRPWR COUNTER');return true;},
+    activate:function(action){activate(action,els.viewport,action==='lineup'?'PRODUCT DISPLAY':action==='poster'?'POSTERS':action==='feedback'?'FEEDBACK':'CHECKOUT');return true;},
     addToBag:function(name){if(['Thai Stick','Northern Lights','Maui Wowie'].indexOf(name)<0)return false;addToBag(name,els.lineup);return true;},
     openBag:function(){setOpen(els.bagPanel,true,els.bagLaunch);return true;},
+    openCheckout:function(){openCheckout(els.viewport);return true;},openFeedback:function(){openFeedback(els.viewport);return true;},
     openPhone:openPhone,switchPhonePage:switchPhonePage,closePanels:closePanels
   };
   updateCamera(.016,true);requestAnimationFrame(animate);els.enter.focus();
