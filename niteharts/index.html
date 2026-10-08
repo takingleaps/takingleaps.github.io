@@ -72,7 +72,6 @@
 .fmap-pin[data-cat="art"]{--pin:#c9a6ff}
 .fmap-pin[data-cat="activity"]{--pin:#6ee7a0}
 .fmap-pin-dot{display:block;width:14px;height:14px;border-radius:50%;background:var(--pin,var(--ice));border:2px solid #0b0c0d;box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,var(--ice)) 35%,transparent),0 2px 8px rgba(0,0,0,.55);transition:background .2s ease}
-.fmap-pin::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid var(--pin,var(--ice));opacity:0;pointer-events:none;animation:pinPulse 2.6s ease-out infinite}
 .fmap-pin[aria-expanded="true"] .fmap-pin-dot{background:var(--paper)}
 .fmap-pin-tag{position:absolute;left:50%;bottom:calc(100% - 14px);transform:translateX(-50%);white-space:nowrap;background:#0b0c0d;border:1px solid var(--pin,var(--ice));color:var(--paper);font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:7px 11px;border-radius:2px;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .fmap-pin[aria-expanded="true"] .fmap-pin-tag{opacity:1}
@@ -92,8 +91,8 @@
 .fmap-chip[data-cat="transit"]{--pin:#b8b8b8}
 .fmap-chip[data-cat="art"]{--pin:#c9a6ff}
 .fmap-chip[data-cat="activity"]{--pin:#6ee7a0}
-@keyframes pinPulse{0%{opacity:.75;transform:scale(1)}70%{opacity:0;transform:scale(2.8)}100%{opacity:0;transform:scale(2.8)}}
-@media (prefers-reduced-motion:reduce){.fmap-pin::after{animation:none;display:none}}
+100%{opacity:0;transform:scale(2.8)}}
+@media (prefers-reduced-motion:reduce){}
     /* official map: routing toolbar, svg overlay, 3d tilt */
     .fmap-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
     .fmap-tilt{position:absolute;inset:0;transform-origin:50% 50%;transition:transform .5s var(--ease, ease)}
@@ -476,18 +475,18 @@
             <div class="fmap-canvas" id="fmapCanvas">
               <div class="fmap-tilt" id="fmapTilt">
               <img id="fmapImage" src="assets/map/nh26-sitemap.webp" alt="Official Niteharts 2026 festival grounds map at Snapdragon Stadium, showing Main Stage, The Mirror, The Crescent, The Terminal, and Half Court stages, plus GA and VIP entrances" width="1920" height="1200" loading="lazy" decoding="async" draggable="false">
-              <button type="button" class="fmap-pin" data-cat="stage" data-node="main_stage" style="left:48.4%;top:65.8%" aria-label="Main Stage" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Main Stage</span></button>
-              <button type="button" class="fmap-pin" data-cat="art" data-node="the_crescent" style="left:33.1%;top:62.5%" aria-label="The Crescent" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Crescent</span></button>
-              <button type="button" class="fmap-pin" data-cat="art" data-node="the_mirror" style="left:32.8%;top:69.2%" aria-label="The Mirror" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Mirror</span></button>
-              <button type="button" class="fmap-pin" data-cat="art" data-node="the_terminal" style="left:20.6%;top:45.8%" aria-label="The Terminal" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Terminal</span></button>
-              <button type="button" class="fmap-pin" data-cat="activity" data-node="half_court" style="left:21.9%;top:45.4%" aria-label="Half Court" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Half Court</span></button>
-              <button type="button" class="fmap-pin" data-cat="entrance" data-node="ga_entrance" style="left:37.0%;top:47.5%" aria-label="GA Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Entrance</span></button>
-              <button type="button" class="fmap-pin" data-cat="entrance" data-node="vip_entrance" style="left:51.0%;top:90.8%" aria-label="VIP Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">VIP Entrance</span></button>
-              <button type="button" class="fmap-pin" data-cat="transit" data-node="trolley" style="left:62.0%;top:85.0%" aria-label="Trolley Stop" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Trolley Stop</span></button>
-              <button type="button" class="fmap-pin" data-cat="merch" data-node="merch" style="left:34.9%;top:95.0%" aria-label="Merch" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Merch</span></button>
-              <button type="button" class="fmap-pin" data-cat="lockers" data-node="lockers" style="left:53.1%;top:94.2%" aria-label="Lockers" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Lockers</span></button>
-              <button type="button" class="fmap-pin" data-cat="transit" data-node="rideshare" style="left:57.0%;top:5.0%" aria-label="Ride Share lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Ride Share</span></button>
-              <button type="button" class="fmap-pin" data-cat="transit" data-node="ga_parking" style="left:80.7%;top:18.8%" aria-label="GA Parking lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Parking</span></button>
+              <button type="button" class="fmap-pin" data-cat="stage" data-node="main_stage" style="left:40.1%;top:66.7%" aria-label="Main Stage" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Main Stage</span></button>
+              <button type="button" class="fmap-pin" data-cat="art" data-node="the_crescent" style="left:27.3%;top:63.6%" aria-label="The Crescent" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Crescent</span></button>
+              <button type="button" class="fmap-pin" data-cat="art" data-node="the_mirror" style="left:27.1%;top:69.5%" aria-label="The Mirror" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Mirror</span></button>
+              <button type="button" class="fmap-pin" data-cat="art" data-node="the_terminal" style="left:19.6%;top:49.4%" aria-label="The Terminal" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Terminal</span></button>
+              <button type="button" class="fmap-pin" data-cat="activity" data-node="half_court" style="left:22.4%;top:50.4%" aria-label="Half Court" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Half Court</span></button>
+              <button type="button" class="fmap-pin" data-cat="entrance" data-node="ga_entrance" style="left:46.4%;top:47.5%" aria-label="GA Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Entrance</span></button>
+              <button type="button" class="fmap-pin" data-cat="entrance" data-node="vip_entrance" style="left:41.4%;top:84.5%" aria-label="VIP Entrance" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">VIP Entrance</span></button>
+              <button type="button" class="fmap-pin" data-cat="transit" data-node="trolley" style="left:56.5%;top:77.9%" aria-label="Trolley Stop" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Trolley Stop</span></button>
+              <button type="button" class="fmap-pin" data-cat="merch" data-node="merch" style="left:34.9%;top:86.3%" aria-label="Merch" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Merch</span></button>
+              <button type="button" class="fmap-pin" data-cat="lockers" data-node="lockers" style="left:36.2%;top:86.1%" aria-label="Lockers" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Lockers</span></button>
+              <button type="button" class="fmap-pin" data-cat="transit" data-node="rideshare" style="left:57.6%;top:11.3%" aria-label="Ride Share lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Ride Share</span></button>
+              <button type="button" class="fmap-pin" data-cat="transit" data-node="ga_parking" style="left:73.4%;top:25.3%" aria-label="GA Parking lot" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">GA Parking</span></button>
               <svg id="fmapSvg" class="fmap-svg" viewBox="0 0 1920 1200" aria-hidden="true" focusable="false">
                 <g id="fmapRouteG" hidden>
                   <polyline id="fmapRouteLineA" points=""/>
