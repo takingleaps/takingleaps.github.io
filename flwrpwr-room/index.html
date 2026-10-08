@@ -33,7 +33,7 @@
     .mouse-icon{position:relative;display:block;width:44px;height:62px;margin:0 auto 15px;border:3px solid var(--mint);border-radius:22px}.mouse-icon::before{content:"";position:absolute;left:50%;top:8px;width:3px;height:14px;background:var(--pink);transform:translateX(-50%)}.mouse-icon::after{content:"";position:absolute;left:7px;right:7px;top:27px;height:2px;background:rgba(255,248,223,.32)}
     .look-prompt strong{display:block;font-size:clamp(23px,4vw,34px);font-weight:400;line-height:1}.look-prompt span{display:block;margin-top:10px;color:#ffe6a8;font-size:14px;line-height:1.5}
     .hud{position:fixed;inset:0;z-index:9;pointer-events:none;font-family:"Courier New",monospace;font-size:clamp(19px,2vw,27px);letter-spacing:.035em;text-shadow:2px 2px 0 #173529,-1px 0 rgba(243,72,145,.65)}
-    .play{position:absolute;top:max(18px,env(safe-area-inset-top));left:max(20px,env(safe-area-inset-left));display:flex;align-items:center;gap:8px}.play i{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:13px solid var(--mint)}
+    .pov-cam{position:absolute;top:max(18px,env(safe-area-inset-top));left:max(20px,env(safe-area-inset-left))}
     .timestamp{position:absolute;top:max(18px,env(safe-area-inset-top));right:max(20px,env(safe-area-inset-right));text-align:right}.timestamp span{font-size:.72em;color:#ffe6a8}
     .brand-hud{position:absolute;left:max(20px,env(safe-area-inset-left));bottom:max(20px,env(safe-area-inset-bottom));color:#d8f2d6}
     .studio-credit{position:fixed;z-index:14;left:max(20px,env(safe-area-inset-left));bottom:max(51px,calc(env(safe-area-inset-bottom) + 31px));color:rgba(216,242,214,.72);font:11px/1.2 "Courier New",monospace;letter-spacing:.08em;text-decoration:none;text-shadow:1px 1px 0 #173529;pointer-events:auto;transition:color .15s,opacity .15s}.studio-credit:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}.studio-credit:focus-visible{outline:2px solid var(--focus);outline-offset:4px;color:var(--ink)}
@@ -92,11 +92,9 @@
       .panel{left:8px;right:8px;top:auto;bottom:max(8px,env(safe-area-inset-bottom));width:auto;max-height:calc(100svh - 72px);padding:22px 16px calc(20px + env(safe-area-inset-bottom));transform:translateY(calc(100% + 24px));box-shadow:0 -18px 64px rgba(0,0,0,.68)}.panel.open{transform:translateY(0)}.panel h2{font-size:43px}.strains{grid-template-columns:1fr 1fr;gap:8px}.strain{min-height:104px;padding:12px 10px}.strain strong{font-size:23px}.poster-stage{min-height:62svh}.poster-stage h2{font-size:clamp(62px,21vw,88px)}
       .bag-launch{right:max(18px,env(safe-area-inset-right));bottom:max(98px,calc(env(safe-area-inset-bottom) + 91px));width:116px;height:100px;padding:35px 8px 10px}.bag-launch::before{left:37px;top:7px;width:36px;height:26px}.bag-label{font-size:19px}.bag-action{margin-top:7px;font-size:11px}.bag-launch strong{right:-8px;top:-8px;min-width:34px;height:34px;font-size:18px}.checkout-layout,.feedback-fields{grid-template-columns:1fr}.checkout-action{padding:17px}.checkout-button{min-height:66px}.stars{justify-content:space-between}.star{width:calc(20% - 5px);height:50px}.feedback-fields textarea{min-height:96px}
     }
-    @media(max-width:430px){.play,.timestamp{top:14px}.play{left:14px}.timestamp{right:14px}.age-actions{grid-template-columns:1fr}.age-card{padding:34px 22px;border-width:6px}.age-flower{transform:scale(.86);margin-bottom:17px}}
+    @media(max-width:430px){.pov-cam,.timestamp{top:14px}.pov-cam{left:14px}.timestamp{right:14px}.age-actions{grid-template-columns:1fr}.age-card{padding:34px 22px;border-width:6px}.age-flower{transform:scale(.86);margin-bottom:17px}}
     @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
   </style>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
   <section class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
@@ -117,7 +115,7 @@
     </div>
     <div class="vhs-texture" aria-hidden="true"></div>
     <div class="vignette" aria-hidden="true"></div>
-    <div class="hud" aria-hidden="true"><div class="play"><i></i> PLAY · STORE CAM 13</div><div class="timestamp" id="timestamp">03:20:27<br><span>17:42:12</span></div><div class="brand-hud">GOOD VIBES, GREAT FLOWER</div><div class="rec"><i></i> FLWRPWR</div></div>
+    <div class="hud" aria-hidden="true"><div class="pov-cam">POV CAM</div><div class="timestamp" id="timestamp">03:20:27<br><span>17:42:12</span></div><div class="brand-hud">GOOD VIBES, GREAT FLOWER</div><div class="rec"><i></i> FLWRPWR</div></div>
     <div class="look-prompt" id="lookPrompt" aria-hidden="true"><i class="mouse-icon" aria-hidden="true"></i><strong>CLICK TO LOOK AROUND</strong><span>Mouse to look · WASD to walk · Space to jump</span></div>
     <a class="studio-credit" href="https://byyystudio.me/" target="_blank" rel="noopener noreferrer">made by byyy studio</a>
     <div class="instruction">CLICK TO LOOK · WASD TO WALK · SPACE TO JUMP · E TO INTERACT · C CHECKOUT · F FEEDBACK</div>
@@ -159,6 +157,6 @@
   </main>
   <script src="assets/three.min.js"></script>
   <script src="assets/GLTFLoader.js?v=texture-loader-fix-2"></script>
-  <script src="assets/game.js?v=checkout-feedback-17"></script>
+  <script src="assets/game.js?v=pov-yaw-fix-18"></script>
 </body>
 </html>
