@@ -240,6 +240,7 @@
     @media(max-width:360px){.mobile-quicknav{margin-inline:-10px}.mobile-quicknav a,.mobile-quicknav button{font-size:.55rem}.hero{min-height:270px}.dates{font-size:3.22rem}.schedule-card{grid-template-columns:68px minmax(0,1fr)}.set-copy{padding:9px}.artist{font-size:1.31rem}}
       /* ---- interactive festival map v1: switcher + our schematic ---- */
     .map-switch{margin:2px 0 14px}
+    .map-wip{font-size:11px;letter-spacing:.08em;opacity:.55;margin-left:8px;white-space:nowrap}
     #mapViewOurs[hidden],#mapViewOfficial[hidden]{display:none!important}
     .omap{border:1px solid var(--line);border-radius:3px;overflow:hidden;background:#0d0e10;margin-bottom:18px}
     .omap-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
@@ -467,7 +468,7 @@
         <div class="module-head"><h2 id="mapTitle">Festival map</h2><span class="module-label">Interactive grounds map</span></div>
         <div class="map-switch segmented" role="group" aria-label="Map style">
           <button type="button" data-mapview="official" aria-pressed="true">Official map</button>
-          <button type="button" data-mapview="ours" aria-pressed="false">[try out] interactive map</button>
+          <button type="button" data-mapview="ours" aria-pressed="false">[try out] interactive map</button><span class="map-wip">-&gt; still under construction</span>
         </div>
         <div id="mapViewOurs" hidden>
           <div class="omap" id="ourMap">
