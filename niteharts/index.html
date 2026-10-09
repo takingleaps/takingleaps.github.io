@@ -102,6 +102,36 @@
 .fmap-pin-util .fmap-pin-dot{width:8px;height:8px;border-width:1px;box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 30%,transparent)}
 .fmap-pin-util[aria-expanded="true"]{opacity:1}
 .fmap-pin-util[aria-expanded="true"] .fmap-pin-dot{width:12px;height:12px;background:var(--paper)}
+/* item 1: soft tappable glow under utility dots — subtle, never the old 2.8x rings */
+.fmap-pin-util .fmap-pin-dot{animation:utilGlow 3.4s ease-in-out infinite}
+@keyframes utilGlow{0%,100%{box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 30%,transparent),0 0 5px 1px color-mix(in srgb,var(--pin,var(--ice)) 20%,transparent)}50%{box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 30%,transparent),0 0 11px 3px color-mix(in srgb,var(--pin,var(--ice)) 38%,transparent)}}
+/* item 2: YOU heading cone */
+.fmap-gps-cone{fill:rgba(47,157,255,.30);stroke:rgba(47,157,255,.65);stroke-width:2}
+/* item 3: near-me quick-find chips — big drunk-proof buttons */
+.fmap-nearme{display:flex;gap:10px;overflow-x:auto;padding:12px 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.fmap-nearme::-webkit-scrollbar{display:none}
+.fmap-nearme button{flex:0 0 auto;min-height:54px;padding:12px 20px;border-radius:999px;border:2px solid var(--ice);background:rgba(159,201,239,.10);color:#fff;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;touch-action:manipulation;white-space:nowrap}
+.fmap-nearme button:active{transform:scale(.96);background:rgba(159,201,239,.22)}
+/* item 4: drunk-proof how-to card */
+.fmap-howto{margin:0 0 14px;padding:20px 18px;border:2px solid var(--ice);border-radius:8px;background:rgba(159,201,239,.07);box-shadow:0 0 24px rgba(159,201,239,.15)}
+.fmap-howto h3{margin:0 0 12px;font:700 1.05rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#fff}
+.fmap-howto ol{margin:0 0 16px;padding-left:22px;font-size:1rem;line-height:1.9;color:var(--paper)}
+.fmap-howto ol b{color:var(--ice-strong)}
+.fmap-howto .lens-btn{width:100%}
+/* item 5: AR heart mascot */
+#arHeart{width:84px;height:84px;filter:drop-shadow(0 0 12px rgba(255,105,135,.7));animation:heartBob 2.6s ease-in-out infinite}
+@keyframes heartBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-10px) rotate(4deg)}}
+/* item 6: venue preview */
+.fmap-venueprev{display:flex;align-items:center;gap:10px;margin:0 0 10px;padding:10px 14px;border:1px dashed var(--ice);border-radius:6px;background:rgba(159,201,239,.05)}
+.fmap-venueprev button{flex:none}
+.fmap-venueprev .sim-tag{font:700 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ice-strong);border:1px solid var(--ice);border-radius:3px;padding:4px 8px}
+.fmap-venueprev p{margin:0;font:400 .72rem var(--mono);color:var(--mist)}
+.fmap-sim-banner{margin:0 0 10px;padding:10px 14px;text-align:center;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:#0b0c0d;background:var(--ice);border-radius:4px}
+/* item 8: map tabs fully legible on mobile */
+.map-switch.segmented{display:flex;flex-wrap:wrap;align-items:center}
+.map-switch.segmented button{flex:1 1 auto;white-space:nowrap}
+.map-switch .map-wip{flex:1 1 100%;text-align:center;font-size:.62rem;margin-top:6px}
+@media(max-width:600px){.map-switch.segmented{display:flex}.map-switch.segmented button{font-size:.66rem;padding-inline:8px}}
 .fmap-pin-flash .fmap-pin-dot{outline:2px solid #fff;outline-offset:3px}
 .fmap-chip[data-cat="water"]{--pin:#29b6f6}
 .fmap-chip[data-cat="restroom"]{--pin:#a678e8}
@@ -137,7 +167,7 @@
     .fmap-gps-you-bg{fill:#2f9dff;stroke:#fff;stroke-width:2;filter:drop-shadow(0 2px 10px rgba(47,157,255,.8))}
     .fmap-gps-you-tx{fill:#fff;font:700 15px var(--mono);text-anchor:middle;letter-spacing:.08em}
     .fmap-controls button[aria-pressed="true"]{background:var(--paper);color:var(--night);border-color:var(--paper);font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;padding:0 14px}
-    @media (prefers-reduced-motion:reduce){#fmapRouteLineB,.fmap-gps-pulse{animation:none}.fmap-tilt{transition:none}}
+    @media (prefers-reduced-motion:reduce){#fmapRouteLineB,.fmap-gps-pulse,.fmap-pin-util .fmap-pin-dot,#arHeart{animation:none}.fmap-tilt{transition:none}}
     @media(max-width:600px){.fmap-toolbar .omap-from select{max-width:170px}}
     .quick-schedule{display:grid;gap:6px}.quick-set{display:grid;grid-template-columns:75px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;background:var(--panel);border-radius:2px}.quick-set time{font:400 .7rem var(--mono);color:var(--mist)}.quick-set strong{text-transform:uppercase;font-size:.92rem}.quick-set span{font:400 .63rem var(--mono);color:var(--ice);text-transform:uppercase}.quick-set.valorant{background:color-mix(in srgb,var(--panel) 82%,var(--red));box-shadow:inset 4px 0 0 var(--red)}.quick-set.valorant span{color:var(--red);font-weight:700}
     .merch-watch{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);background:var(--paper);color:var(--night);overflow:hidden}.merch-photo{display:block;width:100%;height:100%;min-height:500px;object-fit:cover;object-position:center;background:#0e0e10}.merch-copy{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(24px,4vw,56px);overflow:hidden}.merch-copy::after{content:"V26";position:absolute;right:-14px;top:-25px;font:400 9rem/1 var(--display);opacity:.06}.merch-watch h3{position:relative;z-index:1;font:400 clamp(2.4rem,5vw,5rem)/.85 var(--display);text-transform:uppercase;margin:0 0 18px;letter-spacing:-.02em}.merch-watch p{position:relative;z-index:1;margin:0;max-width:42ch}.merch-watch .mono{position:relative;z-index:1;display:block;margin-top:22px;font:400 .68rem var(--mono);text-transform:uppercase;opacity:.7}.merch-source{position:relative;z-index:1;display:inline-flex;align-items:center;align-self:flex-start;min-height:44px;margin-top:14px;color:var(--night);font-weight:800}
@@ -471,6 +501,11 @@
 
             <section class="module map-module" data-module-id="map" data-module-label="Festival map" aria-labelledby="mapTitle">
         <div class="module-head"><h2 id="mapTitle">Festival map</h2><span class="module-label">Interactive grounds map</span></div>
+        <div class="fmap-venueprev" id="fmapVenuePrev">
+          <button type="button" class="set-btn" id="fmapVenuePrevBtn" aria-pressed="false">preview at venue</button>
+          <span class="sim-tag" id="fmapSimTag" hidden>simulation</span>
+          <p>test the map like you're already there. fake GPS at GA entrance.</p>
+        </div>
         <div class="map-switch segmented" role="group" aria-label="Map style">
           <button type="button" data-mapview="interactive" aria-pressed="true">Interactive map</button><span class="map-wip">-&gt; still under construction</span>
           <button type="button" data-mapview="still" aria-pressed="false">official still map</button>
@@ -503,6 +538,22 @@
             <button type="button" class="set-btn" id="fmapGuide" aria-pressed="false">guide</button>
             <button type="button" class="set-btn" id="fmapAR" aria-pressed="false">ar</button>
             <label class="fmap-search"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search the map</span><input id="fmapSearch" type="search" placeholder="search water, bathrooms..." autocomplete="off" aria-label="Search map for water, bathrooms, first aid"><div class="fmap-results" id="fmapResults" hidden></div></label>
+          </div>
+          <div class="fmap-nearme" id="fmapNearMe" role="group" aria-label="Find the closest spot near you">
+            <button type="button" data-nearme="restroom">closest bathroom</button>
+            <button type="button" data-nearme="water">closest water</button>
+            <button type="button" data-nearme="bar">closest bar</button>
+            <button type="button" data-nearme="food">closest food</button>
+            <button type="button" data-nearme="firstaid">closest first aid</button>
+          </div>
+          <div class="fmap-howto" id="fmapHowto" hidden>
+            <h3>how to use this map</h3>
+            <ol>
+              <li>tap <b>my location</b> so the map finds you.</li>
+              <li>tap any dot, or search for water, bathrooms…</li>
+              <li>hit <b>route here</b> and follow the white line.</li>
+            </ol>
+            <button type="button" class="lens-btn" id="fmapHowtoOk">got it</button>
           </div>
           <div class="fmap-viewer" id="fmapViewer">
             <div class="fmap-canvas" id="fmapCanvas">
@@ -602,6 +653,9 @@
       <video id="arVideo" playsinline muted aria-hidden="true"></video>
       <div class="ar-hud">
         <svg id="arArrow" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 8 L78 62 L50 50 L22 62 Z" fill="#8fd8ff"/></svg>
+        <div class="ar-heart-wrap" id="arHeartWrap" aria-hidden="true">
+          <svg id="arHeart" viewBox="0 0 100 100"><path d="M50 88 C22 64 10 46 10 32 C10 18 20 10 31 10 C40 10 47 15 50 23 C53 15 60 10 69 10 C80 10 90 18 90 32 C90 46 78 64 50 88 Z" fill="#ff6b8a" stroke="#fff" stroke-width="3"/><circle cx="38" cy="42" r="4.5" fill="#0b0c0d"/><circle cx="62" cy="42" r="4.5" fill="#0b0c0d"/><path d="M36 54 Q50 66 64 54" fill="none" stroke="#0b0c0d" stroke-width="4" stroke-linecap="round"/></svg>
+        </div>
         <p class="ar-readout" id="arReadout">finding you…</p>
         <p class="ar-beta">ar beta · compass + gps only, no live anchoring</p>
         <button type="button" class="set-btn" id="arClose">close</button>
@@ -1748,38 +1802,39 @@
         trolley:      {x:1085,y:935,label:"Trolley Stop",cat:"transit",info:"San Diego Trolley Green Line. easiest way out after the show."},
         rideshare:    {x:1105,y:135,label:"Ride Share",cat:"transit",info:"purple lot pickup and dropoff. expect surge after the show, the trolley is faster."},
         ga_parking:   {x:1410,y:304,label:"GA Parking",cat:"transit",info:"orange lot. general admission parking."},
-        u_water_0:{x:411,y:229,label:"Water - north walkway",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_1:{x:649,y:300,label:"Water - north walkway east",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_2:{x:918,y:286,label:"Water - innovation walkway",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_3:{x:433,y:478,label:"Water - west walk",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_4:{x:431,y:511,label:"Water - west walk south",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_5:{x:911,y:606,label:"Water - GA entrance",cat:"water",util:1,info:"free water refill station, right by the entrance. fill up on the way in."},
-        u_water_6:{x:423,y:690,label:"Water - central walk",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_7:{x:508,y:692,label:"Water - near the crescent",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_8:{x:608,y:857,label:"Water - VIP area",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_water_9:{x:480,y:1138,label:"Water - south grounds",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
-        u_restroom_10:{x:460,y:335,label:"Restrooms - north walkway",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
-        u_restroom_11:{x:467,y:882,label:"Restrooms - VIP west",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
-        u_restroom_12:{x:798,y:890,label:"Restrooms - main stage",cat:"restroom",util:1,info:"restrooms by the main stage. busiest spot, plan ahead."},
-        u_restroom_13:{x:537,y:1129,label:"Restrooms - south grounds",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
-        u_firstaid_14:{x:431,y:446,label:"First Aid - west walk",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
-        u_firstaid_15:{x:929,y:438,label:"First Aid - innovation walkway",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
-        u_firstaid_16:{x:738,y:694,label:"First Aid - central grounds",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
-        u_firstaid_17:{x:380,y:791,label:"First Aid - entrance tunnel",cat:"firstaid",util:1,info:"first aid tent by the tunnel. open all night, staffed by medics."},
-        u_firstaid_18:{x:751,y:919,label:"First Aid - VIP",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
-        u_food_19:{x:313,y:505,label:"Food - west walk",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
-        u_food_20:{x:467,y:994,label:"Food - south grounds",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
-        u_food_21:{x:444,y:1074,label:"Food - near VIP entrance",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
-        u_food_22:{x:677,y:994,label:"Food - VIP",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
-        u_bar_23:{x:433,y:515,label:"Bar - west walk",cat:"bar",util:1,info:"bar. 21+ with valid id."},
-        u_bar_24:{x:598,y:713,label:"Bar - central grounds",cat:"bar",util:1,info:"bar. 21+ with valid id."},
-        u_bar_25:{x:782,y:710,label:"Bar - near main stage",cat:"bar",util:1,info:"bar by the main stage. 21+ with valid id."},
-        u_bar_26:{x:477,y:750,label:"Bar - central walk",cat:"bar",util:1,info:"bar. 21+ with valid id."},
-        u_bar_27:{x:572,y:898,label:"Bar - VIP west",cat:"bar",util:1,info:"bar. 21+ with valid id."},
-        u_bar_28:{x:560,y:994,label:"Bar - south grounds",cat:"bar",util:1,info:"bar. 21+ with valid id."},
-        u_bar_29:{x:720,y:950,label:"Bar - VIP",cat:"bar",util:1,info:"bar. 21+ with valid id."},
-        u_info_30:{x:480,y:703,label:"Guest Info - central walk",cat:"info",util:1,info:"guest info. lost & found, questions, accessibility help."},
-        u_info_31:{x:692,y:965,label:"Guest Info - VIP",cat:"info",util:1,info:"guest info. lost & found, questions, accessibility help."},
+        u_water_0:{x:411,y:242,label:"Water - north walkway west",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_1:{x:649,y:286,label:"Water - north walkway",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_2:{x:918,y:270,label:"Water - innovation walkway",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_3:{x:434,y:487,label:"Water - west walk",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_4:{x:912,y:592,label:"Water - GA entrance",cat:"water",util:1,info:"free water refill station, right by the entrance. fill up on the way in."},
+        u_water_5:{x:422,y:692,label:"Water - central walk",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_6:{x:509,y:696,label:"Water - near the crescent",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_7:{x:611,y:865,label:"Water - VIP",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_water_8:{x:480,y:1105,label:"Water - south grounds",cat:"water",util:1,info:"free water refill station. bring your empty bottle."},
+        u_rest_0:{x:461,y:337,label:"Restrooms - north walkway",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_rest_1:{x:668,y:704,label:"Restrooms - central grounds",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_rest_2:{x:417,y:874,label:"Restrooms - VIP west",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_rest_3:{x:467,y:905,label:"Restrooms - VIP south",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_rest_4:{x:797,y:907,label:"Restrooms - main stage",cat:"restroom",util:1,info:"restrooms by the main stage. busiest spot, plan ahead."},
+        u_rest_5:{x:540,y:1094,label:"Restrooms - south grounds",cat:"restroom",util:1,info:"restrooms. lines get long after headliners, go early."},
+        u_fa_0:{x:434,y:454,label:"First Aid - west walk",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_fa_1:{x:927,y:442,label:"First Aid - innovation walkway",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_fa_2:{x:737,y:696,label:"First Aid - central grounds",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_fa_3:{x:380,y:816,label:"First Aid - entrance tunnel",cat:"firstaid",util:1,info:"first aid tent by the tunnel. open all night, staffed by medics."},
+        u_fa_4:{x:753,y:934,label:"First Aid - VIP",cat:"firstaid",util:1,info:"first aid tent. open all night, staffed by medics."},
+        u_food_0:{x:315,y:516,label:"Food - west walk",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_food_1:{x:467,y:982,label:"Food - south grounds",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_food_2:{x:442,y:1068,label:"Food - near VIP entrance",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_food_3:{x:680,y:983,label:"Food - VIP",cat:"food",util:1,info:"food vendors. real meals here, not just snacks."},
+        u_bar_0:{x:432,y:520,label:"Bar - west walk",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_1:{x:480,y:748,label:"Bar - central walk",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_2:{x:601,y:736,label:"Bar - central grounds",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_3:{x:781,y:733,label:"Bar - near main stage",cat:"bar",util:1,info:"bar by the main stage. 21+ with valid id."},
+        u_bar_4:{x:570,y:905,label:"Bar - VIP west",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_5:{x:563,y:978,label:"Bar - south grounds",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_bar_6:{x:718,y:935,label:"Bar - VIP",cat:"bar",util:1,info:"bar. 21+ with valid id."},
+        u_info_0:{x:480,y:695,label:"Guest Info - central walk",cat:"info",util:1,info:"guest info. lost & found, questions, accessibility help."},
+        u_info_1:{x:691,y:949,label:"Guest Info - VIP",cat:"info",util:1,info:"guest info. lost & found, questions, accessibility help."},
         w_north1:{x:480,y:210,wp:1}, w_north2:{x:745,y:210,wp:1}, w_north3:{x:1010,y:210,wp:1},
         w_blue:{x:950,y:360,wp:1}, w_walkway:{x:920,y:480,wp:1},
         w_west1:{x:430,y:250,wp:1}, w_west2:{x:400,y:450,wp:1}, w_west3:{x:390,y:640,wp:1},
@@ -1807,22 +1862,39 @@
         ["w_north3","w_rs_rd","Ride Share path"],["w_rs_rd","rideshare","Ride Share path"],
         ["w_rs_rd","gate2","Gate 2 path"],
         ["ga_entrance","valorant_stage","stadium concourse",1],
-        ["w_west1","u_water_0","walkway"],["w_north2","u_water_1","walkway"],
-        ["w_blue","u_water_2","walkway"],["w_west2","u_water_3","walkway"],
-        ["w_west2","u_water_4","walkway"],["w_walkway","u_water_5","walkway"],
-        ["w_west3","u_water_6","walkway"],["w_central","u_water_7","walkway"],
-        ["w_tunnel","u_water_8","walkway"],["w_vip_w","u_water_9","walkway"],
-        ["w_west1","u_restroom_10","walkway"],["w_tunnel","u_restroom_11","walkway"],
-        ["w_vip_n","u_restroom_12","walkway"],["w_vip_w","u_restroom_13","walkway"],
-        ["w_west2","u_firstaid_14","walkway"],["w_walkway","u_firstaid_15","walkway"],
-        ["w_main_w","u_firstaid_16","walkway"],["w_tunnel","u_firstaid_17","walkway"],
-        ["w_vip_n","u_firstaid_18","walkway"],["w_west2","u_food_19","walkway"],
-        ["w_vip_w","u_food_20","walkway"],["w_vip_w","u_food_21","walkway"],
-        ["w_vip_w","u_food_22","walkway"],["w_west2","u_bar_23","walkway"],
-        ["w_central","u_bar_24","walkway"],["w_main_w","u_bar_25","walkway"],
-        ["w_tunnel","u_bar_26","walkway"],["w_vip_w","u_bar_27","walkway"],
-        ["w_vip_w","u_bar_28","walkway"],["w_vip_n","u_bar_29","walkway"],
-        ["w_tunnel","u_info_30","walkway"],["w_vip_w","u_info_31","walkway"],
+        ["w_west1","u_water_0","walkway"],
+        ["w_north2","u_water_1","walkway"],
+        ["w_blue","u_water_2","walkway"],
+        ["w_west2","u_water_3","walkway"],
+        ["ga_entrance","u_water_4","walkway"],
+        ["w_west3","u_water_5","walkway"],
+        ["w_central","u_water_6","walkway"],
+        ["w_vip_w","u_water_7","walkway"],
+        ["w_vip_w","u_water_8","walkway"],
+        ["w_west1","u_rest_0","walkway"],
+        ["w_grounds_e","u_rest_1","walkway"],
+        ["w_tunnel","u_rest_2","walkway"],
+        ["w_tunnel","u_rest_3","walkway"],
+        ["w_vip_n","u_rest_4","walkway"],
+        ["w_vip_w","u_rest_5","walkway"],
+        ["w_west2","u_fa_0","walkway"],
+        ["w_walkway","u_fa_1","walkway"],
+        ["w_main_w","u_fa_2","walkway"],
+        ["w_tunnel","u_fa_3","walkway"],
+        ["w_vip_n","u_fa_4","walkway"],
+        ["w_west2","u_food_0","walkway"],
+        ["w_vip_w","u_food_1","walkway"],
+        ["w_vip_w","u_food_2","walkway"],
+        ["w_vip_w","u_food_3","walkway"],
+        ["w_west2","u_bar_0","walkway"],
+        ["w_tunnel","u_bar_1","walkway"],
+        ["w_central","u_bar_2","walkway"],
+        ["w_main_w","u_bar_3","walkway"],
+        ["w_vip_w","u_bar_4","walkway"],
+        ["w_vip_w","u_bar_5","walkway"],
+        ["w_vip_n","u_bar_6","walkway"],
+        ["w_central","u_info_0","walkway"],
+        ["w_vip_n","u_info_1","walkway"],
       ]
     };
 
@@ -2078,6 +2150,17 @@
         try{if(window.__nhGuide&&window.__nhGuide.crowdMult)return Math.max(1,Math.round(mins*window.__nhGuide.crowdMult(new Date())));}catch(e){}
         return mins;
       }
+      function crowdNote(){
+        try{
+          if(window.__nhGuide&&window.__nhGuide.crowdMult){
+            var m=window.__nhGuide.crowdMult(new Date());
+            if(m>=1.4)return 'busy right now';
+            if(m>=1.2)return 'filling up';
+            return 'quiet right now';
+          }
+        }catch(e){}
+        return '';
+      }
       function showNodeInfo(id){
         var n=D.nodes[id]; if(!n) return;
         /* mark this pin expanded, collapse others */
@@ -2098,13 +2181,14 @@
         drawRoute(r);
         var steps=nhSteps(D,r);
         var walkMins=crowdAdj(r.mins);
-        var h='<div class="omap-info-head"><h3>'+esc(fromN.label)+' → '+esc(toN.label)+'</h3><span class="omap-info-cat">~'+walkMins+' min walk · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</span></div>';
+        var traffic=crowdNote();
+        var h='<div class="omap-info-head"><h3>'+esc(fromN.label)+' → '+esc(toN.label)+'</h3><span class="omap-info-cat">~'+walkMins+' min walk'+(traffic?' · '+traffic:'')+' · '+r.meters+' m'+(r.approx?' · part of this route is approximate':'')+'</span></div>';
         if(title) h+='<p>'+esc(title)+'</p>';
         h+='<button type="button" class="way-link fmap-steps-toggle">steps ('+steps.length+')</button>';
         h+='<ol class="omap-steps">'+steps.map(function(s){
           return '<li>head '+s.dir+' on '+esc(s.via)+' <span class="st-min">~'+crowdAdj(s.mins)+' min</span>'+(s.approx?' <span class="st-min">approx</span>':'')+'</li>';
         }).join('')+'</ol>';
-        h+='<div class="omap-info-actions"><button type="button" class="set-btn fmap-clear-route">clear route</button><button type="button" class="set-btn fmap-close">close</button></div>';
+        h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-far-to="'+toId+'">follow the AR arrow</button><button type="button" class="set-btn fmap-clear-route">clear route</button><button type="button" class="set-btn fmap-close">close</button></div>';
         openInfo(h);
       }
       function clearRoute(){activeRoute=null;drawRoute(null);closeInfo();}
@@ -2198,9 +2282,43 @@
           if(e.key==='Escape'){searchResults.hidden=true;searchInput.blur();}
         });
       }
+      /* ---------- near-me quick find: closest bathroom / water / bar / food / first aid ---------- */
+      var nearMe=document.getElementById('fmapNearMe');
+      if(nearMe){
+        nearMe.addEventListener('click',function(e){
+          var b=e.target.closest?e.target.closest('[data-nearme]'):null;
+          if(!b)return;
+          var cat=b.getAttribute('data-nearme');
+          var origin=(gpsNode&&D.nodes[gpsNode])?gpsNode:'ga_entrance';
+          var best=null,bd=Infinity,id;
+          for(id in D.nodes){
+            var n=D.nodes[id];
+            if(n.cat!==cat||n.wp||!n.label)continue;
+            var r=nhRoute(D,origin,id);
+            if(r&&!r.same&&isFinite(r.meters)&&r.meters<bd){bd=r.meters;best=id;}
+          }
+          if(!best){
+            openInfo('<div class="omap-info-head"><h3>no '+esc(catName(cat)).toLowerCase()+' found</h3></div><p>could not find one from here.</p><div class="omap-info-actions"><button type="button" class="set-btn fmap-close">close</button></div>');
+            return;
+          }
+          centerOnNode(best);
+          showRoute(origin,best,'closest '+catName(cat).toLowerCase()+' to you');
+        });
+      }
+      /* ---------- drunk-proof how-to card: first map open only ---------- */
+      (function(){
+        var howto=document.getElementById('fmapHowto'),ok=document.getElementById('fmapHowtoOk');
+        if(!howto||!ok)return;
+        var seen=null;
+        try{seen=window.localStorage.getItem('nh_map_howto_seen');}catch(e){}
+        if(!seen)howto.hidden=false;
+        ok.addEventListener('click',function(){
+          howto.hidden=true;
+          try{window.localStorage.setItem('nh_map_howto_seen','1');}catch(e){}
+        });
+      })();
       /* ---------- legend toggle ---------- */
-      var legendToggle=document.getElementById('fmapLegendToggle'),legend=document.getElementById('fmapLegend');
-      if(legendToggle&&legend){
+      var legendToggle=document.getElementById('fmapLegendToggle'),legend=document.getElementById('fmapLegend');      if(legendToggle&&legend){
         legendToggle.addEventListener('click',function(){
           var show=legend.hidden;
           legend.hidden=!show;
@@ -2209,7 +2327,15 @@
         });
       }
       /* ---------- origin + geolocation ---------- */
-      var gpsWatch=null, gpsNode=null, gpsCentered=false;
+      var gpsWatch=null, gpsNode=null, gpsCentered=false, gpsHeading=null, gpsCone=null;
+      function onGpsHeading(e){
+        var h=null;
+        if(e&&typeof e.webkitCompassHeading==='number')h=e.webkitCompassHeading;
+        else if(e&&typeof e.alpha==='number')h=(360-e.alpha)%360;
+        if(h===null||isNaN(h))return;
+        gpsHeading=h;
+        if(gpsCone)gpsCone.setAttribute('transform','rotate('+h.toFixed(1)+' '+gpsCone._cx+' '+gpsCone._cy+')');
+      }
       function currentOrigin(){
         if(originSel.value==='__gps'&&gpsNode) return gpsNode;
         return originSel.value||'ga_entrance';
@@ -2234,6 +2360,12 @@
         var accU=Math.min(400,Math.max(30,accM/D.meta.metersPerUnit));
         el('circle',{cx:x,cy:y,r:accU,class:'fmap-gps-acc'},gpsG);
         if(!reduceMotion) el('circle',{cx:x,cy:y,r:26,class:'fmap-gps-pulse'},gpsG);
+        /* heading cone (only when compass has given us a heading) */
+        gpsCone=null;
+        if(gpsHeading!==null){
+          var cone=el('path',{d:'M'+x+','+(y-20)+' L'+(x-17)+','+(y-56)+' L'+(x+17)+','+(y-56)+' Z',class:'fmap-gps-cone',transform:'rotate('+gpsHeading.toFixed(1)+' '+x+' '+y+')'},gpsG);
+          cone._cx=x;cone._cy=y;gpsCone=cone;
+        }
         el('circle',{cx:x,cy:y,r:16,class:'fmap-gps-dot'},gpsG);
         var yg=el('g',{class:'fmap-gps-you'},gpsG);
         el('rect',{x:x-36,y:y-58,width:72,height:28,rx:14,class:'fmap-gps-you-bg'},yg);
@@ -2243,9 +2375,11 @@
         if(!gpsCentered){gpsCentered=true;centerOnPoint(x,y);}
       }
       locateBtn.addEventListener('click',function(){
+        if(simOn)stopSim();
         if(gpsWatch!==null){
           try{navigator.geolocation.clearWatch(gpsWatch);}catch(e){}
-          gpsWatch=null;gpsNode=null;gpsCentered=false;gpsG.setAttribute('hidden','');gpsG.innerHTML='';
+          gpsWatch=null;gpsNode=null;gpsCentered=false;gpsHeading=null;gpsCone=null;gpsG.setAttribute('hidden','');gpsG.innerHTML='';
+          try{window.removeEventListener('deviceorientation',onGpsHeading);}catch(e){}
           debug.hidden=true;locateBtn.textContent='my location';
           var opt=originSel.querySelector('option[value="__gps"]');if(opt)opt.disabled=true;
           if(originSel.value==='__gps')originSel.value='ga_entrance';
@@ -2254,6 +2388,7 @@
         if(!navigator.geolocation){gpsNote('geolocation not supported on this device');return;}
         gpsNote('asking for location…');
         locateBtn.textContent='stop';
+        try{window.addEventListener('deviceorientation',onGpsHeading);}catch(e){}
         try{
           gpsWatch=navigator.geolocation.watchPosition(function(p){
             var pt=nhGpsToSchematic(D,p.coords.latitude,p.coords.longitude);
@@ -2271,6 +2406,45 @@
           },{enableHighAccuracy:true,timeout:15000,maximumAge:5000});
         }catch(e){gpsNote('geolocation failed to start');locateBtn.textContent='my location';gpsWatch=null;}
       });
+
+      /* ---------- venue preview: simulate being on-site (SIMULATION) ---------- */
+      var venuePrevBtn=document.getElementById('fmapVenuePrevBtn'),simTag=document.getElementById('fmapSimTag');
+      var simOn=false,simSweep=null,simBanner=null;
+      function stopSim(){
+        if(!simOn)return;
+        simOn=false;
+        if(venuePrevBtn)venuePrevBtn.setAttribute('aria-pressed','false');
+        if(simTag)simTag.hidden=true;
+        if(simSweep){clearInterval(simSweep);simSweep=null;}
+        gpsHeading=null;gpsCone=null;gpsNode=null;gpsCentered=false;
+        gpsG.setAttribute('hidden','');gpsG.innerHTML='';
+        if(simBanner&&simBanner.parentNode)simBanner.parentNode.removeChild(simBanner);
+        simBanner=null;
+        var o2=originSel.querySelector('option[value="__gps"]');if(o2)o2.disabled=true;
+        if(originSel.value==='__gps')originSel.value='ga_entrance';
+      }
+      if(venuePrevBtn){
+        venuePrevBtn.addEventListener('click',function(){
+          if(simOn){stopSim();return;}
+          simOn=true;
+          venuePrevBtn.setAttribute('aria-pressed','true');
+          if(simTag)simTag.hidden=false;
+          var n=D.nodes.ga_entrance;
+          gpsNode='ga_entrance';gpsCentered=false;gpsHeading=0;
+          drawGps(n.x,n.y,8);
+          var hdg=0;
+          simSweep=setInterval(function(){
+            hdg=(hdg+8)%360;gpsHeading=hdg;
+            if(gpsCone)gpsCone.setAttribute('transform','rotate('+hdg+' '+gpsCone._cx+' '+gpsCone._cy+')');
+          },240);
+          simBanner=document.createElement('div');
+          simBanner.className='fmap-sim-banner';
+          simBanner.textContent='simulation — fake GPS at GA entrance';
+          var viewer=document.getElementById('fmapViewer');
+          if(viewer&&viewer.parentNode)viewer.parentNode.insertBefore(simBanner,viewer);
+          var o1=originSel.querySelector('option[value="__gps"]');if(o1)o1.disabled=false;
+        });
+      }
 
       /* ---------- reset clears the route too ---------- */
       document.getElementById('fmapReset').addEventListener('click',function(){clearRoute();});
@@ -2548,7 +2722,8 @@
     (function initARLite(){
       var overlay=document.getElementById('arOverlay'),video=document.getElementById('arVideo'),
           arrow=document.getElementById('arArrow'),readout=document.getElementById('arReadout'),
-          openBtn=document.getElementById('fmapAR'),closeBtn=document.getElementById('arClose');
+          openBtn=document.getElementById('fmapAR'),closeBtn=document.getElementById('arClose'),
+          heartWrap=document.getElementById('arHeartWrap');
       if(!overlay||!openBtn)return;
       var stream=null,watchId=null,heading=null,target=null,rafId=null,manualTarget=null;
       window.__nhARSetTarget=function(id){manualTarget=id;};
@@ -2603,6 +2778,12 @@
         var b=bearingTo(lastPos,target.gps);
         var rel=(b-heading+360)%360;
         arrow.style.transform='rotate('+rel+'deg)';
+        /* heart mascot leans toward the destination side */
+        if(heartWrap){
+          var side=rel>180?-1:1;
+          var amt=Math.min(16,Math.abs(rel>180?360-rel:rel)*0.18);
+          heartWrap.style.transform='rotate('+(side*amt).toFixed(1)+'deg)';
+        }
         var m=Math.round(distM(lastPos,target.gps));
         readout.textContent=m+'m — head '+compass8(b)+' toward '+target.label;
         rafId=requestAnimationFrame(tick);
