@@ -129,18 +129,35 @@
 .fmap-sim-banner{margin:0 0 10px;padding:10px 14px;text-align:center;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:#0b0c0d;background:var(--ice);border-radius:4px}
 .fmap-sim-spots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
 .fmap-sim-spot{font-size:.72rem;min-height:40px;background:rgba(11,12,13,.12);border:1px solid rgba(11,12,13,.3);color:#0b0c0d}
-/* ---------- late night afters ---------- */
+/* ---------- festival / afters mode toggle ---------- */
 .module-sub{margin:0 0 16px;font:400 .9rem/1.5 var(--sans);color:var(--mist)}
-.latenight-card{background:#101114;border:1px solid var(--line);border-radius:14px;padding:20px;margin:0 0 12px}
-.latenight-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
-.latenight-top strong{font:700 1.4rem var(--sans);color:var(--paper);letter-spacing:.02em}
-.latenight-tag{font:600 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ice);background:rgba(159,201,239,.12);border:1px solid rgba(159,201,239,.35);padding:4px 10px;border-radius:20px}
-.latenight-present{margin:0 0 10px;font:400 .8rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--mist)}
-.latenight-line{margin:0 0 10px;font:600 1rem/1.6 var(--sans);color:var(--paper)}
-.latenight-meta{margin:0 0 8px;font:600 .85rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ice)}
-.latenight-note{margin:0 0 16px;font:400 .92rem/1.5 var(--sans);color:var(--mist)}
-.latenight-cta{display:inline-block;text-decoration:none;min-height:48px;line-height:48px;padding:0 24px}
-.latenight-more{margin:0;font:400 .85rem var(--sans);color:var(--mist)}
+.mode-toggle{display:flex;gap:0;margin:22px 0 4px;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:420px}
+.mode-btn{flex:1;appearance:none;border:0;background:transparent;color:var(--mist);font:700 .85rem var(--mono);text-transform:uppercase;letter-spacing:.1em;min-height:52px;cursor:pointer;transition:background .2s,color .2s}
+.mode-btn.is-on{background:var(--paper);color:#0b0c0d}
+body.afters-mode .mode-btn.is-on{background:#c9a6ff;color:#0b0c0d}
+body.afters-mode{--ice:#c9a6ff}
+/* ---------- afters module ---------- */
+.afters-grid{display:grid;gap:14px;margin-bottom:20px}
+.afters-card{background:#101114;border:1px solid var(--line);border-radius:14px;padding:20px}
+.afters-card.is-tba{opacity:.65;border-style:dashed}
+.afters-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.afters-top strong{font:700 1.4rem var(--sans);color:var(--paper);letter-spacing:.02em}
+.afters-tag{font:600 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:#c9a6ff;background:rgba(201,166,255,.12);border:1px solid rgba(201,166,255,.35);padding:4px 10px;border-radius:20px}
+.afters-present{margin:0 0 10px;font:400 .8rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--mist)}
+.afters-line{margin:0 0 10px;font:600 1rem/1.6 var(--sans);color:var(--paper)}
+.afters-meta{margin:0 0 8px;font:600 .85rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#c9a6ff}
+.afters-note{margin:0 0 16px;font:400 .92rem/1.5 var(--sans);color:var(--mist)}
+.afters-actions{display:flex;gap:10px;flex-wrap:wrap}
+.afters-subhead{margin:0 0 12px;font:700 1.1rem var(--sans);color:var(--paper)}
+.afters-mine{display:grid;gap:10px;margin-bottom:20px}
+.afters-pick{display:flex;align-items:center;gap:12px;background:#101114;border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.afters-pick strong{flex:1;font:600 .95rem var(--sans);color:var(--paper)}
+.afters-pick span{font:400 .75rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mist)}
+.afters-empty{margin:0;font:400 .9rem var(--sans);color:var(--mist)}
+.afters-venue{background:rgba(201,166,255,.07);border:1px solid rgba(201,166,255,.3);border-radius:14px;padding:18px}
+.afters-venue strong{display:block;margin-bottom:8px;font:700 .85rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:#c9a6ff}
+.afters-venue p{margin:0;font:400 .92rem/1.55 var(--sans);color:var(--mist)}
+@media (max-width:480px){.afters-actions .set-btn{flex:1 1 auto;min-height:52px}}
 /* item 8: map tabs fully legible on mobile */
 .map-switch.segmented{display:flex;flex-wrap:wrap;align-items:center}
 .map-switch.segmented button{flex:1 1 auto;white-space:nowrap}
@@ -440,6 +457,12 @@
       </div>
     </header>
 
+    <!-- MODE TOGGLE: festival vs afters — the whole page switches -->
+    <div class="mode-toggle" role="group" aria-label="Festival or afters mode">
+      <button type="button" id="modeFestival" class="mode-btn is-on" aria-pressed="true">Festival</button>
+      <button type="button" id="modeAfters" class="mode-btn" aria-pressed="false">Afters</button>
+    </div>
+
     <!-- FESTIVAL GUIDE STICKER: promo banner for the map guide -->
     <button type="button" class="guide-sticker" id="guideSticker" aria-label="Open the festival guide — your night, mapped">
       <span class="guide-sticker-text"><strong>your night, mapped</strong><em>tap for the festival guide</em></span>
@@ -494,6 +517,18 @@
     <div class="layout-panel" id="layoutPanel" aria-label="Arrange page sections"></div>
 
     <div class="module-grid" id="moduleGrid">
+      <!-- AFTERS MODE: the whole late-night side of the page -->
+      <section class="module afters-module" data-module-id="afters" data-module-label="Afters" aria-labelledby="aftersTitle" hidden>
+        <div class="module-head"><h2 id="aftersTitle">Afters</h2><span class="module-label">late night</span></div>
+        <p class="module-sub">the festival ends. the night doesn't. unofficial late nights, keep it moving.</p>
+        <div id="aftersGrid" class="afters-grid" aria-live="polite"></div>
+        <h3 class="afters-subhead">My Afters</h3>
+        <div id="myAfters" class="afters-mine" aria-live="polite"></div>
+        <div class="afters-venue">
+          <strong>getting there</strong>
+          <p>afters venues drop the day of. rsvp on partiful for the location text, then rideshare from the trolley stop. green line runs late on event nights.</p>
+        </div>
+      </section>
       <section class="module" data-module-id="first" data-module-label="First up" aria-labelledby="tonightTitle">
         <div class="module-head"><h2 id="tonightTitle">First up</h2><span class="module-label">Friday</span></div>
         <div class="quick-schedule"><div class="quick-set"><time>4:00 PM</time><strong>Knock2 & Friends</strong><span>Main</span></div><div class="quick-set"><time>4:45 PM</time><strong>Yaego</strong><span>Main</span></div><div class="quick-set valorant"><time>5:00 PM</time><strong>Acyan</strong><span>Valorant</span></div><div class="quick-set"><time>5:30 PM</time><strong>Frost Children</strong><span>Main</span></div></div>
@@ -504,20 +539,6 @@
         <div class="schedule-toolbar"><div class="toolbar-row"><div class="segmented" aria-label="Choose a day"><button type="button" aria-pressed="true" data-day="friday">Fri 10/09</button><button type="button" aria-pressed="false" data-day="saturday">Sat 10/10</button><button type="button" aria-pressed="false" data-day="sunday">Sun 10/11</button></div><div class="stage-filter stage-filter--compact" aria-label="Filter by stage"><button type="button" aria-pressed="true" data-stage-filter="all">All</button><button type="button" aria-pressed="false" data-stage-filter="main">Main</button><button type="button" aria-pressed="false" data-stage-filter="valorant">Valorant</button></div></div><label class="search-wrap"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search artists</span><input id="artistSearch" type="search" placeholder="Search artist or genre" autocomplete="off" /></label></div>
         <div class="day-intro"><h3 class="day-title" id="dayTitle">Friday</h3><div class="day-facts"><span>Doors <strong id="doorsTime">3:00 PM</strong></span><span>Ends <strong id="endTime">11:00 PM</strong></span></div></div>
         <div id="scheduleGrid" class="schedule-grid" aria-live="polite"></div><div id="emptyState" class="empty-state">No artists match that search.</div>
-      </section>
-
-      <section class="module latenight-module" data-module-id="latenight" data-module-label="Late Night" aria-labelledby="lateNightTitle">
-        <div class="module-head"><h2 id="lateNightTitle">Late Night</h2></div>
-        <p class="module-sub">the festival ends. the night doesn't. unofficial afters, keep it moving.</p>
-        <article class="latenight-card">
-          <div class="latenight-top"><strong>NITESHIFT</strong><span class="latenight-tag">unofficial afters</span></div>
-          <p class="latenight-present">revive x innrsrcl present</p>
-          <p class="latenight-line">subjectivv · petra · jdorrah · asohii · intrphaz3 · kawn</p>
-          <p class="latenight-meta">fri oct 9, 1am til late · downtown san diego · 21+</p>
-          <p class="latenight-note">deep grooves and hypnotic rhythms after the festival. rsvp for location and updates.</p>
-          <a class="set-btn latenight-cta" href="https://partiful.com/e/TFlNK1oNGsrE5Uf7gtDb" target="_blank" rel="noopener">rsvp on partiful</a>
-        </article>
-        <p class="latenight-more">more nights announced soon. check back.</p>
       </section>
 
       <section class="module lineup-module" data-module-id="lineup" data-module-label="My Lineup" aria-labelledby="myLineupTitle">
@@ -2907,6 +2928,89 @@
     })();
     /* initial renders (restored: the declutter pass dropped these with the old venue map) */
     renderMyLineup();renderSchedule();
+    /* ============================================================
+       AFTERS MODE — festival vs late night, whole page switches
+       ============================================================ */
+    (function(){
+      var aftersEvents=[
+        {id:'afters-fri',night:'friday night',title:'NITESHIFT',present:'revive x innrsrcl present',
+         line:'subjectivv · petra · jdorrah · asohii · intrphaz3 · kawn',
+         meta:'fri oct 9, 1am til late · downtown san diego · 21+',
+         note:'deep grooves and hypnotic rhythms after the festival ends. rsvp for the location text and updates.',
+         link:'https://partiful.com/e/TFlNK1oNGsrE5Uf7gtDb',status:'announced'},
+        {id:'afters-sat',night:'saturday night',title:'TBA',status:'tba',
+         note:'saturday afters haven\'t been announced yet. check back.'},
+        {id:'afters-sun',night:'sunday night',title:'TBA',status:'tba',
+         note:'sunday afters haven\'t been announced yet. check back.'}
+      ];
+      var grid=document.getElementById('aftersGrid'),mine=document.getElementById('myAfters');
+      var modeF=document.getElementById('modeFestival'),modeA=document.getElementById('modeAfters');
+      var aftersMod=document.querySelector('[data-module-id="afters"]');
+      function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+      function getPicks(){try{return JSON.parse(localStorage.getItem('nh_afters')||'[]');}catch(e){return[];}}
+      function setPicks(p){try{localStorage.setItem('nh_afters',JSON.stringify(p));}catch(e){}}
+      function renderMine(){
+        if(!mine)return;
+        var picks=getPicks();
+        if(!picks.length){mine.innerHTML='<p class="afters-empty">nothing saved yet. tap "add to my night" on any afters.</p>';return;}
+        mine.innerHTML=picks.map(function(id){
+          var ev=aftersEvents.filter(function(e){return e.id===id;})[0];if(!ev)return '';
+          return '<div class="afters-pick"><strong>'+esc(ev.title)+'</strong><span>'+esc(ev.night)+'</span><button type="button" class="set-btn" data-afters-remove="'+id+'">remove</button></div>';
+        }).join('');
+      }
+      function renderGrid(){
+        if(!grid)return;
+        var picks=getPicks();
+        grid.innerHTML=aftersEvents.map(function(ev){
+          var added=picks.indexOf(ev.id)>-1;
+          var h='<article class="afters-card'+(ev.status==='tba'?' is-tba':'')+'">';
+          h+='<div class="afters-top"><strong>'+esc(ev.title)+'</strong><span class="afters-tag">'+(ev.status==='tba'?'to be announced':'unofficial afters')+'</span></div>';
+          if(ev.present)h+='<p class="afters-present">'+esc(ev.present)+'</p>';
+          if(ev.line)h+='<p class="afters-line">'+esc(ev.line)+'</p>';
+          if(ev.meta)h+='<p class="afters-meta">'+esc(ev.meta)+'</p>';
+          h+='<p class="afters-note">'+esc(ev.note)+'</p>';
+          h+='<div class="afters-actions">';
+          if(ev.link)h+='<a class="set-btn" href="'+ev.link+'" target="_blank" rel="noopener">rsvp on partiful</a>';
+          if(ev.status!=='tba')h+='<button type="button" class="set-btn" data-afters-add="'+ev.id+'" aria-pressed="'+added+'">'+(added?'added':'add to my night')+'</button>';
+          h+='</div></article>';
+          return h;
+        }).join('');
+      }
+      var festivalMods=['schedule','lineup','map','first'];
+      function setMode(mode){
+        var afters=mode==='afters';
+        document.body.classList.toggle('afters-mode',afters);
+        if(modeF){modeF.classList.toggle('is-on',!afters);modeF.setAttribute('aria-pressed',String(!afters));}
+        if(modeA){modeA.classList.toggle('is-on',afters);modeA.setAttribute('aria-pressed',String(afters));}
+        if(aftersMod)aftersMod.hidden=!afters;
+        festivalMods.forEach(function(id){
+          var m=document.querySelector('[data-module-id="'+id+'"]');
+          if(!m)return;
+          if(afters){m.dataset.preAftersHidden=m.hidden?'1':'0';m.hidden=true;}
+          else if(m.dataset.preAftersHidden!==undefined){m.hidden=m.dataset.preAftersHidden==='1';delete m.dataset.preAftersHidden;}
+        });
+        try{localStorage.setItem('nh_mode',mode);}catch(e){}
+        if(afters&&aftersMod)aftersMod.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+      document.addEventListener('click',function(e){
+        var add=e.target.closest?e.target.closest('[data-afters-add]'):null;
+        var rem=e.target.closest?e.target.closest('[data-afters-remove]'):null;
+        if(add){
+          var id=add.getAttribute('data-afters-add'),picks=getPicks();
+          var i=picks.indexOf(id);
+          if(i>-1)picks.splice(i,1);else picks.push(id);
+          setPicks(picks);renderGrid();renderMine();
+        }
+        if(rem){
+          var id2=rem.getAttribute('data-afters-remove'),picks2=getPicks().filter(function(x){return x!==id2;});
+          setPicks(picks2);renderGrid();renderMine();
+        }
+      });
+      if(modeF)modeF.addEventListener('click',function(){setMode('festival');});
+      if(modeA)modeA.addEventListener('click',function(){setMode('afters');});
+      renderGrid();renderMine();
+      try{if(localStorage.getItem('nh_mode')==='afters')setMode('afters');}catch(e){}
+    })();
 
   }());
   </script>
