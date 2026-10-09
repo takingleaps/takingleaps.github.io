@@ -158,6 +158,7 @@ body.afters-mode{--ice:#c9a6ff}
 .afters-venue strong{display:block;margin-bottom:8px;font:700 .85rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:#c9a6ff}
 .afters-venue p{margin:0;font:400 .92rem/1.55 var(--sans);color:var(--mist)}
 @media (max-width:480px){.afters-actions .set-btn{flex:1 1 auto;min-height:52px}}
+body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
 /* item 8: map tabs fully legible on mobile */
 .map-switch.segmented{display:flex;flex-wrap:wrap;align-items:center}
 .map-switch.segmented button{flex:1 1 auto;white-space:nowrap}
@@ -286,10 +287,10 @@ body.afters-mode{--ice:#c9a6ff}
     .module{position:relative;transform-style:preserve-3d}.module::before{content:"";position:absolute;left:0;top:-1px;width:100%;height:1px;background:var(--ice-strong);transform:scaleX(0);transform-origin:left center;transition:transform .8s var(--ease)}.module.motion-seen::before{transform:scaleX(1)}.module-head h2{transform-origin:left center;transition:transform .45s var(--ease)}.module.motion-pop,.merch-browser.motion-pop{animation:moduleSignal .55s var(--ease)}@keyframes moduleSignal{0%{opacity:1;transform:translate3d(0,0,0)}35%{opacity:.86;transform:perspective(1100px) translate3d(0,-2px,18px)}100%{opacity:1;transform:translate3d(0,0,0)}}
     .schedule-card,.merch-slide{transform-style:preserve-3d;transition:transform .42s var(--ease)}.schedule-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 30%,rgba(213,236,255,.10) 49%,transparent 68%);transform:translateX(-120%);transition:transform .65s var(--ease)}.schedule-card{position:relative}.schedule-card:hover::after{transform:translateX(120%)}
     @media(hover:hover) and (pointer:fine){.schedule-card:hover{transform:perspective(900px) translateY(-3px) rotateX(1deg) rotateY(-1deg);box-shadow:0 18px 40px rgba(0,0,0,.28)}.merch-visual:hover{transform:perspective(1100px) rotateX(var(--merch-y,0deg)) rotateY(var(--merch-x,0deg)) translateZ(14px)}}
-    .merch-browser{position:relative;background:var(--paper);color:var(--night);overflow:hidden}.merch-viewport{position:relative;min-height:560px}.merch-slide{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);opacity:0;visibility:hidden;pointer-events:none;transform:perspective(1200px) translateX(6%) rotateY(-4deg) scale(.98);transition:opacity .35s ease,transform .7s var(--ease),visibility 0s linear .7s}.merch-slide.active{position:relative;opacity:1;visibility:visible;pointer-events:auto;transform:perspective(1200px) translateX(0) rotateY(0) scale(1);transition-delay:0s}.merch-visual{position:relative;min-height:560px;background:#0e0e10;overflow:hidden;transform-style:preserve-3d;transition:transform .32s var(--ease)}.merch-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 42%,rgba(255,255,255,.2) 50%,transparent 58%);transform:translateX(-130%);animation:merchSweep 7s var(--ease) infinite;pointer-events:none}.merch-visual .merch-photo{position:absolute;inset:0;min-height:0}.merch-copy{min-height:560px}.merch-index{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;font:400 .64rem var(--mono);text-transform:uppercase}.merch-index::before{content:"";width:28px;height:1px;background:currentColor}.merch-slide>.merch-empty{grid-column:1/-1}.merch-empty{min-height:560px;display:grid;place-items:center;padding:clamp(30px,6vw,90px);background:radial-gradient(circle at 72% 28%,rgba(159,201,239,.2),transparent 32%),#151619;color:var(--paper);overflow:hidden}.merch-empty-inner{position:relative;z-index:1;max-width:620px}.merch-empty .empty-mark{font:400 clamp(6rem,18vw,17rem)/.7 var(--display);color:transparent;-webkit-text-stroke:1px color-mix(in srgb,var(--ice) 55%,transparent);animation:emptyBreath 4s ease-in-out infinite alternate}.merch-empty h3{font:400 clamp(2.4rem,6vw,5.6rem)/.86 var(--display);text-transform:uppercase;margin:22px 0 14px}.merch-empty p{max-width:48ch;color:var(--mist)}.merch-nav{position:absolute;z-index:4;right:clamp(18px,3vw,42px);bottom:18px;display:flex;align-items:center;gap:5px}.merch-nav button{appearance:none;width:46px;height:46px;display:grid;place-items:center;border:1px solid currentColor;background:var(--night);color:var(--paper);cursor:pointer;touch-action:manipulation}.merch-nav button:active{transform:translateY(2px)}.merch-nav svg{width:18px;height:18px;fill:currentColor}.merch-count{min-width:62px;text-align:center;font:400 .66rem var(--mono);color:var(--night)}@keyframes merchSweep{0%,65%{transform:translateX(-130%)}85%,100%{transform:translateX(130%)}}@keyframes emptyBreath{to{transform:scale(1.04) rotate(-1deg);opacity:.55}}
+    .merch-browser{position:relative;background:var(--paper);color:var(--night);overflow:hidden}.merch-viewport{position:relative;min-height:560px}.merch-slide{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);opacity:0;visibility:hidden;pointer-events:none;transform:perspective(1200px) translateX(6%) rotateY(-4deg) scale(.98);transition:opacity .35s ease,transform .7s var(--ease),visibility 0s linear .7s}.merch-slide.active{position:relative;opacity:1;visibility:visible;pointer-events:auto;transform:perspective(1200px) translateX(0) rotateY(0) scale(1);transition-delay:0s}.merch-visual{position:relative;min-height:560px;background:#0e0e10;overflow:hidden;transform-style:preserve-3d;transition:transform .32s var(--ease)}.merch-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 42%,rgba(255,255,255,.2) 50%,transparent 58%);transform:translateX(-130%);animation:merchSweep 7s var(--ease) infinite;pointer-events:none}.merch-visual .merch-photo{position:absolute;inset:0;min-height:0}.merch-copy{min-height:560px}.merch-index{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;font:400 .64rem var(--mono);text-transform:uppercase}.merch-index::before{content:"";width:28px;height:1px;background:currentColor}.merch-slide>.merch-empty{grid-column:1/-1}.merch-empty{min-height:560px;display:grid;place-items:center;padding:clamp(30px,6vw,90px);background:radial-gradient(circle at 72% 28%,rgba(159,201,239,.2),transparent 32%),#151619;color:var(--paper);overflow:hidden}.merch-empty-inner{position:relative;z-index:1;max-width:620px}.merch-empty .empty-mark{font:400 clamp(6rem,18vw,17rem)/.7 var(--display);color:transparent;-webkit-text-stroke:1px color-mix(in srgb,var(--ice) 55%,transparent);animation:emptyBreath 4s ease-in-out infinite alternate}.merch-empty h3{font:400 clamp(2.4rem,6vw,5.6rem)/.86 var(--display);text-transform:uppercase;margin:22px 0 14px}.merch-empty p{max-width:48ch;color:var(--mist)}.merch-nav{position:absolute;z-index:4;right:clamp(18px,3vw,42px);bottom:18px;display:flex;align-items:center;gap:5px}.merch-nav button{appearance:none;width:46px;height:46px;display:grid;place-items:center;border:1px solid currentColor;background:var(--night);color:var(--paper);cursor:pointer;touch-action:manipulation}.merch-nav button:active{transform:translateY(2px)}.merch-nav svg{width:18px;height:18px;fill:currentColor}.merch-count{min-width:62px;text-align:center;font:400 .66rem var(--mono);color:var(--night)}.merch-list{margin:16px 0 0;padding:0 0 0 22px;columns:2;column-gap:26px;font:400 .74rem/1.5 var(--sans);color:var(--night)}.merch-list li{margin:0 0 4px;break-inside:avoid}@keyframes merchSweep{0%,65%{transform:translateX(-130%)}85%,100%{transform:translateX(130%)}}@keyframes emptyBreath{to{transform:scale(1.04) rotate(-1deg);opacity:.55}}
     .player-art-wrap{position:relative;width:54px;height:54px;overflow:hidden}.player-art-wrap .player-art{width:100%;height:100%}.player-visualizer{position:absolute;left:5px;right:5px;bottom:4px;height:17px;display:flex;align-items:flex-end;justify-content:center;gap:2px;padding:3px;background:rgba(17,18,20,.72)}.player-visualizer i{display:block;width:3px;height:100%;background:var(--ice-strong);transform:scaleY(.22);transform-origin:bottom;animation:meter .65s cubic-bezier(.16,1,.3,1) infinite alternate;animation-play-state:paused}.player-visualizer i:nth-child(2){animation-duration:.42s}.player-visualizer i:nth-child(3){animation-duration:.78s}.player-visualizer i:nth-child(4){animation-duration:.5s}.music-player.is-playing .player-visualizer i{animation-play-state:running}.music-player.is-loading .player-icon.primary{animation:previewPulse .55s ease-in-out infinite alternate}.music-player.track-changing .player-track,.music-player.track-changing .expanded-track{animation:trackSlice .42s var(--ease)}@keyframes meter{to{transform:scaleY(1)}}@keyframes trackSlice{0%{opacity:0;transform:translate3d(10px,0,0) scaleX(.98)}100%{opacity:1;transform:translate3d(0,0,0) scaleX(1)}}
     @supports(animation-timeline:view()){.module-head h2{animation:headingKinetic cubic-bezier(.16,1,.3,1) both;animation-timeline:view();animation-range:entry 0% cover 42%}@keyframes headingKinetic{from{opacity:.72;transform:translate3d(-18px,0,0) scaleX(.88)}to{opacity:1;transform:translate3d(0,0,0) scaleX(1)}}}
-    @media(max-width:600px){.ambient-rig{inset:-4% -40% -16%;opacity:.48}.wire-orbit{width:520px;left:16%;top:8%}.marquee{margin-inline:-12px}.marquee-group{gap:17px;padding-block:9px}.marquee-group span::after{margin-left:17px}.merch-viewport{min-height:0}.merch-slide{grid-template-columns:1fr}.merch-visual,.merch-copy,.merch-empty{min-height:0}.merch-visual{aspect-ratio:4/5}.merch-copy{padding:24px 24px 88px}.merch-empty{padding:52px 22px 96px}.merch-empty .empty-mark{font-size:8rem}.merch-nav{right:16px;bottom:18px}.merch-count{color:inherit;background:var(--paper);height:46px;display:grid;place-items:center}.player-art-wrap{width:48px;height:48px}.player-summary{grid-template-columns:48px minmax(0,1fr)}}
+    @media(max-width:600px){.ambient-rig{inset:-4% -40% -16%;opacity:.48}.wire-orbit{width:520px;left:16%;top:8%}.marquee{margin-inline:-12px}.marquee-group{gap:17px;padding-block:9px}.marquee-group span::after{margin-left:17px}.merch-viewport{min-height:0}.merch-slide{grid-template-columns:1fr}.merch-visual,.merch-copy,.merch-empty{min-height:0}.merch-visual{aspect-ratio:4/5}.merch-copy{padding:24px 24px 88px}.merch-list{columns:1}.merch-empty{padding:52px 22px 96px}.merch-empty .empty-mark{font-size:8rem}.merch-nav{right:16px;bottom:18px}.merch-count{color:inherit;background:var(--paper);height:46px;display:grid;place-items:center}.player-art-wrap{width:48px;height:48px}.player-summary{grid-template-columns:48px minmax(0,1fr)}}
     @media(max-width:360px){.marquee{margin-inline:-10px}.merch-empty .empty-mark{font-size:6.5rem}.player-art-wrap{width:42px;height:42px}.player-summary{grid-template-columns:42px minmax(0,1fr)}}
     @media(prefers-reduced-motion:reduce){.ambient-rig,.marquee-track,.merch-visual::after,.merch-empty .empty-mark,.player-visualizer i{animation:none!important}.marquee-track{transform:none}.ambient-rig{opacity:.22}.wire-orbit{transform:rotateX(68deg) rotateZ(18deg)}.merch-slide,.schedule-card,.merch-visual,.module,.module-head h2{transition-duration:.01ms!important;animation:none!important}.schedule-card:hover,.merch-visual:hover{transform:none!important}}
     /* Branded boot sequence: a pixel-signal handoff into the live page. */
@@ -520,13 +521,13 @@ body.afters-mode{--ice:#c9a6ff}
       <!-- AFTERS MODE: the whole late-night side of the page -->
       <section class="module afters-module" data-module-id="afters" data-module-label="Afters" aria-labelledby="aftersTitle" hidden>
         <div class="module-head"><h2 id="aftersTitle">Afters</h2><span class="module-label">late night</span></div>
-        <p class="module-sub">the festival ends. the night doesn't. unofficial late nights, keep it moving.</p>
+        <p class="module-sub">the festival ends. the night doesn't. late nights, keep it moving.</p>
         <div id="aftersGrid" class="afters-grid" aria-live="polite"></div>
         <h3 class="afters-subhead">My Afters</h3>
         <div id="myAfters" class="afters-mine" aria-live="polite"></div>
         <div class="afters-venue">
           <strong>getting there</strong>
-          <p>afters venues drop the day of. rsvp on partiful for the location text, then rideshare from the trolley stop. green line runs late on event nights.</p>
+          <p>afters venues drop the day of. rsvp on partiful for the location text, then rideshare from the trolley stop.</p>
         </div>
       </section>
       <section class="module" data-module-id="first" data-module-label="First up" aria-labelledby="tonightTitle">
@@ -590,7 +591,7 @@ body.afters-mode{--ice:#c9a6ff}
                 <option value="the_crescent">The Crescent</option>
                 <option value="the_terminal">The Terminal</option>
                 <option value="half_court">Half Court</option>
-                <option value="valorant_stage">Valorant Stage</option>
+                <option value="valorant_stage">VAL Sound Truck</option>
                 <option value="merch">Merch</option>
                 <option value="lockers">Lockers</option>
                 <option value="trolley">Trolley Stop</option>
@@ -627,6 +628,7 @@ body.afters-mode{--ice:#c9a6ff}
               <div class="fmap-tilt" id="fmapTilt">
               <img id="fmapImage" src="assets/map/nh26-sitemap.webp" alt="Official Niteharts 2026 festival grounds map at Snapdragon Stadium, showing Main Stage, The Mirror, The Crescent, The Terminal, and Half Court stages, plus GA and VIP entrances" width="1920" height="1200" loading="lazy" decoding="async" draggable="false">
               <button type="button" class="fmap-pin" data-cat="stage" data-node="main_stage" style="left:40.1%;top:66.7%" aria-label="Main Stage" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">Main Stage</span></button>
+              <button type="button" class="fmap-pin" data-cat="stage" data-node="valorant_stage" style="left:14.6%;top:21.7%" aria-label="VAL Sound Truck - Thrive Park" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">VAL Truck</span></button>
               <button type="button" class="fmap-pin" data-cat="art" data-node="the_crescent" style="left:27.3%;top:63.6%" aria-label="The Crescent" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Crescent</span></button>
               <button type="button" class="fmap-pin" data-cat="art" data-node="the_mirror" style="left:27.1%;top:69.5%" aria-label="The Mirror" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Mirror</span></button>
               <button type="button" class="fmap-pin" data-cat="art" data-node="the_terminal" style="left:19.6%;top:49.4%" aria-label="The Terminal" aria-expanded="false"><span class="fmap-pin-dot" aria-hidden="true"></span><span class="fmap-pin-tag">The Terminal</span></button>
@@ -732,7 +734,7 @@ body.afters-mode{--ice:#c9a6ff}
 
 
 
-      <section class="module graphics-module" data-module-id="graphics" data-module-label="Official graphics" aria-labelledby="graphicsTitle"><div class="module-head"><h2 id="graphicsTitle">Official graphics</h2><span class="module-label">Original posts</span></div><div class="graphics-wrap"><div class="poster-stage"><img id="posterImage" src="assets/set-times-1.jpg" alt="Official Niteharts 2026 main stage set times poster" /></div><div class="poster-switch" aria-label="Choose a poster"><button type="button" aria-pressed="true" data-poster="assets/set-times-1.jpg" data-alt="Official Niteharts 2026 main stage set times poster">Main set times</button><button type="button" aria-pressed="false" data-poster="assets/set-times-2.jpg" data-alt="Official Valorant at Niteharts 2026 set times poster">Valorant set times</button><button type="button" aria-pressed="false" data-poster="assets/lineup.jpg" data-alt="Official Niteharts 2026 day-by-day lineup poster">Full lineup</button><button type="button" aria-pressed="false" data-poster="assets/map/nh26-sitemap.webp" data-alt="Official Niteharts 2026 festival grounds map">Festival map</button><button type="button" aria-pressed="false" data-poster="assets/map/nh26-parking-map.webp" data-alt="Official Niteharts 2026 parking map">Parking map</button></div></div></section>
+      <section class="module graphics-module" data-module-id="graphics" data-module-label="Official graphics" aria-labelledby="graphicsTitle"><div class="module-head"><h2 id="graphicsTitle">Official graphics</h2><span class="module-label">Original posts</span></div><div class="graphics-wrap"><div class="poster-stage"><img id="posterImage" src="assets/set-times-1.jpg" alt="Official Niteharts 2026 main stage set times poster" /></div><div class="poster-switch" aria-label="Choose a poster"><button type="button" aria-pressed="true" data-poster="assets/set-times-1.jpg" data-alt="Official Niteharts 2026 main stage set times poster">Main set times</button><button type="button" aria-pressed="false" data-poster="assets/set-times-2.jpg" data-alt="Official Valorant at Niteharts 2026 set times poster">Valorant set times</button><button type="button" aria-pressed="false" data-poster="assets/lineup.jpg" data-alt="Official Niteharts 2026 day-by-day lineup poster">Full lineup</button><button type="button" aria-pressed="false" data-poster="assets/map/nh26-sitemap.webp" data-alt="Official Niteharts 2026 festival grounds map">Festival map</button><button type="button" aria-pressed="false" data-poster="assets/map/nh26-parking-map.webp" data-alt="Official Niteharts 2026 parking map">Parking map</button><button type="button" aria-pressed="false" data-poster="assets/kbyg.jpg" data-alt="Official Niteharts 2026 know before you go graphic">Know before you go</button><button type="button" aria-pressed="false" data-poster="assets/val-poster.jpg" data-alt="Official VALORANT at Niteharts 2026 takeover poster">VALORANT poster</button></div></div></section>
 
       <section class="module info-module" data-module-id="info" data-module-label="Need to know" aria-labelledby="infoTitle">
         <div class="module-head"><h2 id="infoTitle">Need to know</h2><span class="module-label">Times · Parking · Entry</span></div>
@@ -745,6 +747,19 @@ body.afters-mode{--ice:#c9a6ff}
               <li><strong>Sun 10/11</strong><span>lots 12PM · doors 1PM · show 2PM · ends 10PM</span></li>
             </ul>
             <p class="parking-note">All times are subject to change.</p>
+          </div>
+          <div class="info-block">
+            <p class="info-kicker">Entry rules · official know before you go</p>
+            <ul class="day-hours">
+              <li><strong>Ages</strong><span>18+ to enter · 21+ for VIP</span></li>
+              <li><strong>ID</strong><span>valid photo ID required · international guests need a physical passport for will call</span></li>
+              <li><strong>Payments</strong><span>cashless event · all major cards accepted, AMEX included</span></li>
+              <li><strong>Bags</strong><span>clear bags up to 12 × 6 × 12 in. or purses/clutches up to 4.5 × 6.5 in.</span></li>
+              <li><strong>Hydration packs</strong><span>allowed with only 1 main compartment · must be empty on entry</span></li>
+              <li><strong>Water bottles</strong><span>clear plastic or rubber reusable bottles, 1L or smaller · empty on entry, no metal</span></li>
+              <li><strong>Tailgating</strong><span>no tailgating</span></li>
+              <li><strong>Outside substances</strong><span>no outside alcohol or drugs</span></li>
+            </ul>
           </div>
           <div class="info-block">
             <p class="info-kicker">Parking plan</p>
@@ -762,7 +777,7 @@ body.afters-mode{--ice:#c9a6ff}
             <ul class="prohibited-list">
               <li>Aerosol products or cans</li><li>Amplified music, bullhorns, air horns or speakers</li><li>Audio or video recording devices</li><li>Bags larger than 12 × 6 × 12 in.</li><li>Banners and signs</li><li>Bats and sticks, including signs with sticks</li><li>Beach balls or other inflatables</li><li>Beverages, including alcohol</li><li>Bicycles</li><li>Blankets</li><li>Bota bags</li><li>Bottles, cans or containers, empty or full</li><li>Bubble-making devices</li><li>Costume masks</li><li>Costumes resembling police, fire, security or medical uniforms</li><li>Drones or other motorized devices</li><li>Illegal drugs or paraphernalia, including medical marijuana</li><li>E-liquid or e-juice</li><li>Metal bottles or water bottles larger than 1L</li><li>Eye drops</li><li>Firearms</li><li>Fireworks or incendiary devices</li><li>Folding chairs, stools or lawn furniture</li><li>Sporting equipment</li><li>Gas masks</li><li>Glow sticks</li><li>GoPro cameras</li><li>Helium balloons</li><li>Ice chests or coolers</li><li>Jewelry or clothing with spikes over 0.5 in.</li><li>Knives</li><li>Laser devices or pointers</li><li>LED gloves or microlights for light shows</li><li>LED poi or orbitals</li><li>Liquid makeup</li><li>Mace or pepper spray</li><li>Markers, pens or spray paint</li><li>Massagers</li><li>Noisemakers or whistles</li><li>Offensive clothing that demeans or promotes violence against a protected group</li><li>Outside food, beverages or candy</li><li>Pacifiers</li><li>Pets, except service animals</li><li>Professional photo, video or audio equipment</li><li>Segways or hoverboards</li><li>Selfie sticks</li><li>Skateboards, scooters or rollerblades</li><li>Smoking or nicotine products, including vapes</li><li>Stickers or flyers</li><li>Stuffed animals or dolls</li><li>Tents or shade structures</li><li>Totem poles, telescopic poles or pool noodles</li><li>Toy guns, water guns or slingshots</li><li>Umbrellas</li><li>Unsealed over-the-counter medication</li><li>Unsealed gum, mints or breath strips</li><li>Unsealed tampons or pads at entry</li><li>Vapor sticks</li><li>Weapons of any kind</li><li>Wind chairs or sofas</li>
             </ul>
-            <p class="prohibited-exception"><strong>Allowed exceptions:</strong> one clear bag up to 12 × 6 × 12 in. or one purse/clutch up to 4.5 × 6.5 in.; one empty clear plastic or rubber water bottle up to 1L; strollers stored under the ticketed seat or in a designated stroller area.</p>
+            <p class="prohibited-exception"><strong>Allowed exceptions:</strong> one clear bag up to 12 × 6 × 12 in. or one purse/clutch up to 4.5 × 6.5 in.; one hydration pack with only 1 main compartment, empty on entry; one empty clear plastic or rubber water bottle up to 1L; strollers stored under the ticketed seat or in a designated stroller area.</p>
           </div>
         </div>
       </section>
@@ -878,12 +893,36 @@ body.afters-mode{--ice:#c9a6ff}
         <div class="module-head"><h2 id="merchTitle">Merch watch</h2><span class="module-label">From the official feed</span></div>
         <div class="merch-browser" id="merchBrowser" aria-roledescription="carousel" aria-label="Niteharts merch reveals">
           <div class="merch-viewport" aria-live="polite">
-            <article class="merch-slide active" data-merch-slide="0" aria-label="1 of 2: VALORANT collaboration tee">
-              <div class="merch-visual" id="merchVisual"><img class="merch-photo" src="assets/merch/niteharts-valorant-shirt.webp" alt="Black Niteharts V26 and VALORANT collaboration T-shirt shown from the front and back" width="1200" height="1600" loading="lazy" /></div>
-              <div class="merch-copy"><span class="merch-index">Revealed 01</span><h3>VALORANT × Niteharts</h3><p>The official Niteharts account shared this black collaboration tee in its September 28 carousel. It features separate front and back artwork. No online shop or price was posted.</p><span class="mono">Official reveal · Festival availability TBA</span><a class="merch-source" href="https://www.instagram.com/p/Dd1w32DGYUR/" target="_blank" rel="noopener">View the official post ↗</a></div>
+            <article class="merch-slide active" data-merch-slide="0" aria-label="1 of 2: Full merch drop">
+              <div class="merch-visual"><img class="merch-photo" src="assets/merch/merch-drop.jpg" alt="Official Niteharts V26 merch drop grid showing all 20 items" width="1200" height="1500" loading="lazy" /></div>
+              <div class="merch-copy"><span class="merch-index">Full drop</span><h3>The merch drop</h3><p>All 20 pieces from the official Niteharts merch post. Check the grid, pick your fit, hit the booth early.</p>
+              <ol class="merch-list">
+                <li>KNOCK2 'BA22' ZIP HOODIE, REVERSIBLE CAMO</li>
+                <li>NH FUR ZIP HOODIE, RHINESTONE DESIGN</li>
+                <li>NH BROWN HOODED SCARF</li>
+                <li>NH BLACK HOODED SCARF (VIP EXCLUSIVE)</li>
+                <li>NH DOUBLE SLEEVE LINEUP HOODIE, METAL LOGO APPLIQUE</li>
+                <li>NH VINTAGE LINEUP TEE, EMBROIDERED LOGO</li>
+                <li>NH PINK SLEEVELESS TEE, EMBROIDERED LOGO</li>
+                <li>NH WHITE BOX TEE</li>
+                <li>NH DOUBLE SWEATSHORTS</li>
+                <li>NH VIP CHIEF TEE (VIP EXCLUSIVE)</li>
+                <li>ISOXO H.C.D. PIRACY TEE</li>
+                <li>NH BEANIE, EMBROIDERED</li>
+                <li>ISOXO H.C.D. PLAID POLO</li>
+                <li>ISOXO H.C.D. TRAP REAPER TEE</li>
+                <li>KNOCK2 X NITEHARTS TEE</li>
+                <li>ISOXO DIVA TANK</li>
+                <li>KNOCK2 'BA22' CADET CAP, GREEN</li>
+                <li>NH FINGERLESS GLOVES (VIP EXCLUSIVE)</li>
+                <li>NH STICKER PACK</li>
+                <li>KNOCK2 STICKER PACK</li>
+              </ol>
+              <a class="merch-source" href="https://www.instagram.com/p/DeNa0QBDK0m/" target="_blank" rel="noopener">View the official post ↗</a></div>
             </article>
-            <article class="merch-slide" data-merch-slide="1" aria-label="2 of 2: More merch not announced" aria-hidden="true">
-              <div class="merch-empty"><div class="merch-empty-inner"><div class="empty-mark" aria-hidden="true">?</div><span class="merch-index">Next reveal</span><h3>More has not been announced</h3><p>This is the only Niteharts V26 merch item publicly shown so far. Additional festival merch, prices and an online drop have not been posted.</p></div></div>
+            <article class="merch-slide" data-merch-slide="1" aria-label="2 of 2: VALORANT collaboration tee" aria-hidden="true">
+              <div class="merch-visual"><img class="merch-photo" src="assets/merch/niteharts-valorant-shirt.webp" alt="Black Niteharts V26 and VALORANT collaboration T-shirt shown from the front and back" width="1200" height="1600" loading="lazy" /></div>
+              <div class="merch-copy"><span class="merch-index">Revealed 01</span><h3>VALORANT × Niteharts</h3><p>The official Niteharts account shared this black collaboration tee in its September 28 carousel. It features separate front and back artwork. No online shop or price was posted.</p><span class="mono">Official reveal</span><a class="merch-source" href="https://www.instagram.com/p/Dd1w32DGYUR/" target="_blank" rel="noopener">View the official post ↗</a></div>
             </article>
           </div>
           <div class="merch-nav"><button id="merchPrev" type="button" aria-label="Previous merch reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15.5 5-7 7 7 7-1.5 1.5L5.5 12 14 3.5z"/></svg></button><span class="merch-count" id="merchCount">01 / 02</span><button id="merchNext" type="button" aria-label="Next merch reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 5 7 7-7 7L10 20.5l8.5-8.5L10 3.5z"/></svg></button></div>
@@ -1858,7 +1897,7 @@ body.afters-mode{--ice:#c9a6ff}
         the_crescent: {x:524,y:763,label:"The Crescent",cat:"art",info:"art installation. crescent moon piece next to the mirror."},
         the_terminal: {x:376,y:593,label:"The Terminal",cat:"art",info:"landmark art piece on the west walkway by the entrance tunnel."},
         half_court:   {x:430,y:605,label:"Half Court",cat:"activity",info:"half basketball court. shoot around between sets."},
-        valorant_stage:{x:950,y:420,label:"Valorant Stage",cat:"stage",sched:"valorant",approx:true,info:"gaming stage. its exact spot wasn't on the official map, so this pin is approximate. we'll move it when the location is announced."},
+        valorant_stage:{x:280,y:260,label:"VAL Sound Truck · Thrive Park",cat:"stage",sched:"valorant",info:"VAL sound truck, parked in Thrive Park by the west entrance. VALORANT takeover DJs all weekend."},
         ga_entrance:  {x:890,y:570,label:"GA Entrance",cat:"entrance",info:"main way in. have your ticket and id ready."},
         vip_entrance: {x:794,y:1014,label:"VIP Entrance",cat:"entrance",info:"21+ vip entry. separate bars, viewing decks and shorter lines inside."},
         entrance_tunnel:{x:459,y:841,label:"Entrance Tunnel",cat:"entrance",info:"tunnel walkway into the grounds."},
@@ -1928,7 +1967,7 @@ body.afters-mode{--ice:#c9a6ff}
         ["ga_entrance","w_park_rd","Parking link"],["w_park_rd","ga_parking","Parking link"],
         ["w_north3","w_rs_rd","Ride Share path"],["w_rs_rd","rideshare","Ride Share path"],
         ["w_rs_rd","gate2","Gate 2 path"],
-        ["ga_entrance","valorant_stage","stadium concourse",1],
+        ["w_west1","valorant_stage","West Walk"],
         ["w_west1","u_water_0","walkway"],
         ["w_north2","u_water_1","walkway"],
         ["w_blue","u_water_2","walkway"],
@@ -2935,13 +2974,16 @@ body.afters-mode{--ice:#c9a6ff}
       var aftersEvents=[
         {id:'afters-fri',night:'friday night',title:'NITESHIFT',present:'revive x innrsrcl present',
          line:'subjectivv · petra · jdorrah · asohii · intrphaz3 · kawn',
-         meta:'fri oct 9, 1am til late · downtown san diego · 21+',
+         meta:'friday night · sat oct 10, 1am til late · downtown san diego · 21+',
          note:'deep grooves and hypnotic rhythms after the festival ends. rsvp for the location text and updates.',
          link:'https://partiful.com/e/TFlNK1oNGsrE5Uf7gtDb',status:'announced'},
         {id:'afters-sat',night:'saturday night',title:'TBA',status:'tba',
          note:'saturday afters haven\'t been announced yet. check back.'},
-        {id:'afters-sun',night:'sunday night',title:'TBA',status:'tba',
-         note:'sunday afters haven\'t been announced yet. check back.'}
+        {id:'afters-sun',night:'sunday night',title:'LATENITE',present:'niteharts presents',official:true,
+         line:'alison wonderland · hamdi b2b flava d · isoknock b2b rl grime · nitepunk b2b borne · no signal · rocket rese',
+         meta:'sun oct 11, 10pm-4am · pechanga arena san diego · brownies & lemonade',
+         note:'the official closing party. tickets via the post.',
+         link:'https://www.instagram.com/p/DcJhm8OOPZ1/',linkLabel:'view the official post',status:'announced'}
       ];
       var grid=document.getElementById('aftersGrid'),mine=document.getElementById('myAfters');
       var modeF=document.getElementById('modeFestival'),modeA=document.getElementById('modeAfters');
@@ -2964,19 +3006,19 @@ body.afters-mode{--ice:#c9a6ff}
         grid.innerHTML=aftersEvents.map(function(ev){
           var added=picks.indexOf(ev.id)>-1;
           var h='<article class="afters-card'+(ev.status==='tba'?' is-tba':'')+'">';
-          h+='<div class="afters-top"><strong>'+esc(ev.title)+'</strong><span class="afters-tag">'+(ev.status==='tba'?'to be announced':'unofficial afters')+'</span></div>';
+          h+='<div class="afters-top"><strong>'+esc(ev.title)+'</strong><span class="afters-tag">'+(ev.status==='tba'?'to be announced':(ev.official?'official':'unofficial afters'))+'</span></div>';
           if(ev.present)h+='<p class="afters-present">'+esc(ev.present)+'</p>';
           if(ev.line)h+='<p class="afters-line">'+esc(ev.line)+'</p>';
           if(ev.meta)h+='<p class="afters-meta">'+esc(ev.meta)+'</p>';
           h+='<p class="afters-note">'+esc(ev.note)+'</p>';
           h+='<div class="afters-actions">';
-          if(ev.link)h+='<a class="set-btn" href="'+ev.link+'" target="_blank" rel="noopener">rsvp on partiful</a>';
+          if(ev.link)h+='<a class="set-btn" href="'+ev.link+'" target="_blank" rel="noopener">'+esc(ev.linkLabel||'rsvp on partiful')+'</a>';
           if(ev.status!=='tba')h+='<button type="button" class="set-btn" data-afters-add="'+ev.id+'" aria-pressed="'+added+'">'+(added?'added':'add to my night')+'</button>';
           h+='</div></article>';
           return h;
         }).join('');
       }
-      var festivalMods=['schedule','lineup','map','first'];
+      var festivalMods=['first','schedule','lineup','map','graphics','info','merch','arcade','lens','feed','feedback'];
       function setMode(mode){
         var afters=mode==='afters';
         document.body.classList.toggle('afters-mode',afters);
