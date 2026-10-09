@@ -172,22 +172,36 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
 .fmap-chip[data-cat="bar"]{--pin:#26c6da}
 .fmap-chip[data-cat="info"]{--pin:#f5f0dc}
 /* ---------- map info panel: tight, readable, thumb-friendly ---------- */
-.omap-info{background:#101114;border:1px solid var(--line);border-radius:14px;padding:18px;margin:12px 0 0}
+.omap-info{background:#141619;border:1px solid var(--line);border-radius:16px;padding:22px;margin:14px 0 0;box-shadow:0 12px 40px rgba(0,0,0,.45)}
 .omap-info[hidden]{display:none}
-.omap-info-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 6px}
-.omap-info-head h3{margin:0;font:700 1.25rem var(--sans);color:var(--paper);letter-spacing:.01em}
-.omap-info-cat{font:600 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ice);background:rgba(159,201,239,.12);border:1px solid rgba(159,201,239,.35);padding:4px 10px;border-radius:20px;white-space:nowrap}
-.omap-info>p{margin:0 0 14px;font:400 .95rem/1.5 var(--sans);color:var(--mist)}
-.omap-info-actions{display:flex;gap:10px;flex-wrap:wrap}
-.omap-info-actions .set-btn{flex:1 1 auto;min-height:48px;font-size:.85rem}
+.omap-info-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 10px}
+.omap-info-head h3{margin:0;font:800 1.65rem/1 var(--display);font-variation-settings:"wght" 800;color:var(--paper);text-transform:uppercase;letter-spacing:-.02em}
+.omap-info-cat{display:inline-flex;align-items:center;gap:8px;font:700 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--paper);background:rgba(255,255,255,.06);border:1px solid var(--line);padding:7px 14px;border-radius:999px;white-space:nowrap}
+.omap-info-cat i{width:11px;height:11px;flex:none;border-radius:50%;background:var(--pin,#888);box-shadow:0 0 10px var(--pin,#888)}
+.omap-info-cat[data-cat="stage"]{--pin:var(--ice)}
+.omap-info-cat[data-cat="entrance"]{--pin:#fff}
+.omap-info-cat[data-cat="merch"]{--pin:#7ed321}
+.omap-info-cat[data-cat="lockers"]{--pin:#ff6fd8}
+.omap-info-cat[data-cat="transit"]{--pin:#b8b8b8}
+.omap-info-cat[data-cat="art"]{--pin:#c9a6ff}
+.omap-info-cat[data-cat="activity"]{--pin:#6ee7a0}
+.omap-info-cat[data-cat="water"]{--pin:#29b6f6}
+.omap-info-cat[data-cat="restroom"]{--pin:#a678e8}
+.omap-info-cat[data-cat="firstaid"]{--pin:#ff5252}
+.omap-info-cat[data-cat="food"]{--pin:#ff9800}
+.omap-info-cat[data-cat="bar"]{--pin:#26c6da}
+.omap-info-cat[data-cat="info"]{--pin:#f5f0dc}
+.omap-info>p{margin:0 0 18px;font:400 1rem/1.55 var(--sans);color:var(--paper)}
+.omap-info-actions{display:grid;gap:10px}
+.omap-info-actions .set-btn{width:100%;min-height:58px;font-size:.92rem;font-weight:700;justify-content:center}
+.omap-info-actions .set-btn[data-froute-to]{background:var(--paper);border-color:var(--paper);color:var(--night)}
+.omap-info-actions .set-btn[data-froute-to]:active{transform:translateY(2px)}
 .omap-steps{margin:0 0 14px;padding-left:20px;font:400 .9rem/1.6 var(--sans);color:var(--mist)}
 .omap-steps .st-min{color:var(--ice)}
 .fmap-steps-toggle{margin:0 0 10px}
 @media (max-width:480px){
-  .omap-info{padding:16px;border-radius:12px}
-  .omap-info-head h3{font-size:1.15rem}
-  .omap-info-actions{flex-direction:column}
-  .omap-info-actions .set-btn{width:100%;min-height:52px}
+  .omap-info{padding:18px;border-radius:14px}
+  .omap-info-head h3{font-size:1.4rem}
 }
 .fmap-legend[hidden]{display:none}
 .fmap-legend-toggle{margin:0}
@@ -2309,7 +2323,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
         var n=D.nodes[id]; if(!n) return;
         /* mark this pin expanded, collapse others */
         canvas.querySelectorAll('.fmap-pin').forEach(function(p){p.setAttribute('aria-expanded',String(p.getAttribute('data-node')===id));});
-        var h='<div class="omap-info-head"><h3>'+esc(n.label)+'</h3><span class="omap-info-cat">'+esc(catName(n.cat))+(n.approx?' · location approx':'')+'</span></div>';
+        var h='<div class="omap-info-head"><h3>'+esc(n.label)+'</h3><span class="omap-info-cat" data-cat="'+esc(n.cat)+'"><i aria-hidden="true"></i>'+esc(catName(n.cat))+(n.approx?' · location approx':'')+'</span></div>';
         h+='<p>'+esc(n.info)+'</p>';
         if(n.sched) h+=upcomingSetsHtml(n.sched);
         h+='<div class="omap-info-actions"><button type="button" class="set-btn" data-froute-to="'+id+'">route here</button><button type="button" class="set-btn" data-far-to="'+id+'">ar directions</button><button type="button" class="set-btn fmap-close">close</button></div>';
