@@ -59,7 +59,21 @@
     .map-module{grid-column:1/-1}.map-frame{position:relative;min-height:520px;background:var(--panel);overflow:hidden;border-radius:3px}#venueMap{height:520px;width:100%}.map-fallback{display:grid;place-items:center;height:520px;padding:24px;background:radial-gradient(circle at 50% 0,color-mix(in srgb,var(--ice) 12%,transparent),transparent 54%),var(--panel);text-align:center}.map-place{display:grid;justify-items:center;gap:9px;max-width:440px}.map-place-label{font:400 .64rem var(--mono);text-transform:uppercase;color:var(--ice)}.map-place strong{font:400 clamp(2.2rem,5vw,4.6rem)/.9 var(--display);text-transform:uppercase;color:var(--paper)}.map-place-address{color:var(--mist)}.map-place .text-link{margin-top:8px}
     .map-note{display:grid;grid-template-columns:1fr auto;gap:18px;padding:14px 0;font-size:.9rem}.map-note p{margin:0;color:var(--mist);max-width:60ch}.text-link{font-weight:700;color:var(--ice-strong)}
 .fmap{border:1px solid var(--line);border-radius:3px;overflow:hidden;background:var(--deep);margin-bottom:18px}
-.fmap-viewer{position:relative;height:520px;overflow:hidden;touch-action:none;cursor:grab;background:#0b0c0d}
+.fmap-viewer{position:relative;height:520px;overflow:hidden;touch-action:pan-y;cursor:grab;background:#0b0c0d}
+.fmap-expand{position:absolute;top:10px;right:10px;z-index:35;min-width:52px;min-height:52px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:rgba(11,12,13,.82);color:var(--paper);font:400 1.3rem/1 var(--mono);cursor:pointer;touch-action:manipulation;backdrop-filter:blur(4px)}
+.fmap-expand:active{transform:scale(.94)}
+.fmap-far-banner{position:absolute;top:12px;left:12px;right:72px;z-index:34;background:#0d1524;border:2px solid var(--ice);border-radius:12px;padding:14px 16px;font:700 .78rem/1.55 var(--mono);color:#fff;text-transform:uppercase;letter-spacing:.03em;box-shadow:0 10px 34px rgba(0,0,0,.55),0 0 24px rgba(159,201,239,.25)}
+.fmap-far-banner[hidden]{display:none}
+.fmap-far-banner b{color:var(--ice-strong)}
+.fmap-far-banner{animation:farPulse 2s ease-in-out infinite}
+@keyframes farPulse{0%,100%{box-shadow:0 10px 34px rgba(0,0,0,.55),0 0 24px rgba(159,201,239,.25)}50%{box-shadow:0 10px 34px rgba(0,0,0,.55),0 0 44px rgba(159,201,239,.55)}}
+/* fullscreen map mode */
+#festivalMap.fmap-fs{position:fixed;inset:0;z-index:400;background:#0b0c0d;display:flex;flex-direction:column;overflow:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+#festivalMap.fmap-fs .fmap-toolbar,#festivalMap.fmap-fs #fmapNearMe{flex:none}
+#festivalMap.fmap-fs .fmap-viewer{flex:1 1 0%;min-height:0;height:auto;touch-action:none}
+#festivalMap.fmap-fs .fmap-bar,#festivalMap.fmap-fs #fmapLegend,#festivalMap.fmap-fs #fmapHowto,#festivalMap.fmap-fs .fmap-sim-banner{display:none}
+#festivalMap.fmap-fs #fmapInfo{flex:none;max-height:38%;overflow-y:auto;margin:0;border-radius:0;border-left:0;border-right:0;border-bottom:0}
+body.fmap-fs-open{overflow:hidden}
 .fmap-viewer.dragging{cursor:grabbing}
 .fmap-canvas{position:absolute;left:0;top:0;width:100%;transform-origin:0 0;will-change:transform}
 .fmap-canvas img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none}
@@ -71,7 +85,8 @@
 .fmap-pin[data-cat="transit"]{--pin:#b8b8b8}
 .fmap-pin[data-cat="art"]{--pin:#c9a6ff}
 .fmap-pin[data-cat="activity"]{--pin:#6ee7a0}
-.fmap-pin-dot{display:block;width:14px;height:14px;border-radius:50%;background:var(--pin,var(--ice));border:2px solid #0b0c0d;box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,var(--ice)) 35%,transparent),0 2px 8px rgba(0,0,0,.55);transition:background .2s ease}
+.fmap-pin-dot{display:block;width:16px;height:16px;border-radius:50%;background:var(--pin,var(--ice));border:2px solid #0b0c0d;box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,var(--ice)) 40%,transparent),0 0 10px 3px color-mix(in srgb,var(--pin,var(--ice)) 55%,transparent),0 2px 8px rgba(0,0,0,.55);transition:background .2s ease;animation:pinGlow 2.6s ease-in-out infinite}
+@keyframes pinGlow{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,var(--ice)) 40%,transparent),0 0 10px 3px color-mix(in srgb,var(--pin,var(--ice)) 55%,transparent),0 2px 8px rgba(0,0,0,.55)}50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--pin,var(--ice)) 40%,transparent),0 0 22px 8px color-mix(in srgb,var(--pin,var(--ice)) 85%,transparent),0 2px 8px rgba(0,0,0,.55)}}
 .fmap-pin[aria-expanded="true"] .fmap-pin-dot{background:var(--paper)}
 .fmap-pin-tag{position:absolute;left:50%;bottom:calc(100% - 14px);transform:translateX(-50%);white-space:nowrap;background:#0b0c0d;border:1px solid var(--pin,var(--ice));color:var(--paper);font:400 .62rem var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:7px 11px;border-radius:2px;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .fmap-pin[aria-expanded="true"] .fmap-pin-tag{opacity:1}
@@ -104,7 +119,7 @@
 .fmap-pin-util[aria-expanded="true"] .fmap-pin-dot{width:12px;height:12px;background:var(--paper)}
 /* item 1: soft tappable glow under utility dots — subtle, never the old 2.8x rings */
 .fmap-pin-util .fmap-pin-dot{animation:utilGlow 3.4s ease-in-out infinite}
-@keyframes utilGlow{0%,100%{box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 30%,transparent),0 0 5px 1px color-mix(in srgb,var(--pin,var(--ice)) 20%,transparent)}50%{box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 30%,transparent),0 0 11px 3px color-mix(in srgb,var(--pin,var(--ice)) 38%,transparent)}}
+@keyframes utilGlow{0%,100%{box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 35%,transparent),0 0 8px 2px color-mix(in srgb,var(--pin,var(--ice)) 45%,transparent)}50%{box-shadow:0 0 0 2px color-mix(in srgb,var(--pin,var(--ice)) 35%,transparent),0 0 18px 6px color-mix(in srgb,var(--pin,var(--ice)) 70%,transparent)}}
 /* item 2: YOU heading cone */
 .fmap-gps-cone{fill:rgba(47,157,255,.30);stroke:rgba(47,157,255,.65);stroke-width:2}
 /* item 3: near-me quick-find chips — big drunk-proof buttons */
@@ -112,6 +127,11 @@
 .fmap-nearme::-webkit-scrollbar{display:none}
 .fmap-nearme button{flex:0 0 auto;min-height:54px;padding:12px 20px;border-radius:999px;border:2px solid var(--ice);background:rgba(159,201,239,.10);color:#fff;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;touch-action:manipulation;white-space:nowrap}
 .fmap-nearme button:active{transform:scale(.96);background:rgba(159,201,239,.22)}
+/* festival-day: instructions impossible to miss */
+.fmap-intro{margin:0 0 10px;padding:14px 16px;border:1px solid var(--line);border-left:3px solid var(--ice);background:rgba(159,201,239,.07);border-radius:6px}
+.fmap-intro p{margin:0 0 6px;font:400 .82rem/1.5 var(--sans);color:var(--paper)}
+.fmap-intro p:last-child{margin:0}
+.fmap-intro b{color:var(--ice-strong)}
 /* item 4: drunk-proof how-to card */
 .fmap-howto{margin:0 0 14px;padding:20px 18px;border:2px solid var(--ice);border-radius:8px;background:rgba(159,201,239,.07);box-shadow:0 0 24px rgba(159,201,239,.15)}
 .fmap-howto h3{margin:0 0 12px;font:700 1.05rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#fff}
@@ -221,19 +241,20 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
     .fmap-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
     .fmap-tilt{position:absolute;inset:0;transform-origin:50% 50%;transition:transform .5s var(--ease, ease)}
     .fmap-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .fmap-gps-svg{z-index:6}
     #fmapRouteG[hidden]{display:none}
     #fmapRouteLineA{fill:none;stroke:#ffffff;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;opacity:.98;pointer-events:stroke;cursor:pointer;filter:drop-shadow(0 0 7px rgba(255,255,255,.95)) drop-shadow(0 0 22px rgba(159,201,239,.6))}
     #fmapRouteLineB{fill:none;stroke:#d6ecff;stroke-width:4;stroke-dasharray:3 22;stroke-linecap:round;opacity:.95;pointer-events:stroke;cursor:pointer;animation:routeMarch 1.2s linear infinite}
     #fmapRouteLineHit{fill:none;stroke:#fff;stroke-opacity:0;stroke-width:56;stroke-linecap:round;stroke-linejoin:round;pointer-events:stroke;cursor:pointer}
-    .fmap-gps-dot{fill:#2f9dff;stroke:#fff;stroke-width:3.5;filter:drop-shadow(0 0 10px rgba(47,157,255,.95)) drop-shadow(0 0 26px rgba(47,157,255,.5))}
+    .fmap-gps-dot{fill:#2f9dff;stroke:#fff;stroke-width:4;filter:drop-shadow(0 0 14px rgba(47,157,255,1)) drop-shadow(0 0 34px rgba(47,157,255,.75)) drop-shadow(0 0 60px rgba(47,157,255,.4))}
     .fmap-gps-acc{fill:rgba(47,157,255,.18);stroke:rgba(47,157,255,.5);stroke-width:1.5}
     .fmap-gps-pulse{fill:none;stroke:#2f9dff;stroke-width:3;opacity:.9;transform-box:fill-box;transform-origin:center;animation:gpsPulse 2.2s ease-out infinite}
     .fmap-gps-pulse2{fill:none;stroke:#2f9dff;stroke-width:2.5;opacity:.9;transform-box:fill-box;transform-origin:center;animation:gpsPulse 2.2s ease-out 1.1s infinite}
     @keyframes gpsPulse{0%{transform:scale(.5);opacity:.95}100%{transform:scale(2.6);opacity:0}}
     .fmap-gps-you-bg{fill:#2f9dff;stroke:#fff;stroke-width:2;filter:drop-shadow(0 2px 10px rgba(47,157,255,.8))}
-    .fmap-gps-you-tx{fill:#fff;font:700 15px var(--mono);text-anchor:middle;letter-spacing:.08em}
+    .fmap-gps-you-tx{fill:#fff;font:700 17px var(--mono);text-anchor:middle;letter-spacing:.06em}
     .fmap-controls button[aria-pressed="true"]{background:var(--paper);color:var(--night);border-color:var(--paper);font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;padding:0 14px}
-    @media (prefers-reduced-motion:reduce){#fmapRouteLineB,.fmap-gps-pulse,.fmap-pin-util .fmap-pin-dot,#arHeart{animation:none}.fmap-tilt{transition:none}}
+    @media (prefers-reduced-motion:reduce){#fmapRouteLineB,.fmap-gps-pulse,.fmap-gps-pulse2,.fmap-pin-util .fmap-pin-dot,.fmap-pin-dot,.fmap-far-banner,#arHeart{animation:none}.fmap-tilt{transition:none}}
     @media(max-width:600px){.fmap-toolbar .omap-from select{max-width:170px}}
     .quick-schedule{display:grid;gap:6px}.quick-set{display:grid;grid-template-columns:75px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;background:var(--panel);border-radius:2px}.quick-set time{font:400 .7rem var(--mono);color:var(--mist)}.quick-set strong{text-transform:uppercase;font-size:.92rem}.quick-set span{font:400 .63rem var(--mono);color:var(--ice);text-transform:uppercase}.quick-set.valorant{background:color-mix(in srgb,var(--panel) 82%,var(--red));box-shadow:inset 4px 0 0 var(--red)}.quick-set.valorant span{color:var(--red);font-weight:700}
     .merch-watch{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);background:var(--paper);color:var(--night);overflow:hidden}.merch-photo{display:block;width:100%;height:100%;min-height:500px;object-fit:cover;object-position:center;background:#0e0e10}.merch-copy{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(24px,4vw,56px);overflow:hidden}.merch-copy::after{content:"V26";position:absolute;right:-14px;top:-25px;font:400 9rem/1 var(--display);opacity:.06}.merch-watch h3{position:relative;z-index:1;font:400 clamp(2.4rem,5vw,5rem)/.85 var(--display);text-transform:uppercase;margin:0 0 18px;letter-spacing:-.02em}.merch-watch p{position:relative;z-index:1;margin:0;max-width:42ch}.merch-watch .mono{position:relative;z-index:1;display:block;margin-top:22px;font:400 .68rem var(--mono);text-transform:uppercase;opacity:.7}.merch-source{position:relative;z-index:1;display:inline-flex;align-items:center;align-self:flex-start;min-height:44px;margin-top:14px;color:var(--night);font-weight:800}
@@ -630,16 +651,23 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
             <button type="button" data-nearme="food">closest food</button>
             <button type="button" data-nearme="firstaid">closest first aid</button>
           </div>
+          <div class="fmap-intro">
+            <p><b>glowing dots are tappable.</b> tap one for info + route.</p>
+            <p>tap <b>my location</b> to see your blue <b>(you)</b> dot.</p>
+            <p>tap a <b>closest</b> chip for the nearest bathroom, water, bar, food, first aid with steps + AR.</p>
+          </div>
           <div class="fmap-howto" id="fmapHowto" hidden>
             <h3>how to use this map</h3>
             <ol>
-              <li>tap <b>my location</b> so the map finds you.</li>
-              <li>tap any dot, or search for water, bathrooms…</li>
+              <li>tap <b>my location</b>, allow location, look for the big pulsing blue <b>(you)</b> dot.</li>
+              <li><b>glowing dots are tappable</b> — tap one for info + route. or search water, bathrooms…</li>
               <li>hit <b>route here</b> and follow the white line.</li>
             </ol>
             <button type="button" class="lens-btn" id="fmapHowtoOk">got it</button>
           </div>
           <div class="fmap-viewer" id="fmapViewer">
+            <div class="fmap-far-banner" id="fmapFarBanner" hidden></div>
+            <button type="button" class="fmap-expand" id="fmapExpand" aria-label="Open fullscreen map">⤢</button>
             <div class="fmap-canvas" id="fmapCanvas">
               <div class="fmap-tilt" id="fmapTilt">
               <img id="fmapImage" src="assets/map/nh26-sitemap.webp" alt="Official Niteharts 2026 festival grounds map at Snapdragon Stadium, showing Main Stage, The Mirror, The Crescent, The Terminal, and Half Court stages, plus GA and VIP entrances" width="1920" height="1200" loading="lazy" decoding="async" draggable="false">
@@ -662,6 +690,8 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
                   <polyline id="fmapRouteLineB" points=""/>
                   <polyline id="fmapRouteLineHit" points=""/>
                 </g>
+              </svg>
+              <svg id="fmapGpsSvg" class="fmap-svg fmap-gps-svg" viewBox="0 0 1920 1200" aria-hidden="true" focusable="false">
                 <g id="fmapGpsG" hidden></g>
               </svg>
               </div>
@@ -669,7 +699,6 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
             <p class="omap-debug" id="fmapDebug" hidden></p>
           </div>
           <div class="fmap-bar">
-            <p class="fmap-hint">tap a pin for info · tap the route for steps</p>
             <div class="fmap-controls" role="group" aria-label="Map zoom controls">
               <button type="button" id="fmapZoomIn" aria-label="Zoom in">+</button>
               <button type="button" id="fmapZoomOut" aria-label="Zoom out">−</button>
@@ -2307,7 +2336,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
           return '<li><span>'+esc(s.artist)+'</span><time>'+esc(s.start)+' - '+esc(s.end)+'</time></li>';
         }).join('')+'</ul>';
       }
-      function openInfo(html){info.innerHTML=html;info.hidden=false;}
+      function openInfo(html){info.innerHTML=html;info.hidden=false;try{info.scrollIntoView({behavior:'smooth',block:'nearest'});}catch(e){}}
       function closeInfo(){info.hidden=true;info.innerHTML='';canvas.querySelectorAll('.fmap-pin').forEach(function(p){p.setAttribute('aria-expanded','false');});}
       function crowdAdj(mins){
         try{if(window.__nhGuide&&window.__nhGuide.crowdMult)return Math.max(1,Math.round(mins*window.__nhGuide.crowdMult(new Date())));}catch(e){}
@@ -2514,22 +2543,33 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
         }
       });
       function gpsNote(t){debug.hidden=false;debug.textContent=t;}
+      function haversineMi(lat1,lon1,lat2,lon2){
+        var R=3958.8,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
+        var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+        return 2*R*Math.asin(Math.sqrt(a));
+      }
+      var VENUE_LAT=32.78444,VENUE_LON=-117.12278,FAR_MI=1.25; /* ~2km */
+      function showFarBanner(mi){
+        var b=document.getElementById('fmapFarBanner');
+        if(b){b.hidden=false;b.innerHTML='you are <b>'+Math.round(mi)+' mi</b> from Snapdragon. your <b>(you)</b> dot shows up when you arrive.';}
+      }
+      function hideFarBanner(){var b=document.getElementById('fmapFarBanner');if(b)b.hidden=true;}
       function centerOnPoint(x,y){ centerViewOn(x,y); }
       function drawGps(x,y,accM){
         gpsG.innerHTML='';
         var accU=Math.min(400,Math.max(30,accM/D.meta.metersPerUnit));
         el('circle',{cx:x,cy:y,r:accU,class:'fmap-gps-acc'},gpsG);
-        if(!reduceMotion){el('circle',{cx:x,cy:y,r:26,class:'fmap-gps-pulse'},gpsG);el('circle',{cx:x,cy:y,r:26,class:'fmap-gps-pulse2'},gpsG);}
+        if(!reduceMotion){el('circle',{cx:x,cy:y,r:34,class:'fmap-gps-pulse'},gpsG);el('circle',{cx:x,cy:y,r:34,class:'fmap-gps-pulse2'},gpsG);}
         /* heading cone (only when compass has given us a heading) */
         gpsCone=null;
         if(gpsHeading!==null){
-          var cone=el('path',{d:'M'+x+','+(y-20)+' L'+(x-17)+','+(y-56)+' L'+(x+17)+','+(y-56)+' Z',class:'fmap-gps-cone',transform:'rotate('+gpsHeading.toFixed(1)+' '+x+' '+y+')'},gpsG);
+          var cone=el('path',{d:'M'+x+','+(y-26)+' L'+(x-22)+','+(y-68)+' L'+(x+22)+','+(y-68)+' Z',class:'fmap-gps-cone',transform:'rotate('+gpsHeading.toFixed(1)+' '+x+' '+y+')'},gpsG);
           cone._cx=x;cone._cy=y;gpsCone=cone;
         }
-        el('circle',{cx:x,cy:y,r:16,class:'fmap-gps-dot'},gpsG);
+        el('circle',{cx:x,cy:y,r:22,class:'fmap-gps-dot'},gpsG);
         var yg=el('g',{class:'fmap-gps-you'},gpsG);
-        el('rect',{x:x-42,y:y-58,width:84,height:28,rx:14,class:'fmap-gps-you-bg'},yg);
-        var ytx=el('text',{x:x,y:y-38,class:'fmap-gps-you-tx'},yg);
+        el('rect',{x:x-48,y:y-64,width:96,height:32,rx:16,class:'fmap-gps-you-bg'},yg);
+        var ytx=el('text',{x:x,y:y-42,class:'fmap-gps-you-tx'},yg);
         ytx.textContent='(you)';
         gpsG.removeAttribute('hidden');
         if(!gpsCentered){gpsCentered=true;centerOnPoint(x,y);}
@@ -2539,6 +2579,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
         if(gpsWatch!==null){
           try{navigator.geolocation.clearWatch(gpsWatch);}catch(e){}
           gpsWatch=null;gpsNode=null;gpsCentered=false;gpsHeading=null;gpsCone=null;gpsG.setAttribute('hidden','');gpsG.innerHTML='';
+          hideFarBanner();
           try{window.removeEventListener('deviceorientation',onGpsHeading);}catch(e){}
           debug.hidden=true;locateBtn.textContent='my location';
           var opt=originSel.querySelector('option[value="__gps"]');if(opt)opt.disabled=true;
@@ -2551,7 +2592,20 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
         try{window.addEventListener('deviceorientation',onGpsHeading);}catch(e){}
         try{
           gpsWatch=navigator.geolocation.watchPosition(function(p){
-            var pt=nhGpsToSchematic(D,p.coords.latitude,p.coords.longitude);
+            var lat=p.coords.latitude,lon=p.coords.longitude;
+            var miAway=haversineMi(lat,lon,VENUE_LAT,VENUE_LON);
+            if(miAway>FAR_MI){
+              /* too far from the venue: don't drop the dot into the void */
+              gpsNode=null;
+              gpsG.setAttribute('hidden','');gpsG.innerHTML='';
+              showFarBanner(miAway);
+              gpsNote('gps ±'+Math.round(p.coords.accuracy||0)+'m · '+Math.round(miAway)+' mi from Snapdragon');
+              var off=originSel.querySelector('option[value="__gps"]');if(off)off.disabled=true;
+              if(originSel.value==='__gps')originSel.value='ga_entrance';
+              return;
+            }
+            hideFarBanner();
+            var pt=nhGpsToSchematic(D,lat,lon);
             var nn=nhNearest(D,pt.x,pt.y);
             gpsNode=nn.id;
             drawGps(pt.x,pt.y,p.coords.accuracy||0);
@@ -2625,6 +2679,29 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
 
       /* ---------- reset clears the route too ---------- */
       document.getElementById('fmapReset').addEventListener('click',function(){clearRoute();});
+      /* ---------- fullscreen map mode (mobile) ---------- */
+      (function(){
+        var fmap=document.getElementById('festivalMap'),btn=document.getElementById('fmapExpand');
+        if(!fmap||!btn)return;
+        var homeParent=null,homeNext=null;
+        function setFs(on){
+          if(on&&!homeParent){
+            homeParent=fmap.parentNode;homeNext=fmap.nextSibling;
+            document.body.appendChild(fmap);
+          }else if(!on&&homeParent){
+            homeParent.insertBefore(fmap,homeNext);homeParent=null;homeNext=null;
+          }
+          fmap.classList.toggle('fmap-fs',on);
+          document.body.classList.toggle('fmap-fs-open',on);
+          btn.textContent=on?'\u2715':'\u2922';
+          btn.setAttribute('aria-label',on?'Close fullscreen map':'Open fullscreen map');
+          var Mv=window.__nhMapViewers&&window.__nhMapViewers.official;
+          if(Mv&&Mv.refresh){try{Mv.refresh();}catch(e){}}
+        }
+        btn.addEventListener('click',function(e){e.stopPropagation();setFs(!fmap.classList.contains('fmap-fs'));});
+        document.addEventListener('keydown',function(e){if(e.key==='Escape'&&fmap.classList.contains('fmap-fs'))setFs(false);});
+        window.__fmapSetFs=setFs;
+      })();
       /* ---------- public: find-my-way entry ---------- */
       window.nhFmapRoute=function(fromId,toId,title){
         showRoute(fromId||currentOrigin(),toId,title||'');
