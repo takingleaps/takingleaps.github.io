@@ -824,6 +824,21 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
 #nh-lens .lens-recmax{font:400 .68rem var(--mono);color:var(--mist);text-transform:uppercase}
 #nh-lens .lens-recbar .lens-btn{margin-left:auto;min-height:44px}
 #nh-lens #lensPreviewVid{width:100%;border-radius:14px;border:1px solid var(--line);display:block;background:#000}
+/* MEME LAB (scoped) */
+#nh-meme{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+#nh-meme .meme-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+#nh-meme .meme-head h3{margin:0;font:700 1.7rem/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--paper)}
+#nh-meme .meme-sub{margin:2px 0 4px;color:var(--mist);font:400 .66rem/1.4 var(--mono);text-transform:uppercase}
+#nh-meme .meme-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 2px}
+#nh-meme .meme-filters button{appearance:none;min-height:68px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--paper);cursor:pointer;text-align:left;touch-action:manipulation}
+#nh-meme .meme-filters button b{display:block;font-size:.98rem;text-transform:uppercase;letter-spacing:.02em}
+#nh-meme .meme-filters button span{display:block;color:var(--mist);font-size:.72rem;margin-top:3px}
+#nh-meme .meme-filters button[aria-pressed="true"]{border-color:var(--ice);background:rgba(159,201,239,.1)}
+#nh-meme .meme-stage{margin-top:12px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#05070c}
+#nh-meme .meme-stage canvas{display:block;width:100%;height:auto}
+#nh-meme .meme-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+#nh-meme .meme-note{color:var(--mist);font-size:13px;min-height:20px;margin:8px 0 0}
+#nh-meme .meme-pick{cursor:pointer;display:inline-flex;align-items:center}
 #nh-lens #lensPreviewVid[hidden]{display:none}
 #nh-lens .review-queue-note{color:var(--mist);font-size:13px;margin:8px 0 0}
 #nh-review .review-item video{width:100%;display:block;max-height:300px;background:#000}
@@ -1059,6 +1074,29 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
             <button type="button" id="lensRetake" class="lens-retake">retake</button>
             <p class="lens-privacy">posting puts it on the public festival board for everyone to see. saving keeps it on your phone only, never posted anywhere.</p>
             <p class="lens-note" id="lensNote" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+        <div id="nh-meme">
+          <div class="meme-head"><h3 id="memeTitle">Meme Lab</h3><span class="module-label">make it stupid funny</span></div>
+          <p class="meme-sub">for the socal asian raver group chat</p>
+          <p class="lens-step"><b>1 · Photo</b> — take one or upload</p>
+          <div class="meme-actions" style="margin-top:0">
+            <label class="lens-btn meme-pick" for="memeFile">take / upload photo<input type="file" id="memeFile" accept="image/*" hidden></label>
+          </div>
+          <p class="lens-step"><b>2 · Pick a filter</b></p>
+          <div class="meme-filters" role="group" aria-label="Choose a meme filter">
+            <button type="button" data-meme="boba" aria-pressed="true"><b>Boba Powered</b><span>boba cup + floating pearls</span></button>
+            <button type="button" data-meme="bass" aria-pressed="false"><b>Bass Face</b><span>when the drop hits</span></button>
+            <button type="button" data-meme="kandi" aria-pressed="false"><b>Kandi Trader</b><span>stacked wrists</span></button>
+            <button type="button" data-meme="clacker" aria-pressed="false"><b>Certified Clacker</b><span>big fan energy</span></button>
+          </div>
+          <p class="lens-step"><b>3 · Save it</b></p>
+          <div class="meme-stage"><canvas id="memeCanvas" width="1080" height="1350" aria-label="Meme preview"></canvas></div>
+          <p class="meme-note" id="memeNote" role="status" aria-live="polite"></p>
+          <div class="meme-actions">
+            <button type="button" id="memeSave" class="lens-btn">save to my phone</button>
+            <button type="button" id="memeShare" class="lens-btn lens-ghost" hidden>share</button>
+            <button type="button" id="memeRetake" class="lens-retake">new photo</button>
           </div>
         </div>
       </section>
@@ -4227,6 +4265,269 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
       lensSeen = vis;
     }, { threshold: 0.05 }).observe(lensBox);
   }
+
+  /* ============================================================
+     2b. MEME LAB — socal asian raver meme filters (canvas)
+  ============================================================ */
+  (function memeLab(){
+    var fileInput=document.getElementById('memeFile'),
+        canvas=document.getElementById('memeCanvas'),
+        noteEl=document.getElementById('memeNote'),
+        saveBtn=document.getElementById('memeSave'),
+        shareBtn=document.getElementById('memeShare'),
+        retakeBtn=document.getElementById('memeRetake'),
+        filterBar=document.querySelector('#nh-meme .meme-filters');
+    if(!fileInput||!canvas||!filterBar) return;
+    var ctx=canvas.getContext('2d'),
+        W=canvas.width, H=canvas.height,
+        srcImg=null, activeMeme='boba';
+    var MEMES={
+      boba:   {top:'BOBA-POWERED', bottom:'RAVE MODE'},
+      bass:   {top:'WHEN THE DROP', bottom:'HITS'},
+      kandi:  {top:'TRADE KANDI', bottom:'W ME?'},
+      clacker:{top:'CERTIFIED', bottom:'CLACKER'}
+    };
+    var FONT='Impact,Haettenschweiler,"Arial Narrow Bold","Franklin Gothic Medium","Arial Black",sans-serif';
+    function setNote(m){ if(noteEl) noteEl.textContent=m||''; }
+
+    function drawCover(img){
+      var iw=img.width||img.naturalWidth, ih=img.height||img.naturalHeight;
+      if(!iw||!ih) return;
+      var s=Math.max(W/iw,H/ih), dw=iw*s, dh=ih*s;
+      ctx.drawImage(img,(W-dw)/2,(H-dh)/2,dw,dh);
+    }
+
+    /* heavy meme caption: white fill, thick black outline */
+    function memeText(line,y,size){
+      ctx.save();
+      ctx.font='900 '+size+'px '+FONT;
+      ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.lineJoin='round';
+      ctx.lineWidth=Math.max(8,Math.round(size*0.11));
+      ctx.strokeStyle='#000'; ctx.fillStyle='#fff';
+      ctx.strokeText(line,W/2,y);
+      ctx.fillText(line,W/2,y);
+      ctx.restore();
+    }
+    function captions(){
+      var m=MEMES[activeMeme]||MEMES.boba;
+      memeText(m.top,118,104);
+      memeText(m.bottom,H-104,104);
+    }
+
+    function placeholder(){
+      ctx.fillStyle='#05070c'; ctx.fillRect(0,0,W,H);
+      ctx.save();
+      ctx.strokeStyle='#3a3c40'; ctx.lineWidth=6; ctx.setLineDash([26,18]);
+      ctx.strokeRect(60,60,W-120,H-120);
+      ctx.restore();
+      ctx.fillStyle='#c2c6d0'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.font='700 64px '+FONT;
+      ctx.fillText('YOUR MEME HERE',W/2,H/2-30);
+      ctx.font='400 34px Syne,sans-serif';
+      ctx.fillStyle='#8a8f9a';
+      ctx.fillText('pick a photo to start the chaos',W/2,H/2+44);
+    }
+
+    /* ---- sticker bits ---- */
+    function pearl(x,y,r,a){
+      ctx.save(); ctx.globalAlpha=(a==null?1:a);
+      ctx.beginPath(); ctx.arc(x,y,r,0,7);
+      ctx.fillStyle='#2b1a10'; ctx.fill();
+      ctx.beginPath(); ctx.arc(x-r*0.32,y-r*0.36,Math.max(2,r*0.28),0,7);
+      ctx.fillStyle='rgba(255,255,255,.55)'; ctx.fill();
+      ctx.restore();
+    }
+    function bead(x,y,r,color){
+      ctx.beginPath(); ctx.arc(x,y,r,0,7);
+      ctx.fillStyle=color; ctx.fill();
+      ctx.lineWidth=5; ctx.strokeStyle='#fff'; ctx.stroke();
+      ctx.beginPath(); ctx.arc(x-r*0.3,y-r*0.35,Math.max(2,r*0.28),0,7);
+      ctx.fillStyle='rgba(255,255,255,.6)'; ctx.fill();
+    }
+    function spark(x,y,r){
+      ctx.save(); ctx.strokeStyle='#fff'; ctx.lineWidth=6; ctx.lineCap='round';
+      ctx.beginPath();
+      ctx.moveTo(x-r,y); ctx.lineTo(x+r,y);
+      ctx.moveTo(x,y-r); ctx.lineTo(x,y+r);
+      ctx.stroke(); ctx.restore();
+    }
+
+    function drawBoba(){
+      var cx=W-255, top=800, bot=1200, tw=270, bw=195, i;
+      pearl(cx-330,top-190,22); pearl(cx-250,top-260,16,.85); pearl(cx-120,top-300,24,.9);
+      pearl(cx+150,top-240,18,.85); pearl(cx+260,top-150,22); pearl(cx-380,top-40,15,.8);
+      spark(cx-190,top-120,16); spark(cx+90,top-330,13); spark(cx+300,top-60,15);
+      /* straw */
+      ctx.save();
+      ctx.translate(cx+52,top-6); ctx.rotate(-0.24);
+      var straw=new Path2D(); straw.rect(-19,-250,38,250);
+      ctx.fillStyle='#ff6b9d'; ctx.fill(straw);
+      ctx.lineWidth=8; ctx.strokeStyle='#fff'; ctx.stroke(straw);
+      ctx.clip(straw);
+      ctx.strokeStyle='rgba(255,255,255,.85)'; ctx.lineWidth=10;
+      for(i=-3;i<3;i++){ ctx.beginPath(); ctx.moveTo(i*44-20,-250); ctx.lineTo(i*44+30,0); ctx.stroke(); }
+      ctx.restore();
+      /* cup body */
+      var cup=new Path2D();
+      cup.moveTo(cx-tw/2,top); cup.lineTo(cx+tw/2,top);
+      cup.lineTo(cx+bw/2,bot); cup.lineTo(cx-bw/2,bot); cup.closePath();
+      ctx.fillStyle='#f6efe2'; ctx.fill(cup);
+      ctx.lineWidth=12; ctx.strokeStyle='#fff'; ctx.stroke(cup);
+      /* tea */
+      var tea=new Path2D();
+      tea.moveTo(cx-tw/2+44,top+52); tea.lineTo(cx+tw/2-44,top+52);
+      tea.lineTo(cx+bw/2-30,bot-14); tea.lineTo(cx-bw/2+30,bot-14); tea.closePath();
+      ctx.fillStyle='#d99a55'; ctx.fill(tea);
+      /* pearls in the tea */
+      var offs=[-52,0,52,-26,26,-70,70];
+      for(i=0;i<offs.length;i++) pearl(cx+offs[i],bot-52-(i%2)*46,27);
+      /* lid */
+      var lid=new Path2D();
+      if(lid.roundRect) lid.roundRect(cx-tw/2-24,top-56,tw+48,58,16);
+      else lid.rect(cx-tw/2-24,top-56,tw+48,58);
+      ctx.fillStyle='#ffffff'; ctx.fill(lid);
+      ctx.lineWidth=10; ctx.strokeStyle='#fff'; ctx.stroke(lid);
+      ctx.lineWidth=4; ctx.strokeStyle='#d8d8d8'; ctx.stroke(lid);
+    }
+
+    function drawKandi(){
+      var beads=['#ff4d6d','#ff9f1c','#ffe74c','#51e0a5','#4dc6ff','#c792ff'];
+      var i,j;
+      for(i=0;i<3;i++){
+        var r=240+i*56, bx=60-i*30, by=H+160;
+        ctx.beginPath(); ctx.arc(bx,by,r,Math.PI*1.06,Math.PI*1.94);
+        ctx.strokeStyle='rgba(240,240,240,.95)'; ctx.lineWidth=30; ctx.stroke();
+        var n=Math.max(6,Math.floor(r*0.86/46));
+        for(j=0;j<=n;j++){
+          var a=Math.PI*1.06+(Math.PI*0.88)*j/n;
+          bead(bx+Math.cos(a)*r, by+Math.sin(a)*r, 20, beads[(j+i*2)%beads.length]);
+        }
+      }
+      bead(150,560,16,'#ff4d6d'); bead(290,600,16,'#4dc6ff');
+      bead(430,540,16,'#ffe74c'); bead(250,680,16,'#51e0a5');
+      spark(120,700,14); spark(520,660,12); spark(560,470,12);
+    }
+
+    function drawFan(){
+      var px=W-110, py=H-230, R=440;
+      var a0=-Math.PI*0.94, a1=-Math.PI*0.30, n=9, i, a;
+      ctx.save();
+      for(i=0;i<n;i++){
+        var s0=a0+(a1-a0)*i/n, s1=a0+(a1-a0)*(i+1)/n;
+        var p=new Path2D();
+        p.moveTo(px,py); p.arc(px,py,R,s0,s1); p.closePath();
+        ctx.fillStyle=(i%2)?'#202226':'#101113'; ctx.fill(p);
+        ctx.lineWidth=8; ctx.strokeStyle='#fff'; ctx.stroke(p);
+      }
+      for(i=0;i<=n;i++){
+        a=a0+(a1-a0)*i/n;
+        ctx.beginPath(); ctx.moveTo(px,py);
+        ctx.lineTo(px+Math.cos(a)*R, py+Math.sin(a)*R);
+        ctx.strokeStyle='#c9963c'; ctx.lineWidth=12; ctx.stroke();
+      }
+      ctx.beginPath(); ctx.arc(px,py,R-8,a0,a1);
+      ctx.strokeStyle='#ff2e88'; ctx.lineWidth=22; ctx.stroke();
+      ctx.beginPath(); ctx.arc(px,py,36,0,7);
+      ctx.fillStyle='#f2f2f2'; ctx.fill();
+      ctx.lineWidth=8; ctx.strokeStyle='#111'; ctx.stroke();
+      ctx.restore();
+    }
+
+    /* radial bulge at face height */
+    function bulge(){
+      var cxp=W/2, cyp=H*0.44, R=Math.min(W,H)*0.44, str=0.72, R2=R*R;
+      var src, x, y, dx, dy, r2, t, k, nx, ny, si, di;
+      try{ src=ctx.getImageData(0,0,W,H); }catch(e){ return; }
+      var dst=ctx.createImageData(W,H), sd=src.data, dd=dst.data;
+      for(y=0;y<H;y++){
+        for(x=0;x<W;x++){
+          dx=x-cxp; dy=y-cyp; r2=dx*dx+dy*dy; nx=x; ny=y;
+          if(r2<R2&&r2>1){
+            t=Math.sqrt(r2)/R;
+            k=1-str*(1-t*t)*(1-t*t);
+            nx=cxp+dx*k; ny=cyp+dy*k;
+          }
+          si=((ny|0)*W+(nx|0))*4; di=(y*W+x)*4;
+          dd[di]=sd[si]; dd[di+1]=sd[si+1]; dd[di+2]=sd[si+2]; dd[di+3]=sd[si+3];
+        }
+      }
+      ctx.putImageData(dst,0,0);
+    }
+
+    function render(){
+      ctx.clearRect(0,0,W,H);
+      if(!srcImg){ placeholder(); return; }
+      drawCover(srcImg);
+      if(activeMeme==='bass') bulge();
+      captions();
+      if(activeMeme==='boba') drawBoba();
+      else if(activeMeme==='kandi') drawKandi();
+      else if(activeMeme==='clacker') drawFan();
+    }
+
+    function loadFile(f){
+      setNote('cooking...');
+      var url=URL.createObjectURL(f);
+      function done(img){
+        srcImg=img;
+        try{ URL.revokeObjectURL(url); }catch(e){}
+        setNote(''); render();
+      }
+      function imgFallback(){
+        var img=new Image();
+        img.onload=function(){ done(img); };
+        img.onerror=function(){ setNote('could not read that photo'); };
+        img.src=url;
+      }
+      if(window.createImageBitmap){
+        window.createImageBitmap(f,{imageOrientation:'from-image'}).then(done,imgFallback);
+      } else imgFallback();
+    }
+
+    fileInput.addEventListener('change',function(){
+      var f=fileInput.files&&fileInput.files[0];
+      if(f) loadFile(f);
+    });
+    filterBar.addEventListener('click',function(e){
+      var b=e.target.closest('[data-meme]');
+      if(!b) return;
+      activeMeme=b.getAttribute('data-meme');
+      filterBar.querySelectorAll('[data-meme]').forEach(function(x){
+        x.setAttribute('aria-pressed',String(x===b));
+      });
+      render();
+    });
+    saveBtn.addEventListener('click',function(){
+      if(!srcImg){ setNote('grab a photo first'); return; }
+      render();
+      canvas.toBlob(function(blob){
+        if(!blob){ setNote('could not make the image'); return; }
+        var url=URL.createObjectURL(blob), a=document.createElement('a');
+        a.href=url; a.download='niteharts-'+activeMeme+'.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function(){ URL.revokeObjectURL(url); },5000);
+        setNote('saved. go be iconic.');
+      },'image/png');
+    });
+    retakeBtn.addEventListener('click',function(){
+      fileInput.value=''; srcImg=null; render(); setNote('');
+    });
+    try{
+      if(shareBtn&&navigator.canShare&&navigator.canShare({files:[new File(['x'],'x.png',{type:'image/png'})]})){
+        shareBtn.hidden=false;
+        shareBtn.addEventListener('click',function(){
+          if(!srcImg){ setNote('grab a photo first'); return; }
+          render();
+          canvas.toBlob(function(blob){
+            if(!blob){ setNote('could not make the image'); return; }
+            var f=new File([blob],'niteharts-meme.png',{type:'image/png'});
+            if(navigator.share) navigator.share({files:[f],title:'Niteharts Meme Lab'})['catch'](function(){});
+          },'image/png');
+        });
+      }
+    }catch(e){}
+    render();
+  })();
 
   /* ============================================================
      3. PUBLIC PHOTO FEED
