@@ -127,6 +127,20 @@
 .fmap-venueprev .sim-tag{font:700 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ice-strong);border:1px solid var(--ice);border-radius:3px;padding:4px 8px}
 .fmap-venueprev p{margin:0;font:400 .72rem var(--mono);color:var(--mist)}
 .fmap-sim-banner{margin:0 0 10px;padding:10px 14px;text-align:center;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:#0b0c0d;background:var(--ice);border-radius:4px}
+.fmap-sim-spots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.fmap-sim-spot{font-size:.72rem;min-height:40px;background:rgba(11,12,13,.12);border:1px solid rgba(11,12,13,.3);color:#0b0c0d}
+/* ---------- late night afters ---------- */
+.module-sub{margin:0 0 16px;font:400 .9rem/1.5 var(--sans);color:var(--mist)}
+.latenight-card{background:#101114;border:1px solid var(--line);border-radius:14px;padding:20px;margin:0 0 12px}
+.latenight-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.latenight-top strong{font:700 1.4rem var(--sans);color:var(--paper);letter-spacing:.02em}
+.latenight-tag{font:600 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ice);background:rgba(159,201,239,.12);border:1px solid rgba(159,201,239,.35);padding:4px 10px;border-radius:20px}
+.latenight-present{margin:0 0 10px;font:400 .8rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--mist)}
+.latenight-line{margin:0 0 10px;font:600 1rem/1.6 var(--sans);color:var(--paper)}
+.latenight-meta{margin:0 0 8px;font:600 .85rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ice)}
+.latenight-note{margin:0 0 16px;font:400 .92rem/1.5 var(--sans);color:var(--mist)}
+.latenight-cta{display:inline-block;text-decoration:none;min-height:48px;line-height:48px;padding:0 24px}
+.latenight-more{margin:0;font:400 .85rem var(--sans);color:var(--mist)}
 /* item 8: map tabs fully legible on mobile */
 .map-switch.segmented{display:flex;flex-wrap:wrap;align-items:center}
 .map-switch.segmented button{flex:1 1 auto;white-space:nowrap}
@@ -139,6 +153,24 @@
 .fmap-chip[data-cat="food"]{--pin:#ff9800}
 .fmap-chip[data-cat="bar"]{--pin:#26c6da}
 .fmap-chip[data-cat="info"]{--pin:#f5f0dc}
+/* ---------- map info panel: tight, readable, thumb-friendly ---------- */
+.omap-info{background:#101114;border:1px solid var(--line);border-radius:14px;padding:18px;margin:12px 0 0}
+.omap-info[hidden]{display:none}
+.omap-info-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 6px}
+.omap-info-head h3{margin:0;font:700 1.25rem var(--sans);color:var(--paper);letter-spacing:.01em}
+.omap-info-cat{font:600 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ice);background:rgba(159,201,239,.12);border:1px solid rgba(159,201,239,.35);padding:4px 10px;border-radius:20px;white-space:nowrap}
+.omap-info>p{margin:0 0 14px;font:400 .95rem/1.5 var(--sans);color:var(--mist)}
+.omap-info-actions{display:flex;gap:10px;flex-wrap:wrap}
+.omap-info-actions .set-btn{flex:1 1 auto;min-height:48px;font-size:.85rem}
+.omap-steps{margin:0 0 14px;padding-left:20px;font:400 .9rem/1.6 var(--sans);color:var(--mist)}
+.omap-steps .st-min{color:var(--ice)}
+.fmap-steps-toggle{margin:0 0 10px}
+@media (max-width:480px){
+  .omap-info{padding:16px;border-radius:12px}
+  .omap-info-head h3{font-size:1.15rem}
+  .omap-info-actions{flex-direction:column}
+  .omap-info-actions .set-btn{width:100%;min-height:52px}
+}
 .fmap-legend[hidden]{display:none}
 .fmap-legend-toggle{margin:0}
 /* map search */
@@ -472,6 +504,20 @@
         <div class="schedule-toolbar"><div class="toolbar-row"><div class="segmented" aria-label="Choose a day"><button type="button" aria-pressed="true" data-day="friday">Fri 10/09</button><button type="button" aria-pressed="false" data-day="saturday">Sat 10/10</button><button type="button" aria-pressed="false" data-day="sunday">Sun 10/11</button></div><div class="stage-filter stage-filter--compact" aria-label="Filter by stage"><button type="button" aria-pressed="true" data-stage-filter="all">All</button><button type="button" aria-pressed="false" data-stage-filter="main">Main</button><button type="button" aria-pressed="false" data-stage-filter="valorant">Valorant</button></div></div><label class="search-wrap"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search artists</span><input id="artistSearch" type="search" placeholder="Search artist or genre" autocomplete="off" /></label></div>
         <div class="day-intro"><h3 class="day-title" id="dayTitle">Friday</h3><div class="day-facts"><span>Doors <strong id="doorsTime">3:00 PM</strong></span><span>Ends <strong id="endTime">11:00 PM</strong></span></div></div>
         <div id="scheduleGrid" class="schedule-grid" aria-live="polite"></div><div id="emptyState" class="empty-state">No artists match that search.</div>
+      </section>
+
+      <section class="module latenight-module" data-module-id="latenight" data-module-label="Late Night" aria-labelledby="lateNightTitle">
+        <div class="module-head"><h2 id="lateNightTitle">Late Night</h2></div>
+        <p class="module-sub">the festival ends. the night doesn't. unofficial afters, keep it moving.</p>
+        <article class="latenight-card">
+          <div class="latenight-top"><strong>NITESHIFT</strong><span class="latenight-tag">unofficial afters</span></div>
+          <p class="latenight-present">revive x innrsrcl present</p>
+          <p class="latenight-line">subjectivv · petra · jdorrah · asohii · intrphaz3 · kawn</p>
+          <p class="latenight-meta">fri oct 9, 1am til late · downtown san diego · 21+</p>
+          <p class="latenight-note">deep grooves and hypnotic rhythms after the festival. rsvp for location and updates.</p>
+          <a class="set-btn latenight-cta" href="https://partiful.com/e/TFlNK1oNGsrE5Uf7gtDb" target="_blank" rel="noopener">rsvp on partiful</a>
+        </article>
+        <p class="latenight-more">more nights announced soon. check back.</p>
       </section>
 
       <section class="module lineup-module" data-module-id="lineup" data-module-label="My Lineup" aria-labelledby="myLineupTitle">
@@ -2410,6 +2456,15 @@
       /* ---------- venue preview: simulate being on-site (SIMULATION) ---------- */
       var venuePrevBtn=document.getElementById('fmapVenuePrevBtn'),simTag=document.getElementById('fmapSimTag');
       var simOn=false,simSweep=null,simBanner=null;
+      var simSpots=[['ga_entrance','GA entrance'],['ga_parking','GA parking lot'],['main_stage','Main Stage'],['vip_entrance','VIP entrance'],['trolley','Trolley stop']];
+      function simMoveTo(nodeId,label){
+        var n=D.nodes[nodeId]; if(!n)return;
+        gpsNode=nodeId;gpsCentered=false;gpsHeading=0;
+        drawGps(n.x,n.y,8);
+        if(simBanner){var t=simBanner.querySelector('.fmap-sim-where');if(t)t.textContent='simulation — fake GPS at '+label;}
+        var o1=originSel.querySelector('option[value="__gps"]');if(o1)o1.disabled=false;
+        if(originSel.value==='__gps'&&activeRoute&&activeRoute.route&&!activeRoute.route.same){showRoute(nodeId,activeRoute.to,activeRoute.title);}
+      }
       function stopSim(){
         if(!simOn)return;
         simOn=false;
@@ -2439,7 +2494,15 @@
           },240);
           simBanner=document.createElement('div');
           simBanner.className='fmap-sim-banner';
-          simBanner.textContent='simulation — fake GPS at GA entrance';
+          simBanner.innerHTML='<span class="fmap-sim-where">simulation — fake GPS at GA entrance</span><span class="fmap-sim-spots"></span>';
+          var spotsWrap=simBanner.querySelector('.fmap-sim-spots');
+          simSpots.forEach(function(sp){
+            var b=document.createElement('button');
+            b.type='button';b.className='set-btn fmap-sim-spot';b.textContent=sp[1];
+            b.setAttribute('aria-label','Simulate GPS at '+sp[1]);
+            b.addEventListener('click',function(){simMoveTo(sp[0],sp[1]);});
+            spotsWrap.appendChild(b);
+          });
           var viewer=document.getElementById('fmapViewer');
           if(viewer&&viewer.parentNode)viewer.parentNode.insertBefore(simBanner,viewer);
           var o1=originSel.querySelector('option[value="__gps"]');if(o1)o1.disabled=false;
