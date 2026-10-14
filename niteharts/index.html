@@ -343,7 +343,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
     /* Phone view: keep the festival essentials up front and put secondary sections on demand. */
     .mobile-quicknav{display:none}
     @media(max-width:600px){
-      .mobile-quicknav{position:sticky;top:0;z-index:74;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:0 -12px;background:var(--line);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.24)}
+      .mobile-quicknav{position:sticky;top:0;z-index:74;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;margin:0 -12px;background:var(--line);border-bottom:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.24)}
       .mobile-quicknav a,.mobile-quicknav button{appearance:none;min-width:0;min-height:48px;display:grid;place-items:center;border:0;background:var(--deep);color:var(--paper);padding:7px 4px;text-decoration:none;text-align:center;font:600 .59rem/1.15 var(--mono);text-transform:uppercase;letter-spacing:.02em;touch-action:manipulation}
       .mobile-quicknav a:active,.mobile-quicknav button:active{background:var(--ice);color:var(--night)}
       .mobile-quicknav .is-active{background:var(--paper);color:var(--night)}
@@ -361,8 +361,8 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
       .module h2{font-size:2.2rem}
       .module-label{max-width:44%;font-size:.57rem;text-align:right}
       
-      body:not(.mobile-show-all) [data-module-id="first"],body:not(.mobile-show-all) [data-module-id="feedback"],body:not(.mobile-show-all) [data-module-id="feed"],body:not(.mobile-show-all) [data-module-id="lostfound"],body:not(.mobile-show-all) .prohibited-block{display:none}
-      body.mobile-show-all [data-module-id="first"]:not([hidden]),body.mobile-show-all [data-module-id="feedback"]:not([hidden]),body.mobile-show-all [data-module-id="feed"]:not([hidden]),body.mobile-show-all [data-module-id="lostfound"]:not([hidden]),body.mobile-show-all .prohibited-block{display:block}
+      body:not(.mobile-show-all) [data-module-id="first"],body:not(.mobile-show-all) [data-module-id="feedback"],body:not(.mobile-show-all) [data-module-id="feed"],body:not(.mobile-show-all) .prohibited-block{display:none}
+      body.mobile-show-all [data-module-id="first"]:not([hidden]),body.mobile-show-all [data-module-id="feedback"]:not([hidden]),body.mobile-show-all [data-module-id="feed"]:not([hidden]),body.mobile-show-all .prohibited-block{display:block}
       .schedule-toolbar{gap:10px;padding-bottom:14px}.toolbar-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stage-filter--compact button{padding-inline:4px;font-size:.6rem}
       .day-intro{gap:8px;padding-bottom:12px}
       .day-title{font-size:3.65rem}
@@ -543,6 +543,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
       <div class="next-banner-inner"><span class="next-status" id="nextStatus">Up next</span><time class="next-time" id="nextTime">Fri · 4:00 PM</time><span class="next-artist" id="nextArtist">Knock2 &amp; Friends · Main</span><button class="next-jump" id="nextJump" type="button">View set</button></div>
     </div>
     <nav class="mobile-quicknav" aria-label="Festival quick links">
+      <a href="#lostfoundTitle">Lost &amp; Found</a>
       <a href="#scheduleTitle">Set times</a>
       <a href="#myLineupTitle">My lineup</a>
       <a href="#mapTitle">Map</a>
@@ -567,6 +568,56 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
           <p>afters venues drop the day of. rsvp on partiful for the location text, then rideshare from the trolley stop.</p>
         </div>
       </section>
+      <!-- LOST & FOUND -->
+      <section class="module lostfound-module" data-module-id="lostfound" data-module-label="Lost &amp; Found" aria-labelledby="lostfoundTitle">
+        <div class="module-head"><h2 id="lostfoundTitle">Lost &amp; Found</h2><span class="module-label">Post-event recovery</span></div>
+        <p class="module-sub">lost something at Niteharts? found something that isn't yours? post it here and help it get home.</p>
+        <div id="nh-lostfound">
+          <div class="lf-toolbar">
+            <div class="segmented" role="group" aria-label="Filter lost and found posts">
+              <button type="button" data-lf-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-lf-filter="lost" aria-pressed="false">Lost</button>
+              <button type="button" data-lf-filter="found" aria-pressed="false">Found</button>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <span class="lf-count" id="lfCount" aria-live="polite"></span>
+              <button type="button" id="lfRefresh" class="lens-btn lens-ghost">Refresh</button>
+            </div>
+          </div>
+          <div class="lf-grid" id="lfGrid" aria-live="polite"></div>
+          <p class="lf-empty" id="lfEmpty" hidden>No posts yet. Lost something or picked something up? Post it below.</p>
+          <p class="lf-offline" id="lfOffline" hidden>The board is still waking up. Check back in a bit.</p>
+          <details class="lineup-save-details" id="lfFormDetails">
+            <summary>Post a lost or found item</summary>
+            <form class="lf-form" id="lfForm" novalidate>
+              <div class="fb-pills" role="group" aria-label="Is this lost or found">
+                <button type="button" data-kind="lost" aria-pressed="true">I lost it</button>
+                <button type="button" data-kind="found" aria-pressed="false">I found it</button>
+              </div>
+              <label class="fb-field"><span>Item</span><input type="text" id="lfItem" maxlength="80" placeholder="e.g. black iPhone in a clear case" required autocomplete="off" /></label>
+              <label class="fb-field"><span>Where <i>(stage or area)</i></span><select id="lfLocation">
+                <option value="">Not sure</option>
+                <option>Main stage</option>
+                <option>Valorant stage</option>
+                <option>GA entrance</option>
+                <option>Merch</option>
+                <option>Lockers</option>
+                <option>Food / bar area</option>
+                <option>Bathrooms</option>
+                <option>Parking / rideshare</option>
+                <option>Trolley stop</option>
+                <option>Somewhere else on the grounds</option>
+              </select></label>
+              <label class="fb-field"><span>Details</span><textarea id="lfDesc" rows="3" maxlength="500" placeholder="color, brand, stickers, anything that identifies it"></textarea></label>
+              <label class="fb-field"><span>Your Instagram <i>(so people can reach you)</i></span><input type="text" id="lfIg" maxlength="40" placeholder="@yourhandle" autocomplete="off" spellcheck="false" /></label>
+              <label class="fb-field lf-file"><span>Photo <i>(optional)</i></span><input type="file" id="lfPhoto" accept="image/*" /></label>
+              <div><button class="fb-submit" type="submit" id="lfSubmit">Post it</button></div>
+              <p class="fb-note" id="lfNote" role="status" aria-live="polite"></p>
+            </form>
+          </details>
+        </div>
+      </section>
+
       <section class="module" data-module-id="first" data-module-label="First up" aria-labelledby="tonightTitle">
         <div class="module-head"><h2 id="tonightTitle">First up</h2><span class="module-label">Friday</span></div>
         <div class="quick-schedule"><div class="quick-set"><time>4:00 PM</time><strong>Knock2 & Friends</strong><span>Main</span></div><div class="quick-set"><time>4:45 PM</time><strong>Yaego</strong><span>Main</span></div><div class="quick-set valorant"><time>5:00 PM</time><strong>Acyan</strong><span>Valorant</span></div><div class="quick-set"><time>5:30 PM</time><strong>Frost Children</strong><span>Main</span></div></div>
@@ -1184,55 +1235,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
         </div>
       </section>
 
-      <!-- LOST & FOUND -->
-      <section class="module lostfound-module" data-module-id="lostfound" data-module-label="Lost &amp; Found" aria-labelledby="lostfoundTitle">
-        <div class="module-head"><h2 id="lostfoundTitle">Lost &amp; Found</h2><span class="module-label">Post-event recovery</span></div>
-        <p class="module-sub">lost something at Niteharts? found something that isn't yours? post it here and help it get home.</p>
-        <div id="nh-lostfound">
-          <div class="lf-toolbar">
-            <div class="segmented" role="group" aria-label="Filter lost and found posts">
-              <button type="button" data-lf-filter="all" aria-pressed="true">All</button>
-              <button type="button" data-lf-filter="lost" aria-pressed="false">Lost</button>
-              <button type="button" data-lf-filter="found" aria-pressed="false">Found</button>
-            </div>
-            <div style="display:flex;gap:10px;align-items:center">
-              <span class="lf-count" id="lfCount" aria-live="polite"></span>
-              <button type="button" id="lfRefresh" class="lens-btn lens-ghost">Refresh</button>
-            </div>
-          </div>
-          <div class="lf-grid" id="lfGrid" aria-live="polite"></div>
-          <p class="lf-empty" id="lfEmpty" hidden>No posts yet. Lost something or picked something up? Post it below.</p>
-          <p class="lf-offline" id="lfOffline" hidden>The board is still waking up. Check back in a bit.</p>
-          <details class="lineup-save-details" id="lfFormDetails">
-            <summary>Post a lost or found item</summary>
-            <form class="lf-form" id="lfForm" novalidate>
-              <div class="fb-pills" role="group" aria-label="Is this lost or found">
-                <button type="button" data-kind="lost" aria-pressed="true">I lost it</button>
-                <button type="button" data-kind="found" aria-pressed="false">I found it</button>
-              </div>
-              <label class="fb-field"><span>Item</span><input type="text" id="lfItem" maxlength="80" placeholder="e.g. black iPhone in a clear case" required autocomplete="off" /></label>
-              <label class="fb-field"><span>Where <i>(stage or area)</i></span><select id="lfLocation">
-                <option value="">Not sure</option>
-                <option>Main stage</option>
-                <option>Valorant stage</option>
-                <option>GA entrance</option>
-                <option>Merch</option>
-                <option>Lockers</option>
-                <option>Food / bar area</option>
-                <option>Bathrooms</option>
-                <option>Parking / rideshare</option>
-                <option>Trolley stop</option>
-                <option>Somewhere else on the grounds</option>
-              </select></label>
-              <label class="fb-field"><span>Details</span><textarea id="lfDesc" rows="3" maxlength="500" placeholder="color, brand, stickers, anything that identifies it"></textarea></label>
-              <label class="fb-field"><span>Your Instagram <i>(so people can reach you)</i></span><input type="text" id="lfIg" maxlength="40" placeholder="@yourhandle" autocomplete="off" spellcheck="false" /></label>
-              <label class="fb-field lf-file"><span>Photo <i>(optional)</i></span><input type="file" id="lfPhoto" accept="image/*" /></label>
-              <div><button class="fb-submit" type="submit" id="lfSubmit">Post it</button></div>
-              <p class="fb-note" id="lfNote" role="status" aria-live="polite"></p>
-            </form>
-          </details>
-        </div>
-      </section>
+
 
       <section class="module feedback-module" data-module-id="feedback" data-module-label="Feedback" aria-labelledby="feedbackTitle">
         <div class="module-head"><h2 id="feedbackTitle">Feedback</h2><span class="module-label">Report bugs · Share ideas · Quick survey</span></div>
@@ -5204,7 +5207,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
     var mod=h&&h.closest?h.closest('.module'):null;
     if(mod)sections.push({el:mod,tab:a});
   });
-  ['first','graphics','info','merch','arcade','lens','feed','lostfound','feedback'].forEach(function(id){
+  ['first','graphics','info','merch','arcade','lens','feed','feedback'].forEach(function(id){
     var mod=document.querySelector('[data-module-id="'+id+'"]');
     if(mod&&toggle)sections.push({el:mod,tab:toggle});
   });
