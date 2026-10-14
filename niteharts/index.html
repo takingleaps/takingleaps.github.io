@@ -361,8 +361,8 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
       .module h2{font-size:2.2rem}
       .module-label{max-width:44%;font-size:.57rem;text-align:right}
       
-      body:not(.mobile-show-all) [data-module-id="first"],body:not(.mobile-show-all) [data-module-id="feedback"],body:not(.mobile-show-all) [data-module-id="feed"],body:not(.mobile-show-all) .prohibited-block{display:none}
-      body.mobile-show-all [data-module-id="first"]:not([hidden]),body.mobile-show-all [data-module-id="feedback"]:not([hidden]),body.mobile-show-all [data-module-id="feed"]:not([hidden]),body.mobile-show-all .prohibited-block{display:block}
+      body:not(.mobile-show-all) [data-module-id="first"],body:not(.mobile-show-all) [data-module-id="feedback"],body:not(.mobile-show-all) [data-module-id="feed"],body:not(.mobile-show-all) [data-module-id="lostfound"],body:not(.mobile-show-all) .prohibited-block{display:none}
+      body.mobile-show-all [data-module-id="first"]:not([hidden]),body.mobile-show-all [data-module-id="feedback"]:not([hidden]),body.mobile-show-all [data-module-id="feed"]:not([hidden]),body.mobile-show-all [data-module-id="lostfound"]:not([hidden]),body.mobile-show-all .prohibited-block{display:block}
       .schedule-toolbar{gap:10px;padding-bottom:14px}.toolbar-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stage-filter--compact button{padding-inline:4px;font-size:.6rem}
       .day-intro{gap:8px;padding-bottom:12px}
       .day-title{font-size:3.65rem}
@@ -919,6 +919,34 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
 #nh-feed .feed-del{position:absolute;top:6px;right:6px;z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,120,120,.6);background:rgba(0,0,0,.65);color:#ff8080;font-size:22px;line-height:1;cursor:pointer}
 #nh-feed .feed-tag{position:absolute;left:6px;bottom:6px;font:400 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(5,7,12,.72);color:var(--ice-strong);padding:5px 8px;border-radius:999px}
 #nh-feed .feed-empty{color:var(--mist);font-size:14px;text-align:center;padding:28px 12px;border:1px dashed var(--line);border-radius:14px}
+/* LOST & FOUND */
+#nh-lostfound .lf-toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;justify-content:space-between;align-items:center;margin-bottom:14px}
+#nh-lostfound .lf-count{font:400 .66rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mist)}
+.lf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.lf-card{position:relative;border:1px solid var(--line);border-radius:2px;background:var(--panel);padding:16px 16px 14px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.lf-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.lf-kind{font:700 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:6px 10px;border-radius:999px;border:1px solid}
+.lf-kind--lost{color:#ff9090;border-color:rgba(255,128,128,.5);background:rgba(255,128,128,.07)}
+.lf-kind--found{color:var(--ice-strong);border-color:rgba(120,190,255,.45);background:rgba(120,190,255,.07)}
+.lf-time{font:400 .62rem/1.4 var(--mono);color:var(--mist);text-transform:uppercase;white-space:nowrap}
+.lf-item{margin:0;font-family:var(--display);font-size:1.4rem;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;line-height:1;overflow-wrap:anywhere}
+.lf-desc{margin:0;color:var(--mist);font-size:.82rem;line-height:1.55;overflow-wrap:anywhere}
+.lf-photo{width:100%;display:block;border:1px solid var(--line);border-radius:2px;max-height:230px;object-fit:cover;background:#05070c}
+.lf-meta{display:flex;flex-wrap:wrap;gap:6px 16px;font:400 .68rem/1.5 var(--mono);color:var(--mist)}
+.lf-meta a{color:var(--ice-strong);text-decoration:none}
+.lf-meta a:hover{text-decoration:underline}
+.lf-foot{display:flex;justify-content:flex-end;margin-top:auto;padding-top:2px}
+.lf-hide{appearance:none;background:transparent;border:0;color:var(--mist);font:400 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;cursor:pointer;padding:10px 4px;min-height:44px}
+.lf-hide:hover{color:var(--paper)}
+.lf-empty{color:var(--mist);font-size:14px;text-align:center;padding:28px 12px;border:1px dashed var(--line);border-radius:14px;margin:0 0 14px}
+.lf-offline{color:var(--mist);font-size:13px;text-align:center;padding:16px 12px;margin:0 0 14px}
+.lf-form{display:grid;gap:14px;padding:16px 2px 4px}
+.lf-form .fb-pills button[aria-pressed=true]{background:var(--paper);color:var(--night);border-color:var(--paper)}
+.lf-form .fb-pills button[data-kind="lost"][aria-pressed=true]{background:#ff9090;border-color:#ff9090;color:#101113}
+.lf-form .fb-pills button[data-kind="found"][aria-pressed=true]{background:var(--ice);border-color:var(--ice);color:#101113}
+.lf-file{color:var(--mist);font:400 .78rem/1.5 var(--mono)}
+.lf-file input[type=file]{display:block;margin-top:8px;color:var(--paper)}
+@media(max-width:600px){.lf-grid{grid-template-columns:minmax(0,1fr)}}
 #nh-review{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;background:rgba(5,7,12,.88);overflow-y:auto}
 #nh-review[hidden]{display:none}
 #nh-review .review-panel{width:100%;max-width:520px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
@@ -1153,6 +1181,56 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
           <div class="feed-bar"><button type="button" id="feedRefresh" class="lens-btn lens-ghost">Refresh</button></div>
           <div class="feed-grid" id="feedGrid" aria-live="polite"></div>
           <p class="feed-empty" id="feedEmpty" hidden>No photos yet. Be the first to post from Niteharts Lens.</p>
+        </div>
+      </section>
+
+      <!-- LOST & FOUND -->
+      <section class="module lostfound-module" data-module-id="lostfound" data-module-label="Lost &amp; Found" aria-labelledby="lostfoundTitle">
+        <div class="module-head"><h2 id="lostfoundTitle">Lost &amp; Found</h2><span class="module-label">Post-event recovery</span></div>
+        <p class="module-sub">lost something at Niteharts? found something that isn't yours? post it here and help it get home.</p>
+        <div id="nh-lostfound">
+          <div class="lf-toolbar">
+            <div class="segmented" role="group" aria-label="Filter lost and found posts">
+              <button type="button" data-lf-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-lf-filter="lost" aria-pressed="false">Lost</button>
+              <button type="button" data-lf-filter="found" aria-pressed="false">Found</button>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <span class="lf-count" id="lfCount" aria-live="polite"></span>
+              <button type="button" id="lfRefresh" class="lens-btn lens-ghost">Refresh</button>
+            </div>
+          </div>
+          <div class="lf-grid" id="lfGrid" aria-live="polite"></div>
+          <p class="lf-empty" id="lfEmpty" hidden>No posts yet. Lost something or picked something up? Post it below.</p>
+          <p class="lf-offline" id="lfOffline" hidden>The board is still waking up. Check back in a bit.</p>
+          <details class="lineup-save-details" id="lfFormDetails">
+            <summary>Post a lost or found item</summary>
+            <form class="lf-form" id="lfForm" novalidate>
+              <div class="fb-pills" role="group" aria-label="Is this lost or found">
+                <button type="button" data-kind="lost" aria-pressed="true">I lost it</button>
+                <button type="button" data-kind="found" aria-pressed="false">I found it</button>
+              </div>
+              <label class="fb-field"><span>Item</span><input type="text" id="lfItem" maxlength="80" placeholder="e.g. black iPhone in a clear case" required autocomplete="off" /></label>
+              <label class="fb-field"><span>Where <i>(stage or area)</i></span><select id="lfLocation">
+                <option value="">Not sure</option>
+                <option>Main stage</option>
+                <option>Valorant stage</option>
+                <option>GA entrance</option>
+                <option>Merch</option>
+                <option>Lockers</option>
+                <option>Food / bar area</option>
+                <option>Bathrooms</option>
+                <option>Parking / rideshare</option>
+                <option>Trolley stop</option>
+                <option>Somewhere else on the grounds</option>
+              </select></label>
+              <label class="fb-field"><span>Details</span><textarea id="lfDesc" rows="3" maxlength="500" placeholder="color, brand, stickers, anything that identifies it"></textarea></label>
+              <label class="fb-field"><span>Your Instagram <i>(so people can reach you)</i></span><input type="text" id="lfIg" maxlength="40" placeholder="@yourhandle" autocomplete="off" spellcheck="false" /></label>
+              <label class="fb-field lf-file"><span>Photo <i>(optional)</i></span><input type="file" id="lfPhoto" accept="image/*" /></label>
+              <div><button class="fb-submit" type="submit" id="lfSubmit">Post it</button></div>
+              <p class="fb-note" id="lfNote" role="status" aria-live="polite"></p>
+            </form>
+          </details>
         </div>
       </section>
 
@@ -4670,6 +4748,183 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
   } else { loadFeed(); }
 
   /* ============================================================
+     3b. LOST & FOUND BOARD
+  ============================================================ */
+  var lfGrid = document.getElementById('lfGrid');
+  var lfEmpty = document.getElementById('lfEmpty');
+  var lfOffline = document.getElementById('lfOffline');
+  var lfCount = document.getElementById('lfCount');
+  var lfRefresh = document.getElementById('lfRefresh');
+  var lfFilter = 'all';
+  var lfRows = [];
+  var lfLoaded = false;
+  var LF_HIDE_KEY = 'nh_lf_hidden';
+  function lfHiddenIds() {
+    try { return JSON.parse(lsGet(LF_HIDE_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function lfIsHidden(id) { return lfHiddenIds().indexOf(String(id)) !== -1; }
+  function lfHide(id) {
+    var ids = lfHiddenIds();
+    id = String(id);
+    if (ids.indexOf(id) === -1) { ids.push(id); try { localStorage.setItem(LF_HIDE_KEY, JSON.stringify(ids)); } catch (e) {} }
+    renderLf();
+  }
+  function lfTimeAgo(iso) {
+    try {
+      var d = new Date(iso), now = Date.now(), ms = now - d.getTime();
+      if (isNaN(ms) || ms < 0) return '';
+      var m = Math.floor(ms / 60000);
+      if (m < 1) return 'just now';
+      if (m < 60) return m + 'm ago';
+      var h = Math.floor(m / 60);
+      if (h < 24) return h + 'h ago';
+      var days = Math.floor(h / 24);
+      if (days < 7) return days + 'd ago';
+      return (d.getMonth() + 1) + '/' + d.getDate();
+    } catch (e) { return ''; }
+  }
+  function lfIgUrl(handle) {
+    var h = String(handle || '').trim().replace(/^@+/, '').replace(/[^a-zA-Z0-9._]/g, '');
+    return h ? 'https://instagram.com/' + h : '';
+  }
+  function renderLf() {
+    if (!lfGrid) return;
+    var rows = lfRows.filter(function (r) { return !lfIsHidden(r.id); });
+    if (lfFilter !== 'all') rows = rows.filter(function (r) { return r.kind === lfFilter; });
+    if (lfCount) lfCount.textContent = rows.length ? (rows.length + (rows.length === 1 ? ' post' : ' posts')) : '';
+    if (!rows.length) {
+      lfGrid.innerHTML = '';
+      if (lfEmpty) lfEmpty.hidden = !lfLoaded;
+      return;
+    }
+    if (lfEmpty) lfEmpty.hidden = true;
+    lfGrid.innerHTML = rows.map(function (r) {
+      var kind = r.kind === 'found' ? 'found' : 'lost';
+      var badge = '<span class="lf-kind lf-kind--' + kind + '">' + kind + '</span>';
+      var time = '<span class="lf-time">' + esc(lfTimeAgo(r.created_at)) + '</span>';
+      var photo = r.photo_url ? '<img class="lf-photo" loading="lazy" decoding="async" src="' + esc(r.photo_url) + '" alt="Photo of ' + esc(r.item_name || 'item') + '">' : '';
+      var desc = r.description ? '<p class="lf-desc">' + esc(r.description) + '</p>' : '';
+      var loc = r.location ? '<span>spotted: ' + esc(r.location) + '</span>' : '';
+      var igUrl = lfIgUrl(r.contact_ig);
+      var ig = igUrl ? '<a href="' + igUrl + '" target="_blank" rel="noopener">@' + esc(String(r.contact_ig).trim().replace(/^@+/, '')) + '</a>' : '';
+      var meta = (loc || ig) ? '<div class="lf-meta">' + loc + (ig ? '<span>reach: ' + ig + '</span>' : '') + '</div>' : '';
+      return '<article class="lf-card" data-lf-id="' + esc(r.id) + '">' +
+        '<div class="lf-top">' + badge + time + '</div>' +
+        '<h3 class="lf-item">' + esc(r.item_name || 'Untitled item') + '</h3>' +
+        photo + desc + meta +
+        '<div class="lf-foot"><button type="button" class="lf-hide" data-lf-hide="' + esc(r.id) + '">hide</button></div>' +
+        '</article>';
+    }).join('');
+    Array.prototype.forEach.call(lfGrid.querySelectorAll('[data-lf-hide]'), function (b) {
+      b.addEventListener('click', function () { lfHide(b.getAttribute('data-lf-hide')); });
+    });
+  }
+  function loadLf() {
+    if (!lfGrid) return;
+    sb('/lost_found?order=created_at.desc&limit=100&select=id,item_name,kind,description,location,contact_ig,photo_url,created_at')
+      .then(function (r) {
+        if (!r.ok) throw new Error('lf ' + r.status);
+        return r.json();
+      })
+      .then(function (rows) {
+        lfRows = rows || [];
+        lfLoaded = true;
+        if (lfOffline) lfOffline.hidden = true;
+        renderLf();
+      })
+      .catch(function () {
+        if (lfOffline) lfOffline.hidden = false;
+        if (lfEmpty) lfEmpty.hidden = true;
+      });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-lf-filter]'), function (b) {
+    b.addEventListener('click', function () {
+      lfFilter = b.getAttribute('data-lf-filter');
+      Array.prototype.forEach.call(document.querySelectorAll('[data-lf-filter]'), function (x) {
+        x.setAttribute('aria-pressed', String(x === b));
+      });
+      renderLf();
+    });
+  });
+  if (lfRefresh) lfRefresh.addEventListener('click', loadLf);
+  var lfSection = document.querySelector('[data-module-id="lostfound"]');
+  if (lfSection && 'IntersectionObserver' in window) {
+    var lfVisible = false, lfTimer = null;
+    new IntersectionObserver(function (entries) {
+      var vis = entries[0] && entries[0].isIntersecting;
+      if (vis && !lfVisible) { lfVisible = true; loadLf(); lfTimer = setInterval(loadLf, 60000); }
+      else if (!vis && lfVisible) { lfVisible = false; if (lfTimer) clearInterval(lfTimer); lfTimer = null; }
+    }, { threshold: 0.05 }).observe(lfSection);
+  } else { loadLf(); }
+
+  /* lost & found post form */
+  var lfForm = document.getElementById('lfForm');
+  var lfKind = 'lost';
+  Array.prototype.forEach.call(document.querySelectorAll('#lfForm [data-kind]'), function (b) {
+    b.addEventListener('click', function () {
+      lfKind = b.getAttribute('data-kind');
+      Array.prototype.forEach.call(document.querySelectorAll('#lfForm [data-kind]'), function (x) {
+        x.setAttribute('aria-pressed', String(x === b));
+      });
+    });
+  });
+  function lfNote(msg) { var n = document.getElementById('lfNote'); if (n) n.textContent = msg || ''; }
+  function lfUploadPhoto(file) {
+    var fd = new FormData();
+    fd.append('file', file, 'lostfound.jpg');
+    fd.append('upload_preset', CL_PRESET);
+    return timedFetch(CL_UPLOAD, { method: 'POST', body: fd }, 30000).then(function (r) {
+      if (!r.ok) throw new Error('cloudinary ' + r.status);
+      return r.json();
+    }).then(function (j) {
+      if (!j || !j.secure_url) throw new Error('no url');
+      return j.secure_url;
+    });
+  }
+  if (lfForm) lfForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var itemEl = document.getElementById('lfItem');
+    var locEl = document.getElementById('lfLocation');
+    var descEl = document.getElementById('lfDesc');
+    var igEl = document.getElementById('lfIg');
+    var photoEl = document.getElementById('lfPhoto');
+    var submitBtn = document.getElementById('lfSubmit');
+    var item = itemEl ? itemEl.value.trim().slice(0, 80) : '';
+    if (!item) { lfNote('Give the item a name so people know what to look for.'); if (itemEl) itemEl.focus(); return; }
+    submitBtn.disabled = true;
+    lfNote('Posting...');
+    var photoFile = photoEl && photoEl.files && photoEl.files[0] ? photoEl.files[0] : null;
+    var up = photoFile ? lfUploadPhoto(photoFile) : Promise.resolve(null);
+    up.then(function (photoUrl) {
+      var body = {
+        item_name: item,
+        kind: lfKind,
+        description: descEl ? descEl.value.trim().slice(0, 500) : '',
+        location: locEl ? locEl.value : '',
+        contact_ig: igEl ? igEl.value.trim().slice(0, 40).replace(/^@+/, '') : '',
+        photo_url: photoUrl
+      };
+      return sb('/lost_found', { method: 'POST', body: body }).then(function (r) {
+        if (!r.ok) throw new Error('db ' + r.status);
+      });
+    }).then(function () {
+      lfNote('Posted. It is live on the board now.');
+      if (itemEl) itemEl.value = '';
+      if (descEl) descEl.value = '';
+      if (igEl) igEl.value = '';
+      if (locEl) locEl.value = '';
+      if (photoEl) photoEl.value = '';
+      var det = document.getElementById('lfFormDetails');
+      if (det) det.open = false;
+      loadLf();
+      submitBtn.disabled = false;
+    }).catch(function () {
+      lfNote('Could not post. Check your connection and try again.');
+      submitBtn.disabled = false;
+    });
+  });
+
+  /* ============================================================
      4. ADMIN MODE (Nathan — delete bad photos)
   ============================================================ */
   var adminMode = false;
@@ -4949,7 +5204,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
     var mod=h&&h.closest?h.closest('.module'):null;
     if(mod)sections.push({el:mod,tab:a});
   });
-  ['first','graphics','info','merch','arcade','lens','feed','feedback'].forEach(function(id){
+  ['first','graphics','info','merch','arcade','lens','feed','lostfound','feedback'].forEach(function(id){
     var mod=document.querySelector('[data-module-id="'+id+'"]');
     if(mod&&toggle)sections.push({el:mod,tab:toggle});
   });
