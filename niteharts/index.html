@@ -178,7 +178,7 @@ body.afters-mode{--ice:#c9a6ff}
 .afters-venue strong{display:block;margin-bottom:8px;font:700 .85rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:#c9a6ff}
 .afters-venue p{margin:0;font:400 .92rem/1.55 var(--sans);color:var(--mist)}
 @media (max-width:480px){.afters-actions .set-btn{flex:1 1 auto;min-height:52px}}
-body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
+body.afters-mode .nh-extras-strip{display:none}
 /* item 8: map tabs fully legible on mobile */
 .map-switch.segmented{display:flex;flex-wrap:wrap;align-items:center}
 .map-switch.segmented button{flex:1 1 auto;white-space:nowrap}
@@ -394,15 +394,16 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
     #mapViewInteractive[hidden],#mapViewStill[hidden]{display:none!important}
     .still-map{overflow:auto;border:1px solid var(--line);border-radius:3px;background:#0b0c0d;margin-bottom:18px}
     .still-map img{display:block;min-width:900px;width:100%;height:auto;-webkit-user-drag:none;user-select:none}
-    /* ---- festival guide ---- */
-    .guide-sticker{display:flex;align-items:center;justify-content:center;gap:14px;width:min(560px,calc(100% - 32px));margin:6px auto 4px;padding:16px 22px;background:#0a0e16;border:2px solid #8fd8ff;border-radius:18px;color:#fff;cursor:pointer;font-family:'Courier New',Courier,monospace;box-shadow:0 0 22px rgba(143,216,255,.35),0 6px 18px rgba(0,0,0,.5);transition:transform .18s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-    .guide-sticker:active{transform:scale(.96)}
-    .guide-sticker-text{text-align:left}
-    .guide-sticker-text strong{display:block;font-size:17px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
-    .guide-sticker-text em{font-style:normal;font-size:11px;letter-spacing:2px;color:#8fd8ff;text-transform:uppercase}
-    .guide-sticker-arrow{font-size:26px;color:#8fd8ff;animation:guideNudge 2.2s ease-in-out infinite}
-    @keyframes guideNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(7px)}}
-    @media(prefers-reduced-motion:reduce){.guide-sticker-arrow{animation:none}}
+    /* ---- lost & found sticker: jumps to the board ---- */
+    .lf-sticker{display:flex;align-items:center;justify-content:center;gap:14px;width:min(560px,calc(100% - 32px));margin:6px auto 4px;padding:16px 22px;background:#0a0e16;border:2px solid #8fd8ff;border-radius:18px;color:#fff;cursor:pointer;font-family:'Courier New',Courier,monospace;box-shadow:0 0 26px rgba(143,216,255,.45),0 6px 18px rgba(0,0,0,.5);text-decoration:none;transition:transform .18s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent;animation:lfStickerGlow 3.5s ease-in-out infinite}
+    @keyframes lfStickerGlow{0%,100%{box-shadow:0 0 26px rgba(143,216,255,.45),0 6px 18px rgba(0,0,0,.5)}50%{box-shadow:0 0 46px rgba(143,216,255,.68),0 6px 18px rgba(0,0,0,.5)}}
+    .lf-sticker:active{transform:scale(.96)}
+    .lf-sticker-text{text-align:left}
+    .lf-sticker-text strong{display:block;font-size:17px;font-weight:800;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 12px rgba(143,216,255,.6)}
+    .lf-sticker-text em{font-style:normal;font-size:11px;letter-spacing:2px;color:#8fd8ff;text-transform:uppercase}
+    .lf-sticker-arrow{font-size:26px;color:#8fd8ff;animation:lfNudge 2.2s ease-in-out infinite}
+    @keyframes lfNudge{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+    @media(prefers-reduced-motion:reduce){.lf-sticker,.lf-sticker-arrow{animation:none}}
     .guide-panel{border:1px solid var(--line);border-radius:3px;background:#0d0e10;margin:0 0 18px;overflow:hidden}
     .guide-tabs{display:flex;border-bottom:1px solid var(--line)}
     .guide-tabs button{flex:1;background:none;border:0;color:var(--mist);font:400 .68rem var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:14px 8px;cursor:pointer;min-height:48px}
@@ -501,11 +502,11 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
       <button type="button" id="modeAfters" class="mode-btn" aria-pressed="false">Afters</button>
     </div>
 
-    <!-- FESTIVAL GUIDE STICKER: promo banner for the map guide -->
-    <button type="button" class="guide-sticker" id="guideSticker" aria-label="Open the festival guide — your night, mapped">
-      <span class="guide-sticker-text"><strong>your night, mapped</strong><em>tap for the festival guide</em></span>
-      <span class="guide-sticker-arrow" aria-hidden="true">&rarr;</span>
-    </button>
+    <!-- LOST & FOUND STICKER: jumps to the board -->
+    <a class="lf-sticker" id="lfSticker" href="#lostfoundTitle" aria-label="Jump to Lost and Found">
+      <span class="lf-sticker-text"><strong>lost &amp; found</strong><em>tap to reunite stuff with its human</em></span>
+      <span class="lf-sticker-arrow" aria-hidden="true">&darr;</span>
+    </a>
     <!-- NITEHARTS EXTRAS STICKERS: game + camera, hot-sticker style -->
     <section class="nh-extras-strip" aria-label="Festival extras">
       <style>
@@ -970,7 +971,15 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
 #nh-feed .feed-del{position:absolute;top:6px;right:6px;z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,120,120,.6);background:rgba(0,0,0,.65);color:#ff8080;font-size:22px;line-height:1;cursor:pointer}
 #nh-feed .feed-tag{position:absolute;left:6px;bottom:6px;font:400 .62rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(5,7,12,.72);color:var(--ice-strong);padding:5px 8px;border-radius:999px}
 #nh-feed .feed-empty{color:var(--mist);font-size:14px;text-align:center;padding:28px 12px;border:1px dashed var(--line);border-radius:14px}
-/* LOST & FOUND */
+/* LOST & FOUND: top billing, full row, attention glow */
+.lostfound-module{grid-column:1/-1;position:relative;border:1px solid rgba(91,167,230,.32);border-radius:14px;padding:clamp(18px,3vw,30px) clamp(16px,3vw,34px) clamp(22px,3vw,32px);background:linear-gradient(180deg,rgba(91,167,230,.075),rgba(91,167,230,.02) 55%,transparent);box-shadow:0 0 54px rgba(91,167,230,.14),inset 0 1px 0 rgba(213,236,255,.12);animation:lfGlow 5s ease-in-out infinite}
+@keyframes lfGlow{0%,100%{box-shadow:0 0 54px rgba(91,167,230,.14),inset 0 1px 0 rgba(213,236,255,.12)}50%{box-shadow:0 0 84px rgba(91,167,230,.22),inset 0 1px 0 rgba(213,236,255,.16)}}
+.lostfound-module .module-head h2{color:var(--ice-strong);text-shadow:0 0 18px rgba(159,201,239,.55),0 0 46px rgba(91,167,230,.3)}
+.lostfound-module .module-label{display:inline-flex;align-items:center;border:1px solid rgba(91,167,230,.5);border-radius:999px;padding:6px 13px;color:var(--ice-strong);box-shadow:0 0 14px rgba(91,167,230,.25)}
+.lostfound-module .module-label::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ice);margin-right:9px;box-shadow:0 0 10px var(--ice);animation:lfPulse 2.4s ease-in-out infinite}
+@keyframes lfPulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(prefers-reduced-motion:reduce){.lostfound-module,.lostfound-module .module-label::before{animation:none}}
+@media(max-width:600px){.lostfound-module .module-head{flex-direction:column;align-items:flex-start;gap:10px}.lostfound-module .module-head h2{font-size:2.9rem}}
 #nh-lostfound .lf-toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;justify-content:space-between;align-items:center;margin-bottom:14px}
 #nh-lostfound .lf-count{font:400 .66rem/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mist)}
 .lf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -1877,7 +1886,7 @@ body.afters-mode .guide-sticker,body.afters-mode .nh-extras-strip{display:none}
 </script>
 
     </div>
-    <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a><a href="https://byyystudio.me/">Back to byyy.studio</a><a href="mailto:nathanltwong@gmail.com">Contact me</a><button type="button" id="reviewLink">Admin</button></footer>
+    <footer><a href="https://www.niteharts.com/" target="_blank" rel="noopener">Official Niteharts Site</a><a href="mailto:nathanltwong@gmail.com">Contact me</a><button type="button" id="reviewLink">Admin</button></footer>
   </main>
   <aside class="music-player" id="musicPlayer" aria-label="Lineup music player">
     <audio id="previewAudio" preload="auto" playsinline></audio>
