@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FLWRPWR · Good vibes, great flower</title>
+<meta name="description" content="FLWRPWR is a women-owned flower shop. Walk into the store, pick your smalls, check out at the counter.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#faf3e8; --paper:#fffaf2; --ink:#3a2b33; --ink-soft:#6d5561;
+  --lav:#e6d9f6; --lav-deep:#c3a6ec; --blush:#f6cdd9; --blush-deep:#e88bb0;
+  --mint:#c2e6d1; --mint-deep:#4f9e72; --butter:#f7e3ac; --peach:#fbd9b8;
+  --accent:#e5488c; --accent-dark:#c22f70; --green:#2f6b4e;
+  --line:rgba(58,43,51,.14); --shadow:0 18px 44px rgba(58,43,51,.14);
+  --r-lg:26px; --r-md:20px; --r-sm:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:"Nunito","Trebuchet MS",Verdana,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body.in-game{overflow:hidden}
+h1,h2,h3{font-family:"Fraunces",Georgia,"Times New Roman",serif;line-height:1.08;margin:0}
+button{font:inherit;cursor:pointer}
+a{color:var(--green)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+::selection{background:var(--blush);color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+/* announcement + nav */
+.announce{background:var(--lav);text-align:center;padding:8px 14px;font-weight:800;font-size:13.5px;letter-spacing:.04em}
+.announce span{margin:0 8px;color:var(--accent-dark)}
+.nav{position:sticky;top:0;z-index:40;background:rgba(250,243,232,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:26px;padding:12px 0}
+.logo{font-family:"Fraunces",Georgia,serif;font-weight:900;font-size:27px;letter-spacing:.01em;color:var(--ink);text-decoration:none}
+.logo i{font-style:normal;color:var(--accent)}
+.nav-links{display:flex;gap:22px;margin-left:auto}
+.nav-links a{color:var(--ink);text-decoration:none;font-weight:800;font-size:15.5px}
+.nav-links a:hover{color:var(--accent-dark);text-decoration:underline;text-underline-offset:4px}
+.bag-btn{position:relative;border:2px solid var(--ink);background:var(--paper);border-radius:999px;padding:8px 18px;font-weight:900;font-size:15px}
+.bag-btn:hover{background:var(--butter)}
+.bag-btn .n{display:inline-grid;place-items:center;min-width:23px;height:23px;padding:0 5px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;margin-left:7px;vertical-align:1px}
+.bag-btn.bump{animation:bump .5s ease}
+@keyframes bump{30%{transform:scale(1.09) rotate(-2deg)}}
+
+/* hero */
+.hero{padding:34px 0 10px}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.hero-copy{max-width:640px}
+.hero-copy h1{font-size:clamp(42px,6.4vw,74px);font-weight:900;letter-spacing:-.01em}
+.hero-copy h1 em{font-style:italic;font-weight:700;color:var(--accent-dark)}
+.hero-copy p{font-size:19px;color:var(--ink-soft);max-width:52ch;margin:16px 0 22px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border-radius:999px;border:2px solid var(--ink);padding:13px 26px;font-weight:900;font-size:16.5px;text-decoration:none;color:var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn-pink{background:var(--accent);color:#fff;border-color:var(--ink)}
+.btn-pink:hover{background:var(--accent-dark)}
+.btn-plain{border-color:transparent;box-shadow:none;background:transparent}
+.btn-plain:hover{box-shadow:none;text-decoration:underline;text-underline-offset:5px}
+.hero-note{font-size:14px;color:var(--ink-soft);font-weight:700}
+
+/* store frame (3D) */
+.store-frame{position:relative;margin-top:26px;border:3px solid var(--ink);border-radius:30px;overflow:hidden;background:#0d1410;box-shadow:var(--shadow);aspect-ratio:16/9.4;min-height:340px}
+body.in-game .store-frame{position:fixed;inset:0;z-index:60;border:none;border-radius:0;aspect-ratio:auto;min-height:0;margin:0;box-shadow:none}
+.store-frame canvas{position:absolute;inset:0;width:100%;height:100%;display:block;filter:saturate(1.09) contrast(1.05) brightness(1.03)}
+.vhs{position:absolute;inset:0;pointer-events:none}
+.vhs-scan{background:repeating-linear-gradient(to bottom,rgba(255,246,225,.20) 0 1px,rgba(10,20,16,.05) 1px 2px,transparent 2px 4px);opacity:.13;mix-blend-mode:overlay;z-index:3}
+.vhs-grain{z-index:4;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");animation:grain .5s steps(3) infinite}
+@keyframes grain{0%{background-position:0 0}33%{background-position:34px 18px}66%{background-position:-22px 40px}100%{background-position:0 0}}
+.vhs-track{z-index:3;height:110px;background:linear-gradient(to bottom,transparent,rgba(255,250,235,.075),transparent);animation:track 9s linear infinite}
+@keyframes track{0%{transform:translateY(-140px)}100%{transform:translateY(110vh)}}
+.vhs-vig{z-index:5;background:radial-gradient(ellipse at 50% 44%,transparent 52%,rgba(8,10,8,.42) 100%)}
+.hud{position:absolute;inset:0;z-index:6;pointer-events:none;font-family:"Courier New",monospace;color:#fff8df;text-shadow:2px 2px 0 rgba(23,53,41,.85),-1px 0 rgba(229,72,140,.55),1px 0 rgba(90,180,220,.5)}
+.hud .play{position:absolute;top:16px;left:20px;font-size:clamp(15px,2vw,21px);letter-spacing:.06em}
+.hud .stamp{position:absolute;top:16px;right:22px;text-align:right;font-size:clamp(13px,1.7vw,19px);line-height:1.35;white-space:nowrap;max-width:62%}
+.hud .stamp span{color:#ffe6a8;font-size:.78em}
+.hud .camtag{position:absolute;left:20px;bottom:16px;font-size:clamp(12px,1.5vw,16px);color:#d9f2dc;letter-spacing:.05em}
+.hud .rec{position:absolute;right:20px;bottom:16px;display:flex;align-items:center;gap:8px;font-size:clamp(13px,1.6vw,18px)}
+.hud .rec i{width:11px;height:11px;border-radius:50%;background:#ff5b7f;box-shadow:0 0 0 4px rgba(255,91,127,.22);animation:blink 1.5s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+.hero-ui{position:absolute;z-index:8;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;padding:18px 20px;background:linear-gradient(to top,rgba(10,16,12,.55),transparent 78%)}
+.hero-ui .walkin{pointer-events:auto}
+.hero-ui .hint{color:#fff8df;font-family:"Courier New",monospace;font-size:13.5px;letter-spacing:.04em;text-shadow:1px 1px 0 rgba(0,0,0,.6);max-width:32ch;text-align:right}
+.hud .camtag{bottom:64px}
+body.in-game .hud .camtag{bottom:16px}
+body.in-game .hero-ui{display:none}
+.loadbar{position:absolute;z-index:9;left:0;right:0;top:0;height:5px;background:rgba(255,248,223,.18)}
+.loadbar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.loadmsg{position:absolute;z-index:9;top:14px;left:50%;transform:translateX(-50%);background:rgba(12,20,14,.82);color:#fff8df;font-family:"Courier New",monospace;font-size:13px;letter-spacing:.08em;padding:7px 14px;border-radius:999px}
+.loadmsg.done{display:none}
+
+/* sections */
+section{padding:56px 0}
+.band-lav{background:linear-gradient(var(--lav),var(--lav));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.band-mint{background:var(--mint);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sec-head{max-width:640px;margin-bottom:28px}
+.sec-head h2{font-size:clamp(30px,4vw,44px);font-weight:900}
+.sec-head p{color:var(--ink-soft);margin:10px 0 0;font-size:17.5px}
+.eyebrow{display:inline-block;font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark);margin-bottom:10px}
+
+/* category tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tile{border:2px solid var(--ink);border-radius:var(--r-lg);padding:26px 24px;text-decoration:none;color:var(--ink);display:block;transition:transform .14s}
+.tile:hover{transform:translateY(-4px) rotate(-.4deg)}
+.tile .glyph{font-size:34px;line-height:1;display:block;margin-bottom:14px}
+.tile h3{font-size:23px;font-weight:700;margin-bottom:6px}
+.tile p{margin:0;color:var(--ink-soft);font-size:15.5px}
+.tile-lav{background:var(--paper)}
+.tile-blush{background:var(--blush)}
+.tile-mint{background:var(--paper);border-radius:16px}
+
+/* featured drop */
+.drop{display:grid;grid-template-columns:1.15fr .85fr;gap:0;border:3px solid var(--ink);border-radius:30px;overflow:hidden;background:var(--paper);box-shadow:var(--shadow)}
+.drop-art{background:radial-gradient(circle at 30% 30%,var(--butter) 0 18%,transparent 19%),radial-gradient(circle at 78% 70%,var(--blush) 0 22%,transparent 23%),var(--lav);display:grid;place-items:center;min-height:300px;padding:30px}
+.drop-art .jar{width:170px;height:210px;border:3px solid var(--ink);border-radius:26px 26px 34px 34px;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transform:rotate(-3deg);box-shadow:8px 10px 0 rgba(58,43,51,.18)}
+.drop-art .jar b{font-family:"Fraunces",Georgia,serif;font-size:21px}
+.drop-art .jar span{font-size:12.5px;font-weight:800;letter-spacing:.1em;color:var(--ink-soft)}
+.drop-art .jar .lid{width:110px;height:22px;border:3px solid var(--ink);border-radius:8px;background:var(--butter);margin-bottom:10px}
+.drop-copy{padding:40px 38px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.drop-copy h3{font-size:clamp(28px,3.4vw,40px);font-weight:900}
+.drop-copy p{color:var(--ink-soft);margin:0}
+.price{font-weight:900;font-size:19px}
+.price small{font-weight:800;color:var(--accent-dark);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;margin-left:7px}
+
+/* strain cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{border:2px solid var(--ink);border-radius:var(--r-lg);background:var(--paper);padding:24px;display:flex;flex-direction:column;gap:9px}
+.card:nth-child(2){transform:translateY(14px)}
+.card .swatch{height:86px;border-radius:var(--r-sm);border:2px solid var(--ink);display:flex;align-items:flex-end;padding:10px 12px;font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:17px}
+.card h3{font-size:24px;font-weight:700}
+.card p{margin:0;color:var(--ink-soft);font-size:15.5px;flex:1}
+.card .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+.add-btn{border:2px solid var(--ink);background:var(--butter);border-radius:999px;padding:9px 18px;font-weight:900;font-size:14.5px;box-shadow:3px 3px 0 var(--ink)}
+.add-btn:hover{background:var(--accent);color:#fff}
+.add-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.card.soon{border-style:dashed;background:transparent;align-items:flex-start;justify-content:center;min-height:230px}
+.card.soon h3{color:var(--ink-soft)}
+.card.soon .bud{font-size:30px}
+
+/* badges */
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.badge-item{border:2px solid var(--ink);border-radius:var(--r-md);background:var(--paper);padding:18px;text-align:center;font-weight:900;font-size:16px}
+.badge-item span{display:block;font-size:24px;margin-bottom:6px}
+
+/* story + join */
+.story-in{max-width:720px}
+.story-in h2{font-size:clamp(30px,4vw,42px);font-weight:900;margin-bottom:14px}
+.story-in p{font-size:18px;color:#274435}
+.join-in{max-width:640px;margin:0 auto;text-align:center}
+.join-in h2{font-size:clamp(30px,4vw,42px);font-weight:900}
+.join-in p{color:var(--ink-soft)}
+.join-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.join-form input{font:inherit;font-weight:700;padding:13px 20px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);min-width:min(320px,80vw);color:var(--ink)}
+.join-ok{font-weight:900;color:var(--green);min-height:26px;margin-top:12px}
+footer{border-top:1px solid var(--line);padding:30px 0 44px}
+.foot-in{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:baseline}
+.foot-in .small{font-size:13.5px;color:var(--ink-soft);max-width:56ch}
+
+/* game UI */
+.game-ui{position:fixed;inset:0;z-index:70;pointer-events:none;display:none}
+body.in-game .game-ui{display:block}
+.crosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:26px;height:26px}
+.crosshair::before,.crosshair::after{content:"";position:absolute;background:rgba(255,248,223,.92);box-shadow:0 0 4px rgba(0,0,0,.7)}
+.crosshair::before{left:50%;top:0;width:2px;height:100%;transform:translateX(-50%)}
+.crosshair::after{top:50%;left:0;height:2px;width:100%;transform:translateY(-50%)}
+.crosshair.hot::before,.crosshair.hot::after{background:var(--butter)}
+.prompt{position:absolute;left:50%;bottom:118px;transform:translateX(-50%);background:rgba(12,20,14,.86);color:#fff8df;font-family:"Courier New",monospace;font-size:15px;letter-spacing:.05em;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .15s;white-space:nowrap;max-width:92vw;text-align:center}
+.prompt.show{opacity:1}
+.game-btn{pointer-events:auto;position:absolute;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);font-weight:900;box-shadow:3px 3px 0 rgba(20,10,16,.55)}
+.exit-btn{top:calc(14px + env(safe-area-inset-top));right:16px;padding:9px 18px;font-size:14.5px}
+.game-bag{right:16px;bottom:calc(18px + env(safe-area-inset-bottom));padding:14px 22px;font-size:17px;background:var(--butter)}
+.game-bag .n{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:50%;background:var(--accent);color:#fff;font-size:13.5px;margin-left:7px}
+.controls-hint{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);color:rgba(255,248,223,.85);font-family:"Courier New",monospace;font-size:12.5px;letter-spacing:.05em;text-shadow:1px 1px 0 rgba(0,0,0,.7);white-space:nowrap}
+.joystick{pointer-events:auto;position:absolute;left:20px;bottom:calc(20px + env(safe-area-inset-bottom));width:118px;height:118px;border-radius:50%;border:2px solid rgba(255,248,223,.5);background:rgba(12,20,14,.3);display:none;touch-action:none}
+.joystick .stick{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(255,248,223,.85);border:2px solid var(--ink)}
+body.coarse .joystick{display:block}
+body.coarse .controls-hint{display:none}
+
+/* panels / modals */
+.scrim{position:fixed;inset:0;z-index:80;background:rgba(30,16,24,.5);opacity:0;pointer-events:none;transition:opacity .18s}
+.scrim.open{opacity:1;pointer-events:auto}
+.panel{position:fixed;z-index:90;background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:26px;opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .18s,transform .18s;max-height:88vh;overflow:auto}
+.panel.open{opacity:1;pointer-events:auto;transform:none}
+.panel h2{font-size:29px;font-weight:900}
+.panel .close-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-weight:900;font-size:17px;line-height:1}
+.demo-chip{display:inline-block;background:var(--butter);border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font-size:12px;font-weight:900;letter-spacing:.1em}
+#productCard{left:50%;top:50%;width:min(430px,calc(100vw - 28px));transform:translate(-50%,-46%)}
+#productCard.open{transform:translate(-50%,-50%)}
+#productCard .swatch{height:110px;border-radius:var(--r-sm);border:2px solid var(--ink);margin:14px 0}
+#productCard p{color:var(--ink-soft)}
+.qty-row{display:flex;align-items:center;gap:14px;margin:16px 0}
+.qty-btn{width:42px;height:42px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-size:20px;font-weight:900}
+.qty-n{font-size:20px;font-weight:900;min-width:26px;text-align:center}
+#bagPanel{right:0;top:0;bottom:0;height:100dvh;max-height:none;width:min(400px,94vw);border-radius:0;border-top:none;border-bottom:none;border-right:none;transform:translateX(30px)}
+#bagPanel.open{transform:none}
+.bag-list{list-style:none;margin:16px 0;padding:0}
+.bag-list li{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:13px 0;border-top:1px solid var(--line)}
+.bag-list .nm{font-weight:900}
+.bag-list small{display:block;color:var(--ink-soft);font-weight:700}
+.bag-list .qty-ctl{display:flex;align-items:center;gap:8px}
+.bag-list .qty-ctl button{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-weight:900;line-height:1}
+.bag-list .rm{grid-column:1/-1;background:none;border:none;color:var(--accent-dark);font-weight:800;font-size:13.5px;text-align:left;padding:0;text-decoration:underline;text-underline-offset:3px}
+.bag-empty{color:var(--ink-soft);padding:22px 0}
+.bag-total{display:flex;justify-content:space-between;font-weight:900;font-size:19px;border-top:2px solid var(--ink);padding-top:14px;margin-top:6px}
+.fineprint{font-size:13px;color:var(--ink-soft);margin-top:10px}
+.panel .btn{width:100%;justify-content:center;margin-top:16px}
+#checkoutPanel{left:50%;top:50%;width:min(620px,calc(100vw - 24px));transform:translate(-50%,-46%)}
+#checkoutPanel.open{transform:translate(-50%,-50%)}
+.co-steps{display:flex;gap:8px;margin:16px 0 6px;flex-wrap:wrap}
+.co-step{border:2px solid var(--line);border-radius:999px;padding:5px 14px;font-weight:800;font-size:13.5px;color:var(--ink-soft)}
+.co-step.on{border-color:var(--ink);background:var(--lav);color:var(--ink)}
+.co-page{display:none}
+.co-page.on{display:block}
+.co-lines{list-style:none;margin:10px 0;padding:0}
+.co-lines li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-weight:700}
+.co-lines li span small{display:block;color:var(--ink-soft);font-weight:700;font-size:13px}
+.field{margin:12px 0}
+.field label{display:block;font-weight:800;font-size:14px;margin-bottom:5px}
+.field input{width:100%;font:inherit;font-weight:600;padding:11px 14px;border:2px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink)}
+.field input.bad{border-color:#c0392b;background:#fdf0ee}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.demo-banner{border:2px dashed var(--accent-dark);background:#fdeef4;border-radius:var(--r-sm);padding:12px 14px;font-weight:800;font-size:14.5px;margin:14px 0}
+.co-nav{display:flex;gap:10px;margin-top:18px}
+.co-nav .btn{margin-top:0}
+.co-nav .btn-ghost{box-shadow:none}
+.confirm-big{font-family:"Fraunces",Georgia,serif;font-size:30px;font-weight:900;margin:10px 0 4px}
+.order-no{display:inline-block;background:var(--mint);border:2px solid var(--ink);border-radius:10px;padding:6px 14px;font-weight:900;letter-spacing:.05em;margin:8px 0}
+.toast{position:fixed;z-index:120;left:50%;bottom:26px;transform:translate(-50%,80px);background:var(--ink);color:var(--cream);font-weight:900;padding:12px 22px;border-radius:999px;box-shadow:var(--shadow);transition:transform .25s;max-width:92vw;text-align:center}
+.toast.show{transform:translate(-50%,0)}
+
+@media (max-width:900px){
+  .tiles,.cards{grid-template-columns:1fr 1fr}
+  .card:nth-child(2){transform:none}
+  .badges{grid-template-columns:1fr 1fr}
+  .drop{grid-template-columns:1fr}
+  .drop-copy{padding:28px 24px}
+  .nav-links{display:none}
+}
+@media (max-width:560px){
+  .tiles,.cards{grid-template-columns:1fr}
+  .store-frame{aspect-ratio:4/4.6;min-height:480px}
+  .hero-ui{padding:14px;gap:10px}
+  .hero-ui .hint{display:none}
+  .hud .stamp{right:14px;top:12px;font-size:12px}
+  .hud .play{top:12px;left:14px}
+  .hud .camtag{bottom:96px}
+  .prompt{bottom:150px;font-size:13.5px}
+  .field-row{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .vhs-grain,.vhs-track{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="announce">Good vibes, great flower <span>✿</span> Women-owned <span>✿</span> Opening soon</div>
+<header class="nav"><div class="wrap nav-in">
+  <a class="logo" href="#top">FLWRP<i>W</i>R</a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#strains">Strains</a>
+    <a href="#drop">Featured</a>
+    <a href="#story">Our story</a>
+  </nav>
+  <button class="bag-btn" id="navBag" aria-label="Open shopping bag">Bag<span class="n" id="navBagN">0</span></button>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <h1>Good vibes,<br><em>great flower.</em></h1>
+      <p>FLWRPWR is a little flower shop run by women. The store below is real in spirit: walk in, browse the shelf, pick your smalls, check out at the counter.</p>
+      <div class="hero-cta">
+        <button class="btn btn-pink walkin" data-walkin>Walk in ✿</button>
+        <a class="btn btn-plain" href="#strains">Browse the strains</a>
+      </div>
+      <p class="hero-note">The store cam runs on VHS. Grain and all.</p>
+    </div>
+  </div>
+  <div class="store-frame" id="storeFrame">
+    <canvas id="scene" aria-label="Live view of the FLWRPWR shop"></canvas>
+    <div class="vhs vhs-scan"></div>
+    <div class="vhs vhs-track"></div>
+    <div class="vhs vhs-grain"></div>
+    <div class="vhs vhs-vig"></div>
+    <div class="hud" aria-hidden="true">
+      <div class="play">PLAY ▶</div>
+      <div class="stamp" id="stamp">--:--:--<br><span>--- -- ----</span></div>
+      <div class="camtag">FLWRPWR · STORE CAM 01</div>
+      <div class="rec"><i></i>REC</div>
+    </div>
+    <div class="loadbar" id="loadbar"><i id="loadfill"></i></div>
+    <div class="loadmsg" id="loadmsg">OPENING STORE…</div>
+    <div class="hero-ui">
+      <button class="btn btn-pink walkin" data-walkin>Walk in ✿</button>
+      <span class="hint">Click a product inside to add it to your bag</span>
+    </div>
+  </div>
+</div></section>
+
+<section id="browse"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Start here</span>
+    <h2>Three ways to shop</h2>
+  </div>
+  <div class="tiles">
+    <a class="tile tile-lav" href="#strains"><span class="glyph">✿</span><h3>The Smalls</h3><p>4g jars of the three strains in the shop now. The classics, in smalls.</p></a>
+    <a class="tile tile-blush" href="#drop"><span class="glyph">♥</span><h3>Featured drop</h3><p>One strain gets the spotlight. Right now it is Thai Stick.</p></a>
+    <a class="tile tile-mint" href="#join"><span class="glyph">❀</span><h3>Blooming soon</h3><p>Three more strains are on the way. Join the list and we will tell you first.</p></a>
+  </div>
+</div></section>
+
+<section id="drop" class="band-lav"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Featured drop</span>
+    <h2>Thai Stick</h2>
+  </div>
+  <div class="drop">
+    <div class="drop-art" aria-hidden="true">
+      <div class="jar"><div class="lid"></div><b>THAI STICK</b><span>FLWRPWR 4G SMALLS</span><span style="font-size:34px">✿</span></div>
+    </div>
+    <div class="drop-copy">
+      <p class="price">$18 <small>demo price</small></p>
+      <h3>The one everyone asks about first.</h3>
+      <p>Citrus and pine. Bright and clean. A classic landrace, back in smalls for a little while.</p>
+      <p><button class="add-btn" data-add="thai">Add to bag</button></p>
+    </div>
+  </div>
+</div></section>
+
+<section id="strains"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">The lineup</span>
+    <h2>Three in the shop now.</h2>
+    <p>Three more are blooming soon. Everything is FLWRPWR 4g Smalls.</p>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="swatch" style="background:linear-gradient(135deg,#f7e3ac,#f4c3d4)">Thai Stick</div>
+      <h3>Thai Stick</h3>
+      <p>Citrus and pine. Bright and clean.</p>
+      <div class="row"><span class="price">$18 <small>demo</small></span><button class="add-btn" data-add="thai">Add to bag</button></div>
+    </div>
+    <div class="card">
+      <div class="swatch" style="background:linear-gradient(135deg,#c2e6d1,#a9cdea)">Northern Lights</div>
+      <h3>Northern Lights</h3>
+      <p>Earthy and sweet. The cozy one.</p>
+      <div class="row"><span class="price">$20 <small>demo</small></span><button class="add-btn" data-add="northern">Add to bag</button></div>
+    </div>
+    <div class="card">
+      <div class="swatch" style="background:linear-gradient(135deg,#fbd9b8,#f6cdd9)">Maui Wowie</div>
+      <h3>Maui Wowie</h3>
+      <p>Pineapple up front. Sunny and light.</p>
+      <div class="row"><span class="price">$22 <small>demo</small></span><button class="add-btn" data-add="maui">Add to bag</button></div>
+    </div>
+    <div class="card soon"><span class="bud">🌱</span><h3>Blooming soon</h3><p>Still growing. Join the list below and we will tell you when it lands.</p></div>
+    <div class="card soon"><span class="bud">🌱</span><h3>Blooming soon</h3><p>Still growing. Join the list below and we will tell you when it lands.</p></div>
+    <div class="card soon"><span class="bud">🌱</span><h3>Blooming soon</h3><p>Still growing. Join the list below and we will tell you when it lands.</p></div>
+  </div>
+</div></section>
+
+<section class="band-mint"><div class="wrap">
+  <div class="badges">
+    <div class="badge-item"><span>✿</span>Women-owned</div>
+    <div class="badge-item"><span>♥</span>Small-batch drops</div>
+    <div class="badge-item"><span>21+</span>21 and over</div>
+    <div class="badge-item"><span>☺</span>Good vibes only</div>
+  </div>
+</div></section>
+
+<section id="story"><div class="wrap"><div class="story-in">
+  <span class="eyebrow">Our story</span>
+  <h2>Run by women, stocked with care.</h2>
+  <p>FLWRPWR started with a simple idea: a flower shop that feels like your favorite gift shop. Soft colors, good music on the store cam, and flower we are proud to hand you. No rush, no weird vibes.</p>
+  <p>Walk the shop above. The shelf is stocked with the three strains we are opening with. Three more are on the way.</p>
+</div></div></section>
+
+<section id="join" class="band-lav"><div class="wrap"><div class="join-in">
+  <span class="eyebrow">The drop list</span>
+  <h2>Get the drop list.</h2>
+  <p>One email when a new strain lands. No spam, ever.</p>
+  <form class="join-form" id="joinForm">
+    <input type="email" id="joinEmail" placeholder="your email" aria-label="Email address" required>
+    <button class="btn btn-pink" type="submit">Join the list</button>
+  </form>
+  <p class="join-ok" id="joinOk" role="status"></p>
+</div></div></section>
+</main>
+
+<footer><div class="wrap foot-in">
+  <a class="logo" href="#top">FLWRP<i>W</i>R</a>
+  <p class="small">Concept store demo. Prices marked demo are placeholders, and the checkout is a demo that takes no real payment. 21+ only.</p>
+</div></footer>
+
+<div class="game-ui" id="gameUI" aria-hidden="true">
+  <div class="crosshair" id="crosshair"></div>
+  <div class="prompt" id="prompt"></div>
+  <button class="game-btn exit-btn" id="exitBtn">Leave shop ✕</button>
+  <button class="game-btn game-bag" id="gameBag">Bag<span class="n" id="gameBagN">0</span></button>
+  <div class="controls-hint" id="controlsHint">WASD move · Mouse look · Click product · E interact</div>
+  <div class="joystick" id="joystick"><div class="stick" id="stick"></div></div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="panel" id="productCard" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="close-x" data-close aria-label="Close">✕</button>
+  <span class="demo-chip">DEMO</span>
+  <div class="swatch" id="pcSwatch"></div>
+  <h2 id="pcName">Thai Stick</h2>
+  <p><b>FLWRPWR 4g Smalls</b></p>
+  <p id="pcNotes"></p>
+  <div class="qty-row">
+    <button class="qty-btn" id="pcMinus" aria-label="One less">−</button>
+    <span class="qty-n" id="pcQty">1</span>
+    <button class="qty-btn" id="pcPlus" aria-label="One more">+</button>
+    <span class="price" id="pcPrice" style="margin-left:auto"></span>
+  </div>
+  <button class="btn btn-pink" id="pcAdd">Add to bag</button>
+</div>
+
+<div class="panel" id="bagPanel" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="close-x" data-close aria-label="Close">✕</button>
+  <span class="demo-chip">DEMO</span>
+  <h2>Your bag</h2>
+  <ul class="bag-list" id="bagList"></ul>
+  <div class="bag-total"><span>Total</span><span id="bagTotal">$0</span></div>
+  <p class="fineprint">Demo prices. No real payment is taken in this concept store.</p>
+  <button class="btn btn-pink" id="bagCheckout">Checkout</button>
+</div>
+
+<div class="panel" id="checkoutPanel" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="close-x" data-close aria-label="Close">✕</button>
+  <span class="demo-chip">DEMO CHECKOUT</span>
+  <h2>Checkout</h2>
+  <div class="co-steps">
+    <span class="co-step on" data-s="0">1 · Review</span>
+    <span class="co-step" data-s="1">2 · Details</span>
+    <span class="co-step" data-s="2">3 · Payment</span>
+  </div>
+  <div class="co-page on" data-p="0">
+    <ul class="co-lines" id="coLines"></ul>
+    <div class="bag-total"><span>Total</span><span id="coTotal">$0</span></div>
+    <div class="co-nav"><button class="btn btn-pink" id="coToDetails" style="flex:1">Continue</button></div>
+  </div>
+  <div class="co-page" data-p="1">
+    <div class="field"><label for="fName">Full name</label><input id="fName" autocomplete="name" placeholder="Jane Doe"></div>
+    <div class="field"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email" placeholder="jane@email.com"></div>
+    <div class="field"><label for="fAddr">Street address</label><input id="fAddr" autocomplete="street-address" placeholder="123 Blossom St"></div>
+    <div class="field-row">
+      <div class="field"><label for="fCity">City</label><input id="fCity" autocomplete="address-level2" placeholder="Pasadena"></div>
+      <div class="field"><label for="fZip">ZIP</label><input id="fZip" inputmode="numeric" autocomplete="postal-code" placeholder="91101"></div>
+    </div>
+    <div class="co-nav">
+      <button class="btn co-nav-back btn-ghost" data-back style="flex:1">Back</button>
+      <button class="btn btn-pink" id="coToPayment" style="flex:2">Continue</button>
+    </div>
+  </div>
+  <div class="co-page" data-p="2">
+    <div class="demo-banner">Demo checkout. No real payment is processed and no card is charged. Do not enter a real card number.</div>
+    <div class="field"><label for="fCard">Card number</label><input id="fCard" inputmode="numeric" placeholder="4242 4242 4242 4242"></div>
+    <div class="field-row">
+      <div class="field"><label for="fExp">Expiry</label><input id="fExp" placeholder="12/28"></div>
+      <div class="field"><label for="fCvc">CVC</label><input id="fCvc" inputmode="numeric" placeholder="123"></div>
+    </div>
+    <div class="co-nav">
+      <button class="btn co-nav-back btn-ghost" data-back style="flex:1">Back</button>
+      <button class="btn btn-pink" id="coPlace" style="flex:2">Place order</button>
+    </div>
+  </div>
+  <div class="co-page" data-p="3">
+    <span class="demo-chip">DEMO ORDER</span>
+    <p class="confirm-big">Order placed.</p>
+    <p>Order <span class="order-no" id="orderNo">FWP-000000</span></p>
+    <p id="coThanks">Thanks. This is a concept demo, so no order was really placed and nothing was charged.</p>
+    <div class="co-nav"><button class="btn btn-pink" id="coDone" style="flex:1">Keep shopping</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="vendor/three.min.js"></script>
+<script src="vendor/GLTFLoader.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var coarse=matchMedia('(pointer:coarse)').matches;
+var motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(coarse)document.body.classList.add('coarse');
+
+/* ---------- catalog & cart ---------- */
+var PRODUCTS={
+  thai:{name:'Thai Stick',notes:'Citrus and pine. Bright and clean.',price:18,sw:'linear-gradient(135deg,#f7e3ac,#f4c3d4)'},
+  northern:{name:'Northern Lights',notes:'Earthy and sweet. The cozy one.',price:20,sw:'linear-gradient(135deg,#c2e6d1,#a9cdea)'},
+  maui:{name:'Maui Wowie',notes:'Pineapple up front. Sunny and light.',price:22,sw:'linear-gradient(135deg,#fbd9b8,#f6cdd9)'}
+};
+var ORDER=['thai','northern','maui'];
+var bag={},bagTotal=0,lastOrderNo=null;
+function money(n){return '$'+n;}
+function renderBagN(){$('navBagN').textContent=bagTotal;$('gameBagN').textContent=bagTotal;}
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show');},2200);}
+function renderBagNudge(){var b=$('navBag');b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');}
+function addToBag(key,qty){
+  qty=qty||1;bag[key]=(bag[key]||0)+qty;bagTotal+=qty;
+  renderBagN();renderBagNudge();renderBagList();renderCheckoutPage();
+  toast(PRODUCTS[key].name+' added to bag');
+}
+
+/* ---------- 2D bindings ---------- */
+document.querySelectorAll('[data-add]').forEach(function(btn){
+  btn.addEventListener('click',function(){addToBag(btn.getAttribute('data-add'),1);});
+});
+$('joinForm').addEventListener('submit',function(e){
+  e.preventDefault();var em=$('joinEmail');
+  if(!em.value||em.value.indexOf('@')<0){em.focus();return;}
+  $('joinOk').textContent='You are on the list. See you at the drop.';em.value='';
+});
+
+/* ---------- VHS timestamp ---------- */
+function tickStamp(){
+  var d=new Date(),p=function(n){return String(n).padStart(2,'0');};
+  var months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  $('stamp').innerHTML=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())+
+    '<br><span>'+months[d.getMonth()]+' '+p(d.getDate())+' '+d.getFullYear()+'</span>';
+}
+tickStamp();setInterval(tickStamp,1000);
+
+/* ---------- panels ---------- */
+var scrim=$('scrim'),activePanel=null;
+function openPanel(panel,fromGame){
+  ['productCard','bagPanel','checkoutPanel'].forEach(function(id){var p=$(id);p.classList.remove('open');p.setAttribute('aria-hidden','true');});
+  activePanel=panel;
+  if(panel){
+    if(document.pointerLockElement)document.exitPointerLock();
+    panel.classList.add('open');panel.setAttribute('aria-hidden','false');
+    scrim.classList.add('open');
+    var c=panel.querySelector('.close-x');if(c)c.focus();
+  }else{scrim.classList.remove('open');}
+}
+function closePanels(){openPanel(null);}
+scrim.addEventListener('click',closePanels);
+document.querySelectorAll('[data-close]').forEach(function(b){b.addEventListener('click',closePanels);});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&activePanel){closePanels();return;}
+  if(e.key==='Escape'&&inGame&&!document.pointerLockElement){leaveGame();}
+});
+
+/* ---------- bag drawer ---------- */
+function renderBagList(){
+  var ul=$('bagList'),total=0,html='';
+  ORDER.forEach(function(key){
+    var q=bag[key]||0;if(!q)return;
+    var p=PRODUCTS[key];total+=p.price*q;
+    html+='<li><span class="nm">'+p.name+'<small>FLWRPWR 4g Smalls · '+money(p.price)+' demo</small></span>'+
+      '<span class="qty-ctl"><button data-dec="'+key+'" aria-label="One less">−</button><b>'+q+'</b><button data-inc="'+key+'" aria-label="One more">+</button></span>'+
+      '<button class="rm" data-rm="'+key+'">remove</button></li>';
+  });
+  ul.innerHTML=html||'<li class="bag-empty">Your bag is empty. Walk into the store or add a strain above.</li>';
+  $('bagTotal').textContent=money(total);
+}
+function bagTotalAmt(){var t=0;ORDER.forEach(function(k){t+=PRODUCTS[k].price*(bag[k]||0);});return t;}
+$('bagList').addEventListener('click',function(e){
+  var inc=e.target.closest('[data-inc]'),dec=e.target.closest('[data-dec]'),rm=e.target.closest('[data-rm]');
+  if(inc){var k=inc.getAttribute('data-inc');bag[k]++;bagTotal++;renderBagN();renderBagList();renderCheckoutPage();}
+  if(dec){var k2=dec.getAttribute('data-dec');if(bag[k2]>0){bag[k2]--;bagTotal--;}renderBagN();renderBagList();renderCheckoutPage();}
+  if(rm){var k3=rm.getAttribute('data-rm');bagTotal-=bag[k3]||0;bag[k3]=0;renderBagN();renderBagList();renderCheckoutPage();}
+});
+$('navBag').addEventListener('click',function(){renderBagList();openPanel($('bagPanel'));});
+$('gameBag').addEventListener('click',function(){renderBagList();openPanel($('bagPanel'),true);});
+
+/* ---------- product card ---------- */
+var pcKey='thai',pcQty=1;
+function openProduct(key){
+  pcKey=key;pcQty=1;var p=PRODUCTS[key];
+  $('pcName').textContent=p.name;
+  $('pcNotes').textContent=p.notes;
+  $('pcSwatch').style.background=p.sw;
+  $('pcQty').textContent='1';
+  $('pcPrice').textContent=money(p.price)+' demo';
+  openPanel($('productCard'),true);
+}
+$('pcMinus').addEventListener('click',function(){if(pcQty>1){pcQty--;}$('pcQty').textContent=pcQty;});
+$('pcPlus').addEventListener('click',function(){if(pcQty<9){pcQty++;}$('pcQty').textContent=pcQty;});
+$('pcAdd').addEventListener('click',function(){addToBag(pcKey,pcQty);openPanel(null);});
+
+/* ---------- checkout wizard ---------- */
+function coGo(n){
+  document.querySelectorAll('#checkoutPanel .co-page').forEach(function(pg){pg.classList.toggle('on',pg.getAttribute('data-p')==String(n));});
+  document.querySelectorAll('#checkoutPanel .co-step').forEach(function(st){st.classList.toggle('on',Number(st.getAttribute('data-s'))<=n&&n<3);});
+}
+function renderCheckoutPage(){
+  var ul=$('coLines'),total=bagTotalAmt(),html='';
+  ORDER.forEach(function(key){
+    var q=bag[key]||0;if(!q)return;var p=PRODUCTS[key];
+    html+='<li><span>'+p.name+'<small>FLWRPWR 4g Smalls × '+q+'</small></span><span>'+money(p.price*q)+'</span></li>';
+  });
+  ul.innerHTML=html||'<li class="bag-empty">Your bag is empty. Add something before checking out.</li>';
+  $('coTotal').textContent=money(total);
+  $('coToDetails').disabled=bagTotalAmt()===0;
+}
+$('bagCheckout').addEventListener('click',function(){
+  if(bagTotalAmt()===0){toast('Your bag is empty');return;}
+  renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);
+});
+document.querySelectorAll('#checkoutPanel [data-back]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var cur=document.querySelector('#checkoutPanel .co-page.on');
+    coGo(Math.max(0,Number(cur.getAttribute('data-p'))-1));
+  });
+});
+function fieldOk(id,ok){$(id).classList.toggle('bad',!ok);return ok;}
+$('coToDetails').addEventListener('click',function(){coGo(1);});
+$('coToPayment').addEventListener('click',function(){
+  var ok=true;
+  ok=fieldOk('fName',$('fName').value.trim().length>1)&&ok;
+  ok=fieldOk('fEmail',/^\S+@\S+\.\S+$/.test($('fEmail').value.trim()))&&ok;
+  ok=fieldOk('fAddr',$('fAddr').value.trim().length>3)&&ok;
+  ok=fieldOk('fCity',$('fCity').value.trim().length>1)&&ok;
+  ok=fieldOk('fZip',$('fZip').value.trim().length>=5)&&ok;
+  if(ok)coGo(2);
+});
+$('coPlace').addEventListener('click',function(){
+  var ok=true;
+  ok=fieldOk('fCard',$('fCard').value.replace(/\D/g,'').length>=12)&&ok;
+  ok=fieldOk('fExp',/^\d{2}\/\d{2}$/.test($('fExp').value.trim()))&&ok;
+  ok=fieldOk('fCvc',/^\d{3,4}$/.test($('fCvc').value.trim()))&&ok;
+  if(!ok)return;
+  lastOrderNo='FWP-'+Math.floor(100000+Math.random()*899999);
+  $('orderNo').textContent=lastOrderNo;
+  var em=$('fEmail').value.trim();
+  $('coThanks').textContent='Thanks, '+$('fName').value.trim().split(' ')[0]+'. '+
+    'A confirmation would go to '+em+'. This is a concept demo, so no order was really placed and nothing was charged.';
+  coGo(3);
+  bag={};bagTotal=0;renderBagN();renderBagList();renderCheckoutPage();
+});
+$('coDone').addEventListener('click',closePanels);
+
+/* ================= THREE.JS STORE ================= */
+var T=window.THREE;
+var storeReady=false,inGame=false,dirtyFrames=10;
+var loadmsg=$('loadmsg'),loadfill=$('loadfill');
+function setLoad(pct,msg){loadfill.style.width=pct+'%';if(msg)loadmsg.textContent=msg;}
+if(!T||!T.GLTFLoader){setLoad(100,'3D COULD NOT LOAD');loadmsg.classList.add('done');return;}
+
+var frame=$('storeFrame'),canvas=$('scene');
+var renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,coarse?1.25:1.6));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+var scene=new T.Scene();scene.background=new T.Color(0x0d1410);scene.fog=new T.Fog(0x131a13,13,32);
+var camera=new T.PerspectiveCamera(62,1,.055,48);
+var clock=new T.Clock();
+
+scene.add(new T.HemisphereLight(0xffe9d2,0x543525,.5));
+scene.add(new T.AmbientLight(0xffd9c2,.28));
+var sun=new T.DirectionalLight(0xfff0d8,.55);
+sun.position.set(-4.5,8.5,-7);sun.castShadow=true;
+sun.shadow.mapSize.set(1024,1024);
+sun.shadow.camera.near=.5;sun.shadow.camera.far=25;
+sun.shadow.camera.left=-9;sun.shadow.camera.right=9;sun.shadow.camera.top=9;sun.shadow.camera.bottom=-9;
+sun.shadow.bias=-.0008;
+scene.add(sun);scene.add(sun.target);sun.target.position.set(0,0,2.2);
+var warm=new T.PointLight(0xffc27a,.75,12,1.6);warm.position.set(0,2.9,1.2);scene.add(warm);
+var pink=new T.PointLight(0xf47fae,.5,10,1.6);pink.position.set(5,2,3.6);scene.add(pink);
+var mintL=new T.PointLight(0x8fd6b2,.45,10,1.6);mintL.position.set(-5,2.2,2.8);scene.add(mintL);
+
+var modelRoot=new T.Group();scene.add(modelRoot);
+var EYE=1.63;
+var player={x:0,z:-3.4,r:.31,speed:3.2};
+var camYaw=0,camPitch=0,targetYaw=0,targetPitch=0;
+
+function material(color,rough,metal){return new T.MeshStandardMaterial({color:color,roughness:rough==null?.72:rough,metalness:metal||0});}
+function fixMaterials(root){
+  root.traverse(function(o){
+    if(!o.isMesh)return;
+    o.castShadow=true;o.receiveShadow=true;
+    var mats=Array.isArray(o.material)?o.material:[o.material];
+    mats.forEach(function(m){
+      if(!m||!m.isMeshStandardMaterial)return;
+      var n=(m.name||'').toLowerCase();
+      if(m.map){m.map.encoding=T.sRGBEncoding;}
+      if(/glass/.test(n)){m.transparent=true;m.opacity=.28;m.roughness=.12;m.depthWrite=false;}
+      if(/bulb|lightpanel/.test(n)){m.emissive=new T.Color(0xffb066);m.emissiveIntensity=1.6;}
+      if(/logo_sign/.test(n)){m.emissive=new T.Color(0xff5b91);m.emissiveIntensity=.5;}
+      if(/pos_screen/.test(n)){m.emissive=new T.Color(0xf9b35d);m.emissiveIntensity=.4;}
+      m.needsUpdate=true;
+    });
+  });
+  /* Note: the Blender pipeline authored the label/art textures upside-down
+     and mirrored for the room-facing side. TEXSWAP below replaces them at
+     runtime with orientation-corrected textures. Do not "fix" UVs here. */
+}
+/* texture swap: extracted GLB textures, re-oriented (flipY + horizontal
+   flip) so sign, menu, counter front, labels and posters read correctly */
+var TEXSWAP={
+  'logo_sign_hd':'tex/logo.png','hd_menutex':'tex/menu.png','hd_counterfront':'tex/counter_front.png',
+  'hd_label_thai':'tex/label_thai.png','hd_label_northern':'tex/label_northern.png','hd_label_maui':'tex/label_maui.png','hd_label_soon':'tex/label_soon.png',
+  'hd_slabel_thai':'tex/slabel_thai.png','hd_slabel_northern':'tex/slabel_northern.png','hd_slabel_maui':'tex/slabel_maui.png','hd_slabel_soon':'tex/slabel_soon.png',
+  'hd_poster_daisy':'tex/poster_daisy.png','hd_poster_logo':'tex/poster_logo.png'
+};
+var texLoader=new T.TextureLoader(),texCache={},texReady=0,texTotal=Object.keys(TEXSWAP).length;
+var texPromise=new Promise(function(resolve){
+  Object.keys(TEXSWAP).forEach(function(mat){
+    texLoader.load('./'+TEXSWAP[mat],function(t){
+      t.encoding=T.sRGBEncoding;t.flipY=true;
+      t.wrapS=T.RepeatWrapping;t.repeat.x=-1;t.offset.x=1;
+      t.anisotropy=Math.min(4,rasterMaxAniso());
+      texCache[mat]=t;texReady++;
+      setLoad(4+Math.round((loadCount/MODELS.length)*70+ (texReady/texTotal)*14));
+      if(texReady===texTotal)resolve();
+    },undefined,function(){texReady++;if(texReady===texTotal)resolve();});
+  });
+});
+function rasterMaxAniso(){try{return Math.min(4,renderer.capabilities.getMaxAnisotropy());}catch(e){return 4;}}
+function applyTexSwaps(){
+  modelRoot.traverse(function(o){
+    if(!o.isMesh)return;
+    var mats=Array.isArray(o.material)?o.material:[o.material];
+    mats.forEach(function(m){
+      if(!m)return;var f=TEXSWAP[m.name||''];
+      if(f&&texCache[m.name]){
+        m.map=texCache[m.name];
+        if(/logo_sign/.test(m.name)){m.emissiveMap=texCache[m.name];m.emissive=new T.Color(0xffffff);m.emissiveIntensity=.22;}
+        m.needsUpdate=true;
+      }
+    });
+  });
+}
+function addModel(template,pos,rotY){
+  var o=template.clone(true);
+  o.position.set(pos[0],pos[1],pos[2]);o.rotation.y=rotY||0;
+  o.scale.set(1,1,1);
+  modelRoot.add(o);return o;
+}
+
+/* drift path (hero): framed on products and signage, stays in open lanes */
+var driftPts=[
+  {p:[-1.6,1.62,-4.3],l:[-2.2,1.15,.25]},
+  {p:[-3.4,1.64,-.8],l:[0,1.5,5.6]},
+  {p:[2.6,1.62,1.8],l:[5.55,1.25,3.45]},
+  {p:[.8,1.6,-2.6],l:[-4.5,1.7,5.48]}
+];
+var driftI=0,driftT=0,driftDur=6,driftFreeze=false;
+function driftPose(t){
+  var a=driftPts[driftI%driftPts.length],b=driftPts[(driftI+1)%driftPts.length];
+  var e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  return{
+    p:[a.p[0]+(b.p[0]-a.p[0])*e,a.p[1]+(b.p[1]-a.p[1])*e,a.p[2]+(b.p[2]-a.p[2])*e],
+    l:[a.l[0]+(b.l[0]-a.l[0])*e,a.l[1]+(b.l[1]-a.l[1])*e,a.l[2]+(b.l[2]-a.l[2])*e]
+  };
+}
+function updateDrift(dt){
+  if(motionReduced){var s=driftPose(0);camera.position.set(s.p[0],s.p[1],s.p[2]);camera.lookAt(s.l[0],s.l[1],s.l[2]);return;}
+  driftT+=dt/driftDur;if(driftT>=1){driftT=0;driftI=(driftI+1)%driftPts.length;}
+  var s=driftPose(driftT);
+  camera.position.set(s.p[0],s.p[1],s.p[2]);camera.lookAt(s.l[0],s.l[1],s.l[2]);
+}
+
+/* collision (AABBs from the shipped room) */
+var WALK={minX:-7.1,maxX:7.1,minZ:-5.1,maxZ:4.97};
+var SOLIDS=[
+  {x:-4.5,z:5.48,w:3.35,d:.55},{x:4.5,z:5.48,w:3.35,d:.55},
+  {x:-7.52,z:1.55,w:.55,d:3.35},
+  {x:-2.2,z:.25,w:2.55,d:.85},{x:2.2,z:.25,w:2.55,d:.85},
+  {x:5.55,z:3.45,w:1.12,d:3.35},
+  {x:0,z:2.35,w:2.0,d:.75},
+  {x:-6.9,z:-4.8,w:1.05,d:1.05},{x:6.85,z:-4.8,w:1.05,d:1.05}
+];
+function blocked(x,z){
+  if(x<WALK.minX||x>WALK.maxX||z<WALK.minZ||z>WALK.maxZ)return true;
+  for(var i=0;i<SOLIDS.length;i++){var b=SOLIDS[i],hw=b.w/2,hd=b.d/2;
+    if(x+player.r>b.x-hw&&x-player.r<b.x+hw&&z+player.r>b.z-hd&&z-player.r<b.z+hd)return true;}
+  return false;
+}
+function tryMove(dx,dz){
+  if(dx&&!blocked(player.x+dx,player.z))player.x+=dx;
+  if(dz&&!blocked(player.x,player.z+dz))player.z+=dz;
+}
+
+/* products: hitboxes */
+var hitboxes=[],raycaster=new T.Raycaster(),tapV=new T.Vector2();
+function addHitbox(x,y,z,w,h,d,action){
+  var m=new T.Mesh(new T.BoxGeometry(w,h,d),
+    new T.MeshBasicMaterial({colorWrite:false,depthWrite:false}));
+  m.position.set(x,y,z);m.userData.action=action;scene.add(m);hitboxes.push(m);
+}
+function setupHitboxes(){
+  ORDER.forEach(function(key,i){
+    var dx=-1.05+i*1.05;
+    addHitbox(-2.2+dx,1.0,.25,.95,.6,.95,{type:'product',key:key});
+    addHitbox(2.2+dx,1.0,.25,.95,.6,.95,{type:'product',key:key});
+    addHitbox(-5.9+i*1.35,1.7,5.2,.9,1.4,.7,{type:'product',key:key});
+    addHitbox(5.9-i*1.35,1.7,5.2,.9,1.4,.7,{type:'product',key:key});
+  });
+  addHitbox(7.62,1.6,0,.5,2.2,2.2,{type:'menu'});
+  addHitbox(5.55,1.2,3.45,1.5,1.6,3.5,{type:'checkout'});
+}
+/* desktop proximity hotspots (facing + distance) */
+var hotspots=[
+  {x:-2.2,y:1.1,z:-.7,r:1.5,label:'DISPLAY CASE',type:'case'},
+  {x:2.2,y:1.1,z:-.7,r:1.5,label:'DISPLAY CASE',type:'case'},
+  {x:-4.5,y:1.7,z:4.4,r:1.6,label:'SHELF · SMALLS',type:'shelf'},
+  {x:4.5,y:1.7,z:4.4,r:1.6,label:'SHELF · SMALLS',type:'shelf'},
+  {x:7.0,y:2.0,z:0,r:1.5,label:'STRAIN MENU',type:'menu'},
+  {x:4.4,y:1.3,z:3.45,r:1.6,label:'CHECKOUT',type:'checkout'}
+];
+var activeHotspot=null;
+var lookDir=new T.Vector3(),hotV=new T.Vector3();
+function checkHotspot(){
+  activeHotspot=null;var best=1e9;
+  hotspots.forEach(function(h){
+    hotV.set(h.x-player.x,h.y-EYE,h.z-player.z);
+    var d=hotV.length(),facing=hotV.normalize().dot(lookDir);
+    if(d<3.2&&facing>.7&&d<best){best=d;activeHotspot=h;}
+  });
+  var pr=$('prompt');
+  if(activeHotspot){pr.textContent=(coarse?'TAP':'CLICK')+' · '+activeHotspot.label;pr.classList.add('show');$('crosshair').classList.add('hot');}
+  else{pr.classList.remove('show');$('crosshair').classList.remove('hot');}
+}
+
+/* model loading */
+var manager=new T.LoadingManager();
+manager.onProgress=function(u,loaded,total){setLoad(Math.round(loaded/total*70));};
+var loader=new T.GLTFLoader(manager);
+var MODELS=['room_shell','display_case','wall_shelf','checkout_counter','logo_sign','menu_board','plant_large','plant_hanging','pendant_light','bench','poster_frame'];
+var loaded={},loadCount=0;
+setLoad(4,'OPENING STORE…');
+MODELS.forEach(function(name){
+  loader.load('./models/'+name+'.glb',function(g){
+    loadCount++;setLoad(4+Math.round(loadCount/MODELS.length*88),'STOCKING SHELF… '+loadCount+'/11');
+    loaded[name]=g.scene;fixMaterials(g.scene);afterLoad();
+  },undefined,function(){setLoad(100,'3D COULD NOT LOAD');});
+});
+function afterLoad(){
+  if(Object.keys(loaded).length<MODELS.length)return;
+  texPromise.then(function(){
+  addModel(loaded.room_shell,[0,0,0],0);
+  addModel(loaded.display_case,[-2.2,0,.25],0);
+  addModel(loaded.display_case,[2.2,0,.25],0);
+  addModel(loaded.wall_shelf,[-4.5,0,5.48],0);
+  addModel(loaded.wall_shelf,[4.5,0,5.48],0);
+  addModel(loaded.wall_shelf,[-7.52,0,1.55],-Math.PI/2);
+  addModel(loaded.checkout_counter,[5.55,0,3.45],-Math.PI/2);
+  addModel(loaded.logo_sign,[0,1.55,5.62],0);
+  addModel(loaded.menu_board,[7.62,1.18,0],Math.PI/2);
+  addModel(loaded.poster_frame,[-7.62,1.42,-1.8],-Math.PI/2);
+  addModel(loaded.plant_large,[-6.9,0,-4.8],0);
+  addModel(loaded.plant_large,[6.85,0,-4.8],0);
+  addModel(loaded.plant_hanging,[-3.1,3.05,2.45],0);
+  addModel(loaded.plant_hanging,[3.1,3.05,2.45],0);
+  addModel(loaded.pendant_light,[-2.2,3.9,.25],0);
+  addModel(loaded.pendant_light,[2.2,3.9,.25],0);
+  addModel(loaded.pendant_light,[0,3.9,-3.05],0);
+  addModel(loaded.bench,[0,0,2.35],Math.PI);
+  applyTexSwaps();
+  setupHitboxes();
+  setLoad(100,'STORE READY');loadmsg.classList.add('done');
+  $('loadbar').style.display='none';
+  storeReady=true;dirtyFrames=30;
+  sizeRenderer();renderFrame(true);
+  });
+}
+
+/* sizing */
+function sizeRenderer(){
+  var w=frame.clientWidth||innerWidth,h=frame.clientHeight||innerHeight*.6;
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,coarse?1.25:1.6));
+  renderer.setSize(w,h,false);
+  camera.aspect=w/h;camera.updateProjectionMatrix();
+  dirtyFrames=8;
+}
+addEventListener('resize',function(){sizeRenderer();});
+/* ================= GAME LOOP & CONTROLS ================= */
+function updateCamera(){
+  camera.position.set(player.x,EYE,player.z);
+  var cp=Math.cos(camPitch);
+  lookDir.set(Math.sin(camYaw)*cp,Math.sin(camPitch),Math.cos(camYaw)*cp);
+  camera.lookAt(player.x+lookDir.x*5,EYE+lookDir.y*5,player.z+lookDir.z*5);
+}
+function renderFrame(force){
+  if(!storeReady)return;
+  if(inGame)updateCamera();else updateDrift(clock.getDelta()||.016);
+  renderer.render(scene,camera);
+  if(inGame)checkHotspot();
+}
+(function loop(){
+  requestAnimationFrame(loop);
+  if(!storeReady)return;
+  var dt=Math.min(clock.getDelta(),.05);
+  if(!inGame){updateDrift(driftFreeze?0:dt);renderer.render(scene,camera);return;}
+  var moved=false;
+  /* keyboard */
+  var mx=0,mz=0;
+  if(keys.w||keys.ArrowUp)mz+=1;if(keys.s||keys.ArrowDown)mz-=1;
+  if(keys.a||keys.ArrowLeft)mx-=1;if(keys.d||keys.ArrowRight)mx+=1;
+  mx+=joy.x;mz+=-joy.y;
+  if(mx||mz){
+    var len=Math.hypot(mx,mz);if(len>1){mx/=len;mz/=len;}
+    var sy=Math.sin(camYaw),cy=Math.cos(camYaw);
+    var dx=sy*mz-cy*mx,dz=cy*mz+sy*mx;
+    tryMove(dx*player.speed*dt,dz*player.speed*dt);moved=true;
+  }
+  /* tap-to-move */
+  if(moveTarget){
+    var tdx=moveTarget.x-player.x,tdz=moveTarget.z-player.z,td=Math.hypot(tdx,tdz);
+    if(td<.25){moveTarget=null;}
+    else{
+      var before={x:player.x,z:player.z};
+      tryMove(tdx/td*player.speed*dt,tdz/td*player.speed*dt);
+      if(Math.hypot(player.x-before.x,player.z-before.z)<.0005)moveTarget=null;
+      moved=true;
+    }
+  }
+  updateCamera();renderer.render(scene,camera);checkHotspot();
+})();
+
+var keys={},joy={x:0,y:0,pointer:null},moveTarget=null;
+document.addEventListener('keydown',function(e){
+  if(!inGame||activePanel)return;
+  var k=e.key.length===1?e.key.toLowerCase():e.key;
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].indexOf(e.key)>-1)e.preventDefault();
+  keys[k]=true;
+  if(k==='e'){checkHotspot();activateHotspot();}
+});
+document.addEventListener('keyup',function(e){var k=e.key.length===1?e.key.toLowerCase():e.key;keys[k]=false;});
+
+/* enter / leave */
+function enterGame(){
+  if(!storeReady){toast('The store is still loading');return;}
+  inGame=true;document.body.classList.add('in-game');
+  $('gameUI').setAttribute('aria-hidden','false');
+  player.x=0;player.z=-3.4;camYaw=0;targetYaw=0;camPitch=0;targetPitch=0;
+  $('controlsHint').textContent=coarse?'Drag to look · Tap a product · Joystick to walk':'WASD move · Mouse look · Click a product · E interact · ESC leave';
+  sizeRenderer();
+  if(!coarse&&frame.requestPointerLock)frame.requestPointerLock();
+  updateCamera();renderer.render(scene,camera);
+}
+function leaveGame(){
+  inGame=false;document.body.classList.remove('in-game');
+  $('gameUI').setAttribute('aria-hidden','true');
+  if(document.pointerLockElement)document.exitPointerLock();
+  closePanels();sizeRenderer();
+}
+document.querySelectorAll('[data-walkin]').forEach(function(b){b.addEventListener('click',enterGame);});
+$('exitBtn').addEventListener('click',leaveGame);
+
+/* desktop: pointer lock + click interact */
+document.addEventListener('pointerlockchange',function(){
+  frame.classList.toggle('locked',document.pointerLockElement===frame);
+});
+document.addEventListener('mousemove',function(e){
+  if(!inGame||document.pointerLockElement!==frame||activePanel)return;
+  targetYaw-=e.movementX*.0024;targetPitch=Math.max(-1.05,Math.min(1.05,targetPitch-e.movementY*.0021));
+  camYaw=targetYaw;camPitch=targetPitch;
+});
+frame.addEventListener('click',function(){
+  if(!inGame||coarse||activePanel)return;
+  if(document.pointerLockElement===frame){checkHotspot();activateHotspot();}
+  else if(frame.requestPointerLock)frame.requestPointerLock();
+});
+function activateHotspot(){
+  if(!activeHotspot)return;
+  var t=activeHotspot.type;
+  if(t==='case'||t==='shelf')openCasePicker(activeHotspot);
+  else if(t==='menu')openMenuBoard();
+  else if(t==='checkout'){renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);}
+}
+function openCasePicker(){
+  /* quick pick: open a simple product choice via product cards, start with Thai Stick */
+  openProduct('thai');
+}
+function openMenuBoard(){
+  openProduct('northern');
+}
+
+/* touch: drag look, tap products, tap-to-move floor */
+var tl={pointer:null,x:0,y:0,moved:false};
+frame.addEventListener('pointerdown',function(e){
+  if(!inGame||!coarse||activePanel)return;
+  if(e.target!==frame&&e.target!==canvas)return;
+  tl.pointer=e.pointerId;tl.x=e.clientX;tl.y=e.clientY;tl.moved=false;
+  try{frame.setPointerCapture(e.pointerId);}catch(ignore){}
+});
+frame.addEventListener('pointermove',function(e){
+  if(!inGame||!coarse||tl.pointer!==e.pointerId||activePanel)return;
+  var dx=e.clientX-tl.x,dy=e.clientY-tl.y;
+  if(Math.abs(dx)+Math.abs(dy)>5)tl.moved=true;
+  tl.x=e.clientX;tl.y=e.clientY;
+  targetYaw+=dx*.0062;targetPitch=Math.max(-1.02,Math.min(1.02,targetPitch-dy*.0052));
+  camYaw=targetYaw;camPitch=targetPitch;
+});
+function endTouch(e){
+  if(tl.pointer!==e.pointerId)return;
+  var wasTap=!tl.moved;tl.pointer=null;
+  if(!wasTap||!inGame||activePanel)return;
+  tapV.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);
+  raycaster.setFromCamera(tapV,camera);
+  var hits=raycaster.intersectObjects(hitboxes);
+  if(hits.length){activateAction(hits[0].object.userData.action);return;}
+  /* floor tap: move there */
+  var floorY=new T.Plane(new T.Vector3(0,1,0),0);
+  var pt=new T.Vector3();
+  if(raycaster.ray.intersectPlane(floorY,pt)){
+    if(!blocked(pt.x,pt.z))moveTarget={x:pt.x,z:pt.z};
+    else toast('Can not walk there');
+  }
+}
+frame.addEventListener('pointerup',endTouch);
+frame.addEventListener('pointercancel',function(e){if(tl.pointer===e.pointerId)tl.pointer=null;});
+function activateAction(a){
+  if(!a)return;
+  if(a.type==='product')openProduct(a.key);
+  else if(a.type==='menu')openMenuBoard();
+  else if(a.type==='checkout'){renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);}
+}
+/* desktop non-locked click fallback: raycast from screen point */
+frame.addEventListener('dblclick',function(){
+  if(!inGame||coarse||activePanel||document.pointerLockElement===frame)return;
+  tapV.set(0,0);raycaster.setFromCamera(tapV,camera);
+  var hits=raycaster.intersectObjects(hitboxes);
+  if(hits.length)activateAction(hits[0].object.userData.action);
+});
+
+/* joystick */
+var joystick=$('joystick'),stick=$('stick');
+function moveStick(e){
+  var r=joystick.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
+  var d=Math.hypot(dx,dy),max=36;
+  if(d>max){dx=dx/d*max;dy=dy/d*max;}
+  joy.x=dx/max;joy.y=dy/max;
+  stick.style.transform='translate3d('+dx+'px,'+dy+'px,0)';
+}
+joystick.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();joy.pointer=e.pointerId;try{joystick.setPointerCapture(e.pointerId);}catch(ignore){}moveStick(e);moveTarget=null;});
+joystick.addEventListener('pointermove',function(e){if(joy.pointer===e.pointerId)moveStick(e);});
+function releaseStick(e){if(joy.pointer!==e.pointerId)return;joy.pointer=null;joy.x=0;joy.y=0;stick.style.transform='translate3d(0,0,0)';}
+joystick.addEventListener('pointerup',releaseStick);
+joystick.addEventListener('pointercancel',releaseStick);
+
+/* debug hook for QA */
+window.__shopDebug={
+  ready:function(){return storeReady;},
+  enter:enterGame,leave:leaveGame,
+  inGame:function(){return inGame;},
+  addToBag:function(k,q){addToBag(k,q||1);},
+  bag:function(){return JSON.parse(JSON.stringify(bag));},
+  openProduct:openProduct,openCheckout:function(){renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);},
+  setPlayer:function(x,z){if(!blocked(x,z)){player.x=x;player.z=z;return true;}return false;},
+  lookAt:function(x,y,z){var yaw=Math.atan2(x-player.x,z-player.z);targetYaw=camYaw=yaw;targetPitch=camPitch=Math.atan2(y-camera.position.y,Math.hypot(x-player.x,z-player.z));},
+  activateHotspot:activateHotspot,hotspot:checkHotspot,interactAt:function(x,y){tapV.set(x,y);raycaster.setFromCamera(tapV,camera);var h=raycaster.intersectObjects(hitboxes);return h.length?h[0].object.userData.action:null;}
+};
+/* QA deep-links (screenshot testing) */
+var qaParam=new URLSearchParams(location.search).get('qa');
+if(qaParam){
+  var qaTimer=setInterval(function(){
+    if(!storeReady)return;clearInterval(qaTimer);
+    setTimeout(function(){
+      if(qaParam==='game'){enterGame();}
+      else if(qaParam==='case'){enterGame();if(!blocked(-2.2,-1.7)){player.x=-2.2;player.z=-1.7;}camYaw=targetYaw=0;camPitch=targetPitch=-.08;updateCamera();renderer.render(scene,camera);}
+      else if(qaParam==='sign'){enterGame();if(!blocked(0,3.6)){player.x=0;player.z=3.6;}camYaw=targetYaw=0;camPitch=targetPitch=0;updateCamera();renderer.render(scene,camera);}
+      else if(qaParam==='product'){enterGame();openProduct('thai');}
+      else if(qaParam==='confirm'){addToBag('northern',1);renderCheckoutPage();openPanel($('checkoutPanel'),false);$('fName').value='Jane Doe';$('fEmail').value='jane@email.com';$('fCard').value='4242 4242 4242 4242';$('fExp').value='12/28';$('fCvc').value='123';coGo(2);$('coPlace').click();}
+      else if(qaParam==='bag'){addToBag('thai',2);addToBag('northern',1);renderBagList();openPanel($('bagPanel'),false);}
+      else if(qaParam==='checkout'){addToBag('thai',2);addToBag('maui',1);renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);}
+      else if(qaParam==='pay'){addToBag('thai',1);renderCheckoutPage();openPanel($('checkoutPanel'),true);$('fName').value='Jane Doe';$('fEmail').value='jane@email.com';$('fAddr').value='123 Blossom St';$('fCity').value='Pasadena';$('fZip').value='91101';coGo(2);}
+      else if(qaParam==='drift0'){driftFreeze=true;driftI=0;driftT=0;}
+    },600);
+  },250);
+}
+sizeRenderer();
+})();
+</script>
+</body>
+</html>
