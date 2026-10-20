@@ -9201,6 +9201,10 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           var p = npcs[i].group.position;
           if (Math.hypot(x - p.x, z - p.z) < player.r + .4) return true;
         }
+        for (i = 0; i < peds.length; i++){
+          var pp = peds[i].g.position;
+          if (Math.hypot(x - pp.x, z - pp.z) < player.r + .34) return true;
+        }
         return false;
       }
       function move(dx, dz){
@@ -9224,11 +9228,12 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       /* separate shop instances — each its own little room with its own crowd,
          so a busy shop never drags the others down */
       var SHOPS = [
-        { name:"Sunshine Room", crowd:4 },
-        { name:"Daisy Room", crowd:3 },
-        { name:"Petal Room", crowd:4 }
+        { name:"Sunshine Room", crowd:6 },
+        { name:"Daisy Room", crowd:5 },
+        { name:"Petal Room", crowd:6 }
       ];
       var currentShop = 0, npcGroup = null, npcs = [];
+      var checkoutQueue = [], spawnT = 0;
       var cashier = null, cashierArms = null, doorL = null, doorR = null, doorOpen = 0;
 
       function isSmallScreen(){
@@ -9449,7 +9454,6 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         { x:-5.93, z:-2.6, face:-Math.PI/2 }, { x:-5.93, z:-1.6, face:-Math.PI/2 }, { x:-5.93, z:-.6, face:-Math.PI/2 },
         { x: 5.93, z:-2.6, face: Math.PI/2 }, { x: 5.93, z:-1.6, face: Math.PI/2 }, { x: 5.93, z:-.6, face: Math.PI/2 },
         { x:-5.2, z:-4.92, face: Math.PI }, { x:-4.45, z:-4.92, face: Math.PI }, { x: 4.45, z:-4.92, face: Math.PI }, { x: 5.2, z:-4.92, face: Math.PI },
-        { x:-1.1, z:-3.97, face: Math.PI }, { x: 1.1, z:-3.97, face: Math.PI },
         { x:-3.3, z: 5.05, face: 0 }, { x: 3.3, z: 5.05, face: 0 }
       ];
       var AISLES = [
@@ -9490,42 +9494,243 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         }
         return false;
       }
-      function setGoal(n, spot){
-        n.goal = spot;
+      /* ---------- the shopper brain ----------
+         Every shopper runs her own little decision loop — no wandering in
+         circles. She picks a shelf she hasn't just visited (and reserves
+         it, so nobody else heads for the same patch of floor), walks
+         there, browses it properly — look, reach, pick something up and
+         inspect it — maybe keeps it and carries it around, queues at the
+         till when she's done, pays, and eventually heads out the door
+         while a new shopper comes in to take her place. Personality knobs
+         (patience, sociable, decisive) make each one shop differently,
+         and she'll glance at you when you drift close, yield when you're
+         in her way, and stop to chat with another shopper now and then. */
+      function setGoal(n, spot, kind){
+        n.goal = spot; n.goalKind = kind || "browse";
         n.path = [];
         var p = n.group.position;
         if (segBlocked(p.x, p.z, spot.x, spot.z)) n.path.push({ x:0, z:.4 }); // swing through the middle of the shop
         n.path.push({ x:spot.x, z:spot.z, face:spot.face });
-        n.state = "walk"; n.stuckT = 0; n.yieldT = 0;
+        n.state = "walk"; n.stuckT = 0; n.yieldT = 0; n.detourUsed = false;
       }
-      /* a browse spot belongs to one shopper at a time — if someone is
-         standing at it or already headed for it, it's taken, so nobody
-         piles onto the same patch of floor */
-      function spotTaken(spot, self){
-        for (var i = 0; i < npcs.length; i++){
-          var o = npcs[i];
-          if (o === self) continue;
-          var op = o.group.position;
-          if (Math.hypot(op.x - spot.x, op.z - spot.z) < 1.05) return true;
-          if (o.goal && Math.hypot(o.goal.x - spot.x, o.goal.z - spot.z) < .6) return true;
+      function releaseSpot(n){
+        if (n.spotIdx >= 0 && BROWSE[n.spotIdx] && BROWSE[n.spotIdx].reservedBy === n) BROWSE[n.spotIdx].reservedBy = null;
+        n.spotIdx = -1;
+      }
+      /* a browse spot is claimable only if nobody has reserved it, nobody
+         is standing at a neighbouring spot, and nobody is already there —
+         that's what stops the pile-ups in front of the shelves */
+      function spotFree(idx, self){
+        var s = BROWSE[idx], i, o, q, qp;
+        if (s.reservedBy && s.reservedBy !== self) return false;
+        for (i = 0; i < BROWSE.length; i++){
+          if (i === idx) continue;
+          o = BROWSE[i];
+          if (o.reservedBy && o.reservedBy !== self && Math.hypot(o.x - s.x, o.z - s.z) < 1.2) return false;
         }
+        for (i = 0; i < npcs.length; i++){
+          q = npcs[i];
+          if (q === self) continue;
+          qp = q.group.position;
+          if (Math.hypot(qp.x - s.x, qp.z - s.z) < .95) return false;
+        }
+        return true;
+      }
+      function chooseSpotGoal(n){
+        var p = n.group.position, i, s, d, score, total = 0, weights = [], best = -1;
+        // weighted pick: fresh shelves beat just-visited ones, close beats far
+        for (i = 0; i < BROWSE.length; i++){
+          if (!spotFree(i, n)){ weights.push(0); continue; }
+          s = BROWSE[i];
+          d = Math.hypot(s.x - p.x, s.z - p.z);
+          score = (n.visited[i] ? .18 : 1) * (1 / (1 + d * .22)) + n.rnd() * .25;
+          weights.push(score); total += score;
+        }
+        if (total > 0){
+          var r = n.rnd() * total;
+          for (i = 0; i < weights.length; i++){ r -= weights[i]; if (r <= 0){ best = i; break; } }
+          if (best < 0) best = weights.length - 1;
+        }
+        if (best >= 0){
+          releaseSpot(n);
+          BROWSE[best].reservedBy = n; n.spotIdx = best;
+          setGoal(n, BROWSE[best], "browse");
+          return true;
+        }
+        // every shelf is busy — drift to an open aisle point and wait a beat
+        var a = AISLES[Math.floor(n.rnd() * AISLES.length)];
+        setGoal(n, { x:a[0] + (n.rnd() - .5) * .8, z:a[1] + (n.rnd() - .5) * .8, face:null }, "aisle");
         return false;
       }
-      function chooseGoal(n){
-        var r = n.rnd();
-        if (r < .68){
-          var spot = null;
-          for (var tries = 0; tries < 5; tries++){
-            var cand = BROWSE[Math.floor(n.rnd() * BROWSE.length)];
-            if (n.goal && Math.abs(cand.x - n.goal.x) < .01 && Math.abs(cand.z - n.goal.z) < .01) continue;
-            if (!spotTaken(cand, n)){ spot = cand; break; }
-          }
-          if (spot){ setGoal(n, spot); return; }
-          var a2 = AISLES[Math.floor(n.rnd() * AISLES.length)];
-          setGoal(n, { x:a2[0] + (n.rnd() - .5) * .8, z:a2[1] + (n.rnd() - .5) * .8, face:null });
+      function enterBrowse(n){
+        n.state = "browse";
+        n.baseFace = (n.goal && n.goal.face != null) ? n.goal.face : n.group.rotation.y;
+        n.faceTarget = n.baseFace;
+        n.phase = "look"; n.phaseT = .6 + n.rnd() * 1.2;
+        n.browseLeft = (5 + n.rnd() * 6) * n.patience;
+        n.browsed++;
+        if (n.spotIdx >= 0) n.visited[n.spotIdx] = true;
+      }
+      /* ---------- checkout queue ----------
+         One line at the till, in front of the register. The front of the
+         line is being served; when she leaves, everyone shuffles up. */
+      var QUEUE_SLOTS = [ { x:.95, z:-3.45 }, { x:.95, z:-2.5 }, { x:.95, z:-1.55 } ];
+      function sendToQueueSlot(n){
+        var idx = checkoutQueue.indexOf(n);
+        if (idx < 0) return;
+        var s = QUEUE_SLOTS[idx];
+        setGoal(n, { x:s.x, z:s.z, face:Math.PI }, "queue");
+      }
+      function joinQueue(n){
+        if (checkoutQueue.length >= QUEUE_SLOTS.length) return false;
+        checkoutQueue.push(n);
+        sendToQueueSlot(n);
+        return true;
+      }
+      function advanceQueue(){
+        for (var i = 0; i < checkoutQueue.length; i++){
+          var q = checkoutQueue[i];
+          if (q.state === "queue" || (q.state === "walk" && q.goalKind === "queue")) sendToQueueSlot(q);
+        }
+      }
+      function finishCheckout(n){
+        if (n.carryItem){ n.group.remove(n.carryItem); n.carryItem = null; }
+        n.carrying = false;
+        var qi = checkoutQueue.indexOf(n);
+        if (qi >= 0) checkoutQueue.splice(qi, 1);
+        cashierServePop = 1; // the cashier throws a little "you're all set" gesture
+        advanceQueue();
+        n.browsed = 1;
+        if (n.rnd() < .55) setGoal(n, { x:0, z:5.35, face:Math.PI }, "door");
+        else chooseSpotGoal(n);
+      }
+      /* ---------- picking things up ----------
+         Browsing has hands: reach for a pouch, hold it up, turn it over,
+         then either put it back or keep it — a kept pouch rides at her
+         side until the till. Built from plain materials on purpose: no
+         canvas textures to mint mid-shop. */
+      function makeMiniPouch(p){
+        var g = new THREE.Group();
+        var body = new THREE.Mesh(new THREE.BoxGeometry(.3, .4, .09), mat(p.c2, .65));
+        body.castShadow = true; g.add(body);
+        var label = new THREE.Mesh(new THREE.PlaneGeometry(.22, .26), mat(0xfffdf9, .8));
+        label.position.z = .048; g.add(label);
+        var seal = new THREE.Mesh(new THREE.BoxGeometry(.31, .05, .1), mat(0xf2b84b, .45, .4));
+        seal.position.y = .21; g.add(seal);
+        return g;
+      }
+      function startInspect(n){
+        var P = window.FLWR.PRODUCTS;
+        var item = makeMiniPouch(P[Math.floor(n.rnd() * 3)]);
+        item.position.set(.2, 1.04, .3);
+        item.rotation.y = .3;
+        n.group.add(item);
+        n.inspectItem = item;
+      }
+      function endInspect(n, keepChance){
+        if (!n.inspectItem) return;
+        var item = n.inspectItem; n.inspectItem = null;
+        if (!n.carrying && n.rnd() < keepChance){
+          n.carrying = true; n.carryItem = item;
+          item.position.set(.37, .8, .1);
+          item.rotation.set(0, -.2, .12);
         } else {
-          var a = AISLES[Math.floor(n.rnd() * AISLES.length)];
-          setGoal(n, { x:a[0] + (n.rnd() - .5) * .8, z:a[1] + (n.rnd() - .5) * .8, face:null });
+          n.group.remove(item);
+        }
+      }
+      /* ---------- chatting ----------
+         Two shoppers who find themselves near each other sometimes just
+         stop and talk — face to face, gestures and all — the way people
+         actually do in a little shop. */
+      function cancelChat(n){
+        if (n.partner){
+          var o = n.partner;
+          o.partner = null;
+          if (o.state === "chat" || o.state === "chatWait"){ o.state = "idle"; o.idleT = .4 + o.rnd() * .6; }
+        }
+        n.partner = null;
+      }
+      function tryStartChat(n){
+        var p = n.group.position, best = null, bd = 3.1, i, o, op, d;
+        for (i = 0; i < npcs.length; i++){
+          o = npcs[i];
+          if (o === n || o.partner || o.chatCD > 0) continue;
+          if (o.state !== "browse" && o.state !== "idle") continue;
+          op = o.group.position;
+          d = Math.hypot(op.x - p.x, op.z - p.z);
+          if (d < bd){ bd = d; best = o; }
+        }
+        if (!best) return false;
+        releaseSpot(best);
+        if (best.inspectItem) endInspect(best, .3);
+        best.state = "chatWait"; best.partner = n; best.waitT = 7;
+        n.partner = best;
+        var bp = best.group.position;
+        var dx = p.x - bp.x, dz = p.z - bp.z, dl = Math.hypot(dx, dz) || 1;
+        var sx = bp.x + dx / dl * .95, sz = bp.z + dz / dl * .95;
+        if (npcBlocked(sx, sz)){ sx = bp.x - dz / dl * .95; sz = bp.z + dx / dl * .95; }
+        if (npcBlocked(sx, sz)){ cancelChat(n); return false; }
+        setGoal(n, { x:sx, z:sz, face:null }, "chat");
+        return true;
+      }
+      /* ---------- the decision itself ----------
+         A small utility pick, weighted by what she's carrying, how long
+         she's been shopping, and how she's built. */
+      function decide(n){
+        if (n.inspectItem) endInspect(n, .5);
+        releaseSpot(n);
+        n.partner = null;
+        var opts = [ { k:"browse", w:3.1 * (n.carrying ? .5 : 1) } ];
+        if (n.carrying) opts.push({ k:"checkout", w:1.6 + n.browsed * .4 + n.decisive * 1.4 });
+        if (!n.carrying && n.browsed >= 4) opts.push({ k:"leave", w:.5 + (n.browsed - 4) * .35 });
+        if (n.sociable > .4 && n.chatCD <= 0) opts.push({ k:"chat", w:1.15 * n.sociable });
+        opts.push({ k:"idle", w:.45 });
+        var total = 0, i;
+        for (i = 0; i < opts.length; i++) total += opts[i].w;
+        var r = n.rnd() * total, pick = "browse";
+        for (i = 0; i < opts.length; i++){ r -= opts[i].w; if (r <= 0){ pick = opts[i].k; break; } }
+        if (pick === "checkout" && joinQueue(n)) return;
+        if (pick === "leave"){ setGoal(n, { x:0, z:5.35, face:Math.PI }, "door"); return; }
+        if (pick === "chat" && tryStartChat(n)) return;
+        if (pick === "idle"){ n.state = "idle"; n.idleT = .8 + n.rnd() * 1.6; n.baseFace = n.group.rotation.y; return; }
+        chooseSpotGoal(n);
+      }
+      /* a new face through the door when the room has room for one */
+      function spawnShopper(){
+        if (!npcGroup) return;
+        var counts = [0, 0, 0], i;
+        for (i = 0; i < npcs.length; i++) counts[npcs[i].ci]++;
+        var ci = counts[0] <= counts[2] ? 0 : 2;
+        if (counts[1] === 0 && Math.random() < .45) ci = 1;
+        var rnd = mulberry32((Math.random() * 1e9) | 0);
+        var n = makeShopper(rnd, ci, { x:(Math.random() - .5) * .6, z:5.35, face:Math.PI }, Math.random() < .5);
+        npcGroup.add(n.group); npcs.push(n);
+        chooseSpotGoal(n);
+        updateShopLabels();
+      }
+      /* settle everyone out of the walls and furniture, and out of your
+         space — runs before the separation passes so a push never ends
+         with someone inside a shelf */
+      function settleNPCs(boundsOnly){
+        for (var i = 0; i < npcs.length; i++){
+          var p = npcs[i].group.position;
+          p.x = Math.max(NPC_BOUNDS.minX + .05, Math.min(NPC_BOUNDS.maxX - .05, p.x));
+          p.z = Math.max(NPC_BOUNDS.minZ + .05, Math.min(NPC_BOUNDS.maxZ - .05, p.z));
+          if (boundsOnly) continue;
+          for (var j = 0; j < collisions.length; j++){
+            var bx = collisions[j];
+            var hw = bx.w / 2 + NPC_R, hd = bx.d / 2 + NPC_R;
+            var ddx = p.x - bx.x, ddz = p.z - bx.z;
+            if (Math.abs(ddx) < hw && Math.abs(ddz) < hd){
+              if (hw - Math.abs(ddx) < hd - Math.abs(ddz)) p.x = bx.x + (ddx < 0 ? -hw : hw);
+              else p.z = bx.z + (ddz < 0 ? -hd : hd);
+            }
+          }
+          var ux = p.x - player.x, uz = p.z - player.z, ud = Math.sqrt(ux * ux + uz * uz);
+          if (ud > .001 && ud < .72 && !npcBlocked(player.x + ux / ud * .72, player.z + uz / ud * .72)){
+            p.x = player.x + ux / ud * .72;
+            p.z = player.z + uz / ud * .72;
+          }
         }
       }
       /* ---------- shoppers ----------
@@ -9627,9 +9832,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       function findBones(n, ci){
         var names = ARM_BONES[ci];
         if (!names || !n.model) return;
-        n.armBone = n.model.getObjectByName(names.arm) || null;
-        n.foreBone = n.model.getObjectByName(names.fore) || null;
-        n.handBone = n.model.getObjectByName(names.hand) || null;
+        // the bundled loader strips ':' out of node names on the way in
+        // (mixamorig:Hips arrives as mixamorigHips) — try both spellings
+        function byName(nm){
+          return n.model.getObjectByName(nm) || n.model.getObjectByName(nm.replace(":", "")) || null;
+        }
+        n.armBone = byName(names.arm);
+        n.foreBone = byName(names.fore);
+        n.handBone = byName(names.hand);
       }
       /* a tote only counts if it's in a hand. The moment a skinned shopper
          is on the floor, park her tote at her hand — updateNPCs then keeps
@@ -9806,8 +10016,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
                   model:null, mixer:null, actions:null, animState:null, needsClips:false, freezeIdle:false,
                   pose:null, armBone:null, foreBone:null, handBone:null, armRest:null,
                   reachAmt:0, leanAmt:0, reachT:rnd() * 3.4,
-                  speed:.55 + rnd() * .3, wait:0, bob:rnd() * 6,
-                  state:"browse", path:[], goal:null, stuckT:0, yieldT:0, faceTarget:null, tote:null, dead:false };
+                  speed:.55 + rnd() * .3, bob:rnd() * 6,
+                  patience:.6 + rnd() * .9, sociable:rnd(), decisive:rnd(),
+                  browsed:0, visited:{}, carrying:false, carryItem:null, inspectItem:null,
+                  phase:"look", phaseT:1, browseLeft:0, baseFace:0,
+                  chatCD:3 + rnd() * 7, chatT:0, waitT:0, partner:null,
+                  glanceT:0, glanceFace:0, glanceCD:2 + rnd() * 4, idleT:0, serveT:0,
+                  spotIdx:-1, gone:false, detourUsed:false,
+                  state:"idle", path:[], goal:null, goalKind:null, stuckT:0, yieldT:0, faceTarget:null, tote:null, dead:false };
         function styledPerson(){
           var person = makePersonMesh({ skin:skin, hair:hairC, top:outfit, bottom:0x5b4a6e, shoe:0x282128, accent:0xf2b84b, hat: rnd() < .35 });
           g.add(person);
@@ -9852,18 +10068,28 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           });
         }
         npcGroup = new THREE.Group(); npcs = [];
+        checkoutQueue = [];
+        for (var b = 0; b < BROWSE.length; b++) BROWSE[b].reservedBy = null;
         var rnd = mulberry32(1234 + idx * 777);
-        var pool = [0, 1, 2], spots = BROWSE.slice(), k, j, tmp;
-        for (k = pool.length - 1; k > 0; k--){ j = Math.floor(rnd() * (k + 1)); tmp = pool[k]; pool[k] = pool[j]; pool[j] = tmp; }
+        var seq = [0, 1, 2, 0, 2, 0]; // girl, Cesium guy, low-poly regular, then restyled repeats — never a second Cesium man
+        var spots = BROWSE.slice(), k, j, tmp;
         for (k = spots.length - 1; k > 0; k--){ j = Math.floor(rnd() * (k + 1)); tmp = spots[k]; spots[k] = spots[j]; spots[j] = tmp; }
         for (var i = 0; i < SHOPS[idx].crowd; i++){
           var spot = spots[i % spots.length];
-          var n = makeShopper(rnd, i < 3 ? pool[i] : 0, spot, i % 2 === 0); // 4th shopper: a second, restyled HVGirl; every other shopper carries a tote
-          if (i % 2 === 0){ n.state = "browse"; n.wait = 2 + rnd() * 4; n.goal = spot; n.faceTarget = spot.face; }
-          else chooseGoal(n);
+          var n = makeShopper(rnd, seq[i % seq.length], spot, i % 2 === 0);
           npcGroup.add(n.group); npcs.push(n);
+          if (i % 2 === 0){
+            // start mid-browse at this shelf, spot reserved in her name
+            n.spotIdx = BROWSE.indexOf(spot);
+            if (n.spotIdx >= 0) BROWSE[n.spotIdx].reservedBy = n;
+            n.state = "browse"; n.phase = "look"; n.phaseT = .5 + rnd() * 1.5;
+            n.browseLeft = (5 + rnd() * 6) * n.patience;
+            n.baseFace = spot.face != null ? spot.face : 0; n.faceTarget = n.baseFace;
+            n.goal = spot;
+          } else decide(n);
         }
         scene.add(npcGroup);
+        spawnT = 3;
         updateShopLabels();
       }
       function faceToward(n, target, dt){
@@ -9872,190 +10098,296 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         while (diff < -Math.PI) diff += Math.PI * 2;
         n.group.rotation.y += diff * Math.min(1, dt * 7);
       }
+      /* walk the path: collision-tested steps, steering around people,
+         easing off behind slower shoppers, yielding to the player. The
+         pull of other people fades out on the final approach so a
+         shopper can always actually arrive at her shelf / queue slot. */
+      function followPath(n, dt){
+        var g = n.group, dest = n.path[0];
+        if (!dest) return { moving:false, speed:0, arrived:true };
+        var dx = dest.x - g.position.x, dz = dest.z - g.position.z;
+        var d = Math.sqrt(dx * dx + dz * dz);
+        if (d < .18){
+          n.path.shift();
+          return { moving:false, speed:0, arrived:n.path.length === 0 };
+        }
+        var dirx = dx / d, dirz = dz / d, oj, j;
+        var stx = 0, stz = 0;
+        for (oj = 0; oj < npcs.length; oj++){
+          if (npcs[oj] === n) continue;
+          var q = npcs[oj].group.position;
+          var qx = g.position.x - q.x, qz = g.position.z - q.z;
+          var qd = Math.sqrt(qx * qx + qz * qz);
+          if (qd > .001 && qd < 1.15){ var qw = (1.15 - qd) / 1.15 * 1.6; stx += qx / qd * qw; stz += qz / qd * qw; }
+        }
+        var upx = g.position.x - player.x, upz = g.position.z - player.z;
+        var upd = Math.sqrt(upx * upx + upz * upz);
+        if (upd > .001 && upd < 1.05){ var uw = (1.05 - upd) * 1.8; stx += upx / upd * uw; stz += upz / upd * uw; }
+        if (stx || stz){
+          var steerScale = d < 1.1 ? Math.max(.15, d / 1.1) : 1;
+          dirx += stx * steerScale; dirz += stz * steerScale;
+          var dl = Math.sqrt(dirx * dirx + dirz * dirz);
+          if (dl > .01){ dirx /= dl; dirz /= dl; }
+        }
+        var speed = n.speed;
+        // don't barge: ease off behind other shoppers instead of walking through them
+        for (j = 0; j < npcs.length; j++){
+          if (npcs[j] === n) continue;
+          var op = npcs[j].group.position;
+          var ox = op.x - g.position.x, oz = op.z - g.position.z;
+          var od = Math.sqrt(ox * ox + oz * oz);
+          if (od < 1.1 && od > .001 && (ox * dirx + oz * dirz) / od > .25)
+            speed = Math.min(speed, n.speed * Math.max(0, (od - .6) / .5));
+        }
+        // and yield to you — if you're in their path, they stop and wait
+        var yielding = false;
+        var px = player.x - g.position.x, pz = player.z - g.position.z;
+        var pd = Math.sqrt(px * px + pz * pz);
+        if (pd < 1.15 && pd > .001 && (px * dirx + pz * dirz) / pd > .05){ speed = 0; yielding = true; }
+        n.yieldT = yielding ? n.yieldT + dt : 0;
+        var actualSpeed = 0;
+        if (speed > .01){
+          var stepx = dirx * speed * dt, stepz = dirz * speed * dt;
+          var ox2 = g.position.x, oz2 = g.position.z;
+          if (!npcBlocked(g.position.x + stepx, g.position.z)) g.position.x += stepx;
+          if (!npcBlocked(g.position.x, g.position.z + stepz)) g.position.z += stepz;
+          var movedD = Math.sqrt((g.position.x - ox2) * (g.position.x - ox2) + (g.position.z - oz2) * (g.position.z - oz2));
+          actualSpeed = dt > 0 ? movedD / dt : 0;
+          faceToward(n, Math.atan2(dirx, dirz), dt);
+          n.stuckT = actualSpeed > .04 ? 0 : n.stuckT + dt;
+        } else {
+          n.stuckT = yielding ? 0 : n.stuckT + dt;
+        }
+        if (n.stuckT > 1.15 || n.yieldT > 4){
+          n.stuckT = 0; n.yieldT = 0;
+          if (!n.detourUsed && n.goal){
+            n.detourUsed = true;
+            n.path = [{ x:0, z:.4 }, { x:n.goal.x, z:n.goal.z, face:n.goal.face }];
+          } else if (n.goalKind === "door"){
+            g.position.x += (0 - g.position.x) * .3; g.position.z += (5.35 - g.position.z) * .3;
+          } else if (n.goalKind === "chat"){
+            cancelChat(n); decide(n);
+          } else if (n.goalKind === "queue"){
+            sendToQueueSlot(n);
+          } else {
+            decide(n);
+          }
+        }
+        return { moving:actualSpeed > .04, speed:actualSpeed, arrived:false };
+      }
+      /* the body language, once the brain has decided what she's doing:
+         walk bob and arm swing for the low-poly regular, clip crossfades
+         for the skinned shoppers, tote in hand, reach pose on top */
+      function animateNPC(n, dt, t, moving, actualSpeed){
+        var g = n.group;
+        n.bob += dt * 8 * Math.max(actualSpeed, .12);
+        if (!n.model){
+          g.position.y = moving ? Math.abs(Math.sin(n.bob)) * .04 : 0;
+          g.rotation.z = moving ? Math.sin(n.bob) * .02 : 0;
+          if (g.userData.arms){
+            if (moving){
+              var sw = Math.sin(n.bob) * .45;
+              g.userData.arms[0].rotation.x = sw;
+              g.userData.arms[1].rotation.x = -sw;
+            } else {
+              // browsing: right arm up at the shelf, left arm — the one
+              // holding the tote — hanging easy
+              g.userData.arms[1].rotation.x = -1.95 * n.reachAmt + Math.sin(t * 1.7 + n.bob) * .05 * n.reachAmt;
+              g.userData.arms[0].rotation.x = -.12 * n.reachAmt;
+            }
+            if (g.userData.rig) g.userData.rig.rotation.x = .085 * n.leanAmt + .05 * n.reachAmt;
+          }
+        }
+        if (n.pose) n.pose.rotation.x = .07 * n.leanAmt + .045 * n.reachAmt;
+        if (n.tote){
+          n.tote.rotation.z = moving ? Math.sin(n.bob) * .06 : n.tote.rotation.z * .92;
+          if (n.handBone) followHand(n); // a held bag tracks the hand, walk swing and all
+        }
+        if (n.mixer && n.actions){
+          n.mixer.update(dt);
+          if (n.actions.idle){
+            var want = moving ? "walk" : "idle";
+            if (n.animState !== want && n.actions[want]){
+              if (n.actions[n.animState]) n.actions[n.animState].fadeOut(.25);
+              n.actions[want].reset().fadeIn(.25).play();
+              n.animState = want;
+            }
+            if (n.actions.walk) n.actions.walk.timeScale = Math.max(.5, Math.min(1.5, (actualSpeed || .75) / .75));
+          } else if (n.actions.walk){
+            var wa = n.actions.walk;
+            if (!wa.isRunning()) wa.play();
+            wa.paused = !moving;
+            if (moving) wa.timeScale = Math.max(.5, Math.min(1.5, actualSpeed / .75));
+            n.animState = moving ? "walk" : "idle";
+          }
+        }
+        applyReach(n); // after the mixer, so the reach pose wins over the clip for this frame
+      }
       function updateNPCs(dt, t){
         var i, j, n, g;
+        // a fresh shopper comes in the door when the room has room for one
+        spawnT -= dt;
+        if (npcGroup && npcs.length < SHOPS[currentShop].crowd && spawnT <= 0){
+          spawnShopper();
+          spawnT = 5 + Math.random() * 6;
+        }
+        var removals = [];
         for (i = 0; i < npcs.length; i++){
           n = npcs[i]; g = n.group;
           var moving = false, actualSpeed = 0;
+          n.chatCD -= dt; n.glanceCD -= dt;
           if (n.state === "browse"){
-            n.wait -= dt;
-            if (n.faceTarget != null) faceToward(n, n.faceTarget, dt);
-            // browsing is a pose, not a statue impression: lean in toward
-            // the display and keep reaching up to it — touch a pouch, check
-            // a jar, put it back, reach again
-            n.reachT += dt;
-            var cyc = n.reachT % 3.4;
-            var rTarget = cyc < .5 ? cyc / .5 : (cyc < 2.3 ? 1 : Math.max(0, (3.1 - cyc) / .8));
-            n.reachAmt += (rTarget - n.reachAmt) * Math.min(1, dt * 7);
-            n.leanAmt += (1 - n.leanAmt) * Math.min(1, dt * 5);
-            if (n.wait <= 0) chooseGoal(n);
-          } else {
-            var dest = n.path[0];
-            if (!dest){ chooseGoal(n); dest = n.path[0]; }
-            if (dest){
-              var dx = dest.x - g.position.x, dz = dest.z - g.position.z;
-              var d = Math.sqrt(dx * dx + dz * dz);
-              if (d < .16){
-                n.path.shift();
-                if (!n.path.length){
-                  n.state = "browse";
-                  if (n.goal && n.goal.face != null){ n.wait = 2.5 + n.rnd() * 4; n.faceTarget = n.goal.face; }
-                  else { n.wait = .4 + n.rnd() * 1.4; n.faceTarget = null; }
-                }
-              } else {
-                var dirx = dx / d, dirz = dz / d;
-                // personal space: steer around other shoppers and around you
-                // instead of walking straight through them
-                var stx = 0, stz = 0, oj;
-                for (oj = 0; oj < npcs.length; oj++){
-                  if (oj === i) continue;
-                  var q = npcs[oj].group.position;
-                  var qx = g.position.x - q.x, qz = g.position.z - q.z;
-                  var qd = Math.sqrt(qx * qx + qz * qz);
-                  if (qd > .001 && qd < 1.05){ var qw = (1.05 - qd) / 1.05 * 1.5; stx += qx / qd * qw; stz += qz / qd * qw; }
-                }
-                var upx = g.position.x - player.x, upz = g.position.z - player.z;
-                var upd = Math.sqrt(upx * upx + upz * upz);
-                if (upd > .001 && upd < 1.0){ var uw = (1.0 - upd) * 1.7; stx += upx / upd * uw; stz += upz / upd * uw; }
-                if (stx || stz){
-                  dirx += stx; dirz += stz;
-                  var dl = Math.sqrt(dirx * dirx + dirz * dirz);
-                  if (dl > .01){ dirx /= dl; dirz /= dl; }
-                }
-                var speed = n.speed;
-                // don't barge: ease off behind other shoppers instead of walking through them
-                for (j = 0; j < npcs.length; j++){
-                  if (j === i) continue;
-                  var op = npcs[j].group.position;
-                  var ox = op.x - g.position.x, oz = op.z - g.position.z;
-                  var od = Math.sqrt(ox * ox + oz * oz);
-                  if (od < 1.05 && od > .001 && (ox * dirx + oz * dirz) / od > .25)
-                    speed = Math.min(speed, n.speed * Math.max(0, (od - .55) / .5));
-                }
-                // and yield to you — if you're in their path, they stop and wait
-                var yielding = false;
-                var px = player.x - g.position.x, pz = player.z - g.position.z;
-                var pd = Math.sqrt(px * px + pz * pz);
-                if (pd < 1.15 && pd > .001 && (px * dirx + pz * dirz) / pd > .05){ speed = 0; yielding = true; }
-                n.yieldT = yielding ? n.yieldT + dt : 0;
-                if (n.yieldT > 3.5) chooseGoal(n); // waited long enough — they'll wander off another way
-                else if (speed > .01){
-                  var stepx = dirx * speed * dt, stepz = dirz * speed * dt;
-                  var ox2 = g.position.x, oz2 = g.position.z;
-                  if (!npcBlocked(g.position.x + stepx, g.position.z)) g.position.x += stepx;
-                  if (!npcBlocked(g.position.x, g.position.z + stepz)) g.position.z += stepz;
-                  var moved = Math.sqrt((g.position.x - ox2) * (g.position.x - ox2) + (g.position.z - oz2) * (g.position.z - oz2));
-                  actualSpeed = dt > 0 ? moved / dt : 0;
-                  moving = actualSpeed > .04;
-                  faceToward(n, Math.atan2(dirx, dirz), dt);
-                  n.stuckT = moving ? 0 : n.stuckT + dt;
-                  if (n.stuckT > 1.1){ n.stuckT = 0; chooseGoal(n); }
-                }
+            n.browseLeft -= dt; n.phaseT -= dt;
+            // a glance your way when you drift close — people notice people
+            var faceW = n.baseFace;
+            if (n.glanceT > 0){ n.glanceT -= dt; faceW = n.glanceFace; }
+            else if (n.glanceCD <= 0){
+              var gdx = player.x - g.position.x, gdz = player.z - g.position.z;
+              if (gdx * gdx + gdz * gdz < 5.8){
+                var ga = Math.atan2(gdx, gdz), gd2 = ga - n.baseFace;
+                while (gd2 > Math.PI) gd2 -= Math.PI * 2;
+                while (gd2 < -Math.PI) gd2 += Math.PI * 2;
+                if (Math.abs(gd2) < 1.1){
+                  n.glanceFace = n.baseFace + gd2 * .8;
+                  n.glanceT = .8 + n.rnd() * .7;
+                  n.glanceCD = 3 + n.rnd() * 5;
+                  faceW = n.glanceFace;
+                } else n.glanceCD = 1.2;
+              } else n.glanceCD = .8;
+            }
+            faceToward(n, faceW, dt);
+            // the browse itself, in phases: look it over, reach for
+            // something, hold it up and inspect it, put it back or keep it
+            var rT = 0;
+            if (n.phase === "look"){
+              n.leanAmt += (.45 - n.leanAmt) * Math.min(1, dt * 5);
+              if (n.phaseT <= 0){ n.phase = "reach"; n.phaseT = 1.1 + n.rnd() * .9; }
+            } else if (n.phase === "reach"){
+              rT = 1;
+              n.leanAmt += (1 - n.leanAmt) * Math.min(1, dt * 5);
+              if (n.phaseT <= 0){
+                if (!n.carrying && !n.inspectItem && n.rnd() < .55){
+                  startInspect(n); n.phase = "inspect"; n.phaseT = 1.8 + n.rnd() * 1.4;
+                } else { n.phase = "look"; n.phaseT = .9 + n.rnd() * 1.3; }
+              }
+            } else {
+              rT = .3;
+              n.leanAmt += (.7 - n.leanAmt) * Math.min(1, dt * 5);
+              if (n.phaseT <= 0){
+                endInspect(n, .35 + n.decisive * .3);
+                n.phase = "look"; n.phaseT = .8 + n.rnd() * 1.1;
               }
             }
+            n.reachAmt += (rT - n.reachAmt) * Math.min(1, dt * 6);
+            if (n.browseLeft <= 0) decide(n);
+          } else if (n.state === "walk"){
+            var res = followPath(n, dt);
+            moving = res.moving; actualSpeed = res.speed;
+            if (res.arrived){
+              if (n.goalKind === "browse") enterBrowse(n);
+              else if (n.goalKind === "queue") n.state = "queue";
+              else if (n.goalKind === "door") n.gone = true;
+              else if (n.goalKind === "chat"){
+                if (n.partner && !n.partner.dead && n.partner.state === "chatWait"){
+                  n.state = "chat"; n.chatT = 3 + n.rnd() * 2.5;
+                  n.partner.state = "chat"; n.partner.chatT = n.chatT;
+                } else { n.partner = null; decide(n); }
+              }
+              else { n.state = "idle"; n.idleT = .5 + n.rnd() * 1.2; n.baseFace = n.group.rotation.y; }
+            }
+          } else if (n.state === "queue"){
+            faceToward(n, Math.PI, dt); // face the till and wait your turn
+            if (checkoutQueue.indexOf(n) < 0) decide(n); // not in the line anymore — get on with shopping
+            else if (checkoutQueue[0] === n){ n.state = "served"; n.serveT = 3.2 + n.rnd() * 2.4; }
+          } else if (n.state === "served"){
+            faceToward(n, Math.atan2(.95 - g.position.x, -5.45 - g.position.z), dt);
+            n.leanAmt += (.35 - n.leanAmt) * Math.min(1, dt * 5);
+            n.reachAmt += ((Math.sin(t * .006 + i) > .55 ? .55 : .1) - n.reachAmt) * Math.min(1, dt * 6);
+            n.serveT -= dt;
+            if (n.serveT <= 0) finishCheckout(n);
+          } else if (n.state === "chat"){
+            if (!n.partner || n.partner.dead || n.partner.gone){ n.partner = null; decide(n); }
+            else {
+              var cp = n.partner.group.position;
+              faceToward(n, Math.atan2(cp.x - g.position.x, cp.z - g.position.z), dt);
+              n.reachAmt += ((.3 + .18 * Math.sin(t * .004 + i * 2.1)) - n.reachAmt) * Math.min(1, dt * 6);
+              n.leanAmt += (.3 - n.leanAmt) * Math.min(1, dt * 5);
+              n.chatT -= dt;
+              if (n.chatT <= 0){
+                var o2 = n.partner;
+                n.partner = null; o2.partner = null;
+                n.chatCD = 9 + n.rnd() * 9; o2.chatCD = 9 + o2.rnd() * 9;
+                decide(n);
+                if (!o2.dead && !o2.gone && (o2.state === "chat" || o2.state === "chatWait")) decide(o2);
+              }
+            }
+          } else if (n.state === "chatWait"){
+            if (!n.partner || n.partner.dead || n.partner.gone){ n.partner = null; decide(n); }
+            else {
+              var wp = n.partner.group.position;
+              faceToward(n, Math.atan2(wp.x - g.position.x, wp.z - g.position.z), dt);
+              n.waitT -= dt;
+              if (n.waitT <= 0){ cancelChat(n); decide(n); }
+            }
+          } else { // idle — a breath between decisions, eyes drifting over the shop
+            n.idleT -= dt;
+            faceToward(n, n.baseFace + Math.sin(t * .0004 + i * 1.7) * .5, dt);
+            if (n.idleT <= 0) decide(n);
           }
-          if (n.state !== "browse"){
-            n.reachAmt += (0 - n.reachAmt) * Math.min(1, dt * 7);
+          if (n.state === "walk" || n.state === "idle" || n.state === "queue" || n.state === "chatWait"){
+            n.reachAmt += (0 - n.reachAmt) * Math.min(1, dt * 6);
             n.leanAmt += (0 - n.leanAmt) * Math.min(1, dt * 5);
           }
-          n.bob += dt * 8 * Math.max(actualSpeed, .12);
-          if (!n.model){
-            g.position.y = moving ? Math.abs(Math.sin(n.bob)) * .04 : 0;
-            g.rotation.z = moving ? Math.sin(n.bob) * .02 : 0;
-            if (g.userData.arms){
-              if (moving){
-                var sw = Math.sin(n.bob) * .45;
-                g.userData.arms[0].rotation.x = sw;
-                g.userData.arms[1].rotation.x = -sw;
-              } else {
-                // browsing: right arm up at the shelf, left arm — the one
-                // holding the tote — hanging easy; strolling off again
-                // eases both back down with reachAmt
-                g.userData.arms[1].rotation.x = -1.95 * n.reachAmt + Math.sin(t * 1.7 + n.bob) * .05 * n.reachAmt;
-                g.userData.arms[0].rotation.x = -.12 * n.reachAmt;
+          animateNPC(n, dt, t, moving, actualSpeed);
+          if (n.gone) removals.push(n);
+        }
+        for (i = removals.length - 1; i >= 0; i--){
+          var rn = removals[i];
+          rn.dead = true;
+          releaseSpot(rn);
+          var qi2 = checkoutQueue.indexOf(rn);
+          if (qi2 >= 0){ checkoutQueue.splice(qi2, 1); advanceQueue(); }
+          for (j = 0; j < npcs.length; j++) if (npcs[j].partner === rn) npcs[j].partner = null;
+          if (npcGroup) npcGroup.remove(rn.group);
+          rn.group.traverse(function(o){
+            if (o.geometry) o.geometry.dispose();
+            if (o.material) o.material.dispose();
+          });
+          npcs.splice(npcs.indexOf(rn), 1);
+          spawnT = 3 + Math.random() * 4;
+          updateShopLabels();
+        }
+        // settle everyone out of the furniture and walls first, then
+        // personal space — twice. Shoppers standing still (browsing,
+        // queueing, chatting) are anchored: the walker does most of the
+        // moving, so nobody ends a frame inside anybody else.
+        settleNPCs(false);
+        for (var round = 0; round < 2; round++){
+          for (i = 0; i < npcs.length; i++){
+            for (j = i + 1; j < npcs.length; j++){
+              var a = npcs[i], b = npcs[j];
+              var ap = a.group.position, bp = b.group.position;
+              var sx = bp.x - ap.x, sz = bp.z - ap.z, sd = Math.sqrt(sx * sx + sz * sz);
+              if (sd < .8){
+                var ux4, uz4;
+                if (sd > .001){ ux4 = sx / sd; uz4 = sz / sd; }
+                else { var ang4 = i * 2.39 + j * 1.31; ux4 = Math.cos(ang4); uz4 = Math.sin(ang4); sd = 0; }
+                var need = .8 - sd;
+                var aMove = a.state === "walk" ? .75 : .25, bMove = b.state === "walk" ? .75 : .25;
+                var tot = aMove + bMove;
+                ap.x -= ux4 * need * (aMove / tot); ap.z -= uz4 * need * (aMove / tot);
+                bp.x += ux4 * need * (bMove / tot); bp.z += uz4 * need * (bMove / tot);
               }
-              if (g.userData.rig) g.userData.rig.rotation.x = .085 * n.leanAmt + .05 * n.reachAmt;
             }
           }
-          if (n.pose) n.pose.rotation.x = .07 * n.leanAmt + .045 * n.reachAmt;
-          if (n.tote){
-            n.tote.rotation.z = moving ? Math.sin(n.bob) * .06 : n.tote.rotation.z * .92;
-            if (n.handBone) followHand(n); // a held bag tracks the hand, walk swing and all
-          }
-          if (n.mixer && n.actions){
-            n.mixer.update(dt);
-            if (n.actions.idle){
-              var want = moving ? "walk" : "idle";
-              if (n.animState !== want && n.actions[want]){
-                if (n.actions[n.animState]) n.actions[n.animState].fadeOut(.25);
-                n.actions[want].reset().fadeIn(.25).play();
-                n.animState = want;
-              }
-              if (n.actions.walk) n.actions.walk.timeScale = Math.max(.5, Math.min(1.5, (actualSpeed || .75) / .75));
-            } else if (n.actions.walk){
-              var wa = n.actions.walk;
-              if (!wa.isRunning()) wa.play();
-              wa.paused = !moving;
-              if (moving) wa.timeScale = Math.max(.5, Math.min(1.5, actualSpeed / .75));
-              n.animState = moving ? "walk" : "idle";
-            }
-          }
-          applyReach(n); // after the mixer, so the reach pose wins over the clip for this frame
-        }
-        // safety net only: if two shoppers ever end up overlapping, ease them
-        // apart — then settle everyone back out of the furniture and the walls
-        for (i = 0; i < npcs.length; i++){
-          for (j = i + 1; j < npcs.length; j++){
-            var a = npcs[i].group.position, b = npcs[j].group.position;
-            var sx = b.x - a.x, sz = b.z - a.z, sd = Math.sqrt(sx * sx + sz * sz);
-            if (sd < .62){
-              var ux3, uz3;
-              if (sd > .001){ ux3 = sx / sd; uz3 = sz / sd; }
-              else { var ang3 = i * 2.39 + j * 1.31; ux3 = Math.cos(ang3); uz3 = Math.sin(ang3); sd = 0; }
-              var push = (.62 - sd) / 2 + .004;
-              a.x -= ux3 * push; a.z -= uz3 * push;
-              b.x += ux3 * push; b.z += uz3 * push;
-            }
-          }
-        }
-        for (i = 0; i < npcs.length; i++){
-          var p = npcs[i].group.position;
-          p.x = Math.max(NPC_BOUNDS.minX + .05, Math.min(NPC_BOUNDS.maxX - .05, p.x));
-          p.z = Math.max(NPC_BOUNDS.minZ + .05, Math.min(NPC_BOUNDS.maxZ - .05, p.z));
-          for (j = 0; j < collisions.length; j++){
-            var bx = collisions[j];
-            var hw = bx.w / 2 + NPC_R, hd = bx.d / 2 + NPC_R;
-            var ddx = p.x - bx.x, ddz = p.z - bx.z;
-            if (Math.abs(ddx) < hw && Math.abs(ddz) < hd){
-              if (hw - Math.abs(ddx) < hd - Math.abs(ddz)) p.x = bx.x + (ddx < 0 ? -hw : hw);
-              else p.z = bx.z + (ddz < 0 ? -hd : hd);
-            }
-          }
-          var ux = p.x - player.x, uz = p.z - player.z, ud = Math.sqrt(ux * ux + uz * uz);
-          if (ud > .001 && ud < .72 && !npcBlocked(player.x + ux / ud * .72, player.z + uz / ud * .72)){
-            p.x = player.x + ux / ud * .72;
-            p.z = player.z + uz / ud * .72;
-          }
-        }
-        // once more, now that everyone is settled — nobody ends the frame
-        // standing inside anybody else
-        for (i = 0; i < npcs.length; i++){
-          for (j = i + 1; j < npcs.length; j++){
-            var a2p = npcs[i].group.position, b2p = npcs[j].group.position;
-            var s2x = b2p.x - a2p.x, s2z = b2p.z - a2p.z, s2d = Math.sqrt(s2x * s2x + s2z * s2z);
-            if (s2d > .001 && s2d < .62){
-              var p2 = (.62 - s2d) / 2;
-              a2p.x -= s2x / s2d * p2; a2p.z -= s2z / s2d * p2;
-              b2p.x += s2x / s2d * p2; b2p.z += s2z / s2d * p2;
-            }
-          }
+          settleNPCs(true);
         }
       }
       function updateShopLabels(){
         document.querySelectorAll("[data-shop-pick]").forEach(function(b){
           b.classList.toggle("is-on", parseInt(b.getAttribute("data-shop-pick"), 10) === currentShop);
         });
-        var c = SHOPS[currentShop].crowd;
+        var c = npcs.length;
         presenceLabel.textContent = c
           ? "✿ " + c + " other shopper" + (c > 1 ? "s" : "") + " browsing in here with you"
           : "✿ just you in here right now";
@@ -10189,11 +10521,11 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           // sidewalk and street out front
           var sw = new THREE.Mesh(new THREE.PlaneGeometry(30, 5.6), mat(0xf6e7da,.98));
           sw.rotation.x = -Math.PI/2; sw.position.set(0, -.01, D/2 + 2.8); sw.receiveShadow = true; scene.add(sw);
-          var road = new THREE.Mesh(new THREE.PlaneGeometry(30, 3.6), mat(0xa08ba8,.98));
-          road.rotation.x = -Math.PI/2; road.position.set(0, -.02, D/2 + 7.4); road.receiveShadow = true; scene.add(road);
+          var road = new THREE.Mesh(new THREE.PlaneGeometry(30, 5.6), mat(0xa08ba8,.98));
+          road.rotation.x = -Math.PI/2; road.position.set(0, -.02, D/2 + 8.2); road.receiveShadow = true; scene.add(road);
           for (var dxi = -7; dxi <= 7; dxi++){
             var dash = new THREE.Mesh(new THREE.BoxGeometry(1.1, .012, .14), mat(0xfff6da,.9));
-            dash.position.set(dxi * 1.9, 0, D/2 + 7.4); scene.add(dash);
+            dash.position.set(dxi * 1.9, 0, D/2 + 7.55); scene.add(dash);
           }
           // planters flanking the door and along the front, little trees on the pavement
           [[-3.4, 7.3, 1],[3.4, 7.3, 1],[-1.78, 6.55, .42],[1.78, 6.55, .42]].forEach(function(pp){
@@ -10353,6 +10685,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         });
 
         buildCrowd(currentShop);
+        buildStreetLife();
 
         built = true;
         resize();
@@ -10521,26 +10854,240 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         updateCamera(dt);
 
         updateNPCs(dt, t);
-        // the doors part as you walk up to them, and shut behind you
+        // the doors part as you — or a shopper heading in or out — walk up to them
         if (doorL && doorR){
-          var doorDist = Math.hypot(player.x, player.z - 6);
-          doorOpen += ((doorDist < 2.6 ? 1 : 0) - doorOpen) * Math.min(1, dt * 5.5);
+          var doorNear = Math.hypot(player.x, player.z - 6) < 2.6;
+          if (!doorNear) for (var di = 0; di < npcs.length; di++){
+            var dp = npcs[di].group.position;
+            if (Math.hypot(dp.x, dp.z - 6) < 2.3){ doorNear = true; break; }
+          }
+          doorOpen += ((doorNear ? 1 : 0) - doorOpen) * Math.min(1, dt * 5.5);
           doorL.position.x = -.59 - doorOpen * 1.19;
           doorR.position.x = .59 + doorOpen * 1.19;
         }
-        // the cashier minds her register — a little life while she waits
-        if (cashier){
-          var ct = t * .001;
-          cashier.rotation.y = Math.sin(ct * .45) * .24;
-          cashier.position.y = Math.abs(Math.sin(ct * 1.6)) * .012;
-          if (cashierArms){
+        updateCashier(dt, t);
+        updateStreet(dt, t);
+        if (softLook && lastMouse && document.pointerLockElement !== overlay) setHovered(pointerHit(lastMouse));
+        else setHovered(centerHit());
+        renderer.render(scene, camera);
+      }
+
+      /* ---------- the cashier has a brain too ----------
+         She minds the register, watches the door, waves when you come
+         in, turns to whoever she's serving — the front of the queue, or
+         you when you step up to the counter — and taps the till. */
+      var cashierServePop = 0, cashierGreeted = false, cashierGreetT = 0, prevPlayerZ = 12;
+      function updateCashier(dt, t){
+        if (!cashier) return;
+        var ct = t * .001;
+        var cx = cashier.position.x, cz = cashier.position.z;
+        var target = null, serving = false;
+        var front = checkoutQueue[0];
+        if (front && front.state === "served"){ target = front.group.position; serving = true; }
+        else if (Math.abs(player.x - cx) < 2.4 && player.z > cz + .6 && player.z < cz + 3.4){ target = player; serving = true; }
+        // hello! — she clocks you coming through the door
+        if (!cashierGreeted && prevPlayerZ >= 6.2 && player.z < 6.2 && player.z > 0) cashierGreetT = 1.8;
+        if (player.z > 7.5) cashierGreeted = false;
+        prevPlayerZ = player.z;
+        if (cashierGreetT > 0){ cashierGreetT -= dt; if (cashierGreetT <= 0) cashierGreeted = true; }
+        cashierServePop = Math.max(0, cashierServePop - dt * 1.4);
+        var faceT = Math.sin(ct * .4) * .3;
+        if (target) faceT = Math.atan2(target.x - cx, target.z - cz);
+        else if (cashierGreetT > 0) faceT = Math.atan2(player.x - cx, player.z - cz);
+        faceT = Math.max(-1.05, Math.min(1.05, faceT));
+        var cd = faceT - cashier.rotation.y;
+        while (cd > Math.PI) cd -= Math.PI * 2;
+        while (cd < -Math.PI) cd += Math.PI * 2;
+        cashier.rotation.y += cd * Math.min(1, dt * 5);
+        cashier.position.y = Math.abs(Math.sin(ct * 1.6)) * .012;
+        if (cashierArms){
+          if (cashierGreetT > 0){
+            cashierArms[1].rotation.x = -2.5 + Math.sin(ct * 10) * .35; // a proper wave hello
+            cashierArms[0].rotation.x = -.15;
+          } else if (cashierServePop > 0){
+            cashierArms[0].rotation.x = -1.15; cashierArms[1].rotation.x = -1.15; // "you're all set!"
+          } else if (serving){
+            cashierArms[0].rotation.x = -.55 + Math.sin(ct * 6.4) * .16; // tapping the till, bagging up
+            cashierArms[1].rotation.x = -.55 + Math.cos(ct * 5.3) * .16;
+          } else {
             cashierArms[0].rotation.x = -.22 + Math.sin(ct * 1.25) * .1;
             cashierArms[1].rotation.x = -.22 + Math.cos(ct * 1.05) * .1;
           }
         }
-        if (softLook && lastMouse && document.pointerLockElement !== overlay) setHovered(pointerHit(lastMouse));
-        else setHovered(centerHit());
-        renderer.render(scene, camera);
+      }
+
+      /* ---------- street life ----------
+         The world outside the windows: cars rolling past in both lanes
+         and parked up at the far curb, people strolling the pavement
+         (they stop to window-shop, and they wait rather than walk
+         through you), the neighbours' storefronts either side, and the
+         buildings across the street hazed into the fog. */
+      var cars = [], peds = [];
+      function makeCar(color){
+        var g = new THREE.Group();
+        var body = new THREE.Mesh(new THREE.BoxGeometry(1.78, .48, .92), mat(color, .35, .25));
+        body.position.y = .48; body.castShadow = true; g.add(body);
+        var nose = new THREE.Mesh(new THREE.BoxGeometry(.34, .3, .88), mat(color, .35, .25));
+        nose.position.set(1.02, .4, 0); g.add(nose);
+        var cabin = new THREE.Mesh(new THREE.BoxGeometry(.92, .42, .82),
+          new THREE.MeshStandardMaterial({ color:0xbfe6ff, roughness:.15, metalness:.3 }));
+        cabin.position.set(-.08, .9, 0); cabin.castShadow = true; g.add(cabin);
+        var wheelGeo = new THREE.CylinderGeometry(.19, .19, .13, 16);
+        wheelGeo.rotateX(Math.PI / 2);
+        var wheels = [];
+        [[.62, .47], [.62, -.47], [-.62, .47], [-.62, -.47]].forEach(function(wp){
+          var w = new THREE.Mesh(wheelGeo, mat(0x33303a, .9));
+          w.position.set(wp[0], .19, wp[1]); g.add(w); wheels.push(w);
+        });
+        var hl = new THREE.Mesh(new THREE.BoxGeometry(.05, .09, .6),
+          new THREE.MeshStandardMaterial({ color:0xfff6cf, emissive:0xffedb5, emissiveIntensity:1.2 }));
+        hl.position.set(1.2, .44, 0); g.add(hl);
+        var tl = new THREE.Mesh(new THREE.BoxGeometry(.05, .08, .6),
+          new THREE.MeshStandardMaterial({ color:0xff7d7d, emissive:0xd33333, emissiveIntensity:.7 }));
+        tl.position.set(-.92, .5, 0); g.add(tl);
+        g.userData.wheels = wheels;
+        return g;
+      }
+      function buildStreetLife(){
+        var carColors = [0xff8fc7, 0xa8dcff, 0xf2b84b, 0xa9e8c6, 0xc9b8ff, 0xfff3d6];
+        var lanes = [ { z:12.95, dir:1, sp:3.1 }, { z:14.15, dir:-1, sp:3.7 } ];
+        for (var i = 0; i < 4; i++){
+          var lane = lanes[i % 2];
+          var car = makeCar(carColors[i % carColors.length]);
+          car.position.set(-14 + i * 7.5 + (i % 2) * 3, 0, lane.z);
+          if (lane.dir < 0) car.rotation.y = Math.PI;
+          scene.add(car);
+          cars.push({ g:car, dir:lane.dir, sp:lane.sp + Math.random() * .8 });
+        }
+        // parked up along the far curb
+        [[-11.5, 1], [11.8, -1]].forEach(function(pk, i2){
+          var pc = makeCar(carColors[(i2 + 3) % carColors.length]);
+          pc.position.set(pk[0], 0, 15.9);
+          if (pk[1] < 0) pc.rotation.y = Math.PI;
+          scene.add(pc);
+        });
+        // the neighbours: a café on one side, a book nook on the other
+        function neighbour(cx2, wallC, signText, signC, awnC){
+          var g = new THREE.Group();
+          var w = new THREE.Mesh(new THREE.BoxGeometry(6.4, 4.4, .4), mat(wallC, .95));
+          w.position.y = 2.2; w.castShadow = true; w.receiveShadow = true; g.add(w);
+          var sign = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 1.0),
+            new THREE.MeshStandardMaterial({ map:canvasTex(1024, 224, function(x){
+              x.fillStyle = "#fff7ec"; x.fillRect(0, 0, 1024, 224);
+              x.fillStyle = signC; x.textAlign = "center"; x.font = "92px Shrikhand, cursive";
+              x.fillText(signText, 512, 148);
+            }), roughness:.85 }));
+          sign.position.set(0, 3.6, .22); g.add(sign);
+          var awn = new THREE.Mesh(new THREE.BoxGeometry(4.4, .07, 1.1),
+            new THREE.MeshStandardMaterial({ map:canvasTex(256, 64, function(x){
+              for (var ai = 0; ai < 8; ai++){ x.fillStyle = ai % 2 ? "#ffffff" : awnC; x.fillRect(ai * 32, 0, 32, 64); }
+            }), roughness:.85 }));
+          awn.position.set(0, 2.62, .62); awn.rotation.x = -.3; g.add(awn);
+          var win = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 1.7), new THREE.MeshBasicMaterial({ color:0xd9f2ff }));
+          win.position.set(0, 1.45, .21); g.add(win);
+          var door = new THREE.Mesh(new THREE.PlaneGeometry(.95, 2.1), mat(0x47264d, .6));
+          door.position.set(2.2, 1.05, .21); g.add(door);
+          g.position.set(cx2, 0, 6);
+          scene.add(g);
+        }
+        neighbour(-10.3, 0xd8f3e3, "CAFÉ FLEUR", "#c22b78", "#57b87e");
+        neighbour(10.3, 0xfff0c9, "BOOK NOOK", "#5b3fae", "#8f6fe8");
+        // buildings across the street, hazed by the fog into the distance
+        [[-9.5, 8.5, 0xe7deff], [-1, 11, 0xffe3ec], [8, 7.5, 0xd9efff]].forEach(function(bd){
+          var bg = new THREE.Mesh(new THREE.BoxGeometry(7.6, bd[1], 1),
+            new THREE.MeshStandardMaterial({ map:canvasTex(256, 384, function(x){
+              x.fillStyle = "#" + ("000000" + bd[2].toString(16)).slice(-6); x.fillRect(0, 0, 256, 384);
+              x.fillStyle = "rgba(255,255,255,.75)";
+              for (var wy = 0; wy < 6; wy++) for (var wx = 0; wx < 4; wx++)
+                if ((wx * 7 + wy * 13) % 3) x.fillRect(22 + wx * 58, 26 + wy * 58, 32, 38);
+            }), roughness:.95 }));
+          bg.position.set(bd[0], bd[1] / 2, 20.5);
+          scene.add(bg);
+        });
+        // street lamps and a bench on the pavement
+        [-4.8, 4.8].forEach(function(lx){
+          var pole = new THREE.Mesh(new THREE.CylinderGeometry(.05, .06, 3.3, 10), mat(0x47264d, .6));
+          pole.position.set(lx, 1.65, 11.7); pole.castShadow = true; scene.add(pole);
+          var lampBall = new THREE.Mesh(new THREE.SphereGeometry(.16, 14, 10),
+            new THREE.MeshStandardMaterial({ color:0xfff3c4, emissive:0xffca66, emissiveIntensity:1.1 }));
+          lampBall.position.set(lx, 3.35, 11.7); scene.add(lampBall);
+          collisions.push({ name:"lamp post", x:lx, z:11.7, w:.3, d:.3 });
+        });
+        var bench = new THREE.Group();
+        var seat = new THREE.Mesh(new THREE.BoxGeometry(1.8, .09, .5), mat(0xb98a5e, .8));
+        seat.position.y = .48; seat.castShadow = true; bench.add(seat);
+        var back = new THREE.Mesh(new THREE.BoxGeometry(1.8, .5, .07), mat(0xb98a5e, .8));
+        back.position.set(0, .85, -.24); bench.add(back);
+        [-.75, .75].forEach(function(bx2){
+          var leg = new THREE.Mesh(new THREE.BoxGeometry(.09, .48, .45), mat(0x47264d, .6));
+          leg.position.set(bx2, .24, 0); bench.add(leg);
+        });
+        bench.position.set(-3.6, 0, 8.5); bench.rotation.y = Math.PI;
+        scene.add(bench);
+        collisions.push({ name:"bench", x:-3.6, z:8.5, w:1.8, d:.55 });
+        [[-9.6, 9.4], [9.6, 9.4]].forEach(function(tp){
+          var tr = makePlant(2.3); tr.position.set(tp[0], 0, tp[1]); scene.add(tr);
+        });
+        // pavement people — they stroll, window-shop, and step around you
+        var lanesP = [ { z:9.7, dir:1 }, { z:10.45, dir:-1 }, { z:9.7, dir:-1 } ];
+        for (var pi = 0; pi < 3; pi++){
+          var lp = lanesP[pi];
+          var person = makePersonMesh({
+            skin:SKIN_TONES[pi * 2 % SKIN_TONES.length], hair:HAIR_COLORS[(pi + 1) % HAIR_COLORS.length],
+            top:OUTFITS[(pi * 3 + 1) % OUTFITS.length], bottom:0x5b4a6e, shoe:0x282128,
+            accent:0xf2b84b, hat: pi === 1 });
+          person.scale.setScalar(.8 + pi * .03);
+          person.position.set(-11 + pi * 8.5, 0, lp.z);
+          scene.add(person);
+          peds.push({ g:person, dir:lp.dir, z:lp.z, sp:.85 + pi * .18, bob:pi * 2.1, pauseT:0, windowCD:3 + pi * 4 });
+        }
+      }
+      function updateStreet(dt, t){
+        var i, c;
+        for (i = 0; i < cars.length; i++){
+          c = cars[i];
+          c.g.position.x += c.dir * c.sp * dt;
+          if (c.g.position.x > 17.5) c.g.position.x = -17.5;
+          if (c.g.position.x < -17.5) c.g.position.x = 17.5;
+          var spin = c.sp * dt / .19;
+          c.g.userData.wheels.forEach(function(w){ w.rotation.z -= spin; });
+        }
+        for (i = 0; i < peds.length; i++){
+          var pd = peds[i], pg = pd.g;
+          var movingP = true;
+          if (pd.pauseT > 0){
+            pd.pauseT -= dt; movingP = false;
+            // window-shopping: turn and face the storefront while she pauses
+            var wdiff = Math.PI - pg.rotation.y;
+            while (wdiff > Math.PI) wdiff -= Math.PI * 2;
+            while (wdiff < -Math.PI) wdiff += Math.PI * 2;
+            pg.rotation.y += wdiff * Math.min(1, dt * 4);
+          } else {
+            pd.windowCD -= dt;
+            if (pd.windowCD <= 0 && Math.abs(Math.abs(pg.position.x) - 3.3) < .5 && Math.random() < .012){
+              pd.pauseT = 2.2 + Math.random() * 2; pd.windowCD = 9 + Math.random() * 10;
+            }
+            // she waits rather than walk through you
+            var aheadX = pg.position.x + pd.dir * .9;
+            if (Math.abs(player.z - pd.z) < .8 && Math.abs(player.x - aheadX) < .55) movingP = false;
+            if (movingP){
+              pg.position.x += pd.dir * pd.sp * dt;
+              if (pg.position.x > 14.5) pg.position.x = -14.5;
+              if (pg.position.x < -14.5) pg.position.x = 14.5;
+              var fdiff = (pd.dir > 0 ? Math.PI / 2 : -Math.PI / 2) - pg.rotation.y;
+              while (fdiff > Math.PI) fdiff -= Math.PI * 2;
+              while (fdiff < -Math.PI) fdiff += Math.PI * 2;
+              pg.rotation.y += fdiff * Math.min(1, dt * 6);
+            }
+          }
+          pd.bob += dt * 8 * (movingP ? pd.sp : .12);
+          pg.position.y = movingP ? Math.abs(Math.sin(pd.bob)) * .04 : 0;
+          var arms = pg.userData.arms;
+          if (arms){
+            if (movingP){ var sw2 = Math.sin(pd.bob) * .45; arms[0].rotation.x = sw2; arms[1].rotation.x = -sw2; }
+            else { arms[0].rotation.x *= .9; arms[1].rotation.x *= .9; }
+          }
+        }
       }
 
       /* ---------- enter / exit ---------- */
