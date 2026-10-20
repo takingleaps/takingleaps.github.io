@@ -9443,12 +9443,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
          collision-tested against the same furniture boxes the player uses,
          and shoppers yield to each other and to you instead of barging
          through — nobody walks through a shelf, a counter, or a person. */
+      /* pause points sit tight against the furniture — close enough to
+         touch what's on it, still clear of the collision boxes below */
       var BROWSE = [
-        { x:-5.68, z:-2.6, face:-Math.PI/2 }, { x:-5.68, z:-1.6, face:-Math.PI/2 }, { x:-5.68, z:-.6, face:-Math.PI/2 },
-        { x: 5.68, z:-2.6, face: Math.PI/2 }, { x: 5.68, z:-1.6, face: Math.PI/2 }, { x: 5.68, z:-.6, face: Math.PI/2 },
-        { x:-5.2, z:-4.68, face: Math.PI }, { x:-4.45, z:-4.68, face: Math.PI }, { x: 4.45, z:-4.68, face: Math.PI }, { x: 5.2, z:-4.68, face: Math.PI },
-        { x:-1.1, z:-3.72, face: Math.PI }, { x: 1.1, z:-3.72, face: Math.PI },
-        { x:-3.3, z: 4.55, face: 0 }, { x: 3.3, z: 4.55, face: 0 }
+        { x:-5.93, z:-2.6, face:-Math.PI/2 }, { x:-5.93, z:-1.6, face:-Math.PI/2 }, { x:-5.93, z:-.6, face:-Math.PI/2 },
+        { x: 5.93, z:-2.6, face: Math.PI/2 }, { x: 5.93, z:-1.6, face: Math.PI/2 }, { x: 5.93, z:-.6, face: Math.PI/2 },
+        { x:-5.2, z:-4.92, face: Math.PI }, { x:-4.45, z:-4.92, face: Math.PI }, { x: 4.45, z:-4.92, face: Math.PI }, { x: 5.2, z:-4.92, face: Math.PI },
+        { x:-1.1, z:-3.97, face: Math.PI }, { x: 1.1, z:-3.97, face: Math.PI },
+        { x:-3.3, z: 5.05, face: 0 }, { x: 3.3, z: 5.05, face: 0 }
       ];
       var AISLES = [
         [-5.4,3.4],[-2.8,3.5],[0,3.6],[2.8,3.5],[5.4,3.4],
@@ -9615,6 +9617,69 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           });
         });
       }
+      /* arm bones per character: the reaching shoulder + elbow, and the
+         hand a tote hangs from (the other hand, so a shopper can hold a
+         bag and still reach for the shelf) */
+      var ARM_BONES = [
+        { arm:"mixamorig:RightArm", fore:"mixamorig:RightForeArm", hand:"mixamorig:LeftHand" },
+        { arm:"Skeleton_arm_joint_R", fore:"Skeleton_arm_joint_R__2_", hand:"Skeleton_arm_joint_L__2_" }
+      ];
+      function findBones(n, ci){
+        var names = ARM_BONES[ci];
+        if (!names || !n.model) return;
+        n.armBone = n.model.getObjectByName(names.arm) || null;
+        n.foreBone = n.model.getObjectByName(names.fore) || null;
+        n.handBone = n.model.getObjectByName(names.hand) || null;
+      }
+      /* a tote only counts if it's in a hand. The moment a skinned shopper
+         is on the floor, park her tote at her hand — updateNPCs then keeps
+         it there every frame. No reachable hand bone, no bag at all. */
+      function placeToteInHand(n){
+        if (!n.tote) return;
+        if (n.handBone){ n.tote.visible = true; followHand(n); }
+        else { n.group.remove(n.tote); n.tote = null; }
+      }
+      var _handV = new THREE.Vector3();
+      function followHand(n){
+        if (!n.tote || !n.handBone) return;
+        n.handBone.getWorldPosition(_handV);
+        n.group.updateWorldMatrix(true, false);
+        n.group.worldToLocal(_handV);
+        n.tote.position.set(_handV.x, _handV.y + .05, _handV.z);
+      }
+      var _pa = new THREE.Vector3(), _pf = new THREE.Vector3(), _cur = new THREE.Vector3(), _des = new THREE.Vector3();
+      var _UP62 = new THREE.Vector3(0, .62, 0);
+      var _pq = new THREE.Quaternion(), _dq = new THREE.Quaternion(), _tq = new THREE.Quaternion();
+      /* raise a skinned shopper's free arm toward whatever she's facing:
+         measure where the upper arm points right now, decide where "up at
+         the shelf" is, and rotate the shoulder bone between the two —
+         works on either rig without guessing at its local axes. The clip
+         pose is restored first each frame, so nothing accumulates and the
+         arm settles back the moment she stops browsing. */
+      function applyReach(n){
+        var bone = n.armBone;
+        if (!bone || !n.foreBone || !n.model) return;
+        if (n.reachAmt < .004){
+          if (n.armRest){ bone.quaternion.copy(n.armRest); n.armRest = null; }
+          return;
+        }
+        if (!n.armRest) n.armRest = bone.quaternion.clone();
+        bone.quaternion.copy(n.armRest);
+        n.model.updateMatrixWorld(true);
+        bone.getWorldPosition(_pa);
+        n.foreBone.getWorldPosition(_pf);
+        _cur.subVectors(_pf, _pa);
+        if (_cur.lengthSq() < 1e-8) return;
+        _cur.normalize();
+        var ry = n.group.rotation.y;
+        _des.set(Math.sin(ry), 0, Math.cos(ry)).multiplyScalar(.74).add(_UP62).normalize();
+        bone.parent.getWorldQuaternion(_pq).invert();
+        _cur.applyQuaternion(_pq);
+        _des.applyQuaternion(_pq);
+        _dq.setFromUnitVectors(_cur, _des);
+        _tq.copy(_dq).multiply(n.armRest);
+        bone.quaternion.copy(n.armRest).slerp(_tq, n.reachAmt);
+      }
       /* parses run one at a time, a breath apart — decoding several skinned
          models in one tick would freeze the shop for seconds */
       var parseQueue = [], parseBusy = false;
@@ -9644,8 +9709,13 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           model.scale.setScalar(s);
           model.position.set(-(box.min.x + box.max.x) / 2 * s, -box.min.y * s, -(box.min.z + box.max.z) / 2 * s);
           model.traverse(function(m){ if (m.isMesh){ m.castShadow = true; m.frustumCulled = false; } });
-          n.group.add(model);
+          var pose = new THREE.Group(); // browse lean lives here, so it never fights the rig's own root transform
+          pose.add(model);
+          n.group.add(pose);
           n.model = model;
+          n.pose = pose;
+          findBones(n, ci);
+          placeToteInHand(n);
           tintCharacter(n, ci);
           if (gltf.animations && gltf.animations.length){
             setupActions(n, pickClip(gltf.animations, "walk"), pickClip(gltf.animations, "idle"));
@@ -9701,15 +9771,18 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         root.userData.rig = rig;
         return root;
       }
-      /* a proper shopper's tote: hangs from the shoulder on two straps and
-         rests against the hip — not a gold box floating in mid-air */
-      function makeTote(rnd, h){
+      /* a proper shopper's tote, built around its grip: the group's origin
+         IS the hand holding it. Straps loop up over the fingers, the bag
+         hangs below the hand and rests against the leg — it is only ever
+         placed in a hand (arm pivot or hand bone), never loose in the
+         world, so it can never float at leg height again */
+      function makeTote(rnd){
         var colors = [0xfff3d6, 0xffd7ea, 0xe7deff, 0xd8f3e3, 0xf2b84b];
         var g = new THREE.Group();
-        var bag = new THREE.Mesh(new THREE.BoxGeometry(.3, .36, .13), mat(colors[Math.floor(rnd() * colors.length)], .8));
-        bag.position.y = -.21; bag.castShadow = true; g.add(bag);
+        var bag = new THREE.Mesh(new THREE.BoxGeometry(.3, .34, .13), mat(colors[Math.floor(rnd() * colors.length)], .8));
+        bag.position.y = -.3; bag.castShadow = true; g.add(bag);
         var rim = new THREE.Mesh(new THREE.BoxGeometry(.315, .05, .145), mat(0xffffff, .6));
-        rim.position.y = -.045; g.add(rim);
+        rim.position.y = -.145; g.add(rim);
         var decal = new THREE.Mesh(new THREE.PlaneGeometry(.17, .17),
           new THREE.MeshStandardMaterial({ transparent:true, roughness:.8, map:canvasTex(128, 128, function(x){
             x.save(); x.translate(64, 64);
@@ -9717,41 +9790,54 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             x.beginPath(); x.arc(0, 0, 13, 0, Math.PI * 2); x.fillStyle = "#f2b84b"; x.fill();
             x.restore();
           }) }));
-        decal.position.set(0, -.21, .068); g.add(decal);
+        decal.position.set(0, -.3, .068); g.add(decal);
         [-.085, .085].forEach(function(sx){
-          var strap = new THREE.Mesh(new THREE.BoxGeometry(.032, .46, .012), mat(0x8a5a33, .7));
-          strap.position.set(sx, .2, 0); g.add(strap);
+          var strap = new THREE.Mesh(new THREE.BoxGeometry(.032, .3, .012), mat(0x8a5a33, .7));
+          strap.position.set(sx, -.02, 0); g.add(strap);
         });
-        g.position.set(.295, h * .55, .02);
         return g;
       }
-      function makeShopper(rnd, ci, startSpot){
+      function makeShopper(rnd, ci, startSpot, withTote){
         var outfit = OUTFITS[Math.floor(rnd() * OUTFITS.length)];
         var skin = SKIN_TONES[Math.floor(rnd() * SKIN_TONES.length)];
         var hairC = HAIR_COLORS[Math.floor(rnd() * HAIR_COLORS.length)];
         var g = new THREE.Group();
         var n = { group:g, rnd:rnd, ci:ci, targetH:(CHARACTERS[ci] ? CHARACTERS[ci].targetH : 1.7) + (rnd() - .5) * .07,
                   model:null, mixer:null, actions:null, animState:null, needsClips:false, freezeIdle:false,
+                  pose:null, armBone:null, foreBone:null, handBone:null, armRest:null,
+                  reachAmt:0, leanAmt:0, reachT:rnd() * 3.4,
                   speed:.55 + rnd() * .3, wait:0, bob:rnd() * 6,
                   state:"browse", path:[], goal:null, stuckT:0, yieldT:0, faceTarget:null, tote:null, dead:false };
-        var toteH = n.targetH;
         function styledPerson(){
           var person = makePersonMesh({ skin:skin, hair:hairC, top:outfit, bottom:0x5b4a6e, shoe:0x282128, accent:0xf2b84b, hat: rnd() < .35 });
           g.add(person);
           g.userData.arms = person.userData.arms;
+          g.userData.rig = person.userData.rig;
           g.scale.setScalar(.8 + rnd() * .06); // the room's person stands ~2.09 units unscaled
-          toteH = 2.09; // tote lives inside the scaled group, so it uses unscaled height
         }
         if (ci === 2) styledPerson(); // the low-poly regular is a cast member, not a fallback
         else if (charBufs[ci]) attachCharacter(n, ci);
         else {
           var alt = -1, k;
           for (k = 0; k < CHARACTERS.length; k++) if (charBufs[k]){ alt = k; break; }
-          if (alt >= 0){ n.ci = alt; n.targetH = CHARACTERS[alt].targetH + (rnd() - .5) * .07; toteH = n.targetH; attachCharacter(n, alt); }
+          if (alt >= 0){ n.ci = alt; n.targetH = CHARACTERS[alt].targetH + (rnd() - .5) * .07; attachCharacter(n, alt); }
           else styledPerson();
         }
-        var tote = makeTote(rnd, toteH);
-        g.add(tote); n.tote = tote;
+        if (withTote){
+          var tote = makeTote(rnd);
+          n.tote = tote;
+          if (g.userData.arms){
+            // the low-poly regular carries it in her left hand — parented
+            // to the arm itself, so it swings and lifts with the arm
+            tote.position.set(0, -.6, .03);
+            g.userData.arms[0].add(tote);
+          } else {
+            // skinned shoppers: hidden until attachCharacter finds the
+            // hand bone and placeToteInHand parks it there (or drops it)
+            tote.visible = false;
+            g.add(tote);
+          }
+        }
         g.position.set(startSpot.x, 0, startSpot.z);
         g.rotation.y = startSpot.face != null ? startSpot.face : rnd() * Math.PI * 2;
         return n;
@@ -9772,7 +9858,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         for (k = spots.length - 1; k > 0; k--){ j = Math.floor(rnd() * (k + 1)); tmp = spots[k]; spots[k] = spots[j]; spots[j] = tmp; }
         for (var i = 0; i < SHOPS[idx].crowd; i++){
           var spot = spots[i % spots.length];
-          var n = makeShopper(rnd, i < 3 ? pool[i] : 0, spot); // 4th shopper: a second, restyled HVGirl
+          var n = makeShopper(rnd, i < 3 ? pool[i] : 0, spot, i % 2 === 0); // 4th shopper: a second, restyled HVGirl; every other shopper carries a tote
           if (i % 2 === 0){ n.state = "browse"; n.wait = 2 + rnd() * 4; n.goal = spot; n.faceTarget = spot.face; }
           else chooseGoal(n);
           npcGroup.add(n.group); npcs.push(n);
@@ -9794,10 +9880,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           if (n.state === "browse"){
             n.wait -= dt;
             if (n.faceTarget != null) faceToward(n, n.faceTarget, dt);
-            if (g.userData.arms){
-              g.userData.arms[0].rotation.x *= .9;
-              g.userData.arms[1].rotation.x *= .9;
-            }
+            // browsing is a pose, not a statue impression: lean in toward
+            // the display and keep reaching up to it — touch a pouch, check
+            // a jar, put it back, reach again
+            n.reachT += dt;
+            var cyc = n.reachT % 3.4;
+            var rTarget = cyc < .5 ? cyc / .5 : (cyc < 2.3 ? 1 : Math.max(0, (3.1 - cyc) / .8));
+            n.reachAmt += (rTarget - n.reachAmt) * Math.min(1, dt * 7);
+            n.leanAmt += (1 - n.leanAmt) * Math.min(1, dt * 5);
             if (n.wait <= 0) chooseGoal(n);
           } else {
             var dest = n.path[0];
@@ -9864,17 +9954,34 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
               }
             }
           }
+          if (n.state !== "browse"){
+            n.reachAmt += (0 - n.reachAmt) * Math.min(1, dt * 7);
+            n.leanAmt += (0 - n.leanAmt) * Math.min(1, dt * 5);
+          }
           n.bob += dt * 8 * Math.max(actualSpeed, .12);
           if (!n.model){
             g.position.y = moving ? Math.abs(Math.sin(n.bob)) * .04 : 0;
             g.rotation.z = moving ? Math.sin(n.bob) * .02 : 0;
-            if (g.userData.arms && moving){
-              var sw = Math.sin(n.bob) * .45;
-              g.userData.arms[0].rotation.x = sw;
-              g.userData.arms[1].rotation.x = -sw;
+            if (g.userData.arms){
+              if (moving){
+                var sw = Math.sin(n.bob) * .45;
+                g.userData.arms[0].rotation.x = sw;
+                g.userData.arms[1].rotation.x = -sw;
+              } else {
+                // browsing: right arm up at the shelf, left arm — the one
+                // holding the tote — hanging easy; strolling off again
+                // eases both back down with reachAmt
+                g.userData.arms[1].rotation.x = -1.95 * n.reachAmt + Math.sin(t * 1.7 + n.bob) * .05 * n.reachAmt;
+                g.userData.arms[0].rotation.x = -.12 * n.reachAmt;
+              }
+              if (g.userData.rig) g.userData.rig.rotation.x = .085 * n.leanAmt + .05 * n.reachAmt;
             }
           }
-          if (n.tote) n.tote.rotation.z = moving ? Math.sin(n.bob) * .06 : n.tote.rotation.z * .92;
+          if (n.pose) n.pose.rotation.x = .07 * n.leanAmt + .045 * n.reachAmt;
+          if (n.tote){
+            n.tote.rotation.z = moving ? Math.sin(n.bob) * .06 : n.tote.rotation.z * .92;
+            if (n.handBone) followHand(n); // a held bag tracks the hand, walk swing and all
+          }
           if (n.mixer && n.actions){
             n.mixer.update(dt);
             if (n.actions.idle){
@@ -9893,6 +10000,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
               n.animState = moving ? "walk" : "idle";
             }
           }
+          applyReach(n); // after the mixer, so the reach pose wins over the clip for this frame
         }
         // safety net only: if two shoppers ever end up overlapping, ease them
         // apart — then settle everyone back out of the furniture and the walls
