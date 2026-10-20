@@ -1,1077 +1,1779 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FLWRPWR · Good vibes, great flower</title>
-<meta name="description" content="FLWRPWR is a women-owned flower shop. Walk into the store, pick your smalls, check out at the counter.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root{
-  --cream:#faf3e8; --paper:#fffaf2; --ink:#3a2b33; --ink-soft:#6d5561;
-  --lav:#e6d9f6; --lav-deep:#c3a6ec; --blush:#f6cdd9; --blush-deep:#e88bb0;
-  --mint:#c2e6d1; --mint-deep:#4f9e72; --butter:#f7e3ac; --peach:#fbd9b8;
-  --accent:#e5488c; --accent-dark:#c22f70; --green:#2f6b4e;
-  --line:rgba(58,43,51,.14); --shadow:0 18px 44px rgba(58,43,51,.14);
-  --r-lg:26px; --r-md:20px; --r-sm:14px;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-html,body{margin:0;padding:0}
-body{background:var(--cream);color:var(--ink);font-family:"Nunito","Trebuchet MS",Verdana,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
-body.in-game{overflow:hidden}
-h1,h2,h3{font-family:"Fraunces",Georgia,"Times New Roman",serif;line-height:1.08;margin:0}
-button{font:inherit;cursor:pointer}
-a{color:var(--green)}
-:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
-::selection{background:var(--blush);color:var(--ink)}
-.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
-
-/* announcement + nav */
-.announce{background:var(--lav);text-align:center;padding:8px 14px;font-weight:800;font-size:13.5px;letter-spacing:.04em}
-.announce span{margin:0 8px;color:var(--accent-dark)}
-.nav{position:sticky;top:0;z-index:40;background:rgba(250,243,232,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav-in{display:flex;align-items:center;gap:26px;padding:12px 0}
-.logo{font-family:"Fraunces",Georgia,serif;font-weight:900;font-size:27px;letter-spacing:.01em;color:var(--ink);text-decoration:none}
-.logo i{font-style:normal;color:var(--accent)}
-.nav-links{display:flex;gap:22px;margin-left:auto}
-.nav-links a{color:var(--ink);text-decoration:none;font-weight:800;font-size:15.5px}
-.nav-links a:hover{color:var(--accent-dark);text-decoration:underline;text-underline-offset:4px}
-.bag-btn{position:relative;border:2px solid var(--ink);background:var(--paper);border-radius:999px;padding:8px 18px;font-weight:900;font-size:15px}
-.bag-btn:hover{background:var(--butter)}
-.bag-btn .n{display:inline-grid;place-items:center;min-width:23px;height:23px;padding:0 5px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;margin-left:7px;vertical-align:1px}
-.bag-btn.bump{animation:bump .5s ease}
-@keyframes bump{30%{transform:scale(1.09) rotate(-2deg)}}
-
-/* hero */
-.hero{padding:34px 0 10px}
-.hero-grid{display:grid;grid-template-columns:1fr;gap:8px}
-.hero-copy{max-width:640px}
-.hero-copy h1{font-size:clamp(42px,6.4vw,74px);font-weight:900;letter-spacing:-.01em}
-.hero-copy h1 em{font-style:italic;font-weight:700;color:var(--accent-dark)}
-.hero-copy p{font-size:19px;color:var(--ink-soft);max-width:52ch;margin:16px 0 22px}
-.hero-cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:9px;border-radius:999px;border:2px solid var(--ink);padding:13px 26px;font-weight:900;font-size:16.5px;text-decoration:none;color:var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
-.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
-.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
-.btn-pink{background:var(--accent);color:#fff;border-color:var(--ink)}
-.btn-pink:hover{background:var(--accent-dark)}
-.btn-plain{border-color:transparent;box-shadow:none;background:transparent}
-.btn-plain:hover{box-shadow:none;text-decoration:underline;text-underline-offset:5px}
-.hero-note{font-size:14px;color:var(--ink-soft);font-weight:700}
-
-/* store frame (3D) */
-.store-frame{position:relative;margin-top:26px;border:3px solid var(--ink);border-radius:30px;overflow:hidden;background:#0d1410;box-shadow:var(--shadow);aspect-ratio:16/9.4;min-height:340px}
-body.in-game .store-frame{position:fixed;inset:0;z-index:60;border:none;border-radius:0;aspect-ratio:auto;min-height:0;margin:0;box-shadow:none}
-.store-frame canvas{position:absolute;inset:0;width:100%;height:100%;display:block;filter:saturate(1.09) contrast(1.05) brightness(1.03)}
-.vhs{position:absolute;inset:0;pointer-events:none}
-.vhs-scan{background:repeating-linear-gradient(to bottom,rgba(255,246,225,.20) 0 1px,rgba(10,20,16,.05) 1px 2px,transparent 2px 4px);opacity:.13;mix-blend-mode:overlay;z-index:3}
-.vhs-grain{z-index:4;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");animation:grain .5s steps(3) infinite}
-@keyframes grain{0%{background-position:0 0}33%{background-position:34px 18px}66%{background-position:-22px 40px}100%{background-position:0 0}}
-.vhs-track{z-index:3;height:110px;background:linear-gradient(to bottom,transparent,rgba(255,250,235,.075),transparent);animation:track 9s linear infinite}
-@keyframes track{0%{transform:translateY(-140px)}100%{transform:translateY(110vh)}}
-.vhs-vig{z-index:5;background:radial-gradient(ellipse at 50% 44%,transparent 52%,rgba(8,10,8,.42) 100%)}
-.hud{position:absolute;inset:0;z-index:6;pointer-events:none;font-family:"Courier New",monospace;color:#fff8df;text-shadow:2px 2px 0 rgba(23,53,41,.85),-1px 0 rgba(229,72,140,.55),1px 0 rgba(90,180,220,.5)}
-.hud .play{position:absolute;top:16px;left:20px;font-size:clamp(15px,2vw,21px);letter-spacing:.06em}
-.hud .stamp{position:absolute;top:16px;right:22px;text-align:right;font-size:clamp(13px,1.7vw,19px);line-height:1.35;white-space:nowrap;max-width:62%}
-.hud .stamp span{color:#ffe6a8;font-size:.78em}
-.hud .camtag{position:absolute;left:20px;bottom:16px;font-size:clamp(12px,1.5vw,16px);color:#d9f2dc;letter-spacing:.05em}
-.hud .rec{position:absolute;right:20px;bottom:16px;display:flex;align-items:center;gap:8px;font-size:clamp(13px,1.6vw,18px)}
-.hud .rec i{width:11px;height:11px;border-radius:50%;background:#ff5b7f;box-shadow:0 0 0 4px rgba(255,91,127,.22);animation:blink 1.5s steps(1) infinite}
-@keyframes blink{50%{opacity:.25}}
-.hero-ui{position:absolute;z-index:8;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;padding:18px 20px;background:linear-gradient(to top,rgba(10,16,12,.55),transparent 78%)}
-.hero-ui .walkin{pointer-events:auto}
-.hero-ui .hint{color:#fff8df;font-family:"Courier New",monospace;font-size:13.5px;letter-spacing:.04em;text-shadow:1px 1px 0 rgba(0,0,0,.6);max-width:32ch;text-align:right}
-.hud .camtag{bottom:64px}
-body.in-game .hud .camtag{bottom:16px}
-body.in-game .hero-ui{display:none}
-.loadbar{position:absolute;z-index:9;left:0;right:0;top:0;height:5px;background:rgba(255,248,223,.18)}
-.loadbar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
-.loadmsg{position:absolute;z-index:9;top:14px;left:50%;transform:translateX(-50%);background:rgba(12,20,14,.82);color:#fff8df;font-family:"Courier New",monospace;font-size:13px;letter-spacing:.08em;padding:7px 14px;border-radius:999px}
-.loadmsg.done{display:none}
-
-/* sections */
-section{padding:56px 0}
-.band-lav{background:linear-gradient(var(--lav),var(--lav));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.band-mint{background:var(--mint);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.sec-head{max-width:640px;margin-bottom:28px}
-.sec-head h2{font-size:clamp(30px,4vw,44px);font-weight:900}
-.sec-head p{color:var(--ink-soft);margin:10px 0 0;font-size:17.5px}
-.eyebrow{display:inline-block;font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark);margin-bottom:10px}
-
-/* category tiles */
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.tile{border:2px solid var(--ink);border-radius:var(--r-lg);padding:26px 24px;text-decoration:none;color:var(--ink);display:block;transition:transform .14s}
-.tile:hover{transform:translateY(-4px) rotate(-.4deg)}
-.tile .glyph{font-size:34px;line-height:1;display:block;margin-bottom:14px}
-.tile h3{font-size:23px;font-weight:700;margin-bottom:6px}
-.tile p{margin:0;color:var(--ink-soft);font-size:15.5px}
-.tile-lav{background:var(--paper)}
-.tile-blush{background:var(--blush)}
-.tile-mint{background:var(--paper);border-radius:16px}
-
-/* featured drop */
-.drop{display:grid;grid-template-columns:1.15fr .85fr;gap:0;border:3px solid var(--ink);border-radius:30px;overflow:hidden;background:var(--paper);box-shadow:var(--shadow)}
-.drop-art{background:radial-gradient(circle at 30% 30%,var(--butter) 0 18%,transparent 19%),radial-gradient(circle at 78% 70%,var(--blush) 0 22%,transparent 23%),var(--lav);display:grid;place-items:center;min-height:300px;padding:30px}
-.drop-art .jar{width:170px;height:210px;border:3px solid var(--ink);border-radius:26px 26px 34px 34px;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transform:rotate(-3deg);box-shadow:8px 10px 0 rgba(58,43,51,.18)}
-.drop-art .jar b{font-family:"Fraunces",Georgia,serif;font-size:21px}
-.drop-art .jar span{font-size:12.5px;font-weight:800;letter-spacing:.1em;color:var(--ink-soft)}
-.drop-art .jar .lid{width:110px;height:22px;border:3px solid var(--ink);border-radius:8px;background:var(--butter);margin-bottom:10px}
-.drop-copy{padding:40px 38px;display:flex;flex-direction:column;justify-content:center;gap:12px}
-.drop-copy h3{font-size:clamp(28px,3.4vw,40px);font-weight:900}
-.drop-copy p{color:var(--ink-soft);margin:0}
-.price{font-weight:900;font-size:19px}
-.price small{font-weight:800;color:var(--accent-dark);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;margin-left:7px}
-
-/* strain cards */
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card{border:2px solid var(--ink);border-radius:var(--r-lg);background:var(--paper);padding:24px;display:flex;flex-direction:column;gap:9px}
-.card:nth-child(2){transform:translateY(14px)}
-.card .swatch{height:86px;border-radius:var(--r-sm);border:2px solid var(--ink);display:flex;align-items:flex-end;padding:10px 12px;font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:17px}
-.card h3{font-size:24px;font-weight:700}
-.card p{margin:0;color:var(--ink-soft);font-size:15.5px;flex:1}
-.card .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
-.add-btn{border:2px solid var(--ink);background:var(--butter);border-radius:999px;padding:9px 18px;font-weight:900;font-size:14.5px;box-shadow:3px 3px 0 var(--ink)}
-.add-btn:hover{background:var(--accent);color:#fff}
-.add-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.card.soon{border-style:dashed;background:transparent;align-items:flex-start;justify-content:center;min-height:230px}
-.card.soon h3{color:var(--ink-soft)}
-.card.soon .bud{font-size:30px}
-
-/* badges */
-.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.badge-item{border:2px solid var(--ink);border-radius:var(--r-md);background:var(--paper);padding:18px;text-align:center;font-weight:900;font-size:16px}
-.badge-item span{display:block;font-size:24px;margin-bottom:6px}
-
-/* story + join */
-.story-in{max-width:720px}
-.story-in h2{font-size:clamp(30px,4vw,42px);font-weight:900;margin-bottom:14px}
-.story-in p{font-size:18px;color:#274435}
-.join-in{max-width:640px;margin:0 auto;text-align:center}
-.join-in h2{font-size:clamp(30px,4vw,42px);font-weight:900}
-.join-in p{color:var(--ink-soft)}
-.join-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-.join-form input{font:inherit;font-weight:700;padding:13px 20px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);min-width:min(320px,80vw);color:var(--ink)}
-.join-ok{font-weight:900;color:var(--green);min-height:26px;margin-top:12px}
-footer{border-top:1px solid var(--line);padding:30px 0 44px}
-.foot-in{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:baseline}
-.foot-in .small{font-size:13.5px;color:var(--ink-soft);max-width:56ch}
-
-/* game UI */
-.game-ui{position:fixed;inset:0;z-index:70;pointer-events:none;display:none}
-body.in-game .game-ui{display:block}
-.crosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:26px;height:26px}
-.crosshair::before,.crosshair::after{content:"";position:absolute;background:rgba(255,248,223,.92);box-shadow:0 0 4px rgba(0,0,0,.7)}
-.crosshair::before{left:50%;top:0;width:2px;height:100%;transform:translateX(-50%)}
-.crosshair::after{top:50%;left:0;height:2px;width:100%;transform:translateY(-50%)}
-.crosshair.hot::before,.crosshair.hot::after{background:var(--butter)}
-.prompt{position:absolute;left:50%;bottom:118px;transform:translateX(-50%);background:rgba(12,20,14,.86);color:#fff8df;font-family:"Courier New",monospace;font-size:15px;letter-spacing:.05em;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .15s;white-space:nowrap;max-width:92vw;text-align:center}
-.prompt.show{opacity:1}
-.game-btn{pointer-events:auto;position:absolute;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);font-weight:900;box-shadow:3px 3px 0 rgba(20,10,16,.55)}
-.exit-btn{top:calc(14px + env(safe-area-inset-top));right:16px;padding:9px 18px;font-size:14.5px}
-.game-bag{right:16px;bottom:calc(18px + env(safe-area-inset-bottom));padding:14px 22px;font-size:17px;background:var(--butter)}
-.game-bag .n{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:50%;background:var(--accent);color:#fff;font-size:13.5px;margin-left:7px}
-.controls-hint{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);color:rgba(255,248,223,.85);font-family:"Courier New",monospace;font-size:12.5px;letter-spacing:.05em;text-shadow:1px 1px 0 rgba(0,0,0,.7);white-space:nowrap}
-.joystick{pointer-events:auto;position:absolute;left:20px;bottom:calc(20px + env(safe-area-inset-bottom));width:118px;height:118px;border-radius:50%;border:2px solid rgba(255,248,223,.5);background:rgba(12,20,14,.3);display:none;touch-action:none}
-.joystick .stick{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(255,248,223,.85);border:2px solid var(--ink)}
-body.coarse .joystick{display:block}
-body.coarse .controls-hint{display:none}
-
-/* panels / modals */
-.scrim{position:fixed;inset:0;z-index:80;background:rgba(30,16,24,.5);opacity:0;pointer-events:none;transition:opacity .18s}
-.scrim.open{opacity:1;pointer-events:auto}
-.panel{position:fixed;z-index:90;background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:26px;opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .18s,transform .18s;max-height:88vh;overflow:auto}
-.panel.open{opacity:1;pointer-events:auto;transform:none}
-.panel h2{font-size:29px;font-weight:900}
-.panel .close-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-weight:900;font-size:17px;line-height:1}
-.demo-chip{display:inline-block;background:var(--butter);border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font-size:12px;font-weight:900;letter-spacing:.1em}
-#productCard{left:50%;top:50%;width:min(430px,calc(100vw - 28px));transform:translate(-50%,-46%)}
-#productCard.open{transform:translate(-50%,-50%)}
-#productCard .swatch{height:110px;border-radius:var(--r-sm);border:2px solid var(--ink);margin:14px 0}
-#productCard p{color:var(--ink-soft)}
-.qty-row{display:flex;align-items:center;gap:14px;margin:16px 0}
-.qty-btn{width:42px;height:42px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-size:20px;font-weight:900}
-.qty-n{font-size:20px;font-weight:900;min-width:26px;text-align:center}
-#bagPanel{right:0;top:0;bottom:0;height:100dvh;max-height:none;width:min(400px,94vw);border-radius:0;border-top:none;border-bottom:none;border-right:none;transform:translateX(30px)}
-#bagPanel.open{transform:none}
-.bag-list{list-style:none;margin:16px 0;padding:0}
-.bag-list li{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:13px 0;border-top:1px solid var(--line)}
-.bag-list .nm{font-weight:900}
-.bag-list small{display:block;color:var(--ink-soft);font-weight:700}
-.bag-list .qty-ctl{display:flex;align-items:center;gap:8px}
-.bag-list .qty-ctl button{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-weight:900;line-height:1}
-.bag-list .rm{grid-column:1/-1;background:none;border:none;color:var(--accent-dark);font-weight:800;font-size:13.5px;text-align:left;padding:0;text-decoration:underline;text-underline-offset:3px}
-.bag-empty{color:var(--ink-soft);padding:22px 0}
-.bag-total{display:flex;justify-content:space-between;font-weight:900;font-size:19px;border-top:2px solid var(--ink);padding-top:14px;margin-top:6px}
-.fineprint{font-size:13px;color:var(--ink-soft);margin-top:10px}
-.panel .btn{width:100%;justify-content:center;margin-top:16px}
-#checkoutPanel{left:50%;top:50%;width:min(620px,calc(100vw - 24px));transform:translate(-50%,-46%)}
-#checkoutPanel.open{transform:translate(-50%,-50%)}
-.co-steps{display:flex;gap:8px;margin:16px 0 6px;flex-wrap:wrap}
-.co-step{border:2px solid var(--line);border-radius:999px;padding:5px 14px;font-weight:800;font-size:13.5px;color:var(--ink-soft)}
-.co-step.on{border-color:var(--ink);background:var(--lav);color:var(--ink)}
-.co-page{display:none}
-.co-page.on{display:block}
-.co-lines{list-style:none;margin:10px 0;padding:0}
-.co-lines li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-weight:700}
-.co-lines li span small{display:block;color:var(--ink-soft);font-weight:700;font-size:13px}
-.field{margin:12px 0}
-.field label{display:block;font-weight:800;font-size:14px;margin-bottom:5px}
-.field input{width:100%;font:inherit;font-weight:600;padding:11px 14px;border:2px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink)}
-.field input.bad{border-color:#c0392b;background:#fdf0ee}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.demo-banner{border:2px dashed var(--accent-dark);background:#fdeef4;border-radius:var(--r-sm);padding:12px 14px;font-weight:800;font-size:14.5px;margin:14px 0}
-.co-nav{display:flex;gap:10px;margin-top:18px}
-.co-nav .btn{margin-top:0}
-.co-nav .btn-ghost{box-shadow:none}
-.confirm-big{font-family:"Fraunces",Georgia,serif;font-size:30px;font-weight:900;margin:10px 0 4px}
-.order-no{display:inline-block;background:var(--mint);border:2px solid var(--ink);border-radius:10px;padding:6px 14px;font-weight:900;letter-spacing:.05em;margin:8px 0}
-.toast{position:fixed;z-index:120;left:50%;bottom:26px;transform:translate(-50%,80px);background:var(--ink);color:var(--cream);font-weight:900;padding:12px 22px;border-radius:999px;box-shadow:var(--shadow);transition:transform .25s;max-width:92vw;text-align:center}
-.toast.show{transform:translate(-50%,0)}
-
-@media (max-width:900px){
-  .tiles,.cards{grid-template-columns:1fr 1fr}
-  .card:nth-child(2){transform:none}
-  .badges{grid-template-columns:1fr 1fr}
-  .drop{grid-template-columns:1fr}
-  .drop-copy{padding:28px 24px}
-  .nav-links{display:none}
-}
-@media (max-width:560px){
-  .tiles,.cards{grid-template-columns:1fr}
-  .store-frame{aspect-ratio:auto;min-height:0;height:480px}
-  .hero-ui{padding:14px;gap:10px}
-  .hero-ui .hint{display:none}
-  .hud .stamp{right:14px;top:12px;font-size:12px}
-  .hud .play{top:12px;left:14px}
-  .hud .camtag{bottom:96px}
-  .prompt{bottom:150px;font-size:13.5px}
-  .field-row{grid-template-columns:1fr}
-}
-@media (prefers-reduced-motion:reduce){
-  .vhs-grain,.vhs-track{animation:none}
-  html{scroll-behavior:auto}
-}
-</style>
-</head>
-<body>
-<div class="announce">Good vibes, great flower <span>✿</span> Women-owned <span>✿</span> Opening soon</div>
-<header class="nav"><div class="wrap nav-in">
-  <a class="logo" href="#top">FLWRP<i>W</i>R</a>
-  <nav class="nav-links" aria-label="Primary">
-    <a href="#strains">Strains</a>
-    <a href="#drop">Featured</a>
-    <a href="#story">Our story</a>
-  </nav>
-  <button class="bag-btn" id="navBag" aria-label="Open shopping bag">Bag<span class="n" id="navBagN">0</span></button>
-</div></header>
-
-<main id="top">
-<section class="hero"><div class="wrap">
-  <div class="hero-grid">
-    <div class="hero-copy">
-      <h1>Good vibes,<br><em>great flower.</em></h1>
-      <p>FLWRPWR is a little flower shop run by women. The store below is real in spirit: walk in, browse the shelf, pick your smalls, check out at the counter.</p>
-      <div class="hero-cta">
-        <button class="btn btn-pink walkin" data-walkin>Walk in ✿</button>
-        <a class="btn btn-plain" href="#strains">Browse the strains</a>
-      </div>
-      <p class="hero-note">The store cam runs on VHS. Grain and all.</p>
-    </div>
-  </div>
-  <div class="store-frame" id="storeFrame">
-    <canvas id="scene" aria-label="Live view of the FLWRPWR shop"></canvas>
-    <div class="vhs vhs-scan"></div>
-    <div class="vhs vhs-track"></div>
-    <div class="vhs vhs-grain"></div>
-    <div class="vhs vhs-vig"></div>
-    <div class="hud" aria-hidden="true">
-      <div class="play">PLAY ▶</div>
-      <div class="stamp" id="stamp">--:--:--<br><span>--- -- ----</span></div>
-      <div class="camtag">FLWRPWR · STORE CAM 01</div>
-      <div class="rec"><i></i>REC</div>
-    </div>
-    <div class="loadbar" id="loadbar"><i id="loadfill"></i></div>
-    <div class="loadmsg" id="loadmsg">OPENING STORE…</div>
-    <div class="hero-ui">
-      <button class="btn btn-pink walkin" data-walkin>Walk in ✿</button>
-      <span class="hint">Click a product inside to add it to your bag</span>
-    </div>
-  </div>
-</div></section>
-
-<section id="browse"><div class="wrap">
-  <div class="sec-head">
-    <span class="eyebrow">Start here</span>
-    <h2>Three ways to shop</h2>
-  </div>
-  <div class="tiles">
-    <a class="tile tile-lav" href="#strains"><span class="glyph">✿</span><h3>The Smalls</h3><p>4g jars of the three strains in the shop now. The classics, in smalls.</p></a>
-    <a class="tile tile-blush" href="#drop"><span class="glyph">♥</span><h3>Featured drop</h3><p>One strain gets the spotlight. Right now it is Thai Stick.</p></a>
-    <a class="tile tile-mint" href="#join"><span class="glyph">❀</span><h3>Blooming soon</h3><p>Three more strains are on the way. Join the list and we will tell you first.</p></a>
-  </div>
-</div></section>
-
-<section id="drop" class="band-lav"><div class="wrap">
-  <div class="sec-head">
-    <span class="eyebrow">Featured drop</span>
-    <h2>Thai Stick</h2>
-  </div>
-  <div class="drop">
-    <div class="drop-art" aria-hidden="true">
-      <div class="jar"><div class="lid"></div><b>THAI STICK</b><span>FLWRPWR 4G SMALLS</span><span style="font-size:34px">✿</span></div>
-    </div>
-    <div class="drop-copy">
-      <p class="price">$18 <small>demo price</small></p>
-      <h3>The one everyone asks about first.</h3>
-      <p>Sweet lime, herbal and tropical. Uplifting, ready to get creative.</p>
-      <p><button class="add-btn" data-add="thai">Add to bag</button></p>
-    </div>
-  </div>
-</div></section>
-
-<section id="strains"><div class="wrap">
-  <div class="sec-head">
-    <span class="eyebrow">The lineup</span>
-    <h2>Three in the shop now.</h2>
-    <p>Three more are blooming soon. Everything is FLWRPWR 4g Smalls.</p>
-  </div>
-  <div class="cards">
-    <div class="card">
-      <div class="swatch" style="background:linear-gradient(135deg,#f7e3ac,#f4c3d4)">Thai Stick</div>
-      <h3>Thai Stick</h3>
-      <p>Sweet lime, herbal and tropical.</p>
-      <div class="row"><span class="price">$18 <small>demo</small></span><button class="add-btn" data-add="thai">Add to bag</button></div>
-    </div>
-    <div class="card">
-      <div class="swatch" style="background:linear-gradient(135deg,#c2e6d1,#a9cdea)">Northern Lights</div>
-      <h3>Northern Lights</h3>
-      <p>Earthy and sweet. The cozy one.</p>
-      <div class="row"><span class="price">$20 <small>demo</small></span><button class="add-btn" data-add="northern">Add to bag</button></div>
-    </div>
-    <div class="card">
-      <div class="swatch" style="background:linear-gradient(135deg,#fbd9b8,#f6cdd9)">Maui Wowie</div>
-      <h3>Maui Wowie</h3>
-      <p>Pineapple up front. Sunny and light.</p>
-      <div class="row"><span class="price">$22 <small>demo</small></span><button class="add-btn" data-add="maui">Add to bag</button></div>
-    </div>
-    <div class="card soon"><span class="bud">🌱</span><h3>Blooming soon</h3><p>Still growing. Join the list below and we will tell you when it lands.</p></div>
-    <div class="card soon"><span class="bud">🌱</span><h3>Blooming soon</h3><p>Still growing. Join the list below and we will tell you when it lands.</p></div>
-    <div class="card soon"><span class="bud">🌱</span><h3>Blooming soon</h3><p>Still growing. Join the list below and we will tell you when it lands.</p></div>
-  </div>
-</div></section>
-
-<section class="band-mint"><div class="wrap">
-  <div class="badges">
-    <div class="badge-item"><span>✿</span>Women-owned</div>
-    <div class="badge-item"><span>♥</span>Small-batch drops</div>
-    <div class="badge-item"><span>21+</span>21 and over</div>
-    <div class="badge-item"><span>☺</span>Good vibes only</div>
-  </div>
-</div></section>
-
-<section id="story"><div class="wrap"><div class="story-in">
-  <span class="eyebrow">Our story</span>
-  <h2>Run by women, stocked with care.</h2>
-  <p>FLWRPWR started with a simple idea: a flower shop that feels like your favorite gift shop. Soft colors, good music on the store cam, and flower we are proud to hand you. No rush, no weird vibes.</p>
-  <p>Walk the shop above. The shelf is stocked with the three strains we are opening with. Three more are on the way.</p>
-</div></div></section>
-
-<section id="join" class="band-lav"><div class="wrap"><div class="join-in">
-  <span class="eyebrow">The drop list</span>
-  <h2>Get the drop list.</h2>
-  <p>One email when a new strain lands. No spam, ever.</p>
-  <form class="join-form" id="joinForm">
-    <input type="email" id="joinEmail" placeholder="your email" aria-label="Email address" required>
-    <button class="btn btn-pink" type="submit">Join the list</button>
-  </form>
-  <p class="join-ok" id="joinOk" role="status"></p>
-</div></div></section>
-</main>
-
-<footer><div class="wrap foot-in">
-  <a class="logo" href="#top">FLWRP<i>W</i>R</a>
-  <p class="small">Concept store demo. Prices marked demo are placeholders, and the checkout is a demo that takes no real payment. 21+ only.</p>
-</div></footer>
-
-<div class="game-ui" id="gameUI" aria-hidden="true">
-  <div class="crosshair" id="crosshair"></div>
-  <div class="prompt" id="prompt"></div>
-  <button class="game-btn exit-btn" id="exitBtn">Leave shop ✕</button>
-  <button class="game-btn game-bag" id="gameBag">Bag<span class="n" id="gameBagN">0</span></button>
-  <div class="controls-hint" id="controlsHint">WASD move · Mouse look · Click product · E interact</div>
-  <div class="joystick" id="joystick"><div class="stick" id="stick"></div></div>
-</div>
-
-<div class="scrim" id="scrim"></div>
-
-<div class="panel" id="productCard" role="dialog" aria-modal="true" aria-hidden="true">
-  <button class="close-x" data-close aria-label="Close">✕</button>
-  <span class="demo-chip">DEMO</span>
-  <div class="swatch" id="pcSwatch"></div>
-  <h2 id="pcName">Thai Stick</h2>
-  <p><b>FLWRPWR 4g Smalls</b></p>
-  <p id="pcNotes"></p>
-  <div class="qty-row">
-    <button class="qty-btn" id="pcMinus" aria-label="One less">−</button>
-    <span class="qty-n" id="pcQty">1</span>
-    <button class="qty-btn" id="pcPlus" aria-label="One more">+</button>
-    <span class="price" id="pcPrice" style="margin-left:auto"></span>
-  </div>
-  <button class="btn btn-pink" id="pcAdd">Add to bag</button>
-</div>
-
-<div class="panel" id="bagPanel" role="dialog" aria-modal="true" aria-hidden="true">
-  <button class="close-x" data-close aria-label="Close">✕</button>
-  <span class="demo-chip">DEMO</span>
-  <h2>Your bag</h2>
-  <ul class="bag-list" id="bagList"></ul>
-  <div class="bag-total"><span>Total</span><span id="bagTotal">$0</span></div>
-  <p class="fineprint">Demo prices. No real payment is taken in this concept store.</p>
-  <button class="btn btn-pink" id="bagCheckout">Checkout</button>
-</div>
-
-<div class="panel" id="checkoutPanel" role="dialog" aria-modal="true" aria-hidden="true">
-  <button class="close-x" data-close aria-label="Close">✕</button>
-  <span class="demo-chip">DEMO CHECKOUT</span>
-  <h2>Checkout</h2>
-  <div class="co-steps">
-    <span class="co-step on" data-s="0">1 · Review</span>
-    <span class="co-step" data-s="1">2 · Details</span>
-    <span class="co-step" data-s="2">3 · Payment</span>
-  </div>
-  <div class="co-page on" data-p="0">
-    <ul class="co-lines" id="coLines"></ul>
-    <div class="bag-total"><span>Total</span><span id="coTotal">$0</span></div>
-    <div class="co-nav"><button class="btn btn-pink" id="coToDetails" style="flex:1">Continue</button></div>
-  </div>
-  <div class="co-page" data-p="1">
-    <div class="field"><label for="fName">Full name</label><input id="fName" autocomplete="name" placeholder="Jane Doe"></div>
-    <div class="field"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email" placeholder="jane@email.com"></div>
-    <div class="field"><label for="fAddr">Street address</label><input id="fAddr" autocomplete="street-address" placeholder="123 Blossom St"></div>
-    <div class="field-row">
-      <div class="field"><label for="fCity">City</label><input id="fCity" autocomplete="address-level2" placeholder="Pasadena"></div>
-      <div class="field"><label for="fZip">ZIP</label><input id="fZip" inputmode="numeric" autocomplete="postal-code" placeholder="91101"></div>
-    </div>
-    <div class="co-nav">
-      <button class="btn co-nav-back btn-ghost" data-back style="flex:1">Back</button>
-      <button class="btn btn-pink" id="coToPayment" style="flex:2">Continue</button>
-    </div>
-  </div>
-  <div class="co-page" data-p="2">
-    <div class="demo-banner">Demo checkout. No real payment is processed and no card is charged. Do not enter a real card number.</div>
-    <div class="field"><label for="fCard">Card number</label><input id="fCard" inputmode="numeric" placeholder="4242 4242 4242 4242"></div>
-    <div class="field-row">
-      <div class="field"><label for="fExp">Expiry</label><input id="fExp" placeholder="12/28"></div>
-      <div class="field"><label for="fCvc">CVC</label><input id="fCvc" inputmode="numeric" placeholder="123"></div>
-    </div>
-    <div class="co-nav">
-      <button class="btn co-nav-back btn-ghost" data-back style="flex:1">Back</button>
-      <button class="btn btn-pink" id="coPlace" style="flex:2">Place order</button>
-    </div>
-  </div>
-  <div class="co-page" data-p="3">
-    <span class="demo-chip">DEMO ORDER</span>
-    <p class="confirm-big">Order placed.</p>
-    <p>Order <span class="order-no" id="orderNo">FWP-000000</span></p>
-    <p id="coThanks">Thanks. This is a concept demo, so no order was really placed and nothing was charged.</p>
-    <div class="co-nav"><button class="btn btn-pink" id="coDone" style="flex:1">Keep shopping</button></div>
-  </div>
-</div>
-
-<div class="toast" id="toast" role="status"></div>
-<script src="vendor/three.min.js"></script>
-<script src="vendor/GLTFLoader.js"></script>
-<script>
-(function(){
-'use strict';
-var $=function(id){return document.getElementById(id);};
-var coarse=matchMedia('(pointer:coarse)').matches;
-var motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-if(coarse)document.body.classList.add('coarse');
-
-/* ---------- catalog & cart ---------- */
-var PRODUCTS={
-  thai:{name:'Thai Stick',notes:'Sweet lime, herbal and tropical.',price:18,sw:'linear-gradient(135deg,#f7e3ac,#f4c3d4)'},
-  northern:{name:'Northern Lights',notes:'Earthy and sweet. The cozy one.',price:20,sw:'linear-gradient(135deg,#c2e6d1,#a9cdea)'},
-  maui:{name:'Maui Wowie',notes:'Pineapple up front. Sunny and light.',price:22,sw:'linear-gradient(135deg,#fbd9b8,#f6cdd9)'}
-};
-var ORDER=['thai','northern','maui'];
-var bag={},bagTotal=0,lastOrderNo=null;
-function money(n){return '$'+n;}
-function renderBagN(){$('navBagN').textContent=bagTotal;$('gameBagN').textContent=bagTotal;}
-function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show');},2200);}
-function renderBagNudge(){var b=$('navBag');b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');}
-function addToBag(key,qty){
-  qty=qty||1;bag[key]=(bag[key]||0)+qty;bagTotal+=qty;
-  renderBagN();renderBagNudge();renderBagList();renderCheckoutPage();
-  toast(PRODUCTS[key].name+' added to bag');
-}
-
-/* ---------- 2D bindings ---------- */
-document.querySelectorAll('[data-add]').forEach(function(btn){
-  btn.addEventListener('click',function(){addToBag(btn.getAttribute('data-add'),1);});
-});
-$('joinForm').addEventListener('submit',function(e){
-  e.preventDefault();var em=$('joinEmail');
-  if(!em.value||em.value.indexOf('@')<0){em.focus();return;}
-  $('joinOk').textContent='You are on the list. See you at the drop.';em.value='';
-});
-
-/* ---------- VHS timestamp ---------- */
-function tickStamp(){
-  var d=new Date(),p=function(n){return String(n).padStart(2,'0');};
-  var months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  $('stamp').innerHTML=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())+
-    '<br><span>'+months[d.getMonth()]+' '+p(d.getDate())+' '+d.getFullYear()+'</span>';
-}
-tickStamp();setInterval(tickStamp,1000);
-
-/* ---------- panels ---------- */
-var scrim=$('scrim'),activePanel=null;
-function openPanel(panel,fromGame){
-  ['productCard','bagPanel','checkoutPanel'].forEach(function(id){var p=$(id);p.classList.remove('open');p.setAttribute('aria-hidden','true');});
-  activePanel=panel;
-  if(panel){
-    if(document.pointerLockElement)document.exitPointerLock();
-    panel.classList.add('open');panel.setAttribute('aria-hidden','false');
-    scrim.classList.add('open');
-    var c=panel.querySelector('.close-x');if(c)c.focus();
-  }else{scrim.classList.remove('open');}
-}
-function closePanels(){openPanel(null);}
-scrim.addEventListener('click',closePanels);
-document.querySelectorAll('[data-close]').forEach(function(b){b.addEventListener('click',closePanels);});
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'&&activePanel){closePanels();return;}
-  if(e.key==='Escape'&&inGame&&!document.pointerLockElement){leaveGame();}
-});
-
-/* ---------- bag drawer ---------- */
-function renderBagList(){
-  var ul=$('bagList'),total=0,html='';
-  ORDER.forEach(function(key){
-    var q=bag[key]||0;if(!q)return;
-    var p=PRODUCTS[key];total+=p.price*q;
-    html+='<li><span class="nm">'+p.name+'<small>FLWRPWR 4g Smalls · '+money(p.price)+' demo</small></span>'+
-      '<span class="qty-ctl"><button data-dec="'+key+'" aria-label="One less">−</button><b>'+q+'</b><button data-inc="'+key+'" aria-label="One more">+</button></span>'+
-      '<button class="rm" data-rm="'+key+'">remove</button></li>';
-  });
-  ul.innerHTML=html||'<li class="bag-empty">Your bag is empty. Walk into the store or add a strain above.</li>';
-  $('bagTotal').textContent=money(total);
-}
-function bagTotalAmt(){var t=0;ORDER.forEach(function(k){t+=PRODUCTS[k].price*(bag[k]||0);});return t;}
-$('bagList').addEventListener('click',function(e){
-  var inc=e.target.closest('[data-inc]'),dec=e.target.closest('[data-dec]'),rm=e.target.closest('[data-rm]');
-  if(inc){var k=inc.getAttribute('data-inc');bag[k]++;bagTotal++;renderBagN();renderBagList();renderCheckoutPage();}
-  if(dec){var k2=dec.getAttribute('data-dec');if(bag[k2]>0){bag[k2]--;bagTotal--;}renderBagN();renderBagList();renderCheckoutPage();}
-  if(rm){var k3=rm.getAttribute('data-rm');bagTotal-=bag[k3]||0;bag[k3]=0;renderBagN();renderBagList();renderCheckoutPage();}
-});
-$('navBag').addEventListener('click',function(){renderBagList();openPanel($('bagPanel'));});
-$('gameBag').addEventListener('click',function(){renderBagList();openPanel($('bagPanel'),true);});
-
-/* ---------- product card ---------- */
-var pcKey='thai',pcQty=1;
-function openProduct(key){
-  pcKey=key;pcQty=1;var p=PRODUCTS[key];
-  $('pcName').textContent=p.name;
-  $('pcNotes').textContent=p.notes;
-  $('pcSwatch').style.background=p.sw;
-  $('pcQty').textContent='1';
-  $('pcPrice').textContent=money(p.price)+' demo';
-  openPanel($('productCard'),true);
-}
-$('pcMinus').addEventListener('click',function(){if(pcQty>1){pcQty--;}$('pcQty').textContent=pcQty;});
-$('pcPlus').addEventListener('click',function(){if(pcQty<9){pcQty++;}$('pcQty').textContent=pcQty;});
-$('pcAdd').addEventListener('click',function(){addToBag(pcKey,pcQty);openPanel(null);});
-
-/* ---------- checkout wizard ---------- */
-function coGo(n){
-  document.querySelectorAll('#checkoutPanel .co-page').forEach(function(pg){pg.classList.toggle('on',pg.getAttribute('data-p')==String(n));});
-  document.querySelectorAll('#checkoutPanel .co-step').forEach(function(st){st.classList.toggle('on',Number(st.getAttribute('data-s'))<=n&&n<3);});
-}
-function renderCheckoutPage(){
-  var ul=$('coLines'),total=bagTotalAmt(),html='';
-  ORDER.forEach(function(key){
-    var q=bag[key]||0;if(!q)return;var p=PRODUCTS[key];
-    html+='<li><span>'+p.name+'<small>FLWRPWR 4g Smalls × '+q+'</small></span><span>'+money(p.price*q)+'</span></li>';
-  });
-  ul.innerHTML=html||'<li class="bag-empty">Your bag is empty. Add something before checking out.</li>';
-  $('coTotal').textContent=money(total);
-  $('coToDetails').disabled=bagTotalAmt()===0;
-}
-$('bagCheckout').addEventListener('click',function(){
-  if(bagTotalAmt()===0){toast('Your bag is empty');return;}
-  renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);
-});
-document.querySelectorAll('#checkoutPanel [data-back]').forEach(function(b){
-  b.addEventListener('click',function(){
-    var cur=document.querySelector('#checkoutPanel .co-page.on');
-    coGo(Math.max(0,Number(cur.getAttribute('data-p'))-1));
-  });
-});
-function fieldOk(id,ok){$(id).classList.toggle('bad',!ok);return ok;}
-$('coToDetails').addEventListener('click',function(){coGo(1);});
-$('coToPayment').addEventListener('click',function(){
-  var ok=true;
-  ok=fieldOk('fName',$('fName').value.trim().length>1)&&ok;
-  ok=fieldOk('fEmail',/^\S+@\S+\.\S+$/.test($('fEmail').value.trim()))&&ok;
-  ok=fieldOk('fAddr',$('fAddr').value.trim().length>3)&&ok;
-  ok=fieldOk('fCity',$('fCity').value.trim().length>1)&&ok;
-  ok=fieldOk('fZip',$('fZip').value.trim().length>=5)&&ok;
-  if(ok)coGo(2);
-});
-$('coPlace').addEventListener('click',function(){
-  var ok=true;
-  ok=fieldOk('fCard',$('fCard').value.replace(/\D/g,'').length>=12)&&ok;
-  ok=fieldOk('fExp',/^\d{2}\/\d{2}$/.test($('fExp').value.trim()))&&ok;
-  ok=fieldOk('fCvc',/^\d{3,4}$/.test($('fCvc').value.trim()))&&ok;
-  if(!ok)return;
-  lastOrderNo='FWP-'+Math.floor(100000+Math.random()*899999);
-  $('orderNo').textContent=lastOrderNo;
-  var em=$('fEmail').value.trim();
-  $('coThanks').textContent='Thanks, '+$('fName').value.trim().split(' ')[0]+'. '+
-    'A confirmation would go to '+em+'. This is a concept demo, so no order was really placed and nothing was charged.';
-  coGo(3);
-  bag={};bagTotal=0;renderBagN();renderBagList();renderCheckoutPage();
-});
-$('coDone').addEventListener('click',closePanels);
-
-/* ================= THREE.JS STORE ================= */
-var T=window.THREE;
-var storeReady=false,inGame=false,dirtyFrames=10;
-var loadmsg=$('loadmsg'),loadfill=$('loadfill');
-function setLoad(pct,msg){loadfill.style.width=pct+'%';if(msg)loadmsg.textContent=msg;}
-if(!T||!T.GLTFLoader){setLoad(100,'3D COULD NOT LOAD');loadmsg.classList.add('done');return;}
-
-var frame=$('storeFrame'),canvas=$('scene');
-var renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,coarse?1.25:1.6));
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
-renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
-var scene=new T.Scene();scene.background=new T.Color(0x0d1410);scene.fog=new T.Fog(0x131a13,13,32);
-var camera=new T.PerspectiveCamera(62,1,.055,48);
-var clock=new T.Clock();
-
-scene.add(new T.HemisphereLight(0xffe9d2,0x543525,.5));
-scene.add(new T.AmbientLight(0xffd9c2,.28));
-var sun=new T.DirectionalLight(0xfff0d8,.55);
-sun.position.set(-4.5,8.5,-7);sun.castShadow=true;
-sun.shadow.mapSize.set(1024,1024);
-sun.shadow.camera.near=.5;sun.shadow.camera.far=25;
-sun.shadow.camera.left=-9;sun.shadow.camera.right=9;sun.shadow.camera.top=9;sun.shadow.camera.bottom=-9;
-sun.shadow.bias=-.0008;
-scene.add(sun);scene.add(sun.target);sun.target.position.set(0,0,2.2);
-var warm=new T.PointLight(0xffc27a,.75,12,1.6);warm.position.set(0,2.9,1.2);scene.add(warm);
-var pink=new T.PointLight(0xf47fae,.5,10,1.6);pink.position.set(5,2,3.6);scene.add(pink);
-var mintL=new T.PointLight(0x8fd6b2,.45,10,1.6);mintL.position.set(-5,2.2,2.8);scene.add(mintL);
-
-var modelRoot=new T.Group();scene.add(modelRoot);
-var EYE=1.63;
-var player={x:0,z:-3.4,r:.31,speed:3.2};
-var camYaw=0,camPitch=0,targetYaw=0,targetPitch=0;
-
-function material(color,rough,metal){return new T.MeshStandardMaterial({color:color,roughness:rough==null?.72:rough,metalness:metal||0});}
-function fixMaterials(root){
-  root.traverse(function(o){
-    if(!o.isMesh)return;
-    o.castShadow=true;o.receiveShadow=true;
-    var mats=Array.isArray(o.material)?o.material:[o.material];
-    mats.forEach(function(m){
-      if(!m||!m.isMeshStandardMaterial)return;
-      var n=(m.name||'').toLowerCase();
-      if(m.map){m.map.encoding=T.sRGBEncoding;}
-      if(/glass/.test(n)){m.transparent=true;m.opacity=.28;m.roughness=.12;m.depthWrite=false;}
-      if(/bulb|lightpanel/.test(n)){m.emissive=new T.Color(0xffb066);m.emissiveIntensity=1.6;}
-      if(/logo_sign/.test(n)){m.emissive=new T.Color(0xff5b91);m.emissiveIntensity=.5;}
-      if(/pos_screen/.test(n)){m.emissive=new T.Color(0xf9b35d);m.emissiveIntensity=.4;}
-      m.needsUpdate=true;
-    });
-  });
-  /* Note: the Blender pipeline authored the label/art textures upside-down
-     and mirrored for the room-facing side. TEXSWAP below replaces them at
-     runtime with orientation-corrected textures. Do not "fix" UVs here. */
-}
-/* texture swap: extracted GLB textures, re-oriented (flipY + horizontal
-   flip) so sign, menu, counter front, labels and posters read correctly */
-var TEXSWAP={
-  'logo_sign_hd':'tex/logo.png','hd_menutex':'tex/menu.png','hd_counterfront':'tex/counter_front.png',
-  'hd_label_thai':'tex/label_thai.png','hd_label_northern':'tex/label_northern.png','hd_label_maui':'tex/label_maui.png','hd_label_soon':'tex/label_soon.png',
-  'hd_slabel_thai':'tex/slabel_thai.png','hd_slabel_northern':'tex/slabel_northern.png','hd_slabel_maui':'tex/slabel_maui.png','hd_slabel_soon':'tex/slabel_soon.png',
-  'hd_poster_daisy':'tex/poster_daisy.png','hd_poster_logo':'tex/poster_logo.png'
-};
-var texLoader=new T.TextureLoader(),texCache={},texReady=0,texTotal=Object.keys(TEXSWAP).length;
-var texPromise=new Promise(function(resolve){
-  Object.keys(TEXSWAP).forEach(function(mat){
-    texLoader.load('./'+TEXSWAP[mat],function(t){
-      t.encoding=T.sRGBEncoding;t.flipY=true;
-      t.wrapS=T.RepeatWrapping;t.repeat.x=-1;t.offset.x=1;
-      t.anisotropy=Math.min(4,rasterMaxAniso());
-      texCache[mat]=t;texReady++;
-      setLoad(4+Math.round((loadCount/MODELS.length)*70+ (texReady/texTotal)*14));
-      if(texReady===texTotal)resolve();
-    },undefined,function(){texReady++;if(texReady===texTotal)resolve();});
-  });
-});
-function rasterMaxAniso(){try{return Math.min(4,renderer.capabilities.getMaxAnisotropy());}catch(e){return 4;}}
-function applyTexSwaps(){
-  modelRoot.traverse(function(o){
-    if(!o.isMesh)return;
-    var mats=Array.isArray(o.material)?o.material:[o.material];
-    mats.forEach(function(m){
-      if(!m)return;var f=TEXSWAP[m.name||''];
-      if(f&&texCache[m.name]){
-        m.map=texCache[m.name];
-        if(/logo_sign/.test(m.name)){m.emissiveMap=texCache[m.name];m.emissive=new T.Color(0xffffff);m.emissiveIntensity=.22;}
-        m.needsUpdate=true;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>FLWRPWR — Good Vibes, Great Flower</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+    <script src="assets/three.min.js"></script>
+    <script src="assets/GLTFLoader.js"></script>
+    <style>
+      :root{
+        color-scheme: light;
+        --pink:#ff8fc7; --pink-hot:#ff5fa8; --pink-soft:#ffd7ea; --pink-pale:#fff0f7;
+        --lav:#c9b8ff; --lav-soft:#e7deff; --lilac:#efe8ff;
+        --cream:#fff7ec; --paper:#fffdf9;
+        --blue:#a8dcff; --blue-soft:#e2f3ff;
+        --mint:#a9e8c6; --mint-soft:#e2f8ec;
+        --gold:#f2b84b; --gold-soft:#ffeec4;
+        --ink:#47264d; --ink-soft:#7a5b80;
+        --line:#f0d9e8;
+        --card-shadow:0 10px 30px rgba(214,110,175,.18);
+        --bg:var(--cream);
       }
-    });
-  });
-}
-function addModel(template,pos,rotY){
-  var o=template.clone(true);
-  o.position.set(pos[0],pos[1],pos[2]);o.rotation.y=rotY||0;
-  o.scale.set(1,1,1);
-  modelRoot.add(o);return o;
-}
+      @media (prefers-color-scheme: dark){
+        :root{
+          color-scheme: dark;
+          --pink:#ff8fc7; --pink-hot:#ff6fb3; --pink-soft:#5a3350; --pink-pale:#3a2140;
+          --lav:#b7a3f5; --lav-soft:#3d2c5e; --lilac:#33244d;
+          --cream:#241230; --paper:#2c1838;
+          --blue:#8fc9ef; --blue-soft:#26384c;
+          --mint:#8fd3ae; --mint-soft:#23402f;
+          --gold:#f2b84b; --gold-soft:#4d3a17;
+          --ink:#fdeedd; --ink-soft:#cdb3d4;
+          --line:#4b3260;
+          --card-shadow:0 10px 30px rgba(0,0,0,.4);
+          --bg:#1d0e28;
+        }
+      }
+      html{ scroll-behavior:smooth; }
+      body{
+        margin:0; background:var(--bg); color:var(--ink);
+        font-family:"Nunito",system-ui,sans-serif; font-size:16px; line-height:1.55;
+        overflow-x:hidden;
+      }
+      h1,h2,h3,p,ul,figure{ margin:0; }
+      ul{ padding:0; list-style:none; }
+      button{ font-family:inherit; cursor:pointer; }
+      img,svg{ display:block; }
+      a{ color:inherit; }
+      .bubble{ font-family:"Shrikhand",cursive; font-weight:400; letter-spacing:.01em; }
+      .hand{ font-family:"Caveat",cursive; }
+      .wrap{ max-width:1180px; margin:0 auto; padding:0 20px; }
 
-/* drift path (hero): framed on products and signage, stays in open lanes */
-var driftPts=[
-  {p:[-1.6,1.62,-4.3],l:[-2.2,1.15,.25]},
-  {p:[-3.4,1.64,-.8],l:[0,1.5,5.6]},
-  {p:[2.6,1.62,1.8],l:[5.55,1.25,3.45]},
-  {p:[.8,1.6,-2.6],l:[-4.5,1.7,5.48]}
-];
-var driftI=0,driftT=0,driftDur=6,driftFreeze=false;
-function driftPose(t){
-  var a=driftPts[driftI%driftPts.length],b=driftPts[(driftI+1)%driftPts.length];
-  var e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-  return{
-    p:[a.p[0]+(b.p[0]-a.p[0])*e,a.p[1]+(b.p[1]-a.p[1])*e,a.p[2]+(b.p[2]-a.p[2])*e],
-    l:[a.l[0]+(b.l[0]-a.l[0])*e,a.l[1]+(b.l[1]-a.l[1])*e,a.l[2]+(b.l[2]-a.l[2])*e]
-  };
-}
-function updateDrift(dt){
-  if(motionReduced){var s=driftPose(0);camera.position.set(s.p[0],s.p[1],s.p[2]);camera.lookAt(s.l[0],s.l[1],s.l[2]);return;}
-  driftT+=dt/driftDur;if(driftT>=1){driftT=0;driftI=(driftI+1)%driftPts.length;}
-  var s=driftPose(driftT);
-  camera.position.set(s.p[0],s.p[1],s.p[2]);camera.lookAt(s.l[0],s.l[1],s.l[2]);
-}
+      /* ---------- announcement bar ---------- */
+      .announce{
+        background:var(--ink); color:var(--cream); text-align:center;
+        font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+        padding:9px 14px;
+      }
+      .announce .star{ color:var(--gold); }
+      @media (prefers-color-scheme: dark){ .announce{ background:var(--gold); color:#3a2405; } .announce .star{ color:#b3541e; } }
 
-/* collision (AABBs from the shipped room) */
-var WALK={minX:-7.1,maxX:7.1,minZ:-5.1,maxZ:4.97};
-var SOLIDS=[
-  {x:-4.5,z:5.48,w:3.35,d:.55},{x:4.5,z:5.48,w:3.35,d:.55},
-  {x:-7.52,z:1.55,w:.55,d:3.35},
-  {x:-2.2,z:.25,w:2.55,d:.85},{x:2.2,z:.25,w:2.55,d:.85},
-  {x:5.55,z:3.45,w:1.12,d:3.35},
-  {x:0,z:2.35,w:2.0,d:.75},
-  {x:-6.9,z:-4.8,w:1.05,d:1.05},{x:6.85,z:-4.8,w:1.05,d:1.05}
-];
-function blocked(x,z){
-  if(x<WALK.minX||x>WALK.maxX||z<WALK.minZ||z>WALK.maxZ)return true;
-  for(var i=0;i<SOLIDS.length;i++){var b=SOLIDS[i],hw=b.w/2,hd=b.d/2;
-    if(x+player.r>b.x-hw&&x-player.r<b.x+hw&&z+player.r>b.z-hd&&z-player.r<b.z+hd)return true;}
-  return false;
-}
-function tryMove(dx,dz){
-  if(dx&&!blocked(player.x+dx,player.z))player.x+=dx;
-  if(dz&&!blocked(player.x,player.z+dz))player.z+=dz;
-}
+      /* ---------- header ---------- */
+      header.site{
+        position:sticky; top:0; z-index:60; background:color-mix(in srgb, var(--paper) 92%, transparent);
+        backdrop-filter:blur(10px); border-bottom:2px solid var(--line);
+      }
+      .nav{
+        display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px;
+        max-width:1180px; margin:0 auto; padding:12px 20px;
+      }
+      .nav-links{ display:flex; gap:26px; font-weight:800; font-size:.86rem; letter-spacing:.08em; text-transform:uppercase; }
+      .nav-links a{ text-decoration:none; padding:6px 2px; border-bottom:3px solid transparent; }
+      .nav-links a:hover{ border-bottom-color:var(--pink-hot); }
+      .nav-links.right{ justify-content:flex-end; align-items:center; }
+      .logo{ text-align:center; text-decoration:none; line-height:.9; }
+      .logo .logo-word{ font-family:"Shrikhand",cursive; font-size:2rem; color:var(--pink-hot); letter-spacing:.02em; }
+      .logo .logo-sub{ font-size:.6rem; font-weight:900; letter-spacing:.42em; text-transform:uppercase; color:var(--ink-soft); margin-top:3px; }
+      .cart-btn{
+        display:inline-flex; align-items:center; gap:8px; border:2px solid var(--ink);
+        background:var(--gold-soft); color:var(--ink); border-radius:999px; padding:8px 16px;
+        font-weight:900; font-size:.85rem; box-shadow:3px 3px 0 var(--ink); transition:transform .12s ease, box-shadow .12s ease;
+      }
+      .cart-btn:hover{ transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--ink); }
+      .cart-count{ background:var(--pink-hot); color:#fff; border-radius:999px; min-width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; font-size:.78rem; padding:0 5px; }
+      @media (max-width:760px){
+        .nav{ grid-template-columns:1fr auto; row-gap:8px; }
+        .logo{ grid-column:1; grid-row:1; justify-self:start; text-align:left; }
+        .logo .logo-word{ font-size:1.55rem; }
+        .nav-links.right{ grid-column:2; grid-row:1; }
+        .nav-links.left{ grid-column:1 / -1; grid-row:2; display:flex; justify-content:center; gap:24px; border-top:1.5px solid var(--line); padding-top:9px; }
+        .hero-note{ font-size:1.15rem; transform:none; margin-left:2px; }
+      }
 
-/* products: hitboxes */
-var hitboxes=[],raycaster=new T.Raycaster(),tapV=new T.Vector2();
-function addHitbox(x,y,z,w,h,d,action){
-  var m=new T.Mesh(new T.BoxGeometry(w,h,d),
-    new T.MeshBasicMaterial({colorWrite:false,depthWrite:false}));
-  m.position.set(x,y,z);m.userData.action=action;scene.add(m);hitboxes.push(m);
-}
-function setupHitboxes(){
-  ORDER.forEach(function(key,i){
-    var dx=-1.05+i*1.05;
-    addHitbox(-2.2+dx,1.0,.25,.95,.6,.95,{type:'product',key:key});
-    addHitbox(2.2+dx,1.0,.25,.95,.6,.95,{type:'product',key:key});
-    addHitbox(-5.9+i*1.35,1.7,5.2,.9,1.4,.7,{type:'product',key:key});
-    addHitbox(5.9-i*1.35,1.7,5.2,.9,1.4,.7,{type:'product',key:key});
-  });
-  addHitbox(7.62,1.6,0,.5,2.2,2.2,{type:'menu'});
-  addHitbox(5.55,1.2,3.45,1.5,1.6,3.5,{type:'checkout'});
-}
-/* desktop proximity hotspots (facing + distance) */
-var hotspots=[
-  {x:-2.2,y:1.1,z:-.7,r:1.5,label:'DISPLAY CASE',type:'case'},
-  {x:2.2,y:1.1,z:-.7,r:1.5,label:'DISPLAY CASE',type:'case'},
-  {x:-4.5,y:1.7,z:4.4,r:1.6,label:'SHELF · SMALLS',type:'shelf'},
-  {x:4.5,y:1.7,z:4.4,r:1.6,label:'SHELF · SMALLS',type:'shelf'},
-  {x:7.0,y:2.0,z:0,r:1.5,label:'STRAIN MENU',type:'menu'},
-  {x:4.4,y:1.3,z:3.45,r:1.6,label:'CHECKOUT',type:'checkout'}
-];
-var activeHotspot=null;
-var lookDir=new T.Vector3(),hotV=new T.Vector3();
-function checkHotspot(){
-  activeHotspot=null;var best=1e9;
-  hotspots.forEach(function(h){
-    hotV.set(h.x-player.x,h.y-EYE,h.z-player.z);
-    var d=hotV.length(),facing=hotV.normalize().dot(lookDir);
-    if(d<3.2&&facing>.7&&d<best){best=d;activeHotspot=h;}
-  });
-  var pr=$('prompt');
-  if(activeHotspot){pr.textContent=(coarse?'TAP':'CLICK')+' · '+activeHotspot.label;pr.classList.add('show');$('crosshair').classList.add('hot');}
-  else{pr.classList.remove('show');$('crosshair').classList.remove('hot');}
-}
+      /* ---------- hero ---------- */
+      .hero{
+        position:relative; overflow:hidden;
+        background:
+          radial-gradient(620px 340px at 88% 8%, var(--gold-soft) 0%, transparent 60%),
+          radial-gradient(700px 420px at 6% 90%, var(--blue-soft) 0%, transparent 60%),
+          linear-gradient(160deg, var(--pink-pale) 0%, var(--lilac) 55%, var(--blue-soft) 130%);
+        border-bottom:2px solid var(--line);
+      }
+      .hero-inner{ display:grid; grid-template-columns:1.05fr .95fr; gap:24px; align-items:center; padding:64px 0 76px; position:relative; z-index:2; }
+      .hero-kicker{
+        display:inline-block; background:var(--paper); border:2px solid var(--ink); border-radius:999px;
+        padding:6px 16px; font-weight:900; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+        box-shadow:3px 3px 0 var(--ink); transform:rotate(-2deg);
+      }
+      .hero h1{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(3rem,7.2vw,5.6rem); line-height:.98; margin:22px 0 6px; }
+      .hero h1 .line-pink{ color:var(--pink-hot); }
+      .hero h1 .line-lav{ color:#8f6fe8; }
+      @media (prefers-color-scheme: dark){ .hero h1 .line-lav{ color:var(--lav); } }
+      .hero .tagline{ font-size:1.22rem; font-weight:700; color:var(--ink-soft); max-width:44ch; margin-top:14px; }
+      .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
+      .btn{
+        display:inline-flex; align-items:center; gap:9px; border-radius:999px; border:2px solid var(--ink);
+        padding:14px 26px; font-weight:900; font-size:1rem; text-decoration:none;
+        box-shadow:4px 4px 0 var(--ink); transition:transform .12s ease, box-shadow .12s ease; background:var(--paper); color:var(--ink);
+      }
+      .btn:hover{ transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink); }
+      .btn:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink); }
+      .btn-pink{ background:var(--pink-hot); color:#fff; }
+      .btn-gold{ background:var(--gold); color:#40260a; }
+      .hero-note{ margin-top:18px; font-family:"Caveat",cursive; font-size:1.35rem; color:var(--pink-hot); transform:rotate(-1.5deg); display:inline-block; }
+      .hero-art{ position:relative; min-height:420px; }
+      .hero-art .sun{ position:absolute; top:2%; right:6%; width:150px; height:150px; animation:spin 40s linear infinite; }
+      .pouch{ position:absolute; filter:drop-shadow(0 18px 22px rgba(190,90,150,.28)); animation:bob 5s ease-in-out infinite; }
+      .pouch.p1{ width:200px; left:6%; top:16%; transform:rotate(-7deg); }
+      .pouch.p2{ width:168px; right:10%; top:6%; transform:rotate(6deg); animation-delay:.8s; }
+      .pouch.p3{ width:182px; left:34%; bottom:0; transform:rotate(-2deg); animation-delay:1.6s; }
+      .hero-daisy{ position:absolute; animation:spin 26s linear infinite; }
+      @keyframes bob{ 0%,100%{ margin-top:0; } 50%{ margin-top:-14px; } }
+      @keyframes spin{ to{ transform:rotate(360deg); } }
+      .sparkle{ position:absolute; color:var(--gold); animation:twinkle 2.6s ease-in-out infinite; }
+      @keyframes twinkle{ 0%,100%{ opacity:.25; transform:scale(.8); } 50%{ opacity:1; transform:scale(1.15); } }
+      @media (max-width:900px){
+        .hero-inner{ grid-template-columns:1fr; padding:44px 0 56px; }
+        .hero-art{ min-height:340px; max-width:440px; }
+        .pouch.p1{ width:150px; } .pouch.p2{ width:126px; } .pouch.p3{ width:138px; }
+      }
 
-/* model loading */
-var manager=new T.LoadingManager();
-manager.onProgress=function(u,loaded,total){setLoad(Math.round(loaded/total*70));};
-var loader=new T.GLTFLoader(manager);
-var MODELS=['room_shell','display_case','wall_shelf','checkout_counter','logo_sign','menu_board','plant_large','plant_hanging','pendant_light','bench','poster_frame'];
-var loaded={},loadCount=0;
-setLoad(4,'OPENING STORE…');
-MODELS.forEach(function(name){
-  loader.load('./models/'+name+'.glb',function(g){
-    loadCount++;setLoad(4+Math.round(loadCount/MODELS.length*88),'STOCKING SHELF… '+loadCount+'/11');
-    loaded[name]=g.scene;fixMaterials(g.scene);afterLoad();
-  },undefined,function(){setLoad(100,'3D COULD NOT LOAD');});
-});
-function afterLoad(){
-  if(Object.keys(loaded).length<MODELS.length)return;
-  texPromise.then(function(){
-  addModel(loaded.room_shell,[0,0,0],0);
-  addModel(loaded.display_case,[-2.2,0,.25],0);
-  addModel(loaded.display_case,[2.2,0,.25],0);
-  addModel(loaded.wall_shelf,[-4.5,0,5.48],0);
-  addModel(loaded.wall_shelf,[4.5,0,5.48],0);
-  addModel(loaded.wall_shelf,[-7.52,0,1.55],-Math.PI/2);
-  addModel(loaded.checkout_counter,[5.55,0,3.45],-Math.PI/2);
-  addModel(loaded.logo_sign,[0,1.55,5.62],0);
-  addModel(loaded.menu_board,[7.62,1.18,0],Math.PI/2);
-  addModel(loaded.poster_frame,[-7.62,1.42,-1.8],-Math.PI/2);
-  addModel(loaded.plant_large,[-6.9,0,-4.8],0);
-  addModel(loaded.plant_large,[6.85,0,-4.8],0);
-  addModel(loaded.plant_hanging,[-3.1,3.05,2.45],0);
-  addModel(loaded.plant_hanging,[3.1,3.05,2.45],0);
-  addModel(loaded.pendant_light,[-2.2,3.9,.25],0);
-  addModel(loaded.pendant_light,[2.2,3.9,.25],0);
-  addModel(loaded.pendant_light,[0,3.9,-3.05],0);
-  addModel(loaded.bench,[0,0,2.35],Math.PI);
-  applyTexSwaps();
-  setupHitboxes();
-  setLoad(100,'STORE READY');loadmsg.classList.add('done');
-  $('loadbar').style.display='none';
-  storeReady=true;dirtyFrames=30;
-  sizeRenderer();renderFrame(true);
-  });
-}
+      /* ---------- ticker ---------- */
+      .ticker{ background:var(--pink-hot); color:#fff; overflow:hidden; border-block:2px solid var(--ink); padding:10px 0; }
+      .ticker-track{ display:flex; gap:0; width:max-content; animation:tick 26s linear infinite; }
+      .ticker span{ font-family:"Shrikhand",cursive; font-size:1.05rem; padding:0 18px; white-space:nowrap; }
+      @keyframes tick{ to{ transform:translateX(-50%); } }
 
-/* sizing */
-function sizeRenderer(){
-  var w=frame.clientWidth||innerWidth,h=frame.clientHeight||innerHeight*.6;
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,coarse?1.25:1.6));
-  renderer.setSize(w,h,false);
-  camera.aspect=w/h;camera.updateProjectionMatrix();
-  dirtyFrames=8;
-}
-addEventListener('resize',function(){sizeRenderer();});
-/* ================= GAME LOOP & CONTROLS ================= */
-function updateCamera(){
-  camera.position.set(player.x,EYE,player.z);
-  var cp=Math.cos(camPitch);
-  lookDir.set(Math.sin(camYaw)*cp,Math.sin(camPitch),Math.cos(camYaw)*cp);
-  camera.lookAt(player.x+lookDir.x*5,EYE+lookDir.y*5,player.z+lookDir.z*5);
-}
-function renderFrame(force){
-  if(!storeReady)return;
-  if(inGame)updateCamera();else updateDrift(clock.getDelta()||.016);
-  renderer.render(scene,camera);
-  if(inGame)checkHotspot();
-}
-(function loop(){
-  requestAnimationFrame(loop);
-  if(!storeReady)return;
-  var dt=Math.min(clock.getDelta(),.05);
-  if(!inGame){updateDrift(driftFreeze?0:dt);renderer.render(scene,camera);return;}
-  var moved=false;
-  /* keyboard */
-  var mx=0,mz=0;
-  if(keys.w||keys.ArrowUp)mz+=1;if(keys.s||keys.ArrowDown)mz-=1;
-  if(keys.a||keys.ArrowLeft)mx-=1;if(keys.d||keys.ArrowRight)mx+=1;
-  mx+=joy.x;mz+=-joy.y;
-  if(mx||mz){
-    var len=Math.hypot(mx,mz);if(len>1){mx/=len;mz/=len;}
-    var sy=Math.sin(camYaw),cy=Math.cos(camYaw);
-    var dx=sy*mz-cy*mx,dz=cy*mz+sy*mx;
-    tryMove(dx*player.speed*dt,dz*player.speed*dt);moved=true;
-  }
-  /* tap-to-move */
-  if(moveTarget){
-    var tdx=moveTarget.x-player.x,tdz=moveTarget.z-player.z,td=Math.hypot(tdx,tdz);
-    if(td<.25){moveTarget=null;}
-    else{
-      var before={x:player.x,z:player.z};
-      tryMove(tdx/td*player.speed*dt,tdz/td*player.speed*dt);
-      if(Math.hypot(player.x-before.x,player.z-before.z)<.0005)moveTarget=null;
-      moved=true;
-    }
-  }
-  updateCamera();renderer.render(scene,camera);checkHotspot();
-})();
+      /* ---------- sections ---------- */
+      section.block{ padding:72px 0; }
+      .sec-head{ text-align:center; max-width:640px; margin:0 auto 40px; }
+      .sec-head .mini{ font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.75rem; color:var(--pink-hot); }
+      .sec-head h2{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2rem,4.4vw,3rem); line-height:1.05; margin-top:10px; }
+      .sec-head p{ color:var(--ink-soft); font-weight:600; margin-top:12px; }
 
-var keys={},joy={x:0,y:0,pointer:null},moveTarget=null;
-document.addEventListener('keydown',function(e){
-  if(!inGame||activePanel)return;
-  var k=e.key.length===1?e.key.toLowerCase():e.key;
-  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].indexOf(e.key)>-1)e.preventDefault();
-  keys[k]=true;
-  if(k==='e'){checkHotspot();activateHotspot();}
-});
-document.addEventListener('keyup',function(e){var k=e.key.length===1?e.key.toLowerCase():e.key;keys[k]=false;});
+      /* ---------- category circles ---------- */
+      .cats{ display:flex; flex-wrap:wrap; justify-content:center; gap:26px; }
+      .cat{ text-align:center; text-decoration:none; width:128px; }
+      .cat .disc{
+        width:112px; height:112px; margin:0 auto 10px; border-radius:50%; border:2px solid var(--ink);
+        display:flex; align-items:center; justify-content:center; box-shadow:4px 4px 0 var(--ink);
+        transition:transform .15s ease;
+      }
+      .cat:hover .disc{ transform:translateY(-5px) rotate(-3deg); }
+      .cat b{ font-size:.92rem; letter-spacing:.04em; }
+      .cat small{ display:block; color:var(--ink-soft); font-weight:700; font-size:.76rem; }
 
-/* enter / leave */
-function enterGame(){
-  if(!storeReady){toast('The store is still loading');return;}
-  inGame=true;document.body.classList.add('in-game');
-  $('gameUI').setAttribute('aria-hidden','false');
-  player.x=0;player.z=-3.4;camYaw=0;targetYaw=0;camPitch=0;targetPitch=0;
-  $('controlsHint').textContent=coarse?'Drag to look · Tap a product · Joystick to walk':'WASD move · Mouse look · Click a product · E interact · ESC leave';
-  sizeRenderer();
-  if(!coarse&&frame.requestPointerLock)frame.requestPointerLock();
-  updateCamera();renderer.render(scene,camera);
-}
-function leaveGame(){
-  inGame=false;document.body.classList.remove('in-game');
-  $('gameUI').setAttribute('aria-hidden','true');
-  if(document.pointerLockElement)document.exitPointerLock();
-  closePanels();sizeRenderer();
-}
-document.querySelectorAll('[data-walkin]').forEach(function(b){b.addEventListener('click',enterGame);});
-$('exitBtn').addEventListener('click',leaveGame);
+      /* ---------- product grid ---------- */
+      .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+      @media (max-width:900px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+      @media (max-width:560px){ .grid{ grid-template-columns:1fr; } }
+      .card{
+        background:var(--paper); border:2px solid var(--ink); border-radius:26px; overflow:hidden;
+        box-shadow:var(--card-shadow); display:flex; flex-direction:column;
+      }
+      .card-art{ position:relative; padding:30px 20px 8px; display:flex; justify-content:center; }
+      .card-art .badge{
+        position:absolute; top:14px; left:14px; background:var(--ink); color:var(--cream);
+        font-size:.68rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase;
+        padding:5px 11px; border-radius:999px;
+      }
+      .card-art .card-pouch{ width:138px; filter:drop-shadow(0 12px 14px rgba(160,80,130,.25)); transition:transform .2s ease; }
+      .card:hover .card-pouch{ transform:rotate(-3deg) translateY(-4px); }
+      .card-body{ padding:16px 22px 24px; display:flex; flex-direction:column; gap:8px; flex:1; }
+      .card-body h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.5rem; line-height:1.1; }
+      .card-meta{ display:flex; flex-wrap:wrap; gap:7px; }
+      .chip{ font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; padding:4px 10px; border-radius:999px; border:1.5px solid var(--ink); }
+      .chip.type{ background:var(--lilac); }
+      .chip.note{ background:var(--paper); border-color:var(--line); color:var(--ink-soft); text-transform:none; letter-spacing:0; font-size:.78rem; }
+      .card-body .size{ color:var(--ink-soft); font-weight:700; font-size:.9rem; }
+      .card-foot{ margin-top:auto; padding-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+      .price-note{ font-family:"Caveat",cursive; font-size:1.2rem; color:var(--pink-hot); }
+      .add-btn{
+        border:2px solid var(--ink); background:var(--pink-hot); color:#fff; border-radius:999px;
+        padding:10px 20px; font-weight:900; font-size:.9rem; box-shadow:3px 3px 0 var(--ink);
+        transition:transform .12s ease, box-shadow .12s ease;
+      }
+      .add-btn:hover{ transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--ink); }
+      .add-btn.notify{ background:var(--lav); color:var(--ink); }
+      .card.soon .card-art{ filter:saturate(.75); }
+      .card.soon .card-pouch{ opacity:.92; }
 
-/* desktop: pointer lock + click interact */
-document.addEventListener('pointerlockchange',function(){
-  frame.classList.toggle('locked',document.pointerLockElement===frame);
-});
-document.addEventListener('mousemove',function(e){
-  if(!inGame||document.pointerLockElement!==frame||activePanel)return;
-  targetYaw-=e.movementX*.0024;targetPitch=Math.max(-1.05,Math.min(1.05,targetPitch-e.movementY*.0021));
-  camYaw=targetYaw;camPitch=targetPitch;
-});
-frame.addEventListener('click',function(){
-  if(!inGame||coarse||activePanel)return;
-  if(document.pointerLockElement===frame){checkHotspot();activateHotspot();}
-  else if(frame.requestPointerLock)frame.requestPointerLock();
-});
-function activateHotspot(){
-  if(!activeHotspot)return;
-  var t=activeHotspot.type;
-  if(t==='case'||t==='shelf')openCasePicker(activeHotspot);
-  else if(t==='menu')openMenuBoard();
-  else if(t==='checkout'){renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);}
-}
-function openCasePicker(){
-  /* quick pick: open a simple product choice via product cards, start with Thai Stick */
-  openProduct('thai');
-}
-function openMenuBoard(){
-  openProduct('northern');
-}
+      /* ---------- enter the shop banner ---------- */
+      .enter-banner{
+        position:relative; overflow:hidden; border-block:2px solid var(--ink);
+        background:linear-gradient(120deg, #3a2350 0%, #5b2a63 55%, #7c2d5e 100%); color:#ffeef8;
+      }
+      .enter-banner .wrap{ display:grid; grid-template-columns:1.1fr .9fr; gap:30px; align-items:center; padding-top:64px; padding-bottom:64px; position:relative; z-index:2; }
+      .enter-banner h2{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2.2rem,5vw,3.6rem); line-height:1.02; }
+      .enter-banner h2 .gold{ color:var(--gold); }
+      .enter-banner p{ margin-top:14px; font-weight:600; color:#f6d7ec; max-width:46ch; }
+      .rec-chip{
+        display:inline-flex; align-items:center; gap:8px; border:1.5px solid rgba(255,255,255,.55); border-radius:8px;
+        padding:6px 12px; font-size:.78rem; font-weight:800; letter-spacing:.18em; margin-bottom:18px;
+      }
+      .rec-dot{ width:10px; height:10px; border-radius:50%; background:#ff3b30; animation:blink 1.1s steps(1) infinite; }
+      @keyframes blink{ 50%{ opacity:.1; } }
+      .cam-frame{
+        border:2px solid rgba(255,255,255,.5); border-radius:18px; padding:16px; position:relative;
+        background:rgba(255,255,255,.06);
+      }
+      .cam-frame .corner{ position:absolute; width:26px; height:26px; border:3px solid var(--gold); }
+      .corner.tl{ top:-3px; left:-3px; border-right:none; border-bottom:none; border-radius:16px 0 0 0; }
+      .corner.tr{ top:-3px; right:-3px; border-left:none; border-bottom:none; border-radius:0 16px 0 0; }
+      .corner.bl{ bottom:-3px; left:-3px; border-right:none; border-top:none; border-radius:0 0 0 16px; }
+      .corner.br{ bottom:-3px; right:-3px; border-left:none; border-top:none; border-radius:0 0 16px 0; }
+      .cam-frame ul{ display:grid; gap:10px; font-weight:700; }
+      .cam-frame li{ display:flex; gap:10px; align-items:baseline; }
+      .cam-frame li::before{ content:"✿"; color:var(--gold); }
+      @media (max-width:860px){ .enter-banner .wrap{ grid-template-columns:1fr; } }
 
-/* touch: drag look, tap products, tap-to-move floor */
-var tl={pointer:null,x:0,y:0,moved:false};
-frame.addEventListener('pointerdown',function(e){
-  if(!inGame||!coarse||activePanel)return;
-  if(e.target!==frame&&e.target!==canvas)return;
-  tl.pointer=e.pointerId;tl.x=e.clientX;tl.y=e.clientY;tl.moved=false;
-  try{frame.setPointerCapture(e.pointerId);}catch(ignore){}
-});
-frame.addEventListener('pointermove',function(e){
-  if(!inGame||!coarse||tl.pointer!==e.pointerId||activePanel)return;
-  var dx=e.clientX-tl.x,dy=e.clientY-tl.y;
-  if(Math.abs(dx)+Math.abs(dy)>5)tl.moved=true;
-  tl.x=e.clientX;tl.y=e.clientY;
-  targetYaw+=dx*.0062;targetPitch=Math.max(-1.02,Math.min(1.02,targetPitch-dy*.0052));
-  camYaw=targetYaw;camPitch=targetPitch;
-});
-function endTouch(e){
-  if(tl.pointer!==e.pointerId)return;
-  var wasTap=!tl.moved;tl.pointer=null;
-  if(!wasTap||!inGame||activePanel)return;
-  tapV.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);
-  raycaster.setFromCamera(tapV,camera);
-  var hits=raycaster.intersectObjects(hitboxes);
-  if(hits.length){activateAction(hits[0].object.userData.action);return;}
-  /* floor tap: move there */
-  var floorY=new T.Plane(new T.Vector3(0,1,0),0);
-  var pt=new T.Vector3();
-  if(raycaster.ray.intersectPlane(floorY,pt)){
-    if(!blocked(pt.x,pt.z))moveTarget={x:pt.x,z:pt.z};
-    else toast('Can not walk there');
-  }
-}
-frame.addEventListener('pointerup',endTouch);
-frame.addEventListener('pointercancel',function(e){if(tl.pointer===e.pointerId)tl.pointer=null;});
-function activateAction(a){
-  if(!a)return;
-  if(a.type==='product')openProduct(a.key);
-  else if(a.type==='menu')openMenuBoard();
-  else if(a.type==='checkout'){renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);}
-}
-/* desktop non-locked click fallback: raycast from screen point */
-frame.addEventListener('dblclick',function(){
-  if(!inGame||coarse||activePanel||document.pointerLockElement===frame)return;
-  tapV.set(0,0);raycaster.setFromCamera(tapV,camera);
-  var hits=raycaster.intersectObjects(hitboxes);
-  if(hits.length)activateAction(hits[0].object.userData.action);
-});
+      /* ---------- story ---------- */
+      .story{ background:var(--pink-pale); border-block:2px solid var(--line); }
+      .story-grid{ display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center; }
+      @media (max-width:860px){ .story-grid{ grid-template-columns:1fr; } }
+      .story h2{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2rem,4vw,2.9rem); line-height:1.08; }
+      .story h2 .pink{ color:var(--pink-hot); }
+      .story p{ color:var(--ink-soft); font-weight:600; margin-top:16px; max-width:52ch; }
+      .story .hand-note{ font-family:"Caveat",cursive; font-size:1.5rem; color:var(--pink-hot); margin-top:14px; transform:rotate(-1.5deg); display:inline-block; }
+      .props{ display:grid; gap:16px; }
+      .prop{ display:flex; gap:16px; background:var(--paper); border:2px solid var(--ink); border-radius:20px; padding:18px 20px; box-shadow:4px 4px 0 var(--ink); }
+      .prop .prop-ico{ flex:none; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid var(--ink); }
+      .prop b{ font-size:1.02rem; }
+      .prop p{ margin-top:2px; font-size:.92rem; }
 
-/* joystick */
-var joystick=$('joystick'),stick=$('stick');
-function moveStick(e){
-  var r=joystick.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
-  var d=Math.hypot(dx,dy),max=36;
-  if(d>max){dx=dx/d*max;dy=dy/d*max;}
-  joy.x=dx/max;joy.y=dy/max;
-  stick.style.transform='translate3d('+dx+'px,'+dy+'px,0)';
-}
-joystick.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();joy.pointer=e.pointerId;try{joystick.setPointerCapture(e.pointerId);}catch(ignore){}moveStick(e);moveTarget=null;});
-joystick.addEventListener('pointermove',function(e){if(joy.pointer===e.pointerId)moveStick(e);});
-function releaseStick(e){if(joy.pointer!==e.pointerId)return;joy.pointer=null;joy.x=0;joy.y=0;stick.style.transform='translate3d(0,0,0)';}
-joystick.addEventListener('pointerup',releaseStick);
-joystick.addEventListener('pointercancel',releaseStick);
+      /* ---------- gallery ---------- */
+      .gallery{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+      @media (max-width:900px){ .gallery{ grid-template-columns:repeat(3,1fr); } }
+      @media (max-width:540px){ .gallery{ grid-template-columns:repeat(2,1fr); } }
+      .tile{ position:relative; border-radius:20px; border:2px solid var(--ink); aspect-ratio:1; overflow:hidden; display:flex; align-items:center; justify-content:center; text-decoration:none; }
+      .tile .tile-label{ position:absolute; bottom:10px; left:50%; transform:translateX(-50%); background:var(--paper); border:1.5px solid var(--ink); border-radius:999px; padding:3px 12px; font-size:.72rem; font-weight:900; white-space:nowrap; }
+      .tile:hover{ outline:3px solid var(--gold); }
 
-/* debug hook for QA */
-window.__shopDebug={
-  ready:function(){return storeReady;},
-  enter:enterGame,leave:leaveGame,
-  inGame:function(){return inGame;},
-  addToBag:function(k,q){addToBag(k,q||1);},
-  bag:function(){return JSON.parse(JSON.stringify(bag));},
-  openProduct:openProduct,openCheckout:function(){renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);},
-  setPlayer:function(x,z){if(!blocked(x,z)){player.x=x;player.z=z;return true;}return false;},
-  lookAt:function(x,y,z){var yaw=Math.atan2(x-player.x,z-player.z);targetYaw=camYaw=yaw;targetPitch=camPitch=Math.atan2(y-camera.position.y,Math.hypot(x-player.x,z-player.z));},
-  activateHotspot:activateHotspot,hotspot:checkHotspot,interactAt:function(x,y){tapV.set(x,y);raycaster.setFromCamera(tapV,camera);var h=raycaster.intersectObjects(hitboxes);return h.length?h[0].object.userData.action:null;}
-};
-/* QA deep-links (screenshot testing) */
-var qaParam=new URLSearchParams(location.search).get('qa');
-if(qaParam){
-  var qaTimer=setInterval(function(){
-    if(!storeReady)return;clearInterval(qaTimer);
-    setTimeout(function(){
-      if(qaParam==='game'){enterGame();}
-      else if(qaParam==='case'){enterGame();if(!blocked(-2.2,-1.7)){player.x=-2.2;player.z=-1.7;}camYaw=targetYaw=0;camPitch=targetPitch=-.08;updateCamera();renderer.render(scene,camera);}
-      else if(qaParam==='sign'){enterGame();if(!blocked(0,3.6)){player.x=0;player.z=3.6;}camYaw=targetYaw=0;camPitch=targetPitch=0;updateCamera();renderer.render(scene,camera);}
-      else if(qaParam==='product'){enterGame();openProduct('thai');}
-      else if(qaParam==='confirm'){addToBag('northern',1);renderCheckoutPage();openPanel($('checkoutPanel'),false);$('fName').value='Jane Doe';$('fEmail').value='jane@email.com';$('fCard').value='4242 4242 4242 4242';$('fExp').value='12/28';$('fCvc').value='123';coGo(2);$('coPlace').click();}
-      else if(qaParam==='bag'){addToBag('thai',2);addToBag('northern',1);renderBagList();openPanel($('bagPanel'),false);}
-      else if(qaParam==='checkout'){addToBag('thai',2);addToBag('maui',1);renderCheckoutPage();coGo(0);openPanel($('checkoutPanel'),true);}
-      else if(qaParam==='pay'){addToBag('thai',1);renderCheckoutPage();openPanel($('checkoutPanel'),true);$('fName').value='Jane Doe';$('fEmail').value='jane@email.com';$('fAddr').value='123 Blossom St';$('fCity').value='Pasadena';$('fZip').value='91101';coGo(2);}
-      else if(qaParam==='drift0'){driftFreeze=true;driftI=0;driftT=0;}
-    },600);
-  },250);
-}
-sizeRenderer();
-})();
-</script>
-</body>
+      /* ---------- footer ---------- */
+      footer.site{ background:var(--ink); color:var(--cream); padding:64px 0 34px; }
+      @media (prefers-color-scheme: dark){ footer.site{ background:#170a20; } }
+      .foot-grid{ display:grid; grid-template-columns:1.2fr .8fr 1fr; gap:40px; }
+      @media (max-width:860px){ .foot-grid{ grid-template-columns:1fr; } }
+      footer.site h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.9rem; color:var(--pink); }
+      footer.site p{ color:#e8cfe4; font-weight:600; margin-top:10px; max-width:40ch; }
+      .foot-links{ display:grid; gap:9px; font-weight:700; }
+      .foot-links a{ text-decoration:none; color:#e8cfe4; }
+      .foot-links a:hover{ color:var(--gold); }
+      .foot-h{ font-size:.75rem; font-weight:900; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+      .subscribe-form{ display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; }
+      .subscribe-form input{
+        flex:1; min-width:200px; border-radius:999px; border:2px solid var(--gold); background:transparent;
+        color:var(--cream); padding:12px 18px; font:inherit; font-weight:600;
+      }
+      .subscribe-form input::placeholder{ color:#b99cc0; }
+      .subscribe-form button{ border-radius:999px; border:2px solid var(--gold); background:var(--gold); color:#40260a; font-weight:900; padding:12px 22px; }
+      .subscribe-done{ margin-top:12px; font-family:"Caveat",cursive; font-size:1.35rem; color:var(--gold); }
+      .foot-base{ border-top:1px solid rgba(255,255,255,.18); margin-top:44px; padding-top:20px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:.82rem; color:#c9a8c4; font-weight:600; }
+      .age-note{ font-weight:800; color:var(--gold); }
+
+      /* ---------- reveal (pure garnish: content is ALWAYS visible; .in only plays a soft rise) ---------- */
+      .reveal{ opacity:1; }
+      .reveal.in{ animation:riseIn .65s ease both; }
+      @keyframes riseIn{ from{ opacity:.3; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+      @media (prefers-reduced-motion: reduce){
+        .reveal.in{ animation:none; }
+        .pouch,.hero-art .sun,.hero-daisy,.ticker-track,.sparkle{ animation:none !important; }
+      }
+
+      /* ---------- cart drawer ---------- */
+      .scrim{ position:fixed; inset:0; background:rgba(43,16,48,.5); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:260; }
+      .scrim.open{ opacity:1; pointer-events:auto; }
+      .drawer{
+        position:fixed; top:0; right:0; height:100dvh; width:min(430px,94vw); background:var(--paper); z-index:270;
+        transform:translateX(105%); transition:transform .3s cubic-bezier(.32,.72,.28,1);
+        display:flex; flex-direction:column; border-left:2px solid var(--ink);
+      }
+      .drawer.open{ transform:none; }
+      .drawer-head{ display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:2px solid var(--line); }
+      .drawer-head h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.45rem; }
+      .icon-btn{ width:40px; height:40px; border-radius:50%; border:2px solid var(--ink); background:var(--paper); font-size:1.05rem; font-weight:900; display:inline-flex; align-items:center; justify-content:center; }
+      .drawer-body{ flex:1; overflow-y:auto; padding:20px 22px; }
+      .drawer-foot{ border-top:2px solid var(--line); padding:18px 22px 22px; }
+      .cart-item{ display:flex; gap:14px; padding:14px 0; border-bottom:1.5px dashed var(--line); align-items:center; }
+      .cart-item .thumb{ width:58px; height:58px; border-radius:14px; border:2px solid var(--ink); flex:none; display:flex; align-items:center; justify-content:center; }
+      .cart-item .ci-main{ flex:1; }
+      .cart-item b{ font-size:1rem; }
+      .cart-item .ci-sub{ color:var(--ink-soft); font-size:.82rem; font-weight:700; }
+      .qty{ display:inline-flex; align-items:center; gap:2px; border:2px solid var(--ink); border-radius:999px; overflow:hidden; }
+      .qty button{ width:30px; height:30px; border:none; background:var(--lilac); font-weight:900; font-size:1rem; color:var(--ink); }
+      .qty span{ min-width:26px; text-align:center; font-weight:900; }
+      .remove-btn{ background:none; border:none; color:var(--pink-hot); font-weight:800; font-size:.8rem; text-decoration:underline; padding:4px; }
+      .empty-cart{ text-align:center; padding:36px 10px; color:var(--ink-soft); font-weight:700; }
+      .empty-cart .big{ font-size:2.6rem; margin-bottom:8px; }
+      .drawer-note{ font-size:.86rem; color:var(--ink-soft); font-weight:600; margin-bottom:14px; }
+      .checkout-btn{ width:100%; border:2px solid var(--ink); background:var(--pink-hot); color:#fff; border-radius:999px; padding:15px; font-weight:900; font-size:1.02rem; box-shadow:4px 4px 0 var(--ink); }
+      .checkout-btn:disabled{ opacity:.45; box-shadow:none; cursor:not-allowed; }
+      .field{ margin-bottom:14px; }
+      .field label{ display:block; font-weight:800; font-size:.86rem; margin-bottom:6px; }
+      .field input{ width:100%; border:2px solid var(--line); border-radius:14px; padding:12px 14px; font:inherit; background:var(--paper); color:var(--ink); }
+      .field input:focus{ outline:2px solid var(--pink-hot); border-color:transparent; }
+      .age-confirm{
+        width:100%; border:2px dashed var(--ink-soft); background:transparent; color:var(--ink);
+        border-radius:14px; padding:12px; font-weight:800; margin:4px 0 16px;
+      }
+      .age-confirm.on{ border-style:solid; border-color:var(--ink); background:var(--mint-soft); }
+      .form-err{ color:#d6336c; font-weight:800; font-size:.88rem; margin-bottom:12px; display:none; }
+      .back-link{ background:none; border:none; color:var(--pink-hot); font-weight:800; text-decoration:underline; padding:0 0 12px; }
+      .success-box{ text-align:center; padding:22px 6px; }
+      .success-box .big-daisy{ width:84px; margin:0 auto 14px; animation:spin 16s linear infinite; }
+      .success-box h4{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.6rem; margin:0 0 8px; }
+      .success-box p{ color:var(--ink-soft); font-weight:600; }
+      .success-list{ text-align:left; background:var(--pink-pale); border:2px solid var(--line); border-radius:16px; padding:14px 18px; margin:16px 0; font-weight:700; }
+
+      /* ---------- toast ---------- */
+      .toast{
+        position:fixed; left:50%; bottom:26px; transform:translate(-50%,90px); z-index:320;
+        background:var(--ink); color:var(--cream); border-radius:999px; padding:13px 24px; font-weight:800;
+        box-shadow:0 14px 34px rgba(40,10,50,.35); transition:transform .3s cubic-bezier(.32,.72,.28,1); max-width:92vw; text-align:center;
+      }
+      .toast.show{ transform:translate(-50%,0); }
+      @media (prefers-color-scheme: dark){ .toast{ background:var(--gold); color:#3a2405; } }
+
+      /* ---------- 3D shop overlay ---------- */
+      .shop-overlay{ position:fixed; inset:0; z-index:200; background:#fdf0f6; display:none; outline:none; }
+      .shop-overlay.open{ display:block; }
+      #shopCanvasWrap{ position:absolute; inset:0; overflow:hidden; }
+      #shopCanvasWrap canvas{ display:block; }
+      .vhs-grain{ position:absolute; inset:0; width:100%; height:100%; opacity:.045; pointer-events:none; mix-blend-mode:overlay; image-rendering:pixelated; }
+      .vhs-scan{
+        position:absolute; inset:0; pointer-events:none;
+        background:repeating-linear-gradient(to bottom, rgba(0,0,0,.07) 0 1px, transparent 1px 3px);
+        mix-blend-mode:multiply; opacity:.14;
+      }
+      .vhs-vignette{
+        position:absolute; inset:0; pointer-events:none;
+        box-shadow:inset 0 0 90px rgba(70,30,60,.16);
+      }
+      .vhs-track{ position:absolute; left:0; right:0; height:64px; pointer-events:none; opacity:.3; background:linear-gradient(to bottom, transparent, rgba(255,255,255,.10), transparent); animation:track 7s linear infinite; }
+      @keyframes track{ 0%{ top:-12%; } 100%{ top:110%; } }
+      .hud{ position:absolute; z-index:5; color:#fff; font-weight:800; text-shadow:0 1px 6px rgba(60,10,50,.5), 0 0 2px rgba(60,10,50,.35); }
+      .hud-rec{ top:20px; left:24px; display:flex; align-items:center; gap:10px; font-size:1.05rem; letter-spacing:.14em; }
+      .hud-rec .rec-dot{ width:14px; height:14px; }
+      .hud-time{ top:20px; right:24px; text-align:right; font-size:.95rem; letter-spacing:.1em; line-height:1.5; }
+      .hud-play{ top:64px; left:24px; font-size:.85rem; letter-spacing:.22em; opacity:.9; }
+      .crosshair{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:5; width:8px; height:8px; border-radius:50%; border:2px solid rgba(255,255,255,.9); box-shadow:0 0 8px rgba(0,0,0,.45); pointer-events:none; }
+      /* shop picker — separate shop instances, top centre */
+      .hud-shops{ top:16px; left:50%; transform:translateX(-50%); text-align:center; }
+      .shops-row{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+      .shop-pick{
+        border:2px solid rgba(255,255,255,.85); background:rgba(30,8,38,.55); color:#fff;
+        border-radius:999px; padding:7px 14px; font-weight:900; font-size:.8rem; font-family:inherit; cursor:pointer;
+      }
+      .shop-pick:hover{ filter:brightness(1.15); }
+      .shop-pick.is-on{ background:var(--gold); border-color:var(--gold); color:#40260a; }
+      .presence{ margin-top:7px; font-size:.84rem; letter-spacing:.03em; }
+      /* pointer-lock prompt — shown whenever the mouse is free */
+      .lock-prompt{ position:absolute; inset:0; z-index:7; display:none; align-items:center; justify-content:center; pointer-events:none; }
+      .lock-prompt.show{ display:flex; }
+      .lp-card{
+        pointer-events:none; background:rgba(255,253,249,.95); color:var(--ink);
+        border:2px solid var(--ink); border-radius:22px; box-shadow:5px 5px 0 var(--ink);
+        padding:26px 30px; text-align:center; max-width:410px; margin:0 16px;
+      }
+      .lp-card .hud-btn{ pointer-events:auto; }
+      .lp-title{ font-size:1.7rem; color:var(--pink-hot); line-height:1.1; }
+      .lp-card p{ font-weight:700; color:var(--ink-soft); margin:9px 0 14px; }
+      .lp-keys{ font-weight:800; font-size:.86rem; margin-bottom:16px; }
+      .lp-keys kbd{ background:var(--ink); color:#fff; border-radius:5px; padding:1px 7px; font-family:inherit; font-weight:900; font-size:.8rem; }
+      .hud-label{
+        position:absolute; left:50%; top:calc(50% + 34px); transform:translateX(-50%); z-index:5;
+        background:rgba(30,8,38,.82); color:#fff; border:1.5px solid var(--gold); border-radius:999px;
+        padding:7px 18px; font-weight:800; font-size:.92rem; display:none; white-space:nowrap;
+      }
+      .hud-label.show{ display:block; }
+      .hud-bottom{ position:absolute; left:0; right:0; bottom:0; z-index:6; display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding:18px 22px; flex-wrap:wrap; }
+      .hud-hint{ color:#ffe9f6; font-size:.85rem; font-weight:700; background:rgba(25,6,32,.66); border:1.5px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 16px; line-height:1.6; }
+      .hud-hint kbd{ background:#fff; color:#33153f; border-radius:5px; padding:1px 7px; font-family:inherit; font-weight:900; font-size:.8rem; }
+      .hud-actions{ display:flex; gap:10px; }
+      .hud-btn{ border:2px solid #fff; background:rgba(30,8,38,.8); color:#fff; border-radius:999px; padding:12px 22px; font-weight:900; font-size:.95rem; }
+      .hud-btn.gold{ background:var(--gold); border-color:var(--gold); color:#40260a; }
+      .hud-btn:hover{ filter:brightness(1.12); }
+      .shop-fallback{
+        position:absolute; inset:0; z-index:8; display:none; align-items:center; justify-content:center; padding:24px;
+        background:linear-gradient(150deg, #44205c, #7c2d5e); color:#fff; text-align:center;
+      }
+      .shop-fallback.show{ display:flex; }
+      .shop-fallback .fb-card{ max-width:430px; }
+      .shop-fallback h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:2rem; margin:0 0 12px; }
+      .shop-fallback p{ font-weight:600; color:#f6d7ec; margin:0 0 22px; }
+      body.shop-locked{ overflow:hidden; }
+    </style>
+  </head>
+  <body>
+    <div class="announce">✿ Pre-launch — the first drop is blooming soon <span class="star">✶</span> Women-owned <span class="star">✶</span> Good vibes, great flower ✿</div>
+
+    <header class="site">
+      <nav class="nav" aria-label="Main">
+        <div class="nav-links left">
+          <a href="#shop">Shop</a>
+          <a href="#story">Our Story</a>
+          <a href="#gallery">The Feed</a>
+        </div>
+        <a class="logo" href="#top" aria-label="FLWRPWR home">
+          <span class="logo-word">FLWRPWR</span>
+          <span class="logo-sub">Flower Co.</span>
+        </a>
+        <div class="nav-links right">
+          <a href="#visit">Visit</a>
+          <button class="cart-btn" id="cartOpenBtn" type="button" aria-label="Open your basket">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h15l-1.7 8.5a2 2 0 0 1-2 1.5H8.6a2 2 0 0 1-2-1.6L4 3H2"/><circle cx="9" cy="21" r="1.6"/><circle cx="17" cy="21" r="1.6"/></svg>
+            Basket <span class="cart-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="wrap hero-inner">
+          <div>
+            <span class="hero-kicker">✿ Women-owned flower co. ✿</span>
+            <h1>Good <span class="line-pink">vibes,</span><br />great <span class="line-lav">flower.</span></h1>
+            <p class="tagline">FLWRPWR 4g Smalls, packed pretty and ready to reserve. The shop doors open soon — come peek inside before anyone else.</p>
+            <div class="hero-ctas">
+              <a class="btn btn-pink" href="#shop">Shop the smalls</a>
+              <button class="btn btn-gold" type="button" data-enter-shop>▶ Enter the shop</button>
+            </div>
+            <span class="hero-note">psst — you can walk around inside ↑ it's a whole little store</span>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <svg class="sun" viewBox="0 0 100 100"><g fill="#f2b84b"><circle cx="50" cy="50" r="17"/><g id="rays"><path d="M50 4v12M50 84v12M4 50h12M84 50h12M17 17l8.5 8.5M74.5 74.5L83 83M83 17l-8.5 8.5M25.5 74.5L17 83" stroke="#f2b84b" stroke-width="6" stroke-linecap="round"/></g></g></svg>
+            <svg class="pouch p1" data-pouch="mint" viewBox="0 0 200 240"></svg>
+            <svg class="pouch p2" data-pouch="lav" viewBox="0 0 200 240"></svg>
+            <svg class="pouch p3" data-pouch="pink" viewBox="0 0 200 240"></svg>
+            <svg class="hero-daisy" style="left:2%;bottom:12%;width:54px" viewBox="0 0 100 100" data-daisy></svg>
+            <svg class="hero-daisy" style="right:2%;top:44%;width:38px;animation-duration:34s" viewBox="0 0 100 100" data-daisy></svg>
+            <span class="sparkle" style="left:44%;top:4%;font-size:1.5rem">✦</span>
+            <span class="sparkle" style="left:8%;top:56%;font-size:1.1rem;animation-delay:.7s">✦</span>
+            <span class="sparkle" style="right:16%;bottom:6%;font-size:1.3rem;animation-delay:1.3s">✦</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track" id="tickerTrack"></div>
+      </div>
+
+      <!-- CATEGORIES -->
+      <section class="block" style="padding-bottom:8px">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">Shop by feeling</span>
+            <h2>Pick your petal</h2>
+          </div>
+          <div class="cats reveal">
+            <a class="cat" href="#shop">
+              <span class="disc" style="background:var(--mint-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#57b87e"></svg></span>
+              <b>Hybrid</b><small>Thai Stick</small>
+            </a>
+            <a class="cat" href="#shop">
+              <span class="disc" style="background:var(--lav-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#8f6fe8"></svg></span>
+              <b>Indica</b><small>Northern Lights</small>
+            </a>
+            <a class="cat" href="#shop">
+              <span class="disc" style="background:var(--pink-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#ff5fa8"></svg></span>
+              <b>Sativa</b><small>Maui Wowie</small>
+            </a>
+            <a class="cat" href="#shop">
+              <span class="disc" style="background:var(--gold-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-bud></svg></span>
+              <b>Blooming Soon</b><small>3 more strains</small>
+            </a>
+            <button class="cat" type="button" data-enter-shop style="background:none;border:none;color:inherit;font:inherit">
+              <span class="disc" style="background:var(--blue-soft)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#47264d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg></span>
+              <b>The Shop IRL</b><small>walk in, virtually</small>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRODUCTS -->
+      <section class="block" id="shop">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">The first drop</span>
+            <h2>4g Smalls, full-size cute</h2>
+            <p>Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet — reserving just saves your spot for launch day.</p>
+          </div>
+          <div class="grid" id="productGrid"></div>
+        </div>
+      </section>
+
+      <!-- ENTER THE SHOP -->
+      <section class="enter-banner" id="visit">
+        <div class="wrap">
+          <div class="reveal">
+            <span class="rec-chip"><span class="rec-dot"></span> REC — NOW TOURING</span>
+            <h2>Step inside the <span class="gold">flower shop</span></h2>
+            <p>A first-person walk-through of the FLWRPWR shop — bright, sunny and shared with other shoppers wandering the aisles. Click a pouch on the shelf and it lands in your basket — same basket as this page.</p>
+            <div class="hero-ctas">
+              <button class="btn btn-gold" type="button" data-enter-shop>▶ Enter the shop</button>
+              <a class="btn" href="#shop" style="background:transparent;color:#fff;border-color:#fff;box-shadow:4px 4px 0 rgba(255,255,255,.85)">Shop the grid instead</a>
+            </div>
+          </div>
+          <div class="cam-frame reveal" aria-hidden="true">
+            <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+            <ul>
+              <li>Click in to lock the mouse — look around first-person, WASD to walk</li>
+              <li>Other shoppers browse the aisles — hop between three little shops to find your crowd</li>
+              <li>Click any pouch or jar on the shelves to add it</li>
+              <li>Checkout is a launch-day reservation — no payment, ever, on a concept</li>
+              <li>Best on desktop — phones get the grid, same flowers</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- STORY -->
+      <section class="block story" id="story">
+        <div class="wrap story-grid">
+          <div class="reveal">
+            <span class="mini" style="font-weight:900;letter-spacing:.22em;text-transform:uppercase;font-size:.75rem;color:var(--pink-hot)">Our story</span>
+            <h2>Grown by women, <span class="pink">wrapped like a gift</span></h2>
+            <p>FLWRPWR is a women-owned flower company with one rule: good vibes, great flower. We think buying flower should feel like walking into your favorite boutique — soft colors, pretty shelves, zero intimidation.</p>
+            <p>The first drop is our 4g Smalls: Thai Stick, Northern Lights and Maui Wowie, with three more strains still blooming. Follow along at <b>@flwrpwr_co</b> — launch day is getting close.</p>
+            <span class="hand-note">— picked, packed &amp; posted with love ✿</span>
+          </div>
+          <div class="props reveal">
+            <div class="prop">
+              <span class="prop-ico" style="background:var(--pink-soft)"><svg width="28" height="28" viewBox="0 0 100 100" data-daisy data-c="#ff5fa8"></svg></span>
+              <div><b>Women-owned</b><p>Founded and run by women, from the grow to the gram — er, the 4 grams.</p></div>
+            </div>
+            <div class="prop">
+              <span class="prop-ico" style="background:var(--mint-soft)"><svg width="28" height="28" viewBox="0 0 100 100" data-bud></svg></span>
+              <div><b>4g Smalls</b><p>Our signature format. Small buds, boutique energy, one tidy pastel pouch.</p></div>
+            </div>
+            <div class="prop">
+              <span class="prop-ico" style="background:var(--gold-soft)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#47264d" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7.5-4.6-9.7-9A5.4 5.4 0 0 1 12 6.4 5.4 5.4 0 0 1 21.7 12C19.5 16.4 12 21 12 21Z"/></svg></span>
+              <div><b>Good vibes only</b><p>The tagline is the whole business plan: "Good vibes, great flower."</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section class="block" id="gallery">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">The feed</span>
+            <h2>@flwrpwr_co</h2>
+            <p>Petals, pouches and shop days. Come hang out with us on Instagram.</p>
+          </div>
+          <div class="gallery reveal" id="galleryGrid"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site">
+      <div class="wrap">
+        <div class="foot-grid">
+          <div>
+            <h3>FLWRPWR</h3>
+            <p>Good vibes, great flower. A women-owned flower company, blooming soon.</p>
+            <p style="margin-top:14px">Follow the bloom: <a href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener" style="color:var(--gold);font-weight:800">@flwrpwr_co</a></p>
+          </div>
+          <div>
+            <div class="foot-h">Explore</div>
+            <div class="foot-links">
+              <a href="#shop">Shop the smalls</a>
+              <a href="#story">Our story</a>
+              <a href="#visit">Enter the shop</a>
+              <a href="#gallery">The feed</a>
+            </div>
+          </div>
+          <div>
+            <div class="foot-h">Join the list</div>
+            <p style="margin-top:0">First to know when the shop doors open and the first drop goes live.</p>
+            <form class="subscribe-form" id="subscribeForm">
+              <input type="email" id="subscribeEmail" placeholder="your@email.com" aria-label="Email address" required />
+              <button type="submit">Bloom with us</button>
+            </form>
+            <p class="subscribe-done" id="subscribeDone" hidden>you're on the list ✿ see you at launch</p>
+          </div>
+        </div>
+        <div class="foot-base">
+          <span>© 2026 FLWRPWR Flower Co. — concept storefront</span>
+          <span class="age-note">21+ only. Please consume responsibly.</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- CART DRAWER -->
+    <div class="scrim" id="scrim"></div>
+    <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Shopping basket">
+      <div class="drawer-head">
+        <h3 id="drawerTitle">Your basket</h3>
+        <button class="icon-btn" id="drawerClose" type="button" aria-label="Close basket">✕</button>
+      </div>
+
+      <div class="drawer-body" id="cartView">
+        <div id="cartItems"></div>
+        <div class="empty-cart" id="emptyCart">
+          <div class="big">✿</div>
+          Nothing in the basket yet.<br />Tap a pouch — here, or inside the 3D shop.
+        </div>
+      </div>
+      <div class="drawer-foot" id="cartFoot">
+        <p class="drawer-note">We're pre-launch, so checkout is a <b>reservation</b>: no prices, no payment — we just hold your picks and email you on launch day.</p>
+        <button class="checkout-btn" id="toCheckoutBtn" type="button">Reserve my picks →</button>
+      </div>
+
+      <div class="drawer-body" id="checkoutView" hidden>
+        <button class="back-link" id="backToCart" type="button">← back to basket</button>
+        <div class="field">
+          <label for="coName">Your name</label>
+          <input id="coName" type="text" autocomplete="name" placeholder="e.g. Daisy Bloom" />
+        </div>
+        <div class="field">
+          <label for="coEmail">Email for launch day</label>
+          <input id="coEmail" type="email" autocomplete="email" placeholder="your@email.com" />
+        </div>
+        <button class="age-confirm" id="ageConfirm" type="button" aria-pressed="false">Tap to confirm you're 21 or older</button>
+        <p class="form-err" id="formErr"></p>
+        <div class="success-list" id="checkoutSummary" style="margin-top:0"></div>
+      </div>
+      <div class="drawer-foot" id="checkoutFoot" hidden>
+        <button class="checkout-btn" id="placeReservation" type="button">Place my reservation ✿</button>
+      </div>
+
+      <div class="drawer-body" id="successView" hidden>
+        <div class="success-box">
+          <svg class="big-daisy" viewBox="0 0 100 100" data-daisy data-c="#ff5fa8"></svg>
+          <h4>You're reserved!</h4>
+          <p id="successText">Your picks are saved for launch day. We'll email you the moment the shop opens — no payment taken, pinky promise.</p>
+          <div class="success-list" id="successList"></div>
+          <button class="btn btn-pink" id="successClose" type="button" style="margin-top:6px">Keep browsing</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 3D SHOP -->
+    <div class="shop-overlay" id="shopOverlay" role="dialog" aria-label="FLWRPWR virtual flower shop" tabindex="0">
+      <div id="shopCanvasWrap"></div>
+      <canvas class="vhs-grain" id="grainCanvas" width="160" height="90"></canvas>
+      <div class="vhs-scan"></div>
+      <div class="vhs-track"></div>
+      <div class="vhs-vignette"></div>
+      <div class="hud hud-rec"><span class="rec-dot"></span> REC</div>
+      <div class="hud hud-play">▶ PLAY&nbsp;&nbsp;SP 0:00:00</div>
+      <div class="hud hud-time"><span id="vhsDate">—</span><br /><span id="vhsTime">—</span></div>
+      <div class="hud hud-shops">
+        <div class="shops-row" role="group" aria-label="Choose a shop">
+          <button type="button" class="shop-pick is-on" data-shop-pick="0">Shop 1 · Sunshine</button>
+          <button type="button" class="shop-pick" data-shop-pick="1">Shop 2 · Daisy</button>
+          <button type="button" class="shop-pick" data-shop-pick="2">Shop 3 · Petal</button>
+        </div>
+        <div class="presence" id="presenceLabel">✿ other shoppers are browsing in here</div>
+      </div>
+      <div class="crosshair"></div>
+      <div class="hud-label" id="hudLabel"></div>
+      <div class="lock-prompt" id="lockPrompt">
+        <div class="lp-card">
+          <div class="lp-title bubble">You're in the shop ✿</div>
+          <p>Click anywhere in the store to grab the mouse and look around, first-person style — just like the FLWRPWR room.</p>
+          <div class="lp-keys"><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> walk &nbsp;·&nbsp; mouse looks &nbsp;·&nbsp; <kbd>Esc</kbd> frees the mouse</div>
+          <button class="hud-btn gold" id="lockBtn" type="button">Click to look around</button>
+        </div>
+      </div>
+      <div class="hud-bottom">
+        <div class="hud-hint"><b>Click the shop</b> to lock your mouse &nbsp;·&nbsp; mouse looks around &nbsp;·&nbsp; <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> walk &nbsp;·&nbsp; <b>click a pouch</b> to add it &nbsp;·&nbsp; <kbd>Esc</kbd> frees the mouse, again to leave</div>
+        <div class="hud-actions">
+          <button class="hud-btn gold" id="shopCartBtn" type="button">Basket (<span id="shopCartCount">0</span>)</button>
+          <button class="hud-btn" id="exitShopBtn" type="button">← Exit shop</button>
+        </div>
+      </div>
+      <div class="shop-fallback" id="shopFallback">
+        <div class="fb-card">
+          <div style="font-size:2.6rem;margin-bottom:10px">✿</div>
+          <h3>The shop needs a bigger screen</h3>
+          <p>Our walk-in virtual shop is a desktop experience — it needs a keyboard and a little room to wander. On your phone, the full lineup is right here on the page, same flowers, same basket.</p>
+          <button class="btn btn-gold" id="fallbackShopBtn" type="button">Shop the lineup instead</button>
+          <div style="margin-top:14px"><button class="hud-btn" id="fallbackExitBtn" type="button">← Back</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script>
+    (function(){
+      "use strict";
+
+      /* ============ data — real brand facts only ============ */
+      var PRODUCTS = [
+        { id:"thai-stick", name:"Thai Stick", type:"Hybrid", notes:["Sweet lime","Herbal","Tropical"], art:"mint",  c1:"#cdeeda", c2:"#8fd6a8", label:"#2e7d4f" },
+        { id:"northern-lights", name:"Northern Lights", type:"Indica", notes:null, art:"lav", c1:"#e7deff", c2:"#b7a6f5", label:"#5b3fae" },
+        { id:"maui-wowie", name:"Maui Wowie", type:"Sativa", notes:null, art:"pink", c1:"#ffd7ea", c2:"#ff9cc6", label:"#c22b78" },
+        { id:"bloom-1", name:"Blooming Soon", type:"Mystery strain", notes:null, art:"gold", c1:"#ffeec4", c2:"#f6cd7a", label:"#9a6a14", soon:true },
+        { id:"bloom-2", name:"Blooming Soon", type:"Mystery strain", notes:null, art:"blue", c1:"#dff2ff", c2:"#9fd2f7", label:"#2b6cb2", soon:true },
+        { id:"bloom-3", name:"Blooming Soon", type:"Mystery strain", notes:null, art:"lilac", c1:"#f3e9ff", c2:"#d3b8f7", label:"#7c3fae", soon:true }
+      ];
+      function byId(id){ for (var i=0;i<PRODUCTS.length;i++) if (PRODUCTS[i].id===id) return PRODUCTS[i]; return null; }
+
+      /* ============ svg art builders ============ */
+      function daisySVG(petal){
+        var petals="", i, a;
+        for (i=0;i<8;i++){ a=i*45;
+          petals += '<ellipse cx="50" cy="26" rx="11" ry="20" fill="'+petal+'" transform="rotate('+a+' 50 50)"/>';
+        }
+        return petals + '<circle cx="50" cy="50" r="13" fill="#f2b84b"/><circle cx="46" cy="47" r="2.4" fill="#d18f24"/><circle cx="54" cy="52" r="2" fill="#d18f24"/><circle cx="51" cy="44" r="1.6" fill="#d18f24"/>';
+      }
+      document.querySelectorAll("[data-daisy]").forEach(function(el){
+        el.innerHTML = daisySVG(el.getAttribute("data-c") || "#ffffff");
+      });
+      document.querySelectorAll("[data-bud]").forEach(function(el){
+        el.setAttribute("viewBox","0 0 100 100");
+        el.innerHTML = '<path d="M50 12 C66 26 72 40 72 54 a22 22 0 1 1 -44 0 C28 40 34 26 50 12Z" fill="#a9e8c6" stroke="#47264d" stroke-width="3"/>'
+          + '<path d="M50 20 C58 30 61 40 61 50" fill="none" stroke="#57b87e" stroke-width="3" stroke-linecap="round"/>'
+          + '<path d="M50 88 C50 96 50 98 50 98" stroke="#57b87e" stroke-width="3"/>'
+          + '<path d="M38 96 C42 88 48 86 54 88 C48 94 42 97 38 96Z" fill="#57b87e"/>';
+      });
+      var POUCH_ART = {
+        mint:  { c1:"#d9f4e3", c2:"#8fd6a8", band:"#2e7d4f", name:"THAI", sub:"STICK" },
+        lav:   { c1:"#e9e1ff", c2:"#b7a6f5", band:"#5b3fae", name:"NORTHERN", sub:"LIGHTS" },
+        pink:  { c1:"#ffe0ef", c2:"#ff9cc6", band:"#c22b78", name:"MAUI", sub:"WOWIE" },
+        gold:  { c1:"#fff3d6", c2:"#f6cd7a", band:"#9a6a14", name:"BLOOMING", sub:"SOON" },
+        blue:  { c1:"#e6f4ff", c2:"#9fd2f7", band:"#2b6cb2", name:"BLOOMING", sub:"SOON" },
+        lilac: { c1:"#f6ecff", c2:"#d3b8f7", band:"#7c3fae", name:"BLOOMING", sub:"SOON" }
+      };
+      function pouchSVG(kind, gid){
+        var a = POUCH_ART[kind]; if(!a) return "";
+        return '<defs><linearGradient id="pg'+gid+'" x1="0" y1="0" x2="0" y2="1">'
+          + '<stop offset="0" stop-color="'+a.c1+'"/><stop offset="1" stop-color="'+a.c2+'"/></linearGradient></defs>'
+          + '<path d="M38 26 L162 26 L172 208 Q173 226 155 226 L45 226 Q27 226 28 208 Z" fill="url(#pg'+gid+')" stroke="#47264d" stroke-width="4"/>'
+          + '<rect x="34" y="10" width="132" height="20" rx="9" fill="'+a.c2+'" stroke="#47264d" stroke-width="4"/>'
+          + '<rect x="50" y="54" width="100" height="106" rx="14" fill="#fffdf9" stroke="#47264d" stroke-width="3.5"/>'
+          + '<g transform="translate(79,60) scale(0.42)">'+daisySVG(a.c2)+'</g>'
+          + '<text x="100" y="126" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="'+a.band+'">'+a.name+'</text>'
+          + '<text x="100" y="143" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="'+a.band+'">'+a.sub+'</text>'
+          + '<text x="100" y="196" text-anchor="middle" font-family="Shrikhand,cursive" font-size="17" fill="#47264d">FLWRPWR</text>'
+          + '<text x="100" y="214" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="10" letter-spacing="2" fill="#47264d">4G SMALLS</text>';
+      }
+      document.querySelectorAll("[data-pouch]").forEach(function(el, i){
+        el.innerHTML = pouchSVG(el.getAttribute("data-pouch"), "h"+i);
+      });
+
+      /* ============ ticker ============ */
+      var phrases = ["Good vibes, great flower","Women-owned","4g Smalls","Thai Stick ✿ Northern Lights ✿ Maui Wowie","Blooming soon","@flwrpwr_co"];
+      var half = phrases.map(function(p){ return "<span>✿ "+p+"</span>"; }).join("");
+      document.getElementById("tickerTrack").innerHTML = half + half;
+
+      /* ============ product grid ============ */
+      var grid = document.getElementById("productGrid");
+      grid.innerHTML = PRODUCTS.map(function(p, i){
+        var chips = '<span class="chip type">'+p.type+'</span>' + (p.notes ? p.notes.map(function(n){ return '<span class="chip note">'+n+'</span>'; }).join("") : "");
+        var btn = p.soon
+          ? '<button class="add-btn notify" type="button" data-notify="'+p.id+'">Notify me</button>'
+          : '<button class="add-btn" type="button" data-add="'+p.id+'">Reserve ✿</button>';
+        var foot = p.soon
+          ? '<span class="price-note">still growing…</span>'
+          : '<span class="price-note">pricing at launch</span>';
+        return '<article class="card reveal'+(p.soon?" soon":"")+'">'
+          + '<div class="card-art" style="background:linear-gradient(160deg,'+p.c1+','+p.c2+')">'
+          + (p.soon ? '<span class="badge">Blooming soon</span>' : '<span class="badge">First drop</span>')
+          + '<svg class="card-pouch" viewBox="0 0 200 240">'+pouchSVG(p.art, "g"+i)+'</svg></div>'
+          + '<div class="card-body"><h3>'+p.name+'</h3>'
+          + '<div class="card-meta">'+chips+'</div>'
+          + '<p class="size">FLWRPWR · 4g Smalls</p>'
+          + '<div class="card-foot">'+foot+btn+'</div></div></article>';
+      }).join("");
+
+      /* ============ gallery ============ */
+      var TILES = [
+        { bg:"linear-gradient(150deg,#ffd7ea,#ff9cc6)", art:'<svg width="76" height="92" viewBox="0 0 200 240">'+pouchSVG("pink","t0")+'</svg>', label:"the smalls" },
+        { bg:"linear-gradient(150deg,#e7deff,#b7a6f5)", art:'<svg width="84" height="84" viewBox="0 0 100 100">'+daisySVG("#ffffff")+'</svg>', label:"daisy days" },
+        { bg:"linear-gradient(150deg,#dff2ff,#9fd2f7)", art:'<svg width="76" height="92" viewBox="0 0 200 240">'+pouchSVG("lav","t2")+'</svg>', label:"shelfie" },
+        { bg:"linear-gradient(150deg,#e2f8ec,#8fd6a8)", art:'<svg width="76" height="92" viewBox="0 0 200 240">'+pouchSVG("mint","t3")+'</svg>', label:"thai stick" },
+        { bg:"linear-gradient(150deg,#ffeec4,#f6cd7a)", art:'<svg width="84" height="84" viewBox="0 0 100 100">'+daisySVG("#ff8fc7")+'</svg>', label:"golden hour" }
+      ];
+      document.getElementById("galleryGrid").innerHTML = TILES.map(function(t){
+        return '<a class="tile" href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener" style="background:'+t.bg+'" aria-label="FLWRPWR on Instagram — '+t.label+'">'+t.art+'<span class="tile-label">'+t.label+'</span></a>';
+      }).join("");
+
+      /* ============ reveal on scroll (garnish only — adds .in, never hides anything) ============ */
+      if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+        }, { threshold:.12 });
+        document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+      }
+
+      /* ============ toast ============ */
+      var toastEl = document.getElementById("toast"), toastTimer = null;
+      function toast(msg){
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 2600);
+      }
+
+      /* ============ cart (shared: page + 3D shop) ============ */
+      var cart = {}; // id -> qty
+      function cartCountTotal(){ var n=0; for (var k in cart) n += cart[k]; return n; }
+      function syncCartBadges(){
+        var n = cartCountTotal();
+        document.getElementById("cartCount").textContent = n;
+        document.getElementById("shopCartCount").textContent = n;
+      }
+      function addToCart(id, silent){
+        var p = byId(id); if (!p || p.soon) return;
+        cart[id] = (cart[id] || 0) + 1;
+        syncCartBadges(); renderCart();
+        if (!silent) toast("✿ " + p.name + " added to your basket");
+      }
+      function setQty(id, qty){
+        if (qty <= 0) delete cart[id]; else cart[id] = qty;
+        syncCartBadges(); renderCart();
+      }
+      function cartIds(){ return Object.keys(cart); }
+
+      var drawer = document.getElementById("drawer"), scrim = document.getElementById("scrim");
+      var views = { cart:["cartView","cartFoot"], checkout:["checkoutView","checkoutFoot"], success:["successView",null] };
+      function showView(name){
+        ["cartView","cartFoot","checkoutView","checkoutFoot","successView"].forEach(function(id){
+          document.getElementById(id).hidden = true;
+        });
+        views[name].forEach(function(id){ if (id) document.getElementById(id).hidden = false; });
+        document.getElementById("drawerTitle").textContent =
+          name === "checkout" ? "Reserve your picks" : name === "success" ? "Reserved ✿" : "Your basket";
+        if (name === "checkout") renderCheckoutSummary();
+      }
+      function openDrawer(){
+        renderCart(); showView("cart");
+        drawer.classList.add("open"); scrim.classList.add("open");
+        drawer.setAttribute("aria-hidden","false");
+      }
+      function closeDrawer(){
+        drawer.classList.remove("open"); scrim.classList.remove("open");
+        drawer.setAttribute("aria-hidden","true");
+      }
+      function renderCart(){
+        var box = document.getElementById("cartItems");
+        var ids = cartIds();
+        document.getElementById("emptyCart").style.display = ids.length ? "none" : "block";
+        document.getElementById("toCheckoutBtn").disabled = !ids.length;
+        box.innerHTML = ids.map(function(id){
+          var p = byId(id);
+          return '<div class="cart-item">'
+            + '<span class="thumb" style="background:linear-gradient(150deg,'+p.c1+','+p.c2+')"><svg width="30" height="36" viewBox="0 0 200 240">'+pouchSVG(p.art,"c"+id)+'</svg></span>'
+            + '<div class="ci-main"><b>'+p.name+'</b><div class="ci-sub">'+p.type+' · 4g Smalls · pricing at launch</div></div>'
+            + '<span class="qty"><button type="button" data-qty="'+id+'|-1" aria-label="One less">−</button><span>'+cart[id]+'</span><button type="button" data-qty="'+id+'|1" aria-label="One more">+</button></span>'
+            + '<button class="remove-btn" type="button" data-remove="'+id+'">remove</button></div>';
+        }).join("");
+      }
+      function summaryHTML(){
+        var ids = cartIds();
+        if (!ids.length) return "<b>Nothing reserved yet.</b>";
+        return "<b>Your reservation:</b><br />" + ids.map(function(id){
+          var p = byId(id); return "✿ " + p.name + " (" + p.type + ") × " + cart[id];
+        }).join("<br />");
+      }
+      function renderCheckoutSummary(){
+        document.getElementById("checkoutSummary").innerHTML = summaryHTML();
+      }
+
+      /* drawer events (delegated) */
+      document.addEventListener("click", function(e){
+        var add = e.target.closest("[data-add]");
+        if (add){ addToCart(add.getAttribute("data-add")); return; }
+        var nt = e.target.closest("[data-notify]");
+        if (nt){ toast("✿ Noted — we'll shout when this one blooms. Follow @flwrpwr_co for first dibs."); return; }
+        var q = e.target.closest("[data-qty]");
+        if (q){ var parts = q.getAttribute("data-qty").split("|"); setQty(parts[0], (cart[parts[0]]||0) + parseInt(parts[1],10)); return; }
+        var rm = e.target.closest("[data-remove]");
+        if (rm){ setQty(rm.getAttribute("data-remove"), 0); return; }
+      });
+      document.getElementById("cartOpenBtn").addEventListener("click", openDrawer);
+      document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+      scrim.addEventListener("click", closeDrawer);
+      document.getElementById("toCheckoutBtn").addEventListener("click", function(){ showView("checkout"); });
+      document.getElementById("backToCart").addEventListener("click", function(){ showView("cart"); });
+      document.getElementById("successClose").addEventListener("click", closeDrawer);
+
+      /* checkout — honest pre-launch reservation */
+      var ageOk = false;
+      var ageBtn = document.getElementById("ageConfirm");
+      ageBtn.addEventListener("click", function(){
+        ageOk = !ageOk;
+        ageBtn.classList.toggle("on", ageOk);
+        ageBtn.setAttribute("aria-pressed", ageOk ? "true" : "false");
+        ageBtn.textContent = ageOk ? "✓ Confirmed — I'm 21 or older" : "Tap to confirm you're 21 or older";
+      });
+      document.getElementById("placeReservation").addEventListener("click", function(){
+        var name = document.getElementById("coName").value.trim();
+        var email = document.getElementById("coEmail").value.trim();
+        var err = document.getElementById("formErr");
+        var msg = "";
+        if (!name) msg = "Add your name so we know whose basket this is.";
+        else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) msg = "That email doesn't look right — we need it for launch day.";
+        else if (!ageOk) msg = "One tap on the 21+ confirm — flower rules are flower rules.";
+        if (msg){ err.textContent = msg; err.style.display = "block"; return; }
+        err.style.display = "none";
+        document.getElementById("successList").innerHTML = summaryHTML() + "<br /><br />Confirmation goes to <b>" + email.replace(/</g,"&lt;") + "</b> on launch day.";
+        document.getElementById("successText").textContent = "Thanks, " + name.split(" ")[0].replace(/</g,"&lt;") + " — your picks are saved for launch day. We'll email you the moment the shop opens. No payment taken, pinky promise.";
+        cart = {}; syncCartBadges(); renderCart();
+        showView("success");
+      });
+
+      /* subscribe */
+      document.getElementById("subscribeForm").addEventListener("submit", function(e){
+        e.preventDefault();
+        var em = document.getElementById("subscribeEmail");
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim())){ toast("Hmm — that email looks off. One more try?"); em.focus(); return; }
+        document.getElementById("subscribeDone").hidden = false;
+        em.value = "";
+        toast("✿ You're on the list — see you at launch");
+      });
+
+      syncCartBadges(); renderCart();
+
+      /* expose the shared bits the 3D shop needs */
+      window.FLWR = { addToCart:addToCart, openDrawer:openDrawer, closeDrawer:closeDrawer, toast:toast, byId:byId, PRODUCTS:PRODUCTS };
+    })();
+    </script>
+
+    <script>
+    (function(){
+      "use strict";
+      var overlay = document.getElementById("shopOverlay");
+      var wrap = document.getElementById("shopCanvasWrap");
+      var fallback = document.getElementById("shopFallback");
+      var hudLabel = document.getElementById("hudLabel");
+      var lockPrompt = document.getElementById("lockPrompt");
+      var presenceLabel = document.getElementById("presenceLabel");
+      var grain = document.getElementById("grainCanvas");
+      var gtx = grain.getContext("2d");
+
+      var shopOpen = false, built = false, rafId = null, clockTimer = null, grainTimer = null, playSecs = 0;
+      var renderer, scene, camera, raycaster;
+      var clickables = [], hovered = null;
+      var keys = {}, locked = false;
+
+      /* ---------- player + camera — ported from the FLWRPWR room (byyystudio.me/flwrpwr-room, assets/game.js).
+         Same model, same constants: target yaw/pitch eased in updateCamera, axis-separated
+         move() with AABB collision. Sign convention adapted to this shop's layout (spawn at the
+         front windows looking into the store, -Z forward at yaw 0). ---------- */
+      var PLAYER_EYE_HEIGHT = 1.62;
+      var player = { x:0, z:4.7, r:.31, speed:3.15 };
+      var cameraState = { yaw:0, targetYaw:0, pitch:0, targetPitch:0 };
+      var cameraDir = null, cameraLook = null;
+      var WALK_BOUNDS = { minX:-6.55, maxX:6.55, minZ:-5.55, maxZ:5.55 };
+      var collisions = [
+        { name:'left shelf',  x:-6.58, z:-1.6,  w:.62, d:3.2 },
+        { name:'right shelf', x: 6.58, z:-1.6,  w:.62, d:3.2 },
+        { name:'back shelf left',  x:-4.6, z:-5.58, w:3.2, d:.62 },
+        { name:'back shelf right', x: 4.6, z:-5.58, w:3.2, d:.62 },
+        { name:'checkout counter', x:0, z:-4.85, w:3.6, d:1.05 },
+        { name:'plant front left',  x:-6.2, z: 4.9, w:.95, d:.95 },
+        { name:'plant front right', x: 6.2, z: 4.9, w:.95, d:.95 },
+        { name:'plant back left',   x:-6.2, z:-5.1, w:.95, d:.95 },
+        { name:'plant back right',  x: 6.2, z:-5.1, w:.95, d:.95 }
+      ];
+      function blocked(x, z){
+        if (x < WALK_BOUNDS.minX || x > WALK_BOUNDS.maxX || z < WALK_BOUNDS.minZ || z > WALK_BOUNDS.maxZ) return true;
+        for (var i = 0; i < collisions.length; i++){
+          var b = collisions[i], hw = b.w/2, hd = b.d/2;
+          if (x + player.r > b.x - hw && x - player.r < b.x + hw && z + player.r > b.z - hd && z - player.r < b.z + hd) return true;
+        }
+        for (i = 0; i < npcs.length; i++){
+          var p = npcs[i].group.position;
+          if (Math.hypot(x - p.x, z - p.z) < player.r + .4) return true;
+        }
+        return false;
+      }
+      function move(dx, dz){
+        var moved = false;
+        if (dx){ var nx = player.x + dx; if (!blocked(nx, player.z)){ player.x = nx; moved = true; } }
+        if (dz){ var nz = player.z + dz; if (!blocked(player.x, nz)){ player.z = nz; moved = true; } }
+        return moved;
+      }
+      function updateCamera(dt){
+        var safeDt = Math.max(0, Math.min(dt, .05)), ease = 1 - Math.exp(-18 * safeDt);
+        var yawStep = (cameraState.targetYaw - cameraState.yaw) * ease, maxYawStep = safeDt * 8;
+        cameraState.yaw += Math.max(-maxYawStep, Math.min(maxYawStep, yawStep));
+        cameraState.pitch += (cameraState.targetPitch - cameraState.pitch) * ease;
+        camera.position.set(player.x, PLAYER_EYE_HEIGHT, player.z);
+        var cp = Math.cos(cameraState.pitch);
+        cameraDir.set(-Math.sin(cameraState.yaw) * cp, Math.sin(cameraState.pitch), -Math.cos(cameraState.yaw) * cp);
+        cameraLook.copy(camera.position).addScaledVector(cameraDir, 5);
+        camera.lookAt(cameraLook);
+      }
+
+      /* separate shop instances — each its own little room with its own crowd,
+         so a busy shop never drags the others down */
+      var SHOPS = [
+        { name:"Sunshine Room", crowd:4 },
+        { name:"Daisy Room", crowd:2 },
+        { name:"Petal Room", crowd:5 }
+      ];
+      var currentShop = 0, npcGroup = null, npcs = [];
+
+      function isSmallScreen(){
+        return window.matchMedia("(max-width: 860px)").matches ||
+               (window.matchMedia("(pointer: coarse)").matches && window.matchMedia("(max-width: 1100px)").matches);
+      }
+
+      /* ---------- VHS clock + grain ---------- */
+      function pad(n){ return (n<10?"0":"")+n; }
+      function tickClock(){
+        var d = new Date();
+        var months = ["JAN.","FEB.","MAR.","APR.","MAY","JUN.","JUL.","AUG.","SEP.","OCT.","NOV.","DEC."];
+        document.getElementById("vhsDate").textContent = months[d.getMonth()] + " " + pad(d.getDate()) + " " + d.getFullYear();
+        var h = d.getHours(), ap = h >= 12 ? "PM" : "AM"; h = h % 12; if (h === 0) h = 12;
+        document.getElementById("vhsTime").textContent = ap + " " + pad(h) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+        playSecs++;
+        var ps = document.querySelector(".hud-play");
+        if (ps) ps.textContent = "▶ PLAY  SP " + Math.floor(playSecs/3600) + ":" + pad(Math.floor(playSecs/60)%60) + ":" + pad(playSecs%60);
+      }
+      function drawGrain(){
+        var img = gtx.createImageData(grain.width, grain.height);
+        var data = img.data;
+        for (var i = 0; i < data.length; i += 4){
+          var v = 105 + Math.random()*110;
+          data[i] = v; data[i+1] = v; data[i+2] = v; data[i+3] = 255;
+        }
+        gtx.putImageData(img, 0, 0);
+      }
+
+      /* ---------- textures ---------- */
+      function canvasTex(w, h, draw){
+        var c = document.createElement("canvas"); c.width = w; c.height = h;
+        draw(c.getContext("2d"), w, h);
+        var t = new THREE.CanvasTexture(c);
+        t.anisotropy = 4;
+        return t;
+      }
+      function labelTexture(p){
+        return canvasTex(256, 300, function(x){
+          x.fillStyle = "#fffdf9"; x.fillRect(0,0,256,300);
+          x.fillStyle = p.c2; x.fillRect(0,0,256,64);
+          x.fillStyle = "#47264d"; x.font = "900 25px Nunito, sans-serif"; x.textAlign = "center";
+          x.fillText("FLWRPWR", 128, 42);
+          // daisy
+          x.save(); x.translate(128,118);
+          for (var i=0;i<8;i++){ x.save(); x.rotate(i*Math.PI/4); x.beginPath(); x.ellipse(0,-24,10,19,0,0,Math.PI*2); x.fillStyle = p.c2; x.fill(); x.restore(); }
+          x.beginPath(); x.arc(0,0,12,0,Math.PI*2); x.fillStyle = "#f2b84b"; x.fill(); x.restore();
+          x.fillStyle = p.label; x.font = "900 27px Nunito, sans-serif";
+          var words = p.name.toUpperCase().split(" ");
+          words.forEach(function(wd, i){ x.fillText(wd, 128, 196 + i*30); });
+          x.fillStyle = "#7a5b80"; x.font = "800 17px Nunito, sans-serif";
+          x.fillText(p.type.toUpperCase(), 128, 196 + words.length*30 + 6);
+          x.fillText("4G SMALLS", 128, 282);
+        });
+      }
+      function signTexture(){
+        return canvasTex(1024, 300, function(x){
+          x.fillStyle = "#fff7ec"; x.fillRect(0,0,1024,300);
+          x.strokeStyle = "#f2b84b"; x.lineWidth = 10; x.strokeRect(14,14,996,272);
+          x.textAlign = "center";
+          x.fillStyle = "#ff5fa8"; x.font = "92px Shrikhand, cursive";
+          x.fillText("FLWRPWR", 512, 138);
+          x.fillStyle = "#47264d"; x.font = "700 44px Caveat, cursive";
+          x.fillText("good vibes, great flower", 512, 216);
+          x.fillStyle = "#8f6fe8"; x.font = "800 26px Nunito, sans-serif";
+          x.fillText("✿  WOMEN-OWNED  ✿", 512, 262);
+        });
+      }
+      function floorTexture(){
+        var t = canvasTex(256, 256, function(x){
+          x.fillStyle = "#fff8ec"; x.fillRect(0,0,256,256);
+          x.fillStyle = "#ffe3f1"; x.fillRect(0,0,128,128); x.fillRect(128,128,128,128);
+          x.fillStyle = "rgba(242,184,75,.16)"; x.fillRect(128,0,128,128); x.fillRect(0,128,128,128);
+        });
+        t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(7,6);
+        return t;
+      }
+      function posterTexture(line1, line2, bg, fg){
+        return canvasTex(360, 440, function(x){
+          x.fillStyle = bg; x.fillRect(0,0,360,440);
+          x.strokeStyle = fg; x.lineWidth = 6; x.strokeRect(16,16,328,408);
+          x.fillStyle = fg; x.textAlign = "center";
+          x.font = "64px Shrikhand, cursive";
+          x.fillText(line1, 180, 190);
+          x.font = "700 40px Caveat, cursive";
+          x.fillText(line2, 180, 262);
+          x.save(); x.translate(180,348);
+          for (var i=0;i<8;i++){ x.save(); x.rotate(i*Math.PI/4); x.beginPath(); x.ellipse(0,-22,9,17,0,0,Math.PI*2); x.fillStyle = "#ffffff"; x.fill(); x.restore(); }
+          x.beginPath(); x.arc(0,0,11,0,Math.PI*2); x.fillStyle = "#f2b84b"; x.fill(); x.restore();
+        });
+      }
+
+      /* ---------- scene builders ---------- */
+      function mat(color, rough, metal){
+        return new THREE.MeshStandardMaterial({ color:color, roughness:rough == null ? .85 : rough, metalness:metal || 0 });
+      }
+      function makePouch(p){
+        var g = new THREE.Group();
+        var body = new THREE.Mesh(
+          new THREE.BoxGeometry(.62,.8,.17, 3, 4, 2),
+          [mat(p.c2), mat(p.c2), mat(p.c2), mat(p.c2),
+           new THREE.MeshStandardMaterial({ map:labelTexture(p), roughness:.6 }),
+           mat(p.c2)]
+        );
+        body.position.y = .4;
+        var seal = new THREE.Mesh(new THREE.BoxGeometry(.64,.09,.19, 2,1,1), mat(p.c2,.6));
+        seal.position.y = .845;
+        var band = new THREE.Mesh(new THREE.TorusGeometry(.05,.014,10,24), mat(0xf2b84b,.35,.7));
+        band.position.set(.18,.9,0); band.rotation.x = Math.PI/2.4;
+        g.add(body); g.add(seal); g.add(band);
+        g.userData.pid = p.id;
+        g.userData.label = p.soon ? p.name + " — not out yet" : p.name + " · " + p.type + " — click to add";
+        return g;
+      }
+      function makeJar(p){
+        var g = new THREE.Group();
+        var glass = new THREE.Mesh(
+          new THREE.CylinderGeometry(.17,.15,.44, 28),
+          new THREE.MeshStandardMaterial({ color:p.c2, roughness:.22, metalness:.08, transparent:true, opacity:.94 })
+        );
+        glass.position.y = .22;
+        var lid = new THREE.Mesh(new THREE.CylinderGeometry(.18,.18,.07, 28), mat(0xf2b84b,.3,.75));
+        lid.position.y = .475;
+        var tag = new THREE.Mesh(new THREE.PlaneGeometry(.24,.17),
+          new THREE.MeshStandardMaterial({ map:canvasTex(200,140,function(x){
+            x.fillStyle = "#fffdf9"; x.fillRect(0,0,200,140);
+            x.fillStyle = p.label; x.textAlign = "center"; x.font = "900 25px Nunito, sans-serif";
+            var words = p.name.toUpperCase().split(" ");
+            words.forEach(function(wd,i){ x.fillText(wd, 100, 58 + i*30); });
+            x.fillStyle = "#7a5b80"; x.font = "800 16px Nunito, sans-serif"; x.fillText("4G SMALLS", 100, 58 + words.length*30 + 8);
+          }), roughness:.7 }));
+        tag.position.set(0,.22,.163);
+        g.add(glass); g.add(lid); g.add(tag);
+        g.userData.pid = p.id;
+        g.userData.label = p.soon ? p.name + " — not out yet" : p.name + " · " + p.type + " — click to add";
+        return g;
+      }
+      function makeShelfUnit(){
+        var g = new THREE.Group();
+        var wood = mat(0xfdf3e3,.8), edge = mat(0xf2b84b,.5);
+        [-1.5, 1.5].forEach(function(x){
+          var side = new THREE.Mesh(new THREE.BoxGeometry(.08, 2.5, .55), wood);
+          side.position.set(x, 1.25, 0); g.add(side);
+        });
+        [.25, 1.05, 1.85].forEach(function(y){
+          var board = new THREE.Mesh(new THREE.BoxGeometry(3.1,.07,.58), wood);
+          board.position.set(0, y, 0); g.add(board);
+          var trim = new THREE.Mesh(new THREE.BoxGeometry(3.1,.05,.03), edge);
+          trim.position.set(0, y-.05, .29); g.add(trim);
+        });
+        var top = new THREE.Mesh(new THREE.BoxGeometry(3.1,.08,.58), wood);
+        top.position.set(0, 2.52, 0); g.add(top);
+        return g;
+      }
+      function stockShelf(unit, items){
+        var levels = [.285, 1.085, 1.885];
+        items.forEach(function(it, i){
+          var lvl = levels[Math.floor(i/3) % 3], slot = i % 3;
+          var obj = it.jar ? makeJar(it.p) : makePouch(it.p);
+          obj.position.set(-1.0 + slot*1.0, lvl, 0);
+          obj.rotation.y = (slot - 1) * .14;
+          unit.add(obj); clickables.push(obj);
+        });
+      }
+      function makePlant(scale){
+        var g = new THREE.Group();
+        var pot = new THREE.Mesh(new THREE.CylinderGeometry(.26,.19,.42, 20), mat(0xff8fc7,.8));
+        pot.position.y = .21; g.add(pot);
+        var greens = [0x57b87e, 0x6fca92, 0x3f9e63];
+        for (var i=0;i<6;i++){
+          var s = new THREE.Mesh(new THREE.IcosahedronGeometry(.24 + Math.random()*.12, 1), mat(greens[i%3], .95));
+          var a = i/6 * Math.PI*2;
+          s.position.set(Math.cos(a)*.2, .62 + Math.random()*.3, Math.sin(a)*.2);
+          g.add(s);
+        }
+        var daisyTop = new THREE.Mesh(new THREE.SphereGeometry(.07, 12, 10), mat(0xffffff,.6));
+        daisyTop.position.set(.1, 1.02, .08); g.add(daisyTop);
+        var center = new THREE.Mesh(new THREE.SphereGeometry(.035, 10, 8), mat(0xf2b84b,.5));
+        center.position.copy(daisyTop.position); g.add(center);
+        g.scale.setScalar(scale || 1);
+        return g;
+      }
+
+      /* ---------- fellow shoppers (each shop instance has its own crowd) ---------- */
+      function mulberry32(a){
+        return function(){
+          a |= 0; a = a + 0x6D2B79F5 | 0;
+          var t = Math.imul(a ^ a >>> 15, 1 | a);
+          t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        };
+      }
+      var SKIN_TONES = [0xf6cfae, 0xe8b48c, 0xc98d64, 0x9c6b43, 0x7a4e2d, 0xffd9c0];
+      var OUTFITS = [0xff8fc7, 0xa8dcff, 0xa9e8c6, 0xf2b84b, 0xc9b8ff, 0xffa8a8, 0x8fd6a8, 0xffd7ea];
+      var HAIR_COLORS = [0x47264d, 0x7a4a21, 0xd9a441, 0x2b2b33, 0xb3541e, 0xe8e0d0];
+      var SPAWNS = [[-3.5,2.4],[2.8,1.1],[-1.6,-1.9],[4.3,-1.4],[-5.0,-.4],[1.8,4.1],[.4,-.8],[-2.6,4.4]];
+      function pickTarget(n){
+        n.tx = -5.6 + n.rnd() * 11.2;
+        n.tz = -4.0 + n.rnd() * 9.0;
+        if (Math.abs(n.tx) < 2.3 && n.tz < -2.9) n.tz = -2.9; // keep the counter clear
+      }
+      /* ---------- shoppers ----------
+         Primary: a Blender-authored human (assets/shopper.glb), cloned per shopper and
+         tinted by part name (Outfit / Skin / Hair / Legs). Fallback while it loads or if
+         it is unavailable: a merged-geometry person ported from the FLWRPWR room's
+         createPerson — either way the capsule people are gone. */
+      var shopperTemplate = null;
+      function loadShopperModel(){
+        if (typeof THREE === "undefined" || !THREE.GLTFLoader) return;
+        new THREE.GLTFLoader().load("./assets/shopper.glb", function(gltf){
+          shopperTemplate = gltf.scene;
+          if (built && npcGroup) buildCrowd(currentShop);
+        }, undefined, function(){ /* no model — procedural shoppers stay */ });
+      }
+      function makeModelShopper(outfit, skin, hairC){
+        var g = shopperTemplate.clone(true);
+        g.traverse(function(m){
+          if (!m.isMesh) return;
+          m.userData.sharedGeo = true;
+          m.castShadow = true;
+          m.material = m.material.clone();
+          if (m.name === "Outfit") m.material.color.setHex(outfit);
+          else if (m.name === "Skin") m.material.color.setHex(skin);
+          else if (m.name === "Hair") m.material.color.setHex(hairC);
+          else if (m.name === "Legs") m.material.color.setHex(0x5b4a6e);
+        });
+        return g;
+      }
+      function makePersonMesh(options){
+        var root = new THREE.Group(), rig = new THREE.Group(); root.add(rig);
+        var positions = [], normals = [], colors = [];
+        function append(geo, color, pos, scale, rotation){
+          var g = geo.index ? geo.toNonIndexed() : geo.clone(),
+              m = new THREE.Matrix4(),
+              q = new THREE.Quaternion().setFromEuler(new THREE.Euler((rotation && rotation[0]) || 0, (rotation && rotation[1]) || 0, (rotation && rotation[2]) || 0)),
+              sc = new THREE.Vector3((scale && scale[0]) || 1, (scale && scale[1]) || 1, (scale && scale[2]) || 1),
+              tr = new THREE.Vector3(pos[0], pos[1], pos[2]);
+          m.compose(tr, q, sc); g.applyMatrix4(m);
+          if (!g.attributes.normal) g.computeVertexNormals();
+          var pa = g.attributes.position.array, na = g.attributes.normal.array, c = new THREE.Color(color), i;
+          for (i = 0; i < pa.length; i++) positions.push(pa[i]);
+          for (i = 0; i < na.length; i++) normals.push(na[i]);
+          for (i = 0; i < pa.length / 3; i++) colors.push(c.r, c.g, c.b);
+          g.dispose();
+        }
+        var skin = options.skin, hair = options.hair, top = options.top, bottom = options.bottom, shoe = options.shoe, accent = options.accent;
+        append(new THREE.CylinderGeometry(.27, .36, .82, 9), top, [0, 1.14, 0], [1, 1, .76]);
+        append(new THREE.SphereGeometry(.29, 10, 8), skin, [0, 1.79, 0], [.92, 1.05, .92]);
+        append(new THREE.SphereGeometry(.302, 10, 7, 0, Math.PI * 2, 0, Math.PI * .57), hair, [0, 1.89, 0], [.94, .9, .96]);
+        append(new THREE.CylinderGeometry(.095, .11, .66, 8), bottom, [-.15, .43, 0]);
+        append(new THREE.CylinderGeometry(.095, .11, .66, 8), bottom, [.15, .43, 0]);
+        append(new THREE.BoxGeometry(.21, .12, .32), shoe, [-.15, .08, .08]);
+        append(new THREE.BoxGeometry(.21, .12, .32), shoe, [.15, .08, .08]);
+        if (options.hat){
+          append(new THREE.CylinderGeometry(.32, .32, .05, 10), accent, [0, 2.055, 0]);
+          append(new THREE.CylinderGeometry(.2, .25, .2, 9), accent, [0, 2.16, 0]);
+        }
+        var bodyGeo = new THREE.BufferGeometry();
+        bodyGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        bodyGeo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+        bodyGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        bodyGeo.computeBoundingSphere();
+        var body = new THREE.Mesh(bodyGeo, new THREE.MeshStandardMaterial({ vertexColors:true, roughness:.76, metalness:0 }));
+        body.castShadow = true;
+        rig.add(body);
+        root.userData.arms = [];
+        [-1, 1].forEach(function(side){
+          var armPivot = new THREE.Group(); armPivot.position.set(side * .31, 1.43, 0);
+          var arm = new THREE.Mesh(new THREE.CylinderGeometry(.068, .082, .58, 8), mat(skin, .78));
+          arm.position.y = -.27; arm.castShadow = true; armPivot.add(arm);
+          rig.add(armPivot); root.userData.arms.push(armPivot);
+        });
+        root.userData.rig = rig;
+        return root;
+      }
+      function makeShopper(rnd){
+        var outfit = OUTFITS[Math.floor(rnd() * OUTFITS.length)];
+        var skin = SKIN_TONES[Math.floor(rnd() * SKIN_TONES.length)];
+        var hairC = HAIR_COLORS[Math.floor(rnd() * HAIR_COLORS.length)];
+        var g = shopperTemplate
+          ? makeModelShopper(outfit, skin, hairC)
+          : makePersonMesh({ skin:skin, hair:hairC, top:outfit, bottom:0x5b4a6e, shoe:0x282128, accent:0xf2b84b, hat: rnd() < .3 });
+        var tote = new THREE.Mesh(new THREE.BoxGeometry(.3, .34, .13), mat(0xf2b84b, .7));
+        tote.position.set(.34, .8, .06); g.add(tote);
+        var sp = SPAWNS[Math.floor(rnd() * SPAWNS.length)];
+        g.position.set(sp[0] + (rnd() - .5), 0, sp[1] + (rnd() - .5));
+        g.rotation.y = rnd() * Math.PI * 2;
+        var s = .95 + rnd() * .1; g.scale.setScalar(s);
+        var n = { group:g, rnd:rnd, tx:g.position.x, tz:g.position.z,
+                  speed:.5 + rnd() * .35, wait:rnd() * 2, bob:rnd() * 6 };
+        pickTarget(n);
+        return n;
+      }
+      function buildCrowd(idx){
+        if (npcGroup){
+          scene.remove(npcGroup);
+          npcGroup.traverse(function(o){
+            if (o.geometry && !o.userData.sharedGeo) o.geometry.dispose();
+            if (o.material) o.material.dispose();
+          });
+        }
+        npcGroup = new THREE.Group(); npcs = [];
+        var rnd = mulberry32(1234 + idx * 777);
+        for (var i = 0; i < SHOPS[idx].crowd; i++){
+          var n = makeShopper(rnd);
+          npcGroup.add(n.group); npcs.push(n);
+        }
+        scene.add(npcGroup);
+        updateShopLabels();
+      }
+      function updateNPCs(dt, t){
+        var i, j, n, g;
+        for (i = 0; i < npcs.length; i++){
+          n = npcs[i]; g = n.group;
+          if (n.wait > 0){
+            n.wait -= dt;
+            if (g.userData.arms){
+              g.userData.arms[0].rotation.x *= .9;
+              g.userData.arms[1].rotation.x *= .9;
+            }
+          } else {
+            var dx = n.tx - g.position.x, dz = n.tz - g.position.z;
+            var d = Math.sqrt(dx * dx + dz * dz);
+            if (d < .12){ n.wait = 1 + n.rnd() * 2.5; pickTarget(n); }
+            else {
+              var vx = dx / d * n.speed, vz = dz / d * n.speed;
+              g.position.x += vx * dt; g.position.z += vz * dt;
+              var targetRot = Math.atan2(vx, vz), diff = targetRot - g.rotation.y;
+              while (diff > Math.PI) diff -= Math.PI * 2;
+              while (diff < -Math.PI) diff += Math.PI * 2;
+              g.rotation.y += diff * Math.min(1, dt * 8);
+              n.bob += dt * 7 * n.speed;
+              if (g.userData.arms){
+                var sw = Math.sin(n.bob) * .45;
+                g.userData.arms[0].rotation.x = sw;
+                g.userData.arms[1].rotation.x = -sw;
+              }
+            }
+          }
+          g.position.y = Math.abs(Math.sin(n.bob)) * .04;
+          g.rotation.z = Math.sin(n.bob) * .02;
+        }
+        // gentle personal space — between shoppers, and around you
+        for (i = 0; i < npcs.length; i++){
+          for (j = i + 1; j < npcs.length; j++){
+            var a = npcs[i].group.position, b = npcs[j].group.position;
+            var px = b.x - a.x, pz = b.z - a.z, pd = Math.sqrt(px * px + pz * pz);
+            if (pd > .001 && pd < .55){
+              var push = (.55 - pd) / 2;
+              a.x -= px / pd * push; a.z -= pz / pd * push;
+              b.x += px / pd * push; b.z += pz / pd * push;
+            }
+          }
+          if (camera){
+            var cp = npcs[i].group.position;
+            var cx = cp.x - camera.position.x, cz = cp.z - camera.position.z;
+            var cd = Math.sqrt(cx * cx + cz * cz);
+            if (cd > .001 && cd < .85){
+              cp.x = camera.position.x + cx / cd * .85;
+              cp.z = camera.position.z + cz / cd * .85;
+            }
+          }
+        }
+      }
+      function updateShopLabels(){
+        document.querySelectorAll("[data-shop-pick]").forEach(function(b){
+          b.classList.toggle("is-on", parseInt(b.getAttribute("data-shop-pick"), 10) === currentShop);
+        });
+        var c = SHOPS[currentShop].crowd;
+        presenceLabel.textContent = c
+          ? "✿ " + c + " other shopper" + (c > 1 ? "s" : "") + " browsing in here with you"
+          : "✿ just you in here right now";
+      }
+      function switchShop(idx){
+        if (idx === currentShop && built) return;
+        currentShop = idx;
+        cameraState.yaw = cameraState.targetYaw = 0;
+        cameraState.pitch = cameraState.targetPitch = 0;
+        player.x = 0; player.z = 4.7;
+        if (camera && cameraDir) updateCamera(0);
+        if (built) buildCrowd(idx);
+        updateShopLabels();
+        window.FLWR.toast("✿ Shop " + (idx + 1) + " — the " + SHOPS[idx].name);
+      }
+
+      function buildShop(){
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xfff8f0);
+        scene.fog = new THREE.Fog(0xfff8f0, 16, 34);
+        camera = new THREE.PerspectiveCamera(68, 1, .1, 60);
+        camera.position.set(0, 1.62, 4.7);
+        raycaster = new THREE.Raycaster();
+        raycaster.far = 16;
+        cameraDir = new THREE.Vector3();
+        cameraLook = new THREE.Vector3();
+
+        renderer = new THREE.WebGLRenderer({ antialias:true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        wrap.appendChild(renderer.domElement);
+
+        /* bright cheerful daylight — strong sky bounce, warm sun, cool window fill */
+        scene.add(new THREE.HemisphereLight(0xffffff, 0xe8cfe0, 1.3));
+        scene.add(new THREE.AmbientLight(0xfff6ec, .35));
+        var sun = new THREE.DirectionalLight(0xfff1d6, 1.5);
+        sun.position.set(5.5, 7.5, 4.5); sun.castShadow = true;
+        sun.shadow.mapSize.set(1024,1024);
+        scene.add(sun);
+        var windowFill = new THREE.DirectionalLight(0xeaf6ff, .55);
+        windowFill.position.set(-2, 4.5, 9);
+        windowFill.target.position.set(0, 1, -2);
+        scene.add(windowFill); scene.add(windowFill.target);
+
+        var W = 14, D = 12, H = 4.6;
+        var floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D, 1, 1),
+          new THREE.MeshStandardMaterial({ map:floorTexture(), roughness:.9 }));
+        floor.rotation.x = -Math.PI/2; floor.receiveShadow = true; scene.add(floor);
+
+        var ceil = new THREE.Mesh(new THREE.PlaneGeometry(W, D), mat(0xfff7ec,.95));
+        ceil.rotation.x = Math.PI/2; ceil.position.y = H; scene.add(ceil);
+
+        function wall(w, h, color, px, py, pz, ry){
+          var m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat(color,.95));
+          m.position.set(px, py, pz); m.rotation.y = ry; m.receiveShadow = true; scene.add(m); return m;
+        }
+        wall(W, H, 0xe9dfff, 0, H/2, -D/2, 0);            // back — lavender
+        wall(W, H, 0xffe6f2, 0, H/2,  D/2, Math.PI);      // front — pink
+        wall(D, H, 0xd9efff, -W/2, H/2, 0, Math.PI/2);    // left — baby blue
+        wall(D, H, 0xe2f8ea,  W/2, H/2, 0, -Math.PI/2);   // right — mint
+
+        // big sunny windows on the front wall, daylight pouring in
+        [-3.3, 3.3].forEach(function(wx){
+          var frame = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 2.3), mat(0xffffff,.6));
+          frame.position.set(wx, 2.65, D/2 - .02); frame.rotation.y = Math.PI; scene.add(frame);
+          var glass = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.0),
+            new THREE.MeshBasicMaterial({ color:0xeaf7ff }));
+          glass.position.set(wx, 2.65, D/2 - .045); glass.rotation.y = Math.PI; scene.add(glass);
+          var mullV = new THREE.Mesh(new THREE.BoxGeometry(.07, 2.0, .03), mat(0xffffff,.6));
+          mullV.position.set(wx, 2.65, D/2 - .06); scene.add(mullV);
+          var mullH = new THREE.Mesh(new THREE.BoxGeometry(2.6, .07, .03), mat(0xffffff,.6));
+          mullH.position.set(wx, 2.65, D/2 - .06); scene.add(mullH);
+          var glow = new THREE.Mesh(new THREE.CircleGeometry(.55, 20),
+            new THREE.MeshBasicMaterial({ color:0xfff3c4 }));
+          glow.position.set(wx + .7, 3.15, D/2 - .055); glow.rotation.y = Math.PI; scene.add(glow);
+        });
+
+        // wainscot stripes
+        [[0,-D/2+.03,0],[0,D/2-.03,Math.PI],[-W/2+.03,0,Math.PI/2],[W/2-.03,0,-Math.PI/2]].forEach(function(s){
+          var stripe = new THREE.Mesh(new THREE.PlaneGeometry(s[2]===0||s[2]===Math.PI ? W : D, .5), mat(0xffffff,.9));
+          stripe.position.set(s[0], .25, s[1]); stripe.rotation.y = s[2]; scene.add(stripe);
+        });
+
+        // main sign on back wall
+        var sign = new THREE.Mesh(new THREE.PlaneGeometry(5.6, 1.64),
+          new THREE.MeshStandardMaterial({ map:signTexture(), roughness:.8 }));
+        sign.position.set(0, 3.35, -D/2 + .04); scene.add(sign);
+
+        // posters
+        var posterL = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 1.28),
+          new THREE.MeshStandardMaterial({ map:posterTexture("SMALLS","4 grams of cute", "#ffd7ea", "#c22b78"), roughness:.85 }));
+        posterL.position.set(-W/2 + .04, 2.5, -1.6); posterL.rotation.y = Math.PI/2; scene.add(posterL);
+        var posterR = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 1.28),
+          new THREE.MeshStandardMaterial({ map:posterTexture("BLOOM","three more soon", "#e7deff", "#5b3fae"), roughness:.85 }));
+        posterR.position.set(W/2 - .04, 2.5, -1.6); posterR.rotation.y = -Math.PI/2; scene.add(posterR);
+
+        // rug
+        var rug = new THREE.Mesh(new THREE.CircleGeometry(2.3, 40), mat(0xffb9da,.95));
+        rug.rotation.x = -Math.PI/2; rug.position.set(0, .012, .4); rug.receiveShadow = true; scene.add(rug);
+        var rug2 = new THREE.Mesh(new THREE.CircleGeometry(1.55, 40), mat(0xfff0f7,.95));
+        rug2.rotation.x = -Math.PI/2; rug2.position.set(0, .02, .4); scene.add(rug2);
+
+        // shelves: left wall, right wall, back corners
+        var P = window.FLWR.PRODUCTS;
+        var real = [P[0], P[1], P[2]], soon = [P[3], P[4], P[5]];
+        function shelfAt(x, z, ry, items){
+          var u = makeShelfUnit(); u.position.set(x, 0, z); u.rotation.y = ry;
+          scene.add(u); stockShelf(u, items);
+        }
+        shelfAt(-W/2 + .42, -1.6, Math.PI/2, [
+          {p:real[0]}, {p:real[0], jar:true}, {p:real[1]},
+          {p:real[1], jar:true}, {p:real[0]}, {p:real[2], jar:true},
+          {p:real[2]}, {p:real[1]}, {p:real[0], jar:true}
+        ]);
+        shelfAt(W/2 - .42, -1.6, -Math.PI/2, [
+          {p:real[2]}, {p:real[1], jar:true}, {p:real[2], jar:true},
+          {p:real[0], jar:true}, {p:real[2]}, {p:real[1]},
+          {p:real[1], jar:true}, {p:real[0]}, {p:real[2]}
+        ]);
+        shelfAt(-4.6, -D/2 + .42, 0, [
+          {p:soon[0], jar:true}, {p:soon[1]}, {p:soon[2], jar:true},
+          {p:soon[1], jar:true}, {p:soon[2]}, {p:soon[0]},
+          {p:soon[0]}, {p:soon[2], jar:true}, {p:soon[1]}
+        ]);
+        shelfAt(4.6, -D/2 + .42, 0, [
+          {p:real[1]}, {p:real[2]}, {p:real[0]},
+          {p:real[0], jar:true}, {p:real[1], jar:true}, {p:real[2], jar:true},
+          {p:real[2]}, {p:real[0]}, {p:real[1]}
+        ]);
+
+        // checkout counter, back center
+        var counter = new THREE.Group();
+        var cbase = new THREE.Mesh(new THREE.BoxGeometry(3.4, 1.05, .9), mat(0xffffff,.7));
+        cbase.position.y = .525; cbase.castShadow = true; counter.add(cbase);
+        var ctop = new THREE.Mesh(new THREE.BoxGeometry(3.6, .08, 1.05), mat(0xf2b84b,.4));
+        ctop.position.y = 1.09; counter.add(ctop);
+        var cfront = new THREE.Mesh(new THREE.PlaneGeometry(3.2, .7),
+          new THREE.MeshStandardMaterial({ map:canvasTex(640,140,function(x){
+            x.fillStyle = "#47264d"; x.fillRect(0,0,640,140);
+            x.fillStyle = "#ffd7ea"; x.textAlign = "center"; x.font = "46px Shrikhand, cursive";
+            x.fillText("CHECKOUT ✿ RESERVE HERE", 320, 90, 610);
+          }), roughness:.8 }));
+        cfront.position.set(0, .55, .46); counter.add(cfront);
+        counter.position.set(0, 0, -D/2 + 1.15);
+        counter.userData.counter = true;
+        counter.userData.label = "Checkout counter — click to reserve";
+        scene.add(counter); clickables.push(counter);
+        // display pouches on the counter
+        real.forEach(function(p, i){
+          var d = makePouch(p);
+          d.position.set(-1.1 + i*1.1, 1.13, -D/2 + 1.15);
+          d.rotation.y = (i-1) * .22;
+          scene.add(d); clickables.push(d);
+        });
+
+        // plants in the corners
+        [[-6.2, 4.9],[6.2, 4.9],[-6.2, -5.1],[6.2, -5.1]].forEach(function(pos, i){
+          var pl = makePlant(1 + (i%2)*.25); pl.position.set(pos[0], 0, pos[1]); scene.add(pl);
+        });
+        var counterPlant = makePlant(.62); counterPlant.position.set(1.45, 1.13, -D/2 + 1.1); scene.add(counterPlant);
+
+        // pendant lamps
+        [-2.6, 0, 2.6].forEach(function(z){
+          var lamp = new THREE.Group();
+          var cord = new THREE.Mesh(new THREE.CylinderGeometry(.015,.015,1.1, 8), mat(0x47264d,.6));
+          cord.position.y = -.55; lamp.add(cord);
+          var shade = new THREE.Mesh(new THREE.ConeGeometry(.34,.3, 26, 1, true), mat(0xff8fc7,.5));
+          shade.position.y = -1.2; lamp.add(shade);
+          var bulb = new THREE.Mesh(new THREE.SphereGeometry(.09, 16, 12),
+            new THREE.MeshStandardMaterial({ color:0xffe9b8, emissive:0xffca66, emissiveIntensity:1.6 }));
+          bulb.position.y = -1.32; lamp.add(bulb);
+          var pt = new THREE.PointLight(0xffd9a0, 1.15, 10); pt.position.y = -1.35; lamp.add(pt);
+          lamp.position.set(0, H, z);
+          scene.add(lamp);
+        });
+
+        buildCrowd(currentShop);
+
+        built = true;
+        resize();
+      }
+
+      /* ---------- interaction ---------- */
+      function findClickable(obj){
+        while (obj){
+          if (obj.userData && (obj.userData.pid || obj.userData.counter)) return obj;
+          obj = obj.parent;
+        }
+        return null;
+      }
+      function centerHit(){
+        raycaster.setFromCamera({ x:0, y:0 }, camera);
+        var hits = raycaster.intersectObjects(clickables, true);
+        return hits.length ? findClickable(hits[0].object) : null;
+      }
+      function pointerHit(e){
+        var r = renderer.domElement.getBoundingClientRect();
+        raycaster.setFromCamera({
+          x: ((e.clientX - r.left) / r.width) * 2 - 1,
+          y: -((e.clientY - r.top) / r.height) * 2 + 1
+        }, camera);
+        var hits = raycaster.intersectObjects(clickables, true);
+        return hits.length ? findClickable(hits[0].object) : null;
+      }
+      function activate(target){
+        if (!target) return;
+        if (target.userData.counter){
+          window.FLWR.openDrawer();
+          if (document.exitPointerLock) document.exitPointerLock();
+          return;
+        }
+        var p = window.FLWR.byId(target.userData.pid);
+        if (!p) return;
+        if (p.soon){ window.FLWR.toast("✿ " + p.name + " — that one's still in the greenhouse. Join the list below!"); return; }
+        window.FLWR.addToCart(p.id);
+      }
+      function setHovered(target){
+        if (hovered === target) return;
+        if (hovered) hovered.scale.setScalar(1);
+        hovered = target;
+        if (hovered){
+          hovered.scale.setScalar(1.07);
+          hudLabel.textContent = hovered.userData.label || "";
+          hudLabel.classList.add("show");
+          wrap.style.cursor = "pointer";
+        } else {
+          hudLabel.classList.remove("show");
+          wrap.style.cursor = "grab";
+        }
+      }
+
+      /* ---------- controls — ported from the FLWRPWR room (assets/game.js), the build
+         whose controls work: the pointer lock lives on the experience container itself
+         (here #shopOverlay, the room's #gameViewport), so every click inside the shop
+         reaches the same handler the room uses. Click locks; once locked, click interacts
+         at the crosshair; Esc releases the lock (browser-native), Esc again leaves. ---------- */
+      function lockPointer(){
+        if (overlay && overlay.requestPointerLock) overlay.requestPointerLock();
+      }
+      function updateLockPrompt(){
+        var show = shopOpen && built && !locked && !fallback.classList.contains("show");
+        lockPrompt.classList.toggle("show", !!show);
+      }
+      function bindControls(){
+        document.addEventListener("pointerlockchange", function(){
+          locked = document.pointerLockElement === overlay;
+          overlay.classList.toggle("locked", locked);
+          updateLockPrompt();
+        });
+        document.addEventListener("mousemove", function(e){
+          if (document.pointerLockElement !== overlay || !shopOpen) return;
+          cameraState.targetYaw -= e.movementX * .00235;
+          cameraState.targetPitch = Math.max(-1.08, Math.min(1.08, cameraState.targetPitch - e.movementY * .00205));
+        });
+        overlay.addEventListener("click", function(e){
+          if (!shopOpen || fallback.classList.contains("show") || drawerIsOpen()) return;
+          if (e.target.closest("button")) return;
+          if (document.pointerLockElement === overlay){ activate(centerHit()); }
+          else lockPointer();
+        });
+        document.addEventListener("keydown", function(e){
+          if (!shopOpen) return;
+          var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "w", "a", "s", "d"].indexOf(k) > -1){
+            e.preventDefault();
+            keys[k] = true;
+            if (!e.repeat){
+              var f = { x:-Math.sin(cameraState.yaw), z:-Math.cos(cameraState.yaw) },
+                  r = { x: Math.cos(cameraState.yaw), z:-Math.sin(cameraState.yaw) }, dx = 0, dz = 0;
+              if (k === "ArrowUp" || k === "w"){ dx += f.x; dz += f.z; }
+              if (k === "ArrowDown" || k === "s"){ dx -= f.x; dz -= f.z; }
+              if (k === "ArrowLeft" || k === "a"){ dx -= r.x; dz -= r.z; }
+              if (k === "ArrowRight" || k === "d"){ dx += r.x; dz += r.z; }
+              if (dx || dz) move(dx * .14, dz * .14);
+            }
+          }
+          if (e.key === "Escape" && !locked){
+            if (drawerIsOpen()) window.FLWR.closeDrawer(); else exitShop();
+          }
+        });
+        document.addEventListener("keyup", function(e){
+          var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+          keys[k] = false;
+        });
+        window.addEventListener("resize", resize);
+      }
+      function drawerIsOpen(){ return document.getElementById("drawer").classList.contains("open"); }
+      function resize(){
+        if (!renderer) return;
+        var w = wrap.clientWidth, h = wrap.clientHeight;
+        if (!w || !h) return;
+        renderer.setSize(w, h);
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+      }
+
+      var lastT = 0;
+      function loop(t){
+        if (!shopOpen) return;
+        rafId = requestAnimationFrame(loop);
+        var dt = Math.min(.05, (t - lastT) / 1000 || .016); lastT = t;
+
+        var mx = 0, mz = 0;
+        if (keys.ArrowLeft || keys.a) mx -= 1;
+        if (keys.ArrowRight || keys.d) mx += 1;
+        if (keys.ArrowUp || keys.w) mz += 1;
+        if (keys.ArrowDown || keys.s) mz -= 1;
+        if (mx || mz){
+          var len = Math.hypot(mx, mz);
+          if (len > 1){ mx /= len; mz /= len; }
+          var sinYaw = Math.sin(cameraState.yaw), cosYaw = Math.cos(cameraState.yaw);
+          var dx = -sinYaw * mz + cosYaw * mx, dz = -cosYaw * mz - sinYaw * mx;
+          move(dx * player.speed * dt, dz * player.speed * dt);
+        }
+        updateCamera(dt);
+
+        updateNPCs(dt, t);
+        setHovered(centerHit());
+        renderer.render(scene, camera);
+      }
+
+      /* ---------- enter / exit ---------- */
+      function enterShop(){
+        overlay.classList.add("open");
+        document.body.classList.add("shop-locked");
+        shopOpen = true; playSecs = 0;
+        tickClock();
+        clockTimer = setInterval(tickClock, 1000);
+        drawGrain();
+        grainTimer = setInterval(drawGrain, 90);
+
+        if (isSmallScreen()){
+          fallback.classList.add("show");
+          return;
+        }
+        if (typeof THREE === "undefined"){
+          fallback.classList.add("show");
+          fallback.querySelector("h3").textContent = "The shop camera didn't load";
+          fallback.querySelector("p").textContent = "The 3D shop needs its camera feed (Three.js) and it didn't come through. The full lineup is right here on the page though — same flowers, same basket.";
+          return;
+        }
+        fallback.classList.remove("show");
+        if (!built){ buildShop(); bindControls(); }
+        cameraState.yaw = cameraState.targetYaw = 0;
+        cameraState.pitch = cameraState.targetPitch = 0;
+        player.x = 0; player.z = 4.7;
+        updateCamera(0);
+        overlay.focus();
+        updateShopLabels();
+        resize();
+        updateLockPrompt();
+        lastT = 0;
+        rafId = requestAnimationFrame(loop);
+      }
+      function exitShop(){
+        shopOpen = false;
+        if (document.exitPointerLock && document.pointerLockElement) document.exitPointerLock();
+        locked = false;
+        lockPrompt.classList.remove("show");
+        overlay.classList.remove("open");
+        document.body.classList.remove("shop-locked");
+        if (rafId) cancelAnimationFrame(rafId);
+        clearInterval(clockTimer); clearInterval(grainTimer);
+        keys = {};
+        setHovered(null);
+      }
+
+      loadShopperModel();
+
+      document.querySelectorAll("[data-enter-shop]").forEach(function(b){
+        b.addEventListener("click", enterShop);
+      });
+      document.getElementById("exitShopBtn").addEventListener("click", exitShop);
+      document.getElementById("fallbackExitBtn").addEventListener("click", exitShop);
+      document.getElementById("fallbackShopBtn").addEventListener("click", function(){
+        exitShop();
+        document.getElementById("shop").scrollIntoView({ behavior:"smooth" });
+      });
+      document.getElementById("shopCartBtn").addEventListener("click", function(){
+        window.FLWR.openDrawer();
+        if (document.exitPointerLock) document.exitPointerLock();
+      });
+      document.getElementById("lockBtn").addEventListener("click", function(){ lockPointer(); });
+      document.querySelectorAll("[data-shop-pick]").forEach(function(b){
+        b.addEventListener("click", function(){ switchShop(parseInt(b.getAttribute("data-shop-pick"), 10)); });
+      });
+    })();
+    </script>
+  </body>
 </html>
