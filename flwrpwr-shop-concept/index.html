@@ -9235,6 +9235,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       var currentShop = 0, npcGroup = null, npcs = [];
       var checkoutQueue = [], spawnT = 0;
       var cashier = null, cashierArms = null, doorL = null, doorR = null, doorOpen = 0;
+      var skyClouds = [];
 
       function isSmallScreen(){
         return window.matchMedia("(max-width: 860px)").matches ||
@@ -9453,7 +9454,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       var BROWSE = [
         { x:-5.93, z:-2.6, face:-Math.PI/2 }, { x:-5.93, z:-1.6, face:-Math.PI/2 }, { x:-5.93, z:-.6, face:-Math.PI/2 },
         { x: 5.93, z:-2.6, face: Math.PI/2 }, { x: 5.93, z:-1.6, face: Math.PI/2 }, { x: 5.93, z:-.6, face: Math.PI/2 },
-        { x:-5.2, z:-4.92, face: Math.PI }, { x:-4.45, z:-4.92, face: Math.PI }, { x: 4.45, z:-4.92, face: Math.PI }, { x: 5.2, z:-4.92, face: Math.PI },
+        { x:-5.35, z:-4.92, face: Math.PI }, { x:-4.3, z:-4.92, face: Math.PI }, { x: 4.3, z:-4.92, face: Math.PI }, { x: 5.35, z:-4.92, face: Math.PI },
         { x:-3.3, z: 5.05, face: 0 }, { x: 3.3, z: 5.05, face: 0 }
       ];
       var AISLES = [
@@ -9505,11 +9506,34 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
          (patience, sociable, decisive) make each one shop differently,
          and she'll glance at you when you drift close, yield when you're
          in her way, and stop to chat with another shopper now and then. */
+      /* when the straight line to a goal is blocked, route via the
+         aisle point nearest the middle of the trip that nobody is
+         standing near — every shopper gets her OWN waypoint, instead
+         of the whole crowd funnelling through one shared centre point
+         and meeting head-on there */
+      function pickWaypoint(n, tx, tz){
+        var p = n.group.position;
+        var mx = (p.x + tx) / 2, mz = (p.z + tz) / 2;
+        var sorted = AISLES.slice().sort(function(a, b){
+          return Math.hypot(a[0] - mx, a[1] - mz) - Math.hypot(b[0] - mx, b[1] - mz);
+        });
+        for (var i = 0; i < sorted.length; i++){
+          var wx = sorted[i][0], wz = sorted[i][1], clear = true;
+          for (var j = 0; j < npcs.length; j++){
+            if (npcs[j] === n) continue;
+            var q = npcs[j].group.position;
+            if (Math.hypot(q.x - wx, q.z - wz) < 1.05){ clear = false; break; }
+          }
+          if (clear && !npcBlocked(wx, wz))
+            return { x:wx + (n.rnd() - .5) * .5, z:wz + (n.rnd() - .5) * .5 };
+        }
+        return { x:(n.rnd() - .5) * 1.2, z:.4 + (n.rnd() - .5) * .6 };
+      }
       function setGoal(n, spot, kind){
         n.goal = spot; n.goalKind = kind || "browse";
         n.path = [];
         var p = n.group.position;
-        if (segBlocked(p.x, p.z, spot.x, spot.z)) n.path.push({ x:0, z:.4 }); // swing through the middle of the shop
+        if (segBlocked(p.x, p.z, spot.x, spot.z)) n.path.push(pickWaypoint(n, spot.x, spot.z)); // swing wide via her own aisle point
         n.path.push({ x:spot.x, z:spot.z, face:spot.face });
         n.state = "walk"; n.stuckT = 0; n.yieldT = 0; n.detourUsed = false;
       }
@@ -9526,13 +9550,13 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         for (i = 0; i < BROWSE.length; i++){
           if (i === idx) continue;
           o = BROWSE[i];
-          if (o.reservedBy && o.reservedBy !== self && Math.hypot(o.x - s.x, o.z - s.z) < 1.2) return false;
+          if (o.reservedBy && o.reservedBy !== self && Math.hypot(o.x - s.x, o.z - s.z) < .99) return false;
         }
         for (i = 0; i < npcs.length; i++){
           q = npcs[i];
           if (q === self) continue;
           qp = q.group.position;
-          if (Math.hypot(qp.x - s.x, qp.z - s.z) < .95) return false;
+          if (Math.hypot(qp.x - s.x, qp.z - s.z) < 1.0) return false;
         }
         return true;
       }
@@ -9574,7 +9598,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       /* ---------- checkout queue ----------
          One line at the till, in front of the register. The front of the
          line is being served; when she leaves, everyone shuffles up. */
-      var QUEUE_SLOTS = [ { x:.95, z:-3.45 }, { x:.95, z:-2.5 }, { x:.95, z:-1.55 } ];
+      var QUEUE_SLOTS = [ { x:.95, z:-3.5 }, { x:.95, z:-2.45 }, { x:.95, z:-1.4 } ];
       function sendToQueueSlot(n){
         var idx = checkoutQueue.indexOf(n);
         if (idx < 0) return;
@@ -9582,6 +9606,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         setGoal(n, { x:s.x, z:s.z, face:Math.PI }, "queue");
       }
       function joinQueue(n){
+        if (checkoutQueue.indexOf(n) >= 0) return true; // already in line — never twice
         if (checkoutQueue.length >= QUEUE_SLOTS.length) return false;
         checkoutQueue.push(n);
         sendToQueueSlot(n);
@@ -9698,6 +9723,11 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       /* a new face through the door when the room has room for one */
       function spawnShopper(){
         if (!npcGroup) return;
+        // never materialise on top of someone heading out the door
+        for (var si = 0; si < npcs.length; si++){
+          var spp = npcs[si].group.position;
+          if (Math.hypot(spp.x, spp.z - 5.35) < 1.15){ spawnT = 1.2; return; }
+        }
         var counts = [0, 0, 0], i;
         for (i = 0; i < npcs.length; i++) counts[npcs[i].ci]++;
         var ci = counts[0] <= counts[2] ? 0 : 2;
@@ -9708,30 +9738,65 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         chooseSpotGoal(n);
         updateShopLabels();
       }
+      /* clamp one shopper inside the room and out of the furniture */
+      function clampOutOfFurniture(p){
+        p.x = Math.max(NPC_BOUNDS.minX + .05, Math.min(NPC_BOUNDS.maxX - .05, p.x));
+        p.z = Math.max(NPC_BOUNDS.minZ + .05, Math.min(NPC_BOUNDS.maxZ - .05, p.z));
+        for (var j = 0; j < collisions.length; j++){
+          var bx = collisions[j];
+          var hw = bx.w / 2 + NPC_R, hd = bx.d / 2 + NPC_R;
+          var ddx = p.x - bx.x, ddz = p.z - bx.z;
+          if (Math.abs(ddx) < hw && Math.abs(ddz) < hd){
+            if (hw - Math.abs(ddx) < hd - Math.abs(ddz)) p.x = bx.x + (ddx < 0 ? -hw : hw);
+            else p.z = bx.z + (ddz < 0 ? -hd : hd);
+          }
+        }
+      }
       /* settle everyone out of the walls and furniture, and out of your
          space — runs before the separation passes so a push never ends
          with someone inside a shelf */
-      function settleNPCs(boundsOnly){
+      function settleNPCs(){
         for (var i = 0; i < npcs.length; i++){
           var p = npcs[i].group.position;
-          p.x = Math.max(NPC_BOUNDS.minX + .05, Math.min(NPC_BOUNDS.maxX - .05, p.x));
-          p.z = Math.max(NPC_BOUNDS.minZ + .05, Math.min(NPC_BOUNDS.maxZ - .05, p.z));
-          if (boundsOnly) continue;
-          for (var j = 0; j < collisions.length; j++){
-            var bx = collisions[j];
-            var hw = bx.w / 2 + NPC_R, hd = bx.d / 2 + NPC_R;
-            var ddx = p.x - bx.x, ddz = p.z - bx.z;
-            if (Math.abs(ddx) < hw && Math.abs(ddz) < hd){
-              if (hw - Math.abs(ddx) < hd - Math.abs(ddz)) p.x = bx.x + (ddx < 0 ? -hw : hw);
-              else p.z = bx.z + (ddz < 0 ? -hd : hd);
-            }
-          }
+          clampOutOfFurniture(p);
           var ux = p.x - player.x, uz = p.z - player.z, ud = Math.sqrt(ux * ux + uz * uz);
-          if (ud > .001 && ud < .72 && !npcBlocked(player.x + ux / ud * .72, player.z + uz / ud * .72)){
-            p.x = player.x + ux / ud * .72;
-            p.z = player.z + uz / ud * .72;
+          if (ud > .001 && ud < .78 && !npcBlocked(player.x + ux / ud * .78, player.z + uz / ud * .78)){
+            p.x = player.x + ux / ud * .78;
+            p.z = player.z + uz / ud * .78;
           }
         }
+      }
+      /* ---------- personal space, enforced ----------
+         MIN_SEP is the closest two shoppers' centres may ever get —
+         wide enough that no two bodies (plus a tote) can touch, let
+         alone merge. One pass pushes every close pair apart (the
+         walker does most of the moving; someone standing at a shelf
+         or in the queue is anchored) and clamps the pushed shopper
+         back out of the furniture; updateNPCs repeats it until the
+         whole room is clear, so nobody ever ends a frame inside
+         anybody else — not mid-aisle, not at the till. */
+      var MIN_SEP = .92;
+      function separatePass(){
+        var minD = Infinity;
+        for (var i = 0; i < npcs.length; i++){
+          for (var j = i + 1; j < npcs.length; j++){
+            var a = npcs[i], b = npcs[j];
+            var ap = a.group.position, bp = b.group.position;
+            var sx = bp.x - ap.x, sz = bp.z - ap.z, sd = Math.sqrt(sx * sx + sz * sz);
+            if (sd < minD) minD = sd;
+            if (sd >= MIN_SEP) continue;
+            var ux, uz;
+            if (sd > .001){ ux = sx / sd; uz = sz / sd; }
+            else { var ang = i * 2.39 + j * 1.31; ux = Math.cos(ang); uz = Math.sin(ang); sd = 0; }
+            var need = MIN_SEP - sd;
+            var aMove = a.state === "walk" ? .75 : .25, bMove = b.state === "walk" ? .75 : .25;
+            var tot = aMove + bMove;
+            ap.x -= ux * need * (aMove / tot); ap.z -= uz * need * (aMove / tot);
+            bp.x += ux * need * (bMove / tot); bp.z += uz * need * (bMove / tot);
+            clampOutOfFurniture(ap); clampOutOfFurniture(bp);
+          }
+        }
+        return minD;
       }
       /* ---------- shoppers ----------
          Three different people, not one woman cloned: HVGirl (BabylonJS —
@@ -10119,6 +10184,17 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           var qx = g.position.x - q.x, qz = g.position.z - q.z;
           var qd = Math.sqrt(qx * qx + qz * qz);
           if (qd > .001 && qd < 1.15){ var qw = (1.15 - qd) / 1.15 * 1.6; stx += qx / qd * qw; stz += qz / qd * qw; }
+          // keep-right: someone ahead means step to your own right, the
+          // way people pass in a real aisle — head-on pairs slide past
+          // shoulder to shoulder instead of stopping nose to nose and
+          // piling up in the middle of the floor
+          if (qd > .001 && qd < 1.4){
+            var ahead = -(qx * dirx + qz * dirz) / qd;
+            if (ahead > .25){
+              var kw = (1.4 - qd) / 1.4 * 1.5 * ahead;
+              stx += -dirz * kw; stz += dirx * kw;
+            }
+          }
         }
         var upx = g.position.x - player.x, upz = g.position.z - player.z;
         var upd = Math.sqrt(upx * upx + upz * upz);
@@ -10136,8 +10212,8 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           var op = npcs[j].group.position;
           var ox = op.x - g.position.x, oz = op.z - g.position.z;
           var od = Math.sqrt(ox * ox + oz * oz);
-          if (od < 1.1 && od > .001 && (ox * dirx + oz * dirz) / od > .25)
-            speed = Math.min(speed, n.speed * Math.max(0, (od - .6) / .5));
+          if (od < 1.3 && od > .001 && (ox * dirx + oz * dirz) / od > .25)
+            speed = Math.min(speed, n.speed * Math.max(0, (od - .8) / .45));
         }
         // and yield to you — if you're in their path, they stop and wait
         var yielding = false;
@@ -10162,11 +10238,13 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           n.stuckT = 0; n.yieldT = 0;
           if (!n.detourUsed && n.goal){
             n.detourUsed = true;
-            n.path = [{ x:0, z:.4 }, { x:n.goal.x, z:n.goal.z, face:n.goal.face }];
+            n.path = [pickWaypoint(n, n.goal.x, n.goal.z), { x:n.goal.x, z:n.goal.z, face:n.goal.face }];
           } else if (n.goalKind === "door"){
             g.position.x += (0 - g.position.x) * .3; g.position.z += (5.35 - g.position.z) * .3;
           } else if (n.goalKind === "chat"){
             cancelChat(n); decide(n);
+          } else if (n.goalKind === "served"){
+            setGoal(n, { x:.95, z:-3.95, face:Math.PI }, "served");
           } else if (n.goalKind === "queue"){
             sendToQueueSlot(n);
           } else {
@@ -10286,6 +10364,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             if (res.arrived){
               if (n.goalKind === "browse") enterBrowse(n);
               else if (n.goalKind === "queue") n.state = "queue";
+              else if (n.goalKind === "served"){ n.state = "served"; n.serveT = 3.2 + n.rnd() * 2.4; }
               else if (n.goalKind === "door") n.gone = true;
               else if (n.goalKind === "chat"){
                 if (n.partner && !n.partner.dead && n.partner.state === "chatWait"){
@@ -10298,7 +10377,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           } else if (n.state === "queue"){
             faceToward(n, Math.PI, dt); // face the till and wait your turn
             if (checkoutQueue.indexOf(n) < 0) decide(n); // not in the line anymore — get on with shopping
-            else if (checkoutQueue[0] === n){ n.state = "served"; n.serveT = 3.2 + n.rnd() * 2.4; }
+            else if (checkoutQueue[0] === n) setGoal(n, { x:.95, z:-3.95, face:Math.PI }, "served"); // your turn — step right up to the till
           } else if (n.state === "served"){
             faceToward(n, Math.atan2(.95 - g.position.x, -5.45 - g.position.z), dt);
             n.leanAmt += (.35 - n.leanAmt) * Math.min(1, dt * 5);
@@ -10358,30 +10437,24 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           updateShopLabels();
         }
         // settle everyone out of the furniture and walls first, then
-        // personal space — twice. Shoppers standing still (browsing,
-        // queueing, chatting) are anchored: the walker does most of the
-        // moving, so nobody ends a frame inside anybody else.
-        settleNPCs(false);
-        for (var round = 0; round < 2; round++){
-          for (i = 0; i < npcs.length; i++){
-            for (j = i + 1; j < npcs.length; j++){
-              var a = npcs[i], b = npcs[j];
-              var ap = a.group.position, bp = b.group.position;
-              var sx = bp.x - ap.x, sz = bp.z - ap.z, sd = Math.sqrt(sx * sx + sz * sz);
-              if (sd < .8){
-                var ux4, uz4;
-                if (sd > .001){ ux4 = sx / sd; uz4 = sz / sd; }
-                else { var ang4 = i * 2.39 + j * 1.31; ux4 = Math.cos(ang4); uz4 = Math.sin(ang4); sd = 0; }
-                var need = .8 - sd;
-                var aMove = a.state === "walk" ? .75 : .25, bMove = b.state === "walk" ? .75 : .25;
-                var tot = aMove + bMove;
-                ap.x -= ux4 * need * (aMove / tot); ap.z -= uz4 * need * (aMove / tot);
-                bp.x += ux4 * need * (bMove / tot); bp.z += uz4 * need * (bMove / tot);
-              }
-            }
-          }
-          settleNPCs(true);
+        // personal space — iterated until the room is provably clear.
+        // This is the last thing that touches a shopper's position each
+        // frame, so what renders is what was solved: no merged bodies.
+        settleNPCs();
+        var sepMin = 0, sepRound = 0;
+        do { sepMin = separatePass(); sepRound++; } while (sepMin < MIN_SEP - .005 && sepRound < 8);
+        // proof hook: measure what actually renders — the closest any
+        // two shoppers end this frame — and keep the running minima
+        var frameMin = Infinity;
+        for (i = 0; i < npcs.length; i++) for (j = i + 1; j < npcs.length; j++){
+          var mp1 = npcs[i].group.position, mp2 = npcs[j].group.position;
+          var md = Math.hypot(mp1.x - mp2.x, mp1.z - mp2.z);
+          if (md < frameMin) frameMin = md;
         }
+        var st = window.__npcStats || (window.__npcStats = { minEver:Infinity, minRecent:Infinity, frames:0 });
+        if (frameMin < st.minEver) st.minEver = frameMin;
+        if (frameMin < st.minRecent) st.minRecent = frameMin;
+        st.frames++;
       }
       function updateShopLabels(){
         document.querySelectorAll("[data-shop-pick]").forEach(function(b){
@@ -10406,9 +10479,9 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
 
       function buildShop(){
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xfff8f0);
-        scene.fog = new THREE.Fog(0xfff8f0, 18, 46);
-        camera = new THREE.PerspectiveCamera(68, 1, .1, 60);
+        scene.background = new THREE.Color(0x8ec9ee);
+        scene.fog = new THREE.Fog(0xd7ecf8, 26, 78);
+        camera = new THREE.PerspectiveCamera(68, 1, .1, 160);
         camera.position.set(0, 1.62, 10.6);
         raycaster = new THREE.Raycaster();
         raycaster.far = 16;
@@ -10427,22 +10500,77 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         wrap.appendChild(renderer.domElement);
 
-        /* bright cheerful daylight — strong sky bounce, warm sun, cool window fill */
-        scene.add(new THREE.HemisphereLight(0xffffff, 0xe8cfe0, 1.3));
-        scene.add(new THREE.AmbientLight(0xfff6ec, .35));
-        var sun = new THREE.DirectionalLight(0xfff1d6, 1.55);
-        sun.position.set(5.5, 7.5, 4.5); sun.castShadow = true;
+        /* real daylight: a warm sun high over the street, aimed through
+           the storefront so it rakes in through the windows and doors
+           and throws real shadows and sun patches across the floor */
+        scene.add(new THREE.HemisphereLight(0xcfe6ff, 0xe8cfe0, 1.15));
+        scene.add(new THREE.AmbientLight(0xfff6ec, .3));
+        var sun = new THREE.DirectionalLight(0xffe7bd, 1.75);
+        sun.position.set(-14, 20, 30);
+        sun.target.position.set(1, 0, -4);
+        sun.castShadow = true;
         sun.shadow.mapSize.set(2048,2048);
-        sun.shadow.camera.left = -15; sun.shadow.camera.right = 15;
-        sun.shadow.camera.top = 15; sun.shadow.camera.bottom = -15;
-        sun.shadow.camera.near = 1; sun.shadow.camera.far = 34;
+        sun.shadow.camera.left = -17; sun.shadow.camera.right = 17;
+        sun.shadow.camera.top = 17; sun.shadow.camera.bottom = -17;
+        sun.shadow.camera.near = 18; sun.shadow.camera.far = 75;
         sun.shadow.bias = -0.0004;
         if ("normalBias" in sun.shadow) sun.shadow.normalBias = .02;
-        scene.add(sun);
-        var windowFill = new THREE.DirectionalLight(0xeaf6ff, .55);
+        scene.add(sun); scene.add(sun.target);
+        var windowFill = new THREE.DirectionalLight(0xd6ecff, .5);
         windowFill.position.set(-2, 4.5, 9);
-        windowFill.target.position.set(0, 1, -2);
+        windowFill.target.position.set(0, 1, -3);
         scene.add(windowFill); scene.add(windowFill.target);
+
+        /* ---------- a real sky ----------
+           A gradient dome overhead, the sun itself sitting in the sky
+           exactly where the light comes from, and soft clouds drifting
+           across — no more cream void when you look up, outside or
+           through the shop glass. */
+        var skyTex = canvasTex(64, 512, function(x){
+          var gr = x.createLinearGradient(0, 0, 0, 512);
+          gr.addColorStop(0, "#2e7cc4");
+          gr.addColorStop(.42, "#74b6e9");
+          gr.addColorStop(.72, "#c9e7f7");
+          gr.addColorStop(.92, "#fdeeda");
+          gr.addColorStop(1, "#fdeeda");
+          x.fillStyle = gr; x.fillRect(0, 0, 64, 512);
+        });
+        var skyDome = new THREE.Mesh(new THREE.SphereGeometry(60, 28, 18),
+          new THREE.MeshBasicMaterial({ map:skyTex, side:THREE.BackSide, fog:false }));
+        scene.add(skyDome);
+        var glowTex = canvasTex(256, 256, function(x){
+          var rg = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+          rg.addColorStop(0, "rgba(255,252,235,1)");
+          rg.addColorStop(.18, "rgba(255,240,190,.95)");
+          rg.addColorStop(.45, "rgba(255,225,150,.35)");
+          rg.addColorStop(1, "rgba(255,225,150,0)");
+          x.fillStyle = rg; x.fillRect(0, 0, 256, 256);
+        });
+        var sunDirV = new THREE.Vector3(-15, 20, 34).normalize();
+        var sunGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map:glowTex, transparent:true, opacity:.95, fog:false, depthWrite:false }));
+        sunGlow.position.copy(sunDirV).multiplyScalar(52); sunGlow.scale.setScalar(30);
+        scene.add(sunGlow);
+        var sunCore = new THREE.Sprite(new THREE.SpriteMaterial({ map:glowTex, transparent:true, opacity:1, fog:false, depthWrite:false }));
+        sunCore.position.copy(sunDirV).multiplyScalar(52); sunCore.scale.setScalar(9);
+        scene.add(sunCore);
+        var cloudTex = canvasTex(256, 128, function(x){
+          var puffs = [[70,80,42],[120,66,54],[175,78,44],[100,88,36],[150,90,38],[128,56,40]];
+          puffs.forEach(function(pf){
+            var rg2 = x.createRadialGradient(pf[0], pf[1], 0, pf[0], pf[1], pf[2]);
+            rg2.addColorStop(0, "rgba(255,255,255,.85)");
+            rg2.addColorStop(.7, "rgba(255,255,255,.45)");
+            rg2.addColorStop(1, "rgba(255,255,255,0)");
+            x.fillStyle = rg2;
+            x.beginPath(); x.arc(pf[0], pf[1], pf[2], 0, Math.PI * 2); x.fill();
+          });
+        });
+        [[-26,17,34,15],[8,21,40,19],[26,15,30,13],[-14,19,-38,17],[16,16,-34,14],[34,20,-20,16],[-34,15,16,12]].forEach(function(cs){
+          var spr = new THREE.Sprite(new THREE.SpriteMaterial({ map:cloudTex, transparent:true, opacity:.92, fog:false, depthWrite:false }));
+          spr.position.set(cs[0], cs[1], cs[2]);
+          spr.scale.set(cs[3], cs[3] * .45, 1);
+          scene.add(spr);
+          skyClouds.push(spr);
+        });
 
         var W = 14, D = 12, H = 4.6;
         var floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D, 1, 1),
@@ -10472,8 +10600,16 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, .3), pink);
             m.position.set(cx, cy, D/2); m.castShadow = true; m.receiveShadow = true; scene.add(m);
           }
-          seg(5.8, H, -4.1, H/2);                    // left of the door
-          seg(5.8, H,  4.1, H/2);                    // right of the door
+          // each side of the door is built around a REAL window opening
+          // (x 2.0–4.6 from centre, y 1.65–3.65): sky and street show
+          // through the glass, and sunlight pours in through the holes
+          [-1, 1].forEach(function(sideSign){
+            function segS(w, h, cx, cy){ seg(w, h, sideSign * cx, cy); }
+            segS(5.8, 1.65, 4.1, .825);                     // below the window
+            segS(5.8, H - 3.65, 4.1, 3.65 + (H - 3.65) / 2); // above the window
+            segS(.8, 2.0, 1.6, 2.65);                       // pier by the door
+            segS(2.4, 2.0, 5.8, 2.65);                      // pier by the corner
+          });
           seg(2.4, H - 2.8, 0, 2.8 + (H - 2.8) / 2); // header above the door
           var gold = mat(0xf2b84b,.4,.6);
           [-1.24, 1.24].forEach(function(fx){
@@ -10507,10 +10643,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             }), roughness:.85 }));
           awn.position.set(0, 2.98, D/2 + .62); awn.rotation.x = -.3; awn.castShadow = true; scene.add(awn);
           [-3.3, 3.3].forEach(function(wx){
-            var fr = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 2.3), mat(0xffffff,.6));
-            fr.position.set(wx, 2.65, D/2 + .17); scene.add(fr);
+            // a frame border around the opening — the middle is open,
+            // with real see-through glass in it
+            [[0,1.15,2.9,.16],[0,-1.15,2.9,.16],[-1.37,0,.16,2.14],[1.37,0,.16,2.14]].forEach(function(bp){
+              var frp = new THREE.Mesh(new THREE.BoxGeometry(bp[2], bp[3], .06), mat(0xffffff,.6));
+              frp.position.set(wx + bp[0], 2.65 + bp[1], D/2 + .17); scene.add(frp);
+            });
             var gl = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.0),
-              new THREE.MeshBasicMaterial({ color:0xcfeeff }));
+              new THREE.MeshStandardMaterial({ color:0xd8f2ff, roughness:.08, metalness:.15, transparent:true, opacity:.22, depthWrite:false }));
             gl.position.set(wx, 2.65, D/2 + .18); scene.add(gl);
             var fbox = new THREE.Mesh(new THREE.BoxGeometry(2.2, .26, .3), mat(0xff8fc7,.8));
             fbox.position.set(wx, 1.36, D/2 + .3); fbox.castShadow = true; scene.add(fbox);
@@ -10538,20 +10678,21 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           });
         })();
 
-        // big sunny windows on the front wall, daylight pouring in
+        // the same windows from inside: frame border, mullions, and
+        // see-through glass — the street, the sky and the sun are all
+        // visible through them from the shop floor
         [-3.3, 3.3].forEach(function(wx){
-          var frame = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 2.3), mat(0xffffff,.6));
-          frame.position.set(wx, 2.65, D/2 - .17); frame.rotation.y = Math.PI; scene.add(frame);
+          [[0,1.15,2.9,.16],[0,-1.15,2.9,.16],[-1.37,0,.16,2.14],[1.37,0,.16,2.14]].forEach(function(bp){
+            var frp = new THREE.Mesh(new THREE.BoxGeometry(bp[2], bp[3], .06), mat(0xffffff,.6));
+            frp.position.set(wx + bp[0], 2.65 + bp[1], D/2 - .17); scene.add(frp);
+          });
           var glass = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.0),
-            new THREE.MeshBasicMaterial({ color:0xeaf7ff }));
+            new THREE.MeshStandardMaterial({ color:0xd8f2ff, roughness:.08, metalness:.15, transparent:true, opacity:.18, depthWrite:false }));
           glass.position.set(wx, 2.65, D/2 - .18); glass.rotation.y = Math.PI; scene.add(glass);
           var mullV = new THREE.Mesh(new THREE.BoxGeometry(.07, 2.0, .03), mat(0xffffff,.6));
           mullV.position.set(wx, 2.65, D/2 - .19); scene.add(mullV);
           var mullH = new THREE.Mesh(new THREE.BoxGeometry(2.6, .07, .03), mat(0xffffff,.6));
           mullH.position.set(wx, 2.65, D/2 - .19); scene.add(mullH);
-          var glow = new THREE.Mesh(new THREE.CircleGeometry(.55, 20),
-            new THREE.MeshBasicMaterial({ color:0xfff3c4 }));
-          glow.position.set(wx + .7, 3.15, D/2 - .185); glow.rotation.y = Math.PI; scene.add(glow);
         });
 
         // wainscot stripes
@@ -11044,6 +11185,11 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       }
       function updateStreet(dt, t){
         var i, c;
+        // the clouds drift
+        for (i = 0; i < skyClouds.length; i++){
+          skyClouds[i].position.x += dt * .22;
+          if (skyClouds[i].position.x > 44) skyClouds[i].position.x = -44;
+        }
         for (i = 0; i < cars.length; i++){
           c = cars[i];
           c.g.position.x += c.dir * c.sp * dt;
