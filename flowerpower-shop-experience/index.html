@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
+    <script>/* FLWRPWR always opens in light mode — dark is a visitor's toggle, never the starting state */document.documentElement.setAttribute("data-theme","light");</script>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2347264d'/%3E%3Cg fill='%23ff8fc7'%3E%3Cellipse cx='50' cy='30' rx='10' ry='17'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(45 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(90 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(135 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(180 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(225 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(270 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(315 50 50)'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='12' fill='%23f2b84b'/%3E%3C/svg%3E" />
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2347264d'/%3E%3Cg fill='%23ff8fc7'%3E%3Cellipse cx='50' cy='30' rx='10' ry='17'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(45 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(90 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(135 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(180 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(225 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(270 50 50)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='17' transform='rotate(315 50 50)'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='12' fill='%23f2b84b'/%3E%3C/svg%3E" />
     <title>FLWRPWR — Good Vibes, Great Flower</title>
@@ -3767,10 +3768,13 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         padding:6px 16px; font-weight:900; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
         box-shadow:3px 3px 0 var(--ink); transform:rotate(-2deg);
       }
-      .hero h1{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(3rem,7.2vw,5.6rem); line-height:.98; margin:22px 0 6px; }
+      .hero h1{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(3rem,7.2vw,5.6rem); line-height:.94; letter-spacing:-.015em; margin:22px 0 6px; text-shadow:.035em .035em 0 rgba(255,95,168,.22); }
       .hero h1 .line-pink{ color:var(--pink-hot); }
-      .hero h1 .line-lav{ color:#8f6fe8; }
+      .hero h1 .line-lav{ color:#7a4fd0; }
       :root[data-theme="dark"] .hero h1 .line-lav{ color:var(--lav); }
+      /* per-letter spans for the water-ripple shimmer (JS splits the headline) */
+      .hero h1 .rl-word{ display:inline-block; white-space:nowrap; }
+      .hero h1 .rl{ display:inline-block; will-change:transform; }
       .hero .tagline{ font-size:1.22rem; font-weight:700; color:var(--ink-soft); max-width:44ch; margin-top:14px; }
       .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
       .btn{
@@ -3783,21 +3787,79 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       .btn-pink{ background:var(--pink-hot); color:#fff; }
       .btn-gold{ background:var(--gold); color:#40260a; }
       .hero-note{ margin-top:18px; font-family:"Caveat",cursive; font-size:1.35rem; color:var(--pink-hot); transform:rotate(-1.5deg); display:inline-block; }
-      .hero-art{ position:relative; min-height:420px; }
+      .hero-art{ position:relative; min-height:820px; display:flex; flex-direction:column; justify-content:flex-end; }
       .hero-art .sun{ position:absolute; top:2%; right:6%; width:150px; height:150px; animation:spin 40s linear infinite; }
       .pouch{ position:absolute; filter:drop-shadow(0 18px 22px rgba(190,90,150,.28)); animation:bob 5s ease-in-out infinite; }
-      .pouch.p1{ width:200px; left:6%; top:16%; transform:rotate(-7deg); }
-      .pouch.p2{ width:168px; right:10%; top:6%; transform:rotate(6deg); animation-delay:.8s; }
-      .pouch.p3{ width:182px; left:34%; bottom:0; transform:rotate(-2deg); animation-delay:1.6s; }
+      .pouch.p1{ width:200px; left:6%; top:12%; transform:rotate(-7deg); }
+      .pouch.p2{ width:168px; right:10%; top:4%; transform:rotate(6deg); animation-delay:.8s; }
+      .pouch.p3{ width:158px; left:33%; top:22%; transform:rotate(-2deg); animation-delay:1.6s; }
       .hero-daisy{ position:absolute; animation:spin 26s linear infinite; }
       @keyframes bob{ 0%,100%{ margin-top:0; } 50%{ margin-top:-14px; } }
       @keyframes spin{ to{ transform:rotate(360deg); } }
       .sparkle{ position:absolute; color:var(--gold); animation:twinkle 2.6s ease-in-out infinite; }
       @keyframes twinkle{ 0%,100%{ opacity:.25; transform:scale(.8); } 50%{ opacity:1; transform:scale(1.15); } }
+
+      /* ---------- hero showcase shelf (the three strains, on show) ---------- */
+      .showcase{ position:relative; z-index:3; margin:0 1%; }
+      .showcase-tag{
+        display:inline-block; background:var(--paper); border:2px solid var(--ink); border-radius:999px;
+        padding:5px 14px; font-weight:900; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+        box-shadow:3px 3px 0 var(--ink); transform:rotate(-1.5deg); margin-bottom:12px;
+      }
+      .showcase-row{ display:flex; gap:12px; align-items:stretch; }
+      .show-slot{
+        flex:1; border:2px solid var(--ink); border-radius:18px; padding:14px 8px 12px;
+        text-align:center; box-shadow:var(--card-shadow);
+        display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+      }
+      .show-slot svg.slot-pouch{ width:52px; height:63px; margin-bottom:2px; filter:drop-shadow(0 6px 8px rgba(190,90,150,.25)); }
+      .slot-desc{ font-size:.68rem; font-weight:700; color:var(--ink-soft); line-height:1.25; }
+      .show-slot.tint-pink{ background:var(--pink-soft); }
+      .show-slot.tint-mint{ background:var(--mint-soft); }
+      .show-slot.tint-lav{ background:var(--lav-soft); }
+      .show-slot svg{ width:36px; height:36px; margin-bottom:4px; }
+      .show-slot b{ font-size:.85rem; letter-spacing:.02em; line-height:1.15; }
+      .show-slot small{ color:var(--ink-soft); font-weight:800; font-size:.64rem; letter-spacing:.14em; text-transform:uppercase; }
+      .shelf-plank{ height:14px; margin-top:10px; background:var(--gold); border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); }
       @media (max-width:900px){
         .hero-inner{ grid-template-columns:1fr; padding:44px 0 56px; }
-        .hero-art{ min-height:340px; max-width:440px; }
-        .pouch.p1{ width:150px; } .pouch.p2{ width:126px; } .pouch.p3{ width:138px; }
+        .hero-art{ min-height:700px; max-width:440px; }
+        .pouch.p1{ width:150px; } .pouch.p2{ width:126px; } .pouch.p3{ width:118px; }
+        .show-slot{ padding:10px 5px 9px; border-radius:14px; }
+        .show-slot svg{ width:28px; height:28px; }
+        .show-slot svg.slot-pouch{ width:38px; height:46px; }
+        .slot-desc{ font-size:.58rem; }
+        .show-slot b{ font-size:.72rem; }
+        .show-slot small{ font-size:.56rem; }
+      }
+
+      /* ---------- hero open-space showcase placeholders ---------- */
+      .open-showcase{ position:relative; z-index:3; margin:0 1% 14px; }
+      .open-showcase-tag{
+        display:inline-block; background:var(--paper); border:2px dashed var(--ink); border-radius:999px;
+        padding:5px 14px; font-weight:900; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+        box-shadow:3px 3px 0 var(--ink); transform:rotate(1.5deg); margin-bottom:12px;
+      }
+      .open-row{ display:flex; gap:12px; align-items:stretch; }
+      .open-slot{
+        flex:1; border:2px dashed var(--ink); border-radius:18px; padding:12px 8px 10px;
+        background:color-mix(in srgb, var(--paper) 62%, transparent);
+        text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+      }
+      .open-slot .os-img{
+        width:46px; height:46px; border:2px dashed var(--ink-soft); border-radius:13px; margin-bottom:3px;
+        display:flex; align-items:center; justify-content:center; font-size:1.25rem; color:var(--pink-hot);
+      }
+      .open-slot b{ font-size:.82rem; letter-spacing:.02em; line-height:1.15; }
+      .open-slot .os-line{ display:block; width:62%; height:7px; border-radius:99px; background:var(--ink-soft); opacity:.35; margin-top:3px; }
+      .open-slot .os-line.short{ width:42%; }
+      .open-slot small{ color:var(--ink-soft); font-weight:800; font-size:.62rem; letter-spacing:.13em; text-transform:uppercase; margin-top:4px; }
+      @media (max-width:900px){
+        .open-showcase{ margin-bottom:12px; }
+        .open-slot{ padding:9px 5px 8px; border-radius:14px; }
+        .open-slot .os-img{ width:34px; height:34px; border-radius:10px; font-size:1rem; }
+        .open-slot b{ font-size:.7rem; }
+        .open-slot small{ font-size:.54rem; }
       }
 
       /* ---------- ticker ---------- */
@@ -4108,9 +4170,51 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       .shop-fallback h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:2rem; margin:0 0 12px; }
       .shop-fallback p{ font-weight:600; color:#f6d7ec; margin:0 0 22px; }
       body.shop-locked{ overflow:hidden; }
+
+      /* ---------- flower cursor (desktop pointers only; JS adds the
+         .has-flwr-cursor class and drives the follow) ---------- */
+      html.has-flwr-cursor, html.has-flwr-cursor *{ cursor:none !important; }
+      html.has-flwr-cursor input, html.has-flwr-cursor textarea{ cursor:text !important; }
+      .flwr-cursor{
+        position:fixed; left:0; top:0; width:36px; height:36px; margin:-18px 0 0 -18px;
+        z-index:9999; pointer-events:none; opacity:0; transition:opacity .25s ease;
+        will-change:transform;
+      }
+      .flwr-cursor.on{ opacity:1; }
+      .flwr-cursor.locked{ opacity:0 !important; }
+      .flwr-cursor-in{
+        width:100%; height:100%;
+        filter:drop-shadow(0 2px 4px rgba(71,38,77,.35));
+        transition:transform .18s ease;
+      }
+      .flwr-cursor.big .flwr-cursor-in{ transform:scale(1.45) rotate(14deg); }
+      .flwr-cursor svg{ width:100%; height:100%; animation:flwrSpin 16s linear infinite, flwrHue 9s linear infinite; }
+      @keyframes flwrSpin{ to{ transform:rotate(360deg); } }
+      @keyframes flwrHue{ to{ filter:hue-rotate(360deg); } }
+      @media (hover:none), (pointer:coarse){ .flwr-cursor{ display:none; } }
+      @media (prefers-reduced-motion: reduce){ .flwr-cursor svg{ animation:none; } }
+
+      /* ---------- mobile polish ---------- */
+      @media (max-width:560px){
+        .wrap{ padding:0 16px; }
+        .announce{ font-size:.68rem; letter-spacing:.1em; padding:8px 10px; }
+        section.block{ padding:52px 0; }
+        .hero-inner{ padding:36px 0 48px; }
+        .hero h1{ font-size:clamp(2.7rem,13.5vw,3.6rem); }
+        .hero .tagline{ font-size:1.05rem; }
+        .hero-ctas{ gap:10px; }
+        .hero-ctas .btn{ flex:1 1 150px; justify-content:center; padding:13px 18px; }
+        .hero-art{ min-height:600px; width:100%; margin:0 auto; }
+        .cats{ gap:14px; }
+        .cat{ width:102px; }
+        .cat .disc{ width:88px; height:88px; }
+        .sec-head{ margin-bottom:30px; }
+        .subscribe-form input{ min-width:0; }
+      }
     </style>
   </head>
   <body>
+    <div class="flwr-cursor" id="flwrCursor" aria-hidden="true"><div class="flwr-cursor-in"><svg viewBox="0 0 100 100"><g fill="#ff5fa8" stroke="#47264d" stroke-width="2.5"><ellipse cx="50" cy="29" rx="11" ry="18"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(45 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(90 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(135 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(180 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(225 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(270 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(315 50 50)"/></g><circle cx="50" cy="50" r="12.5" fill="#f2b84b" stroke="#47264d" stroke-width="2.5"/></svg></div></div>
     <div class="announce">✿ Pre-launch — the first drop is blooming soon <span class="star">✶</span> Women-owned <span class="star">✶</span> Good vibes, great flower ✿</div>
 
     <header class="site">
@@ -4150,7 +4254,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           <div>
             <span class="cover-chip">Flower Power · Shop Experience</span><br />
             <span class="hero-kicker">✿ Women-owned flower co. ✿</span>
-            <h1>Good <span class="line-pink">vibes,</span><br />great <span class="line-lav">flower.</span></h1>
+            <h1 id="heroTitle"><span class="line-pink">Good vibes,</span><br />great <span class="line-lav">flower.</span></h1>
             <p class="tagline">FLWRPWR 4g Smalls, packed pretty and ready to reserve. The shop doors open soon — come peek inside before anyone else.</p>
             <div class="hero-ctas">
               <a class="btn btn-pink" href="#shop">Shop the smalls</a>
@@ -4168,6 +4272,56 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             <span class="sparkle" style="left:44%;top:4%;font-size:1.5rem">✦</span>
             <span class="sparkle" style="left:8%;top:56%;font-size:1.1rem;animation-delay:.7s">✦</span>
             <span class="sparkle" style="right:16%;bottom:6%;font-size:1.3rem;animation-delay:1.3s">✦</span>
+            <div class="open-showcase">
+              <span class="open-showcase-tag">✿ More on show</span>
+              <div class="open-row">
+                <div class="open-slot">
+                  <span class="os-img">✿</span>
+                  <b>Showcase spot</b>
+                  <span class="os-line"></span>
+                  <span class="os-line short"></span>
+                  <small>Your product here</small>
+                </div>
+                <div class="open-slot">
+                  <span class="os-img">✿</span>
+                  <b>Showcase spot</b>
+                  <span class="os-line"></span>
+                  <span class="os-line short"></span>
+                  <small>Your product here</small>
+                </div>
+                <div class="open-slot">
+                  <span class="os-img">✿</span>
+                  <b>Showcase spot</b>
+                  <span class="os-line"></span>
+                  <span class="os-line short"></span>
+                  <small>Your product here</small>
+                </div>
+              </div>
+            </div>
+            <div class="showcase">
+              <span class="showcase-tag">✿ The showcase shelf</span>
+              <div class="showcase-row">
+                <div class="show-slot tint-pink">
+                  <svg class="slot-pouch" data-pouch="pink" viewBox="0 0 200 240"></svg>
+                  <b>Maui Wowie</b>
+                  <span class="slot-desc">Sweet, tropical, and uplifting.</span>
+                  <small>Sativa · 4g Smalls</small>
+                </div>
+                <div class="show-slot tint-mint">
+                  <svg class="slot-pouch" data-pouch="mint" viewBox="0 0 200 240"></svg>
+                  <b>Thai Stick</b>
+                  <span class="slot-desc">A classic with a kick.</span>
+                  <small>Hybrid · 4g Smalls</small>
+                </div>
+                <div class="show-slot tint-lav">
+                  <svg class="slot-pouch" data-pouch="lav" viewBox="0 0 200 240"></svg>
+                  <b>Afghani</b>
+                  <span class="slot-desc">Rich, smooth, and grounding.</span>
+                  <small>Indica · 4g Smalls</small>
+                </div>
+              </div>
+              <div class="shelf-plank"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -4495,6 +4649,166 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       var half = phrases.map(function(p){ return "<span>✿ "+p+"</span>"; }).join("");
       document.getElementById("tickerTrack").innerHTML = half + half;
 
+      /* ============ hero headline — water-ripple shimmer ============
+         The headline is split into per-letter spans. Moving the pointer
+         across it drops ripples (like a hand through water): a wavefront
+         expands from the touch point, letters bob, tilt and brighten as
+         it passes, then everything settles flat again. Touch devices get
+         a gentle idle ripple every few seconds instead. */
+      (function(){
+        var title = document.getElementById("heroTitle");
+        if (!title) return;
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        /* split text into word wrappers of letter spans, keeping the
+           colour spans and the <br> intact */
+        function splitInto(el){
+          var nodes = Array.prototype.slice.call(el.childNodes);
+          nodes.forEach(function(node){
+            if (node.nodeType === 3){
+              var frag = document.createDocumentFragment();
+              node.textContent.split(/(\s+)/).forEach(function(part){
+                if (!part) return;
+                if (/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(" ")); return; }
+                var w = document.createElement("span"); w.className = "rl-word";
+                part.split("").forEach(function(ch){
+                  var s = document.createElement("span"); s.className = "rl"; s.textContent = ch;
+                  w.appendChild(s);
+                });
+                frag.appendChild(w);
+              });
+              el.replaceChild(frag, node);
+            } else if (node.nodeType === 1 && node.tagName !== "BR"){
+              splitInto(node);
+            }
+          });
+        }
+        title.setAttribute("aria-label", "Good vibes, great flower.");
+        var wrap = document.createElement("span");
+        wrap.setAttribute("aria-hidden", "true");
+        while (title.firstChild) wrap.appendChild(title.firstChild);
+        title.appendChild(wrap);
+        splitInto(wrap);
+
+        var letters = Array.prototype.slice.call(title.querySelectorAll(".rl"));
+        if (!letters.length) return;
+        var centers = [];
+        function measure(){
+          var r = title.getBoundingClientRect();
+          centers = letters.map(function(el){
+            var b = el.getBoundingClientRect();
+            return { x: b.left - r.left + b.width / 2, y: b.top - r.top + b.height / 2 };
+          });
+        }
+        measure();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+        var resizeT = null;
+        window.addEventListener("resize", function(){
+          if (resizeT) clearTimeout(resizeT);
+          resizeT = setTimeout(measure, 120);
+        });
+
+        var ripples = [];           /* {x, y, t, amp} */
+        var running = false;
+        var lastTouch = 0;          /* last pointer interaction, ms */
+        function start(){
+          if (!running){ running = true; requestAnimationFrame(frame); }
+        }
+        function spawn(x, y, amp){
+          ripples.push({ x:x, y:y, t:performance.now(), amp:amp || 1 });
+          if (ripples.length > 6) ripples.shift();
+          start();
+        }
+        function frame(now){
+          ripples = ripples.filter(function(rp){ return now - rp.t < 1700; });
+          var any = ripples.length > 0;
+          for (var i = 0; i < letters.length; i++){
+            var c = centers[i]; if (!c) continue;
+            var v = 0;
+            for (var j = 0; j < ripples.length; j++){
+              var rp = ripples[j];
+              var age = (now - rp.t) / 1000;
+              var dx = c.x - rp.x, dy = c.y - rp.y;
+              var dist = Math.sqrt(dx * dx + dy * dy);
+              var d = dist - age * 360;                    /* wavefront position */
+              var env = Math.exp(-(d * d) / 3600) * Math.exp(-age * 2.1) * Math.exp(-dist / 560);
+              v += Math.sin(d * 0.085) * env * rp.amp;
+            }
+            var el = letters[i];
+            if (v > 0.012 || v < -0.012){
+              el.style.transform = "translateY(" + (v * -11).toFixed(2) + "px) rotate(" + (v * 5).toFixed(2) + "deg) scale(" + (1 + Math.abs(v) * 0.07).toFixed(3) + ")";
+              el.style.filter = "brightness(" + (1 + Math.abs(v) * 0.38).toFixed(3) + ") saturate(" + (1 + Math.abs(v) * 0.3).toFixed(3) + ")";
+            } else if (el.style.transform){
+              el.style.transform = "";
+              el.style.filter = "";
+            }
+          }
+          if (any){ requestAnimationFrame(frame); }
+          else {
+            running = false;
+            letters.forEach(function(el){ el.style.transform = ""; el.style.filter = ""; });
+          }
+        }
+
+        var lastX = -999, lastY = -999, lastSpawn = 0;
+        title.addEventListener("pointermove", function(e){
+          var r = title.getBoundingClientRect();
+          var x = e.clientX - r.left, y = e.clientY - r.top;
+          lastTouch = performance.now();
+          var moved = Math.abs(x - lastX) + Math.abs(y - lastY);
+          if (moved > 30 && performance.now() - lastSpawn > 70){
+            spawn(x, y, 1);
+            lastX = x; lastY = y; lastSpawn = performance.now();
+          }
+        });
+        title.addEventListener("pointerdown", function(e){
+          var r = title.getBoundingClientRect();
+          lastTouch = performance.now();
+          spawn(e.clientX - r.left, e.clientY - r.top, 1.5);
+        });
+
+        /* gentle idle shimmer (also the touch-device behaviour), plus one
+           welcoming ripple once the page has settled */
+        setTimeout(function(){
+          if (centers.length) spawn(centers[Math.floor(centers.length / 2)].x, centers[0].y, 0.9);
+        }, 700);
+        setInterval(function(){
+          if (document.hidden || !centers.length) return;
+          if (performance.now() - lastTouch < 4500) return;
+          var c = centers[Math.floor(Math.random() * centers.length)];
+          spawn(c.x, c.y, 0.8);
+        }, 3400);
+      })();
+
+      /* ============ flower cursor — a little bloom that follows the mouse
+         on desktop (fine) pointers, its petals slowly cycling colour.
+         Touch devices never see it; the native cursor is only hidden
+         once this script confirms a mouse is really there ============ */
+      (function(){
+        var el = document.getElementById("flwrCursor");
+        if (!el || !window.matchMedia || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+        document.documentElement.classList.add("has-flwr-cursor");
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var tx = window.innerWidth / 2, ty = window.innerHeight / 2, x = tx, y = ty, shown = false;
+        document.addEventListener("mousemove", function(e){
+          tx = e.clientX; ty = e.clientY;
+          if (!shown){ shown = true; x = tx; y = ty; el.classList.add("on"); }
+          var t = e.target;
+          var hot = !!(t && t.closest && t.closest("a,button,[role='button'],input,select,textarea,label,.card"));
+          el.classList.toggle("big", hot);
+        });
+        document.addEventListener("mouseleave", function(){ shown = false; el.classList.remove("on"); });
+        document.addEventListener("pointerlockchange", function(){
+          el.classList.toggle("locked", !!document.pointerLockElement);
+        });
+        (function loop(){
+          var k = reduce ? 1 : 0.32;
+          x += (tx - x) * k; y += (ty - y) * k;
+          el.style.transform = "translate(" + x + "px," + y + "px)";
+          requestAnimationFrame(loop);
+        })();
+      })();
+
       /* ============ light / dark toggle — light is the default; flipping
          it restyles the whole page and, once the shop is built, its mood:
          bright sunny pastel by day, evening boutique glow by night ============ */
@@ -4503,7 +4817,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         themeToggle.addEventListener("click", function(){
           var dark = document.documentElement.getAttribute("data-theme") !== "dark";
           if (dark) document.documentElement.setAttribute("data-theme", "dark");
-          else document.documentElement.removeAttribute("data-theme");
+          else document.documentElement.setAttribute("data-theme", "light");
           themeToggle.textContent = dark ? "☀ Light" : "☾ Dark";
           themeToggle.setAttribute("aria-pressed", dark ? "true" : "false");
           themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
