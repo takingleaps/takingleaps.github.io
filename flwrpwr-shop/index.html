@@ -8,20 +8,20 @@
     <title>FLWRPWR — Good Vibes, Great Flower</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&family=Caveat:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <script src="assets/three.min.js"></script>
     <script src="assets/GLTFLoader.js"></script>
     <style>
       :root{
         color-scheme: light;
-        --pink:#ff8fc7; --pink-hot:#ff5fa8; --pink-soft:#ffd7ea; --pink-pale:#fff0f7;
+        --pink:#ff8fc7; --pink-hot:#e8455a; --pink-soft:#ffd7ea; --pink-pale:#fff0f7;
         --lav:#c9b8ff; --lav-soft:#e7deff; --lilac:#efe8ff;
         --cream:#fff7ec; --paper:#fffdf9;
         --blue:#a8dcff; --blue-soft:#e2f3ff;
         --mint:#a9e8c6; --mint-soft:#e2f8ec;
         --gold:#f2b84b; --gold-soft:#ffeec4;
-        --ink:#47264d; --ink-soft:#7a5b80;
-        --line:#f0d9e8;
+        --ink:#2b2118; --ink-soft:#6f5b52;
+        --line:#eddcc8;
         --card-shadow:0 10px 30px rgba(214,110,175,.18);
         --bg:var(--cream);
       }
@@ -113,7 +113,7 @@
       }
       .hero h1{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(3rem,7.2vw,5.6rem); line-height:.98; margin:22px 0 6px; }
       .hero h1 .line-pink{ color:var(--pink-hot); }
-      .hero h1 .line-lav{ color:#8f6fe8; }
+      .hero h1 .line-lav{ color:#3e7c4f; }
       @media (prefers-color-scheme: dark){ .hero h1 .line-lav{ color:var(--lav); } }
       .hero .tagline{ font-size:1.22rem; font-weight:700; color:var(--ink-soft); max-width:44ch; margin-top:14px; }
       .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
@@ -207,12 +207,12 @@
       /* ---------- enter the shop banner ---------- */
       .enter-banner{
         position:relative; overflow:hidden; border-block:2px solid var(--ink);
-        background:linear-gradient(120deg, #3a2350 0%, #5b2a63 55%, #7c2d5e 100%); color:#ffeef8;
+        background:linear-gradient(120deg, #20301c 0%, #2e4a26 55%, #3e7c4f 100%); color:#f2f7e9;
       }
       .enter-banner .wrap{ display:grid; grid-template-columns:1.1fr .9fr; gap:30px; align-items:center; padding-top:64px; padding-bottom:64px; position:relative; z-index:2; }
       .enter-banner h2{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2.2rem,5vw,3.6rem); line-height:1.02; }
       .enter-banner h2 .gold{ color:var(--gold); }
-      .enter-banner p{ margin-top:14px; font-weight:600; color:#f6d7ec; max-width:46ch; }
+      .enter-banner p{ margin-top:14px; font-weight:600; color:#dcebd2; max-width:46ch; }
       .rec-chip{
         display:inline-flex; align-items:center; gap:8px; border:1.5px solid rgba(255,255,255,.55); border-radius:8px;
         padding:6px 12px; font-size:.78rem; font-weight:800; letter-spacing:.18em; margin-bottom:18px;
@@ -401,26 +401,37 @@
       .hud-btn:hover{ filter:brightness(1.12); }
       .shop-fallback{
         position:absolute; inset:0; z-index:8; display:none; align-items:center; justify-content:center; padding:24px;
-        background:linear-gradient(150deg, #44205c, #7c2d5e); color:#fff; text-align:center;
+        background:linear-gradient(150deg, #2b2118, #3e7c4f); color:#fff; text-align:center;
       }
       .shop-fallback.show{ display:flex; }
       .shop-fallback .fb-card{ max-width:430px; }
       .shop-fallback h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:2rem; margin:0 0 12px; }
       .shop-fallback p{ font-weight:600; color:#f6d7ec; margin:0 0 22px; }
       body.shop-locked{ overflow:hidden; }
+
+      /* ---- multi-page build additions (2026-10-22) ---- */
+      .grain{ position:fixed; inset:-50%; width:200%; height:200%; z-index:400; pointer-events:none;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+        opacity:.05; mix-blend-mode:multiply; }
+      @media (prefers-color-scheme: dark){ .grain{ mix-blend-mode:screen; opacity:.06; } }
+      img.pouch{ height:auto; border-radius:14px; }
+      .card-art{ text-decoration:none; }
+      .card-body h3 a{ text-decoration:none; } .card-body h3 a:hover{ color:var(--pink-hot); }
+      .card-art .card-pouch{ border-radius:10px; }
     </style>
   </head>
   <body>
+    <div class="grain" aria-hidden="true"></div>
     <div class="announce">✿ Pre-launch — the first drop is blooming soon <span class="star">✶</span> Women-owned <span class="star">✶</span> Good vibes, great flower ✿</div>
 
     <header class="site">
       <nav class="nav" aria-label="Main">
         <div class="nav-links left">
-          <a href="#shop">Shop</a>
-          <a href="#story">Our Story</a>
-          <a href="#gallery">The Feed</a>
+          <a href="shop.html">Shop</a>
+          <a href="story.html">Our Story</a>
+          <a href="feed.html">The Feed</a>
         </div>
-        <a class="logo" href="#top" aria-label="FLWRPWR home">
+        <a class="logo" href="./" aria-label="FLWRPWR home">
           <span class="logo-word">FLWRPWR</span>
           <span class="logo-sub">Flower Co.</span>
         </a>
@@ -440,19 +451,19 @@
         <div class="wrap hero-inner">
           <div>
             <span class="hero-kicker">✿ Women-owned flower co. ✿</span>
-            <h1>Good <span class="line-pink">vibes,</span><br />great <span class="line-lav">flower.</span></h1>
+            <h1 data-split>Good <span class="line-pink">vibes,</span><br />great <span class="line-lav">flower.</span></h1>
             <p class="tagline">FLWRPWR 4g Smalls, packed pretty and ready to reserve. The shop doors open soon — come peek inside before anyone else.</p>
             <div class="hero-ctas">
-              <a class="btn btn-pink" href="#shop">Shop the smalls</a>
+              <a class="btn btn-pink" href="shop.html">Shop the smalls</a>
               <button class="btn btn-gold" type="button" data-enter-shop>▶ Enter the shop</button>
             </div>
             <span class="hero-note">psst — you can walk around inside ↑ it's a whole little store</span>
           </div>
           <div class="hero-art" aria-hidden="true">
             <svg class="sun" viewBox="0 0 100 100"><g fill="#f2b84b"><circle cx="50" cy="50" r="17"/><g id="rays"><path d="M50 4v12M50 84v12M4 50h12M84 50h12M17 17l8.5 8.5M74.5 74.5L83 83M83 17l-8.5 8.5M25.5 74.5L17 83" stroke="#f2b84b" stroke-width="6" stroke-linecap="round"/></g></g></svg>
-            <svg class="pouch p1" data-pouch="mint" viewBox="0 0 200 240"></svg>
-            <svg class="pouch p2" data-pouch="lav" viewBox="0 0 200 240"></svg>
-            <svg class="pouch p3" data-pouch="pink" viewBox="0 0 200 240"></svg>
+            <img class="pouch p1" src="img/pouch-thai-stick.png" alt="Thai Stick 4g Smalls pouch" />
+            <img class="pouch p2" src="img/pouch-northern-lights.png" alt="Northern Lights 4g Smalls pouch" />
+            <img class="pouch p3" src="img/pouch-maui-wowie.png" alt="Maui Wowie 4g Smalls pouch" />
             <svg class="hero-daisy" style="left:2%;bottom:12%;width:54px" viewBox="0 0 100 100" data-daisy></svg>
             <svg class="hero-daisy" style="right:2%;top:44%;width:38px;animation-duration:34s" viewBox="0 0 100 100" data-daisy></svg>
             <span class="sparkle" style="left:44%;top:4%;font-size:1.5rem">✦</span>
@@ -474,19 +485,19 @@
             <h2>Pick your petal</h2>
           </div>
           <div class="cats reveal">
-            <a class="cat" href="#shop">
+            <a class="cat" href="thai-stick.html">
               <span class="disc" style="background:var(--mint-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#57b87e"></svg></span>
               <b>Hybrid</b><small>Thai Stick</small>
             </a>
-            <a class="cat" href="#shop">
+            <a class="cat" href="northern-lights.html">
               <span class="disc" style="background:var(--lav-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#8f6fe8"></svg></span>
               <b>Indica</b><small>Northern Lights</small>
             </a>
-            <a class="cat" href="#shop">
+            <a class="cat" href="maui-wowie.html">
               <span class="disc" style="background:var(--pink-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#ff5fa8"></svg></span>
               <b>Sativa</b><small>Maui Wowie</small>
             </a>
-            <a class="cat" href="#shop">
+            <a class="cat" href="shop.html">
               <span class="disc" style="background:var(--gold-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-bud></svg></span>
               <b>Blooming Soon</b><small>3 more strains</small>
             </a>
@@ -504,7 +515,7 @@
           <div class="sec-head reveal">
             <span class="mini">The first drop</span>
             <h2>4g Smalls, full-size cute</h2>
-            <p>Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet — reserving just saves your spot for launch day.</p>
+            <p>Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet — reserving just saves your spot for launch day. Tap any pouch for its own page.</p>
           </div>
           <div class="grid" id="productGrid"></div>
         </div>
@@ -543,7 +554,7 @@
             <h2>Grown by women, <span class="pink">wrapped like a gift</span></h2>
             <p>FLWRPWR is a women-owned flower company with one rule: good vibes, great flower. We think buying flower should feel like walking into your favorite boutique — soft colors, pretty shelves, zero intimidation.</p>
             <p>The first drop is our 4g Smalls: Thai Stick, Northern Lights and Maui Wowie, with three more strains still blooming. Follow along at <b>@flwrpwr_co</b> — launch day is getting close.</p>
-            <span class="hand-note">— picked, packed &amp; posted with love ✿</span>
+            <span class="hand-note">— picked, packed &amp; posted with love ✿</span><div style="margin-top:18px"><a class="btn" href="story.html">Read the full story →</a></div>
           </div>
           <div class="props reveal">
             <div class="prop">
@@ -568,7 +579,7 @@
           <div class="sec-head reveal">
             <span class="mini">The feed</span>
             <h2>@flwrpwr_co</h2>
-            <p>Petals, pouches and shop days. Come hang out with us on Instagram.</p>
+            <p>Petals, pouches and shop days. The newest posts live on their own page now — come hang out.</p>
           </div>
           <div class="gallery reveal" id="galleryGrid"></div>
         </div>
@@ -587,10 +598,10 @@
           <div>
             <div class="foot-h">Explore</div>
             <div class="foot-links">
-              <a href="#shop">Shop the smalls</a>
-              <a href="#story">Our story</a>
+              <a href="shop.html">Shop the smalls</a>
+              <a href="story.html">Our story</a>
               <a href="#visit">Enter the shop</a>
-              <a href="#gallery">The feed</a>
+              <a href="feed.html">The feed</a>
             </div>
           </div>
           <div>
@@ -716,9 +727,9 @@
         { id:"thai-stick", name:"Thai Stick", type:"Hybrid", notes:["Sweet lime","Herbal","Tropical"], art:"mint",  c1:"#cdeeda", c2:"#8fd6a8", label:"#2e7d4f" },
         { id:"northern-lights", name:"Northern Lights", type:"Indica", notes:null, art:"lav", c1:"#e7deff", c2:"#b7a6f5", label:"#5b3fae" },
         { id:"maui-wowie", name:"Maui Wowie", type:"Sativa", notes:null, art:"pink", c1:"#ffd7ea", c2:"#ff9cc6", label:"#c22b78" },
-        { id:"bloom-1", name:"Blooming Soon", type:"Mystery strain", notes:null, art:"gold", c1:"#ffeec4", c2:"#f6cd7a", label:"#9a6a14", soon:true },
-        { id:"bloom-2", name:"Blooming Soon", type:"Mystery strain", notes:null, art:"blue", c1:"#dff2ff", c2:"#9fd2f7", label:"#2b6cb2", soon:true },
-        { id:"bloom-3", name:"Blooming Soon", type:"Mystery strain", notes:null, art:"lilac", c1:"#f3e9ff", c2:"#d3b8f7", label:"#7c3fae", soon:true }
+        { id:"acapulco-gold", name:"Acapulco Gold", type:"Hybrid", notes:null, art:"gold", c1:"#ffeec4", c2:"#f6cd7a", label:"#9a6a14", soon:true },
+        { id:"trainwreck", name:"Trainwreck", type:"Sativa", notes:null, art:"blue", c1:"#dff2ff", c2:"#9fd2f7", label:"#2b6cb2", soon:true },
+        { id:"afghani", name:"Afghani", type:"Indica", notes:null, art:"lilac", c1:"#f3e9ff", c2:"#d3b8f7", label:"#7c3fae", soon:true }
       ];
       function byId(id){ for (var i=0;i<PRODUCTS.length;i++) if (PRODUCTS[i].id===id) return PRODUCTS[i]; return null; }
 
@@ -781,10 +792,10 @@
           ? '<span class="price-note">still growing…</span>'
           : '<span class="price-note">pricing at launch</span>';
         return '<article class="card reveal'+(p.soon?" soon":"")+'">'
-          + '<div class="card-art" style="background:linear-gradient(160deg,'+p.c1+','+p.c2+')">'
+          + '<a class="card-art" href="'+p.id+'.html" style="background:linear-gradient(160deg,'+p.c1+','+p.c2+')" aria-label="'+p.name+' — its own page">'
           + (p.soon ? '<span class="badge">Blooming soon</span>' : '<span class="badge">First drop</span>')
-          + '<svg class="card-pouch" viewBox="0 0 200 240">'+pouchSVG(p.art, "g"+i)+'</svg></div>'
-          + '<div class="card-body"><h3>'+p.name+'</h3>'
+          + '<img class="card-pouch" src="img/pouch-'+p.id+'.png" alt="'+p.name+' 4g Smalls pouch" loading="lazy" /></a>'
+          + '<div class="card-body"><h3><a href="'+p.id+'.html">'+p.name+'</a></h3>'
           + '<div class="card-meta">'+chips+'</div>'
           + '<p class="size">FLWRPWR · 4g Smalls</p>'
           + '<div class="card-foot">'+foot+btn+'</div></div></article>';
@@ -792,14 +803,15 @@
 
       /* ============ gallery ============ */
       var TILES = [
-        { bg:"linear-gradient(150deg,#ffd7ea,#ff9cc6)", art:'<svg width="76" height="92" viewBox="0 0 200 240">'+pouchSVG("pink","t0")+'</svg>', label:"the smalls" },
-        { bg:"linear-gradient(150deg,#e7deff,#b7a6f5)", art:'<svg width="84" height="84" viewBox="0 0 100 100">'+daisySVG("#ffffff")+'</svg>', label:"daisy days" },
-        { bg:"linear-gradient(150deg,#dff2ff,#9fd2f7)", art:'<svg width="76" height="92" viewBox="0 0 200 240">'+pouchSVG("lav","t2")+'</svg>', label:"shelfie" },
-        { bg:"linear-gradient(150deg,#e2f8ec,#8fd6a8)", art:'<svg width="76" height="92" viewBox="0 0 200 240">'+pouchSVG("mint","t3")+'</svg>', label:"thai stick" },
-        { bg:"linear-gradient(150deg,#ffeec4,#f6cd7a)", art:'<svg width="84" height="84" viewBox="0 0 100 100">'+daisySVG("#ff8fc7")+'</svg>', label:"golden hour" }
+        { bg:"linear-gradient(150deg,#ffd7ea,#ff9cc6)", img:"img/pouch-maui-wowie.png", label:"bouquet day — oct 2", href:"feed.html" },
+        { bg:"linear-gradient(150deg,#e2f8ec,#8fd6a8)", img:"img/pouch-thai-stick.png", label:"unplug + unwind — sep 25", href:"feed.html" },
+        { bg:"linear-gradient(150deg,#e7deff,#b7a6f5)", img:"img/pouch-northern-lights.png", label:"the grow motto — sep 24", href:"feed.html" },
+        { bg:"linear-gradient(150deg,#ffeec4,#f6cd7a)", art:'<svg width="84" height="84" viewBox="0 0 100 100">'+daisySVG("#ffffff")+'</svg>', label:"new month energy — oct 1", href:"feed.html" },
+        { bg:"linear-gradient(150deg,#dff2ff,#9fd2f7)", art:'<svg width="84" height="84" viewBox="0 0 100 100">'+daisySVG("#ff8fc7")+'</svg>', label:"see the whole feed →", href:"feed.html" }
       ];
       document.getElementById("galleryGrid").innerHTML = TILES.map(function(t){
-        return '<a class="tile" href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener" style="background:'+t.bg+'" aria-label="FLWRPWR on Instagram — '+t.label+'">'+t.art+'<span class="tile-label">'+t.label+'</span></a>';
+        var inner = t.img ? '<img src="'+t.img+'" alt="" loading="lazy" style="width:76px;height:auto;border-radius:8px" />' : t.art;
+        return '<a class="tile" href="'+t.href+'" style="background:'+t.bg+'" aria-label="FLWRPWR feed — '+t.label+'">'+inner+'<span class="tile-label">'+t.label+'</span></a>';
       }).join("");
 
       /* ============ reveal on scroll (garnish only — adds .in, never hides anything) ============ */
@@ -820,10 +832,13 @@
       }
 
       /* ============ cart (shared: page + 3D shop) ============ */
-      var cart = {}; // id -> qty
+      var cart = {}; // id -> qty (persisted: shared with every page on the site)
+      try { cart = JSON.parse(localStorage.getItem("flwrpwr_cart_v1") || "{}") || {}; } catch(e){ cart = {}; }
+      Object.keys(cart).forEach(function(k){ var pp = byId(k); if (!pp || pp.soon) delete cart[k]; });
       function cartCountTotal(){ var n=0; for (var k in cart) n += cart[k]; return n; }
       function syncCartBadges(){
         var n = cartCountTotal();
+        try { localStorage.setItem("flwrpwr_cart_v1", JSON.stringify(cart)); } catch(e){}
         document.getElementById("cartCount").textContent = n;
         document.getElementById("shopCartCount").textContent = n;
       }
@@ -867,7 +882,7 @@
         box.innerHTML = ids.map(function(id){
           var p = byId(id);
           return '<div class="cart-item">'
-            + '<span class="thumb" style="background:linear-gradient(150deg,'+p.c1+','+p.c2+')"><svg width="30" height="36" viewBox="0 0 200 240">'+pouchSVG(p.art,"c"+id)+'</svg></span>'
+            + '<span class="thumb" style="background:linear-gradient(150deg,'+p.c1+','+p.c2+')"><img src="img/pouch-'+p.id+'.png" alt="" style="width:30px;height:auto" /></span>'
             + '<div class="ci-main"><b>'+p.name+'</b><div class="ci-sub">'+p.type+' · 4g Smalls · pricing at launch</div></div>'
             + '<span class="qty"><button type="button" data-qty="'+id+'|-1" aria-label="One less">−</button><span>'+cart[id]+'</span><button type="button" data-qty="'+id+'|1" aria-label="One more">+</button></span>'
             + '<button class="remove-btn" type="button" data-remove="'+id+'">remove</button></div>';
@@ -938,6 +953,11 @@
       });
 
       syncCartBadges(); renderCart();
+      window.addEventListener("storage", function(e){
+        if (e.key !== "flwrpwr_cart_v1") return;
+        try { cart = JSON.parse(e.newValue || "{}") || {}; } catch(_){ }
+        syncCartBadges(); renderCart();
+      });
 
       /* expose the shared bits the 3D shop needs */
       window.FLWR = { addToCart:addToCart, openDrawer:openDrawer, closeDrawer:closeDrawer, toast:toast, byId:byId, PRODUCTS:PRODUCTS };
@@ -1775,5 +1795,10 @@
       });
     })();
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="motion.js"></script>
   </body>
 </html>

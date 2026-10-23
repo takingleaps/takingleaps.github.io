@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="All six FLWRPWR 4g Smalls strains: Thai Stick, Northern Lights, Maui Wowie in the first drop; Acapulco Gold, Trainwreck and Afghani coming soon." />
+    <link rel="icon" href="data:," />
+    <title>Shop the Smalls — FLWRPWR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&family=Caveat:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="site.css" />
+    
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="announce">✿ Pre-launch — the first drop is blooming soon <span class="star">✶</span> Women-owned <span class="star">✶</span> Good vibes, great flower ✿</div>
+    <header class="site">
+      <nav class="nav" aria-label="Main">
+        <div class="nav-links left">
+          <a href="shop.html" aria-current="page">Shop</a>
+          <a href="story.html">Our Story</a>
+          <a href="feed.html">The Feed</a>
+        </div>
+        <a class="logo" href="./" aria-label="FLWRPWR home">
+          <span class="logo-word">FLWRPWR</span>
+          <span class="logo-sub">Flower Co.</span>
+        </a>
+        <div class="nav-links right">
+          <a href="./#visit">Visit</a>
+          <button class="cart-btn" id="cartOpenBtn" type="button" aria-label="Open your basket">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h15l-1.7 8.5a2 2 0 0 1-2 1.5H8.6a2 2 0 0 1-2-1.6L4 3H2"/><circle cx="9" cy="21" r="1.6"/><circle cx="17" cy="21" r="1.6"/></svg>
+            Basket <span class="cart-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="wrap">
+          <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / Shop</nav>
+          <span class="kicker" style="margin-top:22px">✿ The lineup ✿</span>
+          <h1 data-split>Shop the <span class="leaf">smalls</span></h1>
+          <p class="lede">Six strains on the sheet. Three are in the first drop, ready to reserve. Three are still growing — get notified, skip the line. Every pouch is FLWRPWR 4g Smalls. Tap any pouch for its own page.</p>
+        </div>
+      </section>
+      <section class="block" style="padding-top:48px">
+        <div class="wrap">
+          <div class="grid" id="productGrid"></div>
+          <p style="text-align:center;margin-top:34px;color:var(--ink-soft);font-weight:700">Pre-launch: reserving holds your picks for launch day — no prices, no payment yet.<br />Want the full walk-through? <a href="./#visit" style="color:var(--coral);font-weight:900">Step inside the 3D shop →</a></p>
+        </div>
+      </section>
+    </main>
+    <footer class="site">
+      <div class="wrap">
+        <div class="foot-grid">
+          <div>
+            <h3>FLWRPWR</h3>
+            <p>Good vibes, great flower. A women-owned flower company, blooming soon.</p>
+            <p style="margin-top:14px">Follow the bloom: <a href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener" style="color:var(--gold);font-weight:800">@flwrpwr_co</a></p>
+          </div>
+          <div>
+            <div class="foot-h">Explore</div>
+            <div class="foot-links">
+              <a href="shop.html">Shop the smalls</a>
+              <a href="story.html">Our story</a>
+              <a href="./#visit">Enter the shop</a>
+              <a href="feed.html">The feed</a>
+            </div>
+          </div>
+          <div>
+            <div class="foot-h">Join the list</div>
+            <p style="margin-top:0">First to know when the shop doors open and the first drop goes live.</p>
+            <form class="subscribe-form" id="subscribeForm">
+              <input type="email" id="subscribeEmail" placeholder="your@email.com" aria-label="Email address" required />
+              <button type="submit">Bloom with us</button>
+            </form>
+            <p class="subscribe-done" id="subscribeDone" hidden>you're on the list ✿ see you at launch</p>
+          </div>
+        </div>
+        <div class="foot-base">
+          <span>© 2026 FLWRPWR Flower Co. — concept storefront</span>
+          <span class="age-note">21+ only. Please consume responsibly.</span>
+        </div>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="site.js"></script>
+    <script src="motion.js"></script>
+  </body>
+</html>
