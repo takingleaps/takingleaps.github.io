@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<title>Sheldon Engineering — Concept 2: Service-First</title>
+<style>
+  :root{
+    --black:#111; --ink:#1a1a1a; --mid:#5a5a5a; --line:#222;
+    --paper:#f4f4f0; --panel:#ecebe6; --panel2:#e2e1da; --white:#fff;
+    --gray-btn:#f0f0ea;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:Tahoma,Verdana,Segoe UI,system-ui,sans-serif;background:#2b2b2b;color:var(--ink);font-size:15px;line-height:1.55;
+    background-image:radial-gradient(circle at 12% 18%, rgba(255,255,255,.14) 0 90px, transparent 91px),radial-gradient(circle at 88% 8%, rgba(255,255,255,.10) 0 140px, transparent 141px),radial-gradient(circle at 80% 92%, rgba(255,255,255,.08) 0 110px, transparent 111px);}
+  a{color:#111}
+  button,input,select,textarea{font:inherit}
+  .wrap{max-width:1060px;margin:0 auto;padding:14px 14px 86px}
+  /* XP WINDOW */
+  .window{background:var(--paper);border:3px solid #000;border-radius:10px 10px 6px 6px;overflow:hidden;box-shadow:8px 8px 0 rgba(0,0,0,.45)}
+  .titlebar{background:linear-gradient(180deg,#4a4a4a 0%,#111 55%,#000 100%);color:#fff;padding:9px 12px;display:flex;align-items:center;gap:10px}
+  .titlebar b{font-size:13px;letter-spacing:.02em}
+  .titlebar .sp{flex:1}
+  .winbtns{display:flex;gap:5px}
+  .winbtns span{width:22px;height:22px;border:1.5px solid #fff;border-radius:4px;display:grid;place-items:center;font-size:12px;line-height:1;background:#222}
+  .menubar{background:var(--panel2);border-bottom:1px solid #999;padding:6px 10px;font-size:12.5px;display:flex;gap:16px;flex-wrap:wrap;color:#333}
+  /* HEADER INSIDE */
+  .brand{display:flex;gap:16px;align-items:center;padding:18px 18px 6px;flex-wrap:wrap}
+  .logo{width:86px;height:58px;flex:none}
+  .real{font-weight:800;color:#111}
+  .real a{color:#111;text-decoration:underline;text-underline-offset:2px}
+  .brand h1{margin:0;font-size:32px;line-height:.95;letter-spacing:-.02em;text-transform:uppercase}
+  .brand h1 small{display:block;font-size:12px;letter-spacing:.28em;font-weight:400;margin-top:6px}
+  .concept-badge{margin-left:auto;background:#111;color:#fff;padding:8px 11px;font-size:11px;line-height:1.4;max-width:240px;border-radius:4px}
+  .concept-badge b{text-transform:uppercase;letter-spacing:.08em}
+  /* NAV TABS - XP folder tabs */
+  nav.tabs{display:flex;gap:4px;padding:12px 14px 0;flex-wrap:wrap;border-bottom:3px solid #111;margin:0 4px}
+  nav.tabs button{border:2px solid #111;border-bottom:none;border-radius:8px 8px 0 0;background:#d8d7d0;padding:10px 13px;font-weight:700;font-size:13.5px;cursor:pointer}
+  nav.tabs button[aria-selected="true"]{background:#111;color:#fff;padding-bottom:12px}
+  nav.tabs button:focus-visible, .btn:focus-visible{outline:3px solid #111;outline-offset:2px}
+  .page{display:none;padding:20px 18px 26px}
+  .page.active{display:block}
+  /* HERO */
+  .hero{display:grid;grid-template-columns:1.35fr .85fr;gap:18px}
+  @media(max-width:760px){.hero{grid-template-columns:1fr}.brand h1{font-size:26px}}
+  .hero h2{font-size:38px;line-height:.98;margin:2px 0 10px;letter-spacing:-.02em}
+  @media(max-width:560px){.hero h2{font-size:31px}}
+  .hero p.lede{font-size:16.5px;color:#333;max-width:56ch}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#fff,#deddd6);border:2px solid #111;padding:12px 16px;font-weight:800;cursor:pointer;border-radius:5px;box-shadow:3px 3px 0 #111;text-decoration:none;color:#111}
+  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111}
+  .btn.black{background:#111;color:#fff;box-shadow:3px 3px 0 #777}
+  .btn.big{font-size:16px;padding:15px 18px;width:100%;justify-content:center}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+  .cta-row .btn{flex:1;min-width:210px;justify-content:center}
+  .sidebox{border:2px solid #111;background:#fff}
+  .sidebox h3{background:#111;color:#fff;margin:0;padding:9px 12px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  .sidebox div{padding:12px}
+  .sidebox p{margin:0 0 8px;font-size:13.5px}
+  .placeholder{background:#111;color:#fff;padding:2px 6px;font-weight:700;font-size:12.5px;white-space:nowrap}
+  .stripes{height:12px;background:repeating-linear-gradient(45deg,#111 0 12px,#fff 12px 24px);border:2px solid #111}
+  /* SERVICE GRID */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  .card{border:2px solid #111;background:#fff;padding:16px;position:relative}
+  .card h3{margin:0 0 6px;font-size:17px}
+  .card p{margin:0 0 12px;color:#444;font-size:14px}
+  .card button{font-weight:700;background:none;border:none;border-bottom:2px solid #111;padding:0;cursor:pointer}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  @media(max-width:680px){.steps{grid-template-columns:1fr}}
+  .step{border-top:5px solid #111;background:#fff;padding:12px;border-left:1.5px solid #bbb;border-right:1.5px solid #bbb;border-bottom:1.5px solid #bbb}
+  .step b.num{font-size:28px}
+  .section-title{font-size:24px;margin:22px 0 4px;letter-spacing:-.01em}
+  .muted{color:#555;font-size:13.5px}
+  /* FORMS */
+  form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){form{grid-template-columns:1fr}}
+  label{font-weight:700;font-size:13px;display:block;margin-bottom:5px}
+  input,select,textarea{width:100%;padding:11px;border:1.5px solid #777;background:#fff;border-radius:2px}
+  textarea{min-height:88px}
+  .full{grid-column:1/-1}
+  .ticket{display:none;margin-top:16px;border:2.5px dashed #111;background:#fff;padding:16px}
+  .ticket.show{display:block}
+  .ticket h3{margin:0 0 8px}
+  .ticket pre{white-space:pre-wrap;font-family:inherit;font-size:14px;background:var(--panel);padding:12px;border:1px solid #aaa}
+  /* TOOL */
+  .tool-result{margin-top:16px;border:2px solid #111;background:#fff;padding:16px;display:none}
+  .tool-result.show{display:block}
+  .meter{height:20px;border:2px solid #111;background:#fff;margin:10px 0;overflow:hidden}
+  .meter i{display:block;height:100%;background:repeating-linear-gradient(45deg,#111 0 10px,#444 10px 20px);width:0%}
+  .checks{display:grid;gap:8px;margin-top:10px}
+  .checks label{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14.5px;background:#fff;border:1.5px solid #aaa;padding:11px;cursor:pointer}
+  .checks input{width:auto;margin-top:3px}
+  /* TABLE */
+  .tablewrap{overflow:hidden;border:2px solid #111;margin-top:14px;background:#fff}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{background:#111;color:#fff;text-align:left;padding:11px}
+  td{padding:11px;border-top:1px solid #bbb;vertical-align:top}
+  @media(max-width:680px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-top:3px solid #111;padding:8px 0}td{border:none;padding:6px 11px}td::before{content:attr(data-l);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#666;font-weight:700}}
+  .notice{border:2px solid #111;background:#fff;padding:13px 14px;margin-top:14px;font-size:14px}
+  .notice b{text-transform:uppercase}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+  ul.tight{margin:8px 0;padding-left:20px} ul.tight li{margin:6px 0}
+  footer.note{padding:14px 18px;border-top:1px solid #999;background:var(--panel2);font-size:12.5px;color:#444}
+  /* TASKBAR */
+  .taskbar{position:fixed;left:0;right:0;bottom:0;height:46px;background:linear-gradient(180deg,#3d3d3d,#000);color:#fff;display:flex;align-items:center;gap:10px;padding:0 10px;z-index:20;border-top:2px solid #777}
+  .start{background:#fff;color:#000;font-weight:900;font-style:italic;padding:7px 16px;border-radius:0 12px 12px 0;border:none;cursor:pointer}
+  .taskbar .tb{font-size:12px;background:#222;border:1px solid #666;padding:6px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .taskbar .clock{margin-left:auto;font-size:12.5px;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="window">
+    <div class="titlebar"><span>◎</span><b>Sheldon_Engineering — Septic Services.exe</b><span class="sp"></span><div class="winbtns"><span>–</span><span>□</span><span>×</span></div></div>
+    <div class="menubar"><span>Services</span><span>Booking</span><span>Emergency</span><span>Tools</span><span>Pricing</span><span>Help</span><span style="margin-left:auto">Concept 2 of 3 — Service-First</span></div>
+
+    <header class="brand">
+      <!-- Modern logo: exact 3-2-3 geometry from Sheldon Engineering Modern Logo — 3 large on top, 2 medium in the middle, 3 small at the bottom, black and white / gray only -->
+      <svg class="logo" viewBox="0 0 400 268" aria-label="Sheldon Engineering modern logo: eight circles in a 3, 2, 3 arrangement — three large on top, two medium in the middle, three small at the bottom" role="img"><circle cx="90" cy="66" r="38" fill="#111111"/><circle cx="200" cy="66" r="38" fill="#111111"/><circle cx="310" cy="66" r="38" fill="#111111"/><circle cx="145" cy="150" r="26" fill="#555555"/><circle cx="255" cy="150" r="26" fill="#555555"/><circle cx="90" cy="216" r="14" fill="#a8a8a8"/><circle cx="200" cy="216" r="14" fill="#a8a8a8"/><circle cx="310" cy="216" r="14" fill="#a8a8a8"/></svg>
+      <h1>Sheldon<small>Engineering — Septic Tanks</small></h1>
+      <div class="concept-badge"><b>Concept draft</b><br>For Oliver Sheldon to review. Now with the modern black &amp; white logo and real contact details. Prices are still placeholders — confirm before this goes live.</div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Site pages">
+      <button role="tab" aria-selected="true" data-page="home">⌂ Services</button>
+      <button role="tab" aria-selected="false" data-page="book">▦ Book a Pump-Out</button>
+      <button role="tab" aria-selected="false" data-page="emergency">⚠ Emergency Help</button>
+      <button role="tab" aria-selected="false" data-page="tool">◷ Maintenance Tool</button>
+      <button role="tab" aria-selected="false" data-page="pricing">$ Pricing Guide</button>
+      <button role="tab" aria-selected="false" data-page="quote">✉ Get a Quote</button>
+    </nav>
+
+    <!-- HOME / SERVICES -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div>
+          <p style="letter-spacing:.18em;font-size:11px;font-weight:700;margin:0">SEPTIC PUMPING • INSPECTIONS • REPAIRS</p>
+          <h2>Need a pump-out?<br>Book it in two minutes.</h2>
+          <p class="lede">No digging through a basic page to find a phone number. Pick a service, tell us about your tank, and send a booking request — or get emergency help straight away if something's backing up.</p>
+          <div class="cta-row">
+            <button class="btn black" data-goto="book">BOOK A PUMP-OUT →</button>
+            <button class="btn" data-goto="emergency">EMERGENCY HELP</button>
+          </div>
+          <p class="muted">Not sure if you're due? Try the <button style="background:none;border:none;border-bottom:2px solid #111;font-weight:700;cursor:pointer;padding:0" data-goto="tool">Maintenance Schedule Tool</button> — it works out your next pump date from your tank size and household.</p>
+        </div>
+        <aside>
+          <div class="stripes"></div>
+          <div class="sidebox">
+            <h3>Contact</h3>
+            <div>
+              <p>Phone<br><span class="real"><a href="tel:+14244251228">(424) 425-1228</a></span></p>
+              <p>Emergency line<br><span class="real"><a href="tel:+14244251228">(424) 425-1228</a></span></p>
+              <p>Address<br><span class="real">21070 Summit Rd<br>Topanga, CA 90290</span></p>
+              <p>Service area<br><span class="real">Topanga, CA</span></p>
+              <p>Hours<br><span class="placeholder">[ OLIVER TO ADD HOURS ]</span></p>
+              <button class="btn big" data-goto="quote">Request a callback</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <h3 class="section-title">Services</h3>
+      <p class="muted">Everything on one screen — tap a service to start a booking or quote for it.</p>
+      <div class="grid" id="services"></div>
+
+      <h3 class="section-title">How booking works</h3>
+      <div class="steps">
+        <div class="step"><b class="num">01</b><h4 style="margin:4px 0">Tell us about the tank</h4><p class="muted" style="margin:0">Size if you know it, last pump date, and where the access lid is. “Don’t know” is a perfectly good answer — finding it is part of the job.</p></div>
+        <div class="step"><b class="num">02</b><h4 style="margin:4px 0">Get a confirmed slot</h4><p class="muted" style="margin:0">Oliver confirms the visit and any estimate before work starts. No work proceeds on a placeholder price.</p></div>
+        <div class="step"><b class="num">03</b><h4 style="margin:4px 0">Pumped, checked, recorded</h4><p class="muted" style="margin:0">You get the date and details logged, plus your next due date from the maintenance tool so it never sneaks up again.</p></div>
+      </div>
+
+      <div class="notice"><b>Good to know:</b> Most households need a pump every 3–5 years, but the real interval depends on tank size, how many people live in the house, and whether you use a garbage disposal. The tool on this site gives you a personal estimate in about 20 seconds.</div>
+    </section>
+
+    <!-- BOOK -->
+    <section class="page" id="page-book">
+      <h2 style="font-size:28px;margin:0 0 4px">Book a pump-out</h2>
+      <p class="muted">Fill this in and the page builds a tidy booking request you can copy or email. In the live version, Oliver would connect this form to his real inbox / booking system.</p>
+      <form id="bookForm">
+        <div><label for="b-name">Your name *</label><input id="b-name" required autocomplete="name" placeholder="e.g. Jordan Smith"></div>
+        <div><label for="b-contact">Phone or email *</label><input id="b-contact" required placeholder="Best way to reach you"></div>
+        <div><label for="b-town">Property town / area *</label><input id="b-town" required placeholder="Town (full address added later)"></div>
+        <div><label for="b-type">Property type</label><select id="b-type"><option>House</option><option>Rental property</option><option>Business</option><option>Other</option></select></div>
+        <div><label for="b-size">Tank size</label><select id="b-size"><option>Don't know</option><option>750 gallons</option><option>1,000 gallons</option><option>1,250 gallons</option><option>1,500 gallons</option><option>2,000+ gallons</option></select></div>
+        <div><label for="b-last">Last pumped</label><select id="b-last"><option>Don't know / never</option><option>Within last year</option><option>1–3 years ago</option><option>3–5 years ago</option><option>5+ years ago</option></select></div>
+        <div><label for="b-date">Preferred date</label><input id="b-date" type="date"></div>
+        <div><label for="b-urgency">Urgency</label><select id="b-urgency"><option>Routine — no problems</option><option>Due soon — plan ahead</option><option>Warning signs (slow drains, smells)</option><option>Urgent — backup / overflow</option></select></div>
+        <div class="full"><label for="b-notes">Access &amp; notes</label><textarea id="b-notes" placeholder="Where is the lid? Gates, dogs, tight driveway, anything the crew should know…"></textarea></div>
+        <div class="full"><button class="btn black big" type="submit">CREATE MY BOOKING REQUEST →</button></div>
+      </form>
+      <div class="ticket" id="bookTicket" aria-live="polite">
+        <h3>✓ Booking request ready — <span id="bookRef"></span></h3>
+        <pre id="bookSummary"></pre>
+        <div class="cta-row"><button class="btn" id="copyBook">Copy request</button><a class="btn" id="mailBook" href="#">Open in email</a></div>
+        <p class="muted" id="copyBookMsg"></p>
+        <p class="muted">Concept note: the email button uses a placeholder address until Oliver adds his real one.</p>
+      </div>
+    </section>
+
+    <!-- EMERGENCY -->
+    <section class="page" id="page-emergency">
+      <div class="stripes"></div>
+      <h2 style="font-size:30px;margin:12px 0 4px">Emergency help</h2>
+      <p style="font-size:16px;max-width:65ch">Sewage backing up, overflowing, or strong sewage smells indoors? Treat it as urgent. Do these things first, then get in touch.</p>
+      <div class="cta-row">
+        <a class="btn black" href="tel:+14244251228">CALL: (424) 425-1228</a>
+        <button class="btn" data-goto="book">Send an urgent booking request</button>
+      </div>
+      <p class="muted">Sheldon Engineering — 21070 Summit Rd, Topanga, CA 90290</p>
+      <div class="two">
+        <div class="card"><h3>Do this now</h3><ul class="tight"><li><b>Stop using water</b> — no flushing, showers, laundry, or dishwasher until it's checked.</li><li><b>Keep people and pets away</b> from any backed-up or wet area.</li><li><b>Turn off power</b> to affected areas if water is near electrics — only if you can do it safely.</li><li><b>Note what happened:</b> when it started, which drains are affected, any recent heavy rain.</li><li>If you know it, <b>locate your tank lid / access point</b> so the crew can get straight in.</li></ul></div>
+        <div class="card"><h3>Don't do this</h3><ul class="tight"><li>Don't pour drain chemicals or “septic shock” additives into a backup.</li><li>Don't open the tank yourself — gases inside a tank are dangerous.</li><li>Don't keep flushing to “clear it” — it usually makes the backup worse.</li><li>Don't ignore gurgling, slow drains everywhere, or sewage smells — they're early warnings, not quirks.</li></ul></div>
+      </div>
+      <h3 class="section-title">Is it actually an emergency?</h3>
+      <div class="checks" id="symptoms">
+        <label><input type="checkbox" value="Sewage or water backing up into tubs, showers, or toilets"> Sewage or water backing up into tubs, showers, or toilets</label>
+        <label><input type="checkbox" value="Sewage smell strongly indoors"> Strong sewage smell indoors</label>
+        <label><input type="checkbox" value="Wet, soggy, or smelly ground over the tank or drain field"> Wet, soggy, or smelly ground over the tank / drain field</label>
+        <label><input type="checkbox" value="Multiple drains slow or gurgling at once"> Multiple drains slow or gurgling at the same time</label>
+        <label><input type="checkbox" value="Toilet won't flush or overflows"> Toilet won't flush properly or overflows</label>
+        <label><input type="checkbox" value="Just one slow sink or tub"> Just one slow sink or tub, everything else fine</label>
+      </div>
+      <button class="btn black" id="checkSymptoms" style="margin-top:12px">CHECK MY SITUATION →</button>
+      <div class="tool-result" id="symptomResult" aria-live="polite"></div>
+    </section>
+
+    <!-- TOOL -->
+    <section class="page" id="page-tool">
+      <h2 style="font-size:28px;margin:0 0 4px">Maintenance schedule tool</h2>
+      <p class="muted">Works out roughly when your tank is due, from the three things that actually drive it: tank size, household size, and disposal use. Estimate only — Oliver confirms the real schedule on a visit.</p>
+      <form id="toolForm">
+        <div><label for="t-people">People living in the home</label><select id="t-people"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6+</option></select></div>
+        <div><label for="t-size">Tank size (gallons)</label><select id="t-size"><option value="750">750</option><option value="1000" selected>1,000</option><option value="1250">1,250</option><option value="1500">1,500</option><option value="2000">2,000</option></select></div>
+        <div><label for="t-disposal">Garbage disposal used regularly?</label><select id="t-disposal"><option value="no">No</option><option value="yes">Yes — adds extra solids</option></select></div>
+        <div><label for="t-last">When was it last pumped? *</label><input id="t-last" type="date" required></div>
+        <div class="full"><button class="btn black big" type="submit">CALCULATE MY NEXT PUMP DATE →</button></div>
+      </form>
+      <div class="tool-result" id="toolResult" aria-live="polite">
+        <h3 style="margin:0" id="toolHeadline"></h3>
+        <div class="meter"><i id="toolMeter"></i></div>
+        <p id="toolText"></p>
+        <div class="cta-row"><button class="btn" id="downloadIcs">⬇ Download calendar reminder (.ics)</button><button class="btn black" data-goto="book">Book this pump-out</button></div>
+        <p class="muted">How it works: bigger tanks hold more before solids reach the outlet; more people and disposal use fill it faster. The interval shown uses those factors and shortens by about 20% if a disposal is used heavily.</p>
+      </div>
+      <div class="notice"><b>Between pumps:</b> spread laundry across the week instead of one big day, fix dripping taps, keep wipes / grease / chemicals out of the system (even “flushable” wipes), and keep vehicles off the drain field.</div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="page" id="page-pricing">
+      <h2 style="font-size:28px;margin:0 0 4px">Pricing guide</h2>
+      <p style="max-width:68ch">Straight answers about what drives the cost — so there are no surprises. <b>All ranges below are estimate placeholders for this concept draft.</b> Oliver will insert his real ranges before launch; nothing here is a quote.</p>
+      <div class="notice" style="background:#111;color:#fff"><b>Estimates only — concept draft:</b> Final price is confirmed after tank size, depth, and access are known. No job is priced off this page alone.</div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Service</th><th>What's included</th><th>What changes the price</th><th>Estimate range</th></tr></thead>
+        <tbody>
+          <tr><td data-l="Service"><b>Routine pump-out</b></td><td data-l="Included">Full pump, basic tank check, lids re-seated, visit logged</td><td data-l="Factors">Tank size, depth to lid, hose distance</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
+          <tr><td data-l="Service"><b>Pump-out + inspection</b></td><td data-l="Included">Pump plus condition check of baffles, levels, and visible issues</td><td data-l="Factors">Tank size, access, findings</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
+          <tr><td data-l="Service"><b>Emergency call-out</b></td><td data-l="Included">Urgent attendance for backup / overflow</td><td data-l="Factors">Time of day, urgency, work required</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
+          <tr><td data-l="Service"><b>Real-estate / sale inspection</b></td><td data-l="Included">Inspection and written summary for a sale or purchase</td><td data-l="Factors">Tank size, paperwork / report detail</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
+          <tr><td data-l="Service"><b>Repairs</b></td><td data-l="Included">Quoted after diagnosis — no fixed page price</td><td data-l="Factors">Parts, digging, extent of damage</td><td data-l="Estimate range"><b>Quoted per job</b></td></tr>
+          <tr><td data-l="Service"><b>New installation</b></td><td data-l="Included">Quoted after site assessment</td><td data-l="Factors">Site, tank size, ground conditions, permits</td><td data-l="Estimate range"><b>Quoted per job</b></td></tr>
+        </tbody></table></div>
+      <h3 class="section-title">The 5 things that move any septic price</h3>
+      <div class="grid">
+        <div class="card"><h3>1. Tank size</h3><p>A 1,500-gallon tank simply takes longer and holds more than a 750.</p></div>
+        <div class="card"><h3>2. Depth &amp; access</h3><p>Buried lids, tight gates, and long hose runs add time. Clear access keeps it simple.</p></div>
+        <div class="card"><h3>3. Distance</h3><p>Travel to the property and to disposal is part of every operator's cost.</p></div>
+        <div class="card"><h3>4. Condition</h3><p>Thick solids, damage, or a neglected tank can mean extra work on the day.</p></div>
+        <div class="card"><h3>5. Timing</h3><p>Planned routine visits are the cheapest route. Emergencies cost more — another reason the schedule tool exists.</p></div>
+        <div class="card"><h3>Get an exact figure</h3><p>Ranges only go so far. Send the quote form and get a figure for your actual tank.</p><button data-goto="quote">Get my quote →</button></div>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="page" id="page-quote">
+      <h2 style="font-size:28px;margin:0 0 4px">Get a quote / contact</h2>
+      <p class="muted">Tell us what you need and the page builds a clean quote request to send. Prefer to talk? Call <a href="tel:+14244251228"><b>(424) 425-1228</b></a> — full contact details are below.</p>
+      <div class="two">
+        <div>
+          <form id="quoteForm" style="grid-template-columns:1fr">
+            <div><label for="q-name">Your name *</label><input id="q-name" required></div>
+            <div><label for="q-contact">Phone or email *</label><input id="q-contact" required></div>
+            <div><label for="q-service">What do you need?</label><select id="q-service"><option>Pump-out</option><option>Inspection</option><option>Repair — something's wrong</option><option>New installation</option><option>Real-estate inspection</option><option>Not sure — advise me</option></select></div>
+            <div><label for="q-msg">Details</label><textarea id="q-msg" placeholder="Tank size if known, what's happening, timing…"></textarea></div>
+            <button class="btn black big" type="submit">BUILD MY QUOTE REQUEST →</button>
+          </form>
+          <div class="ticket" id="quoteTicket" aria-live="polite"><h3>✓ Quote request ready</h3><pre id="quoteSummary"></pre><div class="cta-row"><button class="btn" id="copyQuote">Copy request</button><a class="btn" id="mailQuote" href="#">Open in email</a></div><p class="muted" id="copyQuoteMsg"></p></div>
+        </div>
+        <aside>
+          <div class="sidebox"><h3>Direct contact</h3><div>
+            <p>Phone<br><span class="real"><a href="tel:+14244251228">(424) 425-1228</a></span></p>
+            <p>Email<br><span class="placeholder">[ OLIVER TO ADD EMAIL ]</span></p>
+            <p>Address<br><span class="real">21070 Summit Rd<br>Topanga, CA 90290</span></p>
+            <p>Based in / service area<br><span class="real">Topanga, CA</span></p>
+            <p>Hours<br><span class="placeholder">[ OLIVER TO ADD HOURS ]</span></p>
+            <hr>
+            <p><b>About Sheldon Engineering</b></p>
+            <p>Septic tank pumping, inspections, repairs, and installations — based at 21070 Summit Rd, Topanga, CA 90290. This About text is a draft — Oliver to add his own story, years in business, licences, and coverage here before launch. Nothing on this concept page should be published as fact until he's checked it.</p>
+          </div></div>
+          <div class="notice"><b>For Oliver — fill-in checklist:</b><ul class="tight"><li>Email the forms should send to</li><li>Towns / radius served beyond Topanga</li><li>Real estimate ranges in Pricing Guide</li><li>Licences, hours, About story</li><li>Connect booking form to inbox / CRM</li></ul></div>
+        </aside>
+      </div>
+    </section>
+
+    <footer class="note">Sheldon Engineering — Concept 2 (Service-First) • Black &amp; white XP concept with the modern 3–2–3 logo • 21070 Summit Rd, Topanga, CA 90290 • (424) 425-1228 • Draft for Oliver Sheldon to review and complete — not the live business website. Prices are still estimate placeholders; email and hours are still to confirm.</footer>
+  </div>
+</div>
+
+<div class="taskbar"><button class="start" data-goto="home">◎ start</button><span class="tb">Sheldon Engineering — Book a Pump-Out</span><span class="tb" style="background:#fff;color:#000;font-weight:700;cursor:pointer" data-goto="emergency">⚠ Emergency?</span><span class="clock" id="clock"></span></div>
+
+<script>
+var services=[
+ ["Pump-Outs","Routine and overdue tank pumping — the core service, bookable in two minutes.", "book"],
+ ["Inspections","Condition checks for peace of mind, problems, or before trouble starts.","quote"],
+ ["Real-Estate Inspections","Inspections and summaries for home sales and purchases.","quote"],
+ ["Repairs","Baffles, lids, lines and faults — diagnosed first, quoted before work.","quote"],
+ ["New Installations","New systems quoted after a proper site assessment.","quote"],
+ ["Emergency Call-Outs","Backups and overflows. Stop using water, then get help fast.","emergency"]
+];
+document.getElementById('services').innerHTML=services.map(function(s){
+ return '<article class="card"><h3>'+s[0]+'</h3><p>'+s[1]+'</p><button data-goto="'+s[2]+'">Start →</button></article>';
+}).join('');
+
+function showPage(id){
+ document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+id)});
+ document.querySelectorAll('nav.tabs button').forEach(function(b){b.setAttribute('aria-selected', b.dataset.page===id?'true':'false')});
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.addEventListener('click',function(e){
+ var t=e.target.closest('[data-goto]'); if(t){showPage(t.dataset.goto);}
+});
+document.querySelectorAll('nav.tabs button').forEach(function(b){b.addEventListener('click',function(){showPage(b.dataset.page)})});
+
+// clock
+function tick(){var d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});}
+tick(); setInterval(tick,20000);
+
+// Booking form
+function copyText(text,msgEl){
+ function done(){msgEl.textContent='Copied — paste it into a text or email to send your request.';}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(function(){msgEl.textContent='Copy failed — select the text above and copy manually.';});}
+ else{msgEl.textContent='Select the text above and copy manually.';}
+}
+document.getElementById('bookForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ var ref='SE-'+Math.floor(1000+Math.random()*9000);
+ var lines=[
+  'BOOKING REQUEST — Sheldon Engineering',
+  'Reference: '+ref,
+  'Name: '+document.getElementById('b-name').value,
+  'Contact: '+document.getElementById('b-contact').value,
+  'Town / area: '+document.getElementById('b-town').value,
+  'Property: '+document.getElementById('b-type').value,
+  'Tank size: '+document.getElementById('b-size').value,
+  'Last pumped: '+document.getElementById('b-last').value,
+  'Preferred date: '+(document.getElementById('b-date').value||'Flexible'),
+  'Urgency: '+document.getElementById('b-urgency').value,
+  'Access / notes: '+(document.getElementById('b-notes').value||'—')
+ ].join('\n');
+ document.getElementById('bookRef').textContent=ref;
+ document.getElementById('bookSummary').textContent=lines;
+ document.getElementById('bookTicket').classList.add('show');
+ document.getElementById('mailBook').href='mailto:OLIVER-TO-ADD-EMAIL@example.com?subject='+encodeURIComponent('Pump-out booking '+ref)+'&body='+encodeURIComponent(lines);
+ document.getElementById('copyBook').onclick=function(){copyText(lines,document.getElementById('copyBookMsg'));};
+ document.getElementById('bookTicket').scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+
+// Quote form
+document.getElementById('quoteForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ var lines=[
+  'QUOTE REQUEST — Sheldon Engineering',
+  'Name: '+document.getElementById('q-name').value,
+  'Contact: '+document.getElementById('q-contact').value,
+  'Service needed: '+document.getElementById('q-service').value,
+  'Details: '+(document.getElementById('q-msg').value||'—')
+ ].join('\n');
+ document.getElementById('quoteSummary').textContent=lines;
+ document.getElementById('quoteTicket').classList.add('show');
+ document.getElementById('mailQuote').href='mailto:OLIVER-TO-ADD-EMAIL@example.com?subject='+encodeURIComponent('Quote request — Sheldon Engineering')+'&body='+encodeURIComponent(lines);
+ document.getElementById('copyQuote').onclick=function(){copyText(lines,document.getElementById('copyQuoteMsg'));};
+});
+
+// Symptom checker
+document.getElementById('checkSymptoms').addEventListener('click',function(){
+ var checked=Array.from(document.querySelectorAll('#symptoms input:checked')).map(function(c){return c.value});
+ var box=document.getElementById('symptomResult'); box.classList.add('show');
+ if(!checked.length){box.innerHTML='<h3 style="margin:0 0 6px">Tick what you are seeing</h3><p style="margin:0">Select at least one sign above and check again.</p>';return;}
+ var onlySlow=checked.length===1 && checked[0].indexOf('Just one slow')===0;
+ if(onlySlow){box.innerHTML='<h3 style="margin:0 0 6px">Probably not an emergency</h3><p style="margin:0">One slow drain on its own is often a local blockage in that fixture, not the septic system. If other drains start slowing, smells appear, or it spreads, treat it as urgent and use the emergency steps.</p>';}
+ else{box.innerHTML='<h3 style="margin:0 0 6px">⚠ Treat this as urgent</h3><p style="margin:0 0 8px">You reported: '+checked.join('; ')+'.</p><p style="margin:0">Stop using water, keep people and pets away from affected areas, and contact Sheldon Engineering on (424) 425-1228. If you cannot reach anyone and sewage is entering the home, consider your local emergency / environmental health route as a backup.</p>';}
+ box.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+
+// Maintenance tool
+var lastCalc=null;
+document.getElementById('toolForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ var people=parseInt(document.getElementById('t-people').value,10);
+ var size=parseInt(document.getElementById('t-size').value,10);
+ var disposal=document.getElementById('t-disposal').value==='yes';
+ var last=new Date(document.getElementById('t-last').value+'T12:00:00');
+ if(isNaN(last.getTime()))return;
+ // Interval model: base fill rate ~ 42 gal/person/year of solids-equivalent against usable capacity ~55% of tank
+ var usable=size*0.55;
+ var perPersonYear=disposal?58:44;
+ var years=usable/(people*perPersonYear);
+ years=Math.max(1,Math.min(7,years));
+ var next=new Date(last.getTime()); next.setDate(next.getDate()+Math.round(years*365));
+ var now=new Date(); var total=next-last; var elapsed=now-last; var pct=Math.max(0,Math.min(100,Math.round(elapsed/total*100)));
+ var daysLeft=Math.round((next-now)/86400000);
+ var status, headline;
+ if(daysLeft<0){status='OVERDUE';headline='Overdue — book a pump-out';}
+ else if(daysLeft<=180){status='DUE SOON';headline='Due soon — get a date booked in';}
+ else{status='ON TRACK';headline='On track — next pump is planned';}
+ lastCalc={next:next,people:people,size:size};
+ document.getElementById('toolHeadline').textContent=status+' — Next pump due: '+next.toLocaleDateString([], {day:'numeric',month:'long',year:'numeric'});
+ document.getElementById('toolMeter').style.width=pct+'%';
+ document.getElementById('toolText').textContent='For a '+size.toLocaleString()+'-gallon tank with '+people+' people'+(disposal?' and regular garbage-disposal use':'')+', the estimated interval is about '+years.toFixed(1)+' years. You are roughly '+pct+'% of the way through this cycle'+(daysLeft>=0?' — about '+daysLeft+' days left.':' — about '+Math.abs(daysLeft)+' days past the estimate.')+' Download the reminder below so the date does not sneak up.';
+ var r=document.getElementById('toolResult'); r.classList.add('show'); r.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+document.getElementById('downloadIcs').addEventListener('click',function(){
+ if(!lastCalc)return;
+ function fmt(d){return d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';}
+ var start=new Date(lastCalc.next); start.setHours(9,0,0,0); var end=new Date(start.getTime()+3600000);
+ var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Sheldon Engineering Concept//Maintenance Tool//EN','BEGIN:VEVENT','UID:'+Date.now()+'@sheldon-concept','DTSTAMP:'+fmt(new Date()),'DTSTART:'+fmt(start),'DTEND:'+fmt(end),'SUMMARY:Septic tank pump-out due — Sheldon Engineering','DESCRIPTION:Estimated pump due date from the Sheldon Engineering maintenance tool for a '+lastCalc.size+' gallon tank. Book a pump-out to confirm.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+ var blob=new Blob([ics],{type:'text/calendar'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='septic-pump-reminder.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+});
+</script>
+</body>
+</html>
