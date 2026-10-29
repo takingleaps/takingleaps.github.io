@@ -3751,7 +3751,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         .nav-links.right a{ display:none; }
         .theme-btn,.cart-btn{ padding:7px 11px; font-size:.78rem; box-shadow:2px 2px 0 var(--ink); }
         .logo .logo-word{ font-size:1.35rem; }
-        .nav-links.left{ grid-column:1 / -1; grid-row:2; display:flex; justify-content:center; gap:24px; border-top:1.5px solid var(--line); padding-top:9px; }
+        .nav-links.left{ grid-column:1 / -1; grid-row:2; display:flex; justify-content:center; flex-wrap:wrap; row-gap:4px; gap:24px; border-top:1.5px solid var(--line); padding-top:9px; }
         .hero-note{ font-size:1.15rem; transform:none; margin-left:2px; }
       }
 
@@ -3955,6 +3955,104 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       }
       @media (max-width:480px){
         .ws-skus{ grid-template-columns:repeat(2,1fr); }
+      }
+
+      /* ---------- weedmaps ---------- */
+      .weedmaps{
+        background:
+          radial-gradient(760px 400px at 6% 0%, var(--sky) 0%, transparent 55%),
+          radial-gradient(640px 360px at 96% 100%, var(--gold-soft) 0%, transparent 55%),
+          linear-gradient(168deg, var(--blue-soft) 0%, var(--green-soft) 135%);
+        border-block:2px solid var(--line);
+      }
+      :root[data-theme="dark"] .weedmaps{
+        background:
+          radial-gradient(760px 400px at 6% 0%, rgba(126,200,247,.12) 0%, transparent 55%),
+          radial-gradient(640px 360px at 96% 100%, rgba(242,184,75,.08) 0%, transparent 55%),
+          linear-gradient(168deg, #1b2c3d 0%, #12291c 135%);
+      }
+      .wm-card{
+        display:grid; grid-template-columns:1.15fr .85fr; gap:34px; align-items:center;
+        border-radius:26px; padding:38px 40px;
+        background:color-mix(in srgb, var(--paper) 58%, transparent);
+        -webkit-backdrop-filter:blur(14px) saturate(1.45); backdrop-filter:blur(14px) saturate(1.45);
+        border:1.5px solid rgba(255,255,255,.7);
+        box-shadow:0 18px 40px rgba(84,120,80,.16), inset 0 1px 0 rgba(255,255,255,.8);
+      }
+      :root[data-theme="dark"] .wm-card{ border-color:rgba(255,255,255,.2); box-shadow:0 18px 40px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.12); }
+      .wm-copy .mini{ font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.75rem; color:var(--green-deep); }
+      .wm-copy h2{ margin:8px 0 12px; }
+      .wm-copy p{ color:var(--ink-soft); max-width:46ch; }
+      .wm-ctas{ margin-top:22px; display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+      .btn-leaf{ background:var(--green-deep); color:#fff; }
+      :root[data-theme="dark"] .btn-leaf{ background:var(--green); color:#0d2417; }
+      .wm-note{ margin-top:18px; font-size:.88rem; font-weight:700; color:var(--ink-soft); max-width:46ch; }
+      .wm-note b{ color:var(--green-deep); }
+      /* storefront slot — swaps to the live Weedmaps listing/embed at launch */
+      .wm-slot{
+        border:2px dashed color-mix(in srgb, var(--green) 55%, transparent);
+        border-radius:22px; padding:30px 24px; text-align:center;
+        background:color-mix(in srgb, var(--paper) 40%, transparent);
+        display:flex; flex-direction:column; align-items:center; gap:9px;
+      }
+      .wm-slot .wm-pin{
+        width:54px; height:54px; border-radius:50%; background:var(--green-soft);
+        display:flex; align-items:center; justify-content:center;
+        box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.7);
+      }
+      .wm-slot b{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.3rem; line-height:1.15; color:var(--green-deep); }
+      .wm-slot span{ font-size:.88rem; font-weight:700; color:var(--ink-soft); max-width:30ch; }
+      .wm-slot .wm-tag{
+        margin-top:4px; padding:6px 13px; border-radius:999px;
+        background:var(--gold); color:#40260a; border:1.5px solid #40260a;
+        font-size:.68rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase;
+      }
+      /* ---------- kushie order block (separate brand, inside Weedmaps) ---------- */
+      .kushie-card{
+        margin-top:22px;
+        display:grid; grid-template-columns:1.15fr .85fr; gap:34px; align-items:center;
+        border-radius:26px; padding:34px 40px;
+        background:
+          radial-gradient(520px 260px at 100% 0%, var(--gold-soft) 0%, transparent 60%),
+          color-mix(in srgb, var(--paper) 62%, transparent);
+        -webkit-backdrop-filter:blur(14px) saturate(1.45); backdrop-filter:blur(14px) saturate(1.45);
+        border:2px solid var(--ink);
+        box-shadow:5px 5px 0 var(--ink), 0 18px 40px rgba(84,120,80,.14);
+      }
+      :root[data-theme="dark"] .kushie-card{
+        border-color:var(--gold);
+        box-shadow:5px 5px 0 rgba(0,0,0,.55), 0 18px 40px rgba(0,0,0,.42);
+        background:
+          radial-gradient(520px 260px at 100% 0%, rgba(242,184,75,.14) 0%, transparent 60%),
+          color-mix(in srgb, var(--paper) 72%, transparent);
+      }
+      .kushie-copy .mini{ font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.75rem; color:#8a5a00; }
+      :root[data-theme="dark"] .kushie-copy .mini{ color:var(--gold); }
+      .kushie-copy h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.7rem,3.4vw,2.35rem); line-height:1.08; margin:8px 0 12px; color:var(--ink); }
+      .kushie-copy p{ color:var(--ink-soft); max-width:48ch; }
+      .kushie-panel{
+        border:1.5px solid color-mix(in srgb, var(--ink) 22%, transparent);
+        border-radius:22px; padding:26px 24px;
+        background:color-mix(in srgb, var(--gold-soft) 42%, var(--paper) 58%);
+        display:flex; flex-direction:column; gap:14px;
+      }
+      :root[data-theme="dark"] .kushie-panel{ background:color-mix(in srgb, var(--gold-soft) 55%, var(--paper) 45%); border-color:rgba(255,255,255,.2); }
+      .kushie-panel b{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.2rem; line-height:1.15; color:var(--ink); }
+      .kushie-cats{ display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:0; padding:0; }
+      .kushie-cats li{
+        padding:7px 12px; border-radius:999px; border:1.5px solid var(--ink);
+        background:var(--paper); color:var(--ink);
+        font-size:.78rem; font-weight:900; letter-spacing:.02em;
+      }
+      .kushie-panel span{ font-size:.88rem; font-weight:700; color:var(--ink-soft); }
+      .kushie-panel .kushie-tag{
+        align-self:flex-start; padding:6px 13px; border-radius:999px;
+        background:var(--ink); color:var(--cream);
+        font-size:.68rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase;
+      }
+      @media (max-width:900px){
+        .wm-card{ grid-template-columns:1fr; padding:28px 22px; gap:24px; }
+        .kushie-card{ grid-template-columns:1fr; padding:28px 22px; gap:24px; }
       }
 
       /* ---------- ticker ---------- */
@@ -4353,6 +4451,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         <div class="nav-links left">
           <a href="#shop">Shop</a>
           <a href="#wholesale">Wholesale</a>
+          <a href="#weedmaps">Weedmaps</a>
           <a href="#story">Our Story</a>
           <a href="#gallery">The Feed</a>
         </div>
@@ -4556,7 +4655,65 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             <span class="ws-claim"><span class="dot">✿</span>High turnover product</span>
             <span class="ws-claim"><span class="dot">✿</span>Competitive wholesale pricing</span>
           </div>
-          <p class="ws-foot reveal">FLWRPWR.CO · <a href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener">@FLWRPWR_CO</a></p>
+          <p class="ws-foot reveal">FLWRPWR.CO · <a href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener">@FLWRPWR_CO</a> · <a href="#weedmaps">On Weedmaps soon</a></p>
+        </div>
+      </section>
+
+      <!-- WEEDMAPS — pre-launch integration. FLWRPWR has no official
+           Weedmaps listing yet, so the button runs a Weedmaps search for
+           the brand name. When the real storefront launches, point the
+           button and the #weedmapsSlot panel at the live store URL/embed. -->
+      <section class="block weedmaps" id="weedmaps">
+        <div class="wrap">
+          <div class="wm-card reveal">
+            <div class="wm-copy">
+              <span class="mini">Find us out there</span>
+              <h2 class="editorial-h">Find FLWRPWR on Weedmaps</h2>
+              <p>Our official Weedmaps storefront is on its way — the brand page blooms with the first drop. Until then, run the name through Weedmaps search and keep an eye out: the second we're live, this is the first place we'll shout about it.</p>
+              <div class="wm-ctas">
+                <a class="btn btn-leaf" href="https://weedmaps.com/search?query=FLWRPWR" target="_blank" rel="noopener">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                  Search FLWRPWR on Weedmaps
+                </a>
+              </div>
+              <p class="wm-note">One heads-up: <b>similar names aren't us.</b> The real FLWRPWR is women-owned — 4g Smalls, daisies on the pouch, good vibes only.</p>
+            </div>
+            <div class="wm-slot" id="weedmapsSlot">
+              <span class="wm-pin"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2e7d4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+              <b>Storefront coming soon</b>
+              <span>Our official Weedmaps store page takes this exact spot at launch — same button, straight to the store.</span>
+              <span class="wm-tag">✿ Launching with the first drop</span>
+            </div>
+          </div>
+
+          <!-- KUSHIE — separate brand with a live Weedmaps page.
+               Ordering happens on Weedmaps through retailers that carry
+               Kushie, not on this site. FLWRPWR does not sell Kushie. -->
+          <div class="kushie-card reveal">
+            <div class="kushie-copy">
+              <span class="mini">Separate brand · Live on Weedmaps</span>
+              <h3>Also on Weedmaps: Kushie</h3>
+              <p>Kushie is a separate brand from FLWRPWR, and unlike us it already has a live page on Weedmaps. Head there to see its Gold carts, disposables, pods, and infused pre-rolls, sold through dispensaries that carry Kushie.</p>
+              <div class="wm-ctas">
+                <a class="btn btn-gold" href="https://weedmaps.com/brands/kushie-brand/products" target="_blank" rel="noopener">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                  Order Kushie on Weedmaps
+                </a>
+              </div>
+              <p class="wm-note">Ordering happens <b>on Weedmaps, through a retailer that carries Kushie</b> — not on this site. FLWRPWR does not sell Kushie; this button just takes you to Kushie&rsquo;s Weedmaps page so you can order there.</p>
+            </div>
+            <div class="kushie-panel">
+              <b>On Kushie&rsquo;s Weedmaps page</b>
+              <ul class="kushie-cats">
+                <li>Gold carts</li>
+                <li>Disposables</li>
+                <li>Pods</li>
+                <li>Infused pre-rolls</li>
+              </ul>
+              <span>Find Kushie through the dispensaries that carry it on Weedmaps, and place your order with that retailer on Weedmaps.</span>
+              <span class="kushie-tag">Live brand page on Weedmaps</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -4658,6 +4815,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             <div class="foot-links">
               <a href="#shop">Shop the smalls</a>
               <a href="#wholesale">Wholesale</a>
+              <a href="#weedmaps">Find us on Weedmaps</a>
               <a href="#story">Our story</a>
               <a href="#visit">Enter the shop</a>
               <a href="#gallery">The feed</a>
@@ -9149,6 +9307,8 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         { name:'back shelf left',  x:-4.6, z:-5.58, w:3.2, d:.62 },
         { name:'back shelf right', x: 4.6, z:-5.58, w:3.2, d:.62 },
         { name:'checkout counter', x:0, z:-4.85, w:3.6, d:1.05 },
+        { name:'security guard', x:-2.45, z:-5.42, w:.95, d:.75 },
+        { name:'atm', x:2.45, z:-5.58, w:1.05, d:.62 },
         { name:'plant front left',  x:-6.2, z: 4.9, w:.95, d:.95 },
         { name:'plant front right', x: 6.2, z: 4.9, w:.95, d:.95 },
         { name:'plant back left',   x:-6.2, z:-5.1, w:.95, d:.95 },
@@ -9206,6 +9366,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       var currentShop = 0, npcGroup = null, npcs = [];
       var checkoutQueue = [], spawnT = 0;
       var cashier = null, cashierNPC = null, cashierArms = null, doorL = null, doorR = null, doorOpen = 0;
+      var guard = null, guardNPC = null;
       var skyClouds = [], lampLights = [], lampBase = 1.15;
       var moodSun = null, moodHemi = null, moodAmb = null, moodFill = null, moodDome = null;
       /* the shop follows the page's light/dark toggle: bright sunny pastel
@@ -9845,9 +10006,9 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         // deterministic per-person combos: no two shoppers in a room share
         // the same tee + shorts + hair + skin combination
         var tee = n.forceTee || TEE_COLORS[si % TEE_COLORS.length];
-        var shorts = SHORT_COLORS[(si * 2 + 1) % SHORT_COLORS.length];
-        var hair = HAIR_COLORS[(si * 3 + 1) % HAIR_COLORS.length];
-        var skin = SKIN_TONES[(si * 2) % SKIN_TONES.length];
+        var shorts = n.forceShorts || SHORT_COLORS[(si * 2 + 1) % SHORT_COLORS.length];
+        var hair = n.forceHair || HAIR_COLORS[(si * 3 + 1) % HAIR_COLORS.length];
+        var skin = n.forceSkin || SKIN_TONES[(si * 2) % SKIN_TONES.length];
         n.model.traverse(function(m){
           if (!m.isMesh) return;
           var mats = Array.isArray(m.material) ? m.material : [m.material];
@@ -9896,25 +10057,37 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         n.handBone = byName(names.hand);
         n.handRBone = names.handR ? byName(names.handR) : null;
       }
-      /* a tote only counts if it's in a hand. The moment a skinned shopper
-         is on the floor, park her tote at her hand — updateNPCs then keeps
-         it there every frame. No reachable hand bone, no bag at all. */
+      /* a tote only counts if it's IN a hand — so it stops being placed
+         near one and becomes part of one: the moment a skinned shopper
+         is on the floor, the tote is re-parented ONTO her hand bone.
+         The skeleton itself then carries it — walk swing, reach, idle,
+         every pose — with nothing re-pinned per frame and nothing left
+         to lag, drift or detach. The bone chain carries the model's own
+         scale, so the tote is counter-scaled once and keeps its true
+         size. No reachable hand bone, no bag at all. */
       function placeToteInHand(n){
         if (!n.tote) return;
-        if (n.handBone){ n.tote.visible = true; followHand(n); }
-        else { n.group.remove(n.tote); n.tote = null; }
+        if (!n.handBone){ n.group.remove(n.tote); n.tote = null; return; }
+        var p = n.tote.parent;
+        if (p) p.remove(n.tote);
+        n.handBone.add(n.tote);
+        var ws = new THREE.Vector3();
+        n.model.getWorldScale(ws);
+        if (ws.x > .0001) n.tote.scale.setScalar(1 / ws.x);
+        // the grip sits in the fist itself. On this rig the hand bone's
+        // own +Y runs out through the fingers (measured off the bind
+        // pose: +Y lands world-down when her arm hangs), so the tote is
+        // flipped a half-turn about the bone's Z — its hang direction
+        // lands on +Y, out of the fist, and its daisy keeps facing away
+        // from her body. The offset is in bone units (≈10cm each): the
+        // palm centre, just past the wrist joint.
+        n.tote.position.set(0, .38, 0);
+        n.tote.rotation.set(0, 0, Math.PI);
+        n.tote.visible = true;
       }
-      var _handV = new THREE.Vector3();
-      function followHand(n){
-        if (!n.tote || !n.handBone) return;
-        n.handBone.getWorldPosition(_handV);
-        n.group.updateWorldMatrix(true, false);
-        n.group.worldToLocal(_handV);
-        // the grip IS the hand: the tote's origin sits exactly on the
-        // hand bone, straps looping up over the fingers, bag hanging
-        // straight off the fist — never floating beside the leg again
-        n.tote.position.set(_handV.x, _handV.y, _handV.z);
-      }
+      /* kept for the animate loop's sway bookkeeping — the bag no longer
+         needs pinning, the bone does the carrying now */
+      function followHand(n){}
       /* anything she's picked up rides in her reaching (right) hand the
          same way: re-pinned to the hand bone every frame, held up in
          front of her while she inspects it, hanging easy at her side
@@ -10234,8 +10407,10 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         }
         if (n.pose) n.pose.rotation.x = .07 * n.leanAmt + .045 * n.reachAmt;
         if (n.tote){
-          n.tote.rotation.z = moving ? Math.sin(n.bob) * .06 : n.tote.rotation.z * .92;
-          if (n.handBone) followHand(n); // a held bag tracks the hand, walk swing and all
+          // the tote rides ON the hand bone now (see placeToteInHand) —
+          // the skeleton carries it; all that's left here is a whisper of
+          // sway around its flipped grip so it feels carried, not welded
+          n.tote.rotation.z = Math.PI + (moving ? Math.sin(n.bob) * .05 : (n.tote.rotation.z - Math.PI) * .92);
         }
         if (n.mixer && n.actions){
           n.mixer.update(dt);
@@ -10770,6 +10945,74 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         cashier.userData.label = "✿ Checkout — she's got you, click to reserve your picks";
         scene.add(cashier); clickables.push(cashier);
 
+        /* ---------- the back of the shop is staffed now ----------
+           The stretches of back wall flanking the counter used to sit
+           blank. Left side: a HUGE security guard on post — the same
+           human rig as everyone else, scaled way up and tinted into a
+           dark security uniform. Right side: an ATM, so the wall works
+           for its living. Both sit inside their own collision boxes
+           (see `collisions`), so nobody walks through either. */
+        guard = new THREE.Group();
+        guard.position.set(-2.45, 0, -D/2 + .58);
+        guardNPC = { group:guard, rnd:mulberry32(5150), ci:0, styleIdx:11, forceTee:0x272b38,
+          forceShorts:0x272b38, forceHair:0x2b2b33, forceSkin:0xc98d64,
+          targetH:2.08, model:null, mixer:null, actions:null, animState:null, needsClips:false, freezeIdle:false,
+          pose:null, armBone:null, foreBone:null, handBone:null, armRest:null, reachAmt:0, tote:null, dead:false };
+        if (charBufs[0]) attachCharacter(guardNPC, 0);
+        scene.add(guard);
+        var guardSign = new THREE.Mesh(new THREE.PlaneGeometry(1.7, .42),
+          new THREE.MeshStandardMaterial({ map:canvasTex(512, 128, function(x){
+            x.fillStyle = "#47264d"; x.fillRect(0, 0, 512, 128);
+            x.fillStyle = "#ffd7ea"; x.textAlign = "center"; x.font = "52px Shrikhand, cursive";
+            x.fillText("✿ SECURITY ✿", 256, 82, 480);
+          }), roughness:.85 }));
+        guardSign.position.set(-2.45, 3.1, -D/2 + .17); scene.add(guardSign);
+
+        // the ATM — plum steel, a glowing screen, and deep enough
+        // pockets for a flower run
+        var atm = new THREE.Group();
+        var atmBody = new THREE.Mesh(new THREE.BoxGeometry(.92, 1.52, .5), mat(0x3a3f52, .5, .35));
+        atmBody.position.y = .76; atmBody.castShadow = true; atm.add(atmBody);
+        var atmFace = new THREE.Mesh(new THREE.BoxGeometry(.8, 1.1, .04), mat(0x23242f, .4, .3));
+        atmFace.position.set(0, .98, .26); atm.add(atmFace);
+        var atmScreen = new THREE.Mesh(new THREE.PlaneGeometry(.56, .42),
+          new THREE.MeshStandardMaterial({ map:canvasTex(256, 192, function(x){
+            x.fillStyle = "#b8f4dc"; x.fillRect(0, 0, 256, 192);
+            x.fillStyle = "#1d5c40"; x.textAlign = "center";
+            x.font = "30px Shrikhand, cursive"; x.fillText("FLWRPWR ATM", 128, 52, 240);
+            x.font = "17px Figtree, sans-serif";
+            x.fillText("good vibes, great flower", 128, 92, 240);
+            x.fillText("cash for the flower run", 128, 122, 240);
+            x.font = "bold 19px Figtree, sans-serif";
+            x.fillText("✿ INSERT CARD ✿", 128, 162, 240);
+          }), roughness:.35, emissive:0x9fe8c8, emissiveIntensity:.35, emissiveMap:null }));
+        atmScreen.position.set(-.06, 1.22, .285); atm.add(atmScreen);
+        for (var kb = 0; kb < 9; kb++){
+          var keyBtn = new THREE.Mesh(new THREE.BoxGeometry(.055, .04, .015), mat(0xd8f3e3, .4, .4));
+          keyBtn.position.set(.24 + (kb % 3) * .085 - .085, 1.3 - Math.floor(kb / 3) * .075, .285); atm.add(keyBtn);
+        }
+        var cardSlot = new THREE.Mesh(new THREE.BoxGeometry(.15, .018, .02), mat(0x11131c, .4));
+        cardSlot.position.set(.26, 1.44, .285); atm.add(cardSlot);
+        var cashSlot = new THREE.Mesh(new THREE.BoxGeometry(.5, .07, .02), mat(0x11131c, .4));
+        cashSlot.position.set(0, .62, .285); atm.add(cashSlot);
+        var bill = new THREE.Mesh(new THREE.PlaneGeometry(.3, .11),
+          new THREE.MeshStandardMaterial({ color:0xa9e8c6, roughness:.85, side:THREE.DoubleSide }));
+        bill.position.set(0, .56, .3); bill.rotation.x = .5; atm.add(bill);
+        var atmTop = new THREE.Mesh(new THREE.BoxGeometry(.98, .3, .54), mat(0x47264d, .55));
+        atmTop.position.y = 1.67; atmTop.castShadow = true; atm.add(atmTop);
+        var atmTopSign = new THREE.Mesh(new THREE.PlaneGeometry(.8, .22),
+          new THREE.MeshStandardMaterial({ map:canvasTex(256, 72, function(x){
+            x.fillStyle = "#47264d"; x.fillRect(0, 0, 256, 72);
+            x.fillStyle = "#f2b84b"; x.textAlign = "center"; x.font = "44px Shrikhand, cursive";
+            x.fillText("✿ ATM ✿", 128, 52, 240);
+          }), roughness:.7 }));
+        atmTopSign.position.set(0, 1.67, .285); atm.add(atmTopSign);
+        atm.position.set(2.45, 0, -D/2 + .42);
+        atm.userData.atm = true;
+        atm.userData.baseScale = 1;
+        atm.userData.label = "ATM — flower money, dispensed fresh";
+        scene.add(atm); clickables.push(atm);
+
         // plants in the corners
         [[-6.2, 4.9],[6.2, 4.9],[-6.2, -5.1],[6.2, -5.1]].forEach(function(pos, i){
           var pl = makePlant(1 + (i%2)*.25); pl.position.set(pos[0], 0, pos[1]); scene.add(pl);
@@ -10802,7 +11045,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       /* ---------- interaction ---------- */
       function findClickable(obj){
         while (obj){
-          if (obj.userData && (obj.userData.pid || obj.userData.counter)) return obj;
+          if (obj.userData && (obj.userData.pid || obj.userData.counter || obj.userData.atm)) return obj;
           obj = obj.parent;
         }
         return null;
@@ -10823,6 +11066,10 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       }
       function activate(target){
         if (!target) return;
+        if (target.userData.atm){
+          window.FLWR.toast("✿ beep boop — fresh twenties for the flower run. The guard approves.");
+          return;
+        }
         if (target.userData.counter){
           window.FLWR.openDrawer();
           if (document.exitPointerLock) document.exitPointerLock();
@@ -10977,6 +11224,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         for (var li = 0; li < lampLights.length; li++)
           lampLights[li].intensity = lampBase + Math.sin(t * .0016 + li * 2.1) * .12 + Math.sin(t * .011 + li * 1.7) * .03;
         updateCashier(dt, t);
+        updateGuard(dt, t);
         updateStreet(dt, t);
         if (softLook && lastMouse && document.pointerLockElement !== overlay) setHovered(pointerHit(lastMouse));
         else setHovered(centerHit());
@@ -11021,6 +11269,18 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           if (cashierGreetT > 0) cashierNPC.reachAmt = .88 + Math.sin(ct * 10) * .12; // the wave lives in the reach
           applyReach(cashierNPC);
         }
+      }
+
+      /* ---------- the guard holds his post ----------
+         He doesn't wander, he doesn't browse — he stands at the back
+         wall, runs his idle, and slowly sweeps the room with his
+         stance: a posted guard, watching the flower and the door. */
+      function updateGuard(dt, t){
+        if (!guard || !guardNPC) return;
+        var ct = t * .001;
+        guard.rotation.y = Math.sin(ct * .22) * .38;
+        guard.position.y = Math.abs(Math.sin(ct * 1.6)) * .008;
+        if (guardNPC.mixer) guardNPC.mixer.update(dt);
       }
 
       /* ---------- street life ----------
