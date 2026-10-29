@@ -5,945 +5,942 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
 <link rel="icon" href="data:," />
-<title>Sheldon Engineering — Concept 3: Septic Systems, Explained</title>
+<title>Sheldon Engineering</title>
 <style>
-  :root{
-    --bg:#e9e9e9;
-    --desktop-dots:#d9d9d9;
-    --window:#ffffff;
-    --window-2:#f4f4f4;
-    --ink:#111111;
-    --ink-soft:#3d3d3d;
-    --ink-faint:#6b6b6b;
-    --line:#111111;
-    --line-soft:#c9c9c9;
-    --bar:#111111;
-    --bar-text:#ffffff;
-    --silver-1:#fdfdfd;
-    --silver-2:#d6d6d6;
-    --silver-3:#a8a8a8;
-    --accent:#111111;
-    --accent-soft:#eeeeee;
-    --warn-bg:#111111;
-    --warn-text:#ffffff;
-    --shadow:6px 6px 0 rgba(0,0,0,.85);
-    --tab-bg:#dcdcdc;
-  }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#161616;
-      --desktop-dots:#232323;
-      --window:#202020;
-      --window-2:#262626;
-      --ink:#f2f2f2;
-      --ink-soft:#d6d6d6;
-      --ink-faint:#a3a3a3;
-      --line:#f2f2f2;
-      --line-soft:#3d3d3d;
-      --bar:#f2f2f2;
-      --bar-text:#111111;
-      --silver-1:#3a3a3a;
-      --silver-2:#2a2a2a;
-      --silver-3:#1c1c1c;
-      --accent:#f2f2f2;
-      --accent-soft:#2c2c2c;
-      --warn-bg:#f2f2f2;
-      --warn-text:#111111;
-      --shadow:6px 6px 0 rgba(255,255,255,.22);
-      --tab-bg:#2b2b2b;
-    }
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;
-    font-family: Tahoma, Verdana, "Segoe UI", system-ui, sans-serif;
-    background:
-      radial-gradient(var(--desktop-dots) 1px, transparent 1.2px);
-    background-size:22px 22px;
-    background-color:var(--bg);
-    color:var(--ink);
-    line-height:1.55;
-    font-size:16px;
-  }
-  a{color:var(--ink); text-decoration:underline; text-underline-offset:2px}
-  button{font-family:inherit}
-  :focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+ :root{
+ --bg:#e9e9e9;
+ --desktop-dots:#d9d9d9;
+ --window:#ffffff;
+ --window-2:#f4f4f4;
+ --ink:#111111;
+ --ink-soft:#3d3d3d;
+ --ink-faint:#6b6b6b;
+ --line:#111111;
+ --line-soft:#c9c9c9;
+ --bar:#111111;
+ --bar-text:#ffffff;
+ --silver-1:#fdfdfd;
+ --silver-2:#d6d6d6;
+ --silver-3:#a8a8a8;
+ --accent:#111111;
+ --accent-soft:#eeeeee;
+ --warn-bg:#111111;
+ --warn-text:#ffffff;
+ --shadow:6px 6px 0 rgba(0,0,0,.85);
+ --tab-bg:#dcdcdc;
+ }
+ @media (prefers-color-scheme: dark){
+ :root{
+ --bg:#161616;
+ --desktop-dots:#232323;
+ --window:#202020;
+ --window-2:#262626;
+ --ink:#f2f2f2;
+ --ink-soft:#d6d6d6;
+ --ink-faint:#a3a3a3;
+ --line:#f2f2f2;
+ --line-soft:#3d3d3d;
+ --bar:#f2f2f2;
+ --bar-text:#111111;
+ --silver-1:#3a3a3a;
+ --silver-2:#2a2a2a;
+ --silver-3:#1c1c1c;
+ --accent:#f2f2f2;
+ --accent-soft:#2c2c2c;
+ --warn-bg:#f2f2f2;
+ --warn-text:#111111;
+ --shadow:6px 6px 0 rgba(255,255,255,.22);
+ --tab-bg:#2b2b2b;
+ }
+ }
+ *{box-sizing:border-box}
+ html{scroll-behavior:smooth}
+ body{
+ margin:0;
+ font-family: Tahoma, Verdana, "Segoe UI", system-ui, sans-serif;
+ background:
+ radial-gradient(var(--desktop-dots) 1px, transparent 1.2px);
+ background-size:22px 22px;
+ background-color:var(--bg);
+ color:var(--ink);
+ line-height:1.55;
+ font-size:16px;
+ }
+ a{color:var(--ink); text-decoration:underline; text-underline-offset:2px}
+ button{font-family:inherit}
+ :focus-visible{outline:3px solid var(--ink); outline-offset:2px}
 
-  .wrap{max-width:1080px; margin:0 auto; padding:20px 16px 56px}
+ .wrap{max-width:1080px; margin:0 auto; padding:20px 16px 56px}
 
-  /* ---------- Concept banner ---------- */
-  .concept-banner{
-    background:var(--warn-bg); color:var(--warn-text);
-    border:2px solid var(--line);
-    padding:10px 14px;
-    display:flex; gap:12px; align-items:flex-start;
-    font-size:.86rem; line-height:1.45;
-    margin-bottom:18px;
-  }
-  .concept-banner strong{letter-spacing:.06em; text-transform:uppercase; white-space:nowrap}
-  .concept-banner p{margin:0}
+ /* ---------- banner ---------- */
+ .-banner{
+ background:var(--warn-bg); color:var(--warn-text);
+ border:2px solid var(--line);
+ padding:10px 14px;
+ display:flex; gap:12px; align-items:flex-start;
+ font-size:.86rem; line-height:1.45;
+ margin-bottom:18px;
+ }
+ .-banner strong{letter-spacing:.06em; text-transform:uppercase; white-space:nowrap}
+ .-banner p{margin:0}
 
-  /* ---------- XP Window chrome ---------- */
-  .window{
-    background:var(--window);
-    border:2px solid var(--line);
-    box-shadow:var(--shadow);
-    margin-bottom:22px;
-  }
-  .titlebar{
-    background:var(--bar); color:var(--bar-text);
-    display:flex; align-items:center; justify-content:space-between;
-    padding:7px 10px 7px 12px; gap:10px;
-    border-bottom:2px solid var(--line);
-  }
-  .titlebar .t{
-    display:flex; align-items:center; gap:9px;
-    font-weight:700; font-size:.86rem; letter-spacing:.04em; text-transform:uppercase;
-    min-width:0;
-  }
-  .titlebar .t span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-  .win-controls{display:flex; gap:5px; flex-shrink:0}
-  .win-controls i{
-    width:20px; height:20px; display:grid; place-items:center;
-    border:2px solid var(--bar-text);
-    font-style:normal; font-size:11px; font-weight:700; line-height:1;
-    background:transparent; color:var(--bar-text);
-  }
-  .circles-mini{display:inline-flex; flex-shrink:0}
-  /* Modern logo mark fills (flat field, black & white only) */
-  .orb-a{fill:#111111}
-  .orb-b{fill:#555555}
-  .orb-c{fill:#a8a8a8}
-  @media (prefers-color-scheme: dark){
-    .orb-a{fill:#ffffff}
-    .orb-b{fill:#e6e6e6}
-    .orb-c{fill:#a8a8a8}
-  }
-  .mark-current .orb-a{fill:currentColor}
-  .mark-current .orb-b{fill:currentColor; fill-opacity:.6}
-  .mark-current .orb-c{fill:currentColor; fill-opacity:.35}
-  .body-pad{padding:22px}
+ /* ---------- XP Window chrome ---------- */
+ .window{
+ background:var(--window);
+ border:2px solid var(--line);
+ box-shadow:var(--shadow);
+ margin-bottom:22px;
+ }
+ .titlebar{
+ background:var(--bar); color:var(--bar-text);
+ display:flex; align-items:center; justify-content:space-between;
+ padding:7px 10px 7px 12px; gap:10px;
+ border-bottom:2px solid var(--line);
+ }
+ .titlebar .t{
+ display:flex; align-items:center; gap:9px;
+ font-weight:700; font-size:.86rem; letter-spacing:.04em; text-transform:uppercase;
+ min-width:0;
+ }
+ .titlebar .t span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+ .win-controls{display:flex; gap:5px; flex-shrink:0}
+ .win-controls i{
+ width:20px; height:20px; display:grid; place-items:center;
+ border:2px solid var(--bar-text);
+ font-style:normal; font-size:11px; font-weight:700; line-height:1;
+ background:transparent; color:var(--bar-text);
+ }
+ .circles-mini{display:inline-flex; flex-shrink:0}
+ /* Modern logo mark fills (flat field, black & white only) */
+ .orb-a{fill:#111111}
+ .orb-b{fill:#555555}
+ .orb-c{fill:#a8a8a8}
+ @media (prefers-color-scheme: dark){
+ .orb-a{fill:#ffffff}
+ .orb-b{fill:#e6e6e6}
+ .orb-c{fill:#a8a8a8}
+ }
+ .mark-current .orb-a{fill:currentColor}
+ .mark-current .orb-b{fill:currentColor; fill-opacity:.6}
+ .mark-current .orb-c{fill:currentColor; fill-opacity:.35}
+ .body-pad{padding:22px}
 
-  /* ---------- Header / logo ---------- */
-  .brand-row{display:flex; gap:20px; align-items:center; flex-wrap:wrap}
-  .logo-lockup{display:flex; align-items:center; gap:16px; min-width:0}
-  .logo-circles{flex-shrink:0}
-  .brand-name{font-size:clamp(1.6rem,4.5vw,2.4rem); font-weight:800; letter-spacing:-.01em; line-height:1.05; margin:0}
-  .brand-sub{margin:4px 0 0; font-size:.92rem; color:var(--ink-soft); letter-spacing:.14em; text-transform:uppercase; font-weight:700}
-  .brand-note{flex:1 1 260px; font-size:.95rem; color:var(--ink-soft); margin:0}
-  .brand-note strong{color:var(--ink)}
+ /* ---------- Header / logo ---------- */
+ .brand-row{display:flex; gap:20px; align-items:center; flex-wrap:wrap}
+ .logo-lockup{display:flex; align-items:center; gap:16px; min-width:0}
+ .logo-circles{flex-shrink:0}
+ .brand-name{font-size:clamp(1.6rem,4.5vw,2.4rem); font-weight:800; letter-spacing:-.01em; line-height:1.05; margin:0}
+ .brand-sub{margin:4px 0 0; font-size:.92rem; color:var(--ink-soft); letter-spacing:.14em; text-transform:uppercase; font-weight:700}
+ .brand-note{flex:1 1 260px; font-size:.95rem; color:var(--ink-soft); margin:0}
+ .brand-note strong{color:var(--ink)}
 
-  /* ---------- XP tabs (pages) ---------- */
-  .tabbar{
-    display:flex; flex-wrap:wrap; gap:6px;
-    padding:10px 10px 0;
-  }
-  .tab{
-    appearance:none; cursor:pointer;
-    background:var(--tab-bg); color:var(--ink);
-    border:2px solid var(--line); border-bottom:none;
-    padding:10px 14px;
-    font-size:.88rem; font-weight:700; letter-spacing:.02em;
-    display:inline-flex; align-items:center; gap:8px;
-    position:relative; top:2px;
-  }
-  .tab .dot{width:9px;height:9px;border:2px solid var(--line);border-radius:50%; background:transparent; flex-shrink:0}
-  .tab[aria-selected="true"]{background:var(--window); padding-bottom:12px}
-  .tab[aria-selected="true"] .dot{background:var(--ink)}
-  .tab:hover{background:var(--window)}
-  .tabpanel{border-top:2px solid var(--line); display:none}
-  .tabpanel.active{display:block}
-  .tabpanel .body-pad{padding-top:26px}
+ /* ---------- XP tabs (pages) ---------- */
+ .tabbar{
+ display:flex; flex-wrap:wrap; gap:6px;
+ padding:10px 10px 0;
+ }
+ .tab{
+ appearance:none; cursor:pointer;
+ background:var(--tab-bg); color:var(--ink);
+ border:2px solid var(--line); border-bottom:none;
+ padding:10px 14px;
+ font-size:.88rem; font-weight:700; letter-spacing:.02em;
+ display:inline-flex; align-items:center; gap:8px;
+ position:relative; top:2px;
+ }
+ .tab .dot{width:9px;height:9px;border:2px solid var(--line);border-radius:50%; background:transparent; flex-shrink:0}
+ .tab[aria-selected="true"]{background:var(--window); padding-bottom:12px}
+ .tab[aria-selected="true"] .dot{background:var(--ink)}
+ .tab:hover{background:var(--window)}
+ .tabpanel{border-top:2px solid var(--line); display:none}
+ .tabpanel.active{display:block}
+ .tabpanel .body-pad{padding-top:26px}
 
-  /* ---------- Buttons (XP bevel) ---------- */
-  .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    background:linear-gradient(180deg, var(--silver-1), var(--silver-2));
-    color:var(--ink);
-    border:2px solid var(--line);
-    box-shadow: inset 1px 1px 0 rgba(255,255,255,.7), inset -1px -1px 0 rgba(0,0,0,.35), 3px 3px 0 rgba(0,0,0,.8);
-    padding:11px 18px;
-    font-weight:700; font-size:.92rem; cursor:pointer; text-decoration:none;
-  }
-  .btn:active{transform:translate(2px,2px); box-shadow: inset 1px 1px 0 rgba(0,0,0,.25)}
-  .btn.primary{background:var(--ink); color:var(--window); box-shadow:3px 3px 0 rgba(0,0,0,.35)}
-  @media (prefers-color-scheme: dark){ .btn.primary{color:#111} }
-  .btn.small{padding:8px 12px; font-size:.85rem}
+ /* ---------- Buttons (XP bevel) ---------- */
+ .btn{
+ display:inline-flex; align-items:center; gap:8px;
+ background:linear-gradient(180deg, var(--silver-1), var(--silver-2));
+ color:var(--ink);
+ border:2px solid var(--line);
+ box-shadow: inset 1px 1px 0 rgba(255,255,255,.7), inset -1px -1px 0 rgba(0,0,0,.35), 3px 3px 0 rgba(0,0,0,.8);
+ padding:11px 18px;
+ font-weight:700; font-size:.92rem; cursor:pointer; text-decoration:none;
+ }
+ .btn:active{transform:translate(2px,2px); box-shadow: inset 1px 1px 0 rgba(0,0,0,.25)}
+ .btn.primary{background:var(--ink); color:var(--window); box-shadow:3px 3px 0 rgba(0,0,0,.35)}
+ @media (prefers-color-scheme: dark){ .btn.primary{color:#111} }
+ .btn.small{padding:8px 12px; font-size:.85rem}
 
-  /* ---------- Type ---------- */
-  h2.page-title{font-size:clamp(1.5rem,3.4vw,2rem); line-height:1.15; margin:0 0 8px; letter-spacing:-.01em}
-  h3{font-size:1.08rem; margin:0 0 6px}
-  .lede{font-size:1.05rem; color:var(--ink-soft); max-width:64ch; margin:0 0 20px}
-  .kicker{
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:.76rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
-    border:2px solid var(--line); padding:4px 10px; margin-bottom:14px; background:var(--window-2);
-  }
-  .kicker i{width:8px;height:8px;border-radius:50%;border:2px solid var(--line); display:inline-block}
-  p{margin:0 0 12px}
-  .muted{color:var(--ink-faint)}
-  .small{font-size:.86rem}
+ /* ---------- Type ---------- */
+ h2.page-title{font-size:clamp(1.5rem,3.4vw,2rem); line-height:1.15; margin:0 0 8px; letter-spacing:-.01em}
+ h3{font-size:1.08rem; margin:0 0 6px}
+ .lede{font-size:1.05rem; color:var(--ink-soft); max-width:64ch; margin:0 0 20px}
+ .kicker{
+ display:inline-flex; align-items:center; gap:8px;
+ font-size:.76rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+ border:2px solid var(--line); padding:4px 10px; margin-bottom:14px; background:var(--window-2);
+ }
+ .kicker i{width:8px;height:8px;border-radius:50%;border:2px solid var(--line); display:inline-block}
+ p{margin:0 0 12px}
+ .muted{color:var(--ink-faint)}
+ .small{font-size:.86rem}
 
-  /* ---------- Layout helpers ---------- */
-  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
-  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
-  @media (max-width:820px){ .grid-2,.grid-3{grid-template-columns:1fr} }
-  .panel{
-    border:2px solid var(--line); background:var(--window-2); padding:18px;
-  }
-  .panel.flat{background:var(--window)}
-  .num-badge{
-    width:34px;height:34px;border-radius:50%; border:2px solid var(--line);
-    display:grid; place-items:center; font-weight:800; background:var(--window); flex-shrink:0;
-  }
-  .icon-circle{
-    width:46px;height:46px;border-radius:50%; border:2px solid var(--line);
-    display:grid; place-items:center; background:var(--window); flex-shrink:0;
-  }
-  .icon-circle svg{width:22px;height:22px}
+ /* ---------- Layout helpers ---------- */
+ .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+ .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+ @media (max-width:820px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+ .panel{
+ border:2px solid var(--line); background:var(--window-2); padding:18px;
+ }
+ .panel.flat{background:var(--window)}
+ .num-badge{
+ width:34px;height:34px;border-radius:50%; border:2px solid var(--line);
+ display:grid; place-items:center; font-weight:800; background:var(--window); flex-shrink:0;
+ }
+ .icon-circle{
+ width:46px;height:46px;border-radius:50%; border:2px solid var(--line);
+ display:grid; place-items:center; background:var(--window); flex-shrink:0;
+ }
+ .icon-circle svg{width:22px;height:22px}
 
-  /* services */
-  .service{display:flex; gap:14px; align-items:flex-start}
-  .service p{margin:0; color:var(--ink-soft); font-size:.94rem}
+ /* services */
+ .service{display:flex; gap:14px; align-items:flex-start}
+ .service p{margin:0; color:var(--ink-soft); font-size:.94rem}
 
-  /* ---------- Diagram ---------- */
-  .diagram-box{border:2px solid var(--line); background:var(--window); padding:14px; overflow:hidden}
-  .diagram-box svg{width:100%; height:auto; display:block}
-  .step-list{display:grid; gap:10px; margin-top:16px}
-  .step-btn{
-    display:flex; gap:12px; align-items:flex-start; text-align:left; width:100%;
-    background:var(--window-2); border:2px solid var(--line); padding:13px 14px; cursor:pointer; color:var(--ink);
-  }
-  .step-btn p{margin:0; font-size:.92rem; color:var(--ink-soft)}
-  .step-btn h4{margin:0 0 2px; font-size:.98rem}
-  .step-btn[aria-pressed="true"]{background:var(--ink); color:var(--window)}
-  .step-btn[aria-pressed="true"] p{color:var(--window); opacity:.85}
-  .step-btn[aria-pressed="true"] .num-badge{background:var(--window); color:var(--ink)}
-  .diagram-readout{
-    border:2px dashed var(--line); padding:16px; margin-top:16px; background:var(--window-2);
-  }
-  .diagram-readout h4{margin:0 0 6px}
-  .diagram-readout p{margin:0; color:var(--ink-soft)}
+ /* ---------- Diagram ---------- */
+ .diagram-box{border:2px solid var(--line); background:var(--window); padding:14px; overflow:hidden}
+ .diagram-box svg{width:100%; height:auto; display:block}
+ .step-list{display:grid; gap:10px; margin-top:16px}
+ .step-btn{
+ display:flex; gap:12px; align-items:flex-start; text-align:left; width:100%;
+ background:var(--window-2); border:2px solid var(--line); padding:13px 14px; cursor:pointer; color:var(--ink);
+ }
+ .step-btn p{margin:0; font-size:.92rem; color:var(--ink-soft)}
+ .step-btn h4{margin:0 0 2px; font-size:.98rem}
+ .step-btn[aria-pressed="true"]{background:var(--ink); color:var(--window)}
+ .step-btn[aria-pressed="true"] p{color:var(--window); opacity:.85}
+ .step-btn[aria-pressed="true"] .num-badge{background:var(--window); color:var(--ink)}
+ .diagram-readout{
+ border:2px dashed var(--line); padding:16px; margin-top:16px; background:var(--window-2);
+ }
+ .diagram-readout h4{margin:0 0 6px}
+ .diagram-readout p{margin:0; color:var(--ink-soft)}
 
-  /* ---------- Do / Don't ---------- */
-  .do-head,.dont-head{
-    display:flex; align-items:center; gap:10px; padding:10px 14px; border:2px solid var(--line); font-weight:800; letter-spacing:.05em; text-transform:uppercase; font-size:.9rem;
-  }
-  .do-head{background:var(--ink); color:var(--window)}
-  @media (prefers-color-scheme: dark){ .do-head{color:#111} }
-  .dont-head{background:var(--window); color:var(--ink)}
-  .check-list{list-style:none; margin:0; padding:14px; border:2px solid var(--line); border-top:none; display:grid; gap:12px; background:var(--window)}
-  .check-list li{display:flex; gap:11px; align-items:flex-start; font-size:.95rem}
-  .check-list li span.txt{color:var(--ink-soft)}
-  .check-list li strong{color:var(--ink)}
-  .mark{
-    width:22px;height:22px;border-radius:50%; border:2px solid var(--line); flex-shrink:0;
-    display:grid; place-items:center; font-size:12px; font-weight:800; margin-top:1px; background:var(--window-2); color:var(--ink);
-  }
-  .dont-head + .check-list .mark{background:var(--ink); color:var(--window)}
-  @media (prefers-color-scheme: dark){ .dont-head + .check-list .mark{color:#111} }
+ /* ---------- Do / Don't ---------- */
+ .do-head,.dont-head{
+ display:flex; align-items:center; gap:10px; padding:10px 14px; border:2px solid var(--line); font-weight:800; letter-spacing:.05em; text-transform:uppercase; font-size:.9rem;
+ }
+ .do-head{background:var(--ink); color:var(--window)}
+ @media (prefers-color-scheme: dark){ .do-head{color:#111} }
+ .dont-head{background:var(--window); color:var(--ink)}
+ .check-list{list-style:none; margin:0; padding:14px; border:2px solid var(--line); border-top:none; display:grid; gap:12px; background:var(--window)}
+ .check-list li{display:flex; gap:11px; align-items:flex-start; font-size:.95rem}
+ .check-list li span.txt{color:var(--ink-soft)}
+ .check-list li strong{color:var(--ink)}
+ .mark{
+ width:22px;height:22px;border-radius:50%; border:2px solid var(--line); flex-shrink:0;
+ display:grid; place-items:center; font-size:12px; font-weight:800; margin-top:1px; background:var(--window-2); color:var(--ink);
+ }
+ .dont-head + .check-list .mark{background:var(--ink); color:var(--window)}
+ @media (prefers-color-scheme: dark){ .dont-head + .check-list .mark{color:#111} }
 
-  /* ---------- Seasons ---------- */
-  .season-bar{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
-  .season-btn{
-    cursor:pointer; border:2px solid var(--line); background:var(--window-2); color:var(--ink);
-    padding:9px 16px; font-weight:700; font-size:.9rem;
-    box-shadow:2px 2px 0 rgba(0,0,0,.7);
-  }
-  .season-btn[aria-pressed="true"]{background:var(--ink); color:var(--window)}
-  @media (prefers-color-scheme: dark){ .season-btn[aria-pressed="true"]{color:#111} }
-  .season-panel{display:none}
-  .season-panel.active{display:block}
+ /* ---------- Seasons ---------- */
+ .season-bar{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
+ .season-btn{
+ cursor:pointer; border:2px solid var(--line); background:var(--window-2); color:var(--ink);
+ padding:9px 16px; font-weight:700; font-size:.9rem;
+ box-shadow:2px 2px 0 rgba(0,0,0,.7);
+ }
+ .season-btn[aria-pressed="true"]{background:var(--ink); color:var(--window)}
+ @media (prefers-color-scheme: dark){ .season-btn[aria-pressed="true"]{color:#111} }
+ .season-panel{display:none}
+ .season-panel.active{display:block}
 
-  /* ---------- Warning signs ---------- */
-  .warn-card{border:2px solid var(--line); background:var(--window); display:flex; flex-direction:column}
-  .warn-card header{
-    display:flex; align-items:center; gap:12px; padding:14px 14px 10px;
-  }
-  .warn-card .sev{
-    margin-left:auto; font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
-    border:2px solid var(--line); padding:3px 8px; white-space:nowrap;
-  }
-  .sev.high{background:var(--ink); color:var(--window)}
-  @media (prefers-color-scheme: dark){ .sev.high{color:#111} }
-  .warn-card .inner{padding:0 14px 14px}
-  .warn-card p{font-size:.92rem; color:var(--ink-soft); margin:0 0 8px}
-  .warn-card p strong{color:var(--ink)}
-  .alert-strip{
-    border:2px solid var(--line); background:var(--ink); color:var(--window);
-    padding:16px 18px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-top:18px;
-  }
-  @media (prefers-color-scheme: dark){ .alert-strip{color:#111} }
-  .alert-strip p{margin:0; flex:1 1 320px; font-size:.95rem}
-  .alert-strip .btn{box-shadow:none}
+ /* ---------- Warning signs ---------- */
+ .warn-card{border:2px solid var(--line); background:var(--window); display:flex; flex-direction:column}
+ .warn-card header{
+ display:flex; align-items:center; gap:12px; padding:14px 14px 10px;
+ }
+ .warn-card .sev{
+ margin-left:auto; font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+ border:2px solid var(--line); padding:3px 8px; white-space:nowrap;
+ }
+ .sev.high{background:var(--ink); color:var(--window)}
+ @media (prefers-color-scheme: dark){ .sev.high{color:#111} }
+ .warn-card .inner{padding:0 14px 14px}
+ .warn-card p{font-size:.92rem; color:var(--ink-soft); margin:0 0 8px}
+ .warn-card p strong{color:var(--ink)}
+ .alert-strip{
+ border:2px solid var(--line); background:var(--ink); color:var(--window);
+ padding:16px 18px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-top:18px;
+ }
+ @media (prefers-color-scheme: dark){ .alert-strip{color:#111} }
+ .alert-strip p{margin:0; flex:1 1 320px; font-size:.95rem}
+ .alert-strip .btn{box-shadow:none}
 
-  /* ---------- FAQ ---------- */
-  .faq-item{border:2px solid var(--line); margin-bottom:10px; background:var(--window)}
-  .faq-q{
-    width:100%; display:flex; align-items:center; gap:12px; text-align:left; cursor:pointer;
-    background:var(--window-2); border:none; padding:15px 16px; color:var(--ink);
-    font-size:1rem; font-weight:700;
-  }
-  .faq-q .plus{
-    margin-left:auto; width:26px;height:26px; border:2px solid var(--line); display:grid; place-items:center;
-    font-weight:800; flex-shrink:0; background:var(--window);
-  }
-  .faq-a{display:none; padding:16px; border-top:2px solid var(--line-soft)}
-  .faq-a p{margin:0; color:var(--ink-soft)}
-  .faq-item.open .faq-a{display:block}
-  .faq-item.open .faq-q .plus{background:var(--ink); color:var(--window)}
-  @media (prefers-color-scheme: dark){ .faq-item.open .faq-q .plus{color:#111} }
+ /* ---------- FAQ ---------- */
+ .faq-item{border:2px solid var(--line); margin-bottom:10px; background:var(--window)}
+ .faq-q{
+ width:100%; display:flex; align-items:center; gap:12px; text-align:left; cursor:pointer;
+ background:var(--window-2); border:none; padding:15px 16px; color:var(--ink);
+ font-size:1rem; font-weight:700;
+ }
+ .faq-q .plus{
+ margin-left:auto; width:26px;height:26px; border:2px solid var(--line); display:grid; place-items:center;
+ font-weight:800; flex-shrink:0; background:var(--window);
+ }
+ .faq-a{display:none; padding:16px; border-top:2px solid var(--line-soft)}
+ .faq-a p{margin:0; color:var(--ink-soft)}
+ .faq-item.open .faq-a{display:block}
+ .faq-item.open .faq-q .plus{background:var(--ink); color:var(--window)}
+ @media (prefers-color-scheme: dark){ .faq-item.open .faq-q .plus{color:#111} }
 
-  /* ---------- Form ---------- */
-  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-  @media (max-width:700px){ .form-grid{grid-template-columns:1fr} }
-  .field{display:flex; flex-direction:column; gap:6px}
-  .field.full{grid-column:1 / -1}
-  label{font-weight:700; font-size:.88rem}
-  input, select, textarea{
-    font-family:inherit; font-size:1rem; color:var(--ink);
-    background:var(--window); border:2px solid var(--line);
-    padding:11px 12px; width:100%;
-    box-shadow: inset 2px 2px 0 rgba(0,0,0,.12);
-  }
-  textarea{resize:vertical; min-height:110px}
-  input::placeholder, textarea::placeholder{color:var(--ink-faint)}
-  .placeholder-box{
-    border:2px dashed var(--line); background:var(--window-2); padding:16px;
-  }
-  .placeholder-box dl{margin:0; display:grid; gap:10px}
-  .placeholder-box dt{font-size:.74rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
-  .placeholder-box dd{margin:2px 0 0; font-weight:700}
-  .form-result{display:none; border:2px solid var(--line); background:var(--window-2); padding:16px; margin-top:16px}
-  .form-result.show{display:block}
-  .form-result pre{
-    white-space:pre-wrap; word-break:break-word; font-family:inherit; font-size:.92rem;
-    background:var(--window); border:2px solid var(--line-soft); padding:12px; margin:10px 0;
-  }
-  .form-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px}
+ /* ---------- Form ---------- */
+ .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+ @media (max-width:700px){ .form-grid{grid-template-columns:1fr} }
+ .field{display:flex; flex-direction:column; gap:6px}
+ .field.full{grid-column:1 / -1}
+ label{font-weight:700; font-size:.88rem}
+ input, select, textarea{
+ font-family:inherit; font-size:1rem; color:var(--ink);
+ background:var(--window); border:2px solid var(--line);
+ padding:11px 12px; width:100%;
+ box-shadow: inset 2px 2px 0 rgba(0,0,0,.12);
+ }
+ textarea{resize:vertical; min-height:110px}
+ input::placeholder, textarea::placeholder{color:var(--ink-faint)}
+ .placeholder-box{
+ border:2px dashed var(--line); background:var(--window-2); padding:16px;
+ }
+ .placeholder-box dl{margin:0; display:grid; gap:10px}
+ .placeholder-box dt{font-size:.74rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+ .placeholder-box dd{margin:2px 0 0; font-weight:700}
+ .form-result{display:none; border:2px solid var(--line); background:var(--window-2); padding:16px; margin-top:16px}
+ .form-result.show{display:block}
+ .form-result pre{
+ white-space:pre-wrap; word-break:break-word; font-family:inherit; font-size:.92rem;
+ background:var(--window); border:2px solid var(--line-soft); padding:12px; margin:10px 0;
+ }
+ .form-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px}
 
-  /* ---------- Footer ---------- */
-  footer{margin-top:8px}
-  .foot-inner{display:flex; gap:18px; flex-wrap:wrap; align-items:center; justify-content:space-between}
-  .foot-inner p{margin:0; font-size:.86rem; color:var(--ink-soft)}
+ /* ---------- Footer ---------- */
+ footer{margin-top:8px}
+ .foot-inner{display:flex; gap:18px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+ .foot-inner p{margin:0; font-size:.86rem; color:var(--ink-soft)}
 
-  .divider-circles{display:flex; align-items:center; gap:10px; margin:4px 0 18px; color:var(--ink-faint)}
-  .divider-circles::before,.divider-circles::after{content:""; flex:1; border-top:2px dotted var(--line-soft)}
+ .divider-circles{display:flex; align-items:center; gap:10px; margin:4px 0 18px; color:var(--ink-faint)}
+ .divider-circles::before,.divider-circles::after{content:""; flex:1; border-top:2px dotted var(--line-soft)}
 
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
-    *{transition:none !important}
-  }
+ @media (prefers-reduced-motion: reduce){
+ html{scroll-behavior:auto}
+ *{transition:none !important}
+ }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- Concept banner -->
-  <div class="concept-banner" role="note">
-    <strong>Concept Draft</strong>
-    <p>This is Concept 3 of 3 for Oliver Sheldon to review — an education-first redesign. The phone number and address below are Sheldon Engineering's real details; email, service area, and hours are still placeholders for Oliver to confirm. No prices are shown anywhere on this concept.</p>
-  </div>
+ <!-- banner -->
+ 
 
-  <!-- Header window -->
-  <header class="window">
-    <div class="titlebar">
-      <div class="t">
-        <svg class="circles-mini mark-current" width="28" height="19" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
-        <span>Sheldon_Engineering — Home</span>
-      </div>
-      <div class="win-controls" aria-hidden="true"><i>–</i><i>▢</i><i>×</i></div>
-    </div>
-    <div class="body-pad">
-      <div class="brand-row">
-        <div class="logo-lockup">
-          <!-- Modern logo mark: 3 large / 2 medium / 3 small, black & white -->
-          <svg class="logo-circles" width="100" height="67" viewBox="0 0 400 268" role="img" aria-label="Sheldon Engineering logo: eight circles in three rows — three large on top, two medium in the middle, three small at the bottom">
-            <circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/>
-            <circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/>
-            <circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/>
-          </svg>
-          <div>
-            <h1 class="brand-name">Sheldon<br>Engineering</h1>
-            <p class="brand-sub">Septic Systems · Est. Knowledge First</p>
-          </div>
-        </div>
-        <p class="brand-note">Most septic problems are preventable — if you know how the system actually works. <strong>This site teaches you first, then helps you book the right job.</strong> No jargon walls, no scare tactics. Just how it works, what to watch for, and how to look after it.</p>
-      </div>
-    </div>
+ <!-- Header window -->
+ <header class="window">
+ <div class="titlebar">
+ <div class="t">
+ <svg class="circles-mini mark-current" width="28" height="19" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
+ <span>Sheldon_Engineering, Home</span>
+ </div>
+ <div class="win-controls" aria-hidden="true"><i>–</i><i>▢</i><i>×</i></div>
+ </div>
+ <div class="body-pad">
+ <div class="brand-row">
+ <div class="logo-lockup">
+ <!-- Modern logo mark: 3 large / 2 medium / 3 small, black & white -->
+ <svg class="logo-circles" width="100" height="67" viewBox="0 0 400 268" role="img" aria-label="Sheldon Engineering logo: eight circles in three rows, three large on top, two medium in the middle, three small at the bottom">
+ <circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/>
+ <circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/>
+ <circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/>
+ </svg>
+ <div>
+ <h1 class="brand-name">Sheldon<br>Engineering</h1>
+ <p class="brand-sub">Septic Systems · Est. Knowledge First</p>
+ </div>
+ </div>
+ <p class="brand-note">Most septic problems are preventable, if you know how the system actually works. <strong>This site teaches you first, then helps you book the right job.</strong> No jargon walls, no scare tactics. Just how it works, what to watch for, and how to look after it.</p>
+ </div>
+ </div>
 
-    <!-- Page tabs -->
-    <nav class="tabbar" role="tablist" aria-label="Site pages">
-      <button class="tab" role="tab" aria-selected="true" data-tab="overview"><span class="dot"></span>Overview</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="how"><span class="dot"></span>How It Works</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="care"><span class="dot"></span>Care Guide</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="warnings"><span class="dot"></span>Warning Signs</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="faq"><span class="dot"></span>FAQ</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="quote"><span class="dot"></span>Get a Quote</button>
-    </nav>
+ <!-- Page tabs -->
+ <nav class="tabbar" role="tablist" aria-label="Site pages">
+ <button class="tab" role="tab" aria-selected="true" data-tab="overview"><span class="dot"></span>Overview</button>
+ <button class="tab" role="tab" aria-selected="false" data-tab="how"><span class="dot"></span>How It Works</button>
+ <button class="tab" role="tab" aria-selected="false" data-tab="care"><span class="dot"></span>Care Guide</button>
+ <button class="tab" role="tab" aria-selected="false" data-tab="warnings"><span class="dot"></span>Warning Signs</button>
+ <button class="tab" role="tab" aria-selected="false" data-tab="faq"><span class="dot"></span>FAQ</button>
+ <button class="tab" role="tab" aria-selected="false" data-tab="quote"><span class="dot"></span>Get a Quote</button>
+ </nav>
 
-    <!-- ============ PAGE: OVERVIEW ============ -->
-    <section class="tabpanel active" id="page-overview" role="tabpanel">
-      <div class="body-pad">
-        <span class="kicker"><i></i> Start here</span>
-        <h2 class="page-title">Your septic system, minus the mystery.</h2>
-        <p class="lede">A septic system is simple machinery buried in your yard: a tank, a drain field, and the soil doing the final cleaning. When homeowners understand those three parts, systems last decades longer. This concept site is built around teaching that — before asking for your business.</p>
+ <!-- ============ PAGE: OVERVIEW ============ -->
+ <section class="tabpanel active" id="page-overview" role="tabpanel">
+ <div class="body-pad">
+ <span class="kicker"><i></i> Start here</span>
+ <h2 class="page-title">Your septic system, minus the mystery.</h2>
+ <p class="lede">A septic system is simple machinery buried in your yard: a tank, a drain field, and the soil doing the final cleaning. When homeowners understand those three parts, systems last decades longer. This site is built around teaching that, before asking for your business.</p>
 
-        <div class="grid-3" style="margin-bottom:18px">
-          <div class="panel service">
-            <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg></div>
-            <div><h3>New system installs</h3><p>Site evaluation, system sizing for the household, tank and drain field installation, and a plain-English walkthrough of what was buried where.</p></div>
-          </div>
-          <div class="panel service">
-            <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
-            <div><h3>Inspections &amp; assessments</h3><p>Tank condition, sludge and scum levels, baffle checks, and drain field health — with findings explained, not just listed.</p></div>
-          </div>
-          <div class="panel service">
-            <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.7 6.3a4 4 0 1 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.1-.7-.7-2.1 2.4-2.8z"/></svg></div>
-            <div><h3>Repairs &amp; troubleshooting</h3><p>Backups, slow drains, odors, and soggy drain fields traced to the actual cause before any digging or replacing is recommended.</p></div>
-          </div>
-          <div class="panel service">
-            <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16"/><path d="M4 10h16M10 10v10"/></svg></div>
-            <div><h3>Pumping coordination</h3><p>Help judging when a pump-out is actually due based on measured sludge and scum — not a calendar guess — and what to check while the tank is open.</p></div>
-          </div>
-          <div class="panel service">
-            <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></div>
-            <div><h3>Upgrades &amp; replacements</h3><p>Risers for easier access, effluent filters, and full system replacement when repair genuinely stops making sense.</p></div>
-          </div>
-          <div class="panel service">
-            <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H19v-5"/></svg></div>
-            <div><h3>Homeowner education</h3><p>The guides on this site: how it works, seasonal care, warning signs, and honest answers — free, whether you hire us or not.</p></div>
-          </div>
-        </div>
+ <div class="grid-3" style="margin-bottom:18px">
+ <div class="panel service">
+ <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg></div>
+ <div><h3>New system installs</h3><p>Site evaluation, system sizing for the household, tank and drain field installation, and a plain-English walkthrough of what was buried where.</p></div>
+ </div>
+ <div class="panel service">
+ <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+ <div><h3>Inspections &amp; assessments</h3><p>Tank condition, sludge and scum levels, baffle checks, and drain field health, with findings explained, not just listed.</p></div>
+ </div>
+ <div class="panel service">
+ <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.7 6.3a4 4 0 1 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.1-.7-.7-2.1 2.4-2.8z"/></svg></div>
+ <div><h3>Repairs &amp; troubleshooting</h3><p>Backups, slow drains, odors, and soggy drain fields traced to the actual cause before any digging or replacing is recommended.</p></div>
+ </div>
+ <div class="panel service">
+ <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16"/><path d="M4 10h16M10 10v10"/></svg></div>
+ <div><h3>Pumping coordination</h3><p>Help judging when a pump-out is actually due based on measured sludge and scum, not a calendar guess, and what to check while the tank is open.</p></div>
+ </div>
+ <div class="panel service">
+ <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></div>
+ <div><h3>Upgrades &amp; replacements</h3><p>Risers for easier access, effluent filters, and full system replacement when repair genuinely stops making sense.</p></div>
+ </div>
+ <div class="panel service">
+ <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H19v-5"/></svg></div>
+ <div><h3>Homeowner education</h3><p>The guides on this site: how it works, seasonal care, warning signs, and honest answers, free, whether you hire us or not.</p></div>
+ </div>
+ </div>
 
-        <div class="grid-2">
-          <div class="panel flat">
-            <h3>Why education first?</h3>
-            <p>The number one cause of early septic failure isn't bad equipment — it's everyday habits: the wrong things flushed, water overload, and warning signs ignored until they become emergencies. A homeowner who understands the system is the cheapest maintenance plan there is.</p>
-            <p style="margin:0">That's the thinking behind this whole concept: teach it clearly, and the phone rings for the right reasons.</p>
-          </div>
-          <div class="panel flat">
-            <h3>New to septic? Read in this order</h3>
-            <p><strong>1.</strong> <a href="#" data-goto="how">How It Works</a> — the 4-step journey from your sink to clean groundwater.<br>
-            <strong>2.</strong> <a href="#" data-goto="care">Care Guide</a> — the do / don't list and seasonal checklist.<br>
-            <strong>3.</strong> <a href="#" data-goto="warnings">Warning Signs</a> — the six symptoms that mean "call soon, not someday."<br>
-            <strong>4.</strong> <a href="#" data-goto="faq">FAQ</a> — pumping schedules, garbage disposals, additives, and more.</p>
-            <div style="margin-top:14px"><button class="btn primary" data-goto="how">Start with How It Works →</button></div>
-          </div>
-        </div>
-      </div>
-    </section>
+ <div class="grid-2">
+ <div class="panel flat">
+ <h3>Why education first?</h3>
+ <p>The number one cause of early septic failure isn't bad equipment, it's everyday habits: the wrong things flushed, water overload, and warning signs ignored until they become emergencies. A homeowner who understands the system is the cheapest maintenance plan there is.</p>
+ <p style="margin:0">That's the thinking behind this whole idea: teach it clearly, and the phone rings for the right reasons.</p>
+ </div>
+ <div class="panel flat">
+ <h3>New to septic? Read in this order</h3>
+ <p><strong>1.</strong> <a href="#" data-goto="how">How It Works</a>, the 4-step journey from your sink to clean groundwater.<br>
+ <strong>2.</strong> <a href="#" data-goto="care">Care Guide</a>, the do / don't list and seasonal checklist.<br>
+ <strong>3.</strong> <a href="#" data-goto="warnings">Warning Signs</a>, the six symptoms that mean "call soon, not someday."<br>
+ <strong>4.</strong> <a href="#" data-goto="faq">FAQ</a>, pumping schedules, garbage disposals, additives, and more.</p>
+ <div style="margin-top:14px"><button class="btn primary" data-goto="how">Start with How It Works →</button></div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-    <!-- ============ PAGE: HOW IT WORKS ============ -->
-    <section class="tabpanel" id="page-how" role="tabpanel">
-      <div class="body-pad">
-        <span class="kicker"><i></i> The diagram page</span>
-        <h2 class="page-title">How a septic system works</h2>
-        <p class="lede">Everything you flush takes the same four-step trip. Tap each step to see what's happening underground — including inside the tank, where three layers do the heavy lifting.</p>
+ <!-- ============ PAGE: HOW IT WORKS ============ -->
+ <section class="tabpanel" id="page-how" role="tabpanel">
+ <div class="body-pad">
+ <span class="kicker"><i></i> The diagram page</span>
+ <h2 class="page-title">How a septic system works</h2>
+ <p class="lede">Everything you flush takes the same four-step trip. Tap each step to see what's happening underground, including inside the tank, where three layers do the heavy lifting.</p>
 
-        <div class="diagram-box">
-          <svg viewBox="0 0 900 360" role="img" aria-label="Diagram showing wastewater flowing from a house into a septic tank with scum, water and sludge layers, then out to a drain field where soil filters it">
-            <!-- ground -->
-            <line x1="10" y1="120" x2="890" y2="120" stroke="currentColor" stroke-width="2" stroke-dasharray="7 6"/>
-            <text x="14" y="108" font-size="12" font-weight="700" letter-spacing="2">GROUND LEVEL</text>
-            <!-- house -->
-            <g stroke="currentColor" stroke-width="2.5" fill="none">
-              <path d="M40 120 V70 L85 40 L130 70 V120"/>
-              <rect x="72" y="88" width="26" height="32"/>
-            </g>
-            <text x="85" y="30" font-size="14" font-weight="700" text-anchor="middle">YOUR HOME</text>
-            <!-- pipe house to tank -->
-            <line x1="130" y1="105" x2="240" y2="105" stroke="currentColor" stroke-width="4"/>
-            <!-- arrows -->
-            <path d="M205 105 l-10 -6 v12 z" fill="currentColor"/>
-            <path d="M560 105 l-10 -6 v12 z" fill="currentColor"/>
-            <path d="M770 175 l-10 -6 v12 z" fill="currentColor"/>
-            <!-- tank -->
-            <rect x="240" y="80" width="300" height="170" fill="none" stroke="currentColor" stroke-width="3"/>
-            <rect x="330" y="58" width="34" height="22" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <rect x="440" y="58" width="34" height="22" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <!-- tank layers -->
-            <rect x="243" y="110" width="294" height="30" fill="currentColor" opacity=".85"/>
-            <rect x="243" y="140" width="294" height="70" fill="currentColor" opacity=".18"/>
-            <rect x="243" y="210" width="294" height="37" fill="currentColor" opacity=".55"/>
-            <text x="390" y="130" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">SCUM — oils &amp; grease float</text>
-            <text x="390" y="180" font-size="13" font-weight="700" text-anchor="middle">WASTEWATER — bacteria break it down</text>
-            <text x="390" y="233" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">SLUDGE — solids sink</text>
-            <text x="390" y="272" font-size="14" font-weight="700" text-anchor="middle">SEPTIC TANK</text>
-            <!-- pipe tank to field -->
-            <line x1="540" y1="105" x2="640" y2="105" stroke="currentColor" stroke-width="4"/>
-            <!-- distribution / drain field -->
-            <rect x="640" y="85" width="50" height="40" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <text x="665" y="70" font-size="11" font-weight="700" text-anchor="middle">DIST. BOX</text>
-            <g stroke="currentColor" stroke-width="3" fill="none">
-              <path d="M665 125 V160 H820"/>
-              <path d="M665 160 H820" opacity="0"/>
-              <path d="M720 160 V205"/>
-              <path d="M770 160 V205"/>
-              <path d="M820 160 V205"/>
-            </g>
-            <g stroke="currentColor" stroke-width="2" stroke-dasharray="3 5">
-              <line x1="712" y1="212" x2="712" y2="252"/>
-              <line x1="728" y1="212" x2="728" y2="252"/>
-              <line x1="762" y1="212" x2="762" y2="252"/>
-              <line x1="778" y1="212" x2="778" y2="252"/>
-              <line x1="812" y1="212" x2="812" y2="252"/>
-              <line x1="828" y1="212" x2="828" y2="252"/>
-            </g>
-            <text x="770" y="282" font-size="14" font-weight="700" text-anchor="middle">DRAIN FIELD</text>
-            <text x="770" y="302" font-size="12" text-anchor="middle">soil filters &amp; cleans the water</text>
-            <!-- modern logo mark in soil -->
-            <g transform="translate(275,290) scale(0.18)" opacity=".5">
-              <circle cx="90" cy="66" r="38" fill="currentColor"/><circle cx="200" cy="66" r="38" fill="currentColor"/><circle cx="310" cy="66" r="38" fill="currentColor"/>
-              <circle cx="145" cy="150" r="26" fill="currentColor" fill-opacity=".65"/><circle cx="255" cy="150" r="26" fill="currentColor" fill-opacity=".65"/>
-              <circle cx="90" cy="216" r="14" fill="currentColor" fill-opacity=".4"/><circle cx="200" cy="216" r="14" fill="currentColor" fill-opacity=".4"/><circle cx="310" cy="216" r="14" fill="currentColor" fill-opacity=".4"/>
-            </g>
-            <text x="450" y="326" font-size="12" text-anchor="middle" font-style="italic">treated water returns to groundwater ↓</text>
-          </svg>
-        </div>
+ <div class="diagram-box">
+ <svg viewBox="0 0 900 360" role="img" aria-label="Diagram showing wastewater flowing from a house into a septic tank with scum, water and sludge layers, then out to a drain field where soil filters it">
+ <!-- ground -->
+ <line x1="10" y1="120" x2="890" y2="120" stroke="currentColor" stroke-width="2" stroke-dasharray="7 6"/>
+ <text x="14" y="108" font-size="12" font-weight="700" letter-spacing="2">GROUND LEVEL</text>
+ <!-- house -->
+ <g stroke="currentColor" stroke-width="2.5" fill="none">
+ <path d="M40 120 V70 L85 40 L130 70 V120"/>
+ <rect x="72" y="88" width="26" height="32"/>
+ </g>
+ <text x="85" y="30" font-size="14" font-weight="700" text-anchor="middle">YOUR HOME</text>
+ <!-- pipe house to tank -->
+ <line x1="130" y1="105" x2="240" y2="105" stroke="currentColor" stroke-width="4"/>
+ <!-- arrows -->
+ <path d="M205 105 l-10 -6 v12 z" fill="currentColor"/>
+ <path d="M560 105 l-10 -6 v12 z" fill="currentColor"/>
+ <path d="M770 175 l-10 -6 v12 z" fill="currentColor"/>
+ <!-- tank -->
+ <rect x="240" y="80" width="300" height="170" fill="none" stroke="currentColor" stroke-width="3"/>
+ <rect x="330" y="58" width="34" height="22" fill="none" stroke="currentColor" stroke-width="2.5"/>
+ <rect x="440" y="58" width="34" height="22" fill="none" stroke="currentColor" stroke-width="2.5"/>
+ <!-- tank layers -->
+ <rect x="243" y="110" width="294" height="30" fill="currentColor" opacity=".85"/>
+ <rect x="243" y="140" width="294" height="70" fill="currentColor" opacity=".18"/>
+ <rect x="243" y="210" width="294" height="37" fill="currentColor" opacity=".55"/>
+ <text x="390" y="130" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">SCUM, oils &amp; grease float</text>
+ <text x="390" y="180" font-size="13" font-weight="700" text-anchor="middle">WASTEWATER, bacteria break it down</text>
+ <text x="390" y="233" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">SLUDGE, solids sink</text>
+ <text x="390" y="272" font-size="14" font-weight="700" text-anchor="middle">SEPTIC TANK</text>
+ <!-- pipe tank to field -->
+ <line x1="540" y1="105" x2="640" y2="105" stroke="currentColor" stroke-width="4"/>
+ <!-- distribution / drain field -->
+ <rect x="640" y="85" width="50" height="40" fill="none" stroke="currentColor" stroke-width="2.5"/>
+ <text x="665" y="70" font-size="11" font-weight="700" text-anchor="middle">DIST. BOX</text>
+ <g stroke="currentColor" stroke-width="3" fill="none">
+ <path d="M665 125 V160 H820"/>
+ <path d="M665 160 H820" opacity="0"/>
+ <path d="M720 160 V205"/>
+ <path d="M770 160 V205"/>
+ <path d="M820 160 V205"/>
+ </g>
+ <g stroke="currentColor" stroke-width="2" stroke-dasharray="3 5">
+ <line x1="712" y1="212" x2="712" y2="252"/>
+ <line x1="728" y1="212" x2="728" y2="252"/>
+ <line x1="762" y1="212" x2="762" y2="252"/>
+ <line x1="778" y1="212" x2="778" y2="252"/>
+ <line x1="812" y1="212" x2="812" y2="252"/>
+ <line x1="828" y1="212" x2="828" y2="252"/>
+ </g>
+ <text x="770" y="282" font-size="14" font-weight="700" text-anchor="middle">DRAIN FIELD</text>
+ <text x="770" y="302" font-size="12" text-anchor="middle">soil filters &amp; cleans the water</text>
+ <!-- modern logo mark in soil -->
+ <g transform="translate(275,290) scale(0.18)" opacity=".5">
+ <circle cx="90" cy="66" r="38" fill="currentColor"/><circle cx="200" cy="66" r="38" fill="currentColor"/><circle cx="310" cy="66" r="38" fill="currentColor"/>
+ <circle cx="145" cy="150" r="26" fill="currentColor" fill-opacity=".65"/><circle cx="255" cy="150" r="26" fill="currentColor" fill-opacity=".65"/>
+ <circle cx="90" cy="216" r="14" fill="currentColor" fill-opacity=".4"/><circle cx="200" cy="216" r="14" fill="currentColor" fill-opacity=".4"/><circle cx="310" cy="216" r="14" fill="currentColor" fill-opacity=".4"/>
+ </g>
+ <text x="450" y="326" font-size="12" text-anchor="middle" font-style="italic">treated water returns to groundwater ↓</text>
+ </svg>
+ </div>
 
-        <div class="step-list" role="group" aria-label="Diagram steps">
-          <button class="step-btn" data-step="1" aria-pressed="true">
-            <span class="num-badge">1</span>
-            <span><h4>Everything leaves the house</h4><p>Every drain — sinks, showers, laundry, toilets — flows into one main line out to the tank.</p></span>
-          </button>
-          <button class="step-btn" data-step="2" aria-pressed="false">
-            <span class="num-badge">2</span>
-            <span><h4>The tank separates it into three layers</h4><p>Oils float (scum), solids sink (sludge), and the liquid middle layer is where bacteria do their work.</p></span>
-          </button>
-          <button class="step-btn" data-step="3" aria-pressed="false">
-            <span class="num-badge">3</span>
-            <span><h4>Liquid flows out to the drain field</h4><p>Only the middle liquid layer leaves the tank, spreading through perforated pipes in shallow trenches.</p></span>
-          </button>
-          <button class="step-btn" data-step="4" aria-pressed="false">
-            <span class="num-badge">4</span>
-            <span><h4>The soil finishes the job</h4><p>As water seeps through the soil, microbes remove bacteria, viruses, and nutrients before it reaches groundwater.</p></span>
-          </button>
-        </div>
+ <div class="step-list" role="group" aria-label="Diagram steps">
+ <button class="step-btn" data-step="1" aria-pressed="true">
+ <span class="num-badge">1</span>
+ <span><h4>Everything leaves the house</h4><p>Every drain, sinks, showers, laundry, toilets, flows into one main line out to the tank.</p></span>
+ </button>
+ <button class="step-btn" data-step="2" aria-pressed="false">
+ <span class="num-badge">2</span>
+ <span><h4>The tank separates it into three layers</h4><p>Oils float (scum), solids sink (sludge), and the liquid middle layer is where bacteria do their work.</p></span>
+ </button>
+ <button class="step-btn" data-step="3" aria-pressed="false">
+ <span class="num-badge">3</span>
+ <span><h4>Liquid flows out to the drain field</h4><p>Only the middle liquid layer leaves the tank, spreading through perforated pipes in shallow trenches.</p></span>
+ </button>
+ <button class="step-btn" data-step="4" aria-pressed="false">
+ <span class="num-badge">4</span>
+ <span><h4>The soil finishes the job</h4><p>As water seeps through the soil, microbes remove bacteria, viruses, and nutrients before it reaches groundwater.</p></span>
+ </button>
+ </div>
 
-        <div class="diagram-readout" id="diagramReadout" aria-live="polite">
-          <h4 id="readoutTitle">Step 1 — Everything leaves the house</h4>
-          <p id="readoutText">There is no "away" in a septic home — everything drained in the house goes to your own backyard system. That's why what you put down the drain matters so much: the system has to handle 100% of it. A typical household sends hundreds of gallons through this pipe every single day.</p>
-        </div>
+ <div class="diagram-readout" id="diagramReadout" aria-live="polite">
+ <h4 id="readoutTitle">Step 1, Everything leaves the house</h4>
+ <p id="readoutText">There is no "away" in a septic home, everything drained in the house goes to your own backyard system. That's why what you put down the drain matters so much: the system has to handle 100% of it. A typical household sends hundreds of gallons through this pipe every single day.</p>
+ </div>
 
-        <div class="grid-2" style="margin-top:18px">
-          <div class="panel">
-            <h3>The tank's one job: time</h3>
-            <p style="margin:0" class="small">Separation only works if wastewater sits in the tank long enough. Overload the system with water — back-to-back laundry, long showers, a leaking toilet — and solids get pushed into the drain field, where they clog the soil. Most "mystery failures" start as water overload.</p>
-          </div>
-          <div class="panel">
-            <h3>Why pumping matters</h3>
-            <p style="margin:0" class="small">Bacteria can't break down everything. Sludge and scum slowly build up, shrinking the tank's working space. When the layers get too thick, solids escape into the field. Pumping resets the clock — see the FAQ for how often.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+ <div class="grid-2" style="margin-top:18px">
+ <div class="panel">
+ <h3>The tank's one job: time</h3>
+ <p style="margin:0" class="small">Separation only works if wastewater sits in the tank long enough. Overload the system with water, back-to-back laundry, long showers, a leaking toilet, and solids get pushed into the drain field, where they clog the soil. Most "mystery failures" start as water overload.</p>
+ </div>
+ <div class="panel">
+ <h3>Why pumping matters</h3>
+ <p style="margin:0" class="small">Bacteria can't break down everything. Sludge and scum slowly build up, shrinking the tank's working space. When the layers get too thick, solids escape into the field. Pumping resets the clock, see the FAQ for how often.</p>
+ </div>
+ </div>
+ </div>
+ </section>
 
-    <!-- ============ PAGE: CARE GUIDE ============ -->
-    <section class="tabpanel" id="page-care" role="tabpanel">
-      <div class="body-pad">
-        <span class="kicker"><i></i> Owner's manual</span>
-        <h2 class="page-title">The care guide</h2>
-        <p class="lede">Two lists and a calendar. Follow the do list, avoid the don't list, and run the seasonal checklist — that's 90% of septic ownership.</p>
+ <!-- ============ PAGE: CARE GUIDE ============ -->
+ <section class="tabpanel" id="page-care" role="tabpanel">
+ <div class="body-pad">
+ <span class="kicker"><i></i> Owner's manual</span>
+ <h2 class="page-title">The care guide</h2>
+ <p class="lede">Two lists and a calendar. Follow the do list, avoid the don't list, and run the seasonal checklist, that's 90% of septic ownership.</p>
 
-        <div class="grid-2" style="margin-bottom:22px">
-          <div>
-            <div class="do-head"><span aria-hidden="true">✓</span> Do these</div>
-            <ul class="check-list">
-              <li><span class="mark">✓</span><span class="txt"><strong>Spread laundry out</strong> across the week instead of doing every load on one day.</span></li>
-              <li><span class="mark">✓</span><span class="txt"><strong>Fix leaks fast.</strong> A running toilet can add hundreds of gallons a day and drown the drain field.</span></li>
-              <li><span class="mark">✓</span><span class="txt"><strong>Use water efficiently</strong> — high-efficiency fixtures give the tank the resting time it needs.</span></li>
-              <li><span class="mark">✓</span><span class="txt"><strong>Keep a system map.</strong> Know where your tank, lids, and drain field are before anyone digs or drives.</span></li>
-              <li><span class="mark">✓</span><span class="txt"><strong>Divert surface water</strong> — roof drains, sump pumps, and driveway runoff should never flow over the drain field.</span></li>
-              <li><span class="mark">✓</span><span class="txt"><strong>Get the tank inspected</strong> regularly and pumped when sludge and scum measurements say it's due.</span></li>
-              <li><span class="mark">✓</span><span class="txt"><strong>Keep records</strong> of every pump, inspection, and repair — gold when you sell the house.</span></li>
-            </ul>
-          </div>
-          <div>
-            <div class="dont-head"><span aria-hidden="true">✕</span> Don't do these</div>
-            <ul class="check-list">
-              <li><span class="mark">✕</span><span class="txt"><strong>Never flush</strong> wipes (even "flushable" ones), hygiene products, paper towels, or cat litter.</span></li>
-              <li><span class="mark">✕</span><span class="txt"><strong>No grease or cooking oil</strong> down the sink — it builds the scum layer and clogs pipes.</span></li>
-              <li><span class="mark">✕</span><span class="txt"><strong>No chemicals in bulk</strong> — paint, solvents, pesticides, and harsh drain cleaners kill the bacteria your system runs on.</span></li>
-              <li><span class="mark">✕</span><span class="txt"><strong>Don't drive or park</strong> on the drain field. Weight crushes pipes and compacts the soil.</span></li>
-              <li><span class="mark">✕</span><span class="txt"><strong>Don't plant trees or deep-rooted shrubs</strong> near the field — roots hunt for that water and invade pipes.</span></li>
-              <li><span class="mark">✕</span><span class="txt"><strong>Don't build over the system</strong> — no decks, patios, pools, or sheds on the tank or field.</span></li>
-              <li><span class="mark">✕</span><span class="txt"><strong>Skip the additives.</strong> Store-bought "septic boosters" aren't a substitute for pumping and can stir solids into the field.</span></li>
-            </ul>
-          </div>
-        </div>
+ <div class="grid-2" style="margin-bottom:22px">
+ <div>
+ <div class="do-head"><span aria-hidden="true">✓</span> Do these</div>
+ <ul class="check-list">
+ <li><span class="mark">✓</span><span class="txt"><strong>Spread laundry out</strong> across the week instead of doing every load on one day.</span></li>
+ <li><span class="mark">✓</span><span class="txt"><strong>Fix leaks fast.</strong> A running toilet can add hundreds of gallons a day and drown the drain field.</span></li>
+ <li><span class="mark">✓</span><span class="txt"><strong>Use water efficiently</strong>, high-efficiency fixtures give the tank the resting time it needs.</span></li>
+ <li><span class="mark">✓</span><span class="txt"><strong>Keep a system map.</strong> Know where your tank, lids, and drain field are before anyone digs or drives.</span></li>
+ <li><span class="mark">✓</span><span class="txt"><strong>Divert surface water</strong>, roof drains, sump pumps, and driveway runoff should never flow over the drain field.</span></li>
+ <li><span class="mark">✓</span><span class="txt"><strong>Get the tank inspected</strong> regularly and pumped when sludge and scum measurements say it's due.</span></li>
+ <li><span class="mark">✓</span><span class="txt"><strong>Keep records</strong> of every pump, inspection, and repair, gold when you sell the house.</span></li>
+ </ul>
+ </div>
+ <div>
+ <div class="dont-head"><span aria-hidden="true">✕</span> Don't do these</div>
+ <ul class="check-list">
+ <li><span class="mark">✕</span><span class="txt"><strong>Never flush</strong> wipes (even "flushable" ones), hygiene products, paper towels, or cat litter.</span></li>
+ <li><span class="mark">✕</span><span class="txt"><strong>No grease or cooking oil</strong> down the sink, it builds the scum layer and clogs pipes.</span></li>
+ <li><span class="mark">✕</span><span class="txt"><strong>No chemicals in bulk</strong>, paint, solvents, pesticides, and harsh drain cleaners kill the bacteria your system runs on.</span></li>
+ <li><span class="mark">✕</span><span class="txt"><strong>Don't drive or park</strong> on the drain field. Weight crushes pipes and compacts the soil.</span></li>
+ <li><span class="mark">✕</span><span class="txt"><strong>Don't plant trees or deep-rooted shrubs</strong> near the field, roots hunt for that water and invade pipes.</span></li>
+ <li><span class="mark">✕</span><span class="txt"><strong>Don't build over the system</strong>, no decks, patios, pools, or sheds on the tank or field.</span></li>
+ <li><span class="mark">✕</span><span class="txt"><strong>Skip the additives.</strong> Store-bought "septic boosters" aren't a substitute for pumping and can stir solids into the field.</span></li>
+ </ul>
+ </div>
+ </div>
 
-        <div class="divider-circles" aria-hidden="true">
-          <svg width="46" height="31" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
-        </div>
+ <div class="divider-circles" aria-hidden="true">
+ <svg width="46" height="31" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
+ </div>
 
-        <h3 style="font-size:1.25rem; margin-bottom:6px">Seasonal care checklist</h3>
-        <p class="lede" style="margin-bottom:16px">Pick a season. Each list is short on purpose — these are the checks that actually catch problems early.</p>
+ <h3 style="font-size:1.25rem; margin-bottom:6px">Seasonal care checklist</h3>
+ <p class="lede" style="margin-bottom:16px">Pick a season. Each list is short on purpose, these are the checks that actually catch problems early.</p>
 
-        <div class="season-bar" role="group" aria-label="Choose a season">
-          <button class="season-btn" data-season="spring" aria-pressed="true">Spring</button>
-          <button class="season-btn" data-season="summer" aria-pressed="false">Summer</button>
-          <button class="season-btn" data-season="fall" aria-pressed="false">Fall</button>
-          <button class="season-btn" data-season="winter" aria-pressed="false">Winter</button>
-        </div>
+ <div class="season-bar" role="group" aria-label="Choose a season">
+ <button class="season-btn" data-season="spring" aria-pressed="true">Spring</button>
+ <button class="season-btn" data-season="summer" aria-pressed="false">Summer</button>
+ <button class="season-btn" data-season="fall" aria-pressed="false">Fall</button>
+ <button class="season-btn" data-season="winter" aria-pressed="false">Winter</button>
+ </div>
 
-        <div class="season-panel active" id="season-spring">
-          <ul class="check-list" style="border-top:2px solid var(--line)">
-            <li><span class="mark">○</span><span class="txt"><strong>Walk the drain field</strong> after snowmelt or heavy rain — look for standing water, soggy patches, or odors.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Check gutters and grading</strong> so spring runoff is directed away from the tank and field.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Inspect the tank area</strong> for settling, cracked lids, or risers that shifted over winter.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Book the year's inspection</strong> now if one is due — and check your pumping records.</span></li>
-          </ul>
-        </div>
-        <div class="season-panel" id="season-summer">
-          <ul class="check-list" style="border-top:2px solid var(--line)">
-            <li><span class="mark">○</span><span class="txt"><strong>Watch water use with guests.</strong> Extra showers and laundry add up — stagger heavy use.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Keep vehicles and heavy equipment off the field</strong> during parties, projects, and deliveries.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Mow, don't landscape.</strong> Grass over the field is ideal; keep it simple grass.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Check for unusually green stripes</strong> of grass over the field — a possible early warning sign.</span></li>
-          </ul>
-        </div>
-        <div class="season-panel" id="season-fall">
-          <ul class="check-list" style="border-top:2px solid var(--line)">
-            <li><span class="mark">○</span><span class="txt"><strong>Pump before winter if it's due</strong> — frozen ground makes mid-winter pumping harder and pricier to arrange.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Clear leaves and debris</strong> from around tank lids and the field so meltwater drains cleanly.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Service water-saving fixtures</strong> — fix the drips you found all summer before holiday guests arrive.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Remind holiday guests</strong>: only toilet paper goes in the toilet. Put a small bin in the bathroom.</span></li>
-          </ul>
-        </div>
-        <div class="season-panel" id="season-winter">
-          <ul class="check-list" style="border-top:2px solid var(--line)">
-            <li><span class="mark">○</span><span class="txt"><strong>Insulate exposed pipes and the tank area</strong> with mulch or straw where winters are severe — never pack soil down hard over the field.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Keep using the system normally.</strong> Regular warm water flow helps prevent freezing; systems left idle in cold snaps are the ones that freeze.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Don't plow or drive over the field</strong> — compacted snow loses its insulating value and weight damages pipes.</span></li>
-            <li><span class="mark">○</span><span class="txt"><strong>Know the freeze signs:</strong> slow drains in extreme cold can mean a frozen line — call before forcing it.</span></li>
-          </ul>
-        </div>
+ <div class="season-panel active" id="season-spring">
+ <ul class="check-list" style="border-top:2px solid var(--line)">
+ <li><span class="mark">○</span><span class="txt"><strong>Walk the drain field</strong> after snowmelt or heavy rain, look for standing water, soggy patches, or odors.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Check gutters and grading</strong> so spring runoff is directed away from the tank and field.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Inspect the tank area</strong> for settling, cracked lids, or risers that shifted over winter.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Book the year's inspection</strong> now if one is due, and check your pumping records.</span></li>
+ </ul>
+ </div>
+ <div class="season-panel" id="season-summer">
+ <ul class="check-list" style="border-top:2px solid var(--line)">
+ <li><span class="mark">○</span><span class="txt"><strong>Watch water use with guests.</strong> Extra showers and laundry add up, stagger heavy use.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Keep vehicles and heavy equipment off the field</strong> during parties, projects, and deliveries.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Mow, don't landscape.</strong> Grass over the field is ideal; keep it simple grass.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Check for unusually green stripes</strong> of grass over the field, a possible early warning sign.</span></li>
+ </ul>
+ </div>
+ <div class="season-panel" id="season-fall">
+ <ul class="check-list" style="border-top:2px solid var(--line)">
+ <li><span class="mark">○</span><span class="txt"><strong>Pump before winter if it's due</strong>, frozen ground makes mid-winter pumping harder and pricier to arrange.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Clear leaves and debris</strong> from around tank lids and the field so meltwater drains cleanly.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Service water-saving fixtures</strong>, fix the drips you found all summer before holiday guests arrive.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Remind holiday guests</strong>: only toilet paper goes in the toilet. Put a small bin in the bathroom.</span></li>
+ </ul>
+ </div>
+ <div class="season-panel" id="season-winter">
+ <ul class="check-list" style="border-top:2px solid var(--line)">
+ <li><span class="mark">○</span><span class="txt"><strong>Insulate exposed pipes and the tank area</strong> with mulch or straw where winters are severe, never pack soil down hard over the field.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Keep using the system normally.</strong> Regular warm water flow helps prevent freezing; systems left idle in cold snaps are the ones that freeze.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Don't plow or drive over the field</strong>, compacted snow loses its insulating value and weight damages pipes.</span></li>
+ <li><span class="mark">○</span><span class="txt"><strong>Know the freeze signs:</strong> slow drains in extreme cold can mean a frozen line, call before forcing it.</span></li>
+ </ul>
+ </div>
 
-        <p class="small muted" style="margin-top:14px">General homeowner guidance for conventional septic systems. Your system type, local rules, and soil conditions can change the specifics — when in doubt, ask for an inspection rather than guessing.</p>
-      </div>
-    </section>
+ <p class="small muted" style="margin-top:14px">General homeowner guidance for conventional septic systems. Your system type, local rules, and soil conditions can change the specifics, when in doubt, ask for an inspection rather than guessing.</p>
+ </div>
+ </section>
 
-    <!-- ============ PAGE: WARNING SIGNS ============ -->
-    <section class="tabpanel" id="page-warnings" role="tabpanel">
-      <div class="body-pad">
-        <span class="kicker"><i></i> Catch it early</span>
-        <h2 class="page-title">Warning signs your system needs attention</h2>
-        <p class="lede">Septic systems almost always warn you before they fail. The trick is knowing which small annoyances are actually the system asking for help. Here are the six big ones.</p>
+ <!-- ============ PAGE: WARNING SIGNS ============ -->
+ <section class="tabpanel" id="page-warnings" role="tabpanel">
+ <div class="body-pad">
+ <span class="kicker"><i></i> Catch it early</span>
+ <h2 class="page-title">Warning signs your system needs attention</h2>
+ <p class="lede">Septic systems almost always warn you before they fail. The trick is knowing which small annoyances are actually the system asking for help. Here are the six big ones.</p>
 
-        <div class="grid-3">
-          <div class="warn-card">
-            <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 1-2"/><path d="M12 3v7M8 7l4 3 4-3"/></svg></div><h3>Slow drains everywhere</h3><span class="sev">Act soon</span></header>
-            <div class="inner">
-              <p><strong>What it can mean:</strong> One slow sink is usually a local clog. Every drain slowing at once points at the tank — often full sludge and scum, or a blocked outlet.</p>
-              <p style="margin:0"><strong>Do this:</strong> Cut water use and book an inspection. Don't reach for chemical drain cleaner.</p>
-            </div>
-          </div>
-          <div class="warn-card">
-            <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="2.4"/><circle cx="14" cy="11" r="1.8"/><circle cx="10" cy="16" r="2.8"/><circle cx="17" cy="18" r="1.5"/></svg></div><h3>Gurgling sounds</h3><span class="sev">Act soon</span></header>
-            <div class="inner">
-              <p><strong>What it can mean:</strong> Gurgling toilets or drains mean air is being pushed back through the plumbing — a classic sign the tank is overfull or a line is blocked.</p>
-              <p style="margin:0"><strong>Do this:</strong> Note when it happens (after laundry? after rain?) and get the tank levels checked.</p>
-            </div>
-          </div>
-          <div class="warn-card">
-            <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 19c3-1 4-4 4-7M12 21c3-1 5-5 5-9M19 17c2-1 3-3 3-6"/><path d="M3 21h18" stroke-dasharray="3 3"/></svg></div><h3>Sewage odors</h3><span class="sev">Act soon</span></header>
-            <div class="inner">
-              <p><strong>What it can mean:</strong> Smell near the tank or drain field suggests venting problems, a full tank, or effluent reaching the surface. Indoor odors can mean a dry trap or a vent issue.</p>
-              <p style="margin:0"><strong>Do this:</strong> Run water in rarely used drains; if the outdoor smell persists, book a visit.</p>
-            </div>
-          </div>
-          <div class="warn-card">
-            <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21c-4-4.5-7-8-7-11.5A7 7 0 0 1 19 10.5C19 14 16 16.5 12 21z"/><path d="M12 21v-8"/></svg></div><h3>Suspiciously lush grass</h3><span class="sev">Watch</span></header>
-            <div class="inner">
-              <p><strong>What it can mean:</strong> A bright green, fast-growing patch over the drain field — especially in dry weather — can mean effluent is rising too close to the surface and fertilizing it.</p>
-              <p style="margin:0"><strong>Do this:</strong> Take a photo, compare over a few weeks, and mention it at your next inspection.</p>
-            </div>
-          </div>
-          <div class="warn-card">
-            <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M3 20c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><circle cx="12" cy="8" r="3.5"/></svg></div><h3>Standing water over the field</h3><span class="sev high">Call now</span></header>
-            <div class="inner">
-              <p><strong>What it can mean:</strong> Pooling water or spongy ground over the drain field means the soil can't absorb effluent — overload, a failing field, or a saturated system after heavy rain.</p>
-              <p style="margin:0"><strong>Do this:</strong> Keep kids and pets off it, slash water use, and call promptly.</p>
-            </div>
-          </div>
-          <div class="warn-card">
-            <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v10M8 9l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div><h3>Sewage backing up</h3><span class="sev high">Call now</span></header>
-            <div class="inner">
-              <p><strong>What it can mean:</strong> Wastewater coming up into tubs, showers, or floor drains is the system at capacity or blocked — the most urgent sign on this page.</p>
-              <p style="margin:0"><strong>Do this:</strong> Stop water use immediately, avoid contact with the water, and call for help the same day.</p>
-            </div>
-          </div>
-        </div>
+ <div class="grid-3">
+ <div class="warn-card">
+ <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 1-2"/><path d="M12 3v7M8 7l4 3 4-3"/></svg></div><h3>Slow drains everywhere</h3><span class="sev">Act soon</span></header>
+ <div class="inner">
+ <p><strong>What it can mean:</strong> One slow sink is usually a local clog. Every drain slowing at once points at the tank, often full sludge and scum, or a blocked outlet.</p>
+ <p style="margin:0"><strong>Do this:</strong> Cut water use and book an inspection. Don't reach for chemical drain cleaner.</p>
+ </div>
+ </div>
+ <div class="warn-card">
+ <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="2.4"/><circle cx="14" cy="11" r="1.8"/><circle cx="10" cy="16" r="2.8"/><circle cx="17" cy="18" r="1.5"/></svg></div><h3>Gurgling sounds</h3><span class="sev">Act soon</span></header>
+ <div class="inner">
+ <p><strong>What it can mean:</strong> Gurgling toilets or drains mean air is being pushed back through the plumbing, a classic sign the tank is overfull or a line is blocked.</p>
+ <p style="margin:0"><strong>Do this:</strong> Note when it happens (after laundry? after rain?) and get the tank levels checked.</p>
+ </div>
+ </div>
+ <div class="warn-card">
+ <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 19c3-1 4-4 4-7M12 21c3-1 5-5 5-9M19 17c2-1 3-3 3-6"/><path d="M3 21h18" stroke-dasharray="3 3"/></svg></div><h3>Sewage odors</h3><span class="sev">Act soon</span></header>
+ <div class="inner">
+ <p><strong>What it can mean:</strong> Smell near the tank or drain field suggests venting problems, a full tank, or effluent reaching the surface. Indoor odors can mean a dry trap or a vent issue.</p>
+ <p style="margin:0"><strong>Do this:</strong> Run water in rarely used drains; if the outdoor smell persists, book a visit.</p>
+ </div>
+ </div>
+ <div class="warn-card">
+ <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21c-4-4.5-7-8-7-11.5A7 7 0 0 1 19 10.5C19 14 16 16.5 12 21z"/><path d="M12 21v-8"/></svg></div><h3>Suspiciously lush grass</h3><span class="sev">Watch</span></header>
+ <div class="inner">
+ <p><strong>What it can mean:</strong> A bright green, fast-growing patch over the drain field, especially in dry weather, can mean effluent is rising too close to the surface and fertilizing it.</p>
+ <p style="margin:0"><strong>Do this:</strong> Take a photo, compare over a few weeks, and mention it at your next inspection.</p>
+ </div>
+ </div>
+ <div class="warn-card">
+ <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M3 20c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><circle cx="12" cy="8" r="3.5"/></svg></div><h3>Standing water over the field</h3><span class="sev high">Call now</span></header>
+ <div class="inner">
+ <p><strong>What it can mean:</strong> Pooling water or spongy ground over the drain field means the soil can't absorb effluent, overload, a failing field, or a saturated system after heavy rain.</p>
+ <p style="margin:0"><strong>Do this:</strong> Keep kids and pets off it, slash water use, and call promptly.</p>
+ </div>
+ </div>
+ <div class="warn-card">
+ <header><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v10M8 9l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div><h3>Sewage backing up</h3><span class="sev high">Call now</span></header>
+ <div class="inner">
+ <p><strong>What it can mean:</strong> Wastewater coming up into tubs, showers, or floor drains is the system at capacity or blocked, the most urgent sign on this page.</p>
+ <p style="margin:0"><strong>Do this:</strong> Stop water use immediately, avoid contact with the water, and call for help the same day.</p>
+ </div>
+ </div>
+ </div>
 
-        <div class="alert-strip">
-          <svg class="mark-current" width="48" height="32" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
-          <p><strong>Two or more signs at once?</strong> Treat it as urgent. Cut water use, keep people and pets off the drain field, and request a quote — early repairs are almost always cheaper than a failed field.</p>
-          <button class="btn" data-goto="quote">Request a quote</button>
-        </div>
-      </div>
-    </section>
+ <div class="alert-strip">
+ <svg class="mark-current" width="48" height="32" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
+ <p><strong>Two or more signs at once?</strong> Treat it as urgent. Cut water use, keep people and pets off the drain field, and request a quote, early repairs are almost always cheaper than a failed field.</p>
+ <button class="btn" data-goto="quote">Request a quote</button>
+ </div>
+ </div>
+ </section>
 
-    <!-- ============ PAGE: FAQ ============ -->
-    <section class="tabpanel" id="page-faq" role="tabpanel">
-      <div class="body-pad">
-        <span class="kicker"><i></i> Straight answers</span>
-        <h2 class="page-title">Frequently asked questions</h2>
-        <p class="lede">The questions every septic homeowner asks, answered the way we'd answer a friend. Tap a question to open it.</p>
+ <!-- ============ PAGE: FAQ ============ -->
+ <section class="tabpanel" id="page-faq" role="tabpanel">
+ <div class="body-pad">
+ <span class="kicker"><i></i> Straight answers</span>
+ <h2 class="page-title">Frequently asked questions</h2>
+ <p class="lede">The questions every septic homeowner asks, answered the way we'd answer a friend. Tap a question to open it.</p>
 
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">How often does a septic tank need pumping?<span class="plus">+</span></button>
-          <div class="faq-a"><p>For most households, every 3 to 5 years is the common guidance — but the honest answer is "when measurements say so." Tank size, household size, and water habits change the timeline a lot. An inspection measures the sludge and scum layers and tells you where you actually stand, so you're not pumping too early or — worse — too late.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">What should never go into a septic system?<span class="plus">+</span></button>
-          <div class="faq-a"><p>Wipes of any kind (including ones labeled "flushable"), hygiene products, paper towels, grease and cooking oil, paint and solvents, pesticides, and bulk harsh chemicals. If it isn't human waste or toilet paper, the toilet is the wrong place for it. In the kitchen, scrape plates into the bin and keep a jar for grease instead of using the sink.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Can I use a garbage disposal with a septic tank?<span class="plus">+</span></button>
-          <div class="faq-a"><p>You can, but it costs the system. Ground food adds solids and grease that build the sludge and scum layers faster, which usually means pumping more often. If you have one, use it sparingly — composting and the bin are kinder to the tank. If you're designing a new kitchen on septic, many homeowners skip the disposal entirely.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Do septic additives and "tank boosters" work?<span class="plus">+</span></button>
-          <div class="faq-a"><p>Your tank already contains all the bacteria it needs, supplied by normal household use. Additives aren't a substitute for pumping, and some can stir settled solids up and push them into the drain field — the opposite of what you want. Save the money toward inspections and pumping.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">How long should a septic system last?<span class="plus">+</span></button>
-          <div class="faq-a"><p>A well-installed, well-maintained system commonly serves a home for decades — 25 to 30 years or more is a reasonable expectation for the drain field, and tanks themselves often last longer. The biggest life-shorteners are water overload, the wrong things flushed, vehicles on the field, and skipped pumping. The care guide on this site exists precisely to protect that lifespan.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">What happens during an inspection?<span class="plus">+</span></button>
-          <div class="faq-a"><p>The lids are opened, sludge and scum depth are measured, inlet and outlet baffles are checked, filters (if fitted) are inspected, and the drain field is examined for surfacing effluent or soggy soil. You should come away knowing your levels, your likely pumping timeline, and anything worth watching — in plain language, with records for your files.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">I'm buying or selling a home with a septic system. What should I do?<span class="plus">+</span></button>
-          <div class="faq-a"><p>Get a dedicated septic inspection as part of the transaction — a general home inspection usually doesn't open the tank. Ask the seller for pumping and repair records, locate the tank and field on a map, and factor the system's age and condition into the deal. Buyers: budget for your first pumping if records are thin. Sellers: a recent inspection report is a genuine selling point.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Why does my yard smell after heavy rain?<span class="plus">+</span></button>
-          <div class="faq-a"><p>Saturated soil can't absorb effluent at its normal rate, so a stressed system can vent odors or surface moisture after storms. Occasional mild odor right after extreme rain that clears quickly is worth watching; persistent odor, soggy ground, or slow drains after every rain means the field is struggling and deserves an inspection.</p></div>
-        </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">How often does a septic tank need pumping?<span class="plus">+</span></button>
+ <div class="faq-a"><p>For most households, every 3 to 5 years is the common guidance, but the honest answer is "when measurements say so." Tank size, household size, and water habits change the timeline a lot. An inspection measures the sludge and scum layers and tells you where you actually stand, so you're not pumping too early or, worse, too late.</p></div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">What should never go into a septic system?<span class="plus">+</span></button>
+ <div class="faq-a"><p>Wipes of any kind (including ones labeled "flushable"), hygiene products, paper towels, grease and cooking oil, paint and solvents, pesticides, and bulk harsh chemicals. If it isn't human waste or toilet paper, the toilet is the wrong place for it. In the kitchen, scrape plates into the bin and keep a jar for grease instead of using the sink.</p></div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">Can I use a garbage disposal with a septic tank?<span class="plus">+</span></button>
+ <div class="faq-a"><p>You can, but it costs the system. Ground food adds solids and grease that build the sludge and scum layers faster, which usually means pumping more often. If you have one, use it sparingly, composting and the bin are kinder to the tank. If you're designing a new kitchen on septic, many homeowners skip the disposal entirely.</p></div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">Do septic additives and "tank boosters" work?<span class="plus">+</span></button>
+ <div class="faq-a"><p>Your tank already contains all the bacteria it needs, supplied by normal household use. Additives aren't a substitute for pumping, and some can stir settled solids up and push them into the drain field, the opposite of what you want. Save the money toward inspections and pumping.</p></div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">How long should a septic system last?<span class="plus">+</span></button>
+ <div class="faq-a"><p>A well-installed, well-maintained system commonly serves a home for decades, 25 to 30 years or more is a reasonable expectation for the drain field, and tanks themselves often last longer. The biggest life-shorteners are water overload, the wrong things flushed, vehicles on the field, and skipped pumping. The care guide on this site exists precisely to protect that lifespan.</p></div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">What happens during an inspection?<span class="plus">+</span></button>
+ <div class="faq-a"><p>The lids are opened, sludge and scum depth are measured, inlet and outlet baffles are checked, filters (if fitted) are inspected, and the drain field is examined for surfacing effluent or soggy soil. You should come away knowing your levels, your likely pumping timeline, and anything worth watching, in plain language, with records for your files.</p></div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">I'm buying or selling a home with a septic system. What should I do?<span class="plus">+</span></button>
+ <div class="faq-a"><p>Get a dedicated septic inspection as part of the transaction, a general home inspection usually doesn't open the tank. Ask the seller for pumping and repair records, locate the tank and field on a map, and factor the system's age and condition into the deal. Buyers: budget for your first pumping if records are thin. Sellers: a recent inspection report is a genuine selling point.</p></div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q" aria-expanded="false">Why does my yard smell after heavy rain?<span class="plus">+</span></button>
+ <div class="faq-a"><p>Saturated soil can't absorb effluent at its normal rate, so a stressed system can vent odors or surface moisture after storms. Occasional mild odor right after extreme rain that clears quickly is worth watching; persistent odor, soggy ground, or slow drains after every rain means the field is struggling and deserves an inspection.</p></div>
+ </div>
 
-        <p class="small muted">Still curious? Bring your question to the quote form — asking a question is free, and the answer might save you a repair.</p>
-        <button class="btn primary" data-goto="quote">Ask a question / get a quote →</button>
-      </div>
-    </section>
+ <p class="small muted">Still curious? Bring your question to the quote form, asking a question is free, and the answer might save you a repair.</p>
+ <button class="btn primary" data-goto="quote">Ask a question / get a quote →</button>
+ </div>
+ </section>
 
-    <!-- ============ PAGE: QUOTE ============ -->
-    <section class="tabpanel" id="page-quote" role="tabpanel">
-      <div class="body-pad">
-        <span class="kicker"><i></i> Last page</span>
-        <h2 class="page-title">Request a quote</h2>
-        <p class="lede">Tell us what's going on with your system. The more detail you give — warning signs, last pumping date, household size — the more useful the first reply will be.</p>
+ <!-- ============ PAGE: QUOTE ============ -->
+ <section class="tabpanel" id="page-quote" role="tabpanel">
+ <div class="body-pad">
+ <span class="kicker"><i></i> Last page</span>
+ <h2 class="page-title">Request a quote</h2>
+ <p class="lede">Tell us what's going on with your system. The more detail you give, warning signs, last pumping date, household size, the more useful the first reply will be.</p>
 
-        <div class="grid-2" style="align-items:start">
-          <form id="quoteForm" novalidate>
-            <div class="form-grid">
-              <div class="field">
-                <label for="fName">Your name *</label>
-                <input id="fName" name="name" type="text" autocomplete="name" placeholder="e.g. Jordan Smith" required>
-              </div>
-              <div class="field">
-                <label for="fContact">Email or phone *</label>
-                <input id="fContact" name="contact" type="text" autocomplete="email" placeholder="How should we reply?" required>
-              </div>
-              <div class="field">
-                <label for="fTown">Town / property location</label>
-                <input id="fTown" name="town" type="text" placeholder="Town or ZIP area">
-              </div>
-              <div class="field">
-                <label for="fService">What do you need?</label>
-                <select id="fService" name="service">
-                  <option>New system installation</option>
-                  <option>Inspection / assessment</option>
-                  <option>Repair / troubleshooting</option>
-                  <option>Pumping advice / coordination</option>
-                  <option>Upgrade or replacement</option>
-                  <option>Buying / selling a home</option>
-                  <option>Just a question</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="fSigns">Any warning signs?</label>
-                <select id="fSigns" name="signs">
-                  <option>None — just planning ahead</option>
-                  <option>Slow drains</option>
-                  <option>Gurgling sounds</option>
-                  <option>Odors</option>
-                  <option>Standing water / soggy field</option>
-                  <option>Sewage backing up — urgent</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="fPump">Last pumped (if known)</label>
-                <input id="fPump" name="pump" type="text" placeholder="e.g. 2023, or 'not sure'">
-              </div>
-              <div class="field full">
-                <label for="fMsg">Tell us about the job</label>
-                <textarea id="fMsg" name="message" placeholder="Property type, household size, what's happening, and anything else that helps..."></textarea>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn primary">Build my enquiry →</button>
-              <span class="small muted" style="align-self:center">Concept form: builds a ready-to-send summary below. Oliver will connect it to his real inbox.</span>
-            </div>
-            <div class="form-result" id="formResult" aria-live="polite">
-              <h3 style="margin:0">Your enquiry, ready to send</h3>
-              <pre id="formSummary"></pre>
-              <div class="form-actions">
-                <button type="button" class="btn small" id="copyBtn">Copy enquiry text</button>
-                <span class="small muted" id="copyStatus" style="align-self:center"></span>
-              </div>
-            </div>
-          </form>
+ <div class="grid-2" style="align-items:start">
+ <form id="quoteForm" novalidate>
+ <div class="form-grid">
+ <div class="field">
+ <label for="fName">Your name *</label>
+ <input id="fName" name="name" type="text" autocomplete="name" placeholder="e.g. Jordan Smith" required>
+ </div>
+ <div class="field">
+ <label for="fContact">Email or phone *</label>
+ <input id="fContact" name="contact" type="text" autocomplete="email" placeholder="How should we reply?" required>
+ </div>
+ <div class="field">
+ <label for="fTown">Town / property location</label>
+ <input id="fTown" name="town" type="text" placeholder="Town or ZIP area">
+ </div>
+ <div class="field">
+ <label for="fService">What do you need?</label>
+ <select id="fService" name="service">
+ <option>New system installation</option>
+ <option>Inspection / assessment</option>
+ <option>Repair / troubleshooting</option>
+ <option>Pumping advice / coordination</option>
+ <option>Upgrade or replacement</option>
+ <option>Buying / selling a home</option>
+ <option>Just a question</option>
+ </select>
+ </div>
+ <div class="field">
+ <label for="fSigns">Any warning signs?</label>
+ <select id="fSigns" name="signs">
+ <option>None, just planning ahead</option>
+ <option>Slow drains</option>
+ <option>Gurgling sounds</option>
+ <option>Odors</option>
+ <option>Standing water / soggy field</option>
+ <option>Sewage backing up, urgent</option>
+ </select>
+ </div>
+ <div class="field">
+ <label for="fPump">Last pumped (if known)</label>
+ <input id="fPump" name="pump" type="text" placeholder="e.g. 2023, or 'not sure'">
+ </div>
+ <div class="field full">
+ <label for="fMsg">Tell us about the job</label>
+ <textarea id="fMsg" name="message" placeholder="Property type, household size, what's happening, and anything else that helps..."></textarea>
+ </div>
+ </div>
+ <div class="form-actions">
+ <button type="submit" class="btn primary">Build my enquiry →</button>
+ <span class="small muted" style="align-self:center">Form: builds a ready-to-send summary below. Oliver will connect it to his real inbox.</span>
+ </div>
+ <div class="form-result" id="formResult" aria-live="polite">
+ <h3 style="margin:0">Your enquiry, ready to send</h3>
+ <pre id="formSummary"></pre>
+ <div class="form-actions">
+ <button type="button" class="btn small" id="copyBtn">Copy enquiry text</button>
+ <span class="small muted" id="copyStatus" style="align-self:center"></span>
+ </div>
+ </div>
+ </form>
 
-          <div>
-            <div class="placeholder-box" style="margin-bottom:16px">
-              <h3 style="margin-bottom:12px">Contact details</h3>
-              <dl>
-                <div><dt>Phone</dt><dd><a href="tel:+14244251228">(424) 425-1228</a></dd></div>
-                <div><dt>Address</dt><dd>21070 Summit Rd, Topanga, CA 90290</dd></div>
-                <div><dt>Email</dt><dd>[ Oliver to add email address ]</dd></div>
-                <div><dt>Service area</dt><dd>[ Oliver to add towns / area covered ]</dd></div>
-                <div><dt>Hours</dt><dd>[ Oliver to add opening hours ]</dd></div>
-                <div><dt>Licences / accreditations</dt><dd>[ Oliver to add, if applicable ]</dd></div>
-              </dl>
-              <p class="small muted" style="margin:14px 0 0">Phone and address are Sheldon Engineering's real details. Email, service area, hours, and licences are still for Oliver to confirm before this design goes live.</p>
-            </div>
-            <div class="panel">
-              <h3>Before you send</h3>
-              <p class="small" style="margin:0 0 8px">Three things that make any quote faster and more accurate:</p>
-              <p class="small" style="margin:0">• Your last pumping or inspection date, if you have it<br>
-              • Photos of the tank area and any problem spots<br>
-              • Whether the issue is urgent (backups and standing water jump the queue)</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </header>
+ <div>
+ <div class="placeholder-box" style="margin-bottom:16px">
+ <h3 style="margin-bottom:12px">Contact details</h3>
+ <dl>
+ <div><dt>Phone</dt><dd><a href="tel:+14244251228">(424) 425-1228</a></dd></div>
+ <div><dt>Address</dt><dd>21070 Summit Rd, Topanga, CA 90290</dd></div>
+ <div><dt>Email</dt><dd>[ Oliver to add email address ]</dd></div>
+ <div><dt>Service area</dt><dd>[ Oliver to add towns / area covered ]</dd></div>
+ <div><dt>Hours</dt><dd>[ Oliver to add opening hours ]</dd></div>
+ <div><dt>Licences / accreditations</dt><dd>[ Oliver to add, if applicable ]</dd></div>
+ </dl>
+ <p class="small muted" style="margin:14px 0 0">Phone and address are Sheldon Engineering's real details. Email, service area, hours, and licences are still for Oliver to confirm before this design goes live.</p>
+ </div>
+ <div class="panel">
+ <h3>Before you send</h3>
+ <p class="small" style="margin:0 0 8px">Three things that make any quote faster and more accurate:</p>
+ <p class="small" style="margin:0">• Your last pumping or inspection date, if you have it<br>
+ • Photos of the tank area and any problem spots<br>
+ • Whether the issue is urgent (backups and standing water jump the queue)</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+ </header>
 
-  <!-- Footer window -->
-  <footer class="window">
-    <div class="titlebar">
-      <div class="t">
-        <svg class="circles-mini mark-current" width="28" height="19" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
-        <span>ReadMe.txt — About this concept</span>
-      </div>
-      <div class="win-controls" aria-hidden="true"><i>–</i><i>▢</i><i>×</i></div>
-    </div>
-    <div class="body-pad" style="padding:16px 22px">
-      <div class="foot-inner">
-        <p><strong>Sheldon Engineering</strong> — Concept 3 of 3 · Education-first design · Black &amp; white XP style with the modern 3–2–3 circles mark.</p>
-        <p>Concept draft for Oliver Sheldon. Phone — <a href="tel:+14244251228">(424) 425-1228</a> — and 21070 Summit Rd, Topanga, CA 90290 are the business's real details; email and hours are still placeholders. No prices shown. General septic guidance only — not a substitute for a site inspection.</p>
-      </div>
-    </div>
-  </footer>
+ <!-- Footer window -->
+ <footer class="window">
+ <div class="titlebar">
+ <div class="t">
+ <svg class="circles-mini mark-current" width="28" height="19" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
+ <span>ReadMe.txt, About this site</span>
+ </div>
+ <div class="win-controls" aria-hidden="true"><i>–</i><i>▢</i><i>×</i></div>
+ </div>
+ <div class="body-pad" style="padding:16px 22px">
+ <div class="foot-inner">
+ <p><strong>Sheldon Engineering</strong> · Education-first design · Black &amp; white XP style with the modern 3–2–3 circles mark.</p>
+ <p> for Oliver Sheldon. Phone, <a href="tel:+14244251228">(424) 425-1228</a>, and 21070 Summit Rd, Topanga, CA 90290 are the business's real details; email and hours are still placeholders. No prices shown. General septic guidance only, not a substitute for a site inspection.</p>
+ </div>
+ </div>
+ </footer>
 
 </div>
 
 <script>
 (function(){
-  // ---------- Page tabs ----------
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
-  var panels = {};
-  tabs.forEach(function(t){ panels[t.getAttribute('data-tab')] = document.getElementById('page-' + t.getAttribute('data-tab')); });
-  var titleEl = document.querySelector('header .titlebar .t span');
-  var titles = { overview:'Sheldon_Engineering — Home', how:'Sheldon_Engineering — How_It_Works', care:'Sheldon_Engineering — Care_Guide', warnings:'Sheldon_Engineering — Warning_Signs', faq:'Sheldon_Engineering — FAQ', quote:'Sheldon_Engineering — Get_A_Quote' };
+ // ---------- Page tabs ----------
+ var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+ var panels = {};
+ tabs.forEach(function(t){ panels[t.getAttribute('data-tab')] = document.getElementById('page-' + t.getAttribute('data-tab')); });
+ var titleEl = document.querySelector('header .titlebar .t span');
+ var titles = { overview:'Sheldon_Engineering, Home', how:'Sheldon_Engineering, How_It_Works', care:'Sheldon_Engineering, Care_Guide', warnings:'Sheldon_Engineering, Warning_Signs', faq:'Sheldon_Engineering, FAQ', quote:'Sheldon_Engineering, Get_A_Quote' };
 
-  function goTo(key){
-    tabs.forEach(function(t){ t.setAttribute('aria-selected', t.getAttribute('data-tab') === key ? 'true' : 'false'); });
-    Object.keys(panels).forEach(function(k){ if(panels[k]) panels[k].classList.toggle('active', k === key); });
-    if(titleEl && titles[key]) titleEl.textContent = titles[key];
-    var header = document.querySelector('header.window');
-    if(header) header.scrollIntoView({block:'start'});
-  }
-  tabs.forEach(function(t){ t.addEventListener('click', function(){ goTo(t.getAttribute('data-tab')); }); });
-  document.querySelectorAll('[data-goto]').forEach(function(el){
-    el.addEventListener('click', function(e){ e.preventDefault(); goTo(el.getAttribute('data-goto')); });
-  });
+ function goTo(key){
+ tabs.forEach(function(t){ t.setAttribute('aria-selected', t.getAttribute('data-tab') === key ? 'true' : 'false'); });
+ Object.keys(panels).forEach(function(k){ if(panels[k]) panels[k].classList.toggle('active', k === key); });
+ if(titleEl && titles[key]) titleEl.textContent = titles[key];
+ var header = document.querySelector('header.window');
+ if(header) header.scrollIntoView({block:'start'});
+ }
+ tabs.forEach(function(t){ t.addEventListener('click', function(){ goTo(t.getAttribute('data-tab')); }); });
+ document.querySelectorAll('[data-goto]').forEach(function(el){
+ el.addEventListener('click', function(e){ e.preventDefault(); goTo(el.getAttribute('data-goto')); });
+ });
 
-  // ---------- Diagram steps ----------
-  var readouts = {
-    '1': { t:'Step 1 — Everything leaves the house', x:'There is no "away" in a septic home — everything drained in the house goes to your own backyard system. That\'s why what you put down the drain matters so much: the system has to handle 100% of it. A typical household sends hundreds of gallons through this pipe every single day.' },
-    '2': { t:'Step 2 — The tank separates it into three layers', x:'Inside the tank, gravity does the sorting. Oils and grease float to form the scum layer, heavy solids sink as sludge, and the liquid in the middle is partially treated by bacteria. Baffles at the outlet keep the floating and sunken layers from escaping — which is why those layers must never be allowed to grow too thick.' },
-    '3': { t:'Step 3 — Liquid flows out to the drain field', x:'Only the middle liquid layer (called effluent) leaves the tank. A distribution box splits the flow evenly between perforated pipes laid in shallow gravel or chamber trenches. Even splitting matters: if one line gets everything, that patch of soil drowns while the rest sits idle.' },
-    '4': { t:'Step 4 — The soil finishes the job', x:'The drain field isn\'t the end of treatment — the soil is. As effluent trickles downward, a living layer of microbes in the soil consumes bacteria, viruses, and nutrients like phosphorus and nitrogen. By the time the water reaches groundwater, it has been genuinely cleaned. Protect the field, and you protect that filter.' }
-  };
-  var stepBtns = document.querySelectorAll('.step-btn');
-  var rTitle = document.getElementById('readoutTitle');
-  var rText = document.getElementById('readoutText');
-  stepBtns.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      stepBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
-      btn.setAttribute('aria-pressed','true');
-      var r = readouts[btn.getAttribute('data-step')];
-      if(r){ rTitle.textContent = r.t; rText.textContent = r.x; }
-    });
-  });
+ // ---------- Diagram steps ----------
+ var readouts = {
+ '1': { t:'Step 1, Everything leaves the house', x:'There is no "away" in a septic home, everything drained in the house goes to your own backyard system. That\'s why what you put down the drain matters so much: the system has to handle 100% of it. A typical household sends hundreds of gallons through this pipe every single day.' },
+ '2': { t:'Step 2, The tank separates it into three layers', x:'Inside the tank, gravity does the sorting. Oils and grease float to form the scum layer, heavy solids sink as sludge, and the liquid in the middle is partially treated by bacteria. Baffles at the outlet keep the floating and sunken layers from escaping, which is why those layers must never be allowed to grow too thick.' },
+ '3': { t:'Step 3, Liquid flows out to the drain field', x:'Only the middle liquid layer (called effluent) leaves the tank. A distribution box splits the flow evenly between perforated pipes laid in shallow gravel or chamber trenches. Even splitting matters: if one line gets everything, that patch of soil drowns while the rest sits idle.' },
+ '4': { t:'Step 4, The soil finishes the job', x:'The drain field isn\'t the end of treatment, the soil is. As effluent trickles downward, a living layer of microbes in the soil consumes bacteria, viruses, and nutrients like phosphorus and nitrogen. By the time the water reaches groundwater, it has been genuinely cleaned. Protect the field, and you protect that filter.' }
+ };
+ var stepBtns = document.querySelectorAll('.step-btn');
+ var rTitle = document.getElementById('readoutTitle');
+ var rText = document.getElementById('readoutText');
+ stepBtns.forEach(function(btn){
+ btn.addEventListener('click', function(){
+ stepBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+ btn.setAttribute('aria-pressed','true');
+ var r = readouts[btn.getAttribute('data-step')];
+ if(r){ rTitle.textContent = r.t; rText.textContent = r.x; }
+ });
+ });
 
-  // ---------- Seasons ----------
-  var seasonBtns = document.querySelectorAll('.season-btn');
-  seasonBtns.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      seasonBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
-      btn.setAttribute('aria-pressed','true');
-      document.querySelectorAll('.season-panel').forEach(function(p){ p.classList.remove('active'); });
-      var panel = document.getElementById('season-' + btn.getAttribute('data-season'));
-      if(panel) panel.classList.add('active');
-    });
-  });
+ // ---------- Seasons ----------
+ var seasonBtns = document.querySelectorAll('.season-btn');
+ seasonBtns.forEach(function(btn){
+ btn.addEventListener('click', function(){
+ seasonBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+ btn.setAttribute('aria-pressed','true');
+ document.querySelectorAll('.season-panel').forEach(function(p){ p.classList.remove('active'); });
+ var panel = document.getElementById('season-' + btn.getAttribute('data-season'));
+ if(panel) panel.classList.add('active');
+ });
+ });
 
-  // ---------- FAQ accordion ----------
-  document.querySelectorAll('.faq-item').forEach(function(item){
-    var q = item.querySelector('.faq-q');
-    q.addEventListener('click', function(){
-      var open = item.classList.toggle('open');
-      q.setAttribute('aria-expanded', open ? 'true' : 'false');
-      q.querySelector('.plus').textContent = open ? '–' : '+';
-    });
-  });
+ // ---------- FAQ accordion ----------
+ document.querySelectorAll('.faq-item').forEach(function(item){
+ var q = item.querySelector('.faq-q');
+ q.addEventListener('click', function(){
+ var open = item.classList.toggle('open');
+ q.setAttribute('aria-expanded', open ? 'true' : 'false');
+ q.querySelector('.plus').textContent = open ? '–' : '+';
+ });
+ });
 
-  // ---------- Quote form ----------
-  var form = document.getElementById('quoteForm');
-  var result = document.getElementById('formResult');
-  var summary = document.getElementById('formSummary');
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    var name = document.getElementById('fName').value.trim();
-    var contact = document.getElementById('fContact').value.trim();
-    if(!name || !contact){
-      result.classList.add('show');
-      summary.textContent = 'Please add your name and an email or phone number so Sheldon Engineering can reply.';
-      return;
-    }
-    var lines = [
-      'QUOTE REQUEST — Sheldon Engineering (website concept form)',
-      '',
-      'Name: ' + name,
-      'Reply to: ' + contact,
-      'Property location: ' + (document.getElementById('fTown').value.trim() || '—'),
-      'Service needed: ' + document.getElementById('fService').value,
-      'Warning signs: ' + document.getElementById('fSigns').value,
-      'Last pumped: ' + (document.getElementById('fPump').value.trim() || '—'),
-      '',
-      'About the job:',
-      document.getElementById('fMsg').value.trim() || '—'
-    ];
-    summary.textContent = lines.join('\n');
-    result.classList.add('show');
-    result.scrollIntoView({block:'nearest'});
-  });
-  document.getElementById('copyBtn').addEventListener('click', function(){
-    var status = document.getElementById('copyStatus');
-    var text = summary.textContent;
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){ status.textContent = 'Copied — paste it into an email or message.'; }, function(){ status.textContent = 'Copy failed — select the text above manually.'; });
-    } else {
-      status.textContent = 'Select the text above and copy it manually.';
-    }
-  });
+ // ---------- Quote form ----------
+ var form = document.getElementById('quoteForm');
+ var result = document.getElementById('formResult');
+ var summary = document.getElementById('formSummary');
+ form.addEventListener('submit', function(e){
+ e.preventDefault();
+ var name = document.getElementById('fName').value.trim();
+ var contact = document.getElementById('fContact').value.trim();
+ if(!name || !contact){
+ result.classList.add('show');
+ summary.textContent = 'Please add your name and an email or phone number so Sheldon Engineering can reply.';
+ return;
+ }
+ var lines = [
+ 'QUOTE REQUEST, Sheldon Engineering (website form)',
+ '',
+ 'Name: ' + name,
+ 'Reply to: ' + contact,
+ 'Property location: ' + (document.getElementById('fTown').value.trim() || ' '),
+ 'Service needed: ' + document.getElementById('fService').value,
+ 'Warning signs: ' + document.getElementById('fSigns').value,
+ 'Last pumped: ' + (document.getElementById('fPump').value.trim() || ' '),
+ '',
+ 'About the job:',
+ document.getElementById('fMsg').value.trim() || ' '
+ ];
+ summary.textContent = lines.join('\n');
+ result.classList.add('show');
+ result.scrollIntoView({block:'nearest'});
+ });
+ document.getElementById('copyBtn').addEventListener('click', function(){
+ var status = document.getElementById('copyStatus');
+ var text = summary.textContent;
+ if(navigator.clipboard && navigator.clipboard.writeText){
+ navigator.clipboard.writeText(text).then(function(){ status.textContent = 'Copied, paste it into an email or message.'; }, function(){ status.textContent = 'Copy failed, select the text above manually.'; });
+ } else {
+ status.textContent = 'Select the text above and copy it manually.';
+ }
+ });
 })();
 </script>
 </body>
