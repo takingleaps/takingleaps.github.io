@@ -7,143 +7,143 @@
 <link rel="icon" href="data:,"/>
 <title>Sheldon Engineering</title>
 <style>
- :root{
- --black:#0a0a0a; --ink:#111; --white:#ffffff; --paper:#f2f2f0; --silver:#e6e6e3; --mid:#c9c9c6; --grey:#6b6b68; --darkgrey:#2b2b2b;
- --border:#0a0a0a;
- }
- *{box-sizing:border-box}
- html{scroll-behavior:smooth}
- body{margin:0;font-family:Tahoma,Verdana,"Segoe UI",system-ui,sans-serif;background:#d9d9d6;color:var(--ink);line-height:1.55;
- background-image:radial-gradient(circle at 12% 8%, rgba(0,0,0,.10) 0 120px, transparent 121px),radial-gradient(circle at 88% 22%, rgba(0,0,0,.07) 0 180px, transparent 181px),radial-gradient(circle at 78% 88%, rgba(0,0,0,.08) 0 140px, transparent 141px);}
- a{color:inherit}
- button,input,select,textarea{font:inherit}
- /* CONCEPT BAR */
- .-bar{background:#000;color:#fff;text-align:center;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;padding:9px 16px;font-weight:700}
- .-bar span{opacity:.65;font-weight:400;letter-spacing:.06em;text-transform:none}
- /* DESKTOP FRAME */
- .desktop{max-width:1160px;margin:0 auto;padding:18px 16px 64px}
- /* TASKBAR / HEADER */
- .taskbar{background:linear-gradient(180deg,#ffffff,#dcdcd8);border:2px solid #000;box-shadow:5px 5px 0 #000;display:flex;align-items:center;gap:16px;padding:12px 16px;flex-wrap:wrap;position:sticky;top:12px;z-index:50}
- .brand{display:flex;align-items:center;gap:13px;min-width:0}
- .brand-text{line-height:1}
- .brand-text strong{display:block;font-size:21px;letter-spacing:.02em;text-transform:uppercase}
- .brand-text small{display:block;margin-top:5px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#444}
- .start-btn{margin-left:auto;background:#000;color:#fff;border:2px solid #000;padding:9px 16px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 2px #fff}
- .start-btn:hover{background:#fff;color:#000}
- .clock{font-size:12px;border:1.5px solid #000;background:#fff;padding:7px 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
- /* NAV */
- .nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 20px}
- .nav button{background:#fff;border:2px solid #000;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:3px 3px 0 #000;display:flex;align-items:center;gap:8px}
- .nav button i{width:11px;height:11px;border:2px solid #000;border-radius:50%;display:inline-block;flex:none}
- .nav button.active{background:#000;color:#fff;box-shadow:3px 3px 0 rgba(0,0,0,.3)}
- .nav button.active i{border-color:#fff;background:#fff}
- .nav button:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #000}
- /* WINDOWS */
- .window{background:var(--paper);border:2px solid #000;box-shadow:6px 6px 0 #000;margin-bottom:26px}
- .titlebar{background:linear-gradient(180deg,#3d3d3d 0%,#111 55%,#000 100%);color:#fff;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;font-size:13px;font-weight:700;letter-spacing:.03em}
- .titlebar .dot{width:13px;height:13px;border:1.5px solid #fff;border-radius:50%;flex:none}
- .titlebar .win-btns{margin-left:auto;display:flex;gap:5px}
- .titlebar .win-btns span{width:22px;height:20px;background:linear-gradient(180deg,#fff,#c9c9c6);color:#000;border:1.5px solid #000;display:grid;place-items:center;font-size:12px;line-height:1;font-weight:900}
- .window-body{padding:28px}
- .window-body.tight{padding:20px}
- /* PAGES */
- .page{display:none}
- .page.active{display:block;animation:in .25s ease}
- @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
- @media(prefers-reduced-motion:reduce){.page.active{animation:none}}
- /* HERO */
- .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
- .eyebrow{font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:10px}
- .eyebrow:before{content:"";width:26px;height:26px;border:2.5px solid #000;border-radius:50%;flex:none}
- h1{font-size:clamp(38px,6vw,64px);line-height:.95;margin:16px 0 14px;letter-spacing:-.02em;text-transform:uppercase}
- h1 .outline{color:#fff;-webkit-text-stroke:2px #000;text-stroke:2px #000}
- h2{font-size:clamp(26px,3.6vw,38px);line-height:1.05;margin:0 0 12px;text-transform:uppercase;letter-spacing:-.01em}
- h3{font-size:17px;margin:0 0 8px}
- p.lead{font-size:17.5px;color:#222;max-width:58ch}
- .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
- .btn{background:#000;color:#fff;border:2px solid #000;padding:13px 20px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-size:14.5px;box-shadow:4px 4px 0 rgba(0,0,0,.25)}
- .btn.secondary{background:#fff;color:#000}
- .btn:hover{transform:translate(-1px,-1px)}
- .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
- .hero-circles{display:grid;place-items:center;background:#000;color:#fff;padding:28px 18px;border:2px solid #000;text-align:center}
- .hero-circles p{margin:14px 0 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
- .status-bar{display:flex;gap:0;border-top:2px solid #000;background:#fff;flex-wrap:wrap}
- .status-bar div{flex:1 1 160px;padding:11px 16px;border-right:1.5px solid #d5d5d2;font-size:12.5px}
- .status-bar div:last-child{border-right:0}
- .status-bar b{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
- /* ICON GRID */
- .icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
- .icon-tile{background:#fff;border:2px solid #000;padding:20px 16px;cursor:pointer;text-align:left;box-shadow:4px 4px 0 #000}
- .icon-tile:hover{background:#000;color:#fff}
- .icon-tile:hover .circ{border-color:#fff}
- .icon-tile:hover .circ:after{border-color:#fff}
- .circ{width:46px;height:46px;border:3px solid #000;border-radius:50%;position:relative;margin-bottom:13px}
- .circ:after{content:"";position:absolute;inset:9px;border:2px solid #000;border-radius:50%}
- .icon-tile strong{display:block;font-size:15px}
- .icon-tile span{font-size:13px;opacity:.75}
- /* GENERIC GRID / CARDS */
- .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
- .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
- .card{background:#fff;border:2px solid #000;padding:22px;box-shadow:4px 4px 0 #000}
- .card.dark{background:#000;color:#fff}
- .card ul{margin:10px 0 0;padding-left:18px}
- .card li{margin:6px 0;font-size:14.5px}
- .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid currentColor;padding:3px 8px;border-radius:999px;margin-bottom:12px}
- .card p{font-size:14.5px;color:inherit;opacity:.88;margin:0}
- .num{font-size:34px;font-weight:900;line-height:1;border:3px solid currentColor;border-radius:50%;width:56px;height:56px;display:grid;place-items:center;margin-bottom:14px}
- /* TABLE */
- table{width:100%;border-collapse:collapse;background:#fff;font-size:14.5px}
- th,td{border:1.5px solid #000;padding:11px 13px;text-align:left;vertical-align:top}
- th{background:#000;color:#fff;text-transform:uppercase;font-size:12.5px;letter-spacing:.07em}
- /* DO DONT */
- .do-list,.dont-list{list-style:none;margin:0;padding:0}
- .do-list li,.dont-list li{padding:11px 0 11px 34px;border-bottom:1.5px solid #ddd;position:relative;font-size:14.5px}
- .do-list li:before{content:"";position:absolute;left:2px;top:13px;width:16px;height:16px;border:2.5px solid #000;border-radius:50%;background:#000;box-shadow:inset 0 0 0 3px #fff}
- .dont-list li:before{content:"×";position:absolute;left:2px;top:6px;width:20px;height:20px;border:2.5px solid #000;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:14px;background:#fff}
- /* DIAGRAM */
- .diagram-wrap{background:#fff;border:2px solid #000;padding:18px;overflow:hidden}
- .diagram-wrap svg{width:100%;height:auto;display:block}
- /* ESTIMATOR */
- .est{display:grid;grid-template-columns:1fr 1fr;gap:22px}
- label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:7px}
- input,select,textarea{width:100%;border:2px solid #000;background:#fff;padding:12px 13px;font-size:15px;border-radius:0;color:#111}
- input:focus,select:focus,textarea:focus{outline:3px solid #000;outline-offset:1px}
- .field{margin-bottom:16px}
- .est-result{background:#000;color:#fff;padding:24px;display:flex;flex-direction:column;justify-content:center}
- .est-result .big{font-size:44px;font-weight:900;line-height:1}
- .est-result p{opacity:.85;font-size:14px}
- /* FAQ */
- .faq-item{border:2px solid #000;background:#fff;margin-bottom:12px;box-shadow:3px 3px 0 #000}
- .faq-q{width:100%;background:none;border:0;padding:18px 20px;display:flex;justify-content:space-between;gap:16px;text-align:left;font-weight:700;font-size:16px;cursor:pointer}
- .faq-q .plus{width:26px;height:26px;flex:none;border:2px solid #000;border-radius:50%;display:grid;place-items:center;font-size:17px}
- .faq-a{display:none;padding:0 20px 20px;font-size:15px;color:#222;max-width:72ch}
- .faq-item.open .faq-a{display:block}
- .faq-item.open .faq-q .plus{background:#000;color:#fff}
- /* AREA */
- .rings{display:grid;place-items:center;padding:10px}
- .area-slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
- .slot{border:2px dashed #000;background:#fff;padding:16px;font-size:14.5px}
- .slot b{display:block;text-transform:uppercase;font-size:12px;letter-spacing:.1em;margin-bottom:4px}
- .placeholder-note{background:#000;color:#fff;padding:14px 18px;font-size:13.5px;margin-bottom:18px}
- .placeholder-note b{text-transform:uppercase;letter-spacing:.08em}
- /* FORM */
- .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
- .summary-box{display:none;background:#fff;border:2px solid #000;padding:18px;margin-top:18px;white-space:pre-wrap;font-size:14px}
- .summary-box.show{display:block}
- .check-row{display:flex;gap:10px;align-items:flex-start;font-size:14px;text-transform:none;letter-spacing:0;font-weight:400}
- .check-row input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:#000}
- /* FOOTER TASKBAR */
- .footer-bar{background:linear-gradient(180deg,#3d3d3d,#000);color:#fff;border:2px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.35);padding:16px 18px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px}
- .footer-bar .start{background:#fff;color:#000;font-weight:900;padding:8px 16px;letter-spacing:.1em;text-transform:uppercase}
- .footer-bar span{opacity:.75}
- .section-head{margin:4px 0 18px}
- .section-head p{max-width:66ch;color:#333;font-size:15.5px;margin:0}
- .warn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
- .warn{background:#fff;border:2px solid #000;padding:18px;font-size:14.5px}
- .warn b{display:block;margin-bottom:6px}
- .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
- @media(max-width:900px){.hero-grid,.grid-3,.grid-2,.est{grid-template-columns:1fr}.icon-grid{grid-template-columns:1fr 1fr}.steps,.warn-grid{grid-template-columns:1fr 1fr}.taskbar{position:static}.start-btn{margin-left:0}}
- @media(max-width:540px){.icon-grid,.steps,.warn-grid,.area-slots,.form-grid{grid-template-columns:1fr}.window-body{padding:20px}.clock{display:none}h1{font-size:40px}}
+  :root{
+    --black:#0a0a0a; --ink:#111; --white:#ffffff; --paper:#f2f2f0; --silver:#e6e6e3; --mid:#c9c9c6; --grey:#6b6b68; --darkgrey:#2b2b2b;
+    --border:#0a0a0a;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:Tahoma,Verdana,"Segoe UI",system-ui,sans-serif;background:#d9d9d6;color:var(--ink);line-height:1.55;
+    background-image:radial-gradient(circle at 12% 8%, rgba(0,0,0,.10) 0 120px, transparent 121px),radial-gradient(circle at 88% 22%, rgba(0,0,0,.07) 0 180px, transparent 181px),radial-gradient(circle at 78% 88%, rgba(0,0,0,.08) 0 140px, transparent 141px);}
+  a{color:inherit}
+  button,input,select,textarea{font:inherit}
+  /* top bar */
+  .-bar{background:#000;color:#fff;text-align:center;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;padding:9px 16px;font-weight:700}
+  .-bar span{opacity:.65;font-weight:400;letter-spacing:.06em;text-transform:none}
+  /* DESKTOP FRAME */
+  .desktop{max-width:1160px;margin:0 auto;padding:18px 16px 64px}
+  /* TASKBAR / HEADER */
+  .taskbar{background:linear-gradient(180deg,#ffffff,#dcdcd8);border:2px solid #000;box-shadow:5px 5px 0 #000;display:flex;align-items:center;gap:16px;padding:12px 16px;flex-wrap:wrap;position:sticky;top:12px;z-index:50}
+  .brand{display:flex;align-items:center;gap:13px;min-width:0}
+  .brand-text{line-height:1}
+  .brand-text strong{display:block;font-size:21px;letter-spacing:.02em;text-transform:uppercase}
+  .brand-text small{display:block;margin-top:5px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#444}
+  .start-btn{margin-left:auto;background:#000;color:#fff;border:2px solid #000;padding:9px 16px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 2px #fff}
+  .start-btn:hover{background:#fff;color:#000}
+  .clock{font-size:12px;border:1.5px solid #000;background:#fff;padding:7px 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  /* NAV */
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 20px}
+  .nav button{background:#fff;border:2px solid #000;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:3px 3px 0 #000;display:flex;align-items:center;gap:8px}
+  .nav button i{width:11px;height:11px;border:2px solid #000;border-radius:50%;display:inline-block;flex:none}
+  .nav button.active{background:#000;color:#fff;box-shadow:3px 3px 0 rgba(0,0,0,.3)}
+  .nav button.active i{border-color:#fff;background:#fff}
+  .nav button:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #000}
+  /* WINDOWS */
+  .window{background:var(--paper);border:2px solid #000;box-shadow:6px 6px 0 #000;margin-bottom:26px}
+  .titlebar{background:linear-gradient(180deg,#3d3d3d 0%,#111 55%,#000 100%);color:#fff;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;font-size:13px;font-weight:700;letter-spacing:.03em}
+  .titlebar .dot{width:13px;height:13px;border:1.5px solid #fff;border-radius:50%;flex:none}
+  .titlebar .win-btns{margin-left:auto;display:flex;gap:5px}
+  .titlebar .win-btns span{width:22px;height:20px;background:linear-gradient(180deg,#fff,#c9c9c6);color:#000;border:1.5px solid #000;display:grid;place-items:center;font-size:12px;line-height:1;font-weight:900}
+  .window-body{padding:28px}
+  .window-body.tight{padding:20px}
+  /* PAGES */
+  .page{display:none}
+  .page.active{display:block;animation:in .25s ease}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.page.active{animation:none}}
+  /* HERO */
+  .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
+  .eyebrow{font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:10px}
+  .eyebrow:before{content:"";width:26px;height:26px;border:2.5px solid #000;border-radius:50%;flex:none}
+  h1{font-size:clamp(38px,6vw,64px);line-height:.95;margin:16px 0 14px;letter-spacing:-.02em;text-transform:uppercase}
+  h1 .outline{color:#fff;-webkit-text-stroke:2px #000;text-stroke:2px #000}
+  h2{font-size:clamp(26px,3.6vw,38px);line-height:1.05;margin:0 0 12px;text-transform:uppercase;letter-spacing:-.01em}
+  h3{font-size:17px;margin:0 0 8px}
+  p.lead{font-size:17.5px;color:#222;max-width:58ch}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .btn{background:#000;color:#fff;border:2px solid #000;padding:13px 20px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-size:14.5px;box-shadow:4px 4px 0 rgba(0,0,0,.25)}
+  .btn.secondary{background:#fff;color:#000}
+  .btn:hover{transform:translate(-1px,-1px)}
+  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+  .hero-circles{display:grid;place-items:center;background:#000;color:#fff;padding:28px 18px;border:2px solid #000;text-align:center}
+  .hero-circles p{margin:14px 0 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+  .status-bar{display:flex;gap:0;border-top:2px solid #000;background:#fff;flex-wrap:wrap}
+  .status-bar div{flex:1 1 160px;padding:11px 16px;border-right:1.5px solid #d5d5d2;font-size:12.5px}
+  .status-bar div:last-child{border-right:0}
+  .status-bar b{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+  /* ICON GRID */
+  .icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .icon-tile{background:#fff;border:2px solid #000;padding:20px 16px;cursor:pointer;text-align:left;box-shadow:4px 4px 0 #000}
+  .icon-tile:hover{background:#000;color:#fff}
+  .icon-tile:hover .circ{border-color:#fff}
+  .icon-tile:hover .circ:after{border-color:#fff}
+  .circ{width:46px;height:46px;border:3px solid #000;border-radius:50%;position:relative;margin-bottom:13px}
+  .circ:after{content:"";position:absolute;inset:9px;border:2px solid #000;border-radius:50%}
+  .icon-tile strong{display:block;font-size:15px}
+  .icon-tile span{font-size:13px;opacity:.75}
+  /* GENERIC GRID / CARDS */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:#fff;border:2px solid #000;padding:22px;box-shadow:4px 4px 0 #000}
+  .card.dark{background:#000;color:#fff}
+  .card ul{margin:10px 0 0;padding-left:18px}
+  .card li{margin:6px 0;font-size:14.5px}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid currentColor;padding:3px 8px;border-radius:999px;margin-bottom:12px}
+  .card p{font-size:14.5px;color:inherit;opacity:.88;margin:0}
+  .num{font-size:34px;font-weight:900;line-height:1;border:3px solid currentColor;border-radius:50%;width:56px;height:56px;display:grid;place-items:center;margin-bottom:14px}
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;background:#fff;font-size:14.5px}
+  th,td{border:1.5px solid #000;padding:11px 13px;text-align:left;vertical-align:top}
+  th{background:#000;color:#fff;text-transform:uppercase;font-size:12.5px;letter-spacing:.07em}
+  /* DO DONT */
+  .do-list,.dont-list{list-style:none;margin:0;padding:0}
+  .do-list li,.dont-list li{padding:11px 0 11px 34px;border-bottom:1.5px solid #ddd;position:relative;font-size:14.5px}
+  .do-list li:before{content:"";position:absolute;left:2px;top:13px;width:16px;height:16px;border:2.5px solid #000;border-radius:50%;background:#000;box-shadow:inset 0 0 0 3px #fff}
+  .dont-list li:before{content:"×";position:absolute;left:2px;top:6px;width:20px;height:20px;border:2.5px solid #000;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:14px;background:#fff}
+  /* DIAGRAM */
+  .diagram-wrap{background:#fff;border:2px solid #000;padding:18px;overflow:hidden}
+  .diagram-wrap svg{width:100%;height:auto;display:block}
+  /* ESTIMATOR */
+  .est{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:7px}
+  input,select,textarea{width:100%;border:2px solid #000;background:#fff;padding:12px 13px;font-size:15px;border-radius:0;color:#111}
+  input:focus,select:focus,textarea:focus{outline:3px solid #000;outline-offset:1px}
+  .field{margin-bottom:16px}
+  .est-result{background:#000;color:#fff;padding:24px;display:flex;flex-direction:column;justify-content:center}
+  .est-result .big{font-size:44px;font-weight:900;line-height:1}
+  .est-result p{opacity:.85;font-size:14px}
+  /* FAQ */
+  .faq-item{border:2px solid #000;background:#fff;margin-bottom:12px;box-shadow:3px 3px 0 #000}
+  .faq-q{width:100%;background:none;border:0;padding:18px 20px;display:flex;justify-content:space-between;gap:16px;text-align:left;font-weight:700;font-size:16px;cursor:pointer}
+  .faq-q .plus{width:26px;height:26px;flex:none;border:2px solid #000;border-radius:50%;display:grid;place-items:center;font-size:17px}
+  .faq-a{display:none;padding:0 20px 20px;font-size:15px;color:#222;max-width:72ch}
+  .faq-item.open .faq-a{display:block}
+  .faq-item.open .faq-q .plus{background:#000;color:#fff}
+  /* AREA */
+  .rings{display:grid;place-items:center;padding:10px}
+  .area-slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .slot{border:2px dashed #000;background:#fff;padding:16px;font-size:14.5px}
+  .slot b{display:block;text-transform:uppercase;font-size:12px;letter-spacing:.1em;margin-bottom:4px}
+  .placeholder-note{background:#000;color:#fff;padding:14px 18px;font-size:13.5px;margin-bottom:18px}
+  .placeholder-note b{text-transform:uppercase;letter-spacing:.08em}
+  /* FORM */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  .summary-box{display:none;background:#fff;border:2px solid #000;padding:18px;margin-top:18px;white-space:pre-wrap;font-size:14px}
+  .summary-box.show{display:block}
+  .check-row{display:flex;gap:10px;align-items:flex-start;font-size:14px;text-transform:none;letter-spacing:0;font-weight:400}
+  .check-row input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:#000}
+  /* FOOTER TASKBAR */
+  .footer-bar{background:linear-gradient(180deg,#3d3d3d,#000);color:#fff;border:2px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.35);padding:16px 18px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px}
+  .footer-bar .start{background:#fff;color:#000;font-weight:900;padding:8px 16px;letter-spacing:.1em;text-transform:uppercase}
+  .footer-bar span{opacity:.75}
+  .section-head{margin:4px 0 18px}
+  .section-head p{max-width:66ch;color:#333;font-size:15.5px;margin:0}
+  .warn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .warn{background:#fff;border:2px solid #000;padding:18px;font-size:14.5px}
+  .warn b{display:block;margin-bottom:6px}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:900px){.hero-grid,.grid-3,.grid-2,.est{grid-template-columns:1fr}.icon-grid{grid-template-columns:1fr 1fr}.steps,.warn-grid{grid-template-columns:1fr 1fr}.taskbar{position:static}.start-btn{margin-left:0}}
+  @media(max-width:540px){.icon-grid,.steps,.warn-grid,.area-slots,.form-grid{grid-template-columns:1fr}.window-body{padding:20px}.clock{display:none}h1{font-size:40px}}
 </style>
 </head>
 <body>
@@ -151,383 +151,383 @@
 
 <div class="desktop">
 
- <!-- HEADER / TASKBAR -->
- <header class="taskbar">
- <div class="brand">
- <svg width="64" height="43" viewBox="0 0 400 268" role="img" aria-label="Sheldon Engineering modern mark, eight circles in 3, 2, 3 rows"><circle cx="90" cy="66" r="38" fill="#111111"/><circle cx="200" cy="66" r="38" fill="#111111"/><circle cx="310" cy="66" r="38" fill="#111111"/><circle cx="145" cy="150" r="26" fill="#555555"/><circle cx="255" cy="150" r="26" fill="#555555"/><circle cx="90" cy="216" r="14" fill="#a8a8a8"/><circle cx="200" cy="216" r="14" fill="#a8a8a8"/><circle cx="310" cy="216" r="14" fill="#a8a8a8"/></svg>
- <div class="brand-text"><strong>Sheldon Engineering</strong><small>Septic Systems</small></div>
- </div>
- <button class="start-btn" data-goto="quote">▸ Start a Quote</button>
- <div class="clock" id="clock">--:--</div>
- </header>
+  <!-- HEADER / TASKBAR -->
+  <header class="taskbar">
+    <div class="brand">
+      <svg width="64" height="43" viewBox="0 0 400 268" role="img" aria-label="Sheldon Engineering modern mark, eight circles in 3, 2, 3 rows"><circle cx="90" cy="66" r="38" fill="#111111"/><circle cx="200" cy="66" r="38" fill="#111111"/><circle cx="310" cy="66" r="38" fill="#111111"/><circle cx="145" cy="150" r="26" fill="#555555"/><circle cx="255" cy="150" r="26" fill="#555555"/><circle cx="90" cy="216" r="14" fill="#a8a8a8"/><circle cx="200" cy="216" r="14" fill="#a8a8a8"/><circle cx="310" cy="216" r="14" fill="#a8a8a8"/></svg>
+      <div class="brand-text"><strong>Sheldon Engineering</strong><small>Septic Systems</small></div>
+    </div>
+    <button class="start-btn" data-goto="quote">▸ Start a Quote</button>
+    <div class="clock" id="clock">--:--</div>
+  </header>
 
- <!-- NAV -->
- <nav class="nav" aria-label="Site pages">
- <button class="active" data-page="home"><i></i>Home</button>
- <button data-page="services"><i></i>Services</button>
- <button data-page="how"><i></i>How Septic Works</button>
- <button data-page="area"><i></i>Service Area</button>
- <button data-page="faq"><i></i>FAQ</button>
- <button data-page="quote"><i></i>Contact / Quote</button>
- </nav>
+  <!-- NAV -->
+  <nav class="nav" aria-label="Site pages">
+    <button class="active" data-page="home"><i></i>Home</button>
+    <button data-page="services"><i></i>Services</button>
+    <button data-page="how"><i></i>How Septic Works</button>
+    <button data-page="area"><i></i>Service Area</button>
+    <button data-page="faq"><i></i>FAQ</button>
+    <button data-page="quote"><i></i>Contact / Quote</button>
+  </nav>
 
- <!-- ============ HOME ============ -->
- <section class="page active" id="page-home">
- <div class="window">
- <div class="titlebar"><span class="dot"></span> Welcome, Sheldon_Engineering.exe <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
- <div class="window-body">
- <div class="hero-grid">
- <div>
- <div class="eyebrow">Septic tanks, done properly</div>
- <h1>Your septic<br/>system,<br/><span class="outline">sorted.</span></h1>
- <p class="lead">Installations, pumping, inspections and repairs, explained in plain English, with the useful information a homeowner actually needs before they pick up the phone.</p>
- <div class="cta-row">
- <button class="btn" data-goto="services">Explore Services</button>
- <button class="btn secondary" data-goto="how">How Septic Works →</button>
- </div>
- </div>
- <div class="hero-circles">
- <svg width="230" height="154" viewBox="0 0 400 268" role="img" aria-label="Sheldon Engineering modern mark, eight circles in 3, 2, 3 rows"><circle cx="90" cy="66" r="38" fill="#ffffff"/><circle cx="200" cy="66" r="38" fill="#ffffff"/><circle cx="310" cy="66" r="38" fill="#ffffff"/><circle cx="145" cy="150" r="26" fill="#e6e6e6"/><circle cx="255" cy="150" r="26" fill="#e6e6e6"/><circle cx="90" cy="216" r="14" fill="#a8a8a8"/><circle cx="200" cy="216" r="14" fill="#a8a8a8"/><circle cx="310" cy="216" r="14" fill="#a8a8a8"/></svg>
- <p>The Sheldon mark <br/>3 · 2 · 3<br/>eight circles, falling in size</p>
- </div>
- </div>
- </div>
- <div class="status-bar">
- <div><b>Install</b>New systems &amp; replacements</div>
- <div><b>Pump</b>Scheduled tank pumping</div>
- <div><b>Inspect</b>Reports for sales &amp; surveys</div>
- <div><b>Repair</b>Faults found &amp; fixed</div>
- </div>
- </div>
+  <!-- ============ HOME ============ -->
+  <section class="page active" id="page-home">
+    <div class="window">
+      <div class="titlebar"><span class="dot"></span> Welcome, Sheldon_Engineering.exe <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+      <div class="window-body">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">Septic tanks, done properly</div>
+            <h1>Your septic<br/>system,<br/><span class="outline">sorted.</span></h1>
+            <p class="lead">Installations, pumping, inspections and repairs, explained in plain English, with the useful information a homeowner actually needs before they pick up the phone.</p>
+            <div class="cta-row">
+              <button class="btn" data-goto="services">Explore Services</button>
+              <button class="btn secondary" data-goto="how">How Septic Works →</button>
+            </div>
+          </div>
+          <div class="hero-circles">
+            <svg width="230" height="154" viewBox="0 0 400 268" role="img" aria-label="Sheldon Engineering modern mark, eight circles in 3, 2, 3 rows"><circle cx="90" cy="66" r="38" fill="#ffffff"/><circle cx="200" cy="66" r="38" fill="#ffffff"/><circle cx="310" cy="66" r="38" fill="#ffffff"/><circle cx="145" cy="150" r="26" fill="#e6e6e6"/><circle cx="255" cy="150" r="26" fill="#e6e6e6"/><circle cx="90" cy="216" r="14" fill="#a8a8a8"/><circle cx="200" cy="216" r="14" fill="#a8a8a8"/><circle cx="310" cy="216" r="14" fill="#a8a8a8"/></svg>
+            <p>The Sheldon mark  <br/>3 · 2 · 3<br/>eight circles, falling in size</p>
+          </div>
+        </div>
+      </div>
+      <div class="status-bar">
+        <div><b>Install</b>New systems &amp; replacements</div>
+        <div><b>Pump</b>Scheduled tank pumping</div>
+        <div><b>Inspect</b>Reports for sales &amp; surveys</div>
+        <div><b>Repair</b>Faults found &amp; fixed</div>
+      </div>
+    </div>
 
- <div class="window">
- <div class="titlebar"><span class="dot"></span> Quick_Links, pick a job <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
- <div class="window-body tight">
- <div class="icon-grid">
- <button class="icon-tile" data-goto="services"><div class="circ"></div><strong>New Installation</strong><span>Systems designed for your property and household.</span></button>
- <button class="icon-tile" data-goto="services"><div class="circ"></div><strong>Tank Pumping</strong><span>Routine emptying before sludge becomes a problem.</span></button>
- <button class="icon-tile" data-goto="services"><div class="circ"></div><strong>Inspections</strong><span>Buying, selling, or just want to know the condition.</span></button>
- <button class="icon-tile" data-goto="quote"><div class="circ"></div><strong>Get a Quote</strong><span>Tell us about the job and get a clear next step.</span></button>
- </div>
- </div>
- </div>
+    <div class="window">
+      <div class="titlebar"><span class="dot"></span> Quick_Links, pick a job <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+      <div class="window-body tight">
+        <div class="icon-grid">
+          <button class="icon-tile" data-goto="services"><div class="circ"></div><strong>New Installation</strong><span>Systems designed for your property and household.</span></button>
+          <button class="icon-tile" data-goto="services"><div class="circ"></div><strong>Tank Pumping</strong><span>Routine emptying before sludge becomes a problem.</span></button>
+          <button class="icon-tile" data-goto="services"><div class="circ"></div><strong>Inspections</strong><span>Buying, selling, or just want to know the condition.</span></button>
+          <button class="icon-tile" data-goto="quote"><div class="circ"></div><strong>Get a Quote</strong><span>Tell us about the job and get a clear next step.</span></button>
+        </div>
+      </div>
+    </div>
 
- <div class="window">
- <div class="titlebar"><span class="dot"></span> Warning_Signs.txt <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
- <div class="window-body">
- <h2>Signs your system needs attention</h2>
- <p class="lead" style="font-size:15.5px">None of these fix themselves. If you spot one, get the tank checked before a small job turns into a replacement.</p>
- <div class="warn-grid" style="margin-top:18px">
- <div class="warn"><b>Slow drains everywhere</b>One slow sink is a blockage. Every drain slowing down at once points at the tank.</div>
- <div class="warn"><b>Gurgling &amp; smells</b>Gurgling pipes, or sewage odours inside or near the tank and drainfield.</div>
- <div class="warn"><b>Wet, lush patches</b>Soggy ground or unusually green grass over the drainfield, even in dry weather.</div>
- <div class="warn"><b>Backups</b>Water backing up into the lowest drains in the house when you flush or run laundry.</div>
- <div class="warn"><b>It's been 3–5 years</b>Most household tanks need pumping on that cycle. Longer gaps risk the drainfield.</div>
- <div class="warn"><b>Well water changes</b>Any change in taste, smell or test results near a septic system deserves a check.</div>
- </div>
- </div>
- </div>
- </section>
+    <div class="window">
+      <div class="titlebar"><span class="dot"></span> Warning_Signs.txt <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+      <div class="window-body">
+        <h2>Signs your system needs attention</h2>
+        <p class="lead" style="font-size:15.5px">None of these fix themselves. If you spot one, get the tank checked before a small job turns into a replacement.</p>
+        <div class="warn-grid" style="margin-top:18px">
+          <div class="warn"><b>Slow drains everywhere</b>One slow sink is a blockage. Every drain slowing down at once points at the tank.</div>
+          <div class="warn"><b>Gurgling &amp; smells</b>Gurgling pipes, or sewage odours inside or near the tank and drainfield.</div>
+          <div class="warn"><b>Wet, lush patches</b>Soggy ground or unusually green grass over the drainfield, even in dry weather.</div>
+          <div class="warn"><b>Backups</b>Water backing up into the lowest drains in the house when you flush or run laundry.</div>
+          <div class="warn"><b>It's been 3–5 years</b>Most household tanks need pumping on that cycle. Longer gaps risk the drainfield.</div>
+          <div class="warn"><b>Well water changes</b>Any change in taste, smell or test results near a septic system deserves a check.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
- <!-- ============ SERVICES ============ -->
- <section class="page" id="page-services">
- <div class="section-head">
- <h2>Services</h2>
- <p>Everything a septic system needs across its life, in one place. Specific equipment, guarantees and pricing are Oliver's to confirm, this site shows the structure and the copy.</p>
- </div>
- <div class="grid-3">
- <div class="card"><span class="tag">Install</span><h3>New System Installation</h3><p>A complete new system sized for your property, soil and household, from first site visit through to a working, signed-off install.</p><ul><li>Site &amp; soil assessment</li><li>System sizing and layout</li><li>Tank, pipework &amp; drainfield install</li><li>Final checks and handover notes</li></ul></div>
- <div class="card"><span class="tag">Maintain</span><h3>Tank Pumping &amp; Cleaning</h3><p>Routine emptying that removes the sludge and scum layers before they escape into, and clog, the drainfield.</p><ul><li>Full tank empty and clean</li><li>Baffle and filter check</li><li>Condition notes after every visit</li><li>Reminder for your next due date</li></ul></div>
- <div class="card"><span class="tag">Inspect</span><h3>Inspections &amp; Reports</h3><p>A clear written picture of what you have and what state it's in, the document buyers, sellers and solicitors actually ask for.</p><ul><li>Full system inspection</li><li>Tank condition and levels</li><li>Drainfield performance check</li><li>Written report with recommendations</li></ul></div>
- <div class="card dark"><span class="tag">Repair</span><h3>Repairs &amp; Replacements</h3><p>Fault finding first, then the smallest fix that properly solves it, from a broken baffle to a failed drainfield.</p><ul><li>Blockages, baffles &amp; lids</li><li>Pipework and pump faults</li><li>Drainfield repair or renewal</li><li>Honest call on repair vs. replace</li></ul></div>
- <div class="card"><span class="tag">Drainfield</span><h3>Drainfield / Leach Field</h3><p>The part of the system you can't replace cheaply, design, installation and rescue work for the field that finishes the treatment.</p><ul><li>New field design and install</li><li>Resting and rotation advice</li><li>Root and damage repairs</li><li>Load and water-use review</li></ul></div>
- <div class="card"><span class="tag">Plan</span><h3>Maintenance Plans</h3><p>Never guess when you're due. A simple schedule based on your tank size and household, so pumping happens on time, every time.</p><ul><li>Schedule set to your household</li><li>Visit reminders</li><li>Service history in one place</li><li>Priority booking for plan holders*</li></ul></div>
- </div>
- <p style="font-size:13px;color:#444;margin-top:14px">* Placeholder line, Oliver to confirm what a maintenance plan includes before this goes live.</p>
- <div class="cta-row"><button class="btn" data-goto="quote">Ask about a service →</button><button class="btn secondary" data-goto="how">Understand your system first</button></div>
- </section>
+  <!-- ============ SERVICES ============ -->
+  <section class="page" id="page-services">
+    <div class="section-head">
+      <h2>Services</h2>
+      <p>Everything a septic system needs across its life, in one place. Specific equipment, guarantees and pricing are Oliver's to confirm, this site shows the structure and the copy.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><span class="tag">Install</span><h3>New System Installation</h3><p>A complete new system sized for your property, soil and household, from first site visit through to a working, signed-off install.</p><ul><li>Site &amp; soil assessment</li><li>System sizing and layout</li><li>Tank, pipework &amp; drainfield install</li><li>Final checks and handover notes</li></ul></div>
+      <div class="card"><span class="tag">Maintain</span><h3>Tank Pumping &amp; Cleaning</h3><p>Routine emptying that removes the sludge and scum layers before they escape into, and clog, the drainfield.</p><ul><li>Full tank empty and clean</li><li>Baffle and filter check</li><li>Condition notes after every visit</li><li>Reminder for your next due date</li></ul></div>
+      <div class="card"><span class="tag">Inspect</span><h3>Inspections &amp; Reports</h3><p>A clear written picture of what you have and what state it's in, the document buyers, sellers and solicitors actually ask for.</p><ul><li>Full system inspection</li><li>Tank condition and levels</li><li>Drainfield performance check</li><li>Written report with recommendations</li></ul></div>
+      <div class="card dark"><span class="tag">Repair</span><h3>Repairs &amp; Replacements</h3><p>Fault finding first, then the smallest fix that properly solves it, from a broken baffle to a failed drainfield.</p><ul><li>Blockages, baffles &amp; lids</li><li>Pipework and pump faults</li><li>Drainfield repair or renewal</li><li>Honest call on repair vs. replace</li></ul></div>
+      <div class="card"><span class="tag">Drainfield</span><h3>Drainfield / Leach Field</h3><p>The part of the system you can't replace cheaply, design, installation and rescue work for the field that finishes the treatment.</p><ul><li>New field design and install</li><li>Resting and rotation advice</li><li>Root and damage repairs</li><li>Load and water-use review</li></ul></div>
+      <div class="card"><span class="tag">Plan</span><h3>Maintenance Plans</h3><p>Never guess when you're due. A simple schedule based on your tank size and household, so pumping happens on time, every time.</p><ul><li>Schedule set to your household</li><li>Visit reminders</li><li>Service history in one place</li><li>Priority booking for plan holders*</li></ul></div>
+    </div>
+    <p style="font-size:13px;color:#444;margin-top:14px">* Placeholder line, Oliver to confirm what a maintenance plan includes before this goes live.</p>
+    <div class="cta-row"><button class="btn" data-goto="quote">Ask about a service →</button><button class="btn secondary" data-goto="how">Understand your system first</button></div>
+  </section>
 
- <!-- ============ HOW IT WORKS ============ -->
- <section class="page" id="page-how">
- <div class="section-head">
- <h2>How a septic system works</h2>
- <p>Three parts, one job: take everything that leaves your house, separate it, treat it, and return clean water to the ground. Here's each stage.</p>
- </div>
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="page" id="page-how">
+    <div class="section-head">
+      <h2>How a septic system works</h2>
+      <p>Three parts, one job: take everything that leaves your house, separate it, treat it, and return clean water to the ground. Here's each stage.</p>
+    </div>
 
- <div class="window">
- <div class="titlebar"><span class="dot"></span> System_Diagram.bmp <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
- <div class="window-body tight">
- <div class="diagram-wrap">
- <svg viewBox="0 0 900 300" role="img" aria-label="Diagram of a house connected to a septic tank and drainfield">
- <rect x="10" y="70" width="140" height="100" fill="none" stroke="#000" stroke-width="3"/>
- <path d="M30 70 L80 30 L130 70" fill="none" stroke="#000" stroke-width="3"/>
- <rect x="68" y="105" width="24" height="34" fill="none" stroke="#000" stroke-width="2.5"/>
- <text x="80" y="195" text-anchor="middle" font-size="14" font-weight="700">HOUSE</text>
- <line x1="150" y1="120" x2="290" y2="120" stroke="#000" stroke-width="4"/>
- <rect x="290" y="70" width="260" height="130" fill="none" stroke="#000" stroke-width="3"/>
- <line x1="290" y1="105" x2="550" y2="105" stroke="#000" stroke-width="2" stroke-dasharray="6 5"/>
- <rect x="290" y="160" width="260" height="40" fill="#000" opacity=".85"/>
- <rect x="330" y="70" width="10" height="80" fill="#000"/>
- <rect x="500" y="70" width="10" height="80" fill="#000"/>
- <text x="420" y="55" text-anchor="middle" font-size="14" font-weight="700">SEPTIC TANK</text>
- <text x="315" y="98" font-size="11" fill="#000">SCUM</text>
- <text x="470" y="188" font-size="11" fill="#fff" font-weight="700">SLUDGE</text>
- <text x="420" y="135" text-anchor="middle" font-size="11">CLEAR EFFLUENT</text>
- <line x1="550" y1="120" x2="640" y2="120" stroke="#000" stroke-width="4"/>
- <g stroke="#000" stroke-width="3" fill="none">
- <line x1="640" y1="120" x2="860" y2="120"/><line x1="680" y1="120" x2="680" y2="185"/><line x1="750" y1="120" x2="750" y2="185"/><line x1="820" y1="120" x2="820" y2="185"/>
- </g>
- <g fill="#000"><circle cx="680" cy="205" r="4"/><circle cx="750" cy="215" r="4"/><circle cx="820" cy="205" r="4"/><circle cx="715" cy="230" r="4"/><circle cx="785" cy="230" r="4"/></g>
- <text x="750" y="275" text-anchor="middle" font-size="14" font-weight="700">DRAINFIELD, soil finishes the treatment</text>
- <text x="215" y="105" font-size="11">ALL WASTEWATER OUT</text>
- </svg>
- </div>
- </div>
- </div>
+    <div class="window">
+      <div class="titlebar"><span class="dot"></span> System_Diagram.bmp <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+      <div class="window-body tight">
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 900 300" role="img" aria-label="Diagram of a house connected to a septic tank and drainfield">
+            <rect x="10" y="70" width="140" height="100" fill="none" stroke="#000" stroke-width="3"/>
+            <path d="M30 70 L80 30 L130 70" fill="none" stroke="#000" stroke-width="3"/>
+            <rect x="68" y="105" width="24" height="34" fill="none" stroke="#000" stroke-width="2.5"/>
+            <text x="80" y="195" text-anchor="middle" font-size="14" font-weight="700">HOUSE</text>
+            <line x1="150" y1="120" x2="290" y2="120" stroke="#000" stroke-width="4"/>
+            <rect x="290" y="70" width="260" height="130" fill="none" stroke="#000" stroke-width="3"/>
+            <line x1="290" y1="105" x2="550" y2="105" stroke="#000" stroke-width="2" stroke-dasharray="6 5"/>
+            <rect x="290" y="160" width="260" height="40" fill="#000" opacity=".85"/>
+            <rect x="330" y="70" width="10" height="80" fill="#000"/>
+            <rect x="500" y="70" width="10" height="80" fill="#000"/>
+            <text x="420" y="55" text-anchor="middle" font-size="14" font-weight="700">SEPTIC TANK</text>
+            <text x="315" y="98" font-size="11" fill="#000">SCUM</text>
+            <text x="470" y="188" font-size="11" fill="#fff" font-weight="700">SLUDGE</text>
+            <text x="420" y="135" text-anchor="middle" font-size="11">CLEAR EFFLUENT</text>
+            <line x1="550" y1="120" x2="640" y2="120" stroke="#000" stroke-width="4"/>
+            <g stroke="#000" stroke-width="3" fill="none">
+              <line x1="640" y1="120" x2="860" y2="120"/><line x1="680" y1="120" x2="680" y2="185"/><line x1="750" y1="120" x2="750" y2="185"/><line x1="820" y1="120" x2="820" y2="185"/>
+            </g>
+            <g fill="#000"><circle cx="680" cy="205" r="4"/><circle cx="750" cy="215" r="4"/><circle cx="820" cy="205" r="4"/><circle cx="715" cy="230" r="4"/><circle cx="785" cy="230" r="4"/></g>
+            <text x="750" y="275" text-anchor="middle" font-size="14" font-weight="700">DRAINFIELD, soil finishes the treatment</text>
+            <text x="215" y="105" font-size="11">ALL WASTEWATER OUT</text>
+          </svg>
+        </div>
+      </div>
+    </div>
 
- <div class="steps" style="margin-bottom:26px">
- <div class="card"><div class="num">1</div><h3>Everything flows in</h3><p>Every drain, toilet and appliance sends wastewater through one main line into the buried tank.</p></div>
- <div class="card"><div class="num">2</div><h3>The tank separates</h3><p>Solids sink as sludge, oils float as scum, and the clearer middle layer, effluent, flows on. Bacteria in the tank break down much of the waste.</p></div>
- <div class="card"><div class="num">3</div><h3>Effluent flows out</h3><p>Baffles hold the scum and sludge back so only the liquid layer leaves for the drainfield. This is why pumping matters, a full tank stops separating.</p></div>
- <div class="card"><div class="num">4</div><h3>Soil finishes it</h3><p>Perforated pipes spread the liquid through the drainfield, where the soil filters and treats it before it rejoins the groundwater.</p></div>
- </div>
+    <div class="steps" style="margin-bottom:26px">
+      <div class="card"><div class="num">1</div><h3>Everything flows in</h3><p>Every drain, toilet and appliance sends wastewater through one main line into the buried tank.</p></div>
+      <div class="card"><div class="num">2</div><h3>The tank separates</h3><p>Solids sink as sludge, oils float as scum, and the clearer middle layer, effluent, flows on. Bacteria in the tank break down much of the waste.</p></div>
+      <div class="card"><div class="num">3</div><h3>Effluent flows out</h3><p>Baffles hold the scum and sludge back so only the liquid layer leaves for the drainfield. This is why pumping matters, a full tank stops separating.</p></div>
+      <div class="card"><div class="num">4</div><h3>Soil finishes it</h3><p>Perforated pipes spread the liquid through the drainfield, where the soil filters and treats it before it rejoins the groundwater.</p></div>
+    </div>
 
- <div class="window">
- <div class="titlebar"><span class="dot"></span> Pumping_Estimator.exe, when are you due? <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
- <div class="window-body">
- <div class="est">
- <div>
- <div class="field"><label for="tankSize">Tank size (gallons)</label>
- <select id="tankSize"><option value="750">750 gal</option><option value="1000" selected>1,000 gal</option><option value="1250">1,250 gal</option><option value="1500">1,500 gal</option></select></div>
- <div class="field"><label for="people">People in household</label>
- <select id="people"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select></div>
- <div class="field"><label for="disposal">Garbage disposal in regular use?</label>
- <select id="disposal"><option value="no" selected>No</option><option value="yes">Yes, adds solids faster</option></select></div>
- <button class="btn" id="calcBtn" style="width:100%">Calculate my interval</button>
- <p style="font-size:12.5px;color:#555;margin-top:12px">General educational estimate based on typical household guidance (most homes: every 3–5 years). Your inspection is the real answer.</p>
- </div>
- <div class="est-result">
- <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.7">Estimated pumping interval</div>
- <div class="big" id="estOut">3–5 yrs</div>
- <p id="estNote">Pick your tank size and household, then calculate. If you don't know your tank size, an inspection will tell you, and start your service record.</p>
- </div>
- </div>
- </div>
- </div>
+    <div class="window">
+      <div class="titlebar"><span class="dot"></span> Pumping_Estimator.exe, when are you due? <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+      <div class="window-body">
+        <div class="est">
+          <div>
+            <div class="field"><label for="tankSize">Tank size (gallons)</label>
+              <select id="tankSize"><option value="750">750 gal</option><option value="1000" selected>1,000 gal</option><option value="1250">1,250 gal</option><option value="1500">1,500 gal</option></select></div>
+            <div class="field"><label for="people">People in household</label>
+              <select id="people"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select></div>
+            <div class="field"><label for="disposal">Garbage disposal in regular use?</label>
+              <select id="disposal"><option value="no" selected>No</option><option value="yes">Yes, adds solids faster</option></select></div>
+            <button class="btn" id="calcBtn" style="width:100%">Calculate my interval</button>
+            <p style="font-size:12.5px;color:#555;margin-top:12px">General educational estimate based on typical household guidance (most homes: every 3–5 years). Your inspection is the real answer.</p>
+          </div>
+          <div class="est-result">
+            <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.7">Estimated pumping interval</div>
+            <div class="big" id="estOut">3–5 yrs</div>
+            <p id="estNote">Pick your tank size and household, then calculate. If you don't know your tank size, an inspection will tell you, and start your service record.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
- <div class="grid-2">
- <div class="card"><h3>Septic-safe habits</h3><ul class="do-list">
- <li>Spread laundry across the week instead of all in one day</li>
- <li>Fix leaking taps and running toilets promptly</li>
- <li>Keep a service record, dates, pumping, inspections</li>
- <li>Keep heavy vehicles off the tank and drainfield</li>
- <li>Direct roof and surface water away from the drainfield</li>
- </ul></div>
- <div class="card"><h3>Never put these down the drain</h3><ul class="dont-list">
- <li>Wipes of any kind, including ones labelled “flushable”</li>
- <li>Fats, oils, grease and coffee grounds</li>
- <li>Paint, solvents, fuel and harsh chemicals</li>
- <li>Sanitary products, nappies, cotton buds, dental floss</li>
- <li>Large volumes of bleach or antibacterial cleaners at once</li>
- </ul></div>
- </div>
- </section>
+    <div class="grid-2">
+      <div class="card"><h3>Septic-safe habits</h3><ul class="do-list">
+        <li>Spread laundry across the week instead of all in one day</li>
+        <li>Fix leaking taps and running toilets promptly</li>
+        <li>Keep a service record, dates, pumping, inspections</li>
+        <li>Keep heavy vehicles off the tank and drainfield</li>
+        <li>Direct roof and surface water away from the drainfield</li>
+      </ul></div>
+      <div class="card"><h3>Never put these down the drain</h3><ul class="dont-list">
+        <li>Wipes of any kind, including ones labelled “flushable”</li>
+        <li>Fats, oils, grease and coffee grounds</li>
+        <li>Paint, solvents, fuel and harsh chemicals</li>
+        <li>Sanitary products, nappies, cotton buds, dental floss</li>
+        <li>Large volumes of bleach or antibacterial cleaners at once</li>
+      </ul></div>
+    </div>
+  </section>
 
- <!-- ============ SERVICE AREA ============ -->
- <section class="page" id="page-area">
- <div class="section-head">
- <h2>Service area</h2>
- <p>Where Sheldon Engineering travels for installs, pumping, inspections and repairs, based at 21070 Summit Rd, Topanga, CA 90290. Call <a href="tel:+14244251228">(424) 425-1228</a>. The surrounding towns and radius below are a framework for Oliver to complete before launch.</p>
- </div>
- <div class="placeholder-note"><b>Based in Topanga:</b> 21070 Summit Rd, Topanga, CA 90290 · (424) 425-1228. The rings below show the layout, Oliver adds the core towns and how far out jobs are taken.</div>
- <div class="grid-2">
- <div class="card rings">
- <svg width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Concentric circles showing core and extended service coverage">
- <circle cx="150" cy="150" r="140" fill="none" stroke="#000" stroke-width="2" stroke-dasharray="7 6"/>
- <circle cx="150" cy="150" r="95" fill="none" stroke="#000" stroke-width="2.5"/>
- <circle cx="150" cy="150" r="50" fill="#000"/>
- <circle cx="150" cy="150" r="10" fill="#fff"/>
- <text x="150" y="42" text-anchor="middle" font-size="12" font-weight="700">EXTENDED, BY arrangement</text>
- <text x="150" y="82" text-anchor="middle" font-size="12" font-weight="700">REGULAR RUNS</text>
- <text x="150" y="225" text-anchor="middle" font-size="12" font-weight="700" fill="#fff"></text>
- <text x="150" y="292" text-anchor="middle" font-size="12">HOME BASE, TOPANGA, CA</text>
- </svg>
- </div>
- <div>
- <div class="area-slots">
- <div class="slot"><b>Home base</b>21070 Summit Rd, Topanga, CA 90290</div>
- <div class="slot"><b>Core area</b>[ Towns covered weekly, Oliver to add ]</div>
- <div class="slot"><b>Regular runs</b>[ Surrounding areas, Oliver to add ]</div>
- <div class="slot"><b>Extended jobs</b>[ Larger installs by arrangement, Oliver to confirm ]</div>
- <div class="slot"><b>Call-out area</b>[ Repairs &amp; urgent work radius, Oliver to add ]</div>
- <div class="slot"><b>Not sure?</b>Send the quote form with your location, that's what it's for.</div>
- </div>
- <div class="cta-row"><button class="btn" data-goto="quote">Check my location →</button></div>
- </div>
- </div>
- <div class="window" style="margin-top:26px">
- <div class="titlebar"><span class="dot"></span> How_a_job_runs.txt <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
- <div class="window-body">
- <div class="steps" style="grid-template-columns:repeat(4,1fr)">
- <div><div class="num">1</div><h3>Enquire</h3><p style="font-size:14.5px">Send the quote form or call. The more you can say about the system, the sharper the first answer.</p></div>
- <div><div class="num">2</div><h3>Assess</h3><p style="font-size:14.5px">Site visit or inspection where needed, so the quote is based on your actual system, not a guess.</p></div>
- <div><div class="num">3</div><h3>Quote</h3><p style="font-size:14.5px">A clear written quote for the work agreed. [Oliver to confirm quote validity period.]</p></div>
- <div><div class="num">4</div><h3>Do &amp; document</h3><p style="font-size:14.5px">Work completed, condition notes left with you, and your next service date set.</p></div>
- </div>
- </div>
- </div>
- </section>
+  <!-- ============ SERVICE AREA ============ -->
+  <section class="page" id="page-area">
+    <div class="section-head">
+      <h2>Service area</h2>
+      <p>Where Sheldon Engineering travels for installs, pumping, inspections and repairs, based at 21070 Summit Rd, Topanga, CA 90290. Call <a href="tel:+14244251228">(424) 425-1228</a>. The surrounding towns and radius below are a framework for Oliver to complete before launch.</p>
+    </div>
+    <div class="placeholder-note"><b>Based in Topanga:</b> 21070 Summit Rd, Topanga, CA 90290 · (424) 425-1228. The rings below show the layout, Oliver adds the core towns and how far out jobs are taken.</div>
+    <div class="grid-2">
+      <div class="card rings">
+        <svg width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Concentric circles showing core and extended service coverage">
+          <circle cx="150" cy="150" r="140" fill="none" stroke="#000" stroke-width="2" stroke-dasharray="7 6"/>
+          <circle cx="150" cy="150" r="95" fill="none" stroke="#000" stroke-width="2.5"/>
+          <circle cx="150" cy="150" r="50" fill="#000"/>
+          <circle cx="150" cy="150" r="10" fill="#fff"/>
+          <text x="150" y="42" text-anchor="middle" font-size="12" font-weight="700">EXTENDED, BY arrangement</text>
+          <text x="150" y="82" text-anchor="middle" font-size="12" font-weight="700">REGULAR RUNS</text>
+          <text x="150" y="225" text-anchor="middle" font-size="12" font-weight="700" fill="#fff"></text>
+          <text x="150" y="292" text-anchor="middle" font-size="12">HOME BASE, TOPANGA, CA</text>
+        </svg>
+      </div>
+      <div>
+        <div class="area-slots">
+          <div class="slot"><b>Home base</b>21070 Summit Rd, Topanga, CA 90290</div>
+          <div class="slot"><b>Core area</b>[ Towns covered weekly, Oliver to add ]</div>
+          <div class="slot"><b>Regular runs</b>[ Surrounding areas, Oliver to add ]</div>
+          <div class="slot"><b>Extended jobs</b>[ Larger installs by arrangement, Oliver to confirm ]</div>
+          <div class="slot"><b>Call-out area</b>[ Repairs &amp; urgent work radius, Oliver to add ]</div>
+          <div class="slot"><b>Not sure?</b>Send the quote form with your location, that's what it's for.</div>
+        </div>
+        <div class="cta-row"><button class="btn" data-goto="quote">Check my location →</button></div>
+      </div>
+    </div>
+    <div class="window" style="margin-top:26px">
+      <div class="titlebar"><span class="dot"></span> How_a_job_runs.txt <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+      <div class="window-body">
+        <div class="steps" style="grid-template-columns:repeat(4,1fr)">
+          <div><div class="num">1</div><h3>Enquire</h3><p style="font-size:14.5px">Send the quote form or call. The more you can say about the system, the sharper the first answer.</p></div>
+          <div><div class="num">2</div><h3>Assess</h3><p style="font-size:14.5px">Site visit or inspection where needed, so the quote is based on your actual system, not a guess.</p></div>
+          <div><div class="num">3</div><h3>Quote</h3><p style="font-size:14.5px">A clear written quote for the work agreed. [Oliver to confirm quote validity period.]</p></div>
+          <div><div class="num">4</div><h3>Do &amp; document</h3><p style="font-size:14.5px">Work completed, condition notes left with you, and your next service date set.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
- <!-- ============ FAQ ============ -->
- <section class="page" id="page-faq">
- <div class="section-head">
- <h2>Frequently asked questions</h2>
- <p>The questions every septic owner asks eventually, answered straight, so you're informed before you ever need to book.</p>
- </div>
- <div id="faqList">
- <div class="faq-item"><button class="faq-q">How often does a tank need pumping?<span class="plus">+</span></button><div class="faq-a">For most households, every 3 to 5 years. The real interval depends on tank size, how many people live in the house, and how much water and solids the system handles. A garbage disposal, for example, fills a tank noticeably faster. The estimator on the “How Septic Works” page gives you a starting point; an inspection gives you the exact answer.</div></div>
- <div class="faq-item"><button class="faq-q">What happens if I never pump it?<span class="plus">+</span></button><div class="faq-a">Sludge and scum build up until the tank can no longer separate them. Solids then escape into the drainfield and clog the soil, and a failed drainfield is the most expensive part of the system to put right. Pumping is cheap insurance by comparison.</div></div>
- <div class="faq-item"><button class="faq-q">Can I use a garbage disposal with a septic tank?<span class="plus">+</span></button><div class="faq-a">Yes, but it adds ground food solids to the tank, which means the sludge layer builds faster and pumping needs to happen more often. Scrape plates into the bin or compost where you can, and treat the disposal as occasional, not a bin.</div></div>
- <div class="faq-item"><button class="faq-q">Are septic additives worth it?<span class="plus">+</span></button><div class="faq-a">A healthy tank already contains the bacteria it needs, supplied by normal household use. Additives are generally not a substitute for pumping, and some products can do more harm than good. If a seller claims an additive means you'll never need pumping again, that claim alone tells you what you need to know.</div></div>
- <div class="faq-item"><button class="faq-q">I'm buying a house with a septic system. What should I do?<span class="plus">+</span></button><div class="faq-a">Get an independent inspection before you complete, where the tank is, its size and condition, when it was last pumped, and whether the drainfield is performing. Ask the seller for any service records. A system is a significant asset with significant replacement costs, so treat it like the survey treats the roof.</div></div>
- <div class="faq-item"><button class="faq-q">Why is the grass greener over my drainfield?<span class="plus">+</span></button><div class="faq-a">A slightly lusher patch can be normal, the field is returning treated water and nutrients to the soil. But very lush growth combined with soggy ground, smells, or slow drains can mean the field is overloaded or failing, and that's worth an inspection.</div></div>
- <div class="faq-item"><button class="faq-q">How long should a septic system last?<span class="plus">+</span></button><div class="faq-a">With correct installation and regular maintenance, tanks commonly last for decades, and a well-cared-for drainfield can serve 20–30 years or more. The biggest life-shorteners are neglected pumping, overloading with water, vehicles driving over the field, and the wrong things going down the drains.</div></div>
- <div class="faq-item"><button class="faq-q">Can I build or plant over the drainfield?<span class="plus">+</span></button><div class="faq-a">Keep it to grass. Tree and shrub roots seek out the moisture and can invade and block pipes, and buildings, patios, pools or driveways over the field prevent it breathing and make any future repair far harder. Keep the area clear and accessible.</div></div>
- </div>
- <div class="cta-row"><button class="btn" data-goto="quote">Still got a question? Ask it here →</button></div>
- </section>
+  <!-- ============ FAQ ============ -->
+  <section class="page" id="page-faq">
+    <div class="section-head">
+      <h2>Frequently asked questions</h2>
+      <p>The questions every septic owner asks eventually, answered straight, so you're informed before you ever need to book.</p>
+    </div>
+    <div id="faqList">
+      <div class="faq-item"><button class="faq-q">How often does a tank need pumping?<span class="plus">+</span></button><div class="faq-a">For most households, every 3 to 5 years. The real interval depends on tank size, how many people live in the house, and how much water and solids the system handles. A garbage disposal, for example, fills a tank noticeably faster. The estimator on the “How Septic Works” page gives you a starting point; an inspection gives you the exact answer.</div></div>
+      <div class="faq-item"><button class="faq-q">What happens if I never pump it?<span class="plus">+</span></button><div class="faq-a">Sludge and scum build up until the tank can no longer separate them. Solids then escape into the drainfield and clog the soil, and a failed drainfield is the most expensive part of the system to put right. Pumping is cheap insurance by comparison.</div></div>
+      <div class="faq-item"><button class="faq-q">Can I use a garbage disposal with a septic tank?<span class="plus">+</span></button><div class="faq-a">Yes, but it adds ground food solids to the tank, which means the sludge layer builds faster and pumping needs to happen more often. Scrape plates into the bin or compost where you can, and treat the disposal as occasional, not a bin.</div></div>
+      <div class="faq-item"><button class="faq-q">Are septic additives worth it?<span class="plus">+</span></button><div class="faq-a">A healthy tank already contains the bacteria it needs, supplied by normal household use. Additives are generally not a substitute for pumping, and some products can do more harm than good. If a seller claims an additive means you'll never need pumping again, that claim alone tells you what you need to know.</div></div>
+      <div class="faq-item"><button class="faq-q">I'm buying a house with a septic system. What should I do?<span class="plus">+</span></button><div class="faq-a">Get an independent inspection before you complete, where the tank is, its size and condition, when it was last pumped, and whether the drainfield is performing. Ask the seller for any service records. A system is a significant asset with significant replacement costs, so treat it like the survey treats the roof.</div></div>
+      <div class="faq-item"><button class="faq-q">Why is the grass greener over my drainfield?<span class="plus">+</span></button><div class="faq-a">A slightly lusher patch can be normal, the field is returning treated water and nutrients to the soil. But very lush growth combined with soggy ground, smells, or slow drains can mean the field is overloaded or failing, and that's worth an inspection.</div></div>
+      <div class="faq-item"><button class="faq-q">How long should a septic system last?<span class="plus">+</span></button><div class="faq-a">With correct installation and regular maintenance, tanks commonly last for decades, and a well-cared-for drainfield can serve 20–30 years or more. The biggest life-shorteners are neglected pumping, overloading with water, vehicles driving over the field, and the wrong things going down the drains.</div></div>
+      <div class="faq-item"><button class="faq-q">Can I build or plant over the drainfield?<span class="plus">+</span></button><div class="faq-a">Keep it to grass. Tree and shrub roots seek out the moisture and can invade and block pipes, and buildings, patios, pools or driveways over the field prevent it breathing and make any future repair far harder. Keep the area clear and accessible.</div></div>
+    </div>
+    <div class="cta-row"><button class="btn" data-goto="quote">Still got a question? Ask it here →</button></div>
+  </section>
 
- <!-- ============ QUOTE ============ -->
- <section class="page" id="page-quote">
- <div class="section-head">
- <h2>Contact &amp; request a quote</h2>
- <p>Tell us about the property and the job, or call <a href="tel:+14244251228">(424) 425-1228</a>. In this the form builds a tidy summary you can copy.</p>
- </div>
- <div class="grid-2" style="align-items:start">
- <div>
- <div class="card" style="margin-bottom:16px">
- <h3>Direct contact</h3>
- <table>
- <tr><th style="width:38%">Phone</th><td><a href="tel:+14244251228">(424) 425-1228</a></td></tr>
- <tr><th>Address</th><td>21070 Summit Rd, Topanga, CA 90290</td></tr>
- <tr><th>Base</th><td>Topanga, CA</td></tr>
- <tr><th>Hours</th><td>[ Mon–Fri hours, Oliver to add ]</td></tr>
- <tr><th>Emergencies</th><td>[ Policy, Oliver to confirm ]</td></tr>
- </table>
- </div>
- <div class="card dark">
- <h3>What helps you get a faster quote</h3>
- <ul>
- <li>Property address or area, and access notes</li>
- <li>Tank size and last pumped date, if you know them</li>
- <li>Photos of the tank lid area or any fault</li>
- <li>For house sales: your completion timeline</li>
- </ul>
- </div>
- </div>
+  <!-- ============ QUOTE ============ -->
+  <section class="page" id="page-quote">
+    <div class="section-head">
+      <h2>Contact &amp; request a quote</h2>
+      <p>Tell us about the property and the job, or call <a href="tel:+14244251228">(424) 425-1228</a>. The form builds a tidy summary you can copy.</p>
+    </div>
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <h3>Direct contact</h3>
+          <table>
+            <tr><th style="width:38%">Phone</th><td><a href="tel:+14244251228">(424) 425-1228</a></td></tr>
+            <tr><th>Address</th><td>21070 Summit Rd, Topanga, CA 90290</td></tr>
+            <tr><th>Base</th><td>Topanga, CA</td></tr>
+            <tr><th>Hours</th><td>[ Mon–Fri hours, Oliver to add ]</td></tr>
+            <tr><th>Emergencies</th><td>[ Policy, Oliver to confirm ]</td></tr>
+          </table>
+        </div>
+        <div class="card dark">
+          <h3>What helps you get a faster quote</h3>
+          <ul>
+            <li>Property address or area, and access notes</li>
+            <li>Tank size and last pumped date, if you know them</li>
+            <li>Photos of the tank lid area or any fault</li>
+            <li>For house sales: your completion timeline</li>
+          </ul>
+        </div>
+      </div>
 
- <div class="window" style="margin-bottom:0">
- <div class="titlebar"><span class="dot"></span> Quote_Request, New <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
- <div class="window-body tight">
- <form id="quoteForm">
- <div class="form-grid">
- <div class="field"><label for="qName">Your name *</label><input id="qName" required placeholder="Full name"/></div>
- <div class="field"><label for="qContact">Phone or email *</label><input id="qContact" required placeholder="Best way to reach you"/></div>
- </div>
- <div class="field"><label for="qLocation">Property location</label><input id="qLocation" placeholder="Town / area of the property"/></div>
- <div class="form-grid">
- <div class="field"><label for="qService">Service needed</label>
- <select id="qService"><option>New installation</option><option>Tank pumping</option><option>Inspection / report</option><option>Repair</option><option>Drainfield work</option><option>Maintenance plan</option><option>Not sure, advise me</option></select></div>
- <div class="field"><label for="qKnown">Tank known?</label>
- <select id="qKnown"><option>Don't know</option><option>Know size &amp; last pumped date</option><option>Know size only</option><option>New property, no system yet</option></select></div>
- </div>
- <div class="field"><label for="qMsg">About the job</label><textarea id="qMsg" rows="4" placeholder="What is happening, what do you need, any deadlines…"></textarea></div>
- <label class="check-row"><input type="checkbox" id="qUrgent"/> This is urgent, drains backing up or sewage visible</label>
- <button class="btn" type="submit" style="width:100%;margin-top:16px">Build my quote request →</button>
- <p style="font-size:12.5px;color:#555;margin-top:10px">Form only, nothing is sent anywhere. It creates a summary below to copy, or call (424) 425-1228.</p>
- </form>
- <div class="summary-box" id="summaryBox" tabindex="-1"></div>
- <button class="btn secondary" id="copyBtn" style="display:none;width:100%;margin-top:12px">Copy request summary</button>
- <p id="copyMsg" style="font-size:13px;margin:10px 0 0"></p>
- </div>
- </div>
- </div>
- </section>
+      <div class="window" style="margin-bottom:0">
+        <div class="titlebar"><span class="dot"></span> Quote_Request, New <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+        <div class="window-body tight">
+          <form id="quoteForm">
+            <div class="form-grid">
+              <div class="field"><label for="qName">Your name *</label><input id="qName" required placeholder="Full name"/></div>
+              <div class="field"><label for="qContact">Phone or email *</label><input id="qContact" required placeholder="Best way to reach you"/></div>
+            </div>
+            <div class="field"><label for="qLocation">Property location</label><input id="qLocation" placeholder="Town / area of the property"/></div>
+            <div class="form-grid">
+              <div class="field"><label for="qService">Service needed</label>
+                <select id="qService"><option>New installation</option><option>Tank pumping</option><option>Inspection / report</option><option>Repair</option><option>Drainfield work</option><option>Maintenance plan</option><option>Not sure, advise me</option></select></div>
+              <div class="field"><label for="qKnown">Tank known?</label>
+                <select id="qKnown"><option>Don't know</option><option>Know size &amp; last pumped date</option><option>Know size only</option><option>New property, no system yet</option></select></div>
+            </div>
+            <div class="field"><label for="qMsg">About the job</label><textarea id="qMsg" rows="4" placeholder="What is happening, what do you need, any deadlines…"></textarea></div>
+            <label class="check-row"><input type="checkbox" id="qUrgent"/> This is urgent, drains backing up or sewage visible</label>
+            <button class="btn" type="submit" style="width:100%;margin-top:16px">Build my quote request →</button>
+            <p style="font-size:12.5px;color:#555;margin-top:10px">Form only, nothing is sent anywhere. It creates a summary below to copy, or call (424) 425-1228.</p>
+          </form>
+          <div class="summary-box" id="summaryBox" tabindex="-1"></div>
+          <button class="btn secondary" id="copyBtn" style="display:none;width:100%;margin-top:12px">Copy request summary</button>
+          <p id="copyMsg" style="font-size:13px;margin:10px 0 0"></p>
+        </div>
+      </div>
+    </div>
+  </section>
 
- <!-- FOOTER -->
- <footer class="footer-bar">
- <span class="start">Sheldon</span>
- <strong>Sheldon Engineering, Septic Systems</strong>
- <span>Sheldon Engineering</span>
- <span style="margin-left:auto">21070 Summit Rd, Topanga, CA 90290 · (424) 425-1228 · Draft for review by Oliver Sheldon</span>
- </footer>
+  <!-- FOOTER -->
+  <footer class="footer-bar">
+    <span class="start">Sheldon</span>
+    <strong>Sheldon Engineering, Septic Systems</strong>
+    <span>Sheldon Engineering</span>
+    <span style="margin-left:auto">21070 Summit Rd, Topanga, CA 90290 · (424) 425-1228 · Draft for review by Oliver Sheldon</span>
+  </footer>
 </div>
 
 <script>
 (function(){
- var pages=document.querySelectorAll('.page');
- var navBtns=document.querySelectorAll('.nav button');
- function show(id){
- pages.forEach(function(p){p.classList.toggle('active',p.id==='page-'+id)});
- navBtns.forEach(function(b){b.classList.toggle('active',b.dataset.page===id)});
- window.scrollTo({top:0,behavior:'smooth'});
- }
- navBtns.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.page)})});
- document.querySelectorAll('[data-goto]').forEach(function(el){el.addEventListener('click',function(){show(el.dataset.goto)})});
+  var pages=document.querySelectorAll('.page');
+  var navBtns=document.querySelectorAll('.nav button');
+  function show(id){
+    pages.forEach(function(p){p.classList.toggle('active',p.id==='page-'+id)});
+    navBtns.forEach(function(b){b.classList.toggle('active',b.dataset.page===id)});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  navBtns.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.page)})});
+  document.querySelectorAll('[data-goto]').forEach(function(el){el.addEventListener('click',function(){show(el.dataset.goto)})});
 
- // Clock, XP taskbar style
- function tick(){var d=new Date();var h=d.getHours()%12||12;var m=('0'+d.getMinutes()).slice(-2);var ap=d.getHours()>=12?'PM':'AM';document.getElementById('clock').textContent=h+':'+m+' '+ap;}
- tick(); setInterval(tick,15000);
+  // Clock, XP taskbar style
+  function tick(){var d=new Date();var h=d.getHours()%12||12;var m=('0'+d.getMinutes()).slice(-2);var ap=d.getHours()>=12?'PM':'AM';document.getElementById('clock').textContent=h+':'+m+' '+ap;}
+  tick(); setInterval(tick,15000);
 
- // FAQ accordion
- document.querySelectorAll('.faq-item').forEach(function(item){
- item.querySelector('.faq-q').addEventListener('click',function(){
- var open=item.classList.contains('open');
- document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open');i.querySelector('.plus').textContent='+'});
- if(!open){item.classList.add('open');item.querySelector('.plus').textContent='−';}
- });
- });
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(function(item){
+    item.querySelector('.faq-q').addEventListener('click',function(){
+      var open=item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open');i.querySelector('.plus').textContent='+'});
+      if(!open){item.classList.add('open');item.querySelector('.plus').textContent='−';}
+    });
+  });
 
- // Pumping estimator, general guidance table (years between pumpings)
- var table={750:{1:5.2,2:2.6,3:1.5,4:0.9,5:0.6,6:0.4},1000:{1:8.0,2:4.2,3:2.6,4:1.7,5:1.2,6:0.9},1250:{1:10.7,2:5.8,3:3.7,4:2.5,5:1.8,6:1.4},1500:{1:13.4,2:7.4,3:4.8,4:3.3,5:2.4,6:1.9}};
- document.getElementById('calcBtn').addEventListener('click',function(){
- var size=document.getElementById('tankSize').value;
- var ppl=parseInt(document.getElementById('people').value,10);
- var disp=document.getElementById('disposal').value==='yes';
- var yrs=table[size][ppl]; if(disp){yrs=yrs*0.7;}
- var out=document.getElementById('estOut'), note=document.getElementById('estNote');
- if(yrs<1){out.textContent='Under 1 yr'; note.textContent='That combination fills a tank fast. You are likely overdue if it has been more than a year, book an inspection and ask about a larger tank or more frequent schedule.';}
- else if(yrs<2){out.textContent='~'+yrs.toFixed(1)+' yrs'; note.textContent='A short interval for this setup. Keep pumping on schedule and go easy on the garbage disposal, solids are what fill the tank.';}
- else if(yrs<=5){out.textContent='~'+Math.round(yrs)+' yrs'; note.textContent='Right in the typical range. Put the date in the diary now, keep your service record, and re-check after any change in household size.';}
- else {out.textContent='~'+Math.round(yrs)+' yrs'; note.textContent='A long interval thanks to a larger tank and smaller household. Still inspect the tank and baffles at least every few years, time passes even when levels look fine.';}
- });
+  // Pumping estimator, general guidance table (years between pumpings)
+  var table={750:{1:5.2,2:2.6,3:1.5,4:0.9,5:0.6,6:0.4},1000:{1:8.0,2:4.2,3:2.6,4:1.7,5:1.2,6:0.9},1250:{1:10.7,2:5.8,3:3.7,4:2.5,5:1.8,6:1.4},1500:{1:13.4,2:7.4,3:4.8,4:3.3,5:2.4,6:1.9}};
+  document.getElementById('calcBtn').addEventListener('click',function(){
+    var size=document.getElementById('tankSize').value;
+    var ppl=parseInt(document.getElementById('people').value,10);
+    var disp=document.getElementById('disposal').value==='yes';
+    var yrs=table[size][ppl]; if(disp){yrs=yrs*0.7;}
+    var out=document.getElementById('estOut'), note=document.getElementById('estNote');
+    if(yrs<1){out.textContent='Under 1 yr'; note.textContent='That combination fills a tank fast. You are likely overdue if it has been more than a year, book an inspection and ask about a larger tank or more frequent schedule.';}
+    else if(yrs<2){out.textContent='~'+yrs.toFixed(1)+' yrs'; note.textContent='A short interval for this setup. Keep pumping on schedule and go easy on the garbage disposal, solids are what fill the tank.';}
+    else if(yrs<=5){out.textContent='~'+Math.round(yrs)+' yrs'; note.textContent='Right in the typical range. Put the date in the diary now, keep your service record, and re-check after any change in household size.';}
+    else {out.textContent='~'+Math.round(yrs)+' yrs'; note.textContent='A long interval thanks to a larger tank and smaller household. Still inspect the tank and baffles at least every few years, time passes even when levels look fine.';}
+  });
 
- // Quote form, builds a copyable summary, sends nothing
- var form=document.getElementById('quoteForm');
- form.addEventListener('submit',function(e){
- e.preventDefault();
- var lines=[
- 'QUOTE REQUEST, Sheldon Engineering (form)',
- 'Name: '+document.getElementById('qName').value,
- 'Contact: '+document.getElementById('qContact').value,
- 'Property location: '+(document.getElementById('qLocation').value||'Not given'),
- 'Service needed: '+document.getElementById('qService').value,
- 'Tank known: '+document.getElementById('qKnown').value,
- 'Urgent: '+(document.getElementById('qUrgent').checked?'YES, backup / sewage visible':'No'),
- 'About the job: '+(document.getElementById('qMsg').value||'Not given')
- ];
- var box=document.getElementById('summaryBox');
- box.textContent=lines.join('\n'); box.classList.add('show');
- document.getElementById('copyBtn').style.display='block';
- document.getElementById('copyMsg').textContent='';
- box.focus();
- });
- document.getElementById('copyBtn').addEventListener('click',function(){
- var text=document.getElementById('summaryBox').textContent;
- var msg=document.getElementById('copyMsg');
- if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){msg.textContent='Copied. Paste it into an email or message, or call (424) 425-1228.';},function(){msg.textContent='Copy failed, select the summary text and copy it manually.';});}
- else{msg.textContent='Select the summary text above and copy it manually.';}
- });
+  // Quote form, builds a copyable summary, sends nothing
+  var form=document.getElementById('quoteForm');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var lines=[
+      'QUOTE REQUEST, Sheldon Engineering (form)',
+      'Name: '+document.getElementById('qName').value,
+      'Contact: '+document.getElementById('qContact').value,
+      'Property location: '+(document.getElementById('qLocation').value||'Not given'),
+      'Service needed: '+document.getElementById('qService').value,
+      'Tank known: '+document.getElementById('qKnown').value,
+      'Urgent: '+(document.getElementById('qUrgent').checked?'YES, backup / sewage visible':'No'),
+      'About the job: '+(document.getElementById('qMsg').value||'Not given')
+    ];
+    var box=document.getElementById('summaryBox');
+    box.textContent=lines.join('\n'); box.classList.add('show');
+    document.getElementById('copyBtn').style.display='block';
+    document.getElementById('copyMsg').textContent='';
+    box.focus();
+  });
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    var text=document.getElementById('summaryBox').textContent;
+    var msg=document.getElementById('copyMsg');
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){msg.textContent='Copied. Paste it into an email or message, or call (424) 425-1228.';},function(){msg.textContent='Copy failed, select the summary text and copy it manually.';});}
+    else{msg.textContent='Select the summary text above and copy it manually.';}
+  });
 })();
 </script>
 </body>
