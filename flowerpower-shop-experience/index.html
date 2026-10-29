@@ -3971,6 +3971,68 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
           radial-gradient(640px 360px at 96% 100%, rgba(242,184,75,.08) 0%, transparent 55%),
           linear-gradient(168deg, #1b2c3d 0%, #12291c 135%);
       }
+      /* storefront header — OG Nation Maywood-style store/order header,
+         honest pre-launch version: no address, hours, phone or deals */
+      .wm-storefront{
+        border-radius:26px; overflow:hidden; margin-bottom:22px;
+        background:color-mix(in srgb, var(--paper) 62%, transparent);
+        -webkit-backdrop-filter:blur(14px) saturate(1.45); backdrop-filter:blur(14px) saturate(1.45);
+        border:2px solid var(--ink); box-shadow:5px 5px 0 var(--ink), 0 18px 40px rgba(84,120,80,.16);
+      }
+      :root[data-theme="dark"] .wm-storefront{ border-color:rgba(255,255,255,.35); box-shadow:5px 5px 0 rgba(0,0,0,.55), 0 18px 40px rgba(0,0,0,.42); }
+      .wm-launch-strip{
+        background:var(--pink-hot); color:#fff; text-align:center;
+        font-weight:900; font-size:.86rem; letter-spacing:.06em; padding:10px 16px;
+        border-bottom:2px solid var(--ink);
+      }
+      .wm-store-main{ padding:26px 30px 8px; display:flex; flex-wrap:wrap; align-items:center; gap:18px; }
+      .wm-store-mark{
+        width:64px; height:64px; flex:0 0 64px; border-radius:50%;
+        background:var(--pink-soft); border:2px solid var(--ink);
+        display:flex; align-items:center; justify-content:center; box-shadow:3px 3px 0 var(--ink);
+      }
+      .wm-store-name{ flex:1 1 260px; min-width:0; }
+      .wm-store-name-row{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+      .wm-store-name h2{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2rem,4.5vw,2.9rem); line-height:1; color:var(--ink); margin:0; }
+      .wm-prelaunch{
+        display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:999px;
+        background:var(--gold); color:#40260a; border:2px solid #40260a;
+        font-size:.72rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap;
+      }
+      .wm-store-name p{ color:var(--ink-soft); font-weight:700; margin-top:7px; }
+      .wm-store-order{ flex:0 1 auto; }
+      .wm-store-order .btn{ font-size:1.05rem; padding:16px 28px; }
+      .wm-info-row{
+        display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+        padding:18px 30px 26px;
+      }
+      .wm-info{
+        border:1.5px solid color-mix(in srgb, var(--ink) 20%, transparent); border-radius:16px;
+        padding:14px 16px; background:color-mix(in srgb, var(--paper) 55%, transparent);
+      }
+      .wm-info .wm-info-label{ display:block; font-size:.68rem; font-weight:900; letter-spacing:.16em; text-transform:uppercase; color:var(--green-deep); margin-bottom:5px; }
+      :root[data-theme="dark"] .wm-info .wm-info-label{ color:var(--green); }
+      .wm-info b{ display:block; font-size:.98rem; color:var(--ink); line-height:1.3; }
+      .wm-info span{ display:block; font-size:.85rem; font-weight:700; color:var(--ink-soft); margin-top:3px; line-height:1.4; }
+      .wm-info a{ color:var(--green-deep); text-decoration:none; border-bottom:2.5px solid var(--gold); }
+      .wm-how{
+        display:flex; gap:12px; align-items:flex-start;
+        border-radius:18px; padding:16px 20px; margin-bottom:22px;
+        background:var(--ink); color:var(--cream);
+        font-weight:700; font-size:.95rem; line-height:1.55;
+      }
+      .wm-how .wm-how-label{ flex:0 0 auto; font-size:.68rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; background:var(--gold); color:#40260a; border-radius:999px; padding:6px 12px; margin-top:1px; }
+      .wm-how b{ color:var(--gold); }
+      .wm-path-label{ font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; color:var(--ink-soft); margin:0 2px 10px; display:flex; align-items:center; gap:10px; }
+      .wm-path-label::after{ content:""; flex:1; height:1.5px; background:color-mix(in srgb, var(--ink) 22%, transparent); }
+      .btn-order-big{ font-size:1.08rem !important; padding:17px 30px !important; width:100%; justify-content:center; }
+      @media (max-width:900px){
+        .wm-info-row{ grid-template-columns:1fr; padding:14px 20px 20px; }
+        .wm-store-main{ padding:22px 20px 4px; }
+        .wm-store-order{ flex:1 1 100%; }
+        .wm-store-order .btn{ width:100%; justify-content:center; }
+        .wm-how{ flex-direction:column; }
+      }
       .wm-card{
         display:grid; grid-template-columns:1.15fr .85fr; gap:34px; align-items:center;
         border-radius:26px; padding:38px 40px;
@@ -4007,11 +4069,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         background:var(--gold); color:#40260a; border:1.5px solid #40260a;
         font-size:.68rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase;
       }
-      /* ---------- kushie order block (separate brand, inside Weedmaps) ---------- */
-      .kushie-card{
-        margin-top:22px;
-        display:grid; grid-template-columns:1.15fr .85fr; gap:34px; align-items:center;
-        border-radius:26px; padding:34px 40px;
+      /* ---------- kushie store grid (separate brand, inside Weedmaps) ----------
+         OG Nation Maywood-style online-store grid in our glassy style:
+         clean white category tiles linking to Kushie's Weedmaps brand page.
+         Honest difference, visible on purpose: Kushie is a brand, not a
+         store — no cart, no login, no OPEN / Pickup line, no prices. */
+      .kushie-store{
+        margin-top:14px;
+        border-radius:26px; padding:30px 32px 32px;
         background:
           radial-gradient(520px 260px at 100% 0%, var(--gold-soft) 0%, transparent 60%),
           color-mix(in srgb, var(--paper) 62%, transparent);
@@ -4019,40 +4084,62 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         border:2px solid var(--ink);
         box-shadow:5px 5px 0 var(--ink), 0 18px 40px rgba(84,120,80,.14);
       }
-      :root[data-theme="dark"] .kushie-card{
+      :root[data-theme="dark"] .kushie-store{
         border-color:var(--gold);
         box-shadow:5px 5px 0 rgba(0,0,0,.55), 0 18px 40px rgba(0,0,0,.42);
         background:
           radial-gradient(520px 260px at 100% 0%, rgba(242,184,75,.14) 0%, transparent 60%),
           color-mix(in srgb, var(--paper) 72%, transparent);
       }
-      .kushie-copy .mini{ font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.75rem; color:#8a5a00; }
-      :root[data-theme="dark"] .kushie-copy .mini{ color:var(--gold); }
-      .kushie-copy h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.7rem,3.4vw,2.35rem); line-height:1.08; margin:8px 0 12px; color:var(--ink); }
-      .kushie-copy p{ color:var(--ink-soft); max-width:48ch; }
-      .kushie-panel{
-        border:1.5px solid color-mix(in srgb, var(--ink) 22%, transparent);
-        border-radius:22px; padding:26px 24px;
-        background:color-mix(in srgb, var(--gold-soft) 42%, var(--paper) 58%);
-        display:flex; flex-direction:column; gap:14px;
+      .kushie-store-head .mini{ font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.75rem; color:#8a5a00; }
+      :root[data-theme="dark"] .kushie-store-head .mini{ color:var(--gold); }
+      .kushie-store-head h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.9rem,4vw,2.6rem); line-height:1.05; margin:8px 0 10px; color:var(--ink); }
+      .kushie-store-head .kushie-sub{ color:var(--ink); font-weight:700; max-width:62ch; }
+      .kushie-store-head .kushie-sub b{ color:var(--green-deep); }
+      :root[data-theme="dark"] .kushie-store-head .kushie-sub b{ color:var(--green); }
+      .kushie-brand-note{
+        margin-top:12px; display:flex; gap:10px; align-items:flex-start;
+        border:1.5px dashed color-mix(in srgb, var(--ink) 32%, transparent); border-radius:14px;
+        padding:11px 14px; font-size:.88rem; font-weight:700; color:var(--ink-soft); line-height:1.5;
+        background:color-mix(in srgb, var(--paper) 45%, transparent);
       }
-      :root[data-theme="dark"] .kushie-panel{ background:color-mix(in srgb, var(--gold-soft) 55%, var(--paper) 45%); border-color:rgba(255,255,255,.2); }
-      .kushie-panel b{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.2rem; line-height:1.15; color:var(--ink); }
-      .kushie-cats{ display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:0; padding:0; }
-      .kushie-cats li{
-        padding:7px 12px; border-radius:999px; border:1.5px solid var(--ink);
-        background:var(--paper); color:var(--ink);
-        font-size:.78rem; font-weight:900; letter-spacing:.02em;
+      .kushie-brand-note b{ color:var(--ink); white-space:nowrap; }
+      .kushie-toolbar{
+        display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+        margin-top:22px; padding:12px 2px; border-top:2px solid color-mix(in srgb, var(--ink) 22%, transparent);
+        border-bottom:2px solid color-mix(in srgb, var(--ink) 22%, transparent);
       }
-      .kushie-panel span{ font-size:.88rem; font-weight:700; color:var(--ink-soft); }
-      .kushie-panel .kushie-tag{
-        align-self:flex-start; padding:6px 13px; border-radius:999px;
-        background:var(--ink); color:var(--cream);
-        font-size:.68rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase;
+      .kushie-toolbar .kushie-toolbar-label{ font-weight:900; font-size:1.05rem; color:var(--ink); }
+      .kushie-toolbar .kushie-toolbar-meta{ font-size:.78rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); }
+      .kushie-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:18px; }
+      .kushie-tile{
+        display:flex; flex-direction:column; gap:14px; min-height:172px;
+        background:#ffffff; color:#221631; text-decoration:none;
+        border:1.5px solid rgba(34,22,49,.16); border-radius:18px; padding:20px 18px 16px;
+        box-shadow:0 8px 22px rgba(84,120,80,.10);
+        transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
       }
+      .kushie-tile:hover{ transform:translateY(-3px); border-color:#8a5a00; box-shadow:0 14px 28px rgba(84,120,80,.16); }
+      .kushie-tile:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+      .kushie-tile-icon{
+        width:56px; height:56px; border-radius:14px; flex:0 0 56px;
+        display:flex; align-items:center; justify-content:center;
+        background:#fdf3d3; border:1.5px solid rgba(34,22,49,.14);
+      }
+      .kushie-tile-icon svg{ width:30px; height:30px; }
+      .kushie-tile b{ font-size:1.08rem; line-height:1.2; font-weight:900; }
+      .kushie-tile .kushie-tile-link{ margin-top:auto; font-size:.82rem; font-weight:900; color:#8a5a00; display:inline-flex; align-items:center; gap:6px; }
+      .kushie-order{ margin-top:20px; }
+      .kushie-store .wm-note{ max-width:none; text-align:center; margin-left:auto; margin-right:auto; }
       @media (max-width:900px){
         .wm-card{ grid-template-columns:1fr; padding:28px 22px; gap:24px; }
-        .kushie-card{ grid-template-columns:1fr; padding:28px 22px; gap:24px; }
+        .kushie-store{ padding:24px 20px 26px; }
+        .kushie-grid{ grid-template-columns:repeat(2,1fr); }
+        .kushie-brand-note{ flex-direction:column; gap:2px; }
+      }
+      @media (max-width:420px){
+        .kushie-tile{ min-height:158px; padding:16px 14px 14px; }
+        .kushie-tile b{ font-size:1rem; }
       }
 
       /* ---------- ticker ---------- */
@@ -4665,14 +4752,57 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
            button and the #weedmapsSlot panel at the live store URL/embed. -->
       <section class="block weedmaps" id="weedmaps">
         <div class="wrap">
+          <!-- STOREFRONT HEADER — Maywood-style store header, pre-launch honest:
+               no address, no hours, no phone, no deals, no directions,
+               because FLWRPWR has no retail store yet. -->
+          <div class="wm-storefront reveal">
+            <div class="wm-launch-strip">✿ Storefront launching with the first drop — FLWRPWR is not taking orders yet ✿</div>
+            <div class="wm-store-main">
+              <span class="wm-store-mark" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 100 100" data-daisy data-c="#ff5fa8"></svg></span>
+              <div class="wm-store-name">
+                <div class="wm-store-name-row">
+                  <h2>FLWRPWR</h2>
+                  <span class="wm-prelaunch">● Pre-launch</span>
+                </div>
+                <p>Good vibes, great flower · Women-owned · 4g Smalls</p>
+              </div>
+              <div class="wm-store-order">
+                <a class="btn btn-leaf" href="https://weedmaps.com/search?query=FLWRPWR" target="_blank" rel="noopener">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                  Find us on Weedmaps
+                </a>
+              </div>
+            </div>
+            <div class="wm-info-row">
+              <div class="wm-info">
+                <span class="wm-info-label">Storefront</span>
+                <b>Coming soon on Weedmaps</b>
+                <span>No retail store yet, so there is no address or directions to give.</span>
+              </div>
+              <div class="wm-info">
+                <span class="wm-info-label">Status</span>
+                <b>Pre-launch</b>
+                <span>No opening hours or order cut-off yet. The storefront opens with the first drop.</span>
+              </div>
+              <div class="wm-info">
+                <span class="wm-info-label">Follow the launch</span>
+                <b><a href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener">@flwrpwr_co</a></b>
+                <span>Launch updates land on Instagram first.</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="wm-how reveal"><span class="wm-how-label">How ordering works</span><span>Ordering happens <b>on Weedmaps, through a retailer that carries the brand</b> — pickup and delivery options are set by that retailer on Weedmaps, not on this site.</span></p>
+
+          <p class="wm-path-label reveal">Order path 1 · FLWRPWR — coming soon</p>
           <div class="wm-card reveal">
             <div class="wm-copy">
-              <span class="mini">Find us out there</span>
+              <span class="mini">FLWRPWR on Weedmaps</span>
               <h2 class="editorial-h">Find FLWRPWR on Weedmaps</h2>
               <p>Our official Weedmaps storefront is on its way — the brand page blooms with the first drop. Until then, run the name through Weedmaps search and keep an eye out: the second we're live, this is the first place we'll shout about it.</p>
               <div class="wm-ctas">
-                <a class="btn btn-leaf" href="https://weedmaps.com/search?query=FLWRPWR" target="_blank" rel="noopener">
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                <a class="btn btn-leaf btn-order-big" href="https://weedmaps.com/search?query=FLWRPWR" target="_blank" rel="noopener">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
                   Search FLWRPWR on Weedmaps
                 </a>
               </div>
@@ -4686,33 +4816,51 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
             </div>
           </div>
 
-          <!-- KUSHIE — separate brand with a live Weedmaps page.
-               Ordering happens on Weedmaps through retailers that carry
-               Kushie, not on this site. FLWRPWR does not sell Kushie. -->
-          <div class="kushie-card reveal">
-            <div class="kushie-copy">
+          <p class="wm-path-label reveal" style="margin-top:28px">Order path 2 · Kushie — live now</p>
+
+          <!-- KUSHIE — separate brand with a live Weedmaps page, shown as an
+               OG Nation Maywood-style category grid. Kushie is a brand, not
+               a store: no cart, no login, no OPEN / Pickup line, no prices.
+               Every tile and the order button go to Kushie's real Weedmaps
+               brand page. FLWRPWR does not sell Kushie. -->
+          <div class="kushie-store reveal">
+            <div class="kushie-store-head">
               <span class="mini">Separate brand · Live on Weedmaps</span>
-              <h3>Also on Weedmaps: Kushie</h3>
-              <p>Kushie is a separate brand from FLWRPWR, and unlike us it already has a live page on Weedmaps. Head there to see its Gold carts, disposables, pods, and infused pre-rolls, sold through dispensaries that carry Kushie.</p>
-              <div class="wm-ctas">
-                <a class="btn btn-gold" href="https://weedmaps.com/brands/kushie-brand/products" target="_blank" rel="noopener">
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-                  Order Kushie on Weedmaps
-                </a>
-              </div>
-              <p class="wm-note">Ordering happens <b>on Weedmaps, through a retailer that carries Kushie</b> — not on this site. FLWRPWR does not sell Kushie; this button just takes you to Kushie&rsquo;s Weedmaps page so you can order there.</p>
+              <h3>Kushie on Weedmaps</h3>
+              <p class="kushie-sub">Ordering happens <b>on Weedmaps, through retailers that carry Kushie</b> — not on this site. Pick a category below, or open the full brand page to order there.</p>
+              <p class="kushie-brand-note"><b>Brand, not a store:</b><span>Kushie has no storefront of its own here, so there is no cart, no login, no pickup line, and no prices on this page. Ordering is handled by the retailer you choose on Weedmaps.</span></p>
             </div>
-            <div class="kushie-panel">
-              <b>On Kushie&rsquo;s Weedmaps page</b>
-              <ul class="kushie-cats">
-                <li>Gold carts</li>
-                <li>Disposables</li>
-                <li>Pods</li>
-                <li>Infused pre-rolls</li>
-              </ul>
-              <span>Find Kushie through the dispensaries that carry it on Weedmaps, and place your order with that retailer on Weedmaps.</span>
-              <span class="kushie-tag">Live brand page on Weedmaps</span>
+            <div class="kushie-toolbar" aria-hidden="true">
+              <span class="kushie-toolbar-label">Categories</span>
+              <span class="kushie-toolbar-meta">Brand page · Weedmaps</span>
             </div>
+            <div class="kushie-grid">
+              <a class="kushie-tile" href="https://weedmaps.com/brands/kushie-brand/products" target="_blank" rel="noopener" aria-label="Gold Carts — view Kushie Gold Carts on Weedmaps">
+                <span class="kushie-tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#8a5a00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="7" width="6" height="11" rx="1.5"/><path d="M10.5 7V4.5h3V7"/><path d="M9 11h6"/></svg></span>
+                <b>Gold Carts</b>
+                <span class="kushie-tile-link">View on Weedmaps <span aria-hidden="true">→</span></span>
+              </a>
+              <a class="kushie-tile" href="https://weedmaps.com/brands/kushie-brand/products" target="_blank" rel="noopener" aria-label="Disposables — view Kushie Disposables on Weedmaps">
+                <span class="kushie-tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#8a5a00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="3.5" width="4" height="17" rx="2"/><path d="M10 8h4"/></svg></span>
+                <b>Disposables</b>
+                <span class="kushie-tile-link">View on Weedmaps <span aria-hidden="true">→</span></span>
+              </a>
+              <a class="kushie-tile" href="https://weedmaps.com/brands/kushie-brand/products" target="_blank" rel="noopener" aria-label="Pods — view Kushie Pods on Weedmaps">
+                <span class="kushie-tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#8a5a00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="6" width="8" height="13" rx="3"/><path d="M10.5 6V4h3v2"/><circle cx="12" cy="12.5" r="1.4"/></svg></span>
+                <b>Pods</b>
+                <span class="kushie-tile-link">View on Weedmaps <span aria-hidden="true">→</span></span>
+              </a>
+              <a class="kushie-tile" href="https://weedmaps.com/brands/kushie-brand/products" target="_blank" rel="noopener" aria-label="Infused Pre-Rolls — view Kushie Infused Pre-Rolls on Weedmaps">
+                <span class="kushie-tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#8a5a00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19 16.5 6.5"/><path d="M16.5 6.5 19 4l1 1-2.5 2.5"/><path d="M4 19l1.8.4L5.4 21z"/></svg></span>
+                <b>Infused Pre-Rolls</b>
+                <span class="kushie-tile-link">View on Weedmaps <span aria-hidden="true">→</span></span>
+              </a>
+            </div>
+            <a class="btn btn-gold btn-order-big kushie-order" href="https://weedmaps.com/brands/kushie-brand/products" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              Order Kushie on Weedmaps
+            </a>
+            <p class="wm-note">FLWRPWR does not sell Kushie. This grid just takes you to Kushie&rsquo;s Weedmaps page, where a retailer that carries Kushie handles your order.</p>
           </div>
         </div>
       </section>
