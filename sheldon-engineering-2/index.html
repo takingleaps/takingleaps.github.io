@@ -157,7 +157,7 @@
  <p>Emergency line<br><span class="real"><a href="tel:+14244251228">(424) 425-1228</a></span></p>
  <p>Address<br><span class="real">21070 Summit Rd<br>Topanga, CA 90290</span></p>
  <p>Service area<br><span class="real">Topanga, CA</span></p>
- <p>Hours<br><span class="placeholder">[ OLIVER TO ADD HOURS ]</span></p>
+ <p>Hours<br><span class="placeholder">Call for hours</span></p>
  <button class="btn big" data-goto="quote">Request a callback</button>
  </div>
  </div>
@@ -171,17 +171,17 @@
  <h3 class="section-title">How booking works</h3>
  <div class="steps">
  <div class="step"><b class="num">01</b><h4 style="margin:4px 0">Tell us about the tank</h4><p class="muted" style="margin:0">Size if you know it, last pump date, and where the access lid is. “Don’t know” is a perfectly good answer, finding it is part of the job.</p></div>
- <div class="step"><b class="num">02</b><h4 style="margin:4px 0">Get a confirmed slot</h4><p class="muted" style="margin:0">Oliver confirms the visit and any estimate before work starts. No work proceeds on a placeholder price.</p></div>
+ <div class="step"><b class="num">02</b><h4 style="margin:4px 0">Get a confirmed slot</h4><p class="muted" style="margin:0">We confirm the visit and any estimate before work starts. No work proceeds on an unconfirmed price.</p></div>
  <div class="step"><b class="num">03</b><h4 style="margin:4px 0">Pumped, checked, recorded</h4><p class="muted" style="margin:0">You get the date and details logged, plus your next due date from the maintenance tool so it never sneaks up again.</p></div>
  </div>
 
- <div class="notice"><b>Good to know:</b> Most households need a pump every 3–5 years, but the real interval depends on tank size, how many people live in the house, and whether you use a garbage disposal. The tool on this site gives you a personal estimate in about 20 seconds.</div>
+ 
  </section>
 
  <!-- BOOK -->
  <section class="page" id="page-book">
  <h2 style="font-size:28px;margin:0 0 4px">Book a pump-out</h2>
- <p class="muted">Fill this in and the page builds a tidy booking request you can copy or email. In the live version, Oliver would connect this form to his real inbox / booking system.</p>
+ <p class="muted">Fill this in and the page builds a tidy booking request you can copy or email.</p>
  <form id="bookForm">
  <div><label for="b-name">Your name *</label><input id="b-name" required autocomplete="name" placeholder="e.g. Jordan Smith"></div>
  <div><label for="b-contact">Phone or email *</label><input id="b-contact" required placeholder="Best way to reach you"></div>
@@ -199,7 +199,7 @@
  <pre id="bookSummary"></pre>
  <div class="cta-row"><button class="btn" id="copyBook">Copy request</button><a class="btn" id="mailBook" href="#">Open in email</a></div>
  <p class="muted" id="copyBookMsg"></p>
- <p class="muted">note: the email button uses a placeholder address until Oliver adds his real one.</p>
+ 
  </div>
  </section>
 
@@ -233,7 +233,7 @@
  <!-- TOOL -->
  <section class="page" id="page-tool">
  <h2 style="font-size:28px;margin:0 0 4px">Maintenance schedule tool</h2>
- <p class="muted">Works out roughly when your tank is due, from the three things that actually drive it: tank size, household size, and disposal use. Estimate only, Oliver confirms the real schedule on a visit.</p>
+ <p class="muted">Works out roughly when your tank is due, from the three things that actually drive it: tank size, household size, and disposal use. Estimate only, We confirms the real schedule on a visit.</p>
  <form id="toolForm">
  <div><label for="t-people">People living in the home</label><select id="t-people"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6+</option></select></div>
  <div><label for="t-size">Tank size (gallons)</label><select id="t-size"><option value="750">750</option><option value="1000" selected>1,000</option><option value="1250">1,250</option><option value="1500">1,500</option><option value="2000">2,000</option></select></div>
@@ -248,21 +248,21 @@
  <div class="cta-row"><button class="btn" id="downloadIcs">⬇ Download calendar reminder (.ics)</button><button class="btn black" data-goto="book">Book this pump-out</button></div>
  <p class="muted">How it works: bigger tanks hold more before solids reach the outlet; more people and disposal use fill it faster. The interval shown uses those factors and shortens by about 20% if a disposal is used heavily.</p>
  </div>
- <div class="notice"><b>Between pumps:</b> spread laundry across the week instead of one big day, fix dripping taps, keep wipes / grease / chemicals out of the system (even “flushable” wipes), and keep vehicles off the drain field.</div>
+ 
  </section>
 
  <!-- PRICING -->
  <section class="page" id="page-pricing">
  <h2 style="font-size:28px;margin:0 0 4px">Pricing guide</h2>
- <p style="max-width:68ch">Straight answers about what drives the cost, so there are no surprises. <b>All ranges below are estimate placeholders for this .</b> Oliver will insert his real ranges before launch; nothing here is a quote.</p>
- <div class="notice" style="background:#111;color:#fff"><b>Estimates only, :</b> Final price is confirmed after tank size, depth, and access are known. No job is priced off this page alone.</div>
+ <p style="max-width:68ch">Straight answers about what drives the cost, so there are no surprises. Nothing here is a quote.</p>
+ <div class="notice" style="background:#111;color:#fff"><b>Estimates only:</b> Final price is confirmed after tank size, depth, and access are known. No job is priced off this page alone.</div>
  <div class="tablewrap"><table>
  <thead><tr><th>Service</th><th>What's included</th><th>What changes the price</th><th>Estimate range</th></tr></thead>
  <tbody>
- <tr><td data-l="Service"><b>Routine pump-out</b></td><td data-l="Included">Full pump, basic tank check, lids re-seated, visit logged</td><td data-l="Factors">Tank size, depth to lid, hose distance</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
- <tr><td data-l="Service"><b>Pump-out + inspection</b></td><td data-l="Included">Pump plus condition check of baffles, levels, and visible issues</td><td data-l="Factors">Tank size, access, findings</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
- <tr><td data-l="Service"><b>Emergency call-out</b></td><td data-l="Included">Urgent attendance for backup / overflow</td><td data-l="Factors">Time of day, urgency, work required</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
- <tr><td data-l="Service"><b>Real-estate / sale inspection</b></td><td data-l="Included">Inspection and written summary for a sale or purchase</td><td data-l="Factors">Tank size, paperwork / report detail</td><td data-l="Estimate range"><span class="placeholder">[ OLIVER TO ADD RANGE ]</span></td></tr>
+ <tr><td data-l="Service"><b>Routine pump-out</b></td><td data-l="Included">Full pump, basic tank check, lids re-seated, visit logged</td><td data-l="Factors">Tank size, depth to lid, hose distance</td><td data-l="Estimate range"><span class="placeholder">Quoted per job</span></td></tr>
+ <tr><td data-l="Service"><b>Pump-out + inspection</b></td><td data-l="Included">Pump plus condition check of baffles, levels, and visible issues</td><td data-l="Factors">Tank size, access, findings</td><td data-l="Estimate range"><span class="placeholder">Quoted per job</span></td></tr>
+ <tr><td data-l="Service"><b>Emergency call-out</b></td><td data-l="Included">Urgent attendance for backup / overflow</td><td data-l="Factors">Time of day, urgency, work required</td><td data-l="Estimate range"><span class="placeholder">Quoted per job</span></td></tr>
+ <tr><td data-l="Service"><b>Real-estate / sale inspection</b></td><td data-l="Included">Inspection and written summary for a sale or purchase</td><td data-l="Factors">Tank size, paperwork / report detail</td><td data-l="Estimate range"><span class="placeholder">Quoted per job</span></td></tr>
  <tr><td data-l="Service"><b>Repairs</b></td><td data-l="Included">Quoted after diagnosis, no fixed page price</td><td data-l="Factors">Parts, digging, extent of damage</td><td data-l="Estimate range"><b>Quoted per job</b></td></tr>
  <tr><td data-l="Service"><b>New installation</b></td><td data-l="Included">Quoted after site assessment</td><td data-l="Factors">Site, tank size, ground conditions, permits</td><td data-l="Estimate range"><b>Quoted per job</b></td></tr>
  </tbody></table></div>
@@ -295,20 +295,20 @@
  <aside>
  <div class="sidebox"><h3>Direct contact</h3><div>
  <p>Phone<br><span class="real"><a href="tel:+14244251228">(424) 425-1228</a></span></p>
- <p>Email<br><span class="placeholder">[ OLIVER TO ADD EMAIL ]</span></p>
+ <p>Email<br><span class="placeholder">Call (424) 425-1228</span></p>
  <p>Address<br><span class="real">21070 Summit Rd<br>Topanga, CA 90290</span></p>
  <p>Based in / service area<br><span class="real">Topanga, CA</span></p>
- <p>Hours<br><span class="placeholder">[ OLIVER TO ADD HOURS ]</span></p>
+ <p>Hours<br><span class="placeholder">Call for hours</span></p>
  <hr>
  <p><b>About Sheldon Engineering</b></p>
- <p>Septic tank pumping, inspections, repairs, and installations, based at 21070 Summit Rd, Topanga, CA 90290. This About text is a draft, Oliver to add his own story, years in business, licences, and coverage here before launch. Nothing on this page should be published as fact until he's checked it.</p>
+ <p>Septic tank pumping, inspections, repairs, and installations, based at 21070 Summit Rd, Topanga, CA 90290.</p>
  </div></div>
- <div class="notice"><b>For Oliver, fill-in checklist:</b><ul class="tight"><li>Email the forms should send to</li><li>Towns / radius served beyond Topanga</li><li>Real estimate ranges in Pricing Guide</li><li>Licences, hours, About story</li><li>Connect booking form to inbox / CRM</li></ul></div>
+ 
  </aside>
  </div>
  </section>
 
- <footer class="note">Sheldon Engineering • Black and white, with the modern 3-2-3 logo • 21070 Summit Rd, Topanga, CA 90290 • (424) 425-1228 • Draft for Oliver Sheldon to review and complete, not the live business website. Prices are still estimate placeholders; email and hours are still to confirm.</footer>
+ <footer class="note">Sheldon Engineering • 21070 Summit Rd, Topanga, CA 90290 • (424) 425-1228</footer>
  </div>
 </div>
 
@@ -433,5 +433,5 @@ document.getElementById('downloadIcs').addEventListener('click',function(){
  var blob=new Blob([ics],{type:'text/calendar'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='septic-pump-reminder.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
 });
 </script>
-</body>
+<div style="text-align:center;padding:24px 16px;font-family:Tahoma,Verdana,sans-serif"><a href="https://byyystudio.me/" style="color:#111">Back to byyystudio.me</a></div></body>
 </html>
