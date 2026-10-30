@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Family Dental Center: Appointment Request (Prototype)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #eef4f2;
+        --bg-soft: #e3edea;
+        --surface: #ffffff;
+        --surface-2: #f5f9f8;
+        --ink: #17322f;
+        --ink-soft: #3d5a55;
+        --muted: #5f7a74;
+        --line: #cfded9;
+        --line-strong: #a9c4bd;
+        --accent: #0d7a70;
+        --accent-dark: #095c54;
+        --tint: #e2efec;
+        --warn-bg: #fdf3e0;
+        --warn-line: #e8cf9a;
+        --warn-ink: #6d5312;
+        --error: #b3352b;
+        --error-bg: #fbeae8;
+        --shadow: 0 1px 2px rgba(23, 50, 47, 0.06), 0 10px 30px rgba(23, 50, 47, 0.07);
+        --radius: 14px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1a18;
+          --bg-soft: #122420;
+          --surface: #152623;
+          --surface-2: #1a2d29;
+          --ink: #e7f1ee;
+          --ink-soft: #c2d8d2;
+          --muted: #93ada6;
+          --line: #2b423d;
+          --line-strong: #3d5c55;
+          --accent: #3dbfae;
+          --accent-dark: #7fd8cb;
+          --tint: #1d3833;
+          --warn-bg: #2e2716;
+          --warn-line: #6b5a2c;
+          --warn-ink: #ecd28e;
+          --error: #f0938a;
+          --error-bg: #3a201d;
+          --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { transition: none !important; animation: none !important; }
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 17px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 64px; }
+
+      /* Prototype strip */
+      .proto-strip {
+        background: var(--ink);
+        color: var(--bg);
+      }
+      @media (prefers-color-scheme: dark) { .proto-strip { background: #050d0b; color: #cfe4de; } }
+      .proto-strip .inner {
+        max-width: 880px; margin: 0 auto; padding: 10px 16px;
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em;
+      }
+      .proto-dot { width: 9px; height: 9px; border-radius: 50%; background: #43c6b6; flex: none; }
+      .proto-strip .tag {
+        border: 1px solid currentColor; border-radius: 999px; padding: 1px 9px;
+        font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      }
+      .proto-strip span:last-child { font-weight: 500; opacity: 0.85; }
+
+      /* Header */
+      header.practice { padding: 30px 0 6px; }
+      .practice-row { display: flex; gap: 16px; align-items: flex-start; }
+      .mark {
+        width: 54px; height: 54px; flex: none; border-radius: 14px;
+        background: var(--accent); color: #fff;
+        display: grid; place-items: center;
+      }
+      @media (prefers-color-scheme: dark) { .mark { color: #08211d; } }
+      .mark svg { width: 30px; height: 30px; }
+      h1 {
+        font-family: "Newsreader", Georgia, serif;
+        font-weight: 600; font-size: clamp(30px, 6.4vw, 42px);
+        line-height: 1.08; margin: 2px 0 6px; letter-spacing: -0.01em;
+      }
+      .practice-meta { color: var(--ink-soft); font-size: 16px; margin: 0; }
+      .practice-meta a { color: var(--accent-dark); font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .practice-meta a:hover { text-decoration: underline; }
+      .lede { color: var(--ink-soft); font-size: 17.5px; max-width: 56ch; margin: 16px 0 0; }
+      .lede strong { color: var(--ink); }
+
+      /* Progress */
+      .progress {
+        display: flex; gap: 8px; margin: 26px 0 4px; flex-wrap: wrap;
+      }
+      .progress .step {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 13.5px; font-weight: 600; color: var(--muted);
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 999px; padding: 7px 13px 7px 8px;
+      }
+      .progress .num {
+        width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+        background: var(--tint); color: var(--accent-dark); font-size: 12.5px; font-weight: 800;
+      }
+      .progress .step.done { color: var(--ink); border-color: var(--line-strong); }
+      .progress .step.done .num { background: var(--accent); color: #fff; }
+      @media (prefers-color-scheme: dark) { .progress .step.done .num { color: #08211d; } }
+
+      /* Cards / sections */
+      section.card {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: var(--radius); box-shadow: var(--shadow);
+        padding: 22px 18px; margin-top: 18px;
+      }
+      @media (min-width: 640px) { section.card { padding: 28px 30px; } }
+      .sec-head { display: flex; gap: 12px; align-items: baseline; margin-bottom: 6px; }
+      .sec-num {
+        font-family: "Newsreader", Georgia, serif; font-style: italic;
+        color: var(--accent); font-size: 22px; font-weight: 600; flex: none;
+      }
+      h2 { font-size: 21px; font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+      .sec-sub { color: var(--muted); font-size: 15px; margin: 2px 0 16px 34px; }
+      fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+      legend { padding: 0; }
+      legend h2 { display: inline; }
+      .visually-hidden {
+        position: absolute; width: 1px; height: 1px; overflow: hidden;
+        clip: rect(0 0 0 0); white-space: nowrap;
+      }
+
+      /* Reason options */
+      .reasons { display: grid; gap: 10px; }
+      @media (min-width: 640px) { .reasons { grid-template-columns: 1fr 1fr; } }
+      .opt { position: relative; display: block; cursor: pointer; }
+      .opt input {
+        position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+        overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+        border: 0; white-space: nowrap;
+      }
+      .opt .face {
+        display: flex; gap: 13px; align-items: flex-start;
+        border: 1.5px solid var(--line); border-radius: 12px;
+        background: var(--surface-2); padding: 15px 15px; min-height: 64px;
+        transition: border-color 0.15s ease, background 0.15s ease;
+        height: 100%;
+      }
+      .opt .icon {
+        width: 42px; height: 42px; flex: none; border-radius: 10px;
+        background: var(--tint); color: var(--accent-dark);
+        display: grid; place-items: center;
+      }
+      .opt .icon svg { width: 22px; height: 22px; }
+      .opt .t { font-weight: 700; font-size: 16.5px; display: block; line-height: 1.3; }
+      .opt .d { color: var(--muted); font-size: 14px; display: block; margin-top: 2px; line-height: 1.4; }
+      .opt .check {
+        margin-left: auto; flex: none; width: 24px; height: 24px; border-radius: 50%;
+        border: 2px solid var(--line-strong); display: grid; place-items: center; color: #fff;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .opt .check svg { width: 13px; height: 13px; opacity: 0; }
+      .opt input:checked + .face { border-color: var(--accent); background: var(--tint); }
+      .opt input:checked + .face .check { background: var(--accent); border-color: var(--accent); }
+      .opt input:checked + .face .check svg { opacity: 1; }
+      @media (prefers-color-scheme: dark) { .opt input:checked + .face .check { color: #08211d; } }
+      .opt input:focus-visible + .face { outline: 3px solid var(--accent); outline-offset: 2px; }
+      .fineprint { color: var(--muted); font-size: 13.5px; margin: 14px 0 0; }
+
+      /* Day grid */
+      .days { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+      @media (min-width: 640px) { .days { grid-template-columns: repeat(5, 1fr); } }
+      .day .face {
+        flex-direction: column; align-items: center; text-align: center; gap: 1px;
+        padding: 11px 6px; min-height: 62px; justify-content: center;
+      }
+      .day .wd { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+      .day input:checked + .face .wd { color: var(--accent-dark); }
+      .day .dt { font-size: 17px; font-weight: 800; line-height: 1.2; }
+      .day .mo { font-size: 12.5px; color: var(--muted); }
+      .day .check { display: none; }
+      .day-wide { grid-column: 1 / -1; }
+      .day-wide .face { flex-direction: row; justify-content: center; min-height: 54px; }
+      .day-wide .t { font-size: 15.5px; }
+
+      /* Time windows */
+      .windows { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+      @media (min-width: 640px) { .windows { grid-template-columns: repeat(4, 1fr); } }
+      .win .face {
+        flex-direction: column; align-items: center; text-align: center; gap: 2px;
+        padding: 13px 8px; min-height: 66px; justify-content: center;
+      }
+      .win .t { font-size: 16px; }
+      .win .d { margin-top: 0; }
+      .win .check { display: none; }
+      .sub-label { font-weight: 700; font-size: 15px; margin: 22px 0 10px; }
+      .sub-label:first-of-type { margin-top: 4px; }
+
+      /* Text fields */
+      .fields { display: grid; gap: 16px; }
+      @media (min-width: 640px) { .fields { grid-template-columns: 1fr 1fr; } .fields .full { grid-column: 1 / -1; } }
+      label.flabel { display: block; font-weight: 700; font-size: 15px; margin-bottom: 7px; }
+      label.flabel .req { color: var(--accent-dark); }
+      input[type="text"], input[type="tel"], textarea {
+        width: 100%; font: inherit; font-size: 17px; color: var(--ink);
+        background: var(--surface-2); border: 1.5px solid var(--line);
+        border-radius: 10px; padding: 14px 15px; min-height: 56px;
+        appearance: none;
+      }
+      textarea { min-height: 84px; resize: vertical; }
+      input:focus, textarea:focus { outline: 3px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+      input.invalid { border-color: var(--error); background: var(--error-bg); }
+      .hint { color: var(--muted); font-size: 13.5px; margin-top: 6px; }
+      .err { color: var(--error); font-size: 14px; font-weight: 600; margin-top: 6px; display: none; }
+      .err.show { display: block; }
+      .form-err {
+        display: none; background: var(--error-bg); color: var(--error);
+        border: 1px solid var(--error); border-radius: 10px;
+        padding: 13px 15px; font-weight: 600; font-size: 15px; margin-top: 18px;
+      }
+      .form-err.show { display: block; }
+
+      /* Submit */
+      .submit-row { margin-top: 22px; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+        width: 100%; min-height: 60px; padding: 14px 22px;
+        font: inherit; font-size: 18px; font-weight: 800;
+        border-radius: 12px; border: 0; cursor: pointer; text-decoration: none;
+        transition: background 0.15s ease, transform 0.05s ease;
+      }
+      .btn:active { transform: translateY(1px); }
+      .btn-primary { background: var(--accent); color: #fff; }
+      .btn-primary:hover { background: var(--accent-dark); }
+      @media (prefers-color-scheme: dark) { .btn-primary { color: #08211d; } .btn-primary:hover { color: #08211d; } }
+      .btn-ghost {
+        background: var(--surface); color: var(--ink); border: 1.5px solid var(--line-strong);
+        font-size: 16px; min-height: 54px;
+      }
+      .btn-ghost:hover { border-color: var(--accent); color: var(--accent-dark); }
+      .btn:focus-visible { outline: 3px solid var(--accent-dark); outline-offset: 2px; }
+      .under-btn { text-align: center; color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+
+      /* Summary */
+      #summary-card { display: none; }
+      #summary-card.show { display: block; }
+      .status-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--warn-bg); color: var(--warn-ink);
+        border: 1px solid var(--warn-line); border-radius: 999px;
+        padding: 6px 13px; font-size: 13.5px; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 0.05em;
+      }
+      .status-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+      .summary-title {
+        font-family: "Newsreader", Georgia, serif; font-size: 27px; font-weight: 600;
+        margin: 14px 0 4px; line-height: 1.15;
+      }
+      .summary-note { color: var(--ink-soft); margin: 0 0 18px; max-width: 58ch; }
+      .summary-note strong { color: var(--ink); }
+      dl.slip {
+        margin: 0; border: 1.5px dashed var(--line-strong); border-radius: 12px;
+        background: var(--surface-2); padding: 6px 18px;
+      }
+      dl.slip > div {
+        display: grid; grid-template-columns: 118px 1fr; gap: 6px 14px;
+        padding: 11px 0; border-bottom: 1px solid var(--line);
+      }
+      dl.slip > div:last-child { border-bottom: 0; }
+      dl.slip dt { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 3px; }
+      dl.slip dd { margin: 0; font-weight: 600; font-size: 16.5px; overflow-wrap: anywhere; }
+      @media (max-width: 480px) {
+        dl.slip > div { grid-template-columns: 1fr; gap: 1px; }
+        dl.slip dt { padding-top: 0; }
+      }
+      .next-steps { margin: 20px 0 0; padding: 0; list-style: none; counter-reset: ns; display: grid; gap: 10px; }
+      .next-steps li { display: flex; gap: 12px; align-items: flex-start; color: var(--ink-soft); font-size: 15.5px; }
+      .next-steps .n {
+        counter-increment: ns; flex: none; width: 26px; height: 26px; border-radius: 50%;
+        background: var(--tint); color: var(--accent-dark); font-weight: 800; font-size: 13.5px;
+        display: grid; place-items: center; margin-top: 1px;
+      }
+      .next-steps strong { color: var(--ink); }
+      .summary-actions { display: grid; gap: 10px; margin-top: 22px; }
+      @media (min-width: 640px) { .summary-actions { grid-template-columns: 1.2fr 1fr 1fr; } }
+      .copied-msg { text-align: center; font-weight: 700; color: var(--accent-dark); font-size: 14.5px; min-height: 22px; margin: 10px 0 0; }
+
+      /* Footer */
+      footer { margin-top: 34px; text-align: center; color: var(--muted); font-size: 14px; }
+      footer .f-line { border-top: 1px solid var(--line); padding-top: 20px; }
+      footer a { color: var(--accent-dark); font-weight: 700; text-decoration: none; }
+      footer a:hover { text-decoration: underline; }
+      footer .credit { margin-top: 8px; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <div class="proto-strip" role="note">
+      <div class="inner">
+        <span class="proto-dot" aria-hidden="true"></span>
+        <span class="tag">Prototype demo</span>
+        <span>For review only. Nothing on this page is sent to the office.</span>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <header class="practice">
+        <div class="practice-row">
+          <div class="mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5c-1.2-1.6-3-2.3-4.7-1.8C5.2 4.3 4 6.2 4.3 8.6c.3 2.1 1 3.4 1.4 5 .4 1.7.6 3.9 1.2 5.2.4.9 1.6.9 2-.1.5-1.3.6-3.2 1.5-4.3.3-.4.9-.4 1.2 0 .9 1.1 1 3 1.5 4.3.4 1 1.6 1 2 .1.6-1.3.8-3.5 1.2-5.2.4-1.6 1.1-2.9 1.4-5 .3-2.4-.9-4.3-3-4.9-1.7-.5-3.5.2-4.7 1.8Z"/></svg>
+          </div>
+          <div>
+            <h1>Family Dental Center</h1>
+            <p class="practice-meta">General dental clinic<br />
+              515 S 1st Ave, Arcadia<br />
+              <a href="tel:+16264471568">(626) 447-1568</a>
+            </p>
+          </div>
+        </div>
+        <p class="lede">Use this form to put together an appointment request. Pick a reason, pick the days and times that work for you, and add your name and phone number. <strong>The office confirms every appointment</strong>, so treat the summary at the end as a request, not a booking.</p>
+      </header>
+
+      <div class="progress" aria-hidden="true">
+        <span class="step" id="prog-1"><span class="num">1</span> Visit reason</span>
+        <span class="step" id="prog-2"><span class="num">2</span> Day and time</span>
+        <span class="step" id="prog-3"><span class="num">3</span> Your details</span>
+      </div>
+
+      <form id="request-form" novalidate>
+        <section class="card" aria-labelledby="h-reason">
+          <fieldset>
+            <legend><span class="sec-head"><span class="sec-num" aria-hidden="true">01</span><h2 id="h-reason">What is the visit for?</h2></span></legend>
+            <p class="sec-sub" style="margin-top:8px;">Pick one. You can change it on the call with the office.</p>
+            <div class="reasons">
+              <label class="opt">
+                <input type="radio" name="reason" value="Routine cleaning and checkup" />
+                <span class="face">
+                  <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/><path d="m8.5 11 1.8 1.8 3.2-3.6"/></svg></span>
+                  <span><span class="t">Routine cleaning and checkup</span><span class="d">A regular visit to check on your teeth and gums.</span></span>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>
+                </span>
+              </label>
+              <label class="opt">
+                <input type="radio" name="reason" value="Tooth pain" />
+                <span class="face">
+                  <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11L9.8 22 19 10h-6.5L13 2Z"/></svg></span>
+                  <span><span class="t">Tooth pain</span><span class="d">A tooth hurts, or something feels off.</span></span>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>
+                </span>
+              </label>
+              <label class="opt">
+                <input type="radio" name="reason" value="New patient visit" />
+                <span class="face">
+                  <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.6"/><path d="M3.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5"/><path d="M18.5 5.5v5M16 8h5"/></svg></span>
+                  <span><span class="t">New patient visit</span><span class="d">Your first visit to this office.</span></span>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>
+                </span>
+              </label>
+              <label class="opt">
+                <input type="radio" name="reason" value="Whitening consult" />
+                <span class="face">
+                  <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+                  <span><span class="t">Whitening consult</span><span class="d">Ask about options for a brighter smile.</span></span>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>
+                </span>
+              </label>
+            </div>
+            <p class="fineprint">These four choices are request categories for this demo. They describe what you are asking about, not a list of services.</p>
+            <p class="err" id="err-reason">Pick a visit reason to continue.</p>
+          </fieldset>
+        </section>
+
+        <section class="card" aria-labelledby="h-when">
+          <div class="sec-head"><span class="sec-num" aria-hidden="true">02</span><h2 id="h-when">When works for you?</h2></div>
+          <p class="sec-sub">These are preferences only. The office confirms the actual appointment time with you.</p>
+
+          <fieldset>
+            <legend class="sub-label">Preferred day</legend>
+            <div class="days" id="days"></div>
+            <p class="fineprint">Picking a day is a preference only. It does not mean the office is open that day. The office will offer the closest time it has when it confirms.</p>
+            <p class="err" id="err-day">Pick a preferred day, or choose first available.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend class="sub-label">Preferred time of day</legend>
+            <div class="windows">
+              <label class="opt win">
+                <input type="checkbox" name="window" value="Morning" />
+                <span class="face"><span class="t">Morning</span><span class="d">Start of the day</span></span>
+              </label>
+              <label class="opt win">
+                <input type="checkbox" name="window" value="Afternoon" />
+                <span class="face"><span class="t">Afternoon</span><span class="d">Middle of the day</span></span>
+              </label>
+              <label class="opt win">
+                <input type="checkbox" name="window" value="Evening" />
+                <span class="face"><span class="t">Evening</span><span class="d">End of the day</span></span>
+              </label>
+              <label class="opt win">
+                <input type="checkbox" name="window" value="Any time" id="win-any" />
+                <span class="face"><span class="t">Any time</span><span class="d">No preference</span></span>
+              </label>
+            </div>
+            <p class="fineprint">Pick one or more. Exact times are set by the office when they confirm.</p>
+            <p class="err" id="err-window">Pick at least one time of day.</p>
+          </fieldset>
+        </section>
+
+        <section class="card" aria-labelledby="h-details">
+          <div class="sec-head"><span class="sec-num" aria-hidden="true">03</span><h2 id="h-details">Your details</h2></div>
+          <p class="sec-sub">The office needs a name and a phone number to confirm your appointment.</p>
+          <div class="fields">
+            <div>
+              <label class="flabel" for="f-name">Full name <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="f-name" name="name" autocomplete="name" placeholder="e.g. Jordan Lee" />
+              <p class="err" id="err-name">Enter your full name.</p>
+            </div>
+            <div>
+              <label class="flabel" for="f-phone">Phone number <span class="req" aria-hidden="true">*</span></label>
+              <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="(626) 555-0123" />
+              <p class="hint">The number the office should call to confirm.</p>
+              <p class="err" id="err-phone">Enter a valid phone number with at least 10 digits.</p>
+            </div>
+            <div class="full">
+              <label class="flabel" for="f-note">Anything the office should know? <span style="color:var(--muted); font-weight:500;">(optional)</span></label>
+              <textarea id="f-note" name="note" placeholder="e.g. The pain is on the lower left side."></textarea>
+            </div>
+          </div>
+          <div class="form-err" id="form-err" role="alert"></div>
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary">Build my request summary</button>
+            <p class="under-btn">This builds a summary on this page. It does not book or send anything.</p>
+          </div>
+        </section>
+      </form>
+
+      <section class="card" id="summary-card" aria-labelledby="h-summary" tabindex="-1">
+        <span class="status-badge">Request only, not confirmed</span>
+        <h2 class="summary-title" id="h-summary">Your appointment request</h2>
+        <p class="summary-note"><strong>This is not a confirmed appointment.</strong> This demo does not send anything to the office. To make the request, call the office and share the details below. The office will confirm your appointment time with you directly.</p>
+        <dl class="slip">
+          <div><dt>Patient</dt><dd id="s-name"></dd></div>
+          <div><dt>Phone</dt><dd id="s-phone"></dd></div>
+          <div><dt>Visit reason</dt><dd id="s-reason"></dd></div>
+          <div><dt>Preferred day</dt><dd id="s-day"></dd></div>
+          <div><dt>Preferred time</dt><dd id="s-window"></dd></div>
+          <div id="s-note-row" style="display:none;"><dt>Note</dt><dd id="s-note"></dd></div>
+          <div><dt>Office</dt><dd>Family Dental Center, 515 S 1st Ave, Arcadia</dd></div>
+        </dl>
+        <ol class="next-steps">
+          <li><span class="n" aria-hidden="true">1</span><span><strong>Call the office</strong> at (626) 447-1568 and read them this request, or copy it first.</span></li>
+          <li><span class="n" aria-hidden="true">2</span><span><strong>The office confirms</strong> your appointment time with you on that call.</span></li>
+          <li><span class="n" aria-hidden="true">3</span><span>Until they confirm, <strong>nothing is booked</strong>.</span></li>
+        </ol>
+        <div class="summary-actions">
+          <a class="btn btn-primary" href="tel:+16264471568">Call (626) 447-1568</a>
+          <button type="button" class="btn btn-ghost" id="btn-copy">Copy request</button>
+          <button type="button" class="btn btn-ghost" id="btn-edit">Edit request</button>
+        </div>
+        <p class="copied-msg" id="copied-msg" aria-live="polite"></p>
+      </section>
+
+      <footer>
+        <div class="f-line">
+          <div>Family Dental Center &middot; 515 S 1st Ave, Arcadia &middot; <a href="tel:+16264471568">(626) 447-1568</a></div>
+          <div class="credit">Prototype demo for review. Free prototype built by Byyy Studio.</div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        var form = document.getElementById('request-form');
+        var daysBox = document.getElementById('days');
+        var summaryCard = document.getElementById('summary-card');
+        var copiedMsg = document.getElementById('copied-msg');
+        var lastRequestText = '';
+
+        // Build the next 14 days as selectable options.
+        var WD = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var WD_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        var MO = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var MO_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+        var today = new Date();
+        for (var i = 1; i <= 14; i++) {
+          var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+          var label = WD[d.getDay()] + ', ' + MO[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+          var val = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+          var lab = document.createElement('label');
+          lab.className = 'opt day';
+          lab.innerHTML =
+            '<input type="radio" name="day" value="' + val + '" data-label="' + label + '" />' +
+            '<span class="face">' +
+              '<span class="wd">' + (i === 1 ? 'Tmrw' : WD_SHORT[d.getDay()]) + '</span>' +
+              '<span class="dt">' + d.getDate() + '</span>' +
+              '<span class="mo">' + MO_SHORT[d.getMonth()] + '</span>' +
+            '</span>';
+          daysBox.appendChild(lab);
+        }
+        var anyLab = document.createElement('label');
+        anyLab.className = 'opt day day-wide';
+        anyLab.innerHTML =
+          '<input type="radio" name="day" value="first-available" data-label="First available day" />' +
+          '<span class="face"><span class="t">First available day</span></span>';
+        daysBox.appendChild(anyLab);
+
+        // "Any time" clears the other time windows, and vice versa.
+        var winAny = document.getElementById('win-any');
+        var winBoxes = form.querySelectorAll('input[name="window"]');
+        winBoxes.forEach(function (box) {
+          box.addEventListener('change', function () {
+            if (box === winAny && box.checked) {
+              winBoxes.forEach(function (b) { if (b !== winAny) b.checked = false; });
+            } else if (box !== winAny && box.checked) {
+              winAny.checked = false;
+            }
+            markProgress();
+          });
+        });
+
+        // Progress pills
+        function markProgress() {
+          var r = form.querySelector('input[name="reason"]:checked');
+          var d = form.querySelector('input[name="day"]:checked');
+          var w = form.querySelectorAll('input[name="window"]:checked').length > 0;
+          var n = document.getElementById('f-name').value.trim().length >= 2;
+          var p = document.getElementById('f-phone').value.replace(/\D/g, '').length >= 10;
+          document.getElementById('prog-1').classList.toggle('done', !!r);
+          document.getElementById('prog-2').classList.toggle('done', !!d && w);
+          document.getElementById('prog-3').classList.toggle('done', n && p);
+        }
+        form.addEventListener('change', markProgress);
+        form.addEventListener('input', markProgress);
+
+        // Light US phone formatting while typing.
+        var phoneInput = document.getElementById('f-phone');
+        phoneInput.addEventListener('input', function () {
+          var digits = phoneInput.value.replace(/\D/g, '').slice(0, 11);
+          if (digits.length > 10 && digits.charAt(0) === '1') digits = digits.slice(1);
+          var out = digits;
+          if (digits.length > 6) out = '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6, 10);
+          else if (digits.length > 3) out = '(' + digits.slice(0, 3) + ') ' + digits.slice(3);
+          else if (digits.length > 0) out = '(' + digits;
+          phoneInput.value = out;
+        });
+
+        function showErr(id, show) {
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('show', show);
+          return !show;
+        }
+
+        form.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          var reason = form.querySelector('input[name="reason"]:checked');
+          var day = form.querySelector('input[name="day"]:checked');
+          var wins = Array.prototype.slice.call(form.querySelectorAll('input[name="window"]:checked')).map(function (b) { return b.value; });
+          var name = document.getElementById('f-name').value.trim();
+          var phoneDigits = phoneInput.value.replace(/\D/g, '');
+          var note = document.getElementById('f-note').value.trim();
+
+          var ok = true;
+          ok = showErr('err-reason', !reason) && ok;
+          ok = showErr('err-day', !day) && ok;
+          ok = showErr('err-window', wins.length === 0) && ok;
+          ok = showErr('err-name', name.length < 2) && ok;
+          var phoneOk = phoneDigits.length >= 10;
+          ok = showErr('err-phone', !phoneOk) && ok;
+          document.getElementById('f-name').classList.toggle('invalid', name.length < 2);
+          phoneInput.classList.toggle('invalid', !phoneOk);
+
+          var formErr = document.getElementById('form-err');
+          if (!ok) {
+            formErr.textContent = 'A few things are still missing. Check the highlighted sections above and try again.';
+            formErr.classList.add('show');
+            var firstMissing = !reason ? 'h-reason' : (!day || wins.length === 0) ? 'h-when' : 'h-details';
+            var target = document.getElementById(firstMissing);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+          formErr.classList.remove('show');
+
+          var dayLabel = day.getAttribute('data-label');
+          var winLabel = wins.join(', ');
+          document.getElementById('s-name').textContent = name;
+          document.getElementById('s-phone').textContent = phoneInput.value;
+          document.getElementById('s-reason').textContent = reason.value;
+          document.getElementById('s-day').textContent = dayLabel;
+          document.getElementById('s-window').textContent = winLabel;
+          var noteRow = document.getElementById('s-note-row');
+          if (note) {
+            document.getElementById('s-note').textContent = note;
+            noteRow.style.display = '';
+          } else {
+            noteRow.style.display = 'none';
+          }
+
+          lastRequestText =
+            'Appointment request for Family Dental Center (prototype demo, not confirmed)\n' +
+            'Name: ' + name + '\n' +
+            'Phone: ' + phoneInput.value + '\n' +
+            'Visit reason: ' + reason.value + '\n' +
+            'Preferred day: ' + dayLabel + '\n' +
+            'Preferred time: ' + winLabel + '\n' +
+            (note ? 'Note: ' + note + '\n' : '') +
+            'Office: Family Dental Center, 515 S 1st Ave, Arcadia, (626) 447-1568';
+
+          copiedMsg.textContent = '';
+          summaryCard.classList.add('show');
+          summaryCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          summaryCard.focus({ preventScroll: true });
+        });
+
+        document.getElementById('btn-copy').addEventListener('click', function () {
+          function done() { copiedMsg.textContent = 'Request copied. You can paste it into a text or note before you call.'; }
+          function failed() { copiedMsg.textContent = 'Copy did not work on this device. The details above are yours to read out on the call.'; }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(lastRequestText).then(done, function () { fallback(); });
+          } else { fallback(); }
+          function fallback() {
+            var ta = document.createElement('textarea');
+            ta.value = lastRequestText;
+            ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); done(); } catch (e) { failed(); }
+            document.body.removeChild(ta);
+          }
+        });
+
+        document.getElementById('btn-edit').addEventListener('click', function () {
+          form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.getElementById('f-name').focus({ preventScroll: true });
+        });
+
+        markProgress();
+      })();
+    </script>
+  </body>
+</html>
