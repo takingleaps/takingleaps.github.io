@@ -13,12 +13,12 @@
  }
  *{box-sizing:border-box}
  html{scroll-behavior:smooth}
- body{margin:0;font-family:Tahoma,Verdana,"Segoe UI",system-ui,sans-serif;background:#d9d9d6;color:var(--ink);line-height:1.55;
+ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#d9d9d6;color:var(--ink);line-height:1.55;
  background-image:radial-gradient(circle at 12% 8%, rgba(0,0,0,.10) 0 120px, transparent 121px),radial-gradient(circle at 88% 22%, rgba(0,0,0,.07) 0 180px, transparent 181px),radial-gradient(circle at 78% 88%, rgba(0,0,0,.08) 0 140px, transparent 141px);}
  a{color:inherit}
  button,input,select,textarea{font:inherit}
  /* top bar */
- .-bar{background:#000;color:#fff;text-align:center;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;padding:9px 16px;font-weight:700}
+ .-bar{background:#000;color:#fff;text-align:center;font-size:12.5px;letter-spacing:.14em;text-transform:none;padding:9px 16px;font-weight:700}
  .-bar span{opacity:.65;font-weight:400;letter-spacing:.06em;text-transform:none}
  /* DESKTOP FRAME */
  .desktop{max-width:1160px;margin:0 auto;padding:18px 16px 64px}
@@ -26,9 +26,9 @@
  .taskbar{background:linear-gradient(180deg,#ffffff,#dcdcd8);border:2px solid #000;box-shadow:5px 5px 0 #000;display:flex;align-items:center;gap:16px;padding:12px 16px;flex-wrap:wrap;position:sticky;top:12px;z-index:50}
  .brand{display:flex;align-items:center;gap:13px;min-width:0}
  .brand-text{line-height:1}
- .brand-text strong{display:block;font-size:21px;letter-spacing:.02em;text-transform:uppercase}
- .brand-text small{display:block;margin-top:5px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#444}
- .start-btn{margin-left:auto;background:#000;color:#fff;border:2px solid #000;padding:9px 16px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 2px #fff}
+ .brand-text strong{display:block;font-size:21px;letter-spacing:.02em;text-transform:none}
+ .brand-text small{display:block;margin-top:5px;font-size:11px;letter-spacing:.28em;text-transform:none;color:#444}
+ .start-btn{margin-left:auto;background:#000;color:#fff;border:2px solid #000;padding:9px 16px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:none;cursor:pointer;box-shadow:inset 0 0 0 2px #fff}
  .start-btn:hover{background:#fff;color:#000}
  .clock{font-size:12px;border:1.5px solid #000;background:#fff;padding:7px 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
  /* NAV */
@@ -53,11 +53,11 @@
  @media(prefers-reduced-motion:reduce){.page.active{animation:none}}
  /* HERO */
  .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
- .eyebrow{font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:10px}
+ .eyebrow{font-size:11.5px;letter-spacing:.3em;text-transform:none;font-weight:700;display:flex;align-items:center;gap:10px}
  .eyebrow:before{content:"";width:26px;height:26px;border:2.5px solid #000;border-radius:50%;flex:none}
- h1{font-size:clamp(38px,6vw,64px);line-height:.95;margin:16px 0 14px;letter-spacing:-.02em;text-transform:uppercase}
- h1 .outline{color:#fff;-webkit-text-stroke:2px #000;text-stroke:2px #000}
- h2{font-size:clamp(26px,3.6vw,38px);line-height:1.05;margin:0 0 12px;text-transform:uppercase;letter-spacing:-.01em}
+ h1{font-size:32px;line-height:1.15;margin:16px 0 14px;letter-spacing:0;text-transform:none}
+ h1 .outline{color:inherit}
+ h2{font-size:clamp(26px,3.6vw,38px);line-height:1.05;margin:0 0 12px;text-transform:none;letter-spacing:-.01em}
  h3{font-size:17px;margin:0 0 8px}
  p.lead{font-size:17.5px;color:#222;max-width:58ch}
  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
@@ -66,11 +66,11 @@
  .btn:hover{transform:translate(-1px,-1px)}
  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
  .hero-circles{display:grid;place-items:center;background:#000;color:#fff;padding:28px 18px;border:2px solid #000;text-align:center}
- .hero-circles p{margin:14px 0 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+ .hero-circles p{margin:14px 0 0;font-size:12px;letter-spacing:.22em;text-transform:none;opacity:.8}
  .status-bar{display:flex;gap:0;border-top:2px solid #000;background:#fff;flex-wrap:wrap}
  .status-bar div{flex:1 1 160px;padding:11px 16px;border-right:1.5px solid #d5d5d2;font-size:12.5px}
  .status-bar div:last-child{border-right:0}
- .status-bar b{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+ .status-bar b{display:block;font-size:13px;text-transform:none;letter-spacing:.06em}
  /* ICON GRID */
  .icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
  .icon-tile{background:#fff;border:2px solid #000;padding:20px 16px;cursor:pointer;text-align:left;box-shadow:4px 4px 0 #000}
@@ -88,13 +88,13 @@
  .card.dark{background:#000;color:#fff}
  .card ul{margin:10px 0 0;padding-left:18px}
  .card li{margin:6px 0;font-size:14.5px}
- .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid currentColor;padding:3px 8px;border-radius:999px;margin-bottom:12px}
+ .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:none;border:1.5px solid currentColor;padding:3px 8px;border-radius:999px;margin-bottom:12px}
  .card p{font-size:14.5px;color:inherit;opacity:.88;margin:0}
  .num{font-size:34px;font-weight:900;line-height:1;border:3px solid currentColor;border-radius:50%;width:56px;height:56px;display:grid;place-items:center;margin-bottom:14px}
  /* TABLE */
  table{width:100%;border-collapse:collapse;background:#fff;font-size:14.5px}
  th,td{border:1.5px solid #000;padding:11px 13px;text-align:left;vertical-align:top}
- th{background:#000;color:#fff;text-transform:uppercase;font-size:12.5px;letter-spacing:.07em}
+ th{background:#000;color:#fff;text-transform:none;font-size:12.5px;letter-spacing:.07em}
  /* DO DONT */
  .do-list,.dont-list{list-style:none;margin:0;padding:0}
  .do-list li,.dont-list li{padding:11px 0 11px 34px;border-bottom:1.5px solid #ddd;position:relative;font-size:14.5px}
@@ -105,7 +105,7 @@
  .diagram-wrap svg{width:100%;height:auto;display:block}
  /* ESTIMATOR */
  .est{display:grid;grid-template-columns:1fr 1fr;gap:22px}
- label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:7px}
+ label{font-size:13px;font-weight:700;text-transform:none;letter-spacing:.06em;display:block;margin-bottom:7px}
  input,select,textarea{width:100%;border:2px solid #000;background:#fff;padding:12px 13px;font-size:15px;border-radius:0;color:#111}
  input:focus,select:focus,textarea:focus{outline:3px solid #000;outline-offset:1px}
  .field{margin-bottom:16px}
@@ -123,9 +123,9 @@
  .rings{display:grid;place-items:center;padding:10px}
  .area-slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
  .slot{border:2px dashed #000;background:#fff;padding:16px;font-size:14.5px}
- .slot b{display:block;text-transform:uppercase;font-size:12px;letter-spacing:.1em;margin-bottom:4px}
+ .slot b{display:block;text-transform:none;font-size:12px;letter-spacing:.1em;margin-bottom:4px}
  .placeholder-note{background:#000;color:#fff;padding:14px 18px;font-size:13.5px;margin-bottom:18px}
- .placeholder-note b{text-transform:uppercase;letter-spacing:.08em}
+ .placeholder-note b{text-transform:none;letter-spacing:.08em}
  /* FORM */
  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
  .summary-box{display:none;background:#fff;border:2px solid #000;padding:18px;margin-top:18px;white-space:pre-wrap;font-size:14px}
@@ -134,7 +134,7 @@
  .check-row input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:#000}
  /* FOOTER TASKBAR */
  .footer-bar{background:linear-gradient(180deg,#3d3d3d,#000);color:#fff;border:2px solid #000;box-shadow:5px 5px 0 rgba(0,0,0,.35);padding:16px 18px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px}
- .footer-bar .start{background:#fff;color:#000;font-weight:900;padding:8px 16px;letter-spacing:.1em;text-transform:uppercase}
+ .footer-bar .start{background:#fff;color:#000;font-weight:900;padding:8px 16px;letter-spacing:.1em;text-transform:none}
  .footer-bar span{opacity:.75}
  .section-head{margin:4px 0 18px}
  .section-head p{max-width:66ch;color:#333;font-size:15.5px;margin:0}
@@ -174,13 +174,13 @@
  <!-- ============ HOME ============ -->
  <section class="page active" id="page-home">
  <div class="window">
- <div class="titlebar"><span class="dot"></span> Welcome, Sheldon_Engineering.exe <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
+ <div class="titlebar"><span class="dot"></span> Sheldon Engineering <span class="win-btns"><span>–</span><span>□</span><span>×</span></span></div>
  <div class="window-body">
  <div class="hero-grid">
  <div>
- <div class="eyebrow">Septic tanks, done properly</div>
- <h1>Your septic<br/>system,<br/><span class="outline">sorted.</span></h1>
- <p class="lead">Installations, pumping, inspections and repairs, explained in plain English, with the useful information a homeowner actually needs before they pick up the phone.</p>
+ <div class="eyebrow">Septic tank services</div>
+ <h1>Septic tank pumping, inspections, repairs, and installations.</h1>
+ <p class="lead">Based in Topanga. Call (424) 425-1228 for a quote.</p>
  <div class="cta-row">
  <button class="btn" data-goto="services">Explore Services</button>
  <button class="btn secondary" data-goto="how">How Septic Works →</button>
@@ -307,7 +307,7 @@
  <p style="font-size:12.5px;color:#555;margin-top:12px">General educational estimate based on typical household guidance (most homes: every 3–5 years). Your inspection is the real answer.</p>
  </div>
  <div class="est-result">
- <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.7">Estimated pumping interval</div>
+ <div style="font-size:12px;letter-spacing:.2em;text-transform:none;opacity:.7">Estimated pumping interval</div>
  <div class="big" id="estOut">3–5 yrs</div>
  <p id="estNote">Pick your tank size and household, then calculate. If you don't know your tank size, an inspection will tell you, and start your service record.</p>
  </div>
