@@ -822,7 +822,7 @@
       .dnav-reset:hover,.dnav-reset:focus-visible{border-color:var(--acid);color:#f3ead8}
     }
     @media(max-width:1099px){
-      .mobile-nav{grid-template-columns:repeat(7,minmax(0,1fr))}
+      .mobile-nav{grid-template-columns:repeat(8,minmax(0,1fr))}
       .mnav-item{font-size:10px;letter-spacing:0;padding:0 1px;min-width:0;overflow:hidden;touch-action:pan-y}
       .mnav-item svg{width:20px;height:20px;flex:0 0 auto}
       .mnav-item.dragging{position:relative;z-index:3;background:#1b110d;color:#f3ead8;box-shadow:0 8px 22px rgba(0,0,0,.5)}
@@ -947,6 +947,34 @@
     }
     @media(prefers-reduced-motion:reduce){.route-pin.is-now{animation:none}}
   </style>
+  <style>
+    /* ===== Account access: always visible, never only a first-visit gate =====
+       The login gate still opens on a first visit, but the account itself
+       now has a permanent home: a Log In / Account button in the desktop
+       rail and the mobile bottom bar, plus an account row inside My
+       Lineup. Tapping any of them reopens the gate, so logging in,
+       switching accounts, and logging out are always one tap away. */
+    .dnav-account{margin-top:10px;min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;border:1px solid var(--line-strong);background:transparent;color:var(--paper);cursor:pointer;font:800 13px 'Archivo',sans-serif;text-transform:uppercase;text-align:left}
+    .dnav-account:hover,.dnav-account:focus-visible{border-color:var(--acid)}
+    .dnav-account .acct-dot{flex:0 0 auto;width:11px;height:11px;border-radius:50%;background:#8d7a6a}
+    body.has-account .dnav-account{border-color:var(--acid)}
+    body.has-account .dnav-account .acct-dot{background:var(--acid);box-shadow:0 0 10px rgba(255,90,31,.8)}
+    .dnav-save{margin:10px 2px 0;color:#8d7a6a;font:600 11px/1.55 'Archivo',sans-serif;text-transform:uppercase}
+    .dnav-save:empty{display:none}
+    .mnav-acct-dot{position:absolute;top:6px;right:calc(50% - 17px);width:8px;height:8px;border-radius:50%;background:#8d7a6a}
+    body.has-account .mnav-acct-dot{background:var(--acid);box-shadow:0 0 8px rgba(255,90,31,.9)}
+    body.has-account #mnavAccount{color:var(--acid-soft)}
+    .account-row{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);display:grid;gap:12px}
+    .account-row-text{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+    .account-row-text b{color:var(--paper)}
+    .account-row-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .account-row-btns .share-button{min-height:56px;font-size:14px}
+    .account-row-btns .acct-secondary{background:transparent;color:var(--paper);border-color:var(--line-strong)}
+    .gate-current{margin:16px 0 0;padding:12px 14px;border:1px solid var(--line-strong);color:var(--muted);font-size:14px;line-height:1.5;text-align:center}
+    .gate-current b{color:var(--paper)}
+    .gate-logout{display:block;margin:12px auto 0;min-height:52px;padding:0 22px;border:1px solid var(--line-strong);background:transparent;color:var(--paper);cursor:pointer;font:700 13px 'Archivo',sans-serif;text-transform:uppercase}
+    .gate-logout:hover,.gate-logout:focus-visible{border-color:var(--acid)}
+  </style>
 </head>
 <body>
   <nav class="desktop-nav" aria-label="Escape sections">
@@ -963,6 +991,8 @@
     </div>
     <button class="dnav-reset" id="dnavReset" type="button">Reset menu order</button>
     <button class="dnav-plan" id="dnavPlan" type="button">My Lineup <span class="nav-plan-count">0</span></button>
+    <button class="dnav-account" id="dnavAccount" type="button" aria-haspopup="dialog" aria-controls="accountGate"><span id="dnavAccountLabel">Log In</span><span class="acct-dot" aria-hidden="true"></span></button>
+    <p class="dnav-save save-status-line" aria-live="polite"></p>
     <p class="dnav-note">Gates 4:00 PM – 2:00 AM · 18+<br>Official set times are in.</p>
   </nav>
   <div class="account-gate" id="accountGate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
@@ -979,6 +1009,8 @@
         <button class="gate-button" id="gateSubmit" type="submit">Let's Go</button>
       </form>
       <button class="gate-skip" id="gateSkip" type="button">Just browsing? Skip</button>
+      <p class="gate-current" id="gateCurrent" hidden></p>
+      <button class="gate-logout" id="gateLogout" type="button" hidden>Log Out</button>
       <p class="gate-note" id="gateNote" hidden>Accounts are live at byyystudio.me/escape.</p>
     </div>
   </div>
@@ -1162,10 +1194,11 @@
     <a class="mnav-item" data-nav="afterlife" href="#afterlife"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13.5A8.5 8.5 0 1 1 10.5 4a7 7 0 0 0 9.5 9.5z"/></svg>Afterlife</a>
     <a class="mnav-item" data-nav="feedback" href="#feedback"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg>Feedback</a>
     <button class="mnav-item" id="mnavPlan" type="button" aria-haspopup="dialog" aria-controls="myLineup"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14M5 12h14M5 19h9"/></svg>My Plan<span class="mnav-count nav-plan-count">0</span></button>
+    <button class="mnav-item" id="mnavAccount" type="button" aria-haspopup="dialog" aria-controls="accountGate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.2-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg><span id="mnavAccountLabel">Log In</span><span class="mnav-acct-dot" aria-hidden="true"></span></button>
     <div class="mnav-drop" id="mnavDrop" hidden></div>
   </nav>
   <button class="lineup-entry" id="lineupEntry" type="button" aria-haspopup="dialog" aria-controls="myLineup">My lineup <span class="lineup-count" id="lineupCount">0</span></button>
-  <section class="my-lineup" id="myLineup" role="dialog" aria-modal="true" aria-labelledby="myLineupTitle" aria-hidden="true"><div class="my-lineup-panel"><header class="my-lineup-head"><h2 id="myLineupTitle">My lineup</h2><button class="my-lineup-close" id="myLineupClose" type="button" aria-label="Close my lineup">×</button></header><div class="my-lineup-tools"><p class="sets-count" id="setsCount">0 sets locked in</p><button class="share-button" id="shareLineup" type="button">Share My Lineup</button><p class="share-note" id="shareNote" aria-live="polite"></p></div><div class="route-wrap" id="routeWrap">
+  <section class="my-lineup" id="myLineup" role="dialog" aria-modal="true" aria-labelledby="myLineupTitle" aria-hidden="true"><div class="my-lineup-panel"><header class="my-lineup-head"><h2 id="myLineupTitle">My lineup</h2><button class="my-lineup-close" id="myLineupClose" type="button" aria-label="Close my lineup">×</button></header><div class="my-lineup-tools"><p class="sets-count" id="setsCount">0 sets locked in</p><button class="share-button" id="shareLineup" type="button">Share My Lineup</button><p class="share-note" id="shareNote" aria-live="polite"></p><div class="account-row"><p class="account-row-text" id="accountRowText">Not logged in. Right now your lineup only saves on this device.</p><div class="account-row-btns"><button class="share-button" id="accountRowBtn" type="button">Log In</button><button class="share-button acct-secondary" id="accountRowLogout" type="button" hidden>Log Out</button></div></div></div><div class="route-wrap" id="routeWrap">
         <div class="route-head"><h3>Your lineup, mapped</h3><p class="route-status" id="routeStatus" aria-live="polite"></p><p class="save-status" id="saveStatus" aria-live="polite"></p></div>
         <div class="route-nownext" id="routeNowNext"></div>
         <div class="route-days" role="group" aria-label="Mapped lineup day"><button type="button" class="route-day" data-route-day="Friday" aria-pressed="false">Fri 10/30</button><button type="button" class="route-day" data-route-day="Saturday" aria-pressed="false">Sat 10/31</button></div>
@@ -1288,7 +1321,7 @@
   ];
   function makeDeviceKey(){if(window.crypto&&crypto.randomUUID)return'escape-dev-'+crypto.randomUUID();return'escape-dev-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)}
   function getDeviceKey(){var key='';try{key=localStorage.getItem('escape_device_key')||''}catch(e){}if(!key){key=transientDeviceKey||makeDeviceKey();transientDeviceKey=key;try{localStorage.setItem('escape_device_key',key)}catch(e){}}return key}
-  function gamesApi(path,options){options=options||{};var headers={'apikey':GAMES_KEY,'Authorization':'Bearer '+GAMES_KEY,'Accept':'application/json'};if(options.body)headers['Content-Type']='application/json';if(options.prefer)headers['Prefer']=options.prefer;return fetch(GAMES_BASE+'/'+path,{method:options.method||'GET',headers:headers,body:options.body?JSON.stringify(options.body):undefined}).then(function(response){if(!response.ok)throw new Error('Games request failed');if(response.status===204)return[];return response.text().then(function(text){return text?JSON.parse(text):[]})})}
+  function gamesApi(path,options){options=options||{};var headers={'apikey':GAMES_KEY,'Authorization':'Bearer '+GAMES_KEY,'Accept':'application/json'};if(options.body)headers['Content-Type']='application/json';if(options.prefer)headers['Prefer']=options.prefer;return fetch(GAMES_BASE+'/'+path,{method:options.method||'GET',headers:headers,body:options.body?JSON.stringify(options.body):undefined,keepalive:!!options.keepalive}).then(function(response){if(!response.ok)throw new Error('Games request failed');if(response.status===204)return[];return response.text().then(function(text){return text?JSON.parse(text):[]})})}
   function setFallback(id,show){document.getElementById(id).classList.toggle('show',!!show)}
   function setAssassinBusy(value){assassinBusy=value;document.getElementById('assassinJoin').disabled=value;document.getElementById('assassinRefresh').disabled=value;document.getElementById('assassinHit').disabled=value||!assassinCurrent||!assassinCurrent.alive||!assassinCurrentTarget}
   function setAssassinState(label,target,sub,canHit,accent){var targetEl=document.getElementById('assassinTarget');document.getElementById('assassinLabel').textContent=label;targetEl.textContent=target;targetEl.classList.toggle('accent',!!accent);document.getElementById('assassinSub').textContent=sub;document.getElementById('assassinHit').disabled=assassinBusy||!canHit}
@@ -1313,16 +1346,76 @@
   function rollCasino(){if(casinoRolling)return;if(casinoBet>casinoStash)casinoBet=Math.max(1,casinoStash);casinoRolling=true;var d1=document.getElementById('dieOne'),d2=document.getElementById('dieTwo');if(!reducedMotion){d1.classList.add('rolling');d2.classList.add('rolling')}document.getElementById('casinoTotal').textContent='Rolling...';paintCasino('');setTimeout(function(){var a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6),total=a+b;d1.textContent=a;d2.textContent=b;d1.classList.remove('rolling');d2.classList.remove('rolling');var msg;if(total===7){casinoStash-=casinoBet;msg='Dead on 7. The house takes your '+casinoBet+' kandi.'}else if((total>7&&casinoCall==='up')||(total<7&&casinoCall==='down')){casinoStash+=casinoBet;msg='you called it. +'+casinoBet+' kandi.'}else{casinoStash-=casinoBet;msg='not this time. the house eats '+casinoBet+' kandi.'}document.getElementById('casinoTotal').textContent='rolled '+total+' · '+(total>7?'up takes it':total<7?'down takes it':'Dead on 7');casinoRolling=false;if(casinoStash<1){casinoStash=20;casinoBet=1;msg+=' stash ran dry, so the table spots you 20 fresh kandi.'}if(casinoBet>casinoStash)casinoBet=casinoStash;paintCasino(msg)},reducedMotion?60:480)}
 
   var gateEl=document.getElementById('accountGate');
-  function accountKeyFor(name){return 'escape-acct-'+name}
+  /* Account names are matched case-insensitively: "Nathan" and "nathan"
+     are the same account and the same saved lineup. The canonical name
+     (the one stored on the account row) keys the lineup save; logins also
+     merge any older row saved under the exact typed spelling, so a
+     lineup saved before this fix is never orphaned by capitalization. */
+  function normalizeName(name){return String(name||'').trim().replace(/\s+/g,' ').toLowerCase()}
+  function accountKeyFor(name){return 'escape-acct-'+normalizeName(name)}
+  var accountName='';try{accountName=localStorage.getItem('escape_account')||''}catch(e){}
   function sha256Hex(text){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)).then(function(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2)}).join('')})}
   function gateError(msg){var e=document.getElementById('gateError');if(msg){e.textContent=msg;e.hidden=false}else{e.textContent='';e.hidden=true}}
   function gateBusy(value){document.getElementById('gateSubmit').disabled=value;document.getElementById('gateSkip').disabled=value}
   function gateOffline(){document.getElementById('gateNote').hidden=false}
-  function closeGate(){gateEl.classList.add('gate-hidden');document.body.style.overflow=''}
+  function closeGate(){gateEl.classList.add('gate-hidden');if(!document.getElementById('myLineup').classList.contains('open'))document.body.style.overflow=''}
   function loadLineupNames(key){return gamesApi('lineup_saves?device_key=eq.'+encodeURIComponent(key)+'&select=lineup&limit=1').then(function(rows){return (rows&&rows[0]&&rows[0].lineup)||[]}).catch(function(){return[]})}
+  function loadLineupNamesMulti(keys){return Promise.all(keys.map(function(k){return loadLineupNames(k)})).then(function(lists){var out=[];lists.forEach(function(list){(list||[]).forEach(function(n){if(out.indexOf(n)<0)out.push(n)})});return out})}
+  /* The gate is no longer a one-time screen: these keep every account
+     surface (desktop rail, mobile bar, My Lineup row, the gate itself)
+     in sync, and openGate() is how the always-visible buttons get back
+     to it after it has closed. */
+  function paintAccount(){
+    var loggedIn=!!accountName;
+    document.body.classList.toggle('has-account',loggedIn);
+    var dl=document.getElementById('dnavAccountLabel');if(dl)dl.textContent=loggedIn?('Account · '+accountName):'Log In';
+    var db=document.getElementById('dnavAccount');if(db)db.setAttribute('aria-label',loggedIn?('Account: '+accountName+'. Tap to switch account or log out'):'Log in to your account');
+    var ml=document.getElementById('mnavAccountLabel');if(ml)ml.textContent=loggedIn?(accountName.length<=9?accountName:'Account'):'Log In';
+    var mb=document.getElementById('mnavAccount');if(mb)mb.setAttribute('aria-label',loggedIn?('Account: '+accountName+'. Tap to switch account or log out'):'Log in to your account');
+    var rt=document.getElementById('accountRowText');if(rt)rt.innerHTML=loggedIn?('Logged in as <b>'+esc(accountName)+'</b>. Your lineup saves to your account, on any device.'):'<b>Not logged in.</b> Right now your lineup only saves on this device. Log in and it follows you to any phone.';
+    var rb=document.getElementById('accountRowBtn');if(rb)rb.textContent=loggedIn?'Switch Account':'Log In';
+    var lo=document.getElementById('accountRowLogout');if(lo)lo.hidden=!loggedIn;
+    var gc=document.getElementById('gateCurrent');if(gc){gc.hidden=!loggedIn;gc.innerHTML=loggedIn?('Logged in as <b>'+esc(accountName)+'</b>. Enter a different name and PIN above to switch accounts.'):''}
+    var gl=document.getElementById('gateLogout');if(gl)gl.hidden=!loggedIn;
+    var sk=document.getElementById('gateSkip');if(sk)sk.textContent=loggedIn?'Stay logged in · Close':'Just browsing? Skip';
+  }
+  function openGate(){
+    gateError('');document.getElementById('gateNote').hidden=true;paintAccount();
+    var n=document.getElementById('gateName');if(accountName&&!n.value)n.value=accountName;
+    gateEl.classList.remove('gate-hidden');document.body.style.overflow='hidden';
+    if(n)n.focus();
+  }
+  function logOut(){
+    accountName='';
+    try{localStorage.removeItem('escape_account');localStorage.removeItem('escape_device_key')}catch(e){}
+    paintAccount();closeGate();
+    /* The account's saved lineup stays on the server untouched. This
+       device drops back to a fresh device key and an empty plan. */
+    myLineup=[];lineupRestored=false;lineupServerCount=-1;lineupExplicitEmpty=false;
+    renderMyLineup();restoreLineup();
+    saveStatus('Logged out. Log in any time to load your saved lineup.');
+  }
   function landAfterGate(names){if(names&&names.length){names.forEach(function(n){if(!myLineup.some(function(a){return a.name===n})){var a=findArtist(n);if(a)myLineup.push(a)}});renderMyLineup()}closeGate();if(myLineup.length){openMyLineup()}else{var target=document.getElementById('lineup');if(target)target.scrollIntoView()}}
-  function finishLogin(name){var acctKey=accountKeyFor(name),prevKey='';try{prevKey=localStorage.getItem('escape_device_key')||''}catch(e){}try{localStorage.setItem('escape_account',name)}catch(e){}var chain;if(prevKey&&prevKey!==acctKey){chain=loadLineupNames(prevKey).then(function(names){if(names&&names.length){return gamesApi('lineup_saves?on_conflict=device_key',{method:'POST',body:{device_key:acctKey,lineup:names,updated_at:new Date().toISOString()},prefer:'resolution=merge-duplicates,return=representation'}).then(function(){return names}).catch(function(){return names})}return loadLineupNames(acctKey)})}else{chain=loadLineupNames(acctKey)}return chain.then(function(names){try{localStorage.setItem('escape_device_key',acctKey)}catch(e){}gateBusy(false);landAfterGate(names)})}
-  function submitGate(){var name=document.getElementById('gateName').value.trim(),pin=document.getElementById('gatePin').value.trim();gateError('');document.getElementById('gateNote').hidden=true;if(name.length<3){gateError('your name needs at least 3 characters.');document.getElementById('gateName').focus();return}if(!/^\d{5}$/.test(pin)){gateError('your pin needs to be exactly 5 digits.');document.getElementById('gatePin').focus();return}if(!window.crypto||!crypto.subtle){gateOffline();return}gateBusy(true);sha256Hex(pin).then(function(hash){return gamesApi('escape_accounts?username=eq.'+encodeURIComponent(name)+'&select=username,pin_hash').then(function(rows){var row=rows&&rows[0];if(!row){return gamesApi('escape_accounts',{method:'POST',body:{username:name,pin_hash:hash},prefer:'resolution=merge-duplicates,return=representation'}).then(function(){return finishLogin(name)})}if(row.pin_hash===hash){return finishLogin(name)}gateBusy(false);gateError("that name's taken and the pin doesn't match. try again or pick a different name.")})}).catch(function(){gateBusy(false);gateOffline()})}
+  function finishLogin(canonicalName,typedName){
+    var acctKey=accountKeyFor(canonicalName),keys=[];function pushKey(k){if(k&&keys.indexOf(k)<0)keys.push(k)}
+    var prevKey='';try{prevKey=localStorage.getItem('escape_device_key')||''}catch(e){}
+    pushKey(prevKey);pushKey(acctKey);
+    if(typedName&&normalizeName(typedName)!==normalizeName(canonicalName))pushKey('escape-acct-'+typedName);
+    if(canonicalName!==normalizeName(canonicalName))pushKey('escape-acct-'+canonicalName);
+    try{localStorage.setItem('escape_account',canonicalName)}catch(e){}
+    return loadLineupNamesMulti(keys).then(function(names){
+      try{localStorage.setItem('escape_device_key',acctKey)}catch(e){}
+      accountName=canonicalName;paintAccount();gateBusy(false);
+      if(!names.length){landAfterGate(names);return}
+      /* One merged lineup, written once to the canonical account key,
+         so every spelling of the name loads the same saved plan. */
+      gamesApi('lineup_saves?on_conflict=device_key',{method:'POST',body:{device_key:acctKey,lineup:names,updated_at:new Date().toISOString()},prefer:'resolution=merge-duplicates,return=representation'})
+        .then(function(){lineupServerCount=names.length})
+        .catch(function(){})
+        .then(function(){landAfterGate(names)});
+    });
+  }
+  function submitGate(){var typed=document.getElementById('gateName').value.trim(),pin=document.getElementById('gatePin').value.trim();gateError('');document.getElementById('gateNote').hidden=true;if(typed.length<3){gateError('Your name needs at least 3 characters.');document.getElementById('gateName').focus();return}if(!/^\d{5}$/.test(pin)){gateError('Your PIN needs to be exactly 5 digits.');document.getElementById('gatePin').focus();return}if(!window.crypto||!crypto.subtle){gateOffline();return}var norm=normalizeName(typed);gateBusy(true);sha256Hex(pin).then(function(hash){var ilike=norm.replace(/\\/g,'\\\\').replace(/%/g,'\\%').replace(/_/g,'\\_');return gamesApi('escape_accounts?username=ilike.'+encodeURIComponent(ilike)+'&select=username,pin_hash').then(function(rows){var row=rows&&rows[0];return row?{row:row,canonical:row.username}:{row:null,canonical:norm}}).then(function(found){if(!found.row){return gamesApi('escape_accounts',{method:'POST',body:{username:found.canonical,pin_hash:hash},prefer:'resolution=merge-duplicates,return=representation'}).then(function(){return finishLogin(found.canonical,typed)})}if(found.row.pin_hash===hash){return finishLogin(found.canonical,typed)}gateBusy(false);gateError("That name is taken and the PIN does not match. Try again, or pick a different name.")})}).catch(function(){gateBusy(false);gateOffline()})}
   function skipGate(){gateBusy(true);loadLineupNames(getDeviceKey()).then(function(names){gateBusy(false);landAfterGate(names)})}
 
   var reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1355,40 +1448,63 @@
      already picked (never replaces), then pushes the merged lineup
      back if this device was ahead of the saved copy. */
   var lineupRestored=false,lineupSaveTimer=null,lineupSaveChain=Promise.resolve();
-  function saveStatus(msg){var el=document.getElementById('saveStatus');if(el)el.textContent=msg}
+  /* lineupServerCount: how many sets the server copy is known to hold
+     (-1 = never loaded). lineupExplicitEmpty: the user personally
+     removed every set, so an empty save is intentional. Together they
+     guard the wipe case: an empty lineup on this device must never
+     overwrite a saved lineup just because a load came back empty. */
+  var lineupServerCount=-1,lineupExplicitEmpty=false;
+  function saveStatus(msg){var el=document.getElementById('saveStatus');if(el)el.textContent=msg;document.querySelectorAll('.save-status-line').forEach(function(n){n.textContent=msg})}
   function schedulePersistLineup(){
     if(!lineupRestored)return;
     saveStatus('Saving your lineup\u2026');
     if(lineupSaveTimer)clearTimeout(lineupSaveTimer);
-    lineupSaveTimer=setTimeout(persistLineup,300);
+    lineupSaveTimer=setTimeout(function(){persistLineup(false)},300);
   }
-  function persistLineup(){
+  function persistLineup(useKeepalive){
     var names=myLineup.map(function(a){return a.name});
+    if(!names.length&&lineupServerCount>0&&!lineupExplicitEmpty){
+      saveStatus('Kept your saved lineup safe \u2014 this device loaded empty, so nothing was overwritten.');
+      return lineupSaveChain;
+    }
     lineupSaveChain=lineupSaveChain.then(function(){
-      return gamesApi('lineup_saves?on_conflict=device_key',{method:'POST',body:{device_key:getDeviceKey(),lineup:names,updated_at:new Date().toISOString()},prefer:'resolution=merge-duplicates,return=representation'})
-        .then(function(){saveStatus(names.length?('Saved \u00B7 '+names.length+' set'+(names.length===1?'':'s')+' locked in'):'Saved \u00B7 lineup is empty')})
+      return gamesApi('lineup_saves?on_conflict=device_key',{method:'POST',body:{device_key:getDeviceKey(),lineup:names,updated_at:new Date().toISOString()},prefer:'resolution=merge-duplicates,return=representation',keepalive:useKeepalive})
+        .then(function(){lineupServerCount=names.length;if(names.length)lineupExplicitEmpty=false;saveStatus(names.length?('Saved \u00B7 '+names.length+' set'+(names.length===1?'':'s')+' locked in'):'Saved \u00B7 lineup is empty')})
         .catch(function(){saveStatus('Could not save just now. Your picks stay on this screen \u2014 check your connection and tap any set again.')});
     });
     return lineupSaveChain;
   }
+  /* If the tab closes or the phone locks inside the 300ms debounce,
+     flush the pending save immediately instead of losing the pick. */
+  function flushLineupSave(){
+    if(!lineupSaveTimer)return;
+    clearTimeout(lineupSaveTimer);lineupSaveTimer=null;
+    persistLineup(true);
+  }
+  window.addEventListener('pagehide',flushLineupSave);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')flushLineupSave()});
   function restoreLineup(attempt){
     attempt=attempt||0;
     gamesApi('lineup_saves?device_key=eq.'+encodeURIComponent(getDeviceKey())+'&select=lineup&limit=1')
       .then(function(rows){
         var names=(rows&&rows[0]&&rows[0].lineup)||[];
+        lineupServerCount=names.length;
         var serverSet={};names.forEach(function(n){serverSet[n]=true});
         var localAhead=myLineup.some(function(a){return !serverSet[a.name]});
         var changed=false;
         names.forEach(function(n){if(!myLineup.some(function(a){return a.name===n})){var a=findArtist(n);if(a){myLineup.push(a);changed=true}}});
         lineupRestored=true;
         if(changed)renderMyLineup();else renderRoute();
-        if(localAhead)persistLineup();
+        if(localAhead)persistLineup(false);
         else saveStatus(myLineup.length?('Saved \u00B7 '+myLineup.length+' set'+(myLineup.length===1?'':'s')+' locked in'):'');
       })
       .catch(function(){
-        if(attempt<1){setTimeout(function(){restoreLineup(attempt+1)},2500);return}
+        if(attempt<3){setTimeout(function(){restoreLineup(attempt+1)},1200*(attempt+1));return}
+        /* A failed load must never trigger a save: pushing this
+           device's (possibly empty) lineup now could erase the saved
+           one. Edits from here still save on the next tap. */
         lineupRestored=true;
-        schedulePersistLineup();
+        saveStatus('Could not load your saved lineup. Your picks on this screen are safe, and saving resumes on your next tap.');
       });
   }
 
@@ -1624,8 +1740,8 @@
     var day=e.target.closest('.day');if(day){currentDay=day.dataset.day;populateGenreFilter();document.querySelectorAll('.day').forEach(function(x){x.classList.toggle('active',x===day)});render();return}
     var preview=e.target.closest('[data-preview-artist]');if(preview){startArtistPreviews(decodeURIComponent(preview.getAttribute('data-preview-artist')),preview);return}
     var video=e.target.closest('[data-video-id]');if(video){openVideo(video.dataset.videoId,video.dataset.videoTitle,video.dataset.videoDescription);return}
-    var add=e.target.closest('[data-lineup-artist]');if(add){var added=decodeURIComponent(add.dataset.lineupArtist),prevCount=myLineup.length,isNew=!myLineup.some(function(a){return a.name===added});if(isNew)myLineup.push(findArtist(added));renderMyLineup();if(isNew){saveJuice(add);animateSetsCount(prevCount,myLineup.length)}return}
-    var remove=e.target.closest('[data-remove-artist]');if(remove){var removed=decodeURIComponent(remove.dataset.removeArtist);myLineup=myLineup.filter(function(a){return a.name!==removed});renderMyLineup();return}
+    var add=e.target.closest('[data-lineup-artist]');if(add){var added=decodeURIComponent(add.dataset.lineupArtist),prevCount=myLineup.length,isNew=!myLineup.some(function(a){return a.name===added});if(isNew){myLineup.push(findArtist(added));lineupExplicitEmpty=false}renderMyLineup();if(isNew){saveJuice(add);animateSetsCount(prevCount,myLineup.length)}return}
+    var remove=e.target.closest('[data-remove-artist]');if(remove){var removed=decodeURIComponent(remove.dataset.removeArtist);myLineup=myLineup.filter(function(a){return a.name!==removed});if(!myLineup.length)lineupExplicitEmpty=true;renderMyLineup();return}
     var clearF=e.target.closest('[data-clear-filters]');if(clearF){document.getElementById('search').value='';currentStage='All';currentGenre='All';stageFilter.value='All';populateGenreFilter();render();return}
     var hit=e.target.closest('.flip-hit');if(hit){toggleCard(hit.closest('.flip-card'));return}
   });
@@ -1662,7 +1778,12 @@
   document.getElementById('gateForm').addEventListener('submit',function(e){e.preventDefault();submitGate()});
   document.getElementById('gateSkip').addEventListener('click',skipGate);
   document.getElementById('gatePin').addEventListener('input',function(e){e.target.value=e.target.value.replace(/\D/g,'').slice(0,5)});
+  /* Always-visible account entry points: the gate can be reopened any
+     time from the desktop rail, the mobile bar, or My Lineup. */
+  ['dnavAccount','mnavAccount','accountRowBtn'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',openGate)});
+  ['gateLogout','accountRowLogout'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',logOut)});
   var hasAccount=false;try{hasAccount=!!localStorage.getItem('escape_account')}catch(e){}
+  paintAccount();
   if(hasAccount){gateEl.classList.add('gate-hidden');if(document.body.style.overflow==='hidden')document.body.style.overflow=''}else{document.body.style.overflow='hidden';document.getElementById('gateName').focus()}
   var mapPlaces=[
     {name:'Festival Entrance',cat:'gate',x:88,y:39,desc:'Main gate. East side of the grounds.'},
@@ -2036,6 +2157,8 @@
       for(i=0;i<order.length;i++){id=order[i];if(byId[id])mNav.appendChild(byId[id])}
       var plan=document.getElementById('mnavPlan');
       if(plan)mNav.appendChild(plan);
+      var acct=document.getElementById('mnavAccount');
+      if(acct)mNav.appendChild(acct);
       if(mDrop)mNav.appendChild(mDrop);
     }
     applySectionOrder(order);
