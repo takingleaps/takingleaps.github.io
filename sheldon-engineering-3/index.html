@@ -57,7 +57,7 @@
  html{scroll-behavior:smooth}
  body{
  margin:0;
- font-family: Tahoma, Verdana, "Segoe UI", system-ui, sans-serif;
+ font-family: system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
  background:
  radial-gradient(var(--desktop-dots) 1px, transparent 1.2px);
  background-size:22px 22px;
@@ -81,7 +81,7 @@
  font-size:.86rem; line-height:1.45;
  margin-bottom:18px;
  }
- .-banner strong{letter-spacing:.06em; text-transform:uppercase; white-space:nowrap}
+ .-banner strong{letter-spacing:.06em; text-transform:none; white-space:nowrap}
  .-banner p{margin:0}
 
  /* ---------- XP Window chrome ---------- */
@@ -99,7 +99,7 @@
  }
  .titlebar .t{
  display:flex; align-items:center; gap:9px;
- font-weight:700; font-size:.86rem; letter-spacing:.04em; text-transform:uppercase;
+ font-weight:700; font-size:.86rem; letter-spacing:.04em; text-transform:none;
  min-width:0;
  }
  .titlebar .t span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
@@ -130,7 +130,7 @@
  .logo-lockup{display:flex; align-items:center; gap:16px; min-width:0}
  .logo-circles{flex-shrink:0}
  .brand-name{font-size:clamp(1.6rem,4.5vw,2.4rem); font-weight:800; letter-spacing:-.01em; line-height:1.05; margin:0}
- .brand-sub{margin:4px 0 0; font-size:.92rem; color:var(--ink-soft); letter-spacing:.14em; text-transform:uppercase; font-weight:700}
+ .brand-sub{margin:4px 0 0; font-size:.92rem; color:var(--ink-soft); letter-spacing:.14em; text-transform:none; font-weight:700}
  .brand-note{flex:1 1 260px; font-size:.95rem; color:var(--ink-soft); margin:0}
  .brand-note strong{color:var(--ink)}
 
@@ -177,7 +177,7 @@
  .lede{font-size:1.05rem; color:var(--ink-soft); max-width:64ch; margin:0 0 20px}
  .kicker{
  display:inline-flex; align-items:center; gap:8px;
- font-size:.76rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+ font-size:.76rem; font-weight:800; letter-spacing:.16em; text-transform:none;
  border:2px solid var(--line); padding:4px 10px; margin-bottom:14px; background:var(--window-2);
  }
  .kicker i{width:8px;height:8px;border-radius:50%;border:2px solid var(--line); display:inline-block}
@@ -228,7 +228,7 @@
 
  /* ---------- Do / Don't ---------- */
  .do-head,.dont-head{
- display:flex; align-items:center; gap:10px; padding:10px 14px; border:2px solid var(--line); font-weight:800; letter-spacing:.05em; text-transform:uppercase; font-size:.9rem;
+ display:flex; align-items:center; gap:10px; padding:10px 14px; border:2px solid var(--line); font-weight:800; letter-spacing:.05em; text-transform:none; font-size:.9rem;
  }
  .do-head{background:var(--ink); color:var(--window)}
  @media (prefers-color-scheme: dark){ .do-head{color:#111} }
@@ -262,7 +262,7 @@
  display:flex; align-items:center; gap:12px; padding:14px 14px 10px;
  }
  .warn-card .sev{
- margin-left:auto; font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+ margin-left:auto; font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:none;
  border:2px solid var(--line); padding:3px 8px; white-space:nowrap;
  }
  .sev.high{background:var(--ink); color:var(--window)}
@@ -313,7 +313,7 @@
  border:2px dashed var(--line); background:var(--window-2); padding:16px;
  }
  .placeholder-box dl{margin:0; display:grid; gap:10px}
- .placeholder-box dt{font-size:.74rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+ .placeholder-box dt{font-size:.74rem; font-weight:800; letter-spacing:.12em; text-transform:none; color:var(--ink-faint)}
  .placeholder-box dd{margin:2px 0 0; font-weight:700}
  .form-result{display:none; border:2px solid var(--line); background:var(--window-2); padding:16px; margin-top:16px}
  .form-result.show{display:block}
@@ -348,7 +348,7 @@
  <div class="titlebar">
  <div class="t">
  <svg class="circles-mini mark-current" width="28" height="19" viewBox="0 0 400 268" aria-hidden="true"><circle class="orb-a" cx="90" cy="66" r="38"/><circle class="orb-a" cx="200" cy="66" r="38"/><circle class="orb-a" cx="310" cy="66" r="38"/><circle class="orb-b" cx="145" cy="150" r="26"/><circle class="orb-b" cx="255" cy="150" r="26"/><circle class="orb-c" cx="90" cy="216" r="14"/><circle class="orb-c" cx="200" cy="216" r="14"/><circle class="orb-c" cx="310" cy="216" r="14"/></svg>
- <span>Sheldon_Engineering, Home</span>
+ <span>Sheldon Engineering - Home</span>
  </div>
  <div class="win-controls" aria-hidden="true"><i>–</i><i>▢</i><i>×</i></div>
  </div>
@@ -363,10 +363,10 @@
  </svg>
  <div>
  <h1 class="brand-name">Sheldon<br>Engineering</h1>
- <p class="brand-sub">Septic Systems · Est. Knowledge First</p>
+ <p class="brand-sub">Septic Systems</p>
  </div>
  </div>
- <p class="brand-note">Most septic problems are preventable, if you know how the system actually works. <strong>This site teaches you first, then helps you book the right job.</strong> No jargon walls, no scare tactics. Just how it works, what to watch for, and how to look after it.</p>
+ <p class="brand-note">Most septic problems are preventable, if you know how the system actually works. No jargon walls, no scare tactics. Just how it works, what to watch for, and how to look after it.</p>
  </div>
  </div>
 
@@ -384,7 +384,7 @@
  <section class="tabpanel active" id="page-overview" role="tabpanel">
  <div class="body-pad">
  <span class="kicker"><i></i> Start here</span>
- <h2 class="page-title">Your septic system, minus the mystery.</h2>
+ <h2 class="page-title">How a septic system works</h2>
  <p class="lede">A septic system is simple machinery buried in your yard: a tank, a drain field, and the soil doing the final cleaning. When homeowners understand those three parts, systems last decades longer. This site is built around teaching that, before asking for your business.</p>
 
  <div class="grid-3" style="margin-bottom:18px">
@@ -847,7 +847,7 @@
  var panels = {};
  tabs.forEach(function(t){ panels[t.getAttribute('data-tab')] = document.getElementById('page-' + t.getAttribute('data-tab')); });
  var titleEl = document.querySelector('header .titlebar .t span');
- var titles = { overview:'Sheldon_Engineering, Home', how:'Sheldon_Engineering, How_It_Works', care:'Sheldon_Engineering, Care_Guide', warnings:'Sheldon_Engineering, Warning_Signs', faq:'Sheldon_Engineering, FAQ', quote:'Sheldon_Engineering, Get_A_Quote' };
+ var titles = { overview:'Sheldon Engineering - Home', how:'Sheldon Engineering - How_It_Works', care:'Sheldon Engineering - Care_Guide', warnings:'Sheldon Engineering - Warning_Signs', faq:'Sheldon Engineering - FAQ', quote:'Sheldon Engineering - Get_A_Quote' };
 
  function goTo(key){
  tabs.forEach(function(t){ t.setAttribute('aria-selected', t.getAttribute('data-tab') === key ? 'true' : 'false'); });
