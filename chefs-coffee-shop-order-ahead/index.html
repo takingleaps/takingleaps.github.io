@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chef's Coffee Shop Order Ahead (Demo)</title>
+<style>
+  :root { --ink: #22201c; --muted: #6f675c; --paper: #faf6ec; --card: #ffffff; --accent: #b3402a; --line: #e5dcc8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--paper); color: var(--ink); }
+  header { background: var(--ink); color: var(--paper); padding: 28px 20px 22px; }
+  header h1 { margin: 0; font-size: 30px; letter-spacing: .01em; }
+  header p { margin: 8px 0 0; color: #d8cfc0; font-size: 15px; line-height: 1.5; }
+  header a { color: #ffffff; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 40px; }
+  .note { background: #fff8e6; border: 1px solid #ecd9a0; border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+  h2 { font-size: 18px; margin: 26px 0 10px; }
+  .item { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .item b { font-size: 16px; display: block; }
+  .item span { font-size: 13px; color: var(--muted); }
+  .stepper { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .stepper button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); font-size: 20px; cursor: pointer; }
+  .stepper button:active { background: var(--line); }
+  .qty { min-width: 20px; text-align: center; font-size: 17px; font-weight: 700; }
+  .days { display: flex; gap: 10px; }
+  .days button { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); font-size: 16px; cursor: pointer; }
+  .days button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  label { display: block; font-size: 14px; font-weight: 600; margin: 16px 0 6px; }
+  input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--line); font-size: 16px; background: var(--card); }
+  .error { color: var(--accent); font-size: 14px; margin-top: 8px; display: none; }
+  #submit { width: 100%; margin-top: 22px; padding: 16px; border: 0; border-radius: 12px; background: var(--accent); color: #fff; font-size: 18px; font-weight: 700; cursor: pointer; }
+  #ticket { display: none; background: var(--card); border: 2px dashed var(--accent); border-radius: 14px; padding: 20px; margin-top: 24px; }
+  #ticket h2 { margin-top: 0; }
+  #ticket ul { padding-left: 20px; line-height: 1.7; }
+  #ticket .pay { font-weight: 700; margin-top: 12px; }
+  #ticket .demo { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  footer { text-align: center; font-size: 13px; color: var(--muted); padding: 0 16px 32px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Chef's Coffee Shop</h1>
+  <p>13 E Live Oak Ave, Arcadia, CA 91006<br>
+  <a href="tel:+16265740257">(626) 574-0257</a><br>
+  Open daily 7am to 2pm. Last pickup 1:45pm.</p>
+</header>
+<main>
+  <div class="note">Order ahead demo. Pick your breakfast, choose a pickup day, and send the request. No payment here. You pay at pickup.</div>
+
+  <h2>Breakfast</h2>
+  <div class="item" data-name="Breakfast Burrito"><div><b>Breakfast Burrito</b><span>A local favorite</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+  <div class="item" data-name="Lumberjack Breakfast"><div><b>Lumberjack Breakfast</b><span>The big plate</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+  <div class="item" data-name="Biscuits and Gravy"><div><b>Biscuits and Gravy</b><span>Homemade</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+  <div class="item" data-name="Hash Browns"><div><b>Hash Browns</b><span>Crispy side</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+
+  <h2>Lunch</h2>
+  <div class="item" data-name="Club Sandwich"><div><b>Club Sandwich</b><span>Classic diner</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+  <div class="item" data-name="Tortilla Soup"><div><b>Tortilla Soup</b><span>House soup</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+
+  <h2>Dessert and Drinks</h2>
+  <div class="item" data-name="Banana Cream Pie"><div><b>Banana Cream Pie</b><span>Homemade favorite</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+  <div class="item" data-name="Coffee"><div><b>Coffee</b><span>Bottomless style</span></div><div class="stepper"><button type="button" data-step="-1" aria-label="Remove one">-</button><span class="qty">0</span><button type="button" data-step="1" aria-label="Add one">+</button></div></div>
+
+  <h2>Pickup Day</h2>
+  <div class="days">
+    <button type="button" id="dayToday" class="on">Today</button>
+    <button type="button" id="dayTomorrow">Tomorrow</button>
+  </div>
+
+  <label for="custName">Your name</label>
+  <input id="custName" type="text" placeholder="Name for the pickup" autocomplete="name">
+  <label for="custPhone">Phone (optional)</label>
+  <input id="custPhone" type="tel" placeholder="So the shop can reach you" autocomplete="tel">
+  <div class="error" id="formError">Add at least one dish and your name, then send again.</div>
+
+  <button type="button" id="submit">Send Pickup Request</button>
+
+  <div id="ticket">
+    <h2>Pickup Request</h2>
+    <ul id="ticketItems"></ul>
+    <div id="ticketMeta"></div>
+    <div class="pay">Pay at pickup.</div>
+    <div class="demo">Demo request, not a confirmed order. The shop confirms pickup details.</div>
+  </div>
+</main>
+<footer>
+  Demo concept built by Byyy Studio.<br>
+  Chef's Coffee Shop, 13 E Live Oak Ave, Arcadia, CA 91006, (626) 574-0257.
+</footer>
+<script>
+  var quantities = {};
+  document.querySelectorAll('.item').forEach(function (row) {
+    var name = row.getAttribute('data-name');
+    quantities[name] = 0;
+    var qtyEl = row.querySelector('.qty');
+    row.querySelectorAll('[data-step]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        quantities[name] = Math.max(0, quantities[name] + parseInt(btn.getAttribute('data-step'), 10));
+        qtyEl.textContent = quantities[name];
+      });
+    });
+  });
+  var pickupDay = 'Today';
+  var dayToday = document.getElementById('dayToday');
+  var dayTomorrow = document.getElementById('dayTomorrow');
+  dayToday.addEventListener('click', function () { pickupDay = 'Today'; dayToday.classList.add('on'); dayTomorrow.classList.remove('on'); });
+  dayTomorrow.addEventListener('click', function () { pickupDay = 'Tomorrow'; dayTomorrow.classList.add('on'); dayToday.classList.remove('on'); });
+  document.getElementById('submit').addEventListener('click', function () {
+    var name = document.getElementById('custName').value.trim();
+    var phone = document.getElementById('custPhone').value.trim();
+    var picked = Object.keys(quantities).filter(function (k) { return quantities[k] > 0; });
+    var err = document.getElementById('formError');
+    if (!name || !picked.length) { err.style.display = 'block'; return; }
+    err.style.display = 'none';
+    var list = document.getElementById('ticketItems');
+    list.innerHTML = '';
+    picked.forEach(function (k) {
+      var li = document.createElement('li');
+      li.textContent = quantities[k] + ' x ' + k;
+      list.appendChild(li);
+    });
+    document.getElementById('ticketMeta').textContent = 'Pickup: ' + pickupDay + '. Name: ' + name + (phone ? '. Phone: ' + phone : '') + '.';
+    document.getElementById('ticket').style.display = 'block';
+    document.getElementById('ticket').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
+</body>
+</html>
