@@ -481,8 +481,8 @@
     .work-card--dental { --project-color: #4fa8a0; }
     .work-card--sheldon { --project-color: #c9c9c9; }
     .work-image__label { display: grid; place-items: center; width: 100%; height: 100%; padding: 16px; font-weight: 700; letter-spacing: .12em; text-align: center; color: var(--project-color); }
-    .concepts-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
-    #concepts .work-card--flwrpwr { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+    .concepts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    #concepts .work-card--flwrpwr { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-column: 1 / -1; }
     #concepts .work-card--flwrpwr .work-image { aspect-ratio: auto; border-bottom: 0; border-right: 1px solid color-mix(in srgb, var(--project-color), transparent 54%); }
     .work-image {
       aspect-ratio: 16 / 10;
@@ -1120,6 +1120,7 @@
       .hero-copy { margin-bottom: 28px; font-size: 15px; line-height: 1.72; }
       .work-grid { grid-template-columns: 1fr; gap: 14px; }
       .work-section .work-grid { grid-template-columns: 1fr; }
+      .concepts-grid { grid-template-columns: 1fr; gap: 14px; }
       .work-card--flwrpwr { grid-column: auto; display: flex; }
       #concepts .work-card--flwrpwr { display: flex; }
       .work-card--flwrpwr .work-image { aspect-ratio: 16 / 10; border-right: 0; border-bottom: 1px solid color-mix(in srgb, var(--project-color), transparent 54%); }
@@ -1439,7 +1440,7 @@
           </div>
         </a>
         <a class="work-card" href="https://byyystudio.me/roblox-game-concepts/" target="_blank" rel="noopener noreferrer">
-          <div class="work-image" style="background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;padding:40px 16px;">COIN YARD</div>
+          <div class="work-image"><img src="work-coinyard.jpg" loading="lazy" decoding="async" alt="Coin Yard Roblox game concept" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Game concept</span><span class="project-arrow">↗</span></span>
             <h3>ROBLOX GAME CONCEPT: COIN YARD</h3>
