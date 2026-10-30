@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Cut at The Firm Barbershop (Demo)</title>
+<style>
+  :root { --ink: #1d1d1b; --muted: #6d6a63; --paper: #f6f6f2; --card: #ffffff; --accent: #b45309; --line: #e2e0d8; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  header { background: var(--ink); color: var(--paper); padding: 26px 20px 20px; }
+  header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+  header p { margin: 8px 0 0; color: rgba(255,255,255,0.72); font-size: 14px; line-height: 1.6; }
+  header a { color: #ffffff; text-decoration: underline; text-underline-offset: 2px; }
+  main { max-width: 600px; margin: 0 auto; padding: 24px 20px 48px; }
+  .note { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 12px 14px; font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-bottom: 8px; }
+  h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 28px 0 12px; }
+  .item { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .item b { font-size: 16px; display: block; line-height: 1.3; }
+  .item span { font-size: 13px; color: var(--muted); }
+  .stepper { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .stepper button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); font-size: 20px; font-family: inherit; cursor: pointer; }
+  .stepper button:active { background: var(--line); }
+  .qty { min-width: 20px; text-align: center; font-size: 17px; font-weight: 700; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opts button { padding: 15px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; transition: border-color 0.15s ease; }
+  .opts button:hover { border-color: var(--muted); }
+  .opts button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .days { display: flex; gap: 10px; }
+  .days button { flex: 1; padding: 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; transition: border-color 0.15s ease; }
+  .days button:hover { border-color: var(--muted); }
+  .days button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  label { display: block; font-size: 13px; font-weight: 700; margin: 18px 0 8px; }
+  input, textarea { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--line); font-size: 16px; background: var(--card); font-family: inherit; color: var(--ink); }
+  textarea { min-height: 84px; resize: vertical; }
+  .error { color: var(--accent); font-size: 13.5px; margin-top: 8px; display: none; }
+  #submit { width: 100%; margin-top: 24px; padding: 17px; border: 0; border-radius: 12px; background: var(--accent); color: #fff; font-size: 17px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  #submit:active { transform: translateY(1px); }
+  #ticket { display: none; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 16px; padding: 22px; margin-top: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  #ticket h2 { margin: 0 0 10px; font-size: 18px; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--ink); }
+  #ticket ul { padding-left: 20px; line-height: 1.7; margin: 8px 0; }
+  #ticket p { line-height: 1.7; margin: 8px 0; }
+  #ticket .pay { font-weight: 700; margin-top: 12px; }
+  #ticket .demo { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  footer { text-align: center; font-size: 12.5px; color: var(--muted); padding: 0 16px 32px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The Firm Barbershop</h1>
+  <p>815 S 1st Ave, Arcadia<br>
+  <a href="tel:+16266236022">(626) 623-6022</a></p>
+</header>
+<main>
+  <div class="note">Demo quiz. Answer three quick questions and get a cut profile you can show at the shop. No booking here, no payment here.</div>
+
+  <h2>What cut are you feeling?</h2>
+  <div class="opts" id="cutOpts">
+    <button type="button" data-cut="Fade">Fade</button>
+    <button type="button" data-cut="Taper">Taper</button>
+    <button type="button" data-cut="Scissor cut">Scissor cut</button>
+    <button type="button" data-cut="Buzz cut">Buzz cut</button>
+  </div>
+
+  <h2>Facial hair?</h2>
+  <div class="opts" id="beardOpts">
+    <button type="button" data-beard="Beard trim">Beard trim</button>
+    <button type="button" data-beard="Clean shave">Clean shave</button>
+    <button type="button" data-beard="Leave it">Leave it</button>
+  </div>
+
+  <h2>How often do you get cut?</h2>
+  <div class="opts" id="freqOpts">
+    <button type="button" data-freq="Every week">Every week</button>
+    <button type="button" data-freq="Every 2 weeks">Every 2 weeks</button>
+    <button type="button" data-freq="Once a month">Once a month</button>
+  </div>
+
+  <div class="error" id="formError">Answer all three questions, then see your match.</div>
+  <button type="button" id="submit">See My Match</button>
+
+  <div id="ticket">
+    <h2>Your Cut Profile</h2>
+    <p id="ticketMain"></p>
+    <p>Show this at the shop or call <a href="tel:+16266236022">(626) 623-6022</a> to book.</p>
+    <div class="demo">Demo quiz, not a booking. The shop confirms availability.</div>
+  </div>
+</main>
+<footer>
+  Demo concept built by Byyy Studio.<br>
+  The Firm Barbershop, 815 S 1st Ave, Arcadia, (626) 623-6022.
+</footer>
+<script>
+  var picks = { cut: '', beard: '', freq: '' };
+  function wire(id, key, attr) {
+    document.querySelectorAll('#' + id + ' button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        picks[key] = btn.getAttribute(attr);
+        document.querySelectorAll('#' + id + ' button').forEach(function (b) { b.classList.remove('on'); });
+        btn.classList.add('on');
+      });
+    });
+  }
+  wire('cutOpts', 'cut', 'data-cut');
+  wire('beardOpts', 'beard', 'data-beard');
+  wire('freqOpts', 'freq', 'data-freq');
+  document.getElementById('submit').addEventListener('click', function () {
+    var err = document.getElementById('formError');
+    if (!picks.cut || !picks.beard || !picks.freq) { err.style.display = 'block'; return; }
+    err.style.display = 'none';
+    document.getElementById('ticketMain').textContent = 'Cut: ' + picks.cut + '. Facial hair: ' + picks.beard + '. Rhythm: ' + picks.freq + '.';
+    document.getElementById('ticket').style.display = 'block';
+    document.getElementById('ticket').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
+</body>
+</html>
