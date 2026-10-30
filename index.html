@@ -1406,7 +1406,7 @@
           </div>
         </button>
         <a class="work-card work-card--taco" href="https://byyystudio.me/taco-treat-order-ahead/" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">TACO TREAT ORDER-AHEAD</div></div>
+          <div class="work-image"><img src="work-taco.jpg" loading="lazy" decoding="async" alt="Taco Treat order-ahead prototype" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
             <h3>TACO TREAT ORDER-AHEAD</h3>
@@ -1414,7 +1414,7 @@
           </div>
         </a>
         <a class="work-card work-card--raceline" href="https://byyystudio.me/raceline-tire-finder/" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">RACELINE TIRE FINDER</div></div>
+          <div class="work-image"><img src="work-raceline.jpg" loading="lazy" decoding="async" alt="Raceline tire finder prototype" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
             <h3>RACELINE TIRE FINDER</h3>
@@ -1422,37 +1422,21 @@
           </div>
         </a>
         <a class="work-card work-card--dental" href="https://byyystudio.me/family-dental-booking/" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">FAMILY DENTAL BOOKING</div></div>
+          <div class="work-image"><img src="work-dental.jpg" loading="lazy" decoding="async" alt="Family Dental appointment request prototype" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
             <h3>FAMILY DENTAL BOOKING</h3>
             <p>An appointment request demo: pick what you need, pick when you are free, the office confirms.</p>
           </div>
         </a>
-        <a class="work-card work-card--sheldon" href="https://byyystudio.me/sheldon-engineering-concept-1/" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">SHELDON CONCEPT 1</div></div>
+        <button class="work-card work-card--sheldon" type="button" data-sheldon-open aria-haspopup="dialog">
+          <div class="work-image"><img src="work-sheldon-1.jpg" loading="lazy" decoding="async" alt="Sheldon Engineering concept 1, classic XP style" /></div>
           <div class="work-card__copy">
-            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
-            <h3>SHELDON ENGINEERING CONCEPT 1: CLASSIC XP</h3>
-            <p>A minimalist Windows XP style site for a septic tank business, with the black and white Sheldon mark.</p>
+            <span class="project-meta"><span>Three concepts</span><span class="project-arrow">+</span></span>
+            <h3>SHELDON ENGINEERING CONCEPTS</h3>
+            <p>Three website directions for the same septic business. Tap to pick one.</p>
           </div>
-        </a>
-        <a class="work-card work-card--sheldon" href="https://byyystudio.me/sheldon-engineering-concept-2/" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">SHELDON CONCEPT 2</div></div>
-          <div class="work-card__copy">
-            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
-            <h3>SHELDON ENGINEERING CONCEPT 2: SERVICE-FIRST</h3>
-            <p>A service-first site for a septic tank business, with the black and white Sheldon mark.</p>
-          </div>
-        </a>
-        <a class="work-card work-card--sheldon" href="https://byyystudio.me/sheldon-engineering-concept-3/" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">SHELDON CONCEPT 3</div></div>
-          <div class="work-card__copy">
-            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
-            <h3>SHELDON ENGINEERING CONCEPT 3: EDUCATION-FIRST</h3>
-            <p>An education-first site for a septic tank business, with the black and white Sheldon mark.</p>
-          </div>
-        </a>
+        </button>
       </div>
     </section>
 
@@ -1694,6 +1678,31 @@
     </div>
   </div>
 
+  <div class="concept-modal" data-sheldon-modal role="dialog" aria-modal="true" aria-labelledby="sheldon-modal-title" aria-hidden="true">
+    <div class="concept-modal__backdrop" data-sheldon-close></div>
+    <div class="concept-modal__panel" role="document">
+      <div class="concept-modal__bar"><span>sheldon // concepts</span><button class="concept-modal__close" type="button" data-sheldon-close aria-label="Close concept picker">×</button></div>
+      <div class="concept-modal__body">
+        <h2 id="sheldon-modal-title">PICK A SHELDON CONCEPT</h2>
+        <p>These are three different directions for the same business.</p>
+        <div class="concept-options">
+          <a class="concept-option" href="https://byyystudio.me/sheldon-engineering-concept-1/" target="_blank" rel="noopener noreferrer">
+            <div class="concept-option__image"><span class="concept-option__fallback">CLASSIC XP</span><img src="work-sheldon-1.jpg" decoding="async" alt="Sheldon Engineering concept 1, classic XP style" /></div>
+            <div class="concept-option__copy"><strong>Classic XP</strong><span>A minimalist Windows XP style site for a septic tank business, with the black and white Sheldon mark.</span></div>
+          </a>
+          <a class="concept-option" href="https://byyystudio.me/sheldon-engineering-concept-2/" target="_blank" rel="noopener noreferrer">
+            <div class="concept-option__image"><span class="concept-option__fallback">SERVICE-FIRST</span><img src="work-sheldon-2.jpg" decoding="async" alt="Sheldon Engineering concept 2, service-first" /></div>
+            <div class="concept-option__copy"><strong>Service-First</strong><span>A service-first site for a septic tank business, with the black and white Sheldon mark.</span></div>
+          </a>
+          <a class="concept-option" href="https://byyystudio.me/sheldon-engineering-concept-3/" target="_blank" rel="noopener noreferrer">
+            <div class="concept-option__image"><span class="concept-option__fallback">EDUCATION-FIRST</span><img src="work-sheldon-3.jpg" decoding="async" alt="Sheldon Engineering concept 3, education-first" /></div>
+            <div class="concept-option__copy"><strong>Education-First</strong><span>An education-first site for a septic tank business, with the black and white Sheldon mark.</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     (function () {
       var root = document.documentElement;
@@ -1803,8 +1812,30 @@
       }
       if (conceptOpen) conceptOpen.addEventListener('click', openConceptModal);
       conceptClose.forEach(function (control) { control.addEventListener('click', closeConceptModal); });
+      var sheldonModal = document.querySelector('[data-sheldon-modal]');
+      var sheldonOpen = document.querySelector('[data-sheldon-open]');
+      var sheldonClose = sheldonModal ? Array.prototype.slice.call(sheldonModal.querySelectorAll('[data-sheldon-close]')) : [];
+      var lastSheldonFocus = null;
+      function openSheldonModal() {
+        if (!sheldonModal) return;
+        lastSheldonFocus = document.activeElement;
+        sheldonModal.classList.add('is-open');
+        sheldonModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        sheldonModal.querySelector('.concept-modal__close').focus();
+      }
+      function closeSheldonModal() {
+        if (!sheldonModal) return;
+        sheldonModal.classList.remove('is-open');
+        sheldonModal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        if (lastSheldonFocus && lastSheldonFocus.focus) lastSheldonFocus.focus();
+      }
+      if (sheldonOpen) sheldonOpen.addEventListener('click', openSheldonModal);
+      sheldonClose.forEach(function (control) { control.addEventListener('click', closeSheldonModal); });
       document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && conceptModal && conceptModal.classList.contains('is-open')) closeConceptModal();
+        if (event.key === 'Escape' && sheldonModal && sheldonModal.classList.contains('is-open')) closeSheldonModal();
       });
       Array.prototype.slice.call(document.querySelectorAll('.concept-option__image img, .work-image img')).forEach(function (image) {
         image.addEventListener('error', function () { image.style.display = 'none'; });
