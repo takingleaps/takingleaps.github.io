@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>Raceline Tire Finder Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0c0e;
+        --panel: #15171b;
+        --panel-2: #1c1f24;
+        --line: #2c3038;
+        --line-strong: #3a3f49;
+        --text: #f4f5f7;
+        --muted: #aab0bc;
+        --muted-2: #848b98;
+        --accent: #e8322a;
+        --accent-dark: #b91f19;
+        --accent-soft: rgba(232, 50, 42, 0.14);
+        --demo-bg: #ffd21f;
+        --demo-text: #141414;
+        --ok: #4cc38a;
+        --radius: 10px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 17px;
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { transition: none !important; }
+      }
+      a { color: inherit; }
+      button { font: inherit; cursor: pointer; }
+      :focus-visible {
+        outline: 3px solid var(--demo-bg);
+        outline-offset: 2px;
+      }
+
+      .demo-strip {
+        background: var(--demo-bg);
+        color: var(--demo-text);
+        text-align: center;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 10px 16px;
+      }
+      .demo-strip span { font-weight: 600; letter-spacing: 0.02em; text-transform: none; }
+
+      .wrap { max-width: 1060px; margin: 0 auto; padding: 0 18px; }
+
+      /* ---------- Header ---------- */
+      header.site {
+        border-bottom: 1px solid var(--line);
+        background:
+          repeating-linear-gradient(-45deg, rgba(255,255,255,0.025) 0 14px, transparent 14px 28px),
+          var(--bg);
+      }
+      .site-inner { padding: 30px 0 34px; }
+      .shop-name {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: clamp(44px, 11vw, 84px);
+        font-weight: 700;
+        line-height: 0.95;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .shop-name .red { color: var(--accent); }
+      .shop-sub {
+        margin: 10px 0 0;
+        font-size: clamp(17px, 4.4vw, 21px);
+        font-weight: 600;
+        color: var(--text);
+        max-width: 34em;
+      }
+      .shop-sub + p { margin: 8px 0 0; color: var(--muted); max-width: 36em; }
+      .shop-meta {
+        display: flex; flex-wrap: wrap; gap: 10px;
+        margin-top: 22px;
+      }
+      .meta-item {
+        display: inline-flex; align-items: center; gap: 9px;
+        border: 1px solid var(--line-strong);
+        background: var(--panel);
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: 15.5px; font-weight: 600;
+        text-decoration: none;
+        min-height: 48px;
+      }
+      a.meta-item:active { background: var(--panel-2); }
+      .meta-item svg { flex: none; color: var(--accent); }
+      .meta-item small { display: block; font-weight: 500; color: var(--muted); font-size: 13px; line-height: 1.25; }
+
+      /* ---------- Steps ---------- */
+      main { padding: 34px 0 10px; }
+      .step-head {
+        display: flex; align-items: baseline; gap: 14px;
+        margin: 0 0 6px;
+      }
+      .step-num {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 15px; font-weight: 700;
+        letter-spacing: 0.12em;
+        color: #fff;
+        background: var(--accent);
+        border-radius: 6px;
+        padding: 5px 10px 4px;
+        white-space: nowrap;
+        transform: translateY(-3px);
+      }
+      h2 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: clamp(30px, 7vw, 42px);
+        font-weight: 700; text-transform: uppercase;
+        line-height: 1.05; margin: 0;
+      }
+      .step-intro { color: var(--muted); margin: 4px 0 22px; max-width: 40em; }
+      section.block { margin-bottom: 46px; }
+
+      .group-label {
+        font-weight: 700; font-size: 15px;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        margin: 0 0 12px;
+        display: flex; align-items: center; gap: 10px;
+      }
+      .group-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+      .group-label .picked {
+        letter-spacing: 0; text-transform: none;
+        font-size: 14px; color: var(--ok); font-weight: 600;
+      }
+
+      .choice-grid { display: grid; gap: 12px; margin-bottom: 28px; }
+      .choice-grid.styles { grid-template-columns: 1fr; }
+      .choice-grid.vehicles { grid-template-columns: repeat(3, 1fr); }
+      @media (min-width: 640px) {
+        .choice-grid.styles { grid-template-columns: 1fr 1fr; }
+      }
+      .choice {
+        text-align: left;
+        background: var(--panel);
+        border: 2px solid var(--line);
+        border-radius: var(--radius);
+        color: var(--text);
+        padding: 18px;
+        min-height: 64px;
+        display: flex; gap: 14px; align-items: flex-start;
+        transition: border-color 0.15s ease, background 0.15s ease;
+        width: 100%;
+      }
+      .choice:active { background: var(--panel-2); }
+      .choice .icon {
+        flex: none; width: 44px; height: 44px;
+        border-radius: 8px;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        display: grid; place-items: center;
+        color: var(--muted);
+      }
+      .choice strong { display: block; font-size: 18.5px; line-height: 1.25; }
+      .choice span.desc { display: block; color: var(--muted); font-size: 15px; margin-top: 3px; line-height: 1.4; }
+      .choice .check {
+        margin-left: auto; flex: none;
+        width: 26px; height: 26px; border-radius: 50%;
+        border: 2px solid var(--line-strong);
+        display: grid; place-items: center;
+        color: transparent;
+      }
+      .choice[aria-pressed="true"] {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+      }
+      .choice[aria-pressed="true"] .icon { color: #fff; background: var(--accent); border-color: var(--accent); }
+      .choice[aria-pressed="true"] .check { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .choice.veh { flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 18px 10px; }
+      .choice.veh .check { margin-left: 0; }
+      .choice.veh strong { font-size: 18px; }
+
+      .to-step2 {
+        width: 100%;
+        min-height: 60px;
+        border: none; border-radius: var(--radius);
+        background: var(--accent);
+        color: #fff;
+        font-weight: 700; font-size: 18px;
+        padding: 14px 20px;
+      }
+      .to-step2:disabled {
+        background: var(--panel-2);
+        color: var(--muted-2);
+        cursor: not-allowed;
+      }
+      .to-step2:not(:disabled):active { background: var(--accent-dark); }
+      .hint { color: var(--muted); font-size: 15px; margin: 10px 2px 0; }
+
+      /* ---------- Recommendation ---------- */
+      .reco-card {
+        border: 2px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        padding: 22px;
+      }
+      .reco-card.ready { border-color: var(--accent); }
+      .reco-kicker {
+        font-size: 13.5px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        color: var(--muted); margin: 0 0 6px;
+      }
+      .reco-card.ready .reco-kicker { color: var(--accent); }
+      .reco-title {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: clamp(30px, 7.5vw, 40px);
+        font-weight: 700; line-height: 1.05;
+        text-transform: uppercase; margin: 0 0 10px;
+      }
+      .reco-why { margin: 0 0 14px; max-width: 38em; }
+      .reco-points { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 9px; }
+      .reco-points li { display: flex; gap: 10px; align-items: flex-start; color: var(--text); }
+      .reco-points svg { flex: none; margin-top: 4px; color: var(--accent); }
+      .reco-fit {
+        border-top: 1px solid var(--line);
+        padding-top: 14px; margin: 0;
+        color: var(--muted); font-size: 15.5px;
+      }
+      .reco-fit strong { color: var(--text); }
+      .reco-empty { color: var(--muted); margin: 0; }
+      .reco-empty strong { color: var(--text); display: block; font-size: 19px; margin-bottom: 4px; }
+
+      /* ---------- Form ---------- */
+      .form-card {
+        margin-top: 26px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        padding: 22px;
+      }
+      .form-card h3 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 27px; font-weight: 700;
+        text-transform: uppercase; margin: 0 0 4px; line-height: 1.1;
+      }
+      .form-card .sub { color: var(--muted); margin: 0 0 20px; font-size: 15.5px; }
+      .field { margin-bottom: 18px; }
+      .field label { display: block; font-weight: 600; margin-bottom: 7px; font-size: 16px; }
+      .field label .opt { color: var(--muted); font-weight: 500; font-size: 14px; }
+      .field input {
+        width: 100%;
+        min-height: 56px;
+        font-size: 16px;
+        font-family: inherit;
+        color: var(--text);
+        background: var(--bg);
+        border: 2px solid var(--line-strong);
+        border-radius: 8px;
+        padding: 12px 14px;
+      }
+      .field input::placeholder { color: var(--muted-2); }
+      .field input[aria-invalid="true"] { border-color: var(--accent); }
+      .field-row { display: grid; gap: 0 14px; }
+      @media (min-width: 640px) { .field-row { grid-template-columns: 110px 1fr 1fr; } }
+      .error-msg { color: #ff8a84; font-size: 15px; margin: 7px 0 0; display: none; }
+      .error-msg.show { display: block; }
+      .submit-btn {
+        width: 100%; min-height: 60px;
+        border: none; border-radius: var(--radius);
+        background: var(--accent); color: #fff;
+        font-weight: 700; font-size: 18px;
+        padding: 14px 20px; margin-top: 4px;
+      }
+      .submit-btn:active { background: var(--accent-dark); }
+      .form-note { color: var(--muted); font-size: 14.5px; margin: 12px 2px 0; }
+
+      /* ---------- Summary ---------- */
+      #summary { display: none; }
+      #summary.show { display: block; }
+      .summary-card {
+        border: 2px solid var(--ok);
+        border-radius: var(--radius);
+        background: var(--panel);
+        padding: 22px;
+      }
+      .summary-card h3 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 30px; font-weight: 700;
+        text-transform: uppercase; margin: 0 0 4px; line-height: 1.1;
+      }
+      .summary-status {
+        display: inline-block;
+        border: 1px solid var(--ok); color: var(--ok);
+        border-radius: 6px; padding: 4px 10px;
+        font-size: 13.5px; font-weight: 700;
+        letter-spacing: 0.08em; text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .summary-note { color: var(--muted); margin: 0 0 18px; max-width: 38em; }
+      .summary-note strong { color: var(--text); }
+      dl.summary-list { margin: 0 0 18px; display: grid; gap: 0; }
+      .summary-list .row {
+        display: grid; grid-template-columns: 128px 1fr; gap: 12px;
+        padding: 10px 0; border-top: 1px solid var(--line);
+      }
+      .summary-list dt { color: var(--muted); font-size: 14.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 2px; }
+      .summary-list dd { margin: 0; font-weight: 600; }
+      .summary-actions { display: grid; gap: 10px; }
+      @media (min-width: 640px) { .summary-actions { grid-template-columns: 1fr 1fr 1fr; } }
+      .summary-actions button, .summary-actions a {
+        min-height: 56px;
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        border-radius: 8px; padding: 12px 16px;
+        font-weight: 700; font-size: 16px; text-decoration: none;
+        border: 2px solid var(--line-strong);
+        background: var(--panel-2); color: var(--text);
+        text-align: center;
+      }
+      .summary-actions .primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .copy-feedback { color: var(--ok); font-size: 15px; font-weight: 600; margin: 10px 0 0; min-height: 1.4em; }
+
+      /* ---------- Services ---------- */
+      .services {
+        border-top: 1px solid var(--line);
+        padding-top: 30px; margin-bottom: 44px;
+      }
+      .services h2 { font-size: clamp(26px, 6vw, 34px); margin-bottom: 16px; }
+      .service-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+      @media (min-width: 640px) { .service-grid { grid-template-columns: 1fr 1fr; } }
+      @media (min-width: 960px) { .service-grid { grid-template-columns: repeat(3, 1fr); } }
+      .service {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 18px;
+      }
+      .service strong { display: block; font-size: 18px; margin-bottom: 4px; }
+      .service p { margin: 0; color: var(--muted); font-size: 15.5px; }
+
+      footer.site {
+        border-top: 1px solid var(--line);
+        padding: 26px 0 calc(30px + env(safe-area-inset-bottom));
+        color: var(--muted);
+        font-size: 15px;
+      }
+      footer.site .foot-shop { color: var(--text); font-weight: 700; }
+      footer.site p { margin: 0 0 6px; }
+      footer.site a { color: var(--text); font-weight: 600; }
+      .credit { margin-top: 14px; font-size: 13.5px; color: var(--muted-2); }
+
+      @media (min-width: 760px) {
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+        .form-card { margin-top: 0; }
+        .reco-card { position: sticky; top: 18px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-strip">Prototype Demo <span>built for review. Not the shop's live website.</span></div>
+
+    <header class="site">
+      <div class="wrap site-inner">
+        <h1 class="shop-name">Raceline <span class="red">USA</span></h1>
+        <p class="shop-sub">Tire Finder. Answer two questions, get a tire category that fits how you drive, then request a quote.</p>
+        <p>Race tires, track tires, canyon tires, and off-road tires, plus fitment advice before you buy.</p>
+        <div class="shop-meta">
+          <a class="meta-item" href="tel:+16262927030">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>(626) 292-7030<small>Tap to call the shop</small></span>
+          </a>
+          <div class="meta-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>900 W Duarte Rd, Arcadia<small>Walk-ins during shop hours</small></span>
+          </div>
+          <div class="meta-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Mon to Fri, 9am to 5pm<small>Closed Saturday and Sunday</small></span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- STEP 1 -->
+      <section class="block" id="step1" aria-labelledby="step1-title">
+        <div class="step-head">
+          <span class="step-num">STEP 1</span>
+          <h2 id="step1-title">How do you drive?</h2>
+        </div>
+        <p class="step-intro">Pick the driving you do most, then pick your vehicle type. You can change either answer at any time.</p>
+
+        <p class="group-label" id="style-label">Driving style <span class="picked" id="style-picked"></span></p>
+        <div class="choice-grid styles" role="group" aria-labelledby="style-label">
+          <button type="button" class="choice" data-group="style" data-value="daily" aria-pressed="false">
+            <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg></span>
+            <span><strong>Daily Commute</strong><span class="desc">Work, school, errands. Mostly streets and freeway, all week long.</span></span>
+            <span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </button>
+          <button type="button" class="choice" data-group="style" data-value="canyon" aria-pressed="false">
+            <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c4-1 4-6 8-7s4-5 8-6"/><path d="M4 12c3 0 3 3 6 3"/><circle cx="4" cy="19" r="1.4"/><circle cx="20" cy="6" r="1.4"/></svg></span>
+            <span><strong>Canyon Carving</strong><span class="desc">Twisty back roads on weekends. You want grip and sharp steering feel.</span></span>
+            <span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </button>
+          <button type="button" class="choice" data-group="style" data-value="track" aria-pressed="false">
+            <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></span>
+            <span><strong>Track Days</strong><span class="desc">Timed laps and HPDE events. Grip and heat handling matter most.</span></span>
+            <span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </button>
+          <button type="button" class="choice" data-group="style" data-value="offroad" aria-pressed="false">
+            <span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg></span>
+            <span><strong>Off-Road</strong><span class="desc">Dirt, trails, rocks, and camping trips. Traction off pavement is the point.</span></span>
+            <span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </button>
+        </div>
+
+        <p class="group-label" id="vehicle-label">Vehicle type <span class="picked" id="vehicle-picked"></span></p>
+        <div class="choice-grid vehicles" role="group" aria-labelledby="vehicle-label">
+          <button type="button" class="choice veh" data-group="vehicle" data-value="car" aria-pressed="false">
+            <span class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+            <strong>Car</strong>
+            <span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </button>
+          <button type="button" class="choice veh" data-group="vehicle" data-value="truck" aria-pressed="false">
+            <span class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18h-5"/><path d="M14 9h4l4 4v4a1 1 0 0 1-1 1h-2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></span>
+            <strong>Truck</strong>
+            <span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </button>
+          <button type="button" class="choice veh" data-group="vehicle" data-value="suv" aria-pressed="false">
+            <span class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M3 17v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4"/><path d="M3 17h2"/><path d="M21 17h-2"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5"/></svg></span>
+            <strong>SUV</strong>
+            <span class="check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </button>
+        </div>
+
+        <button type="button" class="to-step2" id="toStep2" disabled>See my recommendation</button>
+        <p class="hint" id="step1Hint">Pick a driving style and a vehicle type to continue.</p>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="block" id="step2" aria-labelledby="step2-title">
+        <div class="step-head">
+          <span class="step-num">STEP 2</span>
+          <h2 id="step2-title">Your match and quote request</h2>
+        </div>
+        <p class="step-intro">This is a starting point by tire category, not a final pick. The shop confirms exact size and fitment with you before anything is ordered.</p>
+
+        <div class="two-col">
+          <div class="reco-card" id="recoCard" aria-live="polite">
+            <div id="recoEmpty">
+              <p class="reco-empty"><strong>No answers yet.</strong>Finish Step 1 above and your recommended tire category shows up here.</p>
+            </div>
+            <div id="recoBody" hidden>
+              <p class="reco-kicker">Recommended category</p>
+              <h3 class="reco-title" id="recoTitle"></h3>
+              <p class="reco-why" id="recoWhy"></p>
+              <ul class="reco-points" id="recoPoints"></ul>
+              <p class="reco-fit"><strong>Fitment note:</strong> <span id="recoFit"></span></p>
+            </div>
+          </div>
+
+          <form class="form-card" id="quoteForm" novalidate>
+            <h3>Request a quote</h3>
+            <p class="sub">Fill this out and the page builds a request summary you can bring to the shop or read over the phone. This prototype does not send anything to the shop.</p>
+            <div class="field">
+              <label for="fName">Your name</label>
+              <input id="fName" name="name" type="text" autocomplete="name" placeholder="First and last name" />
+              <p class="error-msg" id="errName">Enter your name so the shop knows who the request is for.</p>
+            </div>
+            <div class="field">
+              <label for="fPhone">Phone number</label>
+              <input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(626) 555-0100" />
+              <p class="error-msg" id="errPhone">Enter a phone number with at least 10 digits so the shop can call you back.</p>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="fYear">Year <span class="opt">(optional)</span></label>
+                <input id="fYear" name="year" type="text" inputmode="numeric" autocomplete="off" placeholder="2022" maxlength="4" />
+              </div>
+              <div class="field">
+                <label for="fMake">Make <span class="opt">(optional)</span></label>
+                <input id="fMake" name="make" type="text" autocomplete="off" placeholder="Make" />
+              </div>
+              <div class="field">
+                <label for="fModel">Model <span class="opt">(optional)</span></label>
+                <input id="fModel" name="model" type="text" autocomplete="off" placeholder="Model" />
+              </div>
+            </div>
+            <p class="error-msg" id="errQuiz">Pick a driving style and a vehicle type in Step 1 first, so the request includes your recommended category.</p>
+            <button type="submit" class="submit-btn">Build my request summary</button>
+            <p class="form-note">No price is quoted here. The shop gives you the price after they check your size, fitment, and stock.</p>
+          </form>
+        </div>
+      </section>
+
+      <!-- SUMMARY -->
+      <section class="block" id="summary" aria-labelledby="summary-title">
+        <div class="summary-card">
+          <span class="summary-status">Quote request summary</span>
+          <h3 id="summary-title">Bring this to Raceline USA</h3>
+          <p class="summary-note"><strong>This is a quote request, not a booked appointment and not a confirmed price.</strong> Show this summary at the shop or call <a href="tel:+16262927030">(626) 292-7030</a> and read it off. The shop confirms fitment, stock, and price with you directly.</p>
+          <dl class="summary-list" id="summaryList"></dl>
+          <div class="summary-actions">
+            <button type="button" class="primary" id="copyBtn">Copy summary</button>
+            <button type="button" id="downloadBtn">Download as text file</button>
+            <a href="tel:+16262927030">Call the shop</a>
+          </div>
+          <p class="copy-feedback" id="copyFeedback" role="status"></p>
+          <p class="form-note">Shop hours: Monday to Friday, 9am to 5pm. Address: 900 W Duarte Rd, Arcadia.</p>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section class="services" aria-labelledby="services-title">
+        <h2 id="services-title">What the shop does</h2>
+        <div class="service-grid">
+          <div class="service"><strong>Race and Track Tires</strong><p>High grip tires picked for lap time, heat cycles, and the class you run in.</p></div>
+          <div class="service"><strong>Canyon Tires</strong><p>Street tires with the grip and steering feel for back road driving.</p></div>
+          <div class="service"><strong>Off-Road Tires</strong><p>All-terrain and mud-terrain options matched to your truck or SUV and the trails you run.</p></div>
+          <div class="service"><strong>Daily Driver Tires</strong><p>All-season tires that balance wet grip, ride comfort, and tread life.</p></div>
+          <div class="service"><strong>Fitment Advice</strong><p>Size, load rating, wheel width, and clearance checked before you spend money.</p></div>
+          <div class="service"><strong>Quote Before You Buy</strong><p>Bring your request summary in and the shop prices your exact setup in person.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site">
+      <div class="wrap">
+        <p><span class="foot-shop">Raceline USA</span> · 900 W Duarte Rd, Arcadia · <a href="tel:+16262927030">(626) 292-7030</a> · Mon to Fri, 9am to 5pm</p>
+        <p>Prototype demo for owner review. Tire categories shown are general guidance, not a final recommendation for a specific vehicle.</p>
+        <p class="credit">Free prototype built by Byyy Studio.</p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var state = { style: null, vehicle: null };
+
+        var styleNames = {
+          daily: "Daily Commute",
+          canyon: "Canyon Carving",
+          track: "Track Days",
+          offroad: "Off-Road"
+        };
+        var vehicleNames = { car: "Car", truck: "Truck", suv: "SUV" };
+
+        var recos = {
+          daily: {
+            car: {
+              title: "All-Season Touring Tires",
+              why: "Your driving is mostly everyday miles, so the right tire is one built for that job first. Touring all-seasons trade a little peak grip for a quieter ride, better rain traction, and tread that lasts through years of commuting.",
+              points: [
+                "Confident grip in rain, which matters more than dry grip on a daily route",
+                "Quieter and softer riding than a performance tire",
+                "Longer tread life, so you are not replacing tires every season"
+              ]
+            },
+            truck: {
+              title: "All-Season Highway Tires",
+              why: "For a truck driven every day, a highway all-season is the right category. It is built to carry truck weight, stay quiet on the freeway, and keep tread life long, without the noise and wear of an off-road tire you do not need.",
+              points: [
+                "Load rating matched to a truck, not a passenger car",
+                "Steady, quiet freeway manners for long daily miles",
+                "Solid rain traction and longer tread life than all-terrain options"
+              ]
+            },
+            suv: {
+              title: "All-Season Touring Tires for SUVs",
+              why: "An SUV used daily needs an all-season built for its weight and higher center of gravity. This category gives you calm freeway manners, good rain grip for family duty, and tread that lasts.",
+              points: [
+                "Sized and rated for SUV weight and load",
+                "Good wet grip for school runs and freeway miles alike",
+                "Quiet ride and longer tread life than performance options"
+              ]
+            }
+          },
+          canyon: {
+            car: {
+              title: "Ultra High Performance Summer Tires",
+              why: "Canyon driving is about cornering grip and steering feel, and that is exactly what this category is built for. A soft, grippy compound and stiff sidewalls make the car respond faster and hold a line through turns.",
+              points: [
+                "Strong dry cornering grip for twisty roads",
+                "Sharp steering response you can feel right away",
+                "Trade-off to know: summer compound loses grip in cold weather and wears faster"
+              ]
+            },
+            truck: {
+              title: "Performance All-Season Tires",
+              why: "A truck will never corner like a sports car, but the right performance all-season still transforms back road driving. You get firmer sidewalls and better grip than a highway tire, while keeping year round usability.",
+              points: [
+                "Better cornering grip and steering feel than a standard truck tire",
+                "Still usable in rain and cooler temps, unlike a summer only tire",
+                "Trade-off to know: a step down in tread life and ride softness"
+              ]
+            },
+            suv: {
+              title: "Performance All-Season Tires",
+              why: "For an SUV on canyon roads, a performance all-season is the sweet spot. It sharpens steering and adds cornering grip over a touring tire, and it still handles rain and daily duty without a second set of tires.",
+              points: [
+                "Firmer, more responsive feel in turns than a touring tire",
+                "Year round grip, including wet roads",
+                "Trade-off to know: slightly firmer ride and faster wear than touring tires"
+              ]
+            }
+          },
+          track: {
+            car: {
+              title: "Track and Competition Tires",
+              why: "On track, a normal street tire overheats and gives up after a few hard laps. Track category tires use a compound and construction built to hold grip at high temperature, lap after lap, which is what lap time actually comes from.",
+              points: [
+                "Grip that stays consistent as the tire gets hot",
+                "Stiff construction for precise steering at speed",
+                "Trade-off to know: they wear fast, are loud on the street, and many drivers run them as a second set"
+              ]
+            },
+            truck: {
+              title: "Track and Competition Tires",
+              why: "Trucks on track are hard on tires because of their weight, so category and load rating matter even more. The shop will focus on a track tire that can take the heat and the load your truck puts through it.",
+              points: [
+                "Heat resistant compound for repeated hard laps",
+                "Load rating checked against your truck's weight",
+                "Trade-off to know: expect fast wear, and a dedicated track set is the usual setup"
+              ]
+            },
+            suv: {
+              title: "Track and Competition Tires",
+              why: "A tall, heavy SUV works its tires harder than almost anything else on track. This category is where the grip and heat handling live, and fitment gets extra attention because clearance and load both matter.",
+              points: [
+                "Built to keep gripping as temperatures climb",
+                "Load and clearance checked for a heavier vehicle",
+                "Trade-off to know: fast wear, and most drivers keep a separate street set"
+              ]
+            }
+          },
+          offroad: {
+            car: {
+              title: "All-Terrain Tires for Cars and Crossovers",
+              why: "Off-road options for a car are narrower than for trucks, but all-terrain tires in car and crossover sizes do exist. They add a tougher tread and stronger sidewalls for dirt roads and trails, while staying livable on pavement.",
+              points: [
+                "Real traction on dirt, gravel, and sand compared to a street tire",
+                "Tougher construction for rocks and ruts",
+                "Trade-off to know: size options are limited, so the fitment check matters a lot here"
+              ]
+            },
+            truck: {
+              title: "All-Terrain or Mud-Terrain Tires",
+              why: "This is the core off-road category for trucks. All-terrain is the pick for mixed street and trail use. Mud-terrain goes further, with bigger tread blocks for mud and rocks, at the cost of more road noise. The shop will pin down which one fits the trails you actually run.",
+              points: [
+                "All-terrain: the balanced pick if the truck also commutes",
+                "Mud-terrain: maximum trail traction, louder and heavier on pavement",
+                "Sidewall strength matters as much as tread for trail damage"
+              ]
+            },
+            suv: {
+              title: "All-Terrain or Mud-Terrain Tires",
+              why: "For an SUV that leaves pavement, start with all-terrain for mixed use, or mud-terrain if the trails are the priority. Both give you tread and sidewalls built for dirt, rocks, and mud that a street tire simply does not have.",
+              points: [
+                "All-terrain: best balance of trail grip and daily driving",
+                "Mud-terrain: for serious mud and rock, with more noise on the road",
+                "The shop matches the pick to your trail type and how much you drive on pavement"
+              ]
+            }
+          }
+        };
+
+        var fitNotes = {
+          car: "Exact size depends on your wheel diameter and width. Bring your current tire size, or the shop can read it off the sidewall in person.",
+          truck: "Lift, wheel offset, and load rating all change what fits. The shop checks clearance at full turn before recommending a size.",
+          suv: "Trim level changes wheel size on many SUVs, so the shop confirms your exact wheel and clearance before quoting a tire."
+        };
+
+        var recoEmpty = document.getElementById("recoEmpty");
+        var recoBody = document.getElementById("recoBody");
+        var recoCard = document.getElementById("recoCard");
+        var recoTitle = document.getElementById("recoTitle");
+        var recoWhy = document.getElementById("recoWhy");
+        var recoPoints = document.getElementById("recoPoints");
+        var recoFit = document.getElementById("recoFit");
+        var toStep2 = document.getElementById("toStep2");
+        var step1Hint = document.getElementById("step1Hint");
+        var checkSvg = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+
+        function currentReco() {
+          if (!state.style || !state.vehicle) return null;
+          return recos[state.style][state.vehicle];
+        }
+
+        function renderReco() {
+          var reco = currentReco();
+          var stylePicked = document.getElementById("style-picked");
+          var vehiclePicked = document.getElementById("vehicle-picked");
+          stylePicked.textContent = state.style ? "Picked: " + styleNames[state.style] : "";
+          vehiclePicked.textContent = state.vehicle ? "Picked: " + vehicleNames[state.vehicle] : "";
+
+          if (!reco) {
+            recoEmpty.hidden = false;
+            recoBody.hidden = true;
+            recoCard.classList.remove("ready");
+            toStep2.disabled = true;
+            if (state.style && !state.vehicle) {
+              step1Hint.textContent = "Now pick your vehicle type to continue.";
+            } else if (state.vehicle && !state.style) {
+              step1Hint.textContent = "Now pick your driving style to continue.";
+            } else {
+              step1Hint.textContent = "Pick a driving style and a vehicle type to continue.";
+            }
+            return;
+          }
+          recoEmpty.hidden = true;
+          recoBody.hidden = false;
+          recoCard.classList.add("ready");
+          recoTitle.textContent = reco.title;
+          recoWhy.textContent = reco.why;
+          recoFit.textContent = fitNotes[state.vehicle];
+          recoPoints.innerHTML = "";
+          reco.points.forEach(function (p) {
+            var li = document.createElement("li");
+            li.innerHTML = checkSvg;
+            var span = document.createElement("span");
+            span.textContent = p;
+            li.appendChild(span);
+            recoPoints.appendChild(li);
+          });
+          toStep2.disabled = false;
+          step1Hint.textContent = "Your recommendation is ready in Step 2 below.";
+        }
+
+        document.querySelectorAll(".choice").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var group = btn.getAttribute("data-group");
+            var value = btn.getAttribute("data-value");
+            state[group] = value;
+            document.querySelectorAll('.choice[data-group="' + group + '"]').forEach(function (b) {
+              b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+            });
+            document.getElementById("errQuiz").classList.remove("show");
+            renderReco();
+          });
+        });
+
+        toStep2.addEventListener("click", function () {
+          document.getElementById("step2").scrollIntoView({ behavior: "smooth", block: "start" });
+          document.getElementById("fName").focus({ preventScroll: true });
+        });
+
+        /* ---------- Form ---------- */
+        var form = document.getElementById("quoteForm");
+        var fName = document.getElementById("fName");
+        var fPhone = document.getElementById("fPhone");
+        var fYear = document.getElementById("fYear");
+        var fMake = document.getElementById("fMake");
+        var fModel = document.getElementById("fModel");
+        var summarySection = document.getElementById("summary");
+        var summaryList = document.getElementById("summaryList");
+        var copyFeedback = document.getElementById("copyFeedback");
+        var lastSummaryText = "";
+
+        function setError(input, errEl, bad) {
+          errEl.classList.toggle("show", bad);
+          if (input) input.setAttribute("aria-invalid", bad ? "true" : "false");
+          return !bad;
+        }
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var name = fName.value.trim();
+          var phoneDigits = fPhone.value.replace(/\D/g, "");
+          var ok = true;
+          ok = setError(fName, document.getElementById("errName"), name.length < 2) && ok;
+          ok = setError(fPhone, document.getElementById("errPhone"), phoneDigits.length < 10) && ok;
+          var quizErr = document.getElementById("errQuiz");
+          if (!currentReco()) {
+            quizErr.classList.add("show");
+            ok = false;
+            document.getElementById("step1").scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            quizErr.classList.remove("show");
+          }
+          if (!ok) {
+            if (name.length < 2) { fName.focus(); }
+            else if (phoneDigits.length < 10) { fPhone.focus(); }
+            return;
+          }
+
+          var reco = currentReco();
+          var vehicleLine = [fYear.value.trim(), fMake.value.trim(), fModel.value.trim()].filter(Boolean).join(" ");
+          var rows = [
+            ["Name", name],
+            ["Phone", fPhone.value.trim()],
+            ["Driving style", styleNames[state.style]],
+            ["Vehicle type", vehicleNames[state.vehicle]],
+            ["Your vehicle", vehicleLine || "Not provided, shop will ask"],
+            ["Recommended category", reco.title],
+            ["Why it fits", reco.why],
+            ["Bring to", "Raceline USA, 900 W Duarte Rd, Arcadia"],
+            ["Shop phone", "(626) 292-7030"],
+            ["Shop hours", "Monday to Friday, 9am to 5pm"]
+          ];
+          summaryList.innerHTML = "";
+          rows.forEach(function (r) {
+            var div = document.createElement("div");
+            div.className = "row";
+            var dt = document.createElement("dt");
+            dt.textContent = r[0];
+            var dd = document.createElement("dd");
+            dd.textContent = r[1];
+            div.appendChild(dt);
+            div.appendChild(dd);
+            summaryList.appendChild(div);
+          });
+
+          var today = new Date();
+          var dateStr = today.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+          lastSummaryText =
+            "RACELINE USA, TIRE QUOTE REQUEST\n" +
+            "Created: " + dateStr + "\n" +
+            "This is a quote request only. It is not a booked appointment and not a confirmed price.\n\n" +
+            rows.map(function (r) { return r[0] + ": " + r[1]; }).join("\n") +
+            "\n\nThe shop confirms fitment, stock, and price with you directly.";
+
+          copyFeedback.textContent = "";
+          summarySection.classList.add("show");
+          summarySection.scrollIntoView({ behavior: "smooth", block: "start" });
+          document.getElementById("summary-title").setAttribute("tabindex", "-1");
+          document.getElementById("summary-title").focus({ preventScroll: true });
+        });
+
+        [fName, fPhone].forEach(function (input) {
+          input.addEventListener("input", function () {
+            input.setAttribute("aria-invalid", "false");
+          });
+        });
+
+        document.getElementById("copyBtn").addEventListener("click", function () {
+          function done() { copyFeedback.textContent = "Copied. Paste it anywhere, or just show this screen at the shop."; }
+          function fallback() {
+            var ta = document.createElement("textarea");
+            ta.value = lastSummaryText;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); done(); }
+            catch (err) { copyFeedback.textContent = "Copy did not work on this device. Use the download button instead."; }
+            document.body.removeChild(ta);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(lastSummaryText).then(done, fallback);
+          } else {
+            fallback();
+          }
+        });
+
+        document.getElementById("downloadBtn").addEventListener("click", function () {
+          var blob = new Blob([lastSummaryText], { type: "text/plain" });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "raceline-quote-request.txt";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+          copyFeedback.textContent = "Downloaded. The file is named raceline-quote-request.txt.";
+        });
+
+        renderReco();
+      })();
+    </script>
+  </body>
+</html>
