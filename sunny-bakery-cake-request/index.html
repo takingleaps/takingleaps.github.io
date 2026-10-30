@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sunny Bakery Cake Request (Demo)</title>
+<style>
+  :root { --ink: #241c14; --muted: #6f6154; --paper: #faf6ef; --card: #ffffff; --accent: #9c6b30; --line: #e5dccb; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  header { background: var(--ink); color: var(--paper); padding: 26px 20px 20px; }
+  header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+  header p { margin: 8px 0 0; color: rgba(255,255,255,0.72); font-size: 14px; line-height: 1.6; }
+  header a { color: #ffffff; text-decoration: underline; text-underline-offset: 2px; }
+  main { max-width: 600px; margin: 0 auto; padding: 24px 20px 48px; }
+  .note { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 12px 14px; font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-bottom: 8px; }
+  h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 28px 0 12px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opts button { padding: 15px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; transition: border-color 0.15s ease; }
+  .opts button:hover { border-color: var(--muted); }
+  .opts button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  label { display: block; font-size: 13px; font-weight: 700; margin: 18px 0 8px; }
+  input, textarea { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--line); font-size: 16px; background: var(--card); font-family: inherit; color: var(--ink); }
+  textarea { min-height: 84px; resize: vertical; }
+  .error { color: var(--accent); font-size: 13.5px; margin-top: 8px; display: none; }
+  #submit { width: 100%; margin-top: 24px; padding: 17px; border: 0; border-radius: 12px; background: var(--accent); color: #fff; font-size: 17px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  #submit:active { transform: translateY(1px); }
+  #ticket { display: none; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 16px; padding: 22px; margin-top: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  #ticket h2 { margin: 0 0 10px; font-size: 18px; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--ink); }
+  #ticket p { line-height: 1.7; margin: 8px 0; }
+  #ticket .demo { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  footer { text-align: center; font-size: 12.5px; color: var(--muted); padding: 0 16px 32px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Sunny Bakery</h1>
+  <p>743 E Valley Blvd, San Gabriel, CA 91776<br>
+  <a href="tel:+16263077381">(626) 307-7381</a><br>
+  Open daily 8am to 6pm.</p>
+</header>
+<main>
+  <div class="note">Custom cake request demo. Pick a cake, tell the bakery about your occasion, and send the request. No payment here. The bakery confirms the details.</div>
+
+  <h2>Which cake?</h2>
+  <div class="opts" id="cakeOpts">
+    <button type="button" data-cake="Taro Wedding Cake">Taro Wedding Cake</button>
+    <button type="button" data-cake="Durian Cake">Durian Cake</button>
+    <button type="button" data-cake="Pandan Coconut Cake">Pandan Coconut Cake</button>
+    <button type="button" data-cake="3 Leches Cake">3 Leches Cake</button>
+    <button type="button" data-cake="Something else">Something else</button>
+  </div>
+
+  <h2>What is the occasion?</h2>
+  <div class="opts" id="occasionOpts">
+    <button type="button" data-occasion="Wedding">Wedding</button>
+    <button type="button" data-occasion="Birthday">Birthday</button>
+    <button type="button" data-occasion="Something else">Something else</button>
+  </div>
+
+  <label for="needDate">Date needed</label>
+  <input id="needDate" type="date">
+
+  <label for="details">Anything else?</label>
+  <textarea id="details" placeholder="Flavors, writing on the cake, pickup notes"></textarea>
+
+  <label for="custName">Your name</label>
+  <input id="custName" type="text" placeholder="Name for the request" autocomplete="name">
+  <label for="custPhone">Phone</label>
+  <input id="custPhone" type="tel" placeholder="So the bakery can reach you" autocomplete="tel">
+  <div class="error" id="formError">Pick a cake and an occasion, add your name and phone, then send again.</div>
+
+  <button type="button" id="submit">Send Cake Request</button>
+
+  <div id="ticket">
+    <h2>Cake Request</h2>
+    <p id="ticketMain"></p>
+    <p id="ticketMeta"></p>
+    <div class="demo">Demo request, not a confirmed order. The bakery confirms the details.</div>
+  </div>
+</main>
+<footer>
+  Demo concept built by Byyy Studio.<br>
+  Sunny Bakery, 743 E Valley Blvd, San Gabriel, CA 91776, (626) 307-7381.
+</footer>
+<script>
+  var cake = '';
+  var occasion = '';
+  document.querySelectorAll('#cakeOpts button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      cake = btn.getAttribute('data-cake');
+      document.querySelectorAll('#cakeOpts button').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+    });
+  });
+  document.querySelectorAll('#occasionOpts button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      occasion = btn.getAttribute('data-occasion');
+      document.querySelectorAll('#occasionOpts button').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+    });
+  });
+  document.getElementById('submit').addEventListener('click', function () {
+    var name = document.getElementById('custName').value.trim();
+    var phone = document.getElementById('custPhone').value.trim();
+    var date = document.getElementById('needDate').value;
+    var details = document.getElementById('details').value.trim();
+    var err = document.getElementById('formError');
+    if (!cake || !occasion || !name || !phone) { err.style.display = 'block'; return; }
+    err.style.display = 'none';
+    document.getElementById('ticketMain').textContent = 'Cake: ' + cake + '. Occasion: ' + occasion + '.' + (date ? ' Date needed: ' + date + '.' : '') + (details ? ' Details: ' + details : '');
+    document.getElementById('ticketMeta').textContent = 'Name: ' + name + '. Phone: ' + phone + '.';
+    document.getElementById('ticket').style.display = 'block';
+    document.getElementById('ticket').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
+</body>
+</html>
