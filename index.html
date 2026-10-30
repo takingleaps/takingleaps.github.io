@@ -522,6 +522,7 @@
     button.work-card { width: 100%; padding: 0; text-align: left; font: inherit; cursor: pointer; }
 
     body.modal-open { overflow: hidden; }
+    #pixel-burst { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
     .concept-modal {
       position: fixed;
       inset: 0;
@@ -1397,6 +1398,14 @@
       </div>
 
       <div class="concepts-grid">
+        <button class="work-card work-card--sheldon" type="button" data-sheldon-open aria-haspopup="dialog">
+          <div class="work-image"><img src="work-sheldon-1.jpg" loading="lazy" decoding="async" alt="Sheldon Engineering concept 1, classic XP style" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Three concepts</span><span class="project-arrow">+</span></span>
+            <h3>SHELDON ENGINEERING CONCEPTS</h3>
+            <p>Three website directions for the same septic business. Tap to pick one.</p>
+          </div>
+        </button>
         <button class="work-card work-card--flwrpwr" type="button" data-concept-open aria-haspopup="dialog">
           <div class="work-image"><img src="work-flwrpwr.png" loading="lazy" decoding="async" alt="FLWRPWR stocked store website concept" /></div>
           <div class="work-card__copy">
@@ -1429,14 +1438,7 @@
             <p>An appointment request demo: pick what you need, pick when you are free, the office confirms.</p>
           </div>
         </a>
-        <button class="work-card work-card--sheldon" type="button" data-sheldon-open aria-haspopup="dialog">
-          <div class="work-image"><img src="work-sheldon-1.jpg" loading="lazy" decoding="async" alt="Sheldon Engineering concept 1, classic XP style" /></div>
-          <div class="work-card__copy">
-            <span class="project-meta"><span>Three concepts</span><span class="project-arrow">+</span></span>
-            <h3>SHELDON ENGINEERING CONCEPTS</h3>
-            <p>Three website directions for the same septic business. Tap to pick one.</p>
-          </div>
-        </button>
+        
       </div>
     </section>
 
@@ -1703,6 +1705,8 @@
     </div>
   </div>
 
+  <canvas id="pixel-burst" aria-hidden="true"></canvas>
+
   <script>
     (function () {
       var root = document.documentElement;
@@ -1840,6 +1844,47 @@
       Array.prototype.slice.call(document.querySelectorAll('.concept-option__image img, .work-image img')).forEach(function (image) {
         image.addEventListener('error', function () { image.style.display = 'none'; });
       });
+
+      var burstCanvas = document.getElementById('pixel-burst');
+      if (burstCanvas && window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var bctx = burstCanvas.getContext('2d');
+        var burstParticles = [];
+        var burstRunning = false;
+        function sizeBurst() {
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          burstCanvas.width = Math.floor(window.innerWidth * dpr);
+          burstCanvas.height = Math.floor(window.innerHeight * dpr);
+          bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        sizeBurst();
+        window.addEventListener('resize', sizeBurst);
+        function spawnBurst(x, y) {
+          var colors = ['#37ff00', '#ffffff', '#c9c9c9', '#1c2b1c'];
+          for (var i = 0; i < 16; i++) {
+            var angle = Math.random() * Math.PI * 2;
+            var speed = 2 + Math.random() * 5;
+            burstParticles.push({ x: x, y: y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 2, size: 3 + Math.random() * 7, color: colors[i % colors.length], life: 1 });
+          }
+          if (!burstRunning) { burstRunning = true; requestAnimationFrame(tickBurst); }
+        }
+        function tickBurst() {
+          bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          burstParticles = burstParticles.filter(function (pt) { return pt.life > 0; });
+          if (!burstParticles.length) { burstRunning = false; return; }
+          burstParticles.forEach(function (pt) {
+            pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.18; pt.life -= 0.02;
+            bctx.globalAlpha = Math.max(pt.life, 0);
+            bctx.fillStyle = pt.color;
+            bctx.fillRect(pt.x, pt.y, pt.size, pt.size);
+          });
+          bctx.globalAlpha = 1;
+          requestAnimationFrame(tickBurst);
+        }
+        document.addEventListener('pointerdown', function (event) {
+          if (event.button !== undefined && event.button !== 0) return;
+          spawnBurst(event.clientX, event.clientY);
+        });
+      }
 
       var workPanel = document.querySelector('[data-work-panel-root]');
       var workPanelOpeners = Array.prototype.slice.call(document.querySelectorAll('[data-work-panel]'));
