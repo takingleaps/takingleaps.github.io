@@ -14,7 +14,7 @@
  }
  *{box-sizing:border-box}
  html{scroll-behavior:smooth}
- body{margin:0;font-family:Tahoma,Verdana,Segoe UI,system-ui,sans-serif;background:#2b2b2b;color:var(--ink);font-size:15px;line-height:1.55;
+ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#2b2b2b;color:var(--ink);font-size:15px;line-height:1.55;
  background-image:radial-gradient(circle at 12% 18%, rgba(255,255,255,.14) 0 90px, transparent 91px),radial-gradient(circle at 88% 8%, rgba(255,255,255,.10) 0 140px, transparent 141px),radial-gradient(circle at 80% 92%, rgba(255,255,255,.08) 0 110px, transparent 111px);}
  a{color:#111}
  button,input,select,textarea{font:inherit}
@@ -32,10 +32,10 @@
  .logo{width:86px;height:58px;flex:none}
  .real{font-weight:800;color:#111}
  .real a{color:#111;text-decoration:underline;text-underline-offset:2px}
- .brand h1{margin:0;font-size:32px;line-height:.95;letter-spacing:-.02em;text-transform:uppercase}
+ .brand h1{margin:0;font-size:32px;line-height:1.15;letter-spacing:0;text-transform:none}
  .brand h1 small{display:block;font-size:12px;letter-spacing:.28em;font-weight:400;margin-top:6px}
  .-badge{margin-left:auto;background:#111;color:#fff;padding:8px 11px;font-size:11px;line-height:1.4;max-width:240px;border-radius:4px}
- .-badge b{text-transform:uppercase;letter-spacing:.08em}
+ .-badge b{text-transform:none;letter-spacing:.08em}
  /* NAV TABS - XP folder tabs */
  nav.tabs{display:flex;gap:4px;padding:12px 14px 0;flex-wrap:wrap;border-bottom:3px solid #111;margin:0 4px}
  nav.tabs button{border:2px solid #111;border-bottom:none;border-radius:8px 8px 0 0;background:#d8d7d0;padding:10px 13px;font-weight:700;font-size:13.5px;cursor:pointer}
@@ -46,7 +46,7 @@
  /* HERO */
  .hero{display:grid;grid-template-columns:1.35fr .85fr;gap:18px}
  @media(max-width:760px){.hero{grid-template-columns:1fr}.brand h1{font-size:26px}}
- .hero h2{font-size:38px;line-height:.98;margin:2px 0 10px;letter-spacing:-.02em}
+ .hero h2{font-size:28px;line-height:.98;margin:2px 0 10px;letter-spacing:0}
  @media(max-width:560px){.hero h2{font-size:31px}}
  .hero p.lede{font-size:16.5px;color:#333;max-width:56ch}
  .btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#fff,#deddd6);border:2px solid #111;padding:12px 16px;font-weight:800;cursor:pointer;border-radius:5px;box-shadow:3px 3px 0 #111;text-decoration:none;color:#111}
@@ -56,7 +56,7 @@
  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
  .cta-row .btn{flex:1;min-width:210px;justify-content:center}
  .sidebox{border:2px solid #111;background:#fff}
- .sidebox h3{background:#111;color:#fff;margin:0;padding:9px 12px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+ .sidebox h3{background:#111;color:#fff;margin:0;padding:9px 12px;font-size:13px;letter-spacing:.08em;text-transform:none}
  .sidebox div{padding:12px}
  .sidebox p{margin:0 0 8px;font-size:13.5px}
  .placeholder{background:#111;color:#fff;padding:2px 6px;font-weight:700;font-size:12.5px;white-space:nowrap}
@@ -99,9 +99,9 @@
  table{width:100%;border-collapse:collapse;font-size:14px}
  th{background:#111;color:#fff;text-align:left;padding:11px}
  td{padding:11px;border-top:1px solid #bbb;vertical-align:top}
- @media(max-width:680px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-top:3px solid #111;padding:8px 0}td{border:none;padding:6px 11px}td::before{content:attr(data-l);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#666;font-weight:700}}
+ @media(max-width:680px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-top:3px solid #111;padding:8px 0}td{border:none;padding:6px 11px}td::before{content:attr(data-l);display:block;font-size:11px;text-transform:none;letter-spacing:.08em;color:#666;font-weight:700}}
  .notice{border:2px solid #111;background:#fff;padding:13px 14px;margin-top:14px;font-size:14px}
- .notice b{text-transform:uppercase}
+ .notice b{text-transform:none}
  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
  @media(max-width:720px){.two{grid-template-columns:1fr}}
  ul.tight{margin:8px 0;padding-left:20px} ul.tight li{margin:6px 0}
@@ -116,7 +116,7 @@
 <body>
 <div class="wrap">
  <div class="window">
- <div class="titlebar"><span>◎</span><b>Sheldon_Engineering, Septic Services.exe</b><span class="sp"></span><div class="winbtns"><span>–</span><span>□</span><span>×</span></div></div>
+ <div class="titlebar"><span>◎</span><b>Sheldon Engineering</b><span class="sp"></span><div class="winbtns"><span>–</span><span>□</span><span>×</span></div></div>
  <div class="menubar"><span>Services</span><span>Booking</span><span>Emergency</span><span>Tools</span><span>Pricing</span><span>Help</span></div>
 
  <header class="brand">
@@ -140,7 +140,7 @@
  <div class="hero">
  <div>
  <p style="letter-spacing:.18em;font-size:11px;font-weight:700;margin:0">SEPTIC PUMPING • INSPECTIONS • REPAIRS</p>
- <h2>Need a pump-out?<br>Book it in two minutes.</h2>
+ <h2>Book a pump-out</h2>
  <p class="lede">No digging through a basic page to find a phone number. Pick a service, tell us about your tank, and send a booking request, or get emergency help straight away if something's backing up.</p>
  <div class="cta-row">
  <button class="btn black" data-goto="book">BOOK A PUMP-OUT →</button>
