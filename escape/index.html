@@ -1039,16 +1039,19 @@
   <style>
     /* ===== Auto-hide bottom menu on scroll (phone + tablet) =====
        The bottom navigation and the preview player stacked above it
-       slide off the bottom of the screen while you scroll down, so
-       maps, filters and cards get the full screen. Scroll up, stop
-       scrolling for a moment, or reach the top, and they slide
-       straight back. The desktop left rail never hides. Page padding
-       does not change while hidden, so the page never jumps. */
+       slide fully off the bottom of the screen the moment you scroll,
+       in either direction, so maps, filters and cards get the whole
+       screen while you are moving. They slide back on their own once
+       scrolling stops for a moment, or when you are back near the
+       top. The desktop left rail never hides. Page padding does not
+       change while hidden, so the page never jumps. The player clears
+       the bottom navigation plus the phone safe-area inset, so no
+       sliver of it stays on screen. */
     @media(max-width:1099px){
       .mobile-nav{transition:transform .32s cubic-bezier(.16,1,.3,1);will-change:transform}
       .music-player{transition:transform .32s cubic-bezier(.16,1,.3,1),box-shadow .32s ease}
-      body.menu-hidden .mobile-nav{transform:translateY(115%);pointer-events:none}
-      body.menu-hidden .music-player{transform:translateY(calc(100% + var(--bottomnav,64px) + 16px))!important;pointer-events:none;animation:none!important;box-shadow:none}
+      body.menu-hidden .mobile-nav{transform:translateY(120%);pointer-events:none}
+      body.menu-hidden .music-player{transform:translateY(calc(100% + var(--bottomnav,64px) + env(safe-area-inset-bottom) + 16px))!important;pointer-events:none;animation:none!important;box-shadow:none}
       body.menu-hidden .lineup-entry{transform:translateY(16px);opacity:0;pointer-events:none}
     }
     @media(max-width:1099px) and (prefers-reduced-motion:reduce){
@@ -2545,19 +2548,23 @@
 })();
 </script>
 <script>
-/* Auto-hide bottom menu on scroll: scrolling down slides the bottom
-   navigation and the preview player above it off screen; scrolling up,
-   stopping for a moment, or reaching the top brings them back. It never
-   hides while the player is expanded, while a lineup or login overlay
-   is open, while you are holding or dragging the menu or player, or
-   on the desktop rail layout. */
+/* Auto-hide bottom menu on scroll: the moment the page moves, in
+   either direction, the bottom navigation and the preview player
+   stacked above it slide fully off screen, so the menu is never in
+   the way while you are scrolling. They slide back on their own once
+   scrolling has stopped for a moment, or when you are back near the
+   top. It never hides while the player is expanded, while a lineup
+   or login overlay is open, while you are holding or dragging the
+   menu or player, or on the desktop rail layout. Scrolling inside a
+   panel (the map viewer, a sheet) counts too, and touch drags are
+   caught even where no scroll event fires. */
 (function(){
   'use strict';
   var nav=document.querySelector('.mobile-nav');
   var player=document.getElementById('musicPlayer');
   if(!nav)return;
   var mq=window.matchMedia('(max-width: 1099px)');
-  var lastY=window.scrollY||0, idleTimer=null, touchingChrome=false;
+  var idleTimer=null, touchingChrome=false;
   function overlayOpen(){
     var gate=document.getElementById('accountGate');
     if(gate&&!gate.classList.contains('gate-hidden'))return true;
@@ -2576,30 +2583,38 @@
     if(idleTimer){clearTimeout(idleTimer);idleTimer=null}
     document.body.classList.remove('menu-hidden');
   }
+  function armIdle(){
+    if(idleTimer)clearTimeout(idleTimer);
+    idleTimer=setTimeout(show,1500);
+  }
   function hide(){
     if(blocked())return;
     document.body.classList.add('menu-hidden');
     armIdle();
   }
-  function armIdle(){
-    if(idleTimer)clearTimeout(idleTimer);
-    idleTimer=setTimeout(show,2200);
+  function noteScroll(y){
+    if(!mq.matches){show();return}
+    if(y<48){show();return}
+    hide();
   }
-  function onScroll(){
-    if(!mq.matches){show();lastY=window.scrollY||0;return}
-    var y=window.scrollY||0;
-    var dy=y-lastY;
-    if(y<70){show()}
-    else if(dy>7&&y>140){hide()}
-    else if(dy<-4){show()}
-    else if(document.body.classList.contains('menu-hidden')){armIdle()}
-    lastY=y;
-  }
-  var ticking=false;
-  window.addEventListener('scroll',function(){
-    if(ticking)return;
-    ticking=true;
-    window.requestAnimationFrame(function(){ticking=false;onScroll()});
+  /* Capture phase sees window scrolls and scrolls inside inner
+     panels (map viewer, sheets) alike. */
+  window.addEventListener('scroll',function(e){
+    var t=e.target;
+    var y=(t&&t!==document&&t.nodeType===1)?(t.scrollTop||0):(window.scrollY||0);
+    noteScroll(y);
+  },{passive:true,capture:true});
+  /* A touch drag that pans inside a container can fire no scroll
+     event on some phones; treat a drag anywhere off the menu and
+     player as scrolling too. */
+  window.addEventListener('touchmove',function(e){
+    if(touchingChrome)return;
+    var t=e.target;
+    if(t&&t.closest&&(t.closest('.mobile-nav')||t.closest('.music-player')))return;
+    if((window.scrollY||0)>=48)hide();
+  },{passive:true});
+  window.addEventListener('wheel',function(){
+    if((window.scrollY||0)>=48)hide();
   },{passive:true});
   window.addEventListener('resize',function(){if(!mq.matches)show()},{passive:true});
   if(mq.addEventListener)mq.addEventListener('change',function(){if(!mq.matches)show()});
