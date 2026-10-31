@@ -844,8 +844,8 @@
       .dnav-reset:hover,.dnav-reset:focus-visible{border-color:var(--acid);color:#f3ead8}
     }
     @media(max-width:1099px){
-      .mobile-nav{grid-template-columns:repeat(8,minmax(0,1fr))}
-      .mnav-item{font-size:10px;letter-spacing:0;padding:0 1px;min-width:0;overflow:hidden;touch-action:pan-y}
+      .mobile-nav{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.mobile-nav::-webkit-scrollbar{display:none}
+      .mnav-item{flex:0 0 70px;font-size:10px;letter-spacing:0;padding:0 2px;min-width:70px;white-space:nowrap;overflow:visible;touch-action:pan-x pan-y}
       .mnav-item svg{width:20px;height:20px;flex:0 0 auto}
       .mnav-item.dragging{position:relative;z-index:3;background:#1b110d;color:#f3ead8;box-shadow:0 8px 22px rgba(0,0,0,.5)}
       .mnav-drop{display:block;position:absolute;top:6px;bottom:calc(6px + env(safe-area-inset-bottom));width:3px;background:var(--acid);box-shadow:0 0 10px rgba(255,90,31,.8);z-index:4;pointer-events:none}
