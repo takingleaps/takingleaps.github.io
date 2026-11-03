@@ -414,7 +414,7 @@
     }
     .section-heading {
       max-width: 850px;
-      margin-bottom: 56px;
+      margin-bottom: 44px;
     }
     .section-heading h2 {
       margin-bottom: 20px;
@@ -487,7 +487,10 @@
     .work-card--sunny { --project-color: #9c6b30; }
     .work-card--sheldon { --project-color: #c9c9c9; }
     .work-image__label { display: grid; place-items: center; width: 100%; height: 100%; padding: 16px; font-weight: 700; letter-spacing: .12em; text-align: center; color: var(--project-color); }
-    .concepts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .concepts-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    #concepts .work-card__copy { min-height: 0; padding: 20px; }
+    #concepts .work-card h3 { padding-top: 16px; font-size: 21px; }
+    #concepts .work-image { aspect-ratio: 16 / 9; }
     .work-image {
       aspect-ratio: 16 / 10;
       overflow: hidden;
@@ -506,8 +509,8 @@
     .work-card--escape .work-image img { object-position: center 36%; }
     .work-card:hover .work-image img { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
     .work-card__copy {
-      min-height: 220px;
-      padding: 24px;
+      min-height: 200px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
     }
@@ -515,7 +518,7 @@
     .work-card .project-arrow { color: var(--project-color); }
     .work-card h3 {
       margin: auto 0 14px;
-      padding-top: 38px;
+      padding-top: 24px;
       font-family: var(--display);
       font-size: 26px;
       font-weight: 700;
@@ -1110,7 +1113,7 @@
     @media (max-width: 640px) {
       html { scroll-padding-top: 76px; }
       .site-nav__inner { min-height: 56px; justify-content: center; gap: 0; }
-      .nav-link { padding-inline: 9px; font-size: 11px; letter-spacing: .045em; }
+      .nav-link { min-height: 48px; padding-inline: 12px; font-size: 12px; letter-spacing: .045em; }
       .nav-link--call { margin-left: 2px; }
       .page-shell { padding-top: 18px; }
       .terminal-bar { min-height: 44px; padding-inline: 12px; }
@@ -1241,7 +1244,7 @@
     .work-panel__actions { margin-top: 28px; display: grid; gap: 12px; }
     .work-panel__actions .button { width: 100%; }
 
-    .calendly-waiting {
+    .booking-status {
       position: absolute; inset: 0; z-index: 2;
       display: grid; place-items: center;
       color: var(--dim); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
@@ -1251,13 +1254,10 @@
         var(--bg-deep);
       background-size: 32px 32px;
     }
-    .calendly-loading { display: none; }
-    .booking-embed.is-loading .calendly-loading { display: grid; }
-    .booking-embed.is-loading .calendly-waiting { display: none; }
-    .booking-embed.is-ready .calendly-loading,
-    .booking-embed.is-ready .calendly-waiting,
-    .booking-embed.is-fallback .calendly-loading,
-    .booking-embed.is-fallback .calendly-waiting { display: none; }
+    .booking-direct { margin: 0 0 12px; color: var(--muted); font-size: 12px; }
+    .booking-direct a { color: var(--accent); }
+    .booking-embed.is-ready .booking-status,
+    .booking-embed.is-fallback .booking-status { display: none; }
 
     @media (max-width: 900px) {
       .bottom-nav {
@@ -1269,7 +1269,7 @@
       }
       :root[data-theme="light"] .bottom-nav { background: rgba(238,243,239,.94); }
       .bottom-nav__link {
-        flex: 1 1 0; min-height: 44px; padding: 12px 6px;
+        flex: 1 1 0; min-height: 56px; padding: 14px 6px;
         display: flex; align-items: center; justify-content: center;
         color: var(--muted); font-size: 11px; font-weight: 600;
         letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
@@ -1278,7 +1278,7 @@
       .bottom-nav__link--call { color: var(--accent); }
       .bottom-nav__link[aria-current="true"] { color: var(--accent); border-top-color: var(--accent); background: var(--accent-faint); }
       .bottom-nav__link:active { background: var(--accent-faint); }
-      body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
       html { scroll-padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
     }
 
@@ -1338,11 +1338,11 @@
       <div class="hero-grid">
         <div class="hero-main">
           <p class="command-line">BYYY STUDIOS · DESIGN + BUILD + MARKET + AUTOMATE</p>
-          <h1 id="hero-title">APPS, WEBSITES, AUTONOMOUS SYSTEMS, BUILT FOR BUSINESS.</h1>
-          <p class="hero-copy">I design and build apps, websites, and autonomous systems that handle the busywork for you. Then I help you get seen. No templates. No fluff.</p>
+          <h1 id="hero-title">Websites, apps, and systems that do the busywork.</h1>
+          <p class="hero-copy">I design and build websites, apps, and systems for businesses. Festival apps, local business sites, and repeat work put on autopilot. No templates. No fluff.</p>
           <div class="button-row">
             <a class="button button--primary" href="#contact">
-              Talk about a project
+              Book a 30-minute quote call
               <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
             </a>
             <a class="button" href="#work">See work</a>
@@ -1396,7 +1396,7 @@
     <section id="concepts" class="section" aria-labelledby="concepts-title">
       <div class="section-heading">
         <h2 id="concepts-title">CONCEPTS</h2>
-        <p>design directions and explorations, separate from shipped client work. tap in to look around.</p>
+        <p>12 directions and explorations, separate from shipped client work. Tap a card to look around.</p>
       </div>
 
       <div class="concepts-grid">
@@ -1619,15 +1619,15 @@
         </div>
         <div class="booking-shell">
           <div class="booking-label"><span>Calendly // quote call</span><strong>Booking open</strong></div>
+          <p class="booking-direct">Calendar slow? <a href="https://calendly.com/nathanltwong/festival-app-quote-call" target="_blank" rel="noopener noreferrer">Open Calendly directly</a>.</p>
           <div class="booking-embed" data-booking-embed>
-            <div class="calendly-waiting">Booking calendar loads as you scroll here.</div>
-            <div class="calendly-loading">Loading available times...</div>
+            <div class="booking-status" role="status" aria-live="polite">Booking calendar loads as you scroll here.</div>
             <iframe class="calendly-frame" data-calendly-frame title="Book a 30-minute quote call" data-calendly-src="https://calendly.com/nathanltwong/festival-app-quote-call?embed_type=Inline&amp;hide_gdpr_banner=1" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="payment *"></iframe>
             <div class="booking-card" data-booking-fallback>
               <div>
                 <p class="booking-card__eyebrow">CALENDAR COULD NOT LOAD.</p>
                 <h3>OPEN THE CALENDAR DIRECTLY.</h3>
-                <p class="booking-card__copy">The live calendar could not load here. Open Calendly to see the actual available times.</p>
+                <p class="booking-card__copy">The live calendar did not load here. Open Calendly to see the actual available times, or try loading it again.</p>
                 <ul class="booking-meta" aria-label="Call details">
                   <li>30 minutes</li>
                   <li>Video call</li>
@@ -1637,6 +1637,7 @@
                 Open Calendly
                 <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
               </a>
+              <button class="button" type="button" data-booking-retry>Try loading it again</button>
             </div>
           </div>
         </div>
@@ -2004,24 +2005,38 @@
       var bookingEmbed = document.querySelector('[data-booking-embed]');
       if (bookingEmbed) {
         var bookingFrame = bookingEmbed.querySelector('[data-calendly-frame]');
+        var bookingStatus = bookingEmbed.querySelector('.booking-status');
         var bookingReady = false;
         var bookingBlocked = false;
+        function setBookingStatus(text) { if (bookingStatus) bookingStatus.textContent = text; }
         function markBookingReady() {
           if (bookingReady || bookingBlocked) return;
           if (!bookingFrame || !bookingFrame.getAttribute('src')) return;
           bookingReady = true;
           bookingEmbed.classList.add('is-ready');
+          setBookingStatus('Calendar loaded.');
         }
         function showBookingFallback() {
           if (bookingReady) return;
           bookingBlocked = true;
+          bookingEmbed.classList.remove('is-loading');
           bookingEmbed.classList.add('is-fallback');
         }
+        var bookingRetry = document.querySelector('[data-booking-retry]');
+        if (bookingRetry) bookingRetry.addEventListener('click', function () {
+          bookingReady = false;
+          bookingBlocked = false;
+          bookingEmbed.classList.remove('is-fallback', 'is-ready');
+          if (bookingFrame) bookingFrame.removeAttribute('src');
+          setBookingStatus('Loading available times...');
+          startBookingLoad();
+        });
         function startBookingLoad() {
           if (!bookingFrame || bookingFrame.getAttribute('src')) return;
           var src = bookingFrame.getAttribute('data-calendly-src');
           if (!src) return;
           bookingEmbed.classList.add('is-loading');
+          setBookingStatus('Loading available times...');
           bookingFrame.setAttribute('src', src);
           window.setTimeout(function () {
             if (!bookingReady) showBookingFallback();
