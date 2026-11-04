@@ -5245,7 +5245,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
         .card, .merch-tile, .kushie-tile, .give, .ws-tier, .tile{ transform:none !important; transition:none !important; }
         .ticker-track{ animation-duration:60s; }
       }
-    </style>
+    
+      /* mobile hero fix (2026-11-04): Instagram-matched display font + compact Shop pill */
+      .hero-simple h1{ font-family:"Shrikhand",cursive; font-weight:400; letter-spacing:0; }
+      @media (max-width:860px){
+        .hero-simple .hero-ctas .btn{ flex:0 0 auto; }
+        .hero-simple .hero-shop-btn{ padding:13px 28px; font-size:1rem; }
+      }
+</style>
   </head>
   <body>
     <div class="flwr-cursor" id="flwrCursor" aria-hidden="true"><div class="flwr-cursor-in"><svg viewBox="0 0 100 100"><g fill="#ff5fa8" stroke="#47264d" stroke-width="2.5"><ellipse cx="50" cy="29" rx="11" ry="18"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(45 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(90 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(135 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(180 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(225 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(270 50 50)"/><ellipse cx="50" cy="29" rx="11" ry="18" transform="rotate(315 50 50)"/></g><circle cx="50" cy="50" r="12.5" fill="#f2b84b" stroke="#47264d" stroke-width="2.5"/></svg></div></div>
