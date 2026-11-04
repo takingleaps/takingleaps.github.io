@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Secret Santa</title>
+<meta name="description" content="Joinable Secret Santa page: add your name, vote on the date and budget, and reveal only your own assignment." />
+<style>
+  :root {
+    --paper: #f7f4ee;
+    --ink: #1a1d1a;
+    --muted: #5c615c;
+    --line: #d8d2c4;
+    --card: #ffffff;
+    --accent: #1f5c3d;
+    --accent-text: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 42px;
+    line-height: 1.05;
+    margin: 8px 0 8px;
+    letter-spacing: -0.02em;
+  }
+  h2 { font-family: Georgia, "Times New Roman", serif; font-size: 24px; margin: 0 0 8px; }
+  h3 { font-size: 17px; margin: 20px 0 8px; }
+  p { margin: 8px 0; }
+  .eyebrow { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .status {
+    border: 2px dashed var(--ink);
+    padding: 14px 16px;
+    margin: 20px 0;
+    background: var(--card);
+  }
+  .status strong { display: block; font-size: 17px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 18px;
+    margin: 20px 0;
+  }
+  label { display: block; font-weight: 700; margin: 12px 0 6px; }
+  input, select {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px;
+    font-size: 17px;
+    border: 1px solid var(--ink);
+    background: #fff;
+    color: var(--ink);
+  }
+  button {
+    min-height: 52px;
+    padding: 12px 18px;
+    font-size: 17px;
+    font-weight: 700;
+    border: 1px solid var(--ink);
+    background: var(--accent);
+    color: var(--accent-text);
+    cursor: pointer;
+    width: 100%;
+    margin-top: 12px;
+  }
+  button.secondary { background: #fff; color: var(--ink); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .row { display: grid; gap: 12px; }
+  @media (min-width: 520px) {
+    .row.two { grid-template-columns: 1fr 1fr; }
+  }
+  ul { padding-left: 20px; margin: 8px 0; }
+  li { margin: 6px 0; }
+  .small { font-size: 14px; color: var(--muted); }
+  .result {
+    border: 2px solid var(--accent);
+    padding: 16px;
+    margin-top: 16px;
+    font-size: 19px;
+  }
+  .result .label { font-size: 14px; color: var(--muted); display: block; }
+  .poll-option {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    background: #fff;
+    color: var(--ink);
+    text-align: left;
+  }
+  .poll-option[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .partiful { display: block; margin-top: 12px; font-weight: 700; color: var(--accent); }
+  .error { color: #8b1e1e; font-weight: 700; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Nathan's group</p>
+  <h1>Secret Santa</h1>
+  <p>Add your name, vote on the plan, and reveal only your own assignment. No login is needed in this prototype.</p>
+
+  <section class="status" aria-live="polite">
+    <strong id="backend-status">Backend: Not connected yet</strong>
+    <p id="backend-detail">Joins and votes are not saved yet. Fill in the Supabase URL and anon key at the top of this file, then create the tables in SUPABASE_SETUP.md. Until then, this page will not pretend that joins or votes sync across phones.</p>
+  </section>
+
+  <section class="card" aria-labelledby="join-heading">
+    <h2 id="join-heading">Join the draw</h2>
+    <p id="draw-state" class="small">The list is open. Add your name below.</p>
+    <label for="name-input">Your name</label>
+    <input id="name-input" type="text" maxlength="40" autocomplete="off" placeholder="First name" />
+    <button id="add-button" type="button">Add me to the list</button>
+    <p id="join-message" aria-live="polite"></p>
+    <h3>Who is in (<span id="participant-count">0</span>)</h3>
+    <ul id="participant-list"></ul>
+    <p id="empty-list" class="small">No one has joined yet.</p>
+    <div class="row two">
+      <button id="lock-button" class="secondary" type="button">Lock the list</button>
+      <button id="unlock-button" class="secondary" type="button">Reopen the list</button>
+    </div>
+    <button id="draw-button" type="button">Draw names</button>
+    <button id="reset-button" class="secondary" type="button">Reset this draw</button>
+    <p class="small">The draw needs at least 3 people. No one draws themselves. After the draw, the list stays locked until it is reset.</p>
+  </section>
+
+  <section class="card" aria-labelledby="reveal-heading">
+    <h2 id="reveal-heading">Reveal my assignment</h2>
+    <p>Pick your own name only. The page shows just that one assignment, never the full list.</p>
+    <label for="reveal-name">I am</label>
+    <select id="reveal-name"></select>
+    <button id="reveal-button" type="button">Reveal my person</button>
+    <button id="hide-button" class="secondary hidden" type="button">Hide my person</button>
+    <div id="reveal-result" class="result hidden" aria-live="polite">
+      <span class="label">You are buying for</span>
+      <strong id="reveal-person"></strong>
+    </div>
+    <p id="reveal-message" aria-live="polite"></p>
+    <p class="small">Trust note: this prototype has no login, so revealing relies on each person picking only their own name. The assignment table is set up so direct reads are denied and reveals go through a database function that returns one row only. See SUPABASE_SETUP.md.</p>
+  </section>
+
+  <section class="card" aria-labelledby="poll-heading">
+    <h2 id="poll-heading">Vote on the plan</h2>
+    <p>Pick your name, then vote. You can change your vote. Each name gets one vote per poll.</p>
+    <label for="voter-name">Voting as</label>
+    <select id="voter-name"></select>
+
+    <h3>When should Secret Santa happen?</h3>
+    <div id="date-poll"></div>
+
+    <h3>Budget cap</h3>
+    <p class="small">Placeholder options to confirm. These amounts are not final.</p>
+    <div id="budget-poll"></div>
+    <p id="poll-message" aria-live="polite"></p>
+  </section>
+
+  <section class="card" aria-labelledby="partiful-heading">
+    <h2 id="partiful-heading">Party pages</h2>
+    <p>These are the two separate Partiful drafts already made. They are not invites.</p>
+    <a class="partiful" href="https://partiful.com/e/P9GfGOHSYDNQmj5rgR5a">Nathan's Birthday, Sat Dec 5, 2026</a>
+    <a class="partiful" href="https://partiful.com/e/nlQsHLGruF30Hd9Zo8wB">Secret Santa Party, date and time to be decided</a>
+  </section>
+
+  <p class="small">Prototype note: shared sync will not work until the Supabase tables exist and the placeholders below are filled in. The page shows the not-connected state instead of saving joins or votes only on this device.</p>
+</main>
+
+<script>
+  // ---- Backend configuration: fill these in from Nathan's existing Supabase project. ----
+  // Do not paste a service-role key here. Use the public anon key only.
+  var SUPABASE_URL = "https://dqcoincagejyowqxqqnz.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxY29pbmNhZ2VqeW93cXhxcW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzY4NTQsImV4cCI6MjEwNjcxMjg1NH0.dG7GwddKfuoq08DX_SgtluxWKAU-hyAjMZcAc320ysI";
+
+  var DATE_OPTIONS = [
+    { id: "birthday-dec-5", label: "At my birthday, Sat Dec 5, 2026, house" },
+    { id: "new-years-dec-31", label: "At New Year's, Dec 31, 2026" },
+    { id: "separate-night", label: "A separate Secret Santa night, date TBD" }
+  ];
+  var BUDGET_OPTIONS = [
+    { id: "budget-25", label: "$25" },
+    { id: "budget-50", label: "$50" },
+    { id: "budget-75", label: "$75" }
+  ];
+
+  var state = {
+    participants: [],
+    votes: [],
+    draw: null,
+    connected: false
+  };
+
+  function isConfigured() {
+    return SUPABASE_URL &&
+      SUPABASE_URL.indexOf("YOUR_PROJECT_REF") === -1 &&
+      SUPABASE_ANON_KEY &&
+      SUPABASE_ANON_KEY.indexOf("YOUR_SUPABASE_ANON_KEY") === -1 &&
+      SUPABASE_URL.indexOf("https://") === 0;
+  }
+
+  function sbHeaders() {
+    return {
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+      "Content-Type": "application/json"
+    };
+  }
+
+  function sbFetch(path, options) {
+    var base = SUPABASE_URL.replace(/\/$/, "") + "/rest/v1";
+    var opts = options || {};
+    opts.headers = Object.assign({}, sbHeaders(), opts.headers || {});
+    return fetch(base + path, opts);
+  }
+
+  function esc(text) {
+    return String(text).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function setMessage(id, text, isError) {
+    var el = document.getElementById(id);
+    el.textContent = text || "";
+    el.className = isError ? "error" : "";
+  }
+
+  function setControlsEnabled(enabled) {
+    ["name-input", "add-button", "lock-button", "unlock-button", "draw-button",
+     "reset-button", "reveal-name", "reveal-button", "voter-name"].forEach(function (id) {
+      document.getElementById(id).disabled = !enabled;
+    });
+  }
+
+  function renderParticipants() {
+    var list = document.getElementById("participant-list");
+    list.innerHTML = state.participants.map(function (p) {
+      return "<li>" + esc(p.name) + "</li>";
+    }).join("");
+    document.getElementById("participant-count").textContent = state.participants.length;
+    document.getElementById("empty-list").classList.toggle("hidden", state.participants.length > 0);
+
+    var nameOptions = state.participants.map(function (p) {
+      return '<option value="' + esc(p.name) + '">' + esc(p.name) + "</option>";
+    }).join("");
+    document.getElementById("reveal-name").innerHTML = nameOptions;
+    document.getElementById("voter-name").innerHTML = nameOptions;
+
+    var status = "The list is open. Add your name below.";
+    if (state.draw && state.draw.status === "locked") status = "The list is locked. No new names can be added until it is reopened or reset.";
+    if (state.draw && state.draw.status === "drawn") status = "The draw is done. The list stays locked until it is reset.";
+    document.getElementById("draw-state").textContent = status;
+    document.getElementById("draw-button").disabled = !state.connected ||
+      !(state.draw && state.draw.status === "locked") || state.participants.length < 3;
+    document.getElementById("lock-button").disabled = !state.connected ||
+      !!(state.draw && state.draw.status !== "open");
+    document.getElementById("unlock-button").disabled = !state.connected ||
+      !(state.draw && state.draw.status === "locked");
+    document.getElementById("reveal-button").disabled = !state.connected ||
+      !(state.draw && state.draw.status === "drawn") || state.participants.length === 0;
+  }
+
+  function voteCount(pollId, optionId) {
+    return state.votes.filter(function (v) {
+      return v.poll_id === pollId && v.option_id === optionId;
+    }).length;
+  }
+
+  function renderPolls() {
+    var voter = document.getElementById("voter-name").value;
+    function renderPoll(containerId, pollId, options) {
+      var total = state.votes.filter(function (v) { return v.poll_id === pollId; }).length;
+      var mine = state.votes.find(function (v) {
+        return v.poll_id === pollId && v.voter_name === voter;
+      });
+      document.getElementById(containerId).innerHTML = options.map(function (opt) {
+        var count = voteCount(pollId, opt.id);
+        var pct = total ? Math.round((count / total) * 100) : 0;
+        var pressed = mine && mine.option_id === opt.id ? "true" : "false";
+        return '<button type="button" class="poll-option" aria-pressed="' + pressed +
+          '" data-poll="' + pollId + '" data-option="' + opt.id + '"><span>' + esc(opt.label) +
+          "</span><span>" + count + " vote" + (count === 1 ? "" : "s") + " (" + pct + "%)</span></button>";
+      }).join("");
+    }
+    renderPoll("date-poll", "date", DATE_OPTIONS);
+    renderPoll("budget-poll", "budget", BUDGET_OPTIONS);
+    document.querySelectorAll(".poll-option").forEach(function (btn) {
+      btn.disabled = !state.connected || !voter;
+      btn.addEventListener("click", function () { castVote(btn.dataset.poll, btn.dataset.option); });
+    });
+  }
+
+  function renderAll() {
+    renderParticipants();
+    renderPolls();
+  }
+
+  function derangement(names) {
+    // Random derangement: shuffle until no one is matched to themselves.
+    var shuffled = names.slice();
+    for (var attempt = 0; attempt < 200; attempt++) {
+      for (var i = shuffled.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+      }
+      var ok = shuffled.every(function (name, idx) { return name !== names[idx]; });
+      if (ok) return shuffled;
+    }
+    // Deterministic fallback for 3 or more names: rotate by one. Never a self-draw.
+    return names.slice(1).concat(names.slice(0, 1));
+  }
+
+  async function loadAll() {
+    if (!isConfigured()) {
+      state.connected = false;
+      document.getElementById("backend-status").textContent = "Backend: Not connected yet";
+      document.getElementById("backend-detail").textContent =
+        "Joins and votes are not saved yet. Fill in the Supabase URL and anon key at the top of this file, then create the tables in SUPABASE_SETUP.md. Until then, this page will not pretend that joins or votes sync across phones.";
+      setControlsEnabled(false);
+      renderAll();
+      return;
+    }
+    state.connected = true;
+    document.getElementById("backend-status").textContent = "Backend: Connected";
+    document.getElementById("backend-detail").textContent =
+      "Joins and votes use the shared Supabase tables. If this shows an error, the tables in SUPABASE_SETUP.md have not been created yet.";
+    setControlsEnabled(true);
+    try {
+      var drawsRes = await sbFetch("/draws?select=id,status,created_at&order=created_at.desc&limit=1");
+      if (!drawsRes.ok) throw new Error("Could not load the draw. Check that the tables exist.");
+      var draws = await drawsRes.json();
+      state.draw = draws.length ? draws[0] : null;
+
+      var partsRes = await sbFetch("/participants?select=id,name,created_at&order=created_at.asc");
+      if (!partsRes.ok) throw new Error("Could not load participants.");
+      state.participants = await partsRes.json();
+
+      var votesRes = await sbFetch("/poll_votes?select=poll_id,option_id,voter_name");
+      if (!votesRes.ok) throw new Error("Could not load votes.");
+      state.votes = await votesRes.json();
+      setMessage("join-message", "");
+      renderAll();
+    } catch (err) {
+      setMessage("join-message", err.message + " See SUPABASE_SETUP.md.", true);
+      setControlsEnabled(false);
+      renderAll();
+    }
+  }
+
+  async function addParticipant() {
+    var input = document.getElementById("name-input");
+    var name = input.value.trim();
+    if (!name) { setMessage("join-message", "Type your name first.", true); return; }
+    if (state.participants.some(function (p) { return p.name.toLowerCase() === name.toLowerCase(); })) {
+      setMessage("join-message", "That name is already on the list.", true); return;
+    }
+    try {
+      var res = await sbFetch("/participants", {
+        method: "POST",
+        headers: { "Prefer": "return=representation" },
+        body: JSON.stringify({ name: name })
+      });
+      if (!res.ok) throw new Error("Could not add that name. It may already be on the list.");
+      input.value = "";
+      setMessage("join-message", "You are on the list.");
+      await loadAll();
+    } catch (err) {
+      setMessage("join-message", err.message, true);
+    }
+  }
+
+  async function setDrawStatus(status) {
+    if (!state.draw) {
+      var res = await sbFetch("/draws", {
+        method: "POST",
+        headers: { "Prefer": "return=representation" },
+        body: JSON.stringify({ status: status })
+      });
+      if (!res.ok) throw new Error("Could not create the draw record.");
+      state.draw = (await res.json())[0];
+    } else {
+      var patch = await sbFetch("/draws?id=eq." + state.draw.id, {
+        method: "PATCH",
+        headers: { "Prefer": "return=representation" },
+        body: JSON.stringify({ status: status })
+      });
+      if (!patch.ok) throw new Error("Could not update the draw status.");
+      state.draw = (await patch.json())[0];
+    }
+    await loadAll();
+  }
+
+  async function runDraw() {
+    if (!state.draw || state.draw.status !== "locked") {
+      setMessage("join-message", "Lock the list first, then draw.", true); return;
+    }
+    if (state.participants.length < 3) {
+      setMessage("join-message", "The draw needs at least 3 people.", true); return;
+    }
+    try {
+      var names = state.participants.map(function (p) { return p.name; });
+      var recipients = derangement(names);
+      var rows = names.map(function (giver, i) {
+        return { draw_id: state.draw.id, giver_name: giver, recipient_name: recipients[i] };
+      });
+      var res = await sbFetch("/assignments", {
+        method: "POST",
+        headers: { "Prefer": "return=minimal" },
+        body: JSON.stringify(rows)
+      });
+      if (!res.ok) throw new Error("Could not save the draw. Try again.");
+      await setDrawStatus("drawn");
+      setMessage("join-message", "The draw is done. Each person can now reveal only their own assignment.");
+    } catch (err) {
+      setMessage("join-message", err.message, true);
+    }
+  }
+
+  async function resetDraw() {
+    if (!state.draw) { setMessage("join-message", "There is no draw to reset yet."); return; }
+    if (!window.confirm("Reset this draw? This clears the assignments and reopens the list.")) return;
+    try {
+      await sbFetch("/assignments?draw_id=eq." + state.draw.id, { method: "DELETE" });
+      await setDrawStatus("open");
+      setMessage("join-message", "The draw was reset and the list is open again.");
+    } catch (err) {
+      setMessage("join-message", "Could not reset the draw. " + err.message, true);
+    }
+  }
+
+  async function revealAssignment() {
+    var giver = document.getElementById("reveal-name").value;
+    if (!giver || !state.draw) return;
+    try {
+      // Reveal through the database function only, never a direct read of the assignments table.
+      var res = await fetch(
+        SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/reveal_assignment",
+        {
+          method: "POST",
+          headers: sbHeaders(),
+          body: JSON.stringify({ p_giver: giver, p_draw_id: state.draw.id })
+        }
+      );
+      if (!res.ok) throw new Error("Reveal is not available yet. The reveal_assignment function in SUPABASE_SETUP.md must be created first.");
+      var rows = await res.json();
+      if (!rows.length) { setMessage("reveal-message", "No assignment was found for that name.", true); return; }
+      document.getElementById("reveal-person").textContent = rows[0].recipient_name;
+      document.getElementById("reveal-result").classList.remove("hidden");
+      document.getElementById("hide-button").classList.remove("hidden");
+      setMessage("reveal-message", "");
+    } catch (err) {
+      setMessage("reveal-message", err.message, true);
+    }
+  }
+
+  async function castVote(pollId, optionId) {
+    var voter = document.getElementById("voter-name").value;
+    if (!voter) { setMessage("poll-message", "Pick your name first, then vote.", true); return; }
+    try {
+      var res = await sbFetch("/poll_votes?on_conflict=voter_name,poll_id", {
+        method: "POST",
+        headers: { "Prefer": "resolution=merge-duplicates,return=representation" },
+        body: JSON.stringify({ voter_name: voter, poll_id: pollId, option_id: optionId })
+      });
+      if (!res.ok) throw new Error("Could not save that vote.");
+      setMessage("poll-message", "Your vote was saved.");
+      await loadAll();
+    } catch (err) {
+      setMessage("poll-message", err.message, true);
+    }
+  }
+
+  document.getElementById("add-button").addEventListener("click", addParticipant);
+  document.getElementById("lock-button").addEventListener("click", function () {
+    setDrawStatus("locked").catch(function (e) { setMessage("join-message", e.message, true); });
+  });
+  document.getElementById("unlock-button").addEventListener("click", function () {
+    setDrawStatus("open").catch(function (e) { setMessage("join-message", e.message, true); });
+  });
+  document.getElementById("draw-button").addEventListener("click", runDraw);
+  document.getElementById("reset-button").addEventListener("click", resetDraw);
+  document.getElementById("reveal-button").addEventListener("click", revealAssignment);
+  document.getElementById("hide-button").addEventListener("click", function () {
+    document.getElementById("reveal-result").classList.add("hidden");
+    document.getElementById("hide-button").classList.add("hidden");
+    document.getElementById("reveal-person").textContent = "";
+  });
+  document.getElementById("voter-name").addEventListener("change", renderPolls);
+
+  loadAll();
+</script>
+</body>
+</html>
