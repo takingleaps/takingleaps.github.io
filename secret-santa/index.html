@@ -53,7 +53,7 @@
   @keyframes elfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
   .snowball{position:absolute; left:26px; top:14px; width:7px; height:7px; background:#fff; border:2px solid #000; animation:throwBall 1.4s ease-in infinite}
   @keyframes throwBall{0%{transform:translate(0,0); opacity:1}55%{transform:translate(56px,-34px); opacity:1}100%{transform:translate(110px,6px); opacity:0}}
-  .big-tree{position:absolute; right:14px; bottom:70px; width:118px; height:150px; z-index:1; image-rendering:pixelated; shape-rendering:crispEdges}
+  .big-tree{position:absolute; right:14px; bottom:8px; width:118px; height:150px; z-index:1; image-rendering:pixelated; shape-rendering:crispEdges}
   .big-tree .tree-light{animation:twinkle 1s steps(2) infinite}
   .big-tree .tree-light:nth-child(2){animation-delay:.3s} .big-tree .tree-light:nth-child(3){animation-delay:.6s}
   @media (max-width:420px){.big-tree{width:88px; height:112px; right:8px}}
@@ -282,13 +282,29 @@
 
   <section class="card green" aria-labelledby="poll-heading">
     <h2 id="poll-heading">Vote on the date</h2>
-    <label for="voter-name">Voting as</label>
-    <select id="voter-name"></select>
+    <p id="voter-display" class="small">Log in below to vote.</p>
     <h3>When should we do Secret Santa?</h3>
     <div id="date-poll"></div>
     <h3>What is the budget?</h3>
     <div id="budget-poll"></div>
     <p id="poll-message" aria-live="polite"></p>
+  </section>
+
+  <section class="card gold" aria-labelledby="auth-heading">
+    <h2 id="auth-heading">Log in</h2>
+    <p id="auth-status" class="small">Log in with your email to vote, reveal, and edit your gift list.</p>
+    <div id="auth-form">
+      <label for="auth-email">Email</label>
+      <input id="auth-email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" />
+      <button id="auth-send-button" type="button">Email me a code</button>
+      <div id="auth-code-row" class="hidden">
+        <label for="auth-code">8-digit code</label>
+        <input id="auth-code" type="text" inputmode="numeric" maxlength="8" autocomplete="one-time-code" placeholder="12345678" />
+        <button id="auth-verify-button" type="button">Verify code</button>
+      </div>
+    </div>
+    <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
+    <p id="auth-message" aria-live="polite"></p>
   </section>
 
   <div id="setup-notice" class="setup-notice hidden" role="status">Setting up your group, try reloading in a moment.</div>
@@ -316,8 +332,7 @@
 
   <section class="card green" aria-labelledby="reveal-heading">
     <h2 id="reveal-heading">Reveal my person</h2>
-    <label for="reveal-name">I am</label>
-    <select id="reveal-name"></select>
+    <p id="reveal-display" class="small">Log in above to reveal.</p>
     <button id="reveal-button" type="button">Reveal my person</button>
     <button id="hide-button" class="secondary hidden" type="button">Hide my person</button>
     <div id="reveal-result" class="result hidden" aria-live="polite">
@@ -330,8 +345,7 @@
 
   <section class="card gold" aria-labelledby="gift-heading">
     <h2 id="gift-heading">My gift list</h2>
-    <label for="gift-owner">My name</label>
-    <select id="gift-owner"></select>
+    <p id="gift-display" class="small">Log in above to edit your gift list.</p>
     <label for="gift-item">Gift idea</label>
     <input id="gift-item" type="text" maxlength="120" autocomplete="off" placeholder="Gift idea" />
     <label for="gift-note">Link or note (optional)</label>
@@ -356,8 +370,7 @@
   <section class="card green" aria-labelledby="messages-heading">
     <h2 id="messages-heading">Group messages</h2>
     <div id="message-list"></div>
-    <label for="message-author">I am</label>
-    <select id="message-author"></select>
+    <p id="message-display" class="small">Log in above to message the group.</p>
     <label for="message-input">Message</label>
     <input id="message-input" type="text" maxlength="280" autocomplete="off" placeholder="Message the group" />
     <button id="message-send-button" type="button">Send message</button>
@@ -379,6 +392,7 @@
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Group data connection. Fill the two values below before publishing.
   // Use the public read key for this group only, never a private service key.
@@ -398,6 +412,8 @@
   ];
 
   var state = {
+    myEmail: null,
+    myName: null,
     participants: [],
     votes: [],
     wishlists: [],
@@ -414,6 +430,11 @@
       API_KEY.indexOf("YOUR_") === -1 &&
       API_BASE_URL.indexOf("https://") === 0;
   }
+
+  var supa = null;
+  try {
+    if (window.supabase && isConfigured()) supa = window.supabase.createClient(API_BASE_URL, API_KEY);
+  } catch (e) { supa = null; }
 
   function apiHeaders() {
     return {
@@ -448,33 +469,86 @@
 
   function setControlsEnabled(enabled) {
     ["name-input", "add-button", "lock-button", "unlock-button", "draw-button",
-     "reset-button", "reveal-name", "reveal-button", "gift-owner", "gift-item",
-     "gift-note", "gift-image", "gift-amazon-search", "gift-add-button", "voter-name",
-     "finder-query", "finder-search-button", "message-author", "message-input",
+     "reset-button", "reveal-button", "gift-item",
+     "gift-note", "gift-image", "gift-amazon-search", "gift-add-button",
+     "finder-query", "finder-search-button", "message-input",
      "message-send-button", "email-group-button", "buying-toggle-button"].forEach(function (id) {
       document.getElementById(id).disabled = !enabled;
     });
   }
 
-  function keepSelect(id) {
-    return document.getElementById(id).value;
+  function renderAuth() {
+    var loggedIn = !!state.myEmail;
+    document.getElementById("auth-form").classList.toggle("hidden", loggedIn);
+    document.getElementById("auth-signout-button").classList.toggle("hidden", !loggedIn);
+    document.getElementById("auth-status").textContent = loggedIn
+      ? "Signed in as " + state.myEmail + (state.myName ? " — you are " + state.myName + "." : " — add your name below to join the list.")
+      : "Log in with your email to vote, reveal, and edit your gift list.";
+    document.getElementById("voter-display").textContent = state.myName ? "Voting as " + state.myName + "." : (loggedIn ? "Add your name below to join, then vote." : "Log in below to vote.");
+    document.getElementById("reveal-display").textContent = state.myName ? "Revealing as " + state.myName + "." : "Log in above to reveal.";
+    document.getElementById("gift-display").textContent = state.myName ? "Your gift list — " + state.myName + "." : "Log in above to edit your gift list.";
+    document.getElementById("message-display").textContent = state.myName ? "Messaging as " + state.myName + "." : "Log in above to message the group.";
+    var emailEl = document.getElementById("email-input");
+    if (loggedIn) { emailEl.value = state.myEmail; emailEl.disabled = true; }
+    else { emailEl.disabled = false; }
   }
 
-  function fillSelect(id, value) {
-    var el = document.getElementById(id);
-    var options = state.participants.map(function (p) {
-      return '<option value="' + esc(p.name) + '">' + esc(p.name) + "</option>";
-    }).join("");
-    el.innerHTML = options;
-    if (value && state.participants.some(function (p) { return p.name === value; })) {
-      el.value = value;
+  async function refreshAuth() {
+    if (!supa) { renderAuth(); return; }
+    var res = await supa.auth.getSession();
+    var session = res.data && res.data.session;
+    var user = session && session.user;
+    state.myEmail = user ? (user.email || "").toLowerCase() : null;
+    state.myName = null;
+    if (state.myEmail) {
+      var me = state.participants.find(function (p) { return (p.email || "").toLowerCase() === state.myEmail; });
+      if (me) state.myName = me.name;
+    }
+    renderAuth();
+    renderAll();
+  }
+
+  async function sendAuthCode() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.signInWithOtp({ email: email, options: { emailRedirectTo: "https://byyystudio.me/secret-santa/" } });
+      if (res.error) throw res.error;
+      document.getElementById("auth-code-row").classList.remove("hidden");
+      setMessage("auth-message", "Code sent to " + email + ". It is 8 digits and works for 1 hour. You can also tap the link in the same email.");
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "Could not send the code.", true);
     }
   }
 
+  async function verifyAuthCode() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    var token = document.getElementById("auth-code").value.trim();
+    if (token.length !== 8) { setMessage("auth-message", "The code is 8 digits.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.verifyOtp({ email: email, token: token, type: "email" });
+      if (res.error) throw res.error;
+      document.getElementById("auth-code").value = "";
+      setMessage("auth-message", "");
+      await refreshAuth();
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "That code did not work.", true);
+    }
+  }
+
+  async function signOutAuth() {
+    if (supa) await supa.auth.signOut();
+    state.myEmail = null;
+    state.myName = null;
+    document.getElementById("auth-code-row").classList.add("hidden");
+    setMessage("auth-message", "");
+    renderAuth();
+    renderAll();
+  }
+
   function renderParticipants() {
-    var previousReveal = keepSelect("reveal-name");
-    var previousVoter = keepSelect("voter-name");
-    var previousGift = keepSelect("gift-owner");
     var list = document.getElementById("participant-list");
     list.innerHTML = state.participants.map(function (p) {
       return '<span class="participant-chip">' + esc(p.name) + "</span>";
@@ -487,20 +561,17 @@
     }
     state.lastCount = state.participants.length;
     document.getElementById("empty-list").classList.toggle("hidden", state.participants.length > 0);
-    fillSelect("reveal-name", previousReveal);
-    fillSelect("voter-name", previousVoter);
-    fillSelect("gift-owner", previousGift);
     var status = "Open";
     if (state.draw && state.draw.status === "locked") status = "Locked";
     if (state.draw && state.draw.status === "drawn") status = "Drawn";
     document.getElementById("draw-state").textContent = status;
-    document.getElementById("draw-button").disabled = !state.connected ||
+    document.getElementById("draw-button").disabled = !state.connected || !state.myName ||
       !(state.draw && state.draw.status === "locked") || state.participants.length < 3;
-    document.getElementById("lock-button").disabled = !state.connected ||
+    document.getElementById("lock-button").disabled = !state.connected || !state.myName ||
       !!(state.draw && state.draw.status !== "open");
-    document.getElementById("unlock-button").disabled = !state.connected ||
+    document.getElementById("unlock-button").disabled = !state.connected || !state.myName ||
       !(state.draw && state.draw.status === "locked");
-    document.getElementById("reveal-button").disabled = !state.connected ||
+    document.getElementById("reveal-button").disabled = !state.connected || !state.myName ||
       !(state.draw && state.draw.status === "drawn") || state.participants.length === 0;
   }
 
@@ -515,7 +586,7 @@
   }
 
   function renderOnePoll(pollId, options, elId) {
-    var voter = document.getElementById("voter-name").value;
+    var voter = state.myName;
     var total = state.votes.filter(function (v) { return v.poll_id === pollId; }).length;
     var mine = state.votes.find(function (v) {
       return v.poll_id === pollId && v.voter_name === voter;
@@ -541,7 +612,7 @@
   }
 
   function renderWishlists() {
-    var owner = document.getElementById("gift-owner").value;
+    var owner = state.myName;
     var mine = state.wishlists.filter(function (w) { return w.owner_name === owner; });
     var list = document.getElementById("gift-list");
     list.innerHTML = mine.map(function (w) {
@@ -553,7 +624,7 @@
           note = "<div>" + esc(w.link_or_note) + "</div>";
         }
       }
-      var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" />' : "";
+      var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
       return '<div class="gift-item">' + thumb + '<div><strong>' + esc(w.item) + "</strong>" + note +
         '</div><button type="button" class="secondary danger gift-delete" data-id="' + esc(w.id) + '">Delete</button></div>';
     }).join("");
@@ -580,7 +651,7 @@
           note = " — " + esc(w.link_or_note);
         }
       }
-      var thumb = w.image_url ? ' <img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" />' : "";
+      var thumb = w.image_url ? ' <img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
       return "<li><strong>" + esc(w.item) + "</strong>" + thumb + note + "</li>";
     }).join("") + "</ul>";
   }
@@ -594,7 +665,6 @@
     list.innerHTML = state.messages.map(function (m) {
       return '<div class="msg-item"><div class="msg-author">' + esc(m.author_name) + '</div><div>' + esc(m.message) + "</div></div>";
     }).join("");
-    fillSelect("message-author", keepSelect("message-author"));
   }
 
   function renderBuyingView() {
@@ -607,7 +677,7 @@
     view.innerHTML = owners.map(function (owner) {
       var items = state.wishlists.filter(function (w) { return w.owner_name === owner; });
       return '<div class="buying-owner">' + esc(owner) + "</div>" + items.map(function (w) {
-        var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" />' : "";
+        var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
         var link = "";
         if (w.link_or_note && (w.link_or_note.indexOf("http://") === 0 || w.link_or_note.indexOf("https://") === 0)) {
           link = '<div><a href="' + esc(w.link_or_note) + '" target="_blank" rel="noopener">View link</a></div>';
@@ -690,6 +760,7 @@
       state.connected = true;
       setControlsEnabled(true);
       renderAll();
+      refreshAuth();
     } catch (err) {
       state.connected = false;
       document.getElementById("setup-notice").classList.remove("hidden");
@@ -700,25 +771,40 @@
   }
 
   async function addParticipant() {
+    if (!state.myEmail) { setMessage("join-message", "Log in with your email first.", true); return; }
     var input = document.getElementById("name-input");
     var name = input.value.trim();
     if (!name) { setMessage("join-message", "Type your name first.", true); return; }
-    if (state.participants.some(function (p) { return p.name.toLowerCase() === name.toLowerCase(); })) {
-      setMessage("join-message", "That name is already on the list.", true); return;
-    }
+    var existing = state.participants.find(function (p) { return p.name.toLowerCase() === name.toLowerCase(); });
     try {
-      var emailEl = document.getElementById("email-input");
-      var email = emailEl.value.trim();
+      if (existing) {
+        if ((existing.email || "").toLowerCase() === state.myEmail) {
+          setMessage("join-message", "You are already on the list as " + existing.name + ".");
+          return;
+        }
+        if (existing.email) { setMessage("join-message", "That name is already on the list.", true); return; }
+        var claim = await apiFetch("/participants?id=eq." + existing.id, {
+          method: "PATCH",
+          headers: { "Prefer": "return=representation" },
+          body: JSON.stringify({ email: state.myEmail })
+        });
+        if (!claim.ok) throw new Error("Could not link that name. Ask Nate to link it for you.");
+        input.value = "";
+        setMessage("join-message", "Welcome back, " + existing.name + ". Your email is now linked.");
+        await loadAll();
+        await refreshAuth();
+        return;
+      }
       var res = await apiFetch("/participants", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ name: name, email: email || null })
+        body: JSON.stringify({ name: name, email: state.myEmail })
       });
       if (!res.ok) throw new Error("Could not add that name. It may already be on the list.");
       input.value = "";
-      emailEl.value = "";
       setMessage("join-message", "You are on the list.");
       await loadAll();
+      await refreshAuth();
     } catch (err) {
       setMessage("join-message", err.message, true);
     }
@@ -746,6 +832,7 @@
   }
 
   async function runDraw() {
+    if (!state.myName) { setMessage("join-message", "Log in and join the list first.", true); return; }
     if (!state.draw || state.draw.status !== "locked") {
       setMessage("join-message", "Lock the list first, then draw.", true); return;
     }
@@ -786,6 +873,7 @@
   }
 
   async function resetDraw() {
+    if (!state.myName) { setMessage("join-message", "Log in and join the list first.", true); return; }
     if (!state.draw) { setMessage("join-message", "There is no draw to reset yet."); return; }
     if (!window.confirm("Reset this draw? This clears the assignments and reopens the list.")) return;
     try {
@@ -800,8 +888,9 @@
   }
 
   async function revealAssignment() {
-    var giver = document.getElementById("reveal-name").value;
-    if (!giver || !state.draw) return;
+    var giver = state.myName;
+    if (!giver) { setMessage("reveal-message", "Log in and join the list first.", true); return; }
+    if (!state.draw) return;
     try {
       var res = await fetch(
         API_BASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/reveal_assignment",
@@ -826,11 +915,11 @@
   }
 
   async function addGift() {
-    var owner = document.getElementById("gift-owner").value;
+    var owner = state.myName;
     var itemEl = document.getElementById("gift-item");
     var noteEl = document.getElementById("gift-note");
     var item = itemEl.value.trim();
-    if (!owner) { setMessage("gift-message", "Pick your name first.", true); return; }
+    if (!owner) { setMessage("gift-message", "Log in and join the list first.", true); return; }
     if (!item) { setMessage("gift-message", "Type a gift idea first.", true); return; }
     try {
       var imageEl = document.getElementById("gift-image");
@@ -863,8 +952,8 @@
   }
 
   async function castVote(pollId, optionId) {
-    var voter = document.getElementById("voter-name").value;
-    if (!voter) { setMessage("poll-message", "Pick your name first, then vote.", true); return; }
+    var voter = state.myName;
+    if (!voter) { setMessage("poll-message", "Log in and join the list first, then vote.", true); return; }
     try {
       var res = await apiFetch("/poll_votes?on_conflict=voter_name,poll_id", {
         method: "POST",
@@ -880,10 +969,10 @@
   }
 
   async function postMessage() {
-    var author = document.getElementById("message-author").value;
+    var author = state.myName;
     var input = document.getElementById("message-input");
     var text = input.value.trim();
-    if (!author) { setMessage("message-message", "Pick your name first.", true); return; }
+    if (!author) { setMessage("message-message", "Log in and join the list first.", true); return; }
     if (!text) { setMessage("message-message", "Type a message first.", true); return; }
     try {
       var res = await apiFetch("/group_messages", {
@@ -984,8 +1073,10 @@
   }
 
   document.getElementById("start-button").addEventListener("click", function () {
-    document.getElementById("join-heading").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
-    document.getElementById("name-input").focus({ preventScroll: true });
+    var target = state.myEmail ? "join-heading" : "auth-heading";
+    document.getElementById(target).scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    if (state.myEmail) document.getElementById("name-input").focus({ preventScroll: true });
+    else document.getElementById("auth-email").focus({ preventScroll: true });
   });
   document.getElementById("add-button").addEventListener("click", addParticipant);
   document.getElementById("lock-button").addEventListener("click", function () {
@@ -1023,8 +1114,14 @@
     document.getElementById("buying-toggle-button").textContent = view.classList.contains("hidden") ? "Show all gift lists" : "Hide all gift lists";
     renderBuyingView();
   });
-  document.getElementById("gift-owner").addEventListener("change", renderWishlists);
-  document.getElementById("voter-name").addEventListener("change", renderPolls);
+  document.getElementById("auth-send-button").addEventListener("click", sendAuthCode);
+  document.getElementById("auth-verify-button").addEventListener("click", verifyAuthCode);
+  document.getElementById("auth-signout-button").addEventListener("click", signOutAuth);
+  document.getElementById("auth-code").addEventListener("keydown", function (e) { if (e.key === "Enter") verifyAuthCode(); });
+  document.addEventListener("error", function (e) {
+    if (e.target && e.target.classList && e.target.classList.contains("gift-thumb")) e.target.style.display = "none";
+  }, true);
+  if (supa) supa.auth.onAuthStateChange(function () { refreshAuth(); });
 
   startSnowfall();
   loadAll();
