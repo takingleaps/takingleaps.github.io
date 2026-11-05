@@ -46,13 +46,21 @@
   .twinkle-star:nth-child(5n){animation-delay:.2s; width:5px; height:5px}
   @keyframes starBlink{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.05; transform:scale(.4)}}
   .elf-stage{position:absolute; left:0; right:0; bottom:8px; height:64px; overflow:hidden; pointer-events:none; z-index:2}
-  .elf-run{position:absolute; bottom:0; left:0; width:34px; height:44px; animation:elfRun 14s linear infinite}
-  .elf-run.late{animation-delay:-7s}
-  @keyframes elfRun{0%{transform:translateX(-50px)}100%{transform:translateX(720px)}}
-  .elf-run svg{width:34px; height:44px; image-rendering:pixelated; shape-rendering:crispEdges; animation:elfBob .35s steps(2) infinite}
+  .elf-duel{position:absolute; bottom:0; width:34px; height:44px}
+  .elf-duel.left{left:6%}
+  .elf-duel.right{right:6%; transform:scaleX(-1)}
+  .elf-flinch{width:34px; height:44px}
+  .flinch-l{animation:flinchL 5.6s linear infinite}
+  .flinch-r{animation:flinchR 5.6s linear infinite}
+  @keyframes flinchL{0%,92%{transform:translateY(0)}95%{transform:translateY(3px)}98%,100%{transform:translateY(0)}}
+  @keyframes flinchR{0%,42%{transform:translateY(0)}46%{transform:translateY(3px)}50%,100%{transform:translateY(0)}}
+  .elf-duel svg{width:34px; height:44px; image-rendering:pixelated; shape-rendering:crispEdges; animation:elfBob .35s steps(2) infinite}
   @keyframes elfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  .snowball{position:absolute; left:26px; top:14px; width:7px; height:7px; background:#fff; border:2px solid #000; animation:throwBall 1.4s ease-in infinite}
-  @keyframes throwBall{0%{transform:translate(0,0); opacity:1}55%{transform:translate(56px,-34px); opacity:1}100%{transform:translate(110px,6px); opacity:0}}
+  .snowball{position:absolute; bottom:30px; width:7px; height:7px; background:#fff; border:2px solid #000}
+  .ball-a{animation:throwRight 5.6s linear infinite}
+  .ball-b{animation:throwLeft 5.6s linear infinite; animation-delay:-2.8s}
+  @keyframes throwRight{0%{left:8%; transform:translateY(0); opacity:1}25%{left:50%; transform:translateY(-30px); opacity:1}44%{left:90%; transform:translateY(0); opacity:1}50%{left:90%; transform:translateY(0) scale(1.8); opacity:0}51%,100%{left:8%; transform:translateY(0); opacity:0}}
+  @keyframes throwLeft{0%{left:90%; transform:translateY(0); opacity:1}25%{left:50%; transform:translateY(-30px); opacity:1}44%{left:8%; transform:translateY(0); opacity:1}50%{left:8%; transform:translateY(0) scale(1.8); opacity:0}51%,100%{left:90%; transform:translateY(0); opacity:0}}
   .big-tree{position:absolute; right:14px; bottom:8px; width:118px; height:150px; z-index:1; image-rendering:pixelated; shape-rendering:crispEdges}
   .big-tree .tree-light{animation:twinkle 1s steps(2) infinite}
   .big-tree .tree-light:nth-child(2){animation-delay:.3s} .big-tree .tree-light:nth-child(3){animation-delay:.6s}
@@ -268,8 +276,10 @@
       </div>
     </div>
     <div class="elf-stage" aria-hidden="true">
-      <div class="elf-run"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg><span class="snowball"></span></div>
-      <div class="elf-run late"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg><span class="snowball" style="animation-delay:.7s"></span></div>
+      <div class="elf-duel left"><div class="elf-flinch flinch-l"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg></div></div>
+      <div class="elf-duel right"><div class="elf-flinch flinch-r"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg></div></div>
+      <span class="snowball ball-a"></span>
+      <span class="snowball ball-b"></span>
     </div>
     <svg class="ground" viewBox="0 0 680 74" preserveAspectRatio="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="58" width="680" height="16" fill="#f4f6ff"/><rect x="0" y="54" width="680" height="6" fill="#dfe6ff"/>
@@ -285,7 +295,7 @@
     <p id="voter-display" class="small">Log in below to vote.</p>
     <h3>When should we do Secret Santa?</h3>
     <div id="date-poll"></div>
-    <label for="suggest-date">Or pick another date</label>
+    <label for="suggest-date">Pick a date</label>
     <input id="suggest-date" type="date" />
     <button id="suggest-date-button" class="secondary" type="button">Add this date</button>
     <p id="suggest-message" aria-live="polite"></p>
@@ -402,12 +412,6 @@
   // Use the public read key for this group only, never a private service key.
   var API_BASE_URL = "https://dqcoincagejyowqxqqnz.supabase.co";
   var API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxY29pbmNhZ2VqeW93cXhxcW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzY4NTQsImV4cCI6MjEwNjcxMjg1NH0.dG7GwddKfuoq08DX_SgtluxWKAU-hyAjMZcAc320ysI";
-
-  var DATE_OPTIONS = [
-    { id: "birthday-dec-5", label: "At my birthday, Sat Dec 5, 2026, house" },
-    { id: "new-years-dec-31", label: "At New Year's, Dec 31, 2026" },
-    { id: "separate-night", label: "A separate Secret Santa night, date TBD" }
-  ];
 
   var BUDGET_OPTIONS = [
     { id: "budget-25", label: "$25" },
@@ -595,6 +599,10 @@
     var mine = state.votes.find(function (v) {
       return v.poll_id === pollId && v.voter_name === voter;
     });
+    if (!options.length) {
+      document.getElementById(elId).innerHTML = '<p class="small">No dates suggested yet — pick one below.</p>';
+      return;
+    }
     document.getElementById(elId).innerHTML = options.map(function (opt) {
       var count = voteCountFor(pollId, opt.id);
       var pct = total ? Math.round((count / total) * 100) : 0;
@@ -617,7 +625,6 @@
   }
 
   function dateOptionsWithCustoms() {
-    var opts = DATE_OPTIONS.slice();
     var customs = [];
     var seen = {};
     state.votes.forEach(function (v) {
@@ -629,8 +636,7 @@
       }
     });
     customs.sort(function (a, b) { return a.key < b.key ? -1 : 1; });
-    customs.forEach(function (c) { opts.push({ id: c.id, label: c.label }); });
-    return opts;
+    return customs.map(function (c) { return { id: c.id, label: c.label }; });
   }
 
   function renderPolls() {
@@ -1008,9 +1014,8 @@
     if (isNaN(d.getTime())) { setMessage("suggest-message", "That date did not work. Pick another.", true); return; }
     var today = new Date(); today.setHours(0, 0, 0, 0);
     if (d < today) { setMessage("suggest-message", "Pick a date that has not passed yet.", true); return; }
-    var optionId = value === "2026-12-05" ? "birthday-dec-5" : value === "2026-12-31" ? "new-years-dec-31" : "custom:" + value;
-    var existed = DATE_OPTIONS.some(function (o) { return o.id === optionId; }) ||
-      state.votes.some(function (v) { return v.poll_id === "date" && v.option_id === optionId; });
+    var optionId = "custom:" + value;
+    var existed = state.votes.some(function (v) { return v.poll_id === "date" && v.option_id === optionId; });
     await castVote("date", optionId);
     setMessage("suggest-message", existed
       ? "That date is already an option — your vote is on it."
