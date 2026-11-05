@@ -45,6 +45,14 @@
   .twinkle-star:nth-child(4n){animation-delay:.9s}
   .twinkle-star:nth-child(5n){animation-delay:.2s; width:5px; height:5px}
   @keyframes starBlink{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.05; transform:scale(.4)}}
+  .elf-stage{position:absolute; left:0; right:0; bottom:8px; height:64px; overflow:hidden; pointer-events:none; z-index:2}
+  .elf-run{position:absolute; bottom:0; left:0; width:34px; height:44px; animation:elfRun 14s linear infinite}
+  .elf-run.late{animation-delay:-7s}
+  @keyframes elfRun{0%{transform:translateX(-50px)}100%{transform:translateX(720px)}}
+  .elf-run svg{width:34px; height:44px; image-rendering:pixelated; shape-rendering:crispEdges; animation:elfBob .35s steps(2) infinite}
+  @keyframes elfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .snowball{position:absolute; left:26px; top:14px; width:7px; height:7px; background:#fff; border:2px solid #000; animation:throwBall 1.4s ease-in infinite}
+  @keyframes throwBall{0%{transform:translate(0,0); opacity:1}55%{transform:translate(56px,-34px); opacity:1}100%{transform:translate(110px,6px); opacity:0}}
   .hero .moon{
     position:absolute; right:18px; top:16px; width:52px; height:52px;
     background:var(--gold); border:4px solid #000;
@@ -251,6 +259,10 @@
           <g fill="#fff"><rect x="262" y="40" width="6" height="6"/><rect x="272" y="46" width="6" height="6"/></g>
         </svg>
       </div>
+    </div>
+    <div class="elf-stage" aria-hidden="true">
+      <div class="elf-run"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg><span class="snowball"></span></div>
+      <div class="elf-run late"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg><span class="snowball" style="animation-delay:.7s"></span></div>
     </div>
     <svg class="ground" viewBox="0 0 680 74" preserveAspectRatio="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="58" width="680" height="16" fill="#f4f6ff"/><rect x="0" y="54" width="680" height="6" fill="#dfe6ff"/>
@@ -881,13 +893,13 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       flakes = [];
-      var count = Math.min(70, Math.max(28, Math.floor(window.innerWidth / 18)));
+      var count = Math.min(90, Math.max(40, Math.floor(window.innerWidth / 14)));
       for (var i = 0; i < count; i++) {
         flakes.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          r: 1 + Math.random() * 2.4,
-          speed: 0.3 + Math.random() * 0.7,
+          r: 2 + Math.random() * 2.2,
+          speed: 0.25 + Math.random() * 0.45,
           drift: Math.random() * 0.6
         });
       }
@@ -932,7 +944,7 @@
         shooting.life -= 0.03;
         if (shooting.life <= 0) shooting = null;
       }
-      ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
       flakes.forEach(function (f) {
         f.y += f.speed;
         f.x += Math.sin(f.y / 60) * f.drift * 0.3;
