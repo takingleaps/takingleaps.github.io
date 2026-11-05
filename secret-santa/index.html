@@ -51,7 +51,7 @@
     line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55);
   }
   h1 .red{color:#ff5a2a}
-  h1 .rainbow{background:linear-gradient(90deg,#ff004c,#ff8a00,#f8d800,#00a800,#3b5bff,#b800ff,#ff004c); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:rainbow 3s linear infinite; filter:drop-shadow(4px 4px 0 #000)}
+  h1 .rainbow{background:linear-gradient(90deg,#ff004c,#ff8a00,#f8d800,#00a800,#3b5bff,#b800ff,#ff004c); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; text-shadow:none; animation:rainbow 3s linear infinite; filter:drop-shadow(4px 4px 0 #000)}
   @keyframes rainbow{to{background-position:300% 0}}
   .hero p{color:#dfe6ff; margin:8px 0; max-width:44ch; font-size:22px}
   .hero p b{color:var(--gold)}
@@ -59,10 +59,11 @@
   .sleigh-track{position:relative; height:86px; overflow:visible; margin:6px -18px 0}
   .sleigh{
     position:absolute; top:8px; left:0; width:300px; height:72px;
-    animation:fly 18s linear infinite;
+    animation:fly 12s linear infinite, sleighBob 1.2s ease-in-out infinite;
     filter:drop-shadow(4px 4px 0 rgba(0,0,0,.45));
   }
   .sleigh svg{width:300px; height:72px; image-rendering:pixelated; shape-rendering:crispEdges}
+  @keyframes sleighBob{0%,100%{margin-top:0}50%{margin-top:-6px}}
   @keyframes fly{
     0%{transform:translateX(105vw) translateY(0)}
     25%{transform:translateX(60vw) translateY(-10px)}
@@ -106,7 +107,15 @@
     box-shadow:0 6px 0 #000; text-transform:uppercase;
   }
   button:active{transform:translateY(4px); box-shadow:0 2px 0 #000}
-  .start-button{width:auto; min-width:220px; margin:16px 0 8px; background:var(--red)}
+  .start-button{width:auto; min-width:220px; margin:16px 0 8px; background:var(--red); animation:startPulse 1.6s ease-in-out infinite}
+  @keyframes startPulse{0%,100%{box-shadow:0 6px 0 #000}50%{box-shadow:0 6px 0 #000, 0 0 0 6px rgba(248,216,0,.55)}}
+  .hero .moon{animation:moonBreathe 4s ease-in-out infinite}
+  @keyframes moonBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  .card{animation:cardIn .5s ease both}
+  @keyframes cardIn{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:translateY(0)}}
+  .gift-thumb{transition:transform .2s steps(3)}
+  .gift-thumb:hover{transform:scale(1.15) rotate(-3deg)}
+  button:hover{filter:brightness(1.12)}
   .hero-location{font-family:"Press Start 2P", monospace; font-size:11px; line-height:1.7; color:var(--gold); margin:0 0 18px; text-transform:uppercase}
   .gift-thumb{width:64px; height:64px; object-fit:cover; border:3px solid #000; flex:none}
   .gift-item{align-items:center}
@@ -829,6 +838,9 @@
     var canvas = document.getElementById("snow-canvas");
     var ctx = canvas.getContext("2d");
     var flakes = [];
+    var stars = [];
+    var shooting = null;
+    var shootingTimer = 0;
     function resize() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -843,9 +855,47 @@
           drift: Math.random() * 0.6
         });
       }
+      stars = [];
+      var starCount = Math.min(60, Math.max(24, Math.floor(window.innerWidth / 24)));
+      for (var s = 0; s < starCount; s++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.7,
+          r: 1 + Math.random() * 2,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.6 + Math.random() * 1.8
+        });
+      }
     }
-    function tick() {
+    function tick(now) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var t = (now || 0) / 1000;
+      stars.forEach(function (st) {
+        var a = 0.25 + 0.75 * Math.abs(Math.sin(t * st.speed + st.phase));
+        ctx.fillStyle = "rgba(255, 255, 255, " + a.toFixed(2) + ")";
+        ctx.fillRect(st.x, st.y, st.r * 2, st.r * 2);
+        if (a > 0.9) {
+          ctx.fillStyle = "rgba(248, 216, 0, " + (a - 0.6).toFixed(2) + ")";
+          ctx.fillRect(st.x - 2, st.y - 2, st.r * 2 + 4, st.r * 2 + 4);
+        }
+      });
+      shootingTimer++;
+      if (!shooting && shootingTimer > 360 && Math.random() < 0.02) {
+        shooting = { x: Math.random() * canvas.width * 0.7 + canvas.width * 0.2, y: Math.random() * canvas.height * 0.25, vx: -7, vy: 3, life: 1 };
+        shootingTimer = 0;
+      }
+      if (shooting) {
+        ctx.strokeStyle = "rgba(255, 255, 255, " + shooting.life.toFixed(2) + ")";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(shooting.x, shooting.y);
+        ctx.lineTo(shooting.x + 42, shooting.y - 14);
+        ctx.stroke();
+        shooting.x += shooting.vx;
+        shooting.y += shooting.vy;
+        shooting.life -= 0.03;
+        if (shooting.life <= 0) shooting = null;
+      }
       ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
       flakes.forEach(function (f) {
         f.y += f.speed;
@@ -857,7 +907,7 @@
     }
     window.addEventListener("resize", resize);
     resize();
-    tick();
+    requestAnimationFrame(tick);
   }
 
   document.getElementById("start-button").addEventListener("click", function () {
