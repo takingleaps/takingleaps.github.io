@@ -26,21 +26,6 @@
         --card-shadow:0 10px 30px rgba(214,110,175,.18);
         --bg:var(--cream);
       }
-      @media (prefers-color-scheme: dark){
-        :root{
-          color-scheme: dark;
-          --pink:#ff8fc7; --pink-hot:#ff6fb3; --pink-soft:#5a3350; --pink-pale:#3a2140;
-          --lav:#b7a3f5; --lav-soft:#3d2c5e; --lilac:#33244d;
-          --cream:#241230; --paper:#2c1838;
-          --blue:#8fc9ef; --blue-soft:#26384c;
-          --mint:#8fd3ae; --mint-soft:#23402f;
-          --gold:#f2b84b; --gold-soft:#4d3a17;
-          --ink:#fdeedd; --ink-soft:#cdb3d4;
-          --line:#4b3260;
-          --card-shadow:0 10px 30px rgba(0,0,0,.4);
-          --bg:#1d0e28;
-        }
-      }
       html{ scroll-behavior:smooth; }
       body{
         margin:0; background:var(--bg); color:var(--ink);
@@ -63,7 +48,6 @@
         padding:9px 14px;
       }
       .announce .star{ color:var(--gold); }
-      @media (prefers-color-scheme: dark){ .announce{ background:var(--gold); color:#3a2405; } .announce .star{ color:#b3541e; } }
 
       /* ---------- header ---------- */
       header.site{
@@ -115,7 +99,6 @@
       .hero h1{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(3rem,7.2vw,5.6rem); line-height:.98; margin:22px 0 6px; }
       .hero h1 .line-pink{ color:var(--pink-hot); }
       .hero h1 .line-lav{ color:#3e7c4f; }
-      @media (prefers-color-scheme: dark){ .hero h1 .line-lav{ color:var(--lav); } }
       .hero .tagline{ font-size:1.22rem; font-weight:700; color:var(--ink-soft); max-width:44ch; margin-top:14px; }
       .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
       .btn{
@@ -258,7 +241,6 @@
 
       /* ---------- footer ---------- */
       footer.site{ background:var(--ink); color:var(--cream); padding:64px 0 34px; }
-      @media (prefers-color-scheme: dark){ footer.site{ background:#170a20; } }
       .foot-grid{ display:grid; grid-template-columns:1.2fr .8fr 1fr; gap:40px; }
       @media (max-width:860px){ .foot-grid{ grid-template-columns:1fr; } }
       footer.site h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.9rem; color:var(--pink); }
@@ -339,7 +321,6 @@
         box-shadow:0 14px 34px rgba(40,10,50,.35); transition:transform .3s cubic-bezier(.32,.72,.28,1); max-width:92vw; text-align:center;
       }
       .toast.show{ transform:translate(-50%,0); }
-      @media (prefers-color-scheme: dark){ .toast{ background:var(--gold); color:#3a2405; } }
 
       /* ---------- 3D shop overlay ---------- */
       .shop-overlay{ position:fixed; inset:0; z-index:200; background:#fdf0f6; display:none; outline:none; }
@@ -414,7 +395,6 @@
       .grain{ position:fixed; inset:-50%; width:200%; height:200%; z-index:400; pointer-events:none;
         background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
         opacity:.05; mix-blend-mode:multiply; }
-      @media (prefers-color-scheme: dark){ .grain{ mix-blend-mode:screen; opacity:.06; } }
       img.pouch{ height:auto; border-radius:14px; }
       .card-art{ text-decoration:none; }
       .card-body h3 a{ text-decoration:none; } .card-body h3 a:hover{ color:var(--pink-hot); }
@@ -502,7 +482,7 @@
               <b>Blooming Soon</b><small>3 more strains</small>
             </a>
             <button class="cat" type="button" data-enter-shop style="background:none;border:none;color:inherit;font:inherit">
-              <span class="disc" style="background:var(--blue-soft)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#47264d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg></span>
+              <span class="disc" style="background:var(--blue-soft)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2b2118" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg></span>
               <b>The Shop IRL</b><small>walk in, virtually</small>
             </button>
           </div>
@@ -562,7 +542,7 @@
               <div><b>4g Smalls</b><p>Our signature format. Small buds, boutique energy, one tidy pastel pouch.</p></div>
             </div>
             <div class="prop">
-              <span class="prop-ico" style="background:var(--gold-soft)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#47264d" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7.5-4.6-9.7-9A5.4 5.4 0 0 1 12 6.4 5.4 5.4 0 0 1 21.7 12C19.5 16.4 12 21 12 21Z"/></svg></span>
+              <span class="prop-ico" style="background:var(--gold-soft)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2b2118" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7.5-4.6-9.7-9A5.4 5.4 0 0 1 12 6.4 5.4 5.4 0 0 1 21.7 12C19.5 16.4 12 21 12 21Z"/></svg></span>
               <div><b>Good vibes only</b><p>The tagline is the whole business plan: "Good vibes, great flower."</p></div>
             </div>
           </div>
@@ -753,7 +733,7 @@
       });
       document.querySelectorAll("[data-bud]").forEach(function(el){
         el.setAttribute("viewBox","0 0 100 100");
-        el.innerHTML = '<path d="M50 12 C66 26 72 40 72 54 a22 22 0 1 1 -44 0 C28 40 34 26 50 12Z" fill="#a9e8c6" stroke="#47264d" stroke-width="3"/>'
+        el.innerHTML = '<path d="M50 12 C66 26 72 40 72 54 a22 22 0 1 1 -44 0 C28 40 34 26 50 12Z" fill="#a9e8c6" stroke="#2b2118" stroke-width="3"/>'
           + '<path d="M50 20 C58 30 61 40 61 50" fill="none" stroke="#57b87e" stroke-width="3" stroke-linecap="round"/>'
           + '<path d="M50 88 C50 96 50 98 50 98" stroke="#57b87e" stroke-width="3"/>'
           + '<path d="M38 96 C42 88 48 86 54 88 C48 94 42 97 38 96Z" fill="#57b87e"/>';
@@ -770,14 +750,14 @@
         var a = POUCH_ART[kind]; if(!a) return "";
         return '<defs><linearGradient id="pg'+gid+'" x1="0" y1="0" x2="0" y2="1">'
           + '<stop offset="0" stop-color="'+a.c1+'"/><stop offset="1" stop-color="'+a.c2+'"/></linearGradient></defs>'
-          + '<path d="M38 26 L162 26 L172 208 Q173 226 155 226 L45 226 Q27 226 28 208 Z" fill="url(#pg'+gid+')" stroke="#47264d" stroke-width="4"/>'
-          + '<rect x="34" y="10" width="132" height="20" rx="9" fill="'+a.c2+'" stroke="#47264d" stroke-width="4"/>'
-          + '<rect x="50" y="54" width="100" height="106" rx="14" fill="#fffdf9" stroke="#47264d" stroke-width="3.5"/>'
+          + '<path d="M38 26 L162 26 L172 208 Q173 226 155 226 L45 226 Q27 226 28 208 Z" fill="url(#pg'+gid+')" stroke="#2b2118" stroke-width="4"/>'
+          + '<rect x="34" y="10" width="132" height="20" rx="9" fill="'+a.c2+'" stroke="#2b2118" stroke-width="4"/>'
+          + '<rect x="50" y="54" width="100" height="106" rx="14" fill="#fffdf9" stroke="#2b2118" stroke-width="3.5"/>'
           + '<g transform="translate(79,60) scale(0.42)">'+daisySVG(a.c2)+'</g>'
           + '<text x="100" y="126" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="'+a.band+'">'+a.name+'</text>'
           + '<text x="100" y="143" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="12" fill="'+a.band+'">'+a.sub+'</text>'
-          + '<text x="100" y="196" text-anchor="middle" font-family="Shrikhand,cursive" font-size="17" fill="#47264d">FLWRPWR</text>'
-          + '<text x="100" y="214" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="10" letter-spacing="2" fill="#47264d">4G SMALLS</text>';
+          + '<text x="100" y="196" text-anchor="middle" font-family="Shrikhand,cursive" font-size="17" fill="#2b2118">FLWRPWR</text>'
+          + '<text x="100" y="214" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="10" letter-spacing="2" fill="#2b2118">4G SMALLS</text>';
       }
       document.querySelectorAll("[data-pouch]").forEach(function(el, i){
         el.innerHTML = pouchSVG(el.getAttribute("data-pouch"), "h"+i);
@@ -1086,7 +1066,7 @@
         return canvasTex(256, 300, function(x){
           x.fillStyle = "#fffdf9"; x.fillRect(0,0,256,300);
           x.fillStyle = p.c2; x.fillRect(0,0,256,64);
-          x.fillStyle = "#47264d"; x.font = "900 25px Nunito, sans-serif"; x.textAlign = "center";
+          x.fillStyle = "#2b2118"; x.font = "900 25px Nunito, sans-serif"; x.textAlign = "center";
           x.fillText("FLWRPWR", 128, 42);
           // daisy
           x.save(); x.translate(128,118);
@@ -1107,7 +1087,7 @@
           x.textAlign = "center";
           x.fillStyle = "#ff5fa8"; x.font = "92px Shrikhand, cursive";
           x.fillText("FLWRPWR", 512, 138);
-          x.fillStyle = "#47264d"; x.font = "700 44px Caveat, cursive";
+          x.fillStyle = "#2b2118"; x.font = "700 44px Caveat, cursive";
           x.fillText("good vibes, great flower", 512, 216);
           x.fillStyle = "#8f6fe8"; x.font = "800 26px Nunito, sans-serif";
           x.fillText("✿  4G SMALLS  ✿", 512, 262);
@@ -1553,7 +1533,7 @@
         ctop.position.y = 1.09; counter.add(ctop);
         var cfront = new THREE.Mesh(new THREE.PlaneGeometry(3.2, .7),
           new THREE.MeshStandardMaterial({ map:canvasTex(640,140,function(x){
-            x.fillStyle = "#47264d"; x.fillRect(0,0,640,140);
+            x.fillStyle = "#e8455a"; x.fillRect(0,0,640,140);
             x.fillStyle = "#ffd7ea"; x.textAlign = "center"; x.font = "46px Shrikhand, cursive";
             x.fillText("CHECKOUT ✿ RESERVE HERE", 320, 90, 610);
           }), roughness:.8 }));
