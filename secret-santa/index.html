@@ -6,217 +6,219 @@
 <title>Secret Santa</title>
 <meta name="description" content="Joinable Secret Santa: add your name, vote on the date, share gift ideas, and reveal only your own assignment." />
 <style>
-  :root {
-    --pine: #0f3d2e;
-    --pine-deep: #0a2c21;
-    --pine-soft: #e6efe9;
-    --cream: #fdf8ee;
-    --card: #fffdf6;
-    --ink: #1c2420;
-    --muted: #5f6b63;
-    --line: #e3dcc8;
-    --red: #b4232a;
-    --gold: #c9a227;
-    --gold-soft: #f7ecd0;
+:root{
+    --night:#0d1030; --night2:#1b2350; --night3:#2a2a6a;
+    --snow:#f4f6ff; --paper:#fff8e7; --card:#fffdf4;
+    --ink:#101018; --muted:#4a4a68;
+    --red:#e83800; --red-dark:#a81e00; --green:#00a800; --pine:#005800;
+    --gold:#f8d800; --gold-dark:#c8a800; --blue:#3b5bff;
   }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--cream);
-    color: var(--ink);
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    line-height: 1.55;
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--night); color:var(--ink);
+    font-family:"VT323", "Courier New", monospace; font-size:21px; line-height:1.35;
+    background-image:
+      radial-gradient(2px 2px at 20px 30px, #fff 50%, transparent 51%),
+      radial-gradient(2px 2px at 130px 90px, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 70px 150px, #f8d800 50%, transparent 51%),
+      radial-gradient(2px 2px at 220px 40px, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 300px 120px, #fff 50%, transparent 51%);
+    background-size:340px 220px;
   }
-  #snow-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.7;
+  #snow-canvas{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:3; opacity:.9}
+  main{position:relative; z-index:2; max-width:680px; margin:0 auto; padding:14px 14px 0}
+  /* ---- arcade HUD ---- */
+  .hud{
+    display:flex; justify-content:space-between; gap:8px;
+    font-family:"Press Start 2P", monospace; font-size:9px; line-height:1.6;
+    color:var(--snow); padding:10px 4px 12px; text-transform:uppercase;
   }
-  main { position: relative; z-index: 2; max-width: 660px; margin: 0 auto; padding: 20px 16px 48px; }
-  .hero {
-    background: var(--pine);
-    color: #fff;
-    border-radius: 18px;
-    padding: 28px 22px 24px;
-    margin: 8px 0 20px;
-    box-shadow: 0 10px 30px rgba(15, 61, 46, 0.22);
-    overflow: hidden;
-    position: relative;
+  .hud span b{color:var(--gold)}
+  .hud .blink{color:var(--red); animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  /* ---- hero: night sky scene ---- */
+  .hero{
+    position:relative; overflow:hidden;
+    background:linear-gradient(#141b3d 0%, #1b2350 55%, #2a2a6a 100%);
+    border:4px solid #000; box-shadow:8px 8px 0 #000;
+    padding:22px 18px 0; margin:0 0 22px; color:var(--snow);
   }
-  .hero::after {
-    content: "";
-    position: absolute;
-    right: -30px;
-    top: -30px;
-    width: 130px;
-    height: 130px;
-    border: 2px solid rgba(201, 162, 39, 0.45);
-    border-radius: 50%;
+  .hero .moon{
+    position:absolute; right:18px; top:16px; width:52px; height:52px;
+    background:var(--gold); border:4px solid #000;
+    box-shadow:inset -8px -8px 0 #e8b800;
+    image-rendering:pixelated;
   }
-  .hero::before {
-    content: "";
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    width: 56px;
-    height: 56px;
-    border: 2px solid rgba(201, 162, 39, 0.35);
-    border-radius: 50%;
+  .hero .moon::after{content:""; position:absolute; left:8px; top:10px; width:8px; height:8px; background:#c8a800; box-shadow:18px 12px 0 #c8a800, 6px 26px 0 #c8a800}
+  .eyebrow{font-family:"Press Start 2P", monospace; font-size:9px; letter-spacing:.08em; color:var(--gold); margin:0 0 14px; text-transform:uppercase}
+  h1{
+    font-family:"Press Start 2P", monospace; font-size:clamp(28px, 8.5vw, 44px);
+    line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55);
   }
-  .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #d9c98a; font-weight: 800; margin: 0 0 8px; position: relative; z-index: 1; }
-  h1 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(40px, 11vw, 58px);
-    line-height: 1.0;
-    margin: 0 0 10px;
-    letter-spacing: -0.02em;
-    position: relative;
-    z-index: 1;
+  h1 .red{color:#ff5a2a}
+  .hero p{color:#dfe6ff; margin:8px 0; max-width:44ch; font-size:22px}
+  .hero p b{color:var(--gold)}
+  .press-start{font-family:"Press Start 2P", monospace; font-size:10px; color:var(--gold); margin:16px 0 10px; animation:blink 1.2s steps(2) infinite}
+  /* Santa sleigh flyover */
+  .sleigh-track{position:relative; height:86px; overflow:visible; margin:6px -18px 0}
+  .sleigh{
+    position:absolute; top:8px; left:0; width:300px; height:72px;
+    animation:fly 18s linear infinite;
+    filter:drop-shadow(4px 4px 0 rgba(0,0,0,.45));
   }
-  .hero p { color: #e6efe9; margin: 8px 0; position: relative; z-index: 1; max-width: 46ch; }
-  .hero .gold-rule { width: 48px; height: 3px; background: var(--gold); margin: 14px 0 0; position: relative; z-index: 1; }
-  h2 { font-family: Georgia, "Times New Roman", serif; font-size: 26px; margin: 0 0 8px; }
-  h3 { font-size: 17px; margin: 20px 0 8px; }
-  p { margin: 8px 0; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 20px 18px;
-    margin: 16px 0;
-    box-shadow: 0 4px 18px rgba(28, 36, 32, 0.06);
+  .sleigh svg{width:300px; height:72px; image-rendering:pixelated; shape-rendering:crispEdges}
+  @keyframes fly{
+    0%{transform:translateX(105vw) translateY(0)}
+    25%{transform:translateX(60vw) translateY(-10px)}
+    50%{transform:translateX(20vw) translateY(4px)}
+    75%{transform:translateX(-20vw) translateY(-8px)}
+    100%{transform:translateX(-340px) translateY(0)}
   }
-  .setup-notice {
-    border: 1px solid var(--gold);
-    background: var(--gold-soft);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin: 16px 0;
-    font-weight: 700;
+  .rudolph{animation:rudolph 0.9s steps(2) infinite}
+  @keyframes rudolph{50%{opacity:.25}}
+  .ground{
+    display:block; width:calc(100% + 36px); margin:0 -18px; height:74px;
   }
-  label { display: block; font-weight: 800; margin: 12px 0 6px; }
-  input, select, textarea {
-    width: 100%;
-    min-height: 52px;
-    padding: 12px;
-    font-size: 17px;
-    border: 1px solid #b9bfae;
-    border-radius: 10px;
-    background: #fff;
-    color: var(--ink);
-    font-family: inherit;
+  /* ---- pixel cards ---- */
+  .card{
+    background:var(--card); border:4px solid #000; box-shadow:8px 8px 0 #000;
+    padding:20px 16px; margin:0 0 22px; position:relative;
   }
-  button {
-    min-height: 52px;
-    padding: 12px 18px;
-    font-size: 17px;
-    font-weight: 800;
-    border: 1px solid var(--pine);
-    border-radius: 12px;
-    background: var(--pine);
-    color: #fff;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 12px;
+  .card::before{
+    content:""; position:absolute; left:-4px; top:-4px; width:28px; height:8px;
+    background:var(--red); border:4px solid #000; border-left:0; border-top:0;
   }
-  button.secondary { background: #fff; color: var(--pine); }
-  button.danger { background: #fff; color: var(--red); border-color: var(--red); }
-  button:disabled { opacity: 0.45; cursor: not-allowed; }
-  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-  .row { display: grid; gap: 12px; }
-  @media (min-width: 520px) { .row.two { grid-template-columns: 1fr 1fr; } }
-  ul { padding-left: 20px; margin: 8px 0; }
-  li { margin: 6px 0; }
-  .small { font-size: 14px; color: var(--muted); }
-  .participant-count { display: inline-block; transition: transform 0.25s ease; }
-  .participant-count.pulse { transform: scale(1.25); color: var(--red); }
-  .participant-chip {
-    display: inline-block;
-    background: var(--pine-soft);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 6px 12px;
-    margin: 4px 6px 4px 0;
-    font-weight: 700;
+  .card.green::before{background:var(--green)}
+  .card.gold::before{background:var(--gold)}
+  .level{font-family:"Press Start 2P", monospace; font-size:9px; color:var(--red); margin:0 0 10px; text-transform:uppercase}
+  .card.green .level{color:var(--pine)} .card.gold .level{color:#8a6d00}
+  h2{font-family:"Press Start 2P", monospace; font-size:17px; line-height:1.5; margin:0 0 10px; text-transform:uppercase}
+  h3{font-family:"Press Start 2P", monospace; font-size:11px; line-height:1.6; margin:22px 0 10px; text-transform:uppercase}
+  p{margin:8px 0}
+  .small{font-size:19px; color:var(--muted)}
+  .setup-notice{border:4px solid #000; background:var(--gold); box-shadow:6px 6px 0 #000; padding:14px; margin:0 0 22px; font-family:"Press Start 2P", monospace; font-size:11px; line-height:1.7}
+  label{display:block; font-family:"Press Start 2P", monospace; font-size:10px; margin:14px 0 8px; text-transform:uppercase}
+  input, select, textarea{
+    width:100%; min-height:56px; padding:12px; font-size:23px;
+    font-family:"VT323", monospace; border:4px solid #000; background:#fff; color:var(--ink);
+    box-shadow:inset 4px 4px 0 #e8e8f0;
   }
-  .result {
-    border: 2px solid var(--gold);
-    background: var(--gold-soft);
-    border-radius: 14px;
-    padding: 18px;
-    margin-top: 16px;
-    font-size: 19px;
-    position: relative;
-    overflow: hidden;
+  input:focus, select:focus{outline:4px solid var(--gold); outline-offset:2px}
+  button{
+    min-height:56px; padding:14px 16px; font-family:"Press Start 2P", monospace; font-size:12px; line-height:1.5;
+    border:4px solid #000; background:var(--red); color:#fff; cursor:pointer; width:100%; margin-top:14px;
+    box-shadow:0 6px 0 #000; text-transform:uppercase;
   }
-  .result .label { font-size: 14px; color: var(--muted); display: block; }
-  .result.celebrate { animation: glow 1.2s ease 2; }
-  @keyframes glow { 0%, 100% { box-shadow: 0 0 0 rgba(201,162,39,0); } 50% { box-shadow: 0 0 28px rgba(201,162,39,0.65); } }
-  .confetti-piece {
-    position: absolute;
-    top: -8px;
-    width: 8px;
-    height: 12px;
-    border-radius: 2px;
-    animation: fall 1.6s ease-in forwards;
-    pointer-events: none;
+  button:active{transform:translateY(4px); box-shadow:0 2px 0 #000}
+  button.secondary{background:#fff; color:var(--ink)}
+  button.green{background:var(--green); color:#fff}
+  button.danger{background:#fff; color:var(--red-dark); border-color:#000}
+  button:disabled{opacity:.45; cursor:not-allowed; box-shadow:0 6px 0 #000}
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible{outline:4px solid var(--gold); outline-offset:2px}
+  .row{display:grid; gap:12px}
+  @media (min-width:520px){.row.two{grid-template-columns:1fr 1fr}}
+  ul{padding-left:20px; margin:8px 0}
+  li{margin:6px 0}
+  .participant-count{display:inline-block; transition:transform .25s ease; color:var(--red)}
+  .participant-count.pulse{transform:scale(1.4)}
+  .participant-chip{
+    display:inline-block; background:var(--gold); border:3px solid #000;
+    box-shadow:3px 3px 0 #000; padding:6px 10px; margin:4px 6px 4px 0;
+    font-family:"Press Start 2P", monospace; font-size:10px;
   }
-  @keyframes fall { to { transform: translateY(180px) rotate(240deg); opacity: 0; } }
-  .poll-option {
-    display: block;
-    width: 100%;
-    background: #fff;
-    color: var(--ink);
-    text-align: left;
-    border-color: #b9bfae;
-    padding-bottom: 14px;
+  .result{
+    border:4px solid #000; background:var(--gold); box-shadow:6px 6px 0 #000;
+    padding:18px; margin-top:16px; font-size:23px; position:relative; overflow:hidden;
   }
-  .poll-option[aria-pressed="true"] { background: var(--pine); color: #fff; border-color: var(--pine); }
-  .poll-option[aria-pressed="true"] .bar-track { background: rgba(255,255,255,0.25); }
-  .poll-meta { display: flex; justify-content: space-between; gap: 12px; }
-  .bar-track { height: 8px; background: var(--pine-soft); border-radius: 999px; margin-top: 10px; overflow: hidden; }
-  .bar-fill { height: 100%; width: 0%; background: var(--gold); border-radius: 999px; transition: width 0.6s ease; }
-  .poll-option[aria-pressed="true"] .bar-fill { background: #fff; }
-  .gift-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    border-top: 1px solid var(--line);
-    padding: 12px 0;
+  .result .label{font-family:"Press Start 2P", monospace; font-size:9px; color:var(--ink); display:block; margin-bottom:8px; text-transform:uppercase}
+  .result.celebrate{animation:glow 1.2s ease 2}
+  @keyframes glow{0%,100%{box-shadow:6px 6px 0 #000}50%{box-shadow:6px 6px 0 #000, 0 0 0 6px var(--red)}}
+  .confetti-piece{position:absolute; top:-8px; width:8px; height:8px; animation:fall 1.6s ease-in forwards; pointer-events:none}
+  @keyframes fall{to{transform:translateY(180px) rotate(240deg); opacity:0}}
+  .poll-option{
+    display:block; width:100%; background:#fff; color:var(--ink); text-align:left;
+    border:4px solid #000; padding:14px 12px 14px; box-shadow:0 4px 0 #000;
   }
-  .gift-item button { width: auto; min-height: 44px; margin-top: 0; padding: 8px 14px; font-size: 15px; }
-  .gift-item a { color: var(--pine); font-weight: 700; }
-  .shuffle { text-align: center; font-family: Georgia, "Times New Roman", serif; font-size: 26px; padding: 14px 0 4px; color: var(--red); min-height: 44px; }
-  footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); }
-  footer h2 { font-size: 18px; }
-  footer a { display: block; margin-top: 10px; font-weight: 800; color: var(--pine); }
-  .error { color: #8b1e1e; font-weight: 800; }
-  .hidden { display: none; }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-    html { scroll-behavior: auto; }
+  .poll-option[aria-pressed="true"]{background:var(--green); color:#fff}
+  .poll-option[aria-pressed="true"] .bar-track{background:rgba(255,255,255,.35)}
+  .poll-meta{display:flex; justify-content:space-between; gap:12px; font-size:21px}
+  .bar-track{height:12px; background:#e8e8f0; border:2px solid #000; margin-top:10px; overflow:hidden}
+  .bar-fill{height:100%; width:0%; background:repeating-linear-gradient(90deg, var(--gold) 0 8px, #e8b800 8px 16px); transition:width .6s steps(12)}
+  .poll-option[aria-pressed="true"] .bar-fill{background:repeating-linear-gradient(90deg, #fff 0 8px, var(--gold) 8px 16px)}
+  .gift-item{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; border-top:3px solid #000; padding:12px 0}
+  .gift-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
+  .gift-item a{color:var(--red-dark); font-weight:700}
+  .shuffle{text-align:center; font-family:"Press Start 2P", monospace; font-size:13px; padding:14px 0 4px; color:var(--red); min-height:44px}
+  .tree-row{display:flex; justify-content:space-between; align-items:flex-end; gap:6px; margin:6px 0 0; padding:0 2px}
+  .tree-row svg{width:52px; height:64px; image-rendering:pixelated; shape-rendering:crispEdges}
+  .tree-light{animation:twinkle 1s steps(2) infinite}
+  .tree-light:nth-child(2){animation-delay:.3s} .tree-light:nth-child(3){animation-delay:.6s}
+  @keyframes twinkle{50%{opacity:.15}}
+  footer{margin:0 0 28px; padding:18px 16px; border:4px solid #000; background:var(--paper); box-shadow:8px 8px 0 #000}
+  footer h2{font-size:12px}
+  footer a{display:block; margin-top:12px; font-family:"Press Start 2P", monospace; font-size:10px; line-height:1.7; color:var(--red-dark)}
+  .error{color:var(--red-dark); font-weight:700}
+  .hidden{display:none}
+  @media (max-width:420px){
+    body{font-size:20px}
+    h1{font-size:26px}
+    .sleigh{width:240px} .sleigh svg{width:240px}
+    .hud{font-size:8px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
+    html{scroll-behavior:auto}
+    .sleigh{animation:none; transform:translateX(20px)}
   }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
 </head>
 <body>
 <canvas id="snow-canvas" aria-hidden="true"></canvas>
 <main>
+  <div class="hud" aria-hidden="true"><span>1UP <b>SECRET SANTA</b></span><span>LVL 25 &bull; DEC 2026</span><span class="blink">PRESS START</span></div>
   <section class="hero">
-    <p class="eyebrow">For your group</p>
-    <h1>Secret Santa</h1>
-    <p>Add your name, vote on the date, share gift ideas, and reveal only your own person.</p>
-    <div class="gold-rule" aria-hidden="true"></div>
+    <div class="moon" aria-hidden="true"></div>
+    <p class="eyebrow">For your group &bull; 16-bit Christmas</p>
+    <h1>SECRET<br /><span class="red">SANTA</span></h1>
+    <p>Join the list, share <b>gift ideas</b>, vote on the date, and draw your person. No one draws themselves.</p>
+    <p class="press-start" aria-hidden="true">&gt; PRESS START &lt;</p>
+    <div class="sleigh-track" aria-hidden="true">
+      <div class="sleigh">
+        <svg viewBox="0 0 300 72" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="10" width="6" height="6" fill="#f8d800"/><rect x="14" y="4" width="4" height="4" fill="#fff"/><rect x="28" y="16" width="4" height="4" fill="#f8d800"/>
+          <g fill="#7a3b12"><rect x="34" y="28" width="34" height="14"/><rect x="30" y="20" width="12" height="12"/><rect x="60" y="24" width="10" height="10"/></g>
+          <g fill="#5a2d0c"><rect x="32" y="12" width="4" height="10"/><rect x="38" y="10" width="4" height="10"/><rect x="28" y="16" width="12" height="4"/></g>
+          <g fill="#101018"><rect x="38" y="42" width="5" height="12"/><rect x="58" y="42" width="5" height="12"/></g>
+          <rect class="rudolph" x="28" y="24" width="6" height="6" fill="#e83800"/>
+          <g fill="#8b4513"><rect x="84" y="28" width="34" height="14"/><rect x="80" y="20" width="12" height="12"/><rect x="110" y="24" width="10" height="10"/></g>
+          <g fill="#5a2d0c"><rect x="82" y="12" width="4" height="10"/><rect x="88" y="10" width="4" height="10"/><rect x="78" y="16" width="12" height="4"/></g>
+          <g fill="#101018"><rect x="88" y="42" width="5" height="12"/><rect x="108" y="42" width="5" height="12"/></g>
+          <rect x="78" y="24" width="6" height="6" fill="#e83800"/>
+          <g fill="#101018"><rect x="68" y="34" width="16" height="3"/><rect x="118" y="34" width="16" height="3"/><rect x="134" y="34" width="36" height="3"/></g>
+          <g><rect x="176" y="34" width="72" height="18" fill="#e83800"/><rect x="176" y="34" width="72" height="5" fill="#f8d800"/><rect x="176" y="52" width="72" height="4" fill="#a81e00"/><rect x="170" y="52" width="84" height="5" fill="#f8d800"/></g>
+          <g><rect x="196" y="14" width="26" height="22" fill="#e83800"/><rect x="200" y="10" width="18" height="8" fill="#e83800"/><rect x="214" y="6" width="8" height="8" fill="#fff"/><rect x="196" y="26" width="26" height="8" fill="#fff"/><rect x="200" y="18" width="10" height="6" fill="#ffdbac"/></g>
+          <g><rect x="236" y="22" width="22" height="14" fill="#c8a800"/><rect x="240" y="16" width="14" height="8" fill="#f8d800"/></g>
+          <g fill="#fff"><rect x="262" y="40" width="6" height="6"/><rect x="272" y="46" width="6" height="6"/></g>
+        </svg>
+      </div>
+    </div>
+    <svg class="ground" viewBox="0 0 680 74" preserveAspectRatio="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="58" width="680" height="16" fill="#f4f6ff"/><rect x="0" y="54" width="680" height="6" fill="#dfe6ff"/>
+      <g><rect x="36" y="18" width="28" height="8" fill="#005800"/><rect x="40" y="26" width="20" height="8" fill="#00a800"/><rect x="44" y="34" width="12" height="8" fill="#005800"/><rect x="46" y="42" width="8" height="12" fill="#7a3b12"/><rect x="48" y="12" width="4" height="6" fill="#f8d800"/></g>
+      <g><rect x="590" y="22" width="28" height="8" fill="#005800"/><rect x="594" y="30" width="20" height="8" fill="#00a800"/><rect x="598" y="38" width="12" height="8" fill="#005800"/><rect x="600" y="46" width="8" height="12" fill="#7a3b12"/><rect x="602" y="16" width="4" height="6" fill="#f8d800"/></g>
+      <g><rect x="520" y="38" width="16" height="16" fill="#e83800"/><rect x="520" y="38" width="16" height="4" fill="#f8d800"/><rect x="526" y="32" width="4" height="6" fill="#f8d800"/></g>
+      <g><rect x="120" y="42" width="14" height="12" fill="#3b5bff"/><rect x="120" y="42" width="14" height="3" fill="#f8d800"/></g>
+    </svg>
   </section>
 
   <div id="setup-notice" class="setup-notice hidden" role="status">Setting up your group, try reloading in a moment.</div>
 
   <section class="card" aria-labelledby="join-heading">
+    <p class="level">Level 01 &mdash; Join</p>
     <h2 id="join-heading">Join the draw</h2>
     <p id="draw-state" class="small">The list is open. Add your name below.</p>
     <label for="name-input">Your name</label>
@@ -230,13 +232,14 @@
       <button id="lock-button" class="secondary" type="button">Lock the list</button>
       <button id="unlock-button" class="secondary" type="button">Reopen the list</button>
     </div>
-    <button id="draw-button" type="button">Draw names</button>
+    <button id="draw-button" class="green" type="button">Draw names</button>
     <div id="draw-shuffle" class="shuffle hidden" aria-live="polite"><span id="draw-shuffle-name"></span></div>
     <button id="reset-button" class="secondary" type="button">Reset this draw</button>
     <p class="small">The draw needs at least 3 people. No one draws themselves. After the draw, the list stays locked until it is reset.</p>
   </section>
 
-  <section class="card" aria-labelledby="reveal-heading">
+  <section class="card green" aria-labelledby="reveal-heading">
+    <p class="level">Level 02 &mdash; Reveal</p>
     <h2 id="reveal-heading">Reveal my person</h2>
     <p>Pick your own name only. The page shows just that one person, never the full list.</p>
     <label for="reveal-name">I am</label>
@@ -251,7 +254,8 @@
     <p id="reveal-message" aria-live="polite"></p>
   </section>
 
-  <section class="card" aria-labelledby="gift-heading">
+  <section class="card gold" aria-labelledby="gift-heading">
+    <p class="level">Level 03 &mdash; Gift ideas</p>
     <h2 id="gift-heading">My gift list</h2>
     <p>Add gift ideas so the person who draws you has somewhere to start. Only the list for the name you pick here is shown and edited.</p>
     <label for="gift-owner">My name</label>
@@ -266,7 +270,8 @@
     <p id="gift-empty" class="small">No gift ideas yet for this name.</p>
   </section>
 
-  <section class="card" aria-labelledby="poll-heading">
+  <section class="card green" aria-labelledby="poll-heading">
+    <p class="level">Level 04 &mdash; Vote</p>
     <h2 id="poll-heading">Vote on the date</h2>
     <p>Pick your name, then vote. You can change your vote. Each name gets one vote.</p>
     <label for="voter-name">Voting as</label>
@@ -276,6 +281,11 @@
     <p id="poll-message" aria-live="polite"></p>
   </section>
 
+  <div class="tree-row" aria-hidden="true">
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
+  </div>
   <footer aria-labelledby="partiful-heading">
     <h2 id="partiful-heading">Party pages</h2>
     <p class="small">Drafts, not invites.</p>
@@ -493,7 +503,7 @@
     if (reducedMotion()) return;
     var box = document.getElementById("reveal-result");
     box.classList.add("celebrate");
-    var colors = ["#c9a227", "#b4232a", "#0f3d2e", "#ffffff"];
+    var colors = ["#f8d800", "#e83800", "#00a800", "#ffffff"];
     for (var i = 0; i < 24; i++) {
       var piece = document.createElement("span");
       piece.className = "confetti-piece";
@@ -745,9 +755,7 @@
         f.y += f.speed;
         f.x += Math.sin(f.y / 60) * f.drift * 0.3;
         if (f.y > canvas.height + 5) { f.y = -5; f.x = Math.random() * canvas.width; }
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillRect(f.x, f.y, f.r * 2, f.r * 2);
       });
       requestAnimationFrame(tick);
     }
