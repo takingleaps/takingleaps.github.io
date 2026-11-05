@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Secret Santa</title>
+<title>Crackheadz Secret Santa</title>
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <meta name="description" content="Joinable Secret Santa: add your name, vote on the date, share gift ideas, and reveal only your own assignment." />
@@ -51,6 +51,8 @@
     line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55);
   }
   h1 .red{color:#ff5a2a}
+  h1 .rainbow{background:linear-gradient(90deg,#ff004c,#ff8a00,#f8d800,#00a800,#3b5bff,#b800ff,#ff004c); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:rainbow 3s linear infinite; filter:drop-shadow(4px 4px 0 #000)}
+  @keyframes rainbow{to{background-position:300% 0}}
   .hero p{color:#dfe6ff; margin:8px 0; max-width:44ch; font-size:22px}
   .hero p b{color:var(--gold)}
   /* Santa sleigh flyover */
@@ -182,7 +184,7 @@
 <main>
   <section class="hero">
     <div class="moon" aria-hidden="true"></div>
-    <h1>SECRET<br /><span class="red">SANTA</span></h1>
+    <h1><span class="rainbow">CRACKHEADZ</span><br />SECRET<br /><span class="red">SANTA</span></h1>
     <button id="start-button" type="button" class="start-button">Start</button>
     <p class="hero-location">Chinese Nate's House</p>
     <div class="sleigh-track" aria-hidden="true">
