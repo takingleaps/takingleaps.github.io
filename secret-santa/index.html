@@ -159,6 +159,12 @@
   button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible{outline:4px solid var(--gold); outline-offset:2px}
   .row{display:grid; gap:12px}
   @media (min-width:520px){.row.two{grid-template-columns:1fr 1fr}}
+  @media (min-width:900px){
+    main{max-width:1180px; display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:18px 18px 0}
+    .hero{grid-column:1 / -1; margin-bottom:0}
+    .card{margin-bottom:0}
+    .wide-desktop{grid-column:1 / -1}
+  }
   ul{padding-left:20px; margin:8px 0}
   li{margin:6px 0}
   .participant-count{display:inline-block; transition:transform .25s ease; color:var(--red)}
@@ -381,7 +387,7 @@
     <p id="finder-message" aria-live="polite"></p>
   </section>
 
-  <section class="card green" aria-labelledby="messages-heading">
+  <section class="card green wide-desktop" aria-labelledby="messages-heading">
     <h2 id="messages-heading">Group messages</h2>
     <div id="message-list"></div>
     <p id="message-display" class="small">Log in above to message the group.</p>
@@ -392,7 +398,7 @@
     <p id="message-message" aria-live="polite"></p>
   </section>
 
-  <section class="card gold" aria-labelledby="buying-heading">
+  <section class="card gold wide-desktop" aria-labelledby="buying-heading">
     <h2 id="buying-heading">Buying view</h2>
     <button id="buying-toggle-button" class="secondary" type="button">Show all gift lists</button>
     <div id="buying-view" class="hidden"></div>
@@ -1178,6 +1184,7 @@
   }, true);
   if (supa) supa.auth.onAuthStateChange(function () { refreshAuth(); });
   document.getElementById("suggest-date-button").addEventListener("click", suggestDate);
+  document.getElementById("gift-item").addEventListener("input", function () { setMessage("gift-message", ""); });
   (function () {
     var t = new Date();
     var key = t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2);
