@@ -285,6 +285,10 @@
     <p id="voter-display" class="small">Log in below to vote.</p>
     <h3>When should we do Secret Santa?</h3>
     <div id="date-poll"></div>
+    <label for="suggest-date">Or pick another date</label>
+    <input id="suggest-date" type="date" />
+    <button id="suggest-date-button" class="secondary" type="button">Add this date</button>
+    <p id="suggest-message" aria-live="polite"></p>
     <h3>What is the budget?</h3>
     <div id="budget-poll"></div>
     <p id="poll-message" aria-live="polite"></p>
@@ -606,9 +610,35 @@
     });
   }
 
+  function formatDateLabel(d) {
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return days[d.getDay()] + " " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+  }
+
+  function dateOptionsWithCustoms() {
+    var opts = DATE_OPTIONS.slice();
+    var customs = [];
+    var seen = {};
+    state.votes.forEach(function (v) {
+      if (v.poll_id === "date" && v.option_id.indexOf("custom:") === 0 && !seen[v.option_id]) {
+        seen[v.option_id] = true;
+        var parts = v.option_id.slice(7).split("-");
+        var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        if (!isNaN(d.getTime())) customs.push({ id: v.option_id, label: formatDateLabel(d), key: v.option_id.slice(7) });
+      }
+    });
+    customs.sort(function (a, b) { return a.key < b.key ? -1 : 1; });
+    customs.forEach(function (c) { opts.push({ id: c.id, label: c.label }); });
+    return opts;
+  }
+
   function renderPolls() {
-    renderOnePoll("date", DATE_OPTIONS, "date-poll");
+    renderOnePoll("date", dateOptionsWithCustoms(), "date-poll");
     renderOnePoll("budget", BUDGET_OPTIONS, "budget-poll");
+    var canSuggest = state.connected && !!state.myName;
+    document.getElementById("suggest-date").disabled = !canSuggest;
+    document.getElementById("suggest-date-button").disabled = !canSuggest;
   }
 
   function renderWishlists() {
@@ -968,6 +998,26 @@
     }
   }
 
+  async function suggestDate() {
+    var input = document.getElementById("suggest-date");
+    var value = input.value;
+    if (!state.myName) { setMessage("suggest-message", "Log in and join the list first.", true); return; }
+    if (!value) { setMessage("suggest-message", "Pick a date first.", true); return; }
+    var parts = value.split("-");
+    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    if (isNaN(d.getTime())) { setMessage("suggest-message", "That date did not work. Pick another.", true); return; }
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    if (d < today) { setMessage("suggest-message", "Pick a date that has not passed yet.", true); return; }
+    var optionId = value === "2026-12-05" ? "birthday-dec-5" : value === "2026-12-31" ? "new-years-dec-31" : "custom:" + value;
+    var existed = DATE_OPTIONS.some(function (o) { return o.id === optionId; }) ||
+      state.votes.some(function (v) { return v.poll_id === "date" && v.option_id === optionId; });
+    await castVote("date", optionId);
+    setMessage("suggest-message", existed
+      ? "That date is already an option — your vote is on it."
+      : "Added " + formatDateLabel(d) + " — your vote is on it.");
+    input.value = "";
+  }
+
   async function postMessage() {
     var author = state.myName;
     var input = document.getElementById("message-input");
@@ -1122,6 +1172,12 @@
     if (e.target && e.target.classList && e.target.classList.contains("gift-thumb")) e.target.style.display = "none";
   }, true);
   if (supa) supa.auth.onAuthStateChange(function () { refreshAuth(); });
+  document.getElementById("suggest-date-button").addEventListener("click", suggestDate);
+  (function () {
+    var t = new Date();
+    var key = t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2);
+    document.getElementById("suggest-date").min = key;
+  })();
 
   startSnowfall();
   loadAll();
