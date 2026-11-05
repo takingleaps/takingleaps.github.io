@@ -29,13 +29,6 @@
   #snow-canvas{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:3; opacity:.9}
   main{position:relative; z-index:2; max-width:680px; margin:0 auto; padding:14px 14px 0}
   /* ---- arcade HUD ---- */
-  .hud{
-    display:flex; justify-content:space-between; gap:8px;
-    font-family:"Press Start 2P", monospace; font-size:9px; line-height:1.6;
-    color:var(--snow); padding:10px 4px 12px; text-transform:uppercase;
-  }
-  .hud span b{color:var(--gold)}
-  .hud .blink{color:var(--red); animation:blink 1s steps(2) infinite}
   @keyframes blink{50%{opacity:0}}
   /* ---- hero: night sky scene ---- */
   .hero{
@@ -51,7 +44,6 @@
     image-rendering:pixelated;
   }
   .hero .moon::after{content:""; position:absolute; left:8px; top:10px; width:8px; height:8px; background:#c8a800; box-shadow:18px 12px 0 #c8a800, 6px 26px 0 #c8a800}
-  .eyebrow{font-family:"Press Start 2P", monospace; font-size:9px; letter-spacing:.08em; color:var(--gold); margin:0 0 14px; text-transform:uppercase}
   h1{
     font-family:"Press Start 2P", monospace; font-size:clamp(28px, 8.5vw, 44px);
     line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55);
@@ -59,7 +51,6 @@
   h1 .red{color:#ff5a2a}
   .hero p{color:#dfe6ff; margin:8px 0; max-width:44ch; font-size:22px}
   .hero p b{color:var(--gold)}
-  .press-start{font-family:"Press Start 2P", monospace; font-size:10px; color:var(--gold); margin:16px 0 10px; animation:blink 1.2s steps(2) infinite}
   /* Santa sleigh flyover */
   .sleigh-track{position:relative; height:86px; overflow:visible; margin:6px -18px 0}
   .sleigh{
@@ -111,6 +102,7 @@
     box-shadow:0 6px 0 #000; text-transform:uppercase;
   }
   button:active{transform:translateY(4px); box-shadow:0 2px 0 #000}
+  .start-button{width:auto; min-width:220px; margin:16px 0 18px; background:var(--red)}
   button.secondary{background:#fff; color:var(--ink)}
   button.green{background:var(--green); color:#fff}
   button.danger{background:#fff; color:var(--red-dark); border-color:#000}
@@ -164,8 +156,7 @@
     body{font-size:20px}
     h1{font-size:26px}
     .sleigh{width:240px} .sleigh svg{width:240px}
-    .hud{font-size:8px}
-  }
+    }
   @media (prefers-reduced-motion: reduce){
     *, *::before, *::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
     html{scroll-behavior:auto}
@@ -179,13 +170,10 @@
 <body>
 <canvas id="snow-canvas" aria-hidden="true"></canvas>
 <main>
-  <div class="hud" aria-hidden="true"><span>1UP <b>SECRET SANTA</b></span><span>LVL 25 &bull; DEC 2026</span><span class="blink">PRESS START</span></div>
   <section class="hero">
     <div class="moon" aria-hidden="true"></div>
-    <p class="eyebrow">For your group &bull; 16-bit Christmas</p>
     <h1>SECRET<br /><span class="red">SANTA</span></h1>
-    <p>Join the list, share <b>gift ideas</b>, vote on the date, and draw your person. No one draws themselves.</p>
-    <p class="press-start" aria-hidden="true">&gt; PRESS START &lt;</p>
+    <button id="start-button" type="button" class="start-button">Start</button>
     <div class="sleigh-track" aria-hidden="true">
       <div class="sleigh">
         <svg viewBox="0 0 300 72" xmlns="http://www.w3.org/2000/svg">
@@ -218,16 +206,15 @@
   <div id="setup-notice" class="setup-notice hidden" role="status">Setting up your group, try reloading in a moment.</div>
 
   <section class="card" aria-labelledby="join-heading">
-    <p class="level">Level 01 &mdash; Join</p>
     <h2 id="join-heading">Join the draw</h2>
-    <p id="draw-state" class="small">The list is open. Add your name below.</p>
+    <p id="draw-state" class="small">Open</p>
     <label for="name-input">Your name</label>
     <input id="name-input" type="text" maxlength="40" autocomplete="off" placeholder="First name" />
     <button id="add-button" type="button">Add me to the list</button>
     <p id="join-message" aria-live="polite"></p>
     <h3>Who is in (<span id="participant-count" class="participant-count">0</span>)</h3>
     <div id="participant-list"></div>
-    <p id="empty-list" class="small">No one has joined yet.</p>
+    <p id="empty-list" class="small"></p>
     <div class="row two">
       <button id="lock-button" class="secondary" type="button">Lock the list</button>
       <button id="unlock-button" class="secondary" type="button">Reopen the list</button>
@@ -235,13 +222,10 @@
     <button id="draw-button" class="green" type="button">Draw names</button>
     <div id="draw-shuffle" class="shuffle hidden" aria-live="polite"><span id="draw-shuffle-name"></span></div>
     <button id="reset-button" class="secondary" type="button">Reset this draw</button>
-    <p class="small">The draw needs at least 3 people. No one draws themselves. After the draw, the list stays locked until it is reset.</p>
   </section>
 
   <section class="card green" aria-labelledby="reveal-heading">
-    <p class="level">Level 02 &mdash; Reveal</p>
     <h2 id="reveal-heading">Reveal my person</h2>
-    <p>Pick your own name only. The page shows just that one person, never the full list.</p>
     <label for="reveal-name">I am</label>
     <select id="reveal-name"></select>
     <button id="reveal-button" type="button">Reveal my person</button>
@@ -255,9 +239,7 @@
   </section>
 
   <section class="card gold" aria-labelledby="gift-heading">
-    <p class="level">Level 03 &mdash; Gift ideas</p>
     <h2 id="gift-heading">My gift list</h2>
-    <p>Add gift ideas so the person who draws you has somewhere to start. Only the list for the name you pick here is shown and edited.</p>
     <label for="gift-owner">My name</label>
     <select id="gift-owner"></select>
     <label for="gift-item">Gift idea</label>
@@ -267,13 +249,11 @@
     <button id="gift-add-button" type="button">Add gift idea</button>
     <p id="gift-message" aria-live="polite"></p>
     <div id="gift-list"></div>
-    <p id="gift-empty" class="small">No gift ideas yet for this name.</p>
+    <p id="gift-empty" class="small"></p>
   </section>
 
   <section class="card green" aria-labelledby="poll-heading">
-    <p class="level">Level 04 &mdash; Vote</p>
     <h2 id="poll-heading">Vote on the date</h2>
-    <p>Pick your name, then vote. You can change your vote. Each name gets one vote.</p>
     <label for="voter-name">Voting as</label>
     <select id="voter-name"></select>
     <h3>When should we do Secret Santa?</h3>
@@ -286,12 +266,6 @@
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
   </div>
-  <footer aria-labelledby="partiful-heading">
-    <h2 id="partiful-heading">Party pages</h2>
-    <p class="small">Drafts, not invites.</p>
-    <a href="https://partiful.com/e/P9GfGOHSYDNQmj5rgR5a">Nathan's Birthday, Sat Dec 5, 2026</a>
-    <a href="https://partiful.com/e/nlQsHLGruF30Hd9Zo8wB">Secret Santa Party, date and time to be decided</a>
-  </footer>
 </main>
 
 <script>
@@ -396,9 +370,9 @@
     fillSelect("reveal-name", previousReveal);
     fillSelect("voter-name", previousVoter);
     fillSelect("gift-owner", previousGift);
-    var status = "The list is open. Add your name below.";
-    if (state.draw && state.draw.status === "locked") status = "The list is locked. No new names can be added until it is reopened or reset.";
-    if (state.draw && state.draw.status === "drawn") status = "The draw is done. The list stays locked until it is reset.";
+    var status = "Open";
+    if (state.draw && state.draw.status === "locked") status = "Locked";
+    if (state.draw && state.draw.status === "drawn") status = "Drawn";
     document.getElementById("draw-state").textContent = status;
     document.getElementById("draw-button").disabled = !state.connected ||
       !(state.draw && state.draw.status === "locked") || state.participants.length < 3;
@@ -464,7 +438,7 @@
     var items = state.wishlists.filter(function (w) { return w.owner_name === recipient; });
     var el = document.getElementById("reveal-gift-list");
     if (!items.length) {
-      el.innerHTML = '<p class="small">No gift ideas shared yet.</p>';
+      el.innerHTML = '';
       return;
     }
     el.innerHTML = "<h3>Their gift ideas</h3><ul>" + items.map(function (w) {
@@ -764,6 +738,10 @@
     tick();
   }
 
+  document.getElementById("start-button").addEventListener("click", function () {
+    document.getElementById("join-heading").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    document.getElementById("name-input").focus({ preventScroll: true });
+  });
   document.getElementById("add-button").addEventListener("click", addParticipant);
   document.getElementById("lock-button").addEventListener("click", function () {
     setDrawStatus("locked").catch(function (e) { setMessage("join-message", e.message, true); });
