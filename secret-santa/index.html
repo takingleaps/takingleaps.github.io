@@ -165,6 +165,12 @@
     .card{margin-bottom:0}
     .wide-desktop{grid-column:1 / -1}
   }
+  @media (max-width:899px){
+    .card h2{cursor:pointer}
+    .card h2::after{content:" -"; float:right}
+    .card.collapsed h2::after{content:" +"; float:right}
+    .card.collapsed > :not(h2){display:none}
+  }
   ul{padding-left:20px; margin:8px 0}
   li{margin:6px 0}
   .participant-count{display:inline-block; transition:transform .25s ease; color:var(--red)}
@@ -733,12 +739,45 @@
     });
   }
 
+  function isMobileLayout() { return window.matchMedia("(max-width: 899px)").matches; }
+
+  function openCard(headingId) {
+    var s = document.querySelector('[aria-labelledby="' + headingId + '"]');
+    if (s) s.classList.remove("collapsed");
+  }
+
+  function initCollapsibles() {
+    if (!isMobileLayout()) return;
+    document.querySelectorAll(".card").forEach(function (card) {
+      var h = card.querySelector("h2");
+      if (!h) return;
+      if (card.getAttribute("aria-labelledby") !== "poll-heading") card.classList.add("collapsed");
+      h.setAttribute("tabindex", "0");
+      h.setAttribute("role", "button");
+      h.setAttribute("aria-expanded", card.classList.contains("collapsed") ? "false" : "true");
+      h.addEventListener("click", function () {
+        if (!isMobileLayout()) return;
+        card.classList.toggle("collapsed");
+        if (card.classList.contains("collapsed")) card.dataset.userCollapsed = "1";
+        else delete card.dataset.userCollapsed;
+        h.setAttribute("aria-expanded", card.classList.contains("collapsed") ? "false" : "true");
+      });
+      h.addEventListener("keydown", function (e) {
+        if ((e.key === "Enter" || e.key === " ") && isMobileLayout()) { e.preventDefault(); h.click(); }
+      });
+    });
+  }
+
   function renderAll() {
     renderParticipants();
     renderPolls();
     renderWishlists();
     renderMessages();
     renderBuyingView();
+    if (isMobileLayout() && state.draw && state.draw.status !== "open") {
+      var revealCard = document.querySelector('[aria-labelledby="reveal-heading"]');
+      if (revealCard && !revealCard.dataset.userCollapsed) revealCard.classList.remove("collapsed");
+    }
   }
 
   function derangement(names) {
@@ -1135,6 +1174,7 @@
 
   document.getElementById("start-button").addEventListener("click", function () {
     var target = state.myEmail ? "join-heading" : "auth-heading";
+    openCard(target);
     document.getElementById(target).scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     if (state.myEmail) document.getElementById("name-input").focus({ preventScroll: true });
     else document.getElementById("auth-email").focus({ preventScroll: true });
@@ -1191,6 +1231,7 @@
     document.getElementById("suggest-date").min = key;
   })();
 
+  initCollapsibles();
   startSnowfall();
   loadAll();
   setInterval(function () {
