@@ -194,8 +194,9 @@
       .card{
         background:var(--paper); border:1.5px solid var(--line); border-radius:28px; overflow:hidden;
         box-shadow:var(--soft-shadow); display:flex; flex-direction:column; transition:transform .18s ease, box-shadow .18s ease;
+        transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px)); will-change:transform;
       }
-      .card:hover{ transform:translateY(-4px); box-shadow:0 18px 36px rgba(85,107,63,.2); }
+      .card:hover{ --ty:-6px; box-shadow:0 18px 36px rgba(85,107,63,.2); }
       .card-art{ position:relative; margin:10px 10px 0; height:300px; padding:46px 20px 14px; box-sizing:border-box; display:flex; justify-content:center; align-items:flex-end; border-radius:200px 200px 20px 20px; }
       .card-art .badge{
         position:absolute; top:16px; left:50%; transform:translateX(-50%); background:var(--paper); color:var(--olive); border:1.5px solid var(--line);
@@ -326,14 +327,32 @@
 
       /* ---------- reveal (pure garnish: content is ALWAYS visible; .in only plays a soft rise) ---------- */
       .reveal{ opacity:1; }
-      .reveal.in{ animation:riseIn .65s ease both; }
+      .reveal.in{ animation:riseIn .65s ease backwards; }
       @keyframes riseIn{ from{ opacity:.3; transform:translateY(14px); } to{ opacity:1; transform:none; } }
       @media (prefers-reduced-motion: reduce){
         html{ scroll-behavior:auto; }
         .reveal.in{ animation:none; }
         .pouch,.hero-art .sun,.hero-daisy,.ticker-track,.sparkle,.success-box .big-daisy,.vhs-track{ animation:none !important; }
         .card,.btn,.add-btn,.cart-btn,.cat .disc{ transition:none; }
+        .petal-field, .scroll-bloom{ display:none !important; }
+        .petal{ animation:none !important; }
+        .card{ transform:none !important; }
       }
+
+      /* ---------- whole-page motion (mirrors the experience page) ---------- */
+      .scroll-bloom{ position:fixed; top:0; left:0; height:4px; width:100%; z-index:300; transform-origin:0 50%; transform:scaleX(0); background:linear-gradient(90deg, var(--rose) 0%, var(--lav) 55%, var(--sky) 100%); }
+      .petal-field{ position:fixed; inset:0; z-index:55; pointer-events:none; overflow:hidden; }
+      .petal{ position:absolute; top:-8vh; will-change:transform,opacity; animation:petalFall var(--fall,16s) linear infinite; animation-delay:var(--delay,0s); opacity:0; }
+      .petal svg{ display:block; animation:petalSpin var(--spin,7s) ease-in-out infinite alternate; }
+      @keyframes petalFall{ 0%{ transform:translate3d(0,-6vh,0); opacity:0; } 8%{ opacity:var(--po,.75); } 88%{ opacity:var(--po,.75); } 100%{ transform:translate3d(var(--sway,40px),108vh,0); opacity:0; } }
+      @keyframes petalSpin{ from{ transform:rotate(-38deg); } to{ transform:rotate(42deg) scale(1.12); } }
+      header.site{ transition:box-shadow .3s ease; }
+      header.site.scrolled{ box-shadow:0 10px 28px rgba(47,56,34,.14); }
+      .cart-count{ transition:transform .25s cubic-bezier(.34,1.8,.5,1); }
+      .cart-count.pop{ transform:scale(1.45) rotate(-8deg); }
+      .burst-petal{ position:fixed; z-index:290; pointer-events:none; will-change:transform,opacity; }
+      .card .card-pouch{ transition:transform .5s cubic-bezier(.22,.9,.3,1); }
+      .card:hover .card-pouch{ transform:scale(1.06) rotate(-1deg); }
 
       /* ---------- cart drawer ---------- */
       .scrim{ position:fixed; inset:0; background:rgba(42,54,32,.5); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:260; }
@@ -1853,5 +1872,118 @@
     <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="motion.js"></script>
+    <script>
+    /* ============ whole-page motion pass (mirrors the experience page) ============ */
+    (function(){
+      "use strict";
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var finePointer = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+      /* ---- scroll progress bloom + drifting petals layer ---- */
+      var bloom = document.createElement("div");
+      bloom.className = "scroll-bloom"; bloom.setAttribute("aria-hidden","true");
+      document.body.appendChild(bloom);
+
+      var petalColors = ["#F4728E","#F9A8BC","#ffffff","#B9A7E7","#A7B995","#7CC3F6"];
+      if (!reduce){
+        var field = document.createElement("div");
+        field.className = "petal-field"; field.setAttribute("aria-hidden","true");
+        var petalSVG = function(c, s){
+          return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 100 100"><ellipse cx="50" cy="34" rx="15" ry="30" fill="'+c+'" opacity=".9"/><ellipse cx="50" cy="34" rx="15" ry="30" fill="'+c+'" opacity=".55" transform="rotate(72 50 50)"/><ellipse cx="50" cy="34" rx="15" ry="30" fill="'+c+'" opacity=".55" transform="rotate(-72 50 50)"/><circle cx="50" cy="52" r="8" fill="#f2b84b"/></svg>';
+        };
+        var petalHTML = "";
+        for (var i = 0; i < 14; i++){
+          var size = 14 + Math.round(Math.random() * 20);
+          var left = (Math.random() * 98).toFixed(1);
+          var fall = (13 + Math.random() * 14).toFixed(1);
+          var delay = (-Math.random() * 24).toFixed(1);
+          var sway = Math.round((Math.random() * 140 - 70));
+          var spin = (5 + Math.random() * 6).toFixed(1);
+          var op = (0.45 + Math.random() * 0.4).toFixed(2);
+          petalHTML += '<span class="petal" style="left:'+left+'%;--fall:'+fall+'s;--delay:'+delay+'s;--sway:'+sway+'px;--spin:'+spin+'s;--po:'+op+'">'+petalSVG(petalColors[i % petalColors.length], size)+'</span>';
+        }
+        field.innerHTML = petalHTML;
+        document.body.appendChild(field);
+      }
+
+      /* ---- scroll loop: progress + header shadow (hero parallax already lives in motion.js) ---- */
+      var header = document.querySelector("header.site");
+      var ticking = false;
+      function onScroll(){
+        var doc = document.documentElement;
+        var maxScroll = doc.scrollHeight - window.innerHeight;
+        var p = maxScroll > 0 ? (window.scrollY / maxScroll) : 0;
+        bloom.style.transform = "scaleX(" + p.toFixed(4) + ")";
+        if (header) header.classList.toggle("scrolled", window.scrollY > 12);
+        ticking = false;
+      }
+      window.addEventListener("scroll", function(){
+        if (!ticking){ ticking = true; requestAnimationFrame(onScroll); }
+      }, { passive: true });
+      onScroll();
+
+      /* ---- hero follows the pointer a little ---- */
+      if (!reduce && finePointer){
+        var hero = document.querySelector(".hero");
+        var heroArt = document.querySelector(".hero-art");
+        if (hero && heroArt){
+          hero.addEventListener("pointermove", function(e){
+            var r = hero.getBoundingClientRect();
+            var nx = (e.clientX - r.left) / r.width - .5;
+            heroArt.style.rotate = (nx * 1.6).toFixed(2) + "deg";
+          });
+          hero.addEventListener("pointerleave", function(){ heroArt.style.rotate = "0deg"; });
+        }
+      }
+
+      /* ---- pointer tilt on product cards (CSS vars; the reveal fill was switched so it can apply) ---- */
+      if (!reduce && finePointer){
+        document.querySelectorAll(".card").forEach(function(el){
+          el.addEventListener("pointermove", function(e){
+            var r = el.getBoundingClientRect();
+            var nx = (e.clientX - r.left) / r.width - .5;
+            var ny = (e.clientY - r.top) / r.height - .5;
+            el.style.setProperty("--ry", (nx * 7).toFixed(2) + "deg");
+            el.style.setProperty("--rx", (-ny * 7).toFixed(2) + "deg");
+          });
+          el.addEventListener("pointerleave", function(){
+            el.style.setProperty("--rx", "0deg");
+            el.style.setProperty("--ry", "0deg");
+          });
+        });
+      }
+
+      /* ---- basket count pop + petal burst on reserve ---- */
+      var countEl = document.getElementById("cartCount");
+      if (countEl && "MutationObserver" in window){
+        new MutationObserver(function(){
+          countEl.classList.remove("pop"); void countEl.offsetWidth; countEl.classList.add("pop");
+        }).observe(countEl, { childList: true, characterData: true, subtree: true });
+      }
+      if (!reduce){
+        document.addEventListener("click", function(e){
+          var btn = e.target.closest && e.target.closest("[data-add]");
+          if (!btn) return;
+          var r = btn.getBoundingClientRect();
+          var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          for (var i = 0; i < 7; i++){
+            var s = document.createElement("span");
+            s.className = "burst-petal";
+            var sz = 10 + Math.random() * 10;
+            s.innerHTML = '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 100 100"><ellipse cx="50" cy="38" rx="17" ry="32" fill="'+petalColors[i % petalColors.length]+'"/></svg>';
+            s.style.left = cx + "px"; s.style.top = cy + "px";
+            document.body.appendChild(s);
+            var ang = (Math.PI * 2 * i) / 7 + Math.random() * .5;
+            var dist = 46 + Math.random() * 42;
+            var dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 22;
+            s.animate([
+              { transform: "translate(-50%,-50%) rotate(0deg) scale(1)", opacity: 1 },
+              { transform: "translate(calc(-50% + " + dx.toFixed(0) + "px), calc(-50% + " + dy.toFixed(0) + "px)) rotate(" + Math.round(Math.random()*220-110) + "deg) scale(.4)", opacity: 0 }
+            ], { duration: 650 + Math.random() * 250, easing: "cubic-bezier(.22,.9,.3,1)" }).onfinish = (function(node){ return function(){ node.remove(); }; })(s);
+          }
+        });
+      }
+    })();
+    </script>
   </body>
 </html>

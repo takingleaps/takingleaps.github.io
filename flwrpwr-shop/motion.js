@@ -48,14 +48,14 @@
   /* section reveals — orchestrated batch, not the same fade on everything:
      cards stagger up, heads slide from the left edge of their column */
   if (typeof window.ScrollTrigger !== "undefined"){
-    gsap.utils.toArray(".grid, .feed-grid, .props, .next-row").forEach(function(group){
+    gsap.utils.toArray(".grid, .props").forEach(function(group){
       gsap.from(group.children, {
         y: 34, opacity: 0, duration: 0.75, ease: "power3.out", stagger: 0.09,
         clearProps: "transform,opacity",
         scrollTrigger: { trigger: group, start: "top 86%" }
       });
     });
-    gsap.utils.toArray(".sec-head, .strain-copy, .glass-panel").forEach(function(el){
+    gsap.utils.toArray(".sec-head").forEach(function(el){
       gsap.from(el, {
         y: 22, opacity: 0, duration: 0.7, ease: "power2.out", clearProps: "transform,opacity",
         scrollTrigger: { trigger: el, start: "top 88%" }
