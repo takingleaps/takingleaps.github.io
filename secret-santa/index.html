@@ -152,6 +152,10 @@
   .buying-owner{font-family:"Press Start 2P", monospace; font-size:13px; margin:18px 0 8px; padding:10px; background:#f8d800; color:#101018; border:3px solid #000; box-shadow:4px 4px 0 #000; text-transform:uppercase}
   .buying-item{display:flex; gap:12px; align-items:center; border-top:3px solid #000; padding:10px 0}
   .buying-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
+  .search-item{display:flex; gap:12px; align-items:center; border:3px solid #000; background:#fff; padding:8px; margin-top:8px; box-shadow:4px 4px 0 #000}
+  .search-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px; flex:none}
+  .search-item strong{font-size:11px; line-height:1.5}
+  .search-price{font-size:11px; color:#005800; margin-top:4px}
   button.secondary{background:#fff; color:var(--ink)}
   button.green{background:var(--green); color:#fff}
   button.danger{background:#fff; color:var(--red-dark); border-color:#000}
@@ -390,7 +394,10 @@
     <label for="finder-query">Search Amazon</label>
     <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
     <button id="finder-search-button" type="button">Search Amazon</button>
+    <p class="small">Each person gets 25 Amazon searches a month. After that, add gifts manually with a link in My gift list.</p>
+    <p id="finder-remaining" class="small" aria-live="polite"></p>
     <p id="finder-message" aria-live="polite"></p>
+    <div id="finder-results"></div>
   </section>
 
   <section class="card green wide-desktop" aria-labelledby="messages-heading">
@@ -706,6 +713,68 @@
 
   function amazonSearchUrl(q) {
     return "https://www.amazon.com/s?k=" + encodeURIComponent(q);
+  }
+
+  var SEARCH_URL = API_BASE_URL + "/functions/v1/search-amazon";
+
+  function setSearchRemaining(n) {
+    var el = document.getElementById("finder-remaining");
+    if (el) el.textContent = "Searches left this month: " + n + " of 25";
+  }
+
+  function renderSearchResults(items) {
+    var el = document.getElementById("finder-results");
+    el._items = items;
+    el.innerHTML = items.map(function (it, i) {
+      var thumb = it.thumbnail ? '<img class="gift-thumb" src="' + esc(it.thumbnail) + '" alt="" referrerpolicy="no-referrer" />' : "";
+      var price = it.price ? '<div class="search-price">' + esc(String(it.price)) + '</div>' : "";
+      return '<div class="search-item">' + thumb + '<div><strong>' + esc(it.title || "") + '</strong>' + price + '</div><button type="button" class="secondary search-add" data-i="' + i + '">Add to my list</button></div>';
+    }).join("");
+    el.querySelectorAll(".search-add").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var it = el._items[Number(btn.dataset.i)];
+        if (!it) return;
+        document.getElementById("gift-item").value = it.title || "";
+        document.getElementById("gift-note").value = it.link || "";
+        document.getElementById("gift-image").value = it.thumbnail || "";
+        setMessage("gift-message", "Added to My gift list form. Tap Add gift idea to save it.");
+        openCard("gift-heading");
+        document.getElementById("gift-heading").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+      });
+    });
+  }
+
+  async function runAmazonSearch(q) {
+    var resultsEl = document.getElementById("finder-results");
+    resultsEl.innerHTML = "";
+    if (!supa) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
+    var sess = (await supa.auth.getSession()).data.session;
+    if (!sess) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
+    setMessage("finder-message", "Searching Amazon...");
+    var res;
+    try {
+      res = await fetch(SEARCH_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + sess.access_token, "apikey": API_KEY }, body: JSON.stringify({ q: q }) });
+    } catch (e) {
+      setMessage("finder-message", "Search failed. Try again, or add the gift manually with a link.", true);
+      return;
+    }
+    var data = null;
+    try { data = await res.json(); } catch (e) { data = null; }
+    if (res.status === 401) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
+    if (res.status === 403) { setMessage("finder-message", "Join the draw first, then search.", true); return; }
+    if (res.status === 429) {
+      setSearchRemaining(0);
+      setMessage("finder-message", "You have used your 25 searches this month. Add gifts manually with a link in My gift list.", true);
+      return;
+    }
+    if (!res.ok || !data || !data.items) {
+      setMessage("finder-message", "Search failed. Try again, or add the gift manually with a link.", true);
+      return;
+    }
+    if (typeof data.remaining === "number") setSearchRemaining(data.remaining);
+    if (!data.items.length) { setMessage("finder-message", "No results on Amazon for that. Try different words, or add it manually with a link.", true); return; }
+    setMessage("finder-message", data.cached ? "Results from cache, no search used." : "");
+    renderSearchResults(data.items);
   }
 
   function renderMessages() {
@@ -1199,13 +1268,15 @@
   document.getElementById("gift-amazon-search").addEventListener("click", function () {
     var q = document.getElementById("gift-item").value.trim();
     if (!q) { setMessage("gift-message", "Type a gift idea first.", true); return; }
-    window.open(amazonSearchUrl(q), "_blank", "noopener");
+    document.getElementById("finder-query").value = q;
+    openCard("finder-heading");
+    document.getElementById("finder-heading").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    runAmazonSearch(q);
   });
   document.getElementById("finder-search-button").addEventListener("click", function () {
     var q = document.getElementById("finder-query").value.trim();
     if (!q) { setMessage("finder-message", "Type what you are looking for first.", true); return; }
-    window.open(amazonSearchUrl(q), "_blank", "noopener");
-    setMessage("finder-message", "Results opened on Amazon. Paste the link back in My gift list.");
+    runAmazonSearch(q);
   });
   document.getElementById("message-send-button").addEventListener("click", postMessage);
   document.getElementById("email-group-button").addEventListener("click", emailGroup);
