@@ -395,7 +395,6 @@
     <label for="gift-note">Link or note (optional)</label>
     <input id="gift-note" type="text" maxlength="300" autocomplete="off" placeholder="Link or note" />
     <input id="gift-image" type="hidden" />
-    <button id="gift-amazon-search" class="secondary" type="button">Search Amazon</button>
     <button id="gift-add-button" type="button">Add gift idea</button>
     <p id="gift-message" aria-live="polite"></p>
     <div id="gift-list"></div>
@@ -501,7 +500,7 @@
   function setControlsEnabled(enabled) {
     ["name-input", "add-button", "lock-button", "unlock-button", "draw-button",
      "reset-button", "reveal-button", "gift-item",
-     "gift-note", "gift-image", "gift-amazon-search", "gift-add-button",
+     "gift-note", "gift-image", "gift-add-button",
      "finder-query", "finder-search-button", "message-input",
      "message-send-button", "email-group-button", "buying-toggle-button"].forEach(function (id) {
       document.getElementById(id).disabled = !enabled;
@@ -1269,12 +1268,6 @@
     document.getElementById("reveal-gift-list").innerHTML = "";
   });
   document.getElementById("gift-add-button").addEventListener("click", addGift);
-  document.getElementById("gift-amazon-search").addEventListener("click", function () {
-    var q = document.getElementById("gift-item").value.trim();
-    if (!q) { setMessage("gift-message", "Type a gift idea first.", true); return; }
-    document.getElementById("finder-query").value = q;
-    runAmazonSearch(q);
-  });
   document.getElementById("finder-search-button").addEventListener("click", function () {
     var q = document.getElementById("finder-query").value.trim();
     if (!q) { setMessage("finder-message", "Type what you are looking for first.", true); return; }
