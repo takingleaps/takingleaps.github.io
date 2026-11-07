@@ -414,7 +414,7 @@
     }
     .section-heading {
       max-width: 850px;
-      margin-bottom: 56px;
+      margin-bottom: 44px;
     }
     .section-heading h2 {
       margin-bottom: 20px;
@@ -474,16 +474,25 @@
       transform: translateY(-4px);
     }
     .work-card--niteharts { --project-color: #58a6ff; }
+    .work-card--dreamstate { --project-color: #7dd3fc; }
     .work-card--escape { --project-color: #ff7a28; }
     .work-card--flwrpwr { --project-color: #ff4fa3; }
+    .work-card--rushlab { --project-color: #e53935; }
     .work-card--taco { --project-color: #e8a33d; }
     .work-card--raceline { --project-color: #d94f3d; }
     .work-card--dental { --project-color: #4fa8a0; }
-    .work-card--rushlab { --project-color: #e53935; }
+    .work-card--hokee { --project-color: #a93226; }
+    .work-card--chefs { --project-color: #b3402a; }
+    .work-card--java { --project-color: #c2410c; }
+    .work-card--luquin { --project-color: #0f766e; }
+    .work-card--firm { --project-color: #b45309; }
+    .work-card--sunny { --project-color: #9c6b30; }
+    .work-card--sheldon { --project-color: #c9c9c9; }
     .work-image__label { display: grid; place-items: center; width: 100%; height: 100%; padding: 16px; font-weight: 700; letter-spacing: .12em; text-align: center; color: var(--project-color); }
-    .concepts-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
-    #concepts .work-card--flwrpwr { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
-    #concepts .work-card--flwrpwr .work-image { aspect-ratio: auto; border-bottom: 0; border-right: 1px solid color-mix(in srgb, var(--project-color), transparent 54%); }
+    .concepts-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    #concepts .work-card__copy { min-height: 0; padding: 20px; }
+    #concepts .work-card h3 { padding-top: 16px; font-size: 21px; }
+    #concepts .work-image { aspect-ratio: 16 / 9; }
     .work-image {
       aspect-ratio: 16 / 10;
       overflow: hidden;
@@ -502,8 +511,8 @@
     .work-card--escape .work-image img { object-position: center 36%; }
     .work-card:hover .work-image img { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
     .work-card__copy {
-      min-height: 220px;
-      padding: 24px;
+      min-height: 200px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
     }
@@ -511,7 +520,7 @@
     .work-card .project-arrow { color: var(--project-color); }
     .work-card h3 {
       margin: auto 0 14px;
-      padding-top: 38px;
+      padding-top: 24px;
       font-family: var(--display);
       font-size: 26px;
       font-weight: 700;
@@ -522,6 +531,7 @@
     button.work-card { width: 100%; padding: 0; text-align: left; font: inherit; cursor: pointer; }
 
     body.modal-open { overflow: hidden; }
+    #pixel-burst { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
     .concept-modal {
       position: fixed;
       inset: 0;
@@ -1087,9 +1097,6 @@
       .section-heading h2, .systems-copy h2, .niche-copy h2, .call-panel h2 { font-size: 46px; }
       .hero-grid { grid-template-columns: 1fr; min-height: auto; }
       .work-grid { grid-template-columns: 1fr 1fr; }
-      .work-card--flwrpwr { grid-column: 1 / -1; }
-      .work-card--flwrpwr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-      .work-card--flwrpwr .work-image { aspect-ratio: auto; border-bottom: 0; border-right: 1px solid color-mix(in srgb, var(--project-color), transparent 54%); }
       .work-card--flwrpwr .work-card__copy { min-height: 220px; }
       .hero-grid { grid-template-columns: 1fr; min-height: auto; }
       .hero-main { border-right: 0; border-bottom: 1px solid var(--border); }
@@ -1108,7 +1115,7 @@
     @media (max-width: 640px) {
       html { scroll-padding-top: 76px; }
       .site-nav__inner { min-height: 56px; justify-content: center; gap: 0; }
-      .nav-link { padding-inline: 9px; font-size: 11px; letter-spacing: .045em; }
+      .nav-link { min-height: 48px; padding-inline: 12px; font-size: 12px; letter-spacing: .045em; }
       .nav-link--call { margin-left: 2px; }
       .page-shell { padding-top: 18px; }
       .terminal-bar { min-height: 44px; padding-inline: 12px; }
@@ -1119,6 +1126,7 @@
       .hero-copy { margin-bottom: 28px; font-size: 15px; line-height: 1.72; }
       .work-grid { grid-template-columns: 1fr; gap: 14px; }
       .work-section .work-grid { grid-template-columns: 1fr; }
+      .concepts-grid { grid-template-columns: 1fr; gap: 14px; }
       .work-card--flwrpwr { grid-column: auto; display: flex; }
       #concepts .work-card--flwrpwr { display: flex; }
       .work-card--flwrpwr .work-image { aspect-ratio: 16 / 10; border-right: 0; border-bottom: 1px solid color-mix(in srgb, var(--project-color), transparent 54%); }
@@ -1238,7 +1246,7 @@
     .work-panel__actions { margin-top: 28px; display: grid; gap: 12px; }
     .work-panel__actions .button { width: 100%; }
 
-    .calendly-waiting {
+    .booking-status {
       position: absolute; inset: 0; z-index: 2;
       display: grid; place-items: center;
       color: var(--dim); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
@@ -1248,13 +1256,10 @@
         var(--bg-deep);
       background-size: 32px 32px;
     }
-    .calendly-loading { display: none; }
-    .booking-embed.is-loading .calendly-loading { display: grid; }
-    .booking-embed.is-loading .calendly-waiting { display: none; }
-    .booking-embed.is-ready .calendly-loading,
-    .booking-embed.is-ready .calendly-waiting,
-    .booking-embed.is-fallback .calendly-loading,
-    .booking-embed.is-fallback .calendly-waiting { display: none; }
+    .booking-direct { margin: 0 0 12px; color: var(--muted); font-size: 12px; }
+    .booking-direct a { color: var(--accent); }
+    .booking-embed.is-ready .booking-status,
+    .booking-embed.is-fallback .booking-status { display: none; }
 
     @media (max-width: 900px) {
       .bottom-nav {
@@ -1266,7 +1271,7 @@
       }
       :root[data-theme="light"] .bottom-nav { background: rgba(238,243,239,.94); }
       .bottom-nav__link {
-        flex: 1 1 0; min-height: 44px; padding: 12px 6px;
+        flex: 1 1 0; min-height: 56px; padding: 14px 6px;
         display: flex; align-items: center; justify-content: center;
         color: var(--muted); font-size: 11px; font-weight: 600;
         letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
@@ -1275,7 +1280,7 @@
       .bottom-nav__link--call { color: var(--accent); }
       .bottom-nav__link[aria-current="true"] { color: var(--accent); border-top-color: var(--accent); background: var(--accent-faint); }
       .bottom-nav__link:active { background: var(--accent-faint); }
-      body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
       html { scroll-padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
     }
 
@@ -1303,8 +1308,7 @@
       .work-panel__body { padding: 22px 18px; }
       .work-panel__body h2 { font-size: 27px; }
     }
-
-    /* Kinetic terminal typing hero (Motion Studio Stack).
+  /* Kinetic terminal typing hero (Motion Studio Stack).
        One orchestrated motion moment: the command line and headline type
        themselves, block cursor follows, copy + buttons print after. No
        fade-up reveals anywhere else on the page. */
@@ -1322,7 +1326,7 @@
     html.js-typing .button-row { visibility: hidden; }
     html.typing-done .hero-copy,
     html.typing-done .button-row { visibility: visible; }
-  </style>
+</style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -1387,7 +1391,7 @@
     <section id="work" class="section work-section" aria-labelledby="work-title">
       <div class="section-heading">
         <h2 id="work-title">FESTIVAL + RAVE APPS</h2>
-        <p>I made two festival apps with set times, artist previews, saved lineups, and links you can send to your group.</p>
+        <p>I made three festival apps with set times, artist previews, saved lineups, and links you can send to your group.</p>
       </div>
 
       <div class="work-grid" aria-label="Selected projects">
@@ -1405,6 +1409,13 @@
             <h3>NITEHARTS '26</h3>
             <p>Mobile set times, artist previews, and a personal lineup builder.</p>
           </div>
+        </button><button class="work-card work-card--dreamstate" type="button" data-work-panel data-work-href="https://byyystudio.me/dreamstate/">
+          <div class="work-image"><div class="work-image__label">DREAMSTATE SOCAL 2026</div></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
+            <h3>DREAMSTATE SOCAL '26</h3>
+            <p>A phone-first trance planner with lineup saves, a simple map, and set times to come.</p>
+          </div>
         </button>
       </div>
     </section>
@@ -1412,10 +1423,18 @@
     <section id="concepts" class="section" aria-labelledby="concepts-title">
       <div class="section-heading">
         <h2 id="concepts-title">CONCEPTS</h2>
-        <p>design directions and explorations, separate from shipped client work. tap in to look around.</p>
+        <p>12 directions and explorations, separate from shipped client work. Tap a card to look around.</p>
       </div>
 
       <div class="concepts-grid">
+        <button class="work-card work-card--sheldon" type="button" data-sheldon-open aria-haspopup="dialog">
+          <div class="work-image"><img src="work-sheldon-1.jpg" loading="lazy" decoding="async" alt="Sheldon Engineering concept 1, classic XP style" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Three concepts</span><span class="project-arrow">+</span></span>
+            <h3>SHELDON ENGINEERING CONCEPTS</h3>
+            <p>Three website directions for the same septic business. Tap to pick one.</p>
+          </div>
+        </button>
         <button class="work-card work-card--flwrpwr" type="button" data-concept-open aria-haspopup="dialog">
           <div class="work-image"><img src="work-flwrpwr.png" loading="lazy" decoding="async" alt="FLWRPWR stocked store website concept" /></div>
           <div class="work-card__copy">
@@ -1424,28 +1443,76 @@
             <p>Four website directions for the same cannabis brand. Tap to pick one.</p>
           </div>
         </button>
-        <a class="work-card work-card--taco" href="https://muse.ai/s/taco-treat-order-ahead-prototype-uv627xlfxiaxu4/4Lk1KINgPGBl7ck-0KLaW8BHipHdfjCoU6C6vo2wIQ4" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">TACO TREAT ORDER-AHEAD</div></div>
+        <a class="work-card work-card--taco" href="https://byyystudio.me/taco-treat-order-ahead/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-taco.jpg" loading="lazy" decoding="async" alt="Taco Treat order-ahead prototype" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
             <h3>TACO TREAT ORDER-AHEAD</h3>
             <p>A pickup ordering demo for a cash-only Arcadia taco shop. Build your order, pick a time, pay at the counter.</p>
           </div>
         </a>
-        <a class="work-card work-card--raceline" href="https://muse.ai/s/raceline-tire-finder-prototype-xzv627xldxgixz9/i6pWJ1gloOIxh1jHspjs3f7vHO5DmPs-bO-hVM3jX0o" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">RACELINE TIRE FINDER</div></div>
+        <a class="work-card work-card--raceline" href="https://byyystudio.me/raceline-tire-finder/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-raceline.jpg" loading="lazy" decoding="async" alt="Raceline tire finder prototype" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
             <h3>RACELINE TIRE FINDER</h3>
             <p>Two questions point you to the right tire category, then send the shop your info for a quote.</p>
           </div>
         </a>
-        <a class="work-card work-card--dental" href="https://muse.ai/s/family-dental-booking-prototype-dh627xlhi4xy7/YFOWHAzvL0csb_Dpwsww6ZUCQkSfUA6E0vOyGeeUDpI" target="_blank" rel="noopener noreferrer">
-          <div class="work-image"><div class="work-image__label">FAMILY DENTAL BOOKING</div></div>
+        <a class="work-card work-card--dental" href="https://byyystudio.me/family-dental-booking/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-dental.jpg" loading="lazy" decoding="async" alt="Family Dental appointment request prototype" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
             <h3>FAMILY DENTAL BOOKING</h3>
             <p>An appointment request demo: pick what you need, pick when you are free, the office confirms.</p>
+          </div>
+        </a>
+        <a class="work-card work-card--hokee" href="https://byyystudio.me/ho-kee-order-ahead/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-hokee.jpg" loading="lazy" decoding="async" alt="Ho Kee Cafe order-ahead prototype" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
+            <h3>HO KEE CAFE ORDER-AHEAD</h3>
+            <p>An order-ahead demo for a Cantonese BBQ shop. Pick your dishes, pick a day, pay at pickup.</p>
+          </div>
+        </a>
+        <a class="work-card work-card--chefs" href="https://byyystudio.me/chefs-coffee-shop-order-ahead/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-chefs.jpg" loading="lazy" decoding="async" alt="Chef's Coffee Shop order-ahead prototype" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
+            <h3>CHEF'S COFFEE SHOP ORDER-AHEAD</h3>
+            <p>A breakfast order-ahead demo for an old-school diner. Build your order, pick a day, pay at pickup.</p>
+          </div>
+        </a>
+        <a class="work-card work-card--java" href="https://byyystudio.me/java-motors-service-request/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-java.jpg" loading="lazy" decoding="async" alt="Java Motors service request prototype" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
+            <h3>JAVA MOTORS SERVICE REQUEST</h3>
+            <p>A service request demo for an auto shop. Pick what your car needs, describe it, send the request.</p>
+          </div>
+        </a>
+        <a class="work-card work-card--luquin" href="https://byyystudio.me/luquin-plumbing-service-request/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-luquin.jpg" loading="lazy" decoding="async" alt="Luquin Plumbing service request prototype" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
+            <h3>LUQUIN PLUMBING SERVICE REQUEST</h3>
+            <p>A service request demo for a plumber. Pick the issue, say when you need them, send the request.</p>
+          </div>
+        </a>
+        <a class="work-card work-card--firm" href="https://byyystudio.me/the-firm-barber-match/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-firm.jpg" loading="lazy" decoding="async" alt="The Firm Barbershop barber-match quiz prototype" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
+            <h3>THE FIRM BARBER MATCH</h3>
+            <p>A barber-match quiz demo. Three questions, one cut profile to show at the shop.</p>
+          </div>
+        </a>
+        <a class="work-card work-card--sunny" href="https://byyystudio.me/sunny-bakery-cake-request/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-sunny.jpg" loading="lazy" decoding="async" alt="Sunny Bakery cake request prototype" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Free prototype concept</span><span class="project-arrow">↗</span></span>
+            <h3>SUNNY BAKERY CAKE REQUEST</h3>
+            <p>A custom cake request demo for a San Gabriel bakery. Pick a cake, name the occasion, send the request.</p>
           </div>
         </a>
         <a class="work-card work-card--rushlab" href="https://byyystudio.me/rush-lab/">
@@ -1456,6 +1523,8 @@
             <p>Batch 01: Y2K cat-eye and polarized sports glasses, a retro cap, and a Cuban chain.</p>
           </div>
         </a>
+        
+        
       </div>
     </section>
 
@@ -1577,15 +1646,15 @@
         </div>
         <div class="booking-shell">
           <div class="booking-label"><span>Calendly // quote call</span><strong>Booking open</strong></div>
+          <p class="booking-direct">Calendar slow? <a href="https://calendly.com/nathanltwong/festival-app-quote-call" target="_blank" rel="noopener noreferrer">Open Calendly directly</a>.</p>
           <div class="booking-embed" data-booking-embed>
-            <div class="calendly-waiting">Booking calendar loads as you scroll here.</div>
-            <div class="calendly-loading">Loading available times...</div>
+            <div class="booking-status" role="status" aria-live="polite">Booking calendar loads as you scroll here.</div>
             <iframe class="calendly-frame" data-calendly-frame title="Book a 30-minute quote call" data-calendly-src="https://calendly.com/nathanltwong/festival-app-quote-call?embed_type=Inline&amp;hide_gdpr_banner=1" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="payment *"></iframe>
             <div class="booking-card" data-booking-fallback>
               <div>
                 <p class="booking-card__eyebrow">CALENDAR COULD NOT LOAD.</p>
                 <h3>OPEN THE CALENDAR DIRECTLY.</h3>
-                <p class="booking-card__copy">The live calendar could not load here. Open Calendly to see the actual available times.</p>
+                <p class="booking-card__copy">The live calendar did not load here. Open Calendly to see the actual available times, or try loading it again.</p>
                 <ul class="booking-meta" aria-label="Call details">
                   <li>30 minutes</li>
                   <li>Video call</li>
@@ -1595,6 +1664,7 @@
                 Open Calendly
                 <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
               </a>
+              <button class="button" type="button" data-booking-retry>Try loading it again</button>
             </div>
           </div>
         </div>
@@ -1696,6 +1766,33 @@
       </div>
     </div>
   </div>
+
+  <div class="concept-modal" data-sheldon-modal role="dialog" aria-modal="true" aria-labelledby="sheldon-modal-title" aria-hidden="true">
+    <div class="concept-modal__backdrop" data-sheldon-close></div>
+    <div class="concept-modal__panel" role="document">
+      <div class="concept-modal__bar"><span>sheldon // concepts</span><button class="concept-modal__close" type="button" data-sheldon-close aria-label="Close concept picker">×</button></div>
+      <div class="concept-modal__body">
+        <h2 id="sheldon-modal-title">PICK A SHELDON CONCEPT</h2>
+        <p>These are three different directions for the same business.</p>
+        <div class="concept-options">
+          <a class="concept-option" href="https://byyystudio.me/sheldon-engineering-concept-1/" target="_blank" rel="noopener noreferrer">
+            <div class="concept-option__image"><span class="concept-option__fallback">CLASSIC XP</span><img src="work-sheldon-1.jpg" decoding="async" alt="Sheldon Engineering concept 1, classic XP style" /></div>
+            <div class="concept-option__copy"><strong>Classic XP</strong><span>A minimalist Windows XP style site for a septic tank business, with the black and white Sheldon mark.</span></div>
+          </a>
+          <a class="concept-option" href="https://byyystudio.me/sheldon-engineering-concept-2/" target="_blank" rel="noopener noreferrer">
+            <div class="concept-option__image"><span class="concept-option__fallback">SERVICE-FIRST</span><img src="work-sheldon-2.jpg" decoding="async" alt="Sheldon Engineering concept 2, service-first" /></div>
+            <div class="concept-option__copy"><strong>Service-First</strong><span>A service-first site for a septic tank business, with the black and white Sheldon mark.</span></div>
+          </a>
+          <a class="concept-option" href="https://byyystudio.me/sheldon-engineering-concept-3/" target="_blank" rel="noopener noreferrer">
+            <div class="concept-option__image"><span class="concept-option__fallback">EDUCATION-FIRST</span><img src="work-sheldon-3.jpg" decoding="async" alt="Sheldon Engineering concept 3, education-first" /></div>
+            <div class="concept-option__copy"><strong>Education-First</strong><span>An education-first site for a septic tank business, with the black and white Sheldon mark.</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="pixel-burst" aria-hidden="true"></canvas>
 
   <script>
     (function () {
@@ -1806,12 +1903,75 @@
       }
       if (conceptOpen) conceptOpen.addEventListener('click', openConceptModal);
       conceptClose.forEach(function (control) { control.addEventListener('click', closeConceptModal); });
+      var sheldonModal = document.querySelector('[data-sheldon-modal]');
+      var sheldonOpen = document.querySelector('[data-sheldon-open]');
+      var sheldonClose = sheldonModal ? Array.prototype.slice.call(sheldonModal.querySelectorAll('[data-sheldon-close]')) : [];
+      var lastSheldonFocus = null;
+      function openSheldonModal() {
+        if (!sheldonModal) return;
+        lastSheldonFocus = document.activeElement;
+        sheldonModal.classList.add('is-open');
+        sheldonModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        sheldonModal.querySelector('.concept-modal__close').focus();
+      }
+      function closeSheldonModal() {
+        if (!sheldonModal) return;
+        sheldonModal.classList.remove('is-open');
+        sheldonModal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        if (lastSheldonFocus && lastSheldonFocus.focus) lastSheldonFocus.focus();
+      }
+      if (sheldonOpen) sheldonOpen.addEventListener('click', openSheldonModal);
+      sheldonClose.forEach(function (control) { control.addEventListener('click', closeSheldonModal); });
       document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && conceptModal && conceptModal.classList.contains('is-open')) closeConceptModal();
+        if (event.key === 'Escape' && sheldonModal && sheldonModal.classList.contains('is-open')) closeSheldonModal();
       });
       Array.prototype.slice.call(document.querySelectorAll('.concept-option__image img, .work-image img')).forEach(function (image) {
         image.addEventListener('error', function () { image.style.display = 'none'; });
       });
+
+      var burstCanvas = document.getElementById('pixel-burst');
+      if (burstCanvas && window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var bctx = burstCanvas.getContext('2d');
+        var burstParticles = [];
+        var burstRunning = false;
+        function sizeBurst() {
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          burstCanvas.width = Math.floor(window.innerWidth * dpr);
+          burstCanvas.height = Math.floor(window.innerHeight * dpr);
+          bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        sizeBurst();
+        window.addEventListener('resize', sizeBurst);
+        function spawnBurst(x, y) {
+          var colors = ['#37ff00', '#ffffff', '#c9c9c9', '#1c2b1c'];
+          for (var i = 0; i < 16; i++) {
+            var angle = Math.random() * Math.PI * 2;
+            var speed = 2 + Math.random() * 5;
+            burstParticles.push({ x: x, y: y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 2, size: 3 + Math.random() * 7, color: colors[i % colors.length], life: 1 });
+          }
+          if (!burstRunning) { burstRunning = true; requestAnimationFrame(tickBurst); }
+        }
+        function tickBurst() {
+          bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          burstParticles = burstParticles.filter(function (pt) { return pt.life > 0; });
+          if (!burstParticles.length) { burstRunning = false; return; }
+          burstParticles.forEach(function (pt) {
+            pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.18; pt.life -= 0.02;
+            bctx.globalAlpha = Math.max(pt.life, 0);
+            bctx.fillStyle = pt.color;
+            bctx.fillRect(pt.x, pt.y, pt.size, pt.size);
+          });
+          bctx.globalAlpha = 1;
+          requestAnimationFrame(tickBurst);
+        }
+        document.addEventListener('pointerdown', function (event) {
+          if (event.button !== undefined && event.button !== 0) return;
+          spawnBurst(event.clientX, event.clientY);
+        });
+      }
 
       var workPanel = document.querySelector('[data-work-panel-root]');
       var workPanelOpeners = Array.prototype.slice.call(document.querySelectorAll('[data-work-panel]'));
@@ -1872,24 +2032,38 @@
       var bookingEmbed = document.querySelector('[data-booking-embed]');
       if (bookingEmbed) {
         var bookingFrame = bookingEmbed.querySelector('[data-calendly-frame]');
+        var bookingStatus = bookingEmbed.querySelector('.booking-status');
         var bookingReady = false;
         var bookingBlocked = false;
+        function setBookingStatus(text) { if (bookingStatus) bookingStatus.textContent = text; }
         function markBookingReady() {
           if (bookingReady || bookingBlocked) return;
           if (!bookingFrame || !bookingFrame.getAttribute('src')) return;
           bookingReady = true;
           bookingEmbed.classList.add('is-ready');
+          setBookingStatus('Calendar loaded.');
         }
         function showBookingFallback() {
           if (bookingReady) return;
           bookingBlocked = true;
+          bookingEmbed.classList.remove('is-loading');
           bookingEmbed.classList.add('is-fallback');
         }
+        var bookingRetry = document.querySelector('[data-booking-retry]');
+        if (bookingRetry) bookingRetry.addEventListener('click', function () {
+          bookingReady = false;
+          bookingBlocked = false;
+          bookingEmbed.classList.remove('is-fallback', 'is-ready');
+          if (bookingFrame) bookingFrame.removeAttribute('src');
+          setBookingStatus('Loading available times...');
+          startBookingLoad();
+        });
         function startBookingLoad() {
           if (!bookingFrame || bookingFrame.getAttribute('src')) return;
           var src = bookingFrame.getAttribute('data-calendly-src');
           if (!src) return;
           bookingEmbed.classList.add('is-loading');
+          setBookingStatus('Loading available times...');
           bookingFrame.setAttribute('src', src);
           window.setTimeout(function () {
             if (!bookingReady) showBookingFallback();
@@ -2099,8 +2273,8 @@
         }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 });
         sections.forEach(function (section) { observer.observe(section); });
       }
-
-      /* Kinetic terminal typing hero (Motion Studio Stack).
+    }());
+  /* Kinetic terminal typing hero (Motion Studio Stack).
          Types the command line, then the headline, char by char, with a
          block cursor. Copy + buttons print after, no fade. Skipped entirely
          under prefers-reduced-motion: everything stays visible as authored.
@@ -2164,7 +2338,6 @@
           });
         }, 350);
       }());
-    }());
-  </script>
+</script>
 </body>
 </html>
