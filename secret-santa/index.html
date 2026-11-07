@@ -127,6 +127,7 @@
     box-shadow:inset 4px 4px 0 #e8e8f0;
   }
   input:focus, select:focus{outline:4px solid var(--gold); outline-offset:2px}
+  input[type="date"]{height:56px; min-height:56px; font-size:19px; line-height:1.2; padding:8px 12px}
   button{
     min-height:56px; padding:14px 16px; font-family:"Press Start 2P", monospace; font-size:12px; line-height:1.5;
     border:4px solid #000; background:var(--red); color:#fff; cursor:pointer; width:100%; margin-top:14px;
@@ -199,9 +200,9 @@
   }
   .poll-option[aria-pressed="true"]{background:var(--green); color:#fff}
   .poll-option[aria-pressed="true"] .bar-track{background:rgba(255,255,255,.35)}
-  .poll-meta{display:flex; justify-content:space-between; gap:12px; font-size:21px}
-  .bar-track{height:12px; background:#e8e8f0; border:2px solid #000; margin-top:10px; overflow:hidden}
-  .bar-fill{height:100%; width:0%; background:repeating-linear-gradient(90deg, var(--gold) 0 8px, #e8b800 8px 16px); transition:width .6s steps(12)}
+  .poll-meta{display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; font-size:18px}
+  .bar-track{display:block; height:12px; background:#e8e8f0; border:2px solid #000; margin-top:10px; overflow:hidden}
+  .bar-fill{display:block; height:100%; width:0%; background:repeating-linear-gradient(90deg, var(--gold) 0 8px, #e8b800 8px 16px); transition:width .6s steps(12)}
   .poll-option[aria-pressed="true"] .bar-fill{background:repeating-linear-gradient(90deg, #fff 0 8px, var(--gold) 8px 16px)}
   .gift-item{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; border-top:3px solid #000; padding:12px 0}
   .gift-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
@@ -306,19 +307,7 @@
     </svg>
   </section>
 
-  <section class="card green" aria-labelledby="poll-heading">
-    <h2 id="poll-heading">Vote on the date</h2>
-    <p id="voter-display" class="small">Log in below to vote.</p>
-    <h3>When should we do Secret Santa?</h3>
-    <div id="date-poll"></div>
-    <label for="suggest-date">Pick a date</label>
-    <input id="suggest-date" type="date" />
-    <button id="suggest-date-button" class="secondary" type="button">Add this date</button>
-    <p id="suggest-message" aria-live="polite"></p>
-    <h3>What is the budget?</h3>
-    <div id="budget-poll"></div>
-    <p id="poll-message" aria-live="polite"></p>
-  </section>
+
 
   <section class="card gold" aria-labelledby="auth-heading">
     <h2 id="auth-heading">Log in</h2>
@@ -336,6 +325,8 @@
     <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
     <p id="auth-message" aria-live="polite"></p>
   </section>
+
+
 
   <div id="setup-notice" class="setup-notice hidden" role="status">Setting up your group, try reloading in a moment.</div>
 
@@ -360,6 +351,20 @@
     <button id="reset-button" class="secondary" type="button">Reset this draw</button>
   </section>
 
+  <section class="card green" aria-labelledby="poll-heading">
+    <h2 id="poll-heading">Vote on the date</h2>
+    <p id="voter-display" class="small">Log in below to vote.</p>
+    <h3>When should we do Secret Santa?</h3>
+    <div id="date-poll"></div>
+    <label for="suggest-date">Pick a date</label>
+    <input id="suggest-date" type="date" />
+    <button id="suggest-date-button" class="secondary" type="button">Add this date</button>
+    <p id="suggest-message" aria-live="polite"></p>
+    <h3>What is the budget?</h3>
+    <div id="budget-poll"></div>
+    <p id="poll-message" aria-live="polite"></p>
+  </section>
+
   <section class="card green" aria-labelledby="reveal-heading">
     <h2 id="reveal-heading">Reveal my person</h2>
     <p id="reveal-display" class="small">Log in above to reveal.</p>
@@ -373,15 +378,23 @@
     <p id="reveal-message" aria-live="polite"></p>
   </section>
 
-  <section class="card gold" aria-labelledby="gift-heading">
+  <section class="card gold wide-desktop" aria-labelledby="gift-heading">
     <h2 id="gift-heading">My gift list</h2>
     <p id="gift-display" class="small">Log in above to edit your gift list.</p>
+    <h3>Search Amazon to add a gift</h3>
+    <label for="finder-query">Search Amazon</label>
+    <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
+    <button id="finder-search-button" type="button">Search Amazon</button>
+    <p class="small">Each person gets 62 Amazon searches a month. After that, add gifts manually with a link below.</p>
+    <p id="finder-remaining" class="small" aria-live="polite"></p>
+    <p id="finder-message" aria-live="polite"></p>
+    <div id="finder-results"></div>
+    <h3>Or add one manually</h3>
     <label for="gift-item">Gift idea</label>
     <input id="gift-item" type="text" maxlength="120" autocomplete="off" placeholder="Gift idea" />
     <label for="gift-note">Link or note (optional)</label>
     <input id="gift-note" type="text" maxlength="300" autocomplete="off" placeholder="Link or note" />
-    <label for="gift-image">Image link (optional)</label>
-    <input id="gift-image" type="text" maxlength="500" autocomplete="off" placeholder="Image link" />
+    <input id="gift-image" type="hidden" />
     <button id="gift-amazon-search" class="secondary" type="button">Search Amazon</button>
     <button id="gift-add-button" type="button">Add gift idea</button>
     <p id="gift-message" aria-live="polite"></p>
@@ -389,16 +402,7 @@
     <p id="gift-empty" class="small"></p>
   </section>
 
-  <section class="card" aria-labelledby="finder-heading">
-    <h2 id="finder-heading">Find a gift</h2>
-    <label for="finder-query">Search Amazon</label>
-    <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
-    <button id="finder-search-button" type="button">Search Amazon</button>
-    <p class="small">Each person gets 25 Amazon searches a month. After that, add gifts manually with a link in My gift list.</p>
-    <p id="finder-remaining" class="small" aria-live="polite"></p>
-    <p id="finder-message" aria-live="polite"></p>
-    <div id="finder-results"></div>
-  </section>
+
 
   <section class="card green wide-desktop" aria-labelledby="messages-heading">
     <h2 id="messages-heading">Group messages</h2>
@@ -719,7 +723,7 @@
 
   function setSearchRemaining(n) {
     var el = document.getElementById("finder-remaining");
-    if (el) el.textContent = "Searches left this month: " + n + " of 25";
+    if (el) el.textContent = "Searches left this month: " + n + " of 62";
   }
 
   function renderSearchResults(items) {
@@ -764,7 +768,7 @@
     if (res.status === 403) { setMessage("finder-message", "Join the draw first, then search.", true); return; }
     if (res.status === 429) {
       setSearchRemaining(0);
-      setMessage("finder-message", "You have used your 25 searches this month. Add gifts manually with a link in My gift list.", true);
+      setMessage("finder-message", "You have used your 62 searches this month. Add gifts manually with a link in My gift list.", true);
       return;
     }
     if (!res.ok || !data || !data.items) {
@@ -820,7 +824,7 @@
     document.querySelectorAll(".card").forEach(function (card) {
       var h = card.querySelector("h2");
       if (!h) return;
-      if (card.getAttribute("aria-labelledby") !== "poll-heading") card.classList.add("collapsed");
+      if (card.getAttribute("aria-labelledby") !== "auth-heading") card.classList.add("collapsed");
       h.setAttribute("tabindex", "0");
       h.setAttribute("role", "button");
       h.setAttribute("aria-expanded", card.classList.contains("collapsed") ? "false" : "true");
@@ -1269,8 +1273,6 @@
     var q = document.getElementById("gift-item").value.trim();
     if (!q) { setMessage("gift-message", "Type a gift idea first.", true); return; }
     document.getElementById("finder-query").value = q;
-    openCard("finder-heading");
-    document.getElementById("finder-heading").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     runAmazonSearch(q);
   });
   document.getElementById("finder-search-button").addEventListener("click", function () {
