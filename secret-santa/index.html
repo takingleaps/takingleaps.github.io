@@ -155,11 +155,22 @@
   .buying-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
   .search-item{display:flex; gap:12px; align-items:center; border:3px solid #000; background:#fff; padding:8px; margin-top:8px; box-shadow:4px 4px 0 #000}
   .search-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px; flex:none}
-  .search-item strong{font-size:11px; line-height:1.5}
-  .search-price{font-size:11px; color:#005800; margin-top:4px}
+  .search-item strong{font-size:22px; line-height:1.2}
+  .search-price{font-size:16px; color:#005800; margin-top:4px}
+  .search-rating{font-size:16px; color:#005800; margin-top:2px}
+  .search-popular{display:inline-block; background:#f8d800; border:2px solid #000; padding:1px 6px; font-size:15px; margin-left:6px; vertical-align:middle}
   #finder-suggestions{display:grid; gap:8px}
   #finder-suggestions .search-item{margin-top:0}
   @media (min-width:900px){#finder-suggestions{grid-template-columns:1fr 1fr}}
+  #gift-filters{margin-top:14px}
+  .filter-row{display:grid; gap:10px}
+  @media (min-width:520px){.filter-row{grid-template-columns:1fr 1fr}}
+  #gift-filters label{margin:0 0 4px}
+  #gift-filters select{min-height:48px; font-size:21px; padding:8px 12px}
+  .filter-chip{display:inline-flex; align-items:center; gap:6px; background:#f8d800; border:3px solid #000; box-shadow:3px 3px 0 #000; padding:2px 8px; margin:4px 6px 0 0; font-size:18px}
+  .filter-chip button{width:auto; min-height:0; margin:0; padding:0 4px; font-size:16px; background:transparent; color:var(--ink); border:none; box-shadow:none}
+  .recent-chip{width:auto; min-height:40px; margin:4px 6px 0 0; padding:6px 10px; font-size:11px}
+  #filter-clear{width:auto; min-height:44px; margin-top:10px; padding:8px 12px; font-size:10px}
   button.secondary{background:#fff; color:var(--ink)}
   button.green{background:var(--green); color:#fff}
   button.danger{background:#fff; color:var(--red-dark); border-color:#000}
@@ -389,9 +400,20 @@
     <label for="finder-query">Search Amazon</label>
     <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
     <button id="finder-search-button" type="button">Search Amazon</button>
+    <div id="gift-filters">
+      <div class="filter-row">
+        <div><label for="filter-for">For</label><select id="filter-for"><option value="">Anyone</option><option value="men">Men</option><option value="women">Women</option><option value="kids">Kids</option></select></div>
+        <div><label for="filter-age">Age</label><select id="filter-age"><option value="">Any age</option><option value="18-25">18 - 25 years</option><option value="26-35">26 - 35 years</option><option value="36-50">36 - 50 years</option><option value="50+">50+ years</option></select></div>
+        <div><label for="filter-price">Price</label><select id="filter-price"><option value="">Any price</option><option value="0-25">Under $25</option><option value="20-30">$20 - $30</option><option value="30-50">$30 - $50</option><option value="50-100">$50 - $100</option></select></div>
+        <div><label for="filter-category">Category</label><select id="filter-category"><option value="">Any category</option><option value="electronics">Electronics</option><option value="home">Home &amp; Kitchen</option><option value="beauty">Beauty</option><option value="toys">Toys &amp; Games</option><option value="fashion">Fashion</option><option value="sports">Sports &amp; Outdoors</option><option value="books">Books</option><option value="kitchen">Kitchen &amp; Dining</option></select></div>
+      </div>
+      <div id="filter-chips"></div>
+      <button id="filter-clear" type="button" class="secondary hidden">Clear all filters</button>
+    </div>
     <p class="small">Each person gets 62 Amazon searches a month. After that, add gifts manually with a link below.</p>
     <p id="finder-remaining" class="small" aria-live="polite"></p>
     <p id="finder-message" aria-live="polite"></p>
+    <div id="recent-searches"></div>
     <div id="finder-results"></div>
     <h3>Suggestions for you</h3>
     <div id="finder-suggestions"></div>
@@ -507,7 +529,8 @@
     ["name-input", "add-button", "lock-button", "unlock-button", "draw-button",
      "reset-button", "reveal-button", "gift-item",
      "gift-note", "gift-image", "gift-add-button",
-     "finder-query", "finder-search-button", "message-input",
+     "finder-query", "finder-search-button", "filter-for", "filter-age",
+     "filter-price", "filter-category", "filter-clear", "message-input",
      "message-send-button", "email-group-button", "buying-toggle-button"].forEach(function (id) {
       document.getElementById(id).disabled = !enabled;
     });
@@ -545,6 +568,10 @@
     if (state.myEmail && state.myName && !suggestionsLoaded) {
       suggestionsLoaded = true;
       loadSuggestions();
+    }
+    if (!recentLoaded) {
+      recentLoaded = true;
+      renderRecentChips();
     }
   }
 
@@ -740,9 +767,158 @@
   var SUGGEST_QUERIES = ["gift under $25", "cozy gift", "funny gift"];
   var suggestionsLoaded = false;
 
-  async function callSearchApi(q, token) {
+  var giftFilters = { forWhom: "", age: "", price: "", category: "" };
+  var suggestionItems = [];
+  var recentLoaded = false;
+
+  var FOR_WORDS = { men: "for men", women: "for women", kids: "for kids" };
+  var AGE_WORDS = { "18-25": "for young adults", "26-35": "for adults", "36-50": "for adults", "50+": "for seniors" };
+  var CATEGORY_WORDS = { electronics: "electronics", home: "home and kitchen", beauty: "beauty", toys: "toys and games", fashion: "fashion", sports: "sports and outdoors", books: "books", kitchen: "kitchen" };
+  var PRICE_RANGES = { "0-25": [0, 25], "20-30": [20, 30], "30-50": [30, 50], "50-100": [50, 100] };
+  var PRICE_LABELS = { "0-25": "Under $25", "20-30": "$20-$30", "30-50": "$30-$50", "50-100": "$50-$100" };
+  var CATEGORY_LABELS = { electronics: "Electronics", home: "Home & Kitchen", beauty: "Beauty", toys: "Toys & Games", fashion: "Fashion", sports: "Sports & Outdoors", books: "Books", kitchen: "Kitchen & Dining" };
+  var FOR_LABELS = { men: "Men", women: "Women", kids: "Kids" };
+  var AGE_LABELS = { "18-25": "18-25 years", "26-35": "26-35 years", "36-50": "36-50 years", "50+": "50+ years" };
+
+  function filterSuffix() {
+    var parts = [];
+    if (FOR_WORDS[giftFilters.forWhom]) parts.push(FOR_WORDS[giftFilters.forWhom]);
+    if (AGE_WORDS[giftFilters.age]) parts.push(AGE_WORDS[giftFilters.age]);
+    if (CATEGORY_WORDS[giftFilters.category]) parts.push(CATEGORY_WORDS[giftFilters.category]);
+    return parts.join(" ");
+  }
+
+  function filterPrice() {
+    return PRICE_RANGES[giftFilters.price] || null;
+  }
+
+  function activeFilters() {
+    var list = [];
+    if (giftFilters.forWhom) list.push({ key: "forWhom", label: FOR_LABELS[giftFilters.forWhom] });
+    if (giftFilters.age) list.push({ key: "age", label: AGE_LABELS[giftFilters.age] });
+    if (giftFilters.price) list.push({ key: "price", label: PRICE_LABELS[giftFilters.price] });
+    if (giftFilters.category) list.push({ key: "category", label: CATEGORY_LABELS[giftFilters.category] });
+    return list;
+  }
+
+  function renderFilterChips() {
+    var el = document.getElementById("filter-chips");
+    var list = activeFilters();
+    el.innerHTML = list.map(function (f) {
+      return '<span class="filter-chip">' + esc(f.label) + '<button type="button" data-f="' + f.key + '" aria-label="Remove ' + esc(f.label) + ' filter">x</button></span>';
+    }).join("");
+    var clearBtn = document.getElementById("filter-clear");
+    clearBtn.classList.toggle("hidden", list.length === 0);
+    clearBtn.textContent = "Clear all filters (" + list.length + ")";
+    el.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var key = btn.dataset.f;
+        giftFilters[key] = "";
+        document.getElementById("filter-" + (key === "forWhom" ? "for" : key)).value = "";
+        renderFilterChips();
+        if (state.myEmail && state.myName) loadSuggestions();
+      });
+    });
+  }
+
+  function onFilterChange() {
+    giftFilters.forWhom = document.getElementById("filter-for").value;
+    giftFilters.age = document.getElementById("filter-age").value;
+    giftFilters.price = document.getElementById("filter-price").value;
+    giftFilters.category = document.getElementById("filter-category").value;
+    renderFilterChips();
+    if (state.myEmail && state.myName) loadSuggestions();
+  }
+
+  function clearAllFilters() {
+    giftFilters = { forWhom: "", age: "", price: "", category: "" };
+    document.getElementById("filter-for").value = "";
+    document.getElementById("filter-age").value = "";
+    document.getElementById("filter-price").value = "";
+    document.getElementById("filter-category").value = "";
+    renderFilterChips();
+    if (state.myEmail && state.myName) loadSuggestions();
+  }
+
+  async function recentSearchQueries() {
     try {
-      var res = await fetch(SEARCH_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": API_KEY }, body: JSON.stringify({ q: q }) });
+      var res = await apiFetch("/gift_searches?select=query&order=created_at.desc&limit=20");
+      if (!res.ok) return [];
+      var rows = await res.json();
+      var queries = [];
+      rows.forEach(function (r) {
+        var q = (r.query || "").trim();
+        if (q && queries.indexOf(q) === -1) queries.push(q);
+      });
+      return queries;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async function renderRecentChips() {
+    var el = document.getElementById("recent-searches");
+    if (!el) return;
+    var queries = (await recentSearchQueries()).slice(0, 6);
+    if (!queries.length) { el.innerHTML = ""; return; }
+    el.innerHTML = '<span class="small">Recent searches: </span>' + queries.map(function (q) {
+      return '<button type="button" class="secondary recent-chip" data-q="' + esc(q) + '">' + esc(q) + '</button>';
+    }).join("");
+    el.querySelectorAll(".recent-chip").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.getElementById("finder-query").value = btn.dataset.q;
+        runAmazonSearch(btn.dataset.q);
+      });
+    });
+  }
+
+  async function recentSearchItems(seen, maxCount) {
+    if (maxCount <= 0) return [];
+    var queries = await recentSearchQueries();
+    var out = [];
+    for (var i = 0; i < queries.length && out.length < maxCount; i++) {
+      var c;
+      try {
+        c = await apiFetch("/gift_search_cache?select=items&query=eq." + encodeURIComponent(queries[i]));
+      } catch (e) {
+        continue;
+      }
+      if (!c.ok) continue;
+      var rows = await c.json();
+      if (!rows.length || !rows[0].items) continue;
+      rows[0].items.slice(0, 2).forEach(function (it) {
+        var key = it.asin || it.link || it.title;
+        if (!key || seen[key]) return;
+        seen[key] = true;
+        out.push(it);
+      });
+    }
+    return out;
+  }
+
+  function addToSuggestions(extra) {
+    var el = document.getElementById("finder-suggestions");
+    if (!el || !extra || !extra.length) return;
+    var seen = {};
+    suggestionItems.forEach(function (it) { seen[it.asin || it.link || it.title] = true; });
+    var fresh = [];
+    extra.forEach(function (it) {
+      var key = it.asin || it.link || it.title;
+      if (key && !seen[key]) { seen[key] = true; fresh.push(it); }
+    });
+    if (!fresh.length) return;
+    suggestionItems = fresh.concat(suggestionItems).slice(0, 8);
+    renderProductCards(el, suggestionItems);
+  }
+
+  async function callSearchApi(q, token, extra) {
+    var body = { q: q };
+    if (extra) {
+      if (typeof extra.min_price === "number") body.min_price = extra.min_price;
+      if (typeof extra.max_price === "number") body.max_price = extra.max_price;
+    }
+    try {
+      var res = await fetch(SEARCH_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": API_KEY }, body: JSON.stringify(body) });
       var data = null;
       try { data = await res.json(); } catch (e) { data = null; }
       return { res: res, data: data };
@@ -775,7 +951,11 @@
     el.innerHTML = items.map(function (it, i) {
       var thumb = it.thumbnail ? '<img class="gift-thumb" src="' + esc(it.thumbnail) + '" alt="" referrerpolicy="no-referrer" />' : "";
       var price = it.price ? '<div class="search-price">' + esc(String(it.price)) + '</div>' : "";
-      return '<div class="search-item">' + thumb + '<div><strong>' + esc(it.title || "") + '</strong>' + price + '</div><button type="button" class="secondary search-add" data-i="' + i + '">Add to my list</button></div>';
+      var rating = (typeof it.rating === "number" && typeof it.reviews === "number")
+        ? '<div class="search-rating">' + it.rating + " stars, " + it.reviews.toLocaleString() + " reviews</div>" : "";
+      var popular = (typeof it.rating === "number" && typeof it.reviews === "number" && it.rating >= 4.5 && it.reviews >= 500)
+        ? '<span class="search-popular">Popular</span>' : "";
+      return '<div class="search-item">' + thumb + '<div><strong>' + esc(it.title || "") + '</strong>' + popular + price + rating + '</div><button type="button" class="secondary search-add" data-i="' + i + '">Add to my list</button></div>';
     }).join("");
     el.querySelectorAll(".search-add").forEach(function (btn) {
       btn.addEventListener("click", async function () {
@@ -796,8 +976,12 @@
     if (!sess) return;
     var seen = {};
     var items = [];
+    var suffix = filterSuffix();
+    var price = filterPrice();
+    var extra = price ? { min_price: price[0], max_price: price[1] } : null;
     for (var i = 0; i < SUGGEST_QUERIES.length; i++) {
-      var out = await callSearchApi(SUGGEST_QUERIES[i], sess.access_token);
+      var q = (SUGGEST_QUERIES[i] + (suffix ? " " + suffix : "")).trim();
+      var out = await callSearchApi(q, sess.access_token, extra);
       if (!out || !out.data || !out.data.items) continue;
       if (typeof out.data.remaining === "number") setSearchRemaining(out.data.remaining);
       out.data.items.slice(0, 3).forEach(function (it) {
@@ -808,7 +992,10 @@
       });
       if (items.length >= 8) break;
     }
-    if (items.length) renderProductCards(document.getElementById("finder-suggestions"), items.slice(0, 8));
+    var recent = await recentSearchItems(seen, 8 - items.length);
+    items = items.concat(recent);
+    suggestionItems = items.slice(0, 8);
+    if (suggestionItems.length) renderProductCards(document.getElementById("finder-suggestions"), suggestionItems);
   }
 
   function renderSearchResults(items) {
@@ -822,7 +1009,11 @@
     var sess = (await supa.auth.getSession()).data.session;
     if (!sess) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
     setMessage("finder-message", "Searching Amazon...");
-    var out = await callSearchApi(q, sess.access_token);
+    var suffix = filterSuffix();
+    var effectiveQ = (q + (suffix ? " " + suffix : "")).trim();
+    var price = filterPrice();
+    var extra = price ? { min_price: price[0], max_price: price[1] } : null;
+    var out = await callSearchApi(effectiveQ, sess.access_token, extra);
     if (!out) { setMessage("finder-message", "Search failed. Try again, or add the gift manually with a link.", true); return; }
     var res = out.res, data = out.data;
     if (res.status === 401) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
@@ -840,6 +1031,8 @@
     if (!data.items.length) { setMessage("finder-message", "No results on Amazon for that. Try different words, or add it manually with a link.", true); return; }
     setMessage("finder-message", data.cached ? "Results from cache, no search used." : "");
     renderSearchResults(data.items);
+    addToSuggestions(data.items.slice(0, 3));
+    renderRecentChips();
   }
 
   function renderMessages() {
@@ -1330,6 +1523,10 @@
     document.getElementById("reveal-gift-list").innerHTML = "";
   });
   document.getElementById("gift-add-button").addEventListener("click", addGift);
+  ["filter-for", "filter-age", "filter-price", "filter-category"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", onFilterChange);
+  });
+  document.getElementById("filter-clear").addEventListener("click", clearAllFilters);
   document.getElementById("finder-search-button").addEventListener("click", function () {
     var q = document.getElementById("finder-query").value.trim();
     if (!q) { setMessage("finder-message", "Type what you are looking for first.", true); return; }
