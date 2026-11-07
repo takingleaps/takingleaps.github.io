@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Crackheadz Secret Santa</title>
+<title id="page-title">Crackheadz Secret Santa</title>
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <meta name="description" content="Joinable Secret Santa: add your name, vote on the date, share gift ideas, and reveal only your own assignment." />
@@ -264,9 +264,9 @@
     <span class="twinkle-star" style="left:84%; top:38%"></span>
     <span class="twinkle-star gold" style="left:92%; top:22%"></span>
     <span class="twinkle-star" style="left:38%; top:48%"></span>
-    <h1><span class="rainbow">CRACKHEADZ</span><br />SECRET<br /><span class="red">SANTA</span></h1>
+    <h1><span id="hero-group-name" class="rainbow">CRACKHEADZ</span><br />SECRET<br /><span class="red">SANTA</span></h1>
     <button id="start-button" type="button" class="start-button">Start</button>
-    <p class="hero-location">Chinese Nate's House</p>
+    <p id="hero-location" class="hero-location">Chinese Nate's House</p>
     <svg class="big-tree" viewBox="0 0 118 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="52" y="0" width="14" height="14" fill="#f8d800"/><rect x="55" y="3" width="8" height="8" fill="#fff"/><rect x="44" y="14" width="30" height="14" fill="#005800"/><rect x="38" y="28" width="42" height="14" fill="#00a800"/><rect x="32" y="42" width="54" height="14" fill="#005800"/><rect x="26" y="56" width="66" height="14" fill="#00a800"/><rect x="20" y="70" width="78" height="14" fill="#005800"/><rect x="14" y="84" width="90" height="14" fill="#00a800"/><rect x="8" y="98" width="102" height="14" fill="#005800"/><rect x="50" y="112" width="18" height="26" fill="#7a3b12"/><rect class="tree-light" x="52" y="20" width="7" height="7" fill="#e83800"/><rect class="tree-light" x="66" y="34" width="7" height="7" fill="#f8d800"/><rect class="tree-light" x="46" y="48" width="7" height="7" fill="#3b5bff"/><rect class="tree-light" x="72" y="62" width="7" height="7" fill="#e83800"/><rect class="tree-light" x="40" y="76" width="7" height="7" fill="#f8d800"/><rect class="tree-light" x="62" y="90" width="7" height="7" fill="#fff"/><rect class="tree-light" x="82" y="76" width="7" height="7" fill="#3b5bff"/><rect class="tree-light" x="30" y="90" width="7" height="7" fill="#e83800"/></svg>
     <div class="sleigh-track" aria-hidden="true">
       <div class="sleigh" style="animation-delay:-6s, 0s">
@@ -322,6 +322,18 @@
   </section>
 
 
+
+  <section class="card" aria-labelledby="groups-heading">
+    <h2 id="groups-heading">Groups</h2>
+    <p class="small">You are in <strong id="current-group-name">Crackheadz</strong>.</p>
+    <label for="group-switch">Switch group</label>
+    <select id="group-switch"></select>
+    <h3>Start a new group</h3>
+    <label for="group-name-input">Group name</label>
+    <input id="group-name-input" type="text" maxlength="60" autocomplete="off" placeholder="e.g. Family Santa 2026" />
+    <button id="group-create-button" type="button">Create group</button>
+    <p id="group-message" aria-live="polite"></p>
+  </section>
 
   <section class="card gold" aria-labelledby="auth-heading">
     <h2 id="auth-heading">Log in</h2>
@@ -473,6 +485,8 @@
   var state = {
     myEmail: null,
     myName: null,
+    group: null,
+    groups: [],
     participants: [],
     votes: [],
     wishlists: [],
@@ -916,6 +930,7 @@
 
   async function callSearchApi(q, token, extra) {
     var body = { q: q };
+    if (state.group) body.group_id = state.group.id;
     if (extra) {
       if (typeof extra.min_price === "number") body.min_price = extra.min_price;
       if (typeof extra.max_price === "number") body.max_price = extra.max_price;
@@ -937,7 +952,7 @@
       var res = await apiFetch("/wishlists", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ owner_name: owner, item: (it.title || "Gift idea").slice(0, 120), link_or_note: it.link || null, image_url: it.thumbnail || null })
+        body: JSON.stringify({ owner_name: owner, item: (it.title || "Gift idea").slice(0, 120), link_or_note: it.link || null, image_url: it.thumbnail || null, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not add that gift.");
       setMessage("finder-message", "Added to your gift list.");
@@ -1142,6 +1157,114 @@
     }, 2200);
   }
 
+  var GROUP_SLUG = (function () {
+    var g = "";
+    try { g = (new URLSearchParams(window.location.search)).get("g") || ""; } catch (e) { g = ""; }
+    g = g.toLowerCase().replace(/[^a-z0-9-]/g, "");
+    return g || "crackheadz";
+  })();
+
+  function slugify(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+  }
+
+  function renderHero() {
+    var name = state.group ? state.group.name : "Secret Santa";
+    document.getElementById("hero-group-name").textContent = name.toUpperCase();
+    var loc = document.getElementById("hero-location");
+    if (state.group && state.group.location) {
+      loc.textContent = state.group.location;
+      loc.classList.remove("hidden");
+    } else {
+      loc.classList.add("hidden");
+    }
+    document.getElementById("page-title").textContent = state.group ? name + " Secret Santa" : "Secret Santa";
+  }
+
+  function renderGroups() {
+    var current = document.getElementById("current-group-name");
+    if (current) current.textContent = state.group ? state.group.name : "—";
+    var sel = document.getElementById("group-switch");
+    sel.innerHTML = state.groups.map(function (g) {
+      return '<option value="' + esc(g.slug) + '"' + (state.group && g.id === state.group.id ? " selected" : "") + ">" + esc(g.name) + "</option>";
+    }).join("");
+  }
+
+  async function loadGroups() {
+    try {
+      var res = await apiFetch("/groups?select=id,slug,name,location&order=created_at.asc");
+      if (!res.ok) return;
+      state.groups = await res.json();
+      renderGroups();
+    } catch (e) { /* groups list stays as-is */ }
+  }
+
+  async function loadGroup() {
+    try {
+      var res = await apiFetch("/groups?select=id,slug,name,location&slug=eq." + encodeURIComponent(GROUP_SLUG));
+      if (!res.ok) throw new Error("Could not load groups.");
+      var rows = await res.json();
+      state.group = rows.length ? rows[0] : null;
+      renderHero();
+      await loadGroups();
+      if (!state.group) {
+        setMessage("group-message", "That group does not exist — pick one below or start a new one.");
+        renderAll();
+        refreshAuth();
+        return;
+      }
+      await loadAll();
+    } catch (err) {
+      setMessage("group-message", "Could not load groups. Try reloading the page.", true);
+      renderAll();
+    }
+  }
+
+  function switchGroup() {
+    var slug = document.getElementById("group-switch").value;
+    if (!slug) return;
+    window.location.href = window.location.pathname + "?g=" + encodeURIComponent(slug);
+  }
+
+  async function createGroup() {
+    if (!state.myEmail) { setMessage("group-message", "Log in above to start a group.", true); return; }
+    var input = document.getElementById("group-name-input");
+    var name = input.value.trim();
+    if (!name) { setMessage("group-message", "Type a group name first.", true); return; }
+    var base = slugify(name);
+    if (!base) { setMessage("group-message", "Pick a name with letters or numbers.", true); return; }
+    try {
+      var slug = base;
+      var n = 2;
+      while (true) {
+        var check = await apiFetch("/groups?select=id&slug=eq." + encodeURIComponent(slug));
+        if (!check.ok) throw new Error("Could not start that group. Try again.");
+        var taken = await check.json();
+        if (!taken.length) break;
+        if (n > 10) throw new Error("That name is taken. Pick a different one.");
+        slug = base + "-" + n;
+        n++;
+      }
+      var res = await apiFetch("/groups", {
+        method: "POST",
+        headers: { "Prefer": "return=representation" },
+        body: JSON.stringify({ slug: slug, name: name, location: null })
+      });
+      if (!res.ok) throw new Error("Could not start that group. Try again.");
+      var created = await res.json();
+      var groupId = created[0].id;
+      var drawRes = await apiFetch("/draws", {
+        method: "POST",
+        headers: { "Prefer": "return=minimal" },
+        body: JSON.stringify({ group_id: groupId, status: "open" })
+      });
+      if (!drawRes.ok) throw new Error("Group started, but its draw did not open. Open the group and tell Nate.");
+      window.location.href = window.location.pathname + "?g=" + encodeURIComponent(slug);
+    } catch (err) {
+      setMessage("group-message", err.message, true);
+    }
+  }
+
   async function loadAll() {
     if (!isConfigured()) {
       state.connected = false;
@@ -1151,21 +1274,26 @@
       return;
     }
     document.getElementById("setup-notice").classList.add("hidden");
+    if (!state.group) {
+      state.connected = false;
+      renderAll();
+      return;
+    }
     try {
-      var drawsRes = await apiFetch("/draws?select=id,status,created_at&order=created_at.desc&limit=1");
+      var drawsRes = await apiFetch("/draws?select=id,status,created_at&group_id=eq." + state.group.id + "&order=created_at.desc&limit=1");
       if (!drawsRes.ok) throw new Error("Could not load the draw.");
       var draws = await drawsRes.json();
       state.draw = draws.length ? draws[0] : null;
-      var partsRes = await apiFetch("/participants?select=id,name,email,created_at&order=created_at.asc");
+      var partsRes = await apiFetch("/participants?select=id,name,email,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
       if (!partsRes.ok) throw new Error("Could not load participants.");
       state.participants = await partsRes.json();
-      var votesRes = await apiFetch("/poll_votes?select=poll_id,option_id,voter_name");
+      var votesRes = await apiFetch("/poll_votes?select=poll_id,option_id,voter_name&group_id=eq." + state.group.id);
       if (!votesRes.ok) throw new Error("Could not load votes.");
       state.votes = await votesRes.json();
-      var giftsRes = await apiFetch("/wishlists?select=id,owner_name,item,link_or_note,image_url,created_at&order=created_at.asc");
+      var giftsRes = await apiFetch("/wishlists?select=id,owner_name,item,link_or_note,image_url,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
       if (!giftsRes.ok) throw new Error("Could not load gift lists.");
       state.wishlists = await giftsRes.json();
-      var msgsRes = await apiFetch("/group_messages?select=id,author_name,message,created_at&order=created_at.asc");
+      var msgsRes = await apiFetch("/group_messages?select=id,author_name,message,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
       if (!msgsRes.ok) throw new Error("Could not load messages.");
       state.messages = await msgsRes.json();
       state.connected = true;
@@ -1209,7 +1337,7 @@
       var res = await apiFetch("/participants", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ name: name, email: state.myEmail })
+        body: JSON.stringify({ name: name, email: state.myEmail, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not add that name. It may already be on the list.");
       input.value = "";
@@ -1266,7 +1394,7 @@
     try {
       var recipients = derangement(names);
       var rows = names.map(function (giver, i) {
-        return { draw_id: state.draw.id, giver_name: giver, recipient_name: recipients[i] };
+        return { draw_id: state.draw.id, giver_name: giver, recipient_name: recipients[i], group_id: state.group.id };
       });
       var res = await apiFetch("/assignments", {
         method: "POST",
@@ -1337,7 +1465,7 @@
       var res = await apiFetch("/wishlists", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ owner_name: owner, item: item, link_or_note: noteEl.value.trim() || null, image_url: imageEl.value.trim() || null })
+        body: JSON.stringify({ owner_name: owner, item: item, link_or_note: noteEl.value.trim() || null, image_url: imageEl.value.trim() || null, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not add that gift idea.");
       itemEl.value = "";
@@ -1369,7 +1497,7 @@
       var res = await apiFetch("/poll_votes?on_conflict=voter_name,poll_id", {
         method: "POST",
         headers: { "Prefer": "resolution=merge-duplicates,return=representation" },
-        body: JSON.stringify({ voter_name: voter, poll_id: pollId, option_id: optionId })
+        body: JSON.stringify({ voter_name: voter, poll_id: pollId, option_id: optionId, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not save that vote.");
       setMessage("poll-message", "Your vote was saved.");
@@ -1408,7 +1536,7 @@
       var res = await apiFetch("/group_messages", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ author_name: author, message: text })
+        body: JSON.stringify({ author_name: author, message: text, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not send that message.");
       input.value = "";
@@ -1530,6 +1658,8 @@
     document.getElementById(id).addEventListener("change", onFilterChange);
   });
   document.getElementById("filter-clear").addEventListener("click", clearAllFilters);
+  document.getElementById("group-switch").addEventListener("change", switchGroup);
+  document.getElementById("group-create-button").addEventListener("click", createGroup);
   document.getElementById("finder-search-button").addEventListener("click", function () {
     var q = document.getElementById("finder-query").value.trim();
     if (!q) { setMessage("finder-message", "Type what you are looking for first.", true); return; }
@@ -1561,7 +1691,7 @@
 
   initCollapsibles();
   startSnowfall();
-  loadAll();
+  loadGroup();
   setInterval(function () {
     if (!document.hidden) loadAll();
   }, 5000);
