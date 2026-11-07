@@ -402,6 +402,7 @@
     <button id="finder-search-button" type="button">Search Amazon</button>
     <div id="gift-filters">
       <div class="filter-row">
+        <div><label for="filter-shop">Shop</label><select id="filter-shop"><option value="amazon">Amazon</option></select></div>
         <div><label for="filter-for">For</label><select id="filter-for"><option value="">Anyone</option><option value="men">Men</option><option value="women">Women</option><option value="kids">Kids</option></select></div>
         <div><label for="filter-age">Age</label><select id="filter-age"><option value="">Any age</option><option value="18-25">18 - 25 years</option><option value="26-35">26 - 35 years</option><option value="36-50">36 - 50 years</option><option value="50+">50+ years</option></select></div>
         <div><label for="filter-price">Price</label><select id="filter-price"><option value="">Any price</option><option value="0-25">Under $25</option><option value="20-30">$20 - $30</option><option value="30-50">$30 - $50</option><option value="50-100">$50 - $100</option></select></div>
@@ -530,7 +531,7 @@
      "reset-button", "reveal-button", "gift-item",
      "gift-note", "gift-image", "gift-add-button",
      "finder-query", "finder-search-button", "filter-for", "filter-age",
-     "filter-price", "filter-category", "filter-clear", "message-input",
+     "filter-price", "filter-category", "filter-clear", "filter-shop", "message-input",
      "message-send-button", "email-group-button", "buying-toggle-button"].forEach(function (id) {
       document.getElementById(id).disabled = !enabled;
     });
@@ -767,7 +768,7 @@
   var SUGGEST_QUERIES = ["gift under $25", "cozy gift", "funny gift"];
   var suggestionsLoaded = false;
 
-  var giftFilters = { forWhom: "", age: "", price: "", category: "" };
+  var giftFilters = { forWhom: "", age: "", price: "", category: "", shop: "amazon" };
   var suggestionItems = [];
   var recentLoaded = false;
 
@@ -826,16 +827,18 @@
     giftFilters.age = document.getElementById("filter-age").value;
     giftFilters.price = document.getElementById("filter-price").value;
     giftFilters.category = document.getElementById("filter-category").value;
+    giftFilters.shop = document.getElementById("filter-shop").value;
     renderFilterChips();
     if (state.myEmail && state.myName) loadSuggestions();
   }
 
   function clearAllFilters() {
-    giftFilters = { forWhom: "", age: "", price: "", category: "" };
+    giftFilters = { forWhom: "", age: "", price: "", category: "", shop: "amazon" };
     document.getElementById("filter-for").value = "";
     document.getElementById("filter-age").value = "";
     document.getElementById("filter-price").value = "";
     document.getElementById("filter-category").value = "";
+    document.getElementById("filter-shop").value = "amazon";
     renderFilterChips();
     if (state.myEmail && state.myName) loadSuggestions();
   }
@@ -1523,7 +1526,7 @@
     document.getElementById("reveal-gift-list").innerHTML = "";
   });
   document.getElementById("gift-add-button").addEventListener("click", addGift);
-  ["filter-for", "filter-age", "filter-price", "filter-category"].forEach(function (id) {
+  ["filter-for", "filter-age", "filter-price", "filter-category", "filter-shop"].forEach(function (id) {
     document.getElementById(id).addEventListener("change", onFilterChange);
   });
   document.getElementById("filter-clear").addEventListener("click", clearAllFilters);
