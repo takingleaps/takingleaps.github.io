@@ -353,6 +353,18 @@
         <input id="auth-code" type="text" inputmode="numeric" maxlength="8" autocomplete="one-time-code" placeholder="12345678" />
         <button id="auth-verify-button" type="button">Verify code</button>
       </div>
+      <div id="auth-password-row" class="hidden">
+        <label for="auth-password">Password</label>
+        <input id="auth-password" type="password" maxlength="72" autocomplete="current-password" placeholder="Your password" />
+        <button id="auth-password-button" type="button">Log in with password</button>
+        <button id="auth-signup-button" class="secondary" type="button">Create an account with this password</button>
+      </div>
+      <button id="auth-mode-button" class="secondary" type="button">Use a password instead</button>
+    </div>
+    <div id="auth-set-password" class="hidden">
+      <label for="auth-new-password">Set a password for next time</label>
+      <input id="auth-new-password" type="password" maxlength="72" autocomplete="new-password" placeholder="New password" />
+      <button id="auth-set-password-button" type="button">Save password</button>
     </div>
     <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
     <p id="auth-message" aria-live="polite"></p>
@@ -561,6 +573,7 @@
     var loggedIn = !!state.myEmail;
     document.getElementById("auth-form").classList.toggle("hidden", loggedIn);
     document.getElementById("auth-signout-button").classList.toggle("hidden", !loggedIn);
+    document.getElementById("auth-set-password").classList.toggle("hidden", !loggedIn);
     document.getElementById("auth-status").textContent = loggedIn
       ? "Signed in as " + state.myEmail + (state.myName ? " — you are " + state.myName + "." : " — add your name below to join the list.")
       : "Log in with your email to vote, reveal, and edit your gift list.";
@@ -626,11 +639,71 @@
     }
   }
 
+  var authMode = "code";
+
+  function setAuthMode(mode) {
+    authMode = mode;
+    var code = mode === "code";
+    document.getElementById("auth-send-button").classList.toggle("hidden", !code);
+    document.getElementById("auth-code-row").classList.add("hidden");
+    document.getElementById("auth-password-row").classList.toggle("hidden", code);
+    document.getElementById("auth-mode-button").textContent = code ? "Use a password instead" : "Use an email code instead";
+    setMessage("auth-message", "");
+  }
+
+  async function signInWithPassword() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    var password = document.getElementById("auth-password").value;
+    if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
+    if (!password) { setMessage("auth-message", "Type your password.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.signInWithPassword({ email: email, password: password });
+      if (res.error) throw res.error;
+      document.getElementById("auth-password").value = "";
+      setMessage("auth-message", "");
+      await refreshAuth();
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "That password did not work.", true);
+    }
+  }
+
+  async function signUpWithPassword() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    var password = document.getElementById("auth-password").value;
+    if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
+    if (password.length < 6) { setMessage("auth-message", "Pick a password with at least 6 characters.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.signUp({ email: email, password: password, options: { emailRedirectTo: "https://byyystudio.me/secret-santa/" } });
+      if (res.error) throw res.error;
+      setMessage("auth-message", "Account created — check your email for a confirmation link, then log in with your password.");
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "Could not create that account.", true);
+    }
+  }
+
+  async function setPassword() {
+    var password = document.getElementById("auth-new-password").value;
+    if (password.length < 6) { setMessage("auth-message", "Pick a password with at least 6 characters.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.updateUser({ password: password });
+      if (res.error) throw res.error;
+      document.getElementById("auth-new-password").value = "";
+      setMessage("auth-message", "Password saved — next time log in with your password.");
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "Could not save that password.", true);
+    }
+  }
+
   async function signOutAuth() {
     if (supa) await supa.auth.signOut();
     state.myEmail = null;
     state.myName = null;
     document.getElementById("auth-code-row").classList.add("hidden");
+    document.getElementById("auth-password").value = "";
+    document.getElementById("auth-new-password").value = "";
     setMessage("auth-message", "");
     renderAuth();
     renderAll();
@@ -1713,6 +1786,10 @@
   document.getElementById("auth-send-button").addEventListener("click", sendAuthCode);
   document.getElementById("auth-verify-button").addEventListener("click", verifyAuthCode);
   document.getElementById("auth-signout-button").addEventListener("click", signOutAuth);
+  document.getElementById("auth-mode-button").addEventListener("click", function () { setAuthMode(authMode === "code" ? "password" : "code"); });
+  document.getElementById("auth-password-button").addEventListener("click", signInWithPassword);
+  document.getElementById("auth-signup-button").addEventListener("click", signUpWithPassword);
+  document.getElementById("auth-set-password-button").addEventListener("click", setPassword);
   document.getElementById("auth-code").addEventListener("keydown", function (e) { if (e.key === "Enter") verifyAuthCode(); });
   document.addEventListener("error", function (e) {
     if (e.target && e.target.classList && e.target.classList.contains("gift-thumb")) e.target.style.display = "none";
