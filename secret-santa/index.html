@@ -325,9 +325,10 @@
 
   <section class="card" aria-labelledby="groups-heading">
     <h2 id="groups-heading">Groups</h2>
-    <p class="small">You are in <strong id="current-group-name">Crackheadz</strong>.</p>
-    <label for="group-switch">Switch group</label>
+    <p class="small">You are in <strong id="current-group-name">No group open yet.</strong></p>
+    <label for="group-switch">Your groups</label>
     <select id="group-switch"></select>
+    <p id="group-share" class="small hidden">Your group's private link: <a id="group-share-link" href="#">…</a> <button id="group-copy-button" type="button">Copy link</button></p>
     <h3>Start a new group</h3>
     <label for="group-name-input">Group name</label>
     <input id="group-name-input" type="text" maxlength="60" autocomplete="off" placeholder="e.g. Family Santa 2026" />
@@ -1164,13 +1165,24 @@
     return g || "crackheadz";
   })();
 
+  var GROUP_KEY = (function () {
+    var k = "";
+    try { k = (new URLSearchParams(window.location.search)).get("k") || ""; } catch (e) { k = ""; }
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(k) ? k : "";
+  })();
+
   function slugify(name) {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
   }
 
   function renderHero() {
-    var name = state.group ? state.group.name : "Secret Santa";
-    document.getElementById("hero-group-name").textContent = name.toUpperCase();
+    var nameEl = document.getElementById("hero-group-name");
+    if (state.group) {
+      nameEl.textContent = state.group.name.toUpperCase();
+      nameEl.style.display = "";
+    } else {
+      nameEl.style.display = "none";
+    }
     var loc = document.getElementById("hero-location");
     if (state.group && state.group.location) {
       loc.textContent = state.group.location;
@@ -1178,41 +1190,66 @@
     } else {
       loc.classList.add("hidden");
     }
-    document.getElementById("page-title").textContent = state.group ? name + " Secret Santa" : "Secret Santa";
+    document.getElementById("page-title").textContent = state.group ? state.group.name + " Secret Santa" : "Secret Santa";
   }
 
   function renderGroups() {
     var current = document.getElementById("current-group-name");
-    if (current) current.textContent = state.group ? state.group.name : "—";
+    if (current) current.textContent = state.group ? state.group.name : "No group open yet.";
     var sel = document.getElementById("group-switch");
     sel.innerHTML = state.groups.map(function (g) {
-      return '<option value="' + esc(g.slug) + '"' + (state.group && g.id === state.group.id ? " selected" : "") + ">" + esc(g.name) + "</option>";
+      return '<option value="' + esc(g.slug) + '"' + (state.group && g.slug === state.group.slug ? " selected" : "") + ">" + esc(g.name) + "</option>";
     }).join("");
+    var share = document.getElementById("group-share");
+    if (state.group) {
+      var url = window.location.origin + window.location.pathname + "?g=" + encodeURIComponent(state.group.slug) + "&k=" + encodeURIComponent(GROUP_KEY);
+      var link = document.getElementById("group-share-link");
+      link.href = url;
+      link.textContent = url;
+      share.classList.remove("hidden");
+    } else {
+      share.classList.add("hidden");
+    }
   }
 
-  async function loadGroups() {
-    try {
-      var res = await apiFetch("/groups?select=id,slug,name,location&order=created_at.asc");
-      if (!res.ok) return;
-      state.groups = await res.json();
-      renderGroups();
-    } catch (e) { /* groups list stays as-is */ }
+  function readMyGroups() {
+    try { return JSON.parse(localStorage.getItem("ss-groups") || "[]"); } catch (e) { return []; }
+  }
+
+  function saveMyGroup(g) {
+    var list = readMyGroups().filter(function (x) { return x.slug !== g.slug; });
+    list.unshift({ slug: g.slug, name: g.name, key: g.key });
+    try { localStorage.setItem("ss-groups", JSON.stringify(list.slice(0, 20))); } catch (e) { /* private mode */ }
+    state.groups = list.slice(0, 20);
+    renderGroups();
   }
 
   async function loadGroup() {
+    state.groups = readMyGroups();
+    renderGroups();
+    if (!GROUP_SLUG || !GROUP_KEY) {
+      state.group = null;
+      renderHero();
+      renderAll();
+      refreshAuth();
+      return;
+    }
     try {
-      var res = await apiFetch("/groups?select=id,slug,name,location&slug=eq." + encodeURIComponent(GROUP_SLUG));
+      var res = await apiFetch("/rpc/get_group_by_key", {
+        method: "POST",
+        body: JSON.stringify({ p_slug: GROUP_SLUG, p_key: GROUP_KEY })
+      });
       if (!res.ok) throw new Error("Could not load groups.");
       var rows = await res.json();
       state.group = rows.length ? rows[0] : null;
       renderHero();
-      await loadGroups();
       if (!state.group) {
-        setMessage("group-message", "That group does not exist — pick one below or start a new one.");
+        setMessage("group-message", "That group link does not work — check the link or start a new group below.");
         renderAll();
         refreshAuth();
         return;
       }
+      saveMyGroup({ slug: state.group.slug, name: state.group.name, key: GROUP_KEY });
       await loadAll();
     } catch (err) {
       setMessage("group-message", "Could not load groups. Try reloading the page.", true);
@@ -1222,8 +1259,19 @@
 
   function switchGroup() {
     var slug = document.getElementById("group-switch").value;
-    if (!slug) return;
-    window.location.href = window.location.pathname + "?g=" + encodeURIComponent(slug);
+    var g = state.groups.find(function (x) { return x.slug === slug; });
+    if (!g || !g.key) return;
+    window.location.href = window.location.pathname + "?g=" + encodeURIComponent(g.slug) + "&k=" + encodeURIComponent(g.key);
+  }
+
+  async function copyGroupLink() {
+    var url = document.getElementById("group-share-link").href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setMessage("group-message", "Link copied — send it to your group.");
+    } catch (e) {
+      setMessage("group-message", "Copy this link: " + url);
+    }
   }
 
   async function createGroup() {
@@ -1234,32 +1282,15 @@
     var base = slugify(name);
     if (!base) { setMessage("group-message", "Pick a name with letters or numbers.", true); return; }
     try {
-      var slug = base;
-      var n = 2;
-      while (true) {
-        var check = await apiFetch("/groups?select=id&slug=eq." + encodeURIComponent(slug));
-        if (!check.ok) throw new Error("Could not start that group. Try again.");
-        var taken = await check.json();
-        if (!taken.length) break;
-        if (n > 10) throw new Error("That name is taken. Pick a different one.");
-        slug = base + "-" + n;
-        n++;
-      }
-      var res = await apiFetch("/groups", {
+      var res = await apiFetch("/rpc/create_group", {
         method: "POST",
-        headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ slug: slug, name: name, location: null })
+        body: JSON.stringify({ p_name: name, p_slug: base })
       });
       if (!res.ok) throw new Error("Could not start that group. Try again.");
       var created = await res.json();
-      var groupId = created[0].id;
-      var drawRes = await apiFetch("/draws", {
-        method: "POST",
-        headers: { "Prefer": "return=minimal" },
-        body: JSON.stringify({ group_id: groupId, status: "open" })
-      });
-      if (!drawRes.ok) throw new Error("Group started, but its draw did not open. Open the group and tell Nate.");
-      window.location.href = window.location.pathname + "?g=" + encodeURIComponent(slug);
+      var g = created[0];
+      saveMyGroup({ slug: g.slug, name: g.name, key: g.access_key });
+      window.location.href = window.location.pathname + "?g=" + encodeURIComponent(g.slug) + "&k=" + encodeURIComponent(g.access_key);
     } catch (err) {
       setMessage("group-message", err.message, true);
     }
@@ -1660,6 +1691,7 @@
   document.getElementById("filter-clear").addEventListener("click", clearAllFilters);
   document.getElementById("group-switch").addEventListener("change", switchGroup);
   document.getElementById("group-create-button").addEventListener("click", createGroup);
+  document.getElementById("group-copy-button").addEventListener("click", copyGroupLink);
   document.getElementById("finder-search-button").addEventListener("click", function () {
     var q = document.getElementById("finder-query").value.trim();
     if (!q) { setMessage("finder-message", "Type what you are looking for first.", true); return; }
