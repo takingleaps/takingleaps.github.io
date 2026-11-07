@@ -157,6 +157,9 @@
   .search-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px; flex:none}
   .search-item strong{font-size:11px; line-height:1.5}
   .search-price{font-size:11px; color:#005800; margin-top:4px}
+  #finder-suggestions{display:grid; gap:8px}
+  #finder-suggestions .search-item{margin-top:0}
+  @media (min-width:900px){#finder-suggestions{grid-template-columns:1fr 1fr}}
   button.secondary{background:#fff; color:var(--ink)}
   button.green{background:var(--green); color:#fff}
   button.danger{background:#fff; color:var(--red-dark); border-color:#000}
@@ -381,6 +384,7 @@
   <section class="card gold wide-desktop" aria-labelledby="gift-heading">
     <h2 id="gift-heading">My gift list</h2>
     <p id="gift-display" class="small">Log in above to edit your gift list.</p>
+    <p id="gift-nudge" class="small" aria-live="polite"></p>
     <h3>Search Amazon to add a gift</h3>
     <label for="finder-query">Search Amazon</label>
     <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
@@ -389,6 +393,8 @@
     <p id="finder-remaining" class="small" aria-live="polite"></p>
     <p id="finder-message" aria-live="polite"></p>
     <div id="finder-results"></div>
+    <h3>Suggestions for you</h3>
+    <div id="finder-suggestions"></div>
     <h3>Or add one manually</h3>
     <label for="gift-item">Gift idea</label>
     <input id="gift-item" type="text" maxlength="120" autocomplete="off" placeholder="Gift idea" />
@@ -536,6 +542,10 @@
     }
     renderAuth();
     renderAll();
+    if (state.myEmail && state.myName && !suggestionsLoaded) {
+      suggestionsLoaded = true;
+      loadSuggestions();
+    }
   }
 
   async function sendAuthCode() {
@@ -687,6 +697,8 @@
         '</div><button type="button" class="secondary danger gift-delete" data-id="' + esc(w.id) + '">Delete</button></div>';
     }).join("");
     document.getElementById("gift-empty").classList.toggle("hidden", mine.length > 0 || !owner);
+    var nudge = document.getElementById("gift-nudge");
+    if (nudge) nudge.textContent = !owner ? "" : (mine.length >= 3 ? "You have " + mine.length + " gifts — nice, your Santa has options." : "Add at least 3 gifts so your Santa has options. You have " + mine.length + ".");
     document.querySelectorAll(".gift-delete").forEach(function (btn) {
       btn.disabled = !state.connected;
       btn.addEventListener("click", function () { deleteGift(btn.dataset.id); });
@@ -725,8 +737,40 @@
     if (el) el.textContent = "Searches left this month: " + n + " of 62";
   }
 
-  function renderSearchResults(items) {
-    var el = document.getElementById("finder-results");
+  var SUGGEST_QUERIES = ["gift under $25", "cozy gift", "funny gift"];
+  var suggestionsLoaded = false;
+
+  async function callSearchApi(q, token) {
+    try {
+      var res = await fetch(SEARCH_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": API_KEY }, body: JSON.stringify({ q: q }) });
+      var data = null;
+      try { data = await res.json(); } catch (e) { data = null; }
+      return { res: res, data: data };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function addGiftDirect(it) {
+    var owner = state.myName;
+    if (!owner) { setMessage("finder-message", "Log in and join the list first.", true); return false; }
+    try {
+      var res = await apiFetch("/wishlists", {
+        method: "POST",
+        headers: { "Prefer": "return=representation" },
+        body: JSON.stringify({ owner_name: owner, item: (it.title || "Gift idea").slice(0, 120), link_or_note: it.link || null, image_url: it.thumbnail || null })
+      });
+      if (!res.ok) throw new Error("Could not add that gift.");
+      setMessage("finder-message", "Added to your gift list.");
+      await loadAll();
+      return true;
+    } catch (err) {
+      setMessage("finder-message", err.message, true);
+      return false;
+    }
+  }
+
+  function renderProductCards(el, items) {
     el._items = items;
     el.innerHTML = items.map(function (it, i) {
       var thumb = it.thumbnail ? '<img class="gift-thumb" src="' + esc(it.thumbnail) + '" alt="" referrerpolicy="no-referrer" />' : "";
@@ -734,17 +778,41 @@
       return '<div class="search-item">' + thumb + '<div><strong>' + esc(it.title || "") + '</strong>' + price + '</div><button type="button" class="secondary search-add" data-i="' + i + '">Add to my list</button></div>';
     }).join("");
     el.querySelectorAll(".search-add").forEach(function (btn) {
-      btn.addEventListener("click", function () {
+      btn.addEventListener("click", async function () {
         var it = el._items[Number(btn.dataset.i)];
-        if (!it) return;
-        document.getElementById("gift-item").value = it.title || "";
-        document.getElementById("gift-note").value = it.link || "";
-        document.getElementById("gift-image").value = it.thumbnail || "";
-        setMessage("gift-message", "Added to My gift list form. Tap Add gift idea to save it.");
-        openCard("gift-heading");
-        document.getElementById("gift-heading").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+        if (!it || btn.disabled) return;
+        btn.disabled = true;
+        btn.textContent = "Adding...";
+        var ok = await addGiftDirect(it);
+        if (ok) { btn.textContent = "Added"; }
+        else { btn.disabled = false; btn.textContent = "Add to my list"; }
       });
     });
+  }
+
+  async function loadSuggestions() {
+    if (!supa) return;
+    var sess = (await supa.auth.getSession()).data.session;
+    if (!sess) return;
+    var seen = {};
+    var items = [];
+    for (var i = 0; i < SUGGEST_QUERIES.length; i++) {
+      var out = await callSearchApi(SUGGEST_QUERIES[i], sess.access_token);
+      if (!out || !out.data || !out.data.items) continue;
+      if (typeof out.data.remaining === "number") setSearchRemaining(out.data.remaining);
+      out.data.items.slice(0, 3).forEach(function (it) {
+        var key = it.asin || it.link || it.title;
+        if (!key || seen[key]) return;
+        seen[key] = true;
+        items.push(it);
+      });
+      if (items.length >= 8) break;
+    }
+    if (items.length) renderProductCards(document.getElementById("finder-suggestions"), items.slice(0, 8));
+  }
+
+  function renderSearchResults(items) {
+    renderProductCards(document.getElementById("finder-results"), items);
   }
 
   async function runAmazonSearch(q) {
@@ -754,15 +822,9 @@
     var sess = (await supa.auth.getSession()).data.session;
     if (!sess) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
     setMessage("finder-message", "Searching Amazon...");
-    var res;
-    try {
-      res = await fetch(SEARCH_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + sess.access_token, "apikey": API_KEY }, body: JSON.stringify({ q: q }) });
-    } catch (e) {
-      setMessage("finder-message", "Search failed. Try again, or add the gift manually with a link.", true);
-      return;
-    }
-    var data = null;
-    try { data = await res.json(); } catch (e) { data = null; }
+    var out = await callSearchApi(q, sess.access_token);
+    if (!out) { setMessage("finder-message", "Search failed. Try again, or add the gift manually with a link.", true); return; }
+    var res = out.res, data = out.data;
     if (res.status === 401) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
     if (res.status === 403) { setMessage("finder-message", "Join the draw first, then search.", true); return; }
     if (res.status === 429) {
