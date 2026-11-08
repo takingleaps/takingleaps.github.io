@@ -509,6 +509,8 @@
     }
     .work-card--niteharts .work-image img { object-position: center 30%; }
     .work-card--escape .work-image img { object-position: center 36%; }
+    .work-card--dreamstate .work-image { display: grid; place-items: center; }
+    .work-card--dreamstate .work-image img { width: 72%; height: auto; object-fit: contain; }
     .work-card:hover .work-image img { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
     .work-card__copy {
       min-height: 200px;
@@ -1395,7 +1397,14 @@
       </div>
 
       <div class="work-grid" aria-label="Selected projects">
-        <button class="work-card work-card--escape" type="button" data-work-panel data-work-href="https://byyystudio.me/escape/"><span class="work-banner">Live &mdash; under construction</span>
+        <button class="work-card work-card--dreamstate" type="button" data-work-panel data-work-href="https://byyystudio.me/dreamstate/">
+          <div class="work-image"><img src="work-dreamstate.png" loading="lazy" decoding="async" alt="Dreamstate SoCal 2026 official logo" /></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
+            <h3>DREAMSTATE SOCAL '26</h3>
+            <p>A phone-first trance planner with lineup saves, a simple map, and set times to come.</p>
+          </div>
+        </button><button class="work-card work-card--escape" type="button" data-work-panel data-work-href="https://byyystudio.me/escape/"><span class="work-banner">Live &mdash; under construction</span>
           <div class="work-image"><img src="work-escape.webp" loading="lazy" decoding="async" alt="Escape Halloween festival stage" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
@@ -1408,13 +1417,6 @@
             <span class="project-meta"><span>Past event</span><span class="project-arrow">↗</span></span>
             <h3>NITEHARTS '26</h3>
             <p>Mobile set times, artist previews, and a personal lineup builder.</p>
-          </div>
-        </button><button class="work-card work-card--dreamstate" type="button" data-work-panel data-work-href="https://byyystudio.me/dreamstate/">
-          <div class="work-image"><div class="work-image__label">DREAMSTATE SOCAL 2026</div></div>
-          <div class="work-card__copy">
-            <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
-            <h3>DREAMSTATE SOCAL '26</h3>
-            <p>A phone-first trance planner with lineup saves, a simple map, and set times to come.</p>
           </div>
         </button>
       </div>
