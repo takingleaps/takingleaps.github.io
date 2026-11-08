@@ -179,6 +179,24 @@
       .cat:hover .disc{ transform:translateY(-5px) rotate(-3deg); }
       .cat b{ font-size:.92rem; letter-spacing:.04em; color:var(--ink); }
       .cat small{ display:block; color:var(--ink-soft); font-weight:700; font-size:.78rem; }
+      .cat.active .disc{ outline:3px solid var(--rose); outline-offset:3px; }
+
+      /* ---------- vibe preview ---------- */
+      .vibe-preview{ display:flex; gap:24px; align-items:center; background:var(--paper); border:1.5px solid var(--line); border-radius:24px; padding:20px 24px; margin:26px auto 0; max-width:680px; box-shadow:var(--soft-shadow); }
+      .vibe-preview[hidden]{ display:none; }
+      .vibe-preview img{ width:150px; height:auto; flex:none; }
+      .vibe-preview h3{ font-family:"Shrikhand",cursive; font-size:1.5rem; margin:2px 0 6px; }
+      .vibe-preview p{ color:var(--ink-soft); margin:0 0 10px; }
+      .vibe-preview .vibe-all{ background:none; border:none; color:var(--olive); font-weight:800; cursor:pointer; padding:0; text-decoration:underline; }
+      @media (max-width:560px){
+        .vibe-preview{ flex-direction:column; text-align:center; gap:12px; padding:18px; }
+        .vibe-preview img{ width:120px; }
+      }
+
+      /* ---------- shop toggle ---------- */
+      .shop-toggle{ display:flex; justify-content:center; gap:8px; margin-bottom:22px; }
+      .toggle-btn{ font:inherit; font-weight:800; padding:10px 22px; border-radius:999px; border:1.5px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; }
+      .toggle-btn.active{ background:var(--olive); border-color:var(--olive); color:var(--cream); }
 
       /* ---------- product grid ---------- */
       .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
@@ -537,21 +555,21 @@
         <div class="wrap">
           <div class="sec-head reveal">
             <span class="mini">Shop by feeling</span>
-            <h2>Pick your petal</h2>
+            <h2>Find your vibe</h2>
           </div>
           <div class="cats reveal">
-            <a class="cat" href="thai-stick.html">
+            <button class="cat" type="button" data-vibe="Hybrid" style="background:none;border:none;color:inherit;font:inherit">
               <span class="disc" style="background:var(--sage-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#FDF6EA"></svg></span>
               <b>Hybrid</b><small>Thai Stick</small>
-            </a>
-            <a class="cat" href="northern-lights.html">
+            </button>
+            <button class="cat" type="button" data-vibe="Indica" style="background:none;border:none;color:inherit;font:inherit">
               <span class="disc" style="background:var(--sky-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#FDF6EA"></svg></span>
               <b>Indica</b><small>Northern Lights</small>
-            </a>
-            <a class="cat" href="maui-wowie.html">
+            </button>
+            <button class="cat" type="button" data-vibe="Sativa" style="background:none;border:none;color:inherit;font:inherit">
               <span class="disc" style="background:var(--rose-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#FDF6EA"></svg></span>
               <b>Sativa</b><small>Maui Wowie</small>
-            </a>
+            </button>
             <a class="cat" href="shop.html">
               <span class="disc" style="background:var(--lav-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-bud></svg></span>
               <b>Blooming Soon</b><small>3 more strains</small>
@@ -561,6 +579,15 @@
               <b>The Shop IRL</b><small>walk in, virtually</small>
             </button>
           </div>
+          <div class="vibe-preview" id="vibePreview" hidden>
+            <img id="vibeImg" src="img/pouch-maui-wowie.png" alt="" />
+            <div>
+              <span class="mini" id="vibeType">Sativa</span>
+              <h3 id="vibeName">Maui Wowie</h3>
+              <p id="vibeDesc"></p>
+              <button class="vibe-all" type="button" id="vibeAll">Show all vibes</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -569,8 +596,12 @@
         <div class="wrap">
           <div class="sec-head reveal">
             <span class="mini">The first drop</span>
-            <h2>4g Smalls, full-size cute</h2>
-            <p>Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet — reserving just saves your spot for launch day. Tap any pouch for its own page.</p>
+            <h2 id="shopTitle">4g Smalls, full-size cute</h2>
+            <p id="shopIntro">Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet — reserving just saves your spot for launch day. Tap any pouch for its own page.</p>
+          </div>
+          <div class="shop-toggle reveal" role="tablist" aria-label="Shop format">
+            <button type="button" class="toggle-btn active" data-format="flower" role="tab" aria-selected="true">Flower</button>
+            <button type="button" class="toggle-btn" data-format="preroll" role="tab" aria-selected="false">Prerolls</button>
           </div>
           <div class="grid" id="productGrid"></div>
         </div>
@@ -843,25 +874,79 @@
       var half = phrases.map(function(p){ return "<span>✿ "+p+"</span>"; }).join("");
       document.getElementById("tickerTrack").innerHTML = half + half;
 
-      /* ============ product grid ============ */
+      /* ============ product grid (flower / prerolls + vibe filter) ============ */
       var grid = document.getElementById("productGrid");
-      grid.innerHTML = PRODUCTS.map(function(p, i){
-        var chips = '<span class="chip type">'+p.type+'</span>' + (p.notes ? p.notes.map(function(n){ return '<span class="chip note">'+n+'</span>'; }).join("") : "");
-        var btn = p.soon
-          ? '<button class="add-btn notify" type="button" data-notify="'+p.id+'">Notify me</button>'
-          : '<button class="add-btn" type="button" data-add="'+p.id+'">Reserve ✿</button>';
-        var foot = p.soon
-          ? '<span class="price-note">still growing…</span>'
-          : '<span class="price-note">pricing at launch</span>';
-        return '<article class="card reveal'+(p.soon?" soon":"")+'">'
-          + '<a class="card-art" href="'+p.id+'.html" style="background:linear-gradient(160deg,'+p.c1+','+p.c2+')" aria-label="'+p.name+' — its own page">'
-          + (p.soon ? '<span class="badge">Blooming soon</span>' : '<span class="badge">First drop</span>')
-          + '<img class="card-pouch" src="img/pouch-'+p.id+'.png" alt="'+p.name+' 4g Smalls pouch" loading="lazy" /></a>'
-          + '<div class="card-body"><h3><a href="'+p.id+'.html">'+p.name+'</a></h3>'
-          + '<div class="card-meta">'+chips+'</div>'
-          + '<p class="size">FLWRPWR · 4g Smalls</p>'
-          + '<div class="card-foot">'+foot+btn+'</div></div></article>';
-      }).join("");
+      var shopState = { format:"flower", vibe:null };
+      var VIBE_INFO = {
+        Sativa: { rep:"maui-wowie", name:"Maui Wowie", desc:"Energizing, uplifting and creative." },
+        Hybrid: { rep:"thai-stick", name:"Thai Stick", desc:"Balanced vibes for mind and body." },
+        Indica: { rep:"northern-lights", name:"Northern Lights", desc:"Deep relaxation, stress relief and calm." }
+      };
+      function renderGrid(animate){
+        var list = PRODUCTS.filter(function(p){ return !shopState.vibe || p.type === shopState.vibe; });
+        grid.innerHTML = list.map(function(p, i){
+          var chips = '<span class="chip type">'+p.type+'</span>' + (p.notes ? p.notes.map(function(n){ return '<span class="chip note">'+n+'</span>'; }).join("") : "");
+          var btn = p.soon
+            ? '<button class="add-btn notify" type="button" data-notify="'+p.id+'">Notify me</button>'
+            : '<button class="add-btn" type="button" data-add="'+p.id+'">Reserve ✿</button>';
+          var foot = p.soon
+            ? '<span class="price-note">still growing…</span>'
+            : '<span class="price-note">pricing at launch</span>';
+          var size = shopState.format === "preroll" ? "FLWRPWR · 8 x 0.5g Prerolls" : "FLWRPWR · 4g Smalls";
+          var alt = shopState.format === "preroll" ? p.name + " preroll pack" : p.name + " 4g Smalls pouch";
+          return '<article class="card reveal'+(animate?" in":"")+(p.soon?" soon":"")+'">'
+            + '<a class="card-art" href="'+p.id+'.html" style="background:linear-gradient(160deg,'+p.c1+','+p.c2+')" aria-label="'+p.name+' — its own page">'
+            + (p.soon ? '<span class="badge">Blooming soon</span>' : '<span class="badge">First drop</span>')
+            + '<img class="card-pouch" src="img/pouch-'+p.id+'.png" alt="'+alt+'" loading="lazy" /></a>'
+            + '<div class="card-body"><h3><a href="'+p.id+'.html">'+p.name+'</a></h3>'
+            + '<div class="card-meta">'+chips+'</div>'
+            + '<p class="size">'+size+'</p>'
+            + '<div class="card-foot">'+foot+btn+'</div></div></article>';
+        }).join("");
+      }
+      renderGrid(false);
+      /* vibe picker: click a feeling, show its product image + filter the grid */
+      var vibePreview = document.getElementById("vibePreview");
+      function setVibe(vibe){
+        shopState.vibe = vibe;
+        document.querySelectorAll("[data-vibe]").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-vibe") === vibe); });
+        if (!vibe){
+          vibePreview.hidden = true;
+        } else {
+          var info = VIBE_INFO[vibe];
+          document.getElementById("vibeImg").src = "img/pouch-" + info.rep + ".png";
+          document.getElementById("vibeImg").alt = info.name + " pouch";
+          document.getElementById("vibeType").textContent = vibe;
+          document.getElementById("vibeName").textContent = info.name;
+          document.getElementById("vibeDesc").textContent = info.desc;
+          vibePreview.hidden = false;
+        }
+        renderGrid(true);
+      }
+      document.querySelectorAll("[data-vibe]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var v = b.getAttribute("data-vibe");
+          setVibe(shopState.vibe === v ? null : v);
+        });
+      });
+      document.getElementById("vibeAll").addEventListener("click", function(){ setVibe(null); });
+      /* flower / prerolls toggle */
+      var SHOP_COPY = {
+        flower: { title:"4g Smalls, full-size cute", intro:"Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet — reserving just saves your spot for launch day. Tap any pouch for its own page." },
+        preroll: { title:"Prerolls, smooth and consistent", intro:"Eight 0.5g prerolls of the same flower, six flavors. We're pre-launch, so there's no price tag yet — reserving just saves your spot for launch day. Tap any pack for its own page." }
+      };
+      document.querySelectorAll("[data-format]").forEach(function(b){
+        b.addEventListener("click", function(){
+          shopState.format = b.getAttribute("data-format");
+          document.querySelectorAll("[data-format]").forEach(function(x){
+            x.classList.toggle("active", x === b);
+            x.setAttribute("aria-selected", x === b ? "true" : "false");
+          });
+          document.getElementById("shopTitle").textContent = SHOP_COPY[shopState.format].title;
+          document.getElementById("shopIntro").textContent = SHOP_COPY[shopState.format].intro;
+          renderGrid(true);
+        });
+      });
 
       /* ============ gallery ============ */
       var TILES = [
