@@ -179,18 +179,11 @@
       .cat:hover .disc{ transform:translateY(-5px) rotate(-3deg); }
       .cat b{ font-size:.92rem; letter-spacing:.04em; color:var(--ink); }
       .cat small{ display:block; color:var(--ink-soft); font-weight:700; font-size:.78rem; }
-      @media (max-width:560px){
-        .cats{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px 8px; }
-        .cat{ width:auto; min-height:44px; }
-        .cat .disc{ width:84px; height:84px; }
-        .cat .disc svg{ width:40px; height:40px; }
-        .cat b{ font-size:.82rem; }
-        .cat small{ font-size:.72rem; }
-      }
 
       /* ---------- product grid ---------- */
       .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
       @media (max-width:900px){ .grid{ grid-template-columns:repeat(2,1fr); gap:18px; } }
+      @media (max-width:560px){ .grid{ grid-template-columns:1fr; } }
       .card{
         background:var(--paper); border:1.5px solid var(--line); border-radius:28px; overflow:hidden;
         box-shadow:var(--soft-shadow); display:flex; flex-direction:column; transition:transform .18s ease, box-shadow .18s ease;
@@ -225,17 +218,14 @@
       .card.soon .card-pouch{ opacity:.95; }
       @media (max-width:560px){
         .card{ border-radius:22px; }
-        .card-art{ margin:8px 8px 0; height:190px; padding:34px 8px 10px; }
-        .card-art .card-pouch{ height:128px; }
+        .card-art{ margin:8px 8px 0; height:260px; padding:34px 8px 10px; }
+        .card-art .card-pouch{ height:200px; }
         .card-art .badge{ font-size:.58rem; letter-spacing:.1em; padding:4px 9px; top:12px; }
         .card-body{ padding:12px 12px 14px; gap:6px; }
         .card-body h3{ font-size:1.15rem; }
         .chip{ font-size:.64rem; padding:3px 8px; }
         .chip.note{ font-size:.7rem; }
         .card-body .size{ font-size:.8rem; }
-        .card-foot{ flex-direction:column; align-items:stretch; gap:8px; }
-        .price-note{ font-size:1.1rem; text-align:center; }
-        .add-btn{ width:100%; padding:10px 8px; }
       }
 
       /* ---------- enter the shop banner ---------- */
