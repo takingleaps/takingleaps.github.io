@@ -348,19 +348,19 @@
     <div id="auth-form">
       <label for="auth-email">Email</label>
       <input id="auth-email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" />
-      <button id="auth-send-button" type="button">Email me a code</button>
+      <button id="auth-send-button" class="hidden" type="button">Email me a code</button>
       <div id="auth-code-row" class="hidden">
         <label for="auth-code">8-digit code</label>
         <input id="auth-code" type="text" inputmode="numeric" maxlength="8" autocomplete="one-time-code" placeholder="12345678" />
         <button id="auth-verify-button" type="button">Verify code</button>
       </div>
-      <div id="auth-password-row" class="hidden">
+      <div id="auth-password-row">
         <label for="auth-password">Password</label>
         <input id="auth-password" type="password" maxlength="72" autocomplete="current-password" placeholder="Your password" />
         <button id="auth-password-button" type="button">Log in with password</button>
         <button id="auth-signup-button" class="secondary" type="button">Create an account with this password</button>
       </div>
-      <button id="auth-mode-button" class="secondary" type="button">Use a password instead</button>
+      <button id="auth-mode-button" class="secondary" type="button">Use an email code instead</button>
     </div>
     <div id="auth-set-password" class="hidden">
       <label for="auth-new-password">Set a password for next time</label>
@@ -640,7 +640,7 @@
     }
   }
 
-  var authMode = "code";
+  var authMode = "password";
 
   function setAuthMode(mode) {
     authMode = mode;
