@@ -179,7 +179,8 @@
   button.secondary{background:#fff; color:var(--ink)}
   button.green{background:var(--green); color:#fff}
   button.danger{background:#fff; color:var(--red-dark); border-color:#000}
-  button:disabled{opacity:.45; cursor:not-allowed; box-shadow:0 6px 0 #000}
+  button:disabled{opacity:.6; filter:grayscale(.85); cursor:not-allowed; box-shadow:0 6px 0 #000}
+  .link-button{background:none; border:none; box-shadow:none; text-decoration:underline; color:#fff; font-family:"VT323", monospace; font-size:19px; padding:6px 0; margin:6px 0 0; width:auto; min-height:0}
   button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible{outline:4px solid var(--gold); outline-offset:2px}
   .row{display:grid; gap:12px}
   @media (min-width:520px){.row.two{grid-template-columns:1fr 1fr}}
@@ -270,7 +271,7 @@
     <span class="twinkle-star gold" style="left:92%; top:22%"></span>
     <span class="twinkle-star" style="left:38%; top:48%"></span>
     <h1><span id="hero-group-name" class="rainbow"></span><br />SECRET<br /><span class="red">SANTA</span></h1>
-    <button id="start-button" type="button" class="start-button">Start</button>
+    <button id="start-button" type="button" class="start-button">Get started</button>
     <p id="hero-location" class="hero-location hidden"></p>
     <p id="hero-date" class="hero-date hidden"></p>
     <svg class="big-tree" viewBox="0 0 118 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="52" y="0" width="14" height="14" fill="#f8d800"/><rect x="55" y="3" width="8" height="8" fill="#fff"/><rect x="44" y="14" width="30" height="14" fill="#005800"/><rect x="38" y="28" width="42" height="14" fill="#00a800"/><rect x="32" y="42" width="54" height="14" fill="#005800"/><rect x="26" y="56" width="66" height="14" fill="#00a800"/><rect x="20" y="70" width="78" height="14" fill="#005800"/><rect x="14" y="84" width="90" height="14" fill="#00a800"/><rect x="8" y="98" width="102" height="14" fill="#005800"/><rect x="50" y="112" width="18" height="26" fill="#7a3b12"/><rect class="tree-light" x="52" y="20" width="7" height="7" fill="#e83800"/><rect class="tree-light" x="66" y="34" width="7" height="7" fill="#f8d800"/><rect class="tree-light" x="46" y="48" width="7" height="7" fill="#3b5bff"/><rect class="tree-light" x="72" y="62" width="7" height="7" fill="#e83800"/><rect class="tree-light" x="40" y="76" width="7" height="7" fill="#f8d800"/><rect class="tree-light" x="62" y="90" width="7" height="7" fill="#fff"/><rect class="tree-light" x="82" y="76" width="7" height="7" fill="#3b5bff"/><rect class="tree-light" x="30" y="90" width="7" height="7" fill="#e83800"/></svg>
@@ -358,7 +359,7 @@
         <label for="auth-password">Password</label>
         <input id="auth-password" type="password" maxlength="72" autocomplete="current-password" placeholder="Your password" />
         <button id="auth-password-button" type="button">Log in with password</button>
-        <button id="auth-signup-button" class="secondary" type="button">Create an account with this password</button>
+        <button id="auth-signup-button" class="link-button" type="button">New here? Create an account</button>
       </div>
       <button id="auth-mode-button" class="secondary" type="button">Use an email code instead</button>
     </div>
@@ -398,7 +399,7 @@
 
   <section class="card green" aria-labelledby="poll-heading">
     <h2 id="poll-heading">Vote on the date</h2>
-    <p id="voter-display" class="small">Log in below to vote.</p>
+    <p id="voter-display" class="small">Log in above to vote.</p>
     <h3>When should we do Secret Santa?</h3>
     <div id="date-poll"></div>
     <label for="suggest-date">Pick a date</label>
@@ -436,7 +437,7 @@
         <div><label for="filter-shop">Shop</label><select id="filter-shop"><option value="amazon">Amazon</option></select></div>
         <div><label for="filter-for">For</label><select id="filter-for"><option value="">Anyone</option><option value="men">Men</option><option value="women">Women</option><option value="kids">Kids</option></select></div>
         <div><label for="filter-age">Age</label><select id="filter-age"><option value="">Any age</option><option value="18-25">18 - 25 years</option><option value="26-35">26 - 35 years</option><option value="36-50">36 - 50 years</option><option value="50+">50+ years</option></select></div>
-        <div><label for="filter-price">Price</label><select id="filter-price"><option value="">Any price</option><option value="0-25">Under $25</option><option value="20-30">$20 - $30</option><option value="30-50">$30 - $50</option><option value="50-100">$50 - $100</option></select></div>
+        <div><label for="filter-price">Price</label><select id="filter-price"><option value="">Any price</option><option value="0-25">Under $25</option><option value="25-30">$25 - $30</option><option value="30-50">$30 - $50</option><option value="50-100">$50 - $100</option></select></div>
         <div><label for="filter-category">Category</label><select id="filter-category"><option value="">Any category</option><option value="electronics">Electronics</option><option value="home">Home &amp; Kitchen</option><option value="beauty">Beauty</option><option value="toys">Toys &amp; Games</option><option value="fashion">Fashion</option><option value="sports">Sports &amp; Outdoors</option><option value="books">Books</option><option value="kitchen">Kitchen &amp; Dining</option></select></div>
       </div>
       <div id="filter-chips"></div>
@@ -447,7 +448,7 @@
     <p id="finder-message" aria-live="polite"></p>
     <div id="recent-searches"></div>
     <div id="finder-results"></div>
-    <h3>Suggestions for you</h3>
+    <h3 id="suggestions-heading">Suggestions for you</h3>
     <div id="finder-suggestions"></div>
     <h3>Or add one manually</h3>
     <label for="gift-item">Gift idea</label>
@@ -560,14 +561,59 @@
   }
 
   function setControlsEnabled(enabled) {
-    ["name-input", "add-button", "lock-button", "unlock-button", "draw-button",
-     "reset-button", "reveal-button", "gift-item",
+    ["reset-button", "gift-item",
      "gift-note", "gift-image", "gift-add-button",
      "finder-query", "finder-search-button", "filter-for", "filter-age",
      "filter-price", "filter-category", "filter-clear", "filter-shop", "message-input",
-     "message-send-button", "email-group-button", "buying-toggle-button"].forEach(function (id) {
+     "message-send-button", "email-group-button"].forEach(function (id) {
       document.getElementById(id).disabled = !enabled;
     });
+  }
+
+  function needGroup(msgId) {
+    if (state.group) return true;
+    setMessage(msgId, "Open your group's private link first — this page has no group open.", true);
+    return false;
+  }
+
+  function friendlyError(err) {
+    var m = (err && err.message) || "";
+    if (m.indexOf("Cannot read properties") !== -1) return "Something went wrong — try reloading the page.";
+    return m || "Something went wrong — try reloading the page.";
+  }
+
+  function trimTitle(t) {
+    t = String(t || "").replace(/…$/, "");
+    if (t.length <= 100) return t;
+    var cut = t.slice(0, 100);
+    var lastSpace = cut.lastIndexOf(" ");
+    if (lastSpace > 60) cut = cut.slice(0, lastSpace);
+    return cut + "…";
+  }
+
+  function setJoinEnabled(enabled) {
+    ["name-input", "add-button"].forEach(function (id) {
+      document.getElementById(id).disabled = !enabled;
+    });
+  }
+
+  function updateControlStates() {
+    var ok = !!state.group && state.connected;
+    setJoinEnabled(ok && !!state.myEmail);
+    setControlsEnabled(ok && !!state.myName);
+    document.getElementById("suggestions-heading").classList.toggle("hidden", !state.myName);
+    document.getElementById("finder-suggestions").classList.toggle("hidden", !state.myName);
+  }
+
+  async function refreshSearchRemaining() {
+    if (!state.myName || !state.group) return;
+    try {
+      var first = new Date(); first.setDate(1); first.setHours(0, 0, 0, 0);
+      var res = await apiFetch("/gift_searches?select=id&searcher_name=eq." + encodeURIComponent(state.myName) + "&created_at=gte." + encodeURIComponent(first.toISOString()));
+      if (!res.ok) return;
+      var rows = await res.json();
+      setSearchRemaining(Math.max(0, 62 - rows.length));
+    } catch (e) { /* leave the note as-is */ }
   }
 
   function renderAuth() {
@@ -578,7 +624,7 @@
     document.getElementById("auth-status").textContent = loggedIn
       ? "Signed in as " + state.myEmail + (state.myName ? " — you are " + state.myName + "." : " — add your name below to join the list.")
       : "Log in with your email to vote, reveal, and edit your gift list.";
-    document.getElementById("voter-display").textContent = state.myName ? "Voting as " + state.myName + "." : (loggedIn ? "Add your name below to join, then vote." : "Log in below to vote.");
+    document.getElementById("voter-display").textContent = state.myName ? "Voting as " + state.myName + "." : (loggedIn ? "Add your name below to join, then vote." : "Log in above to vote.");
     document.getElementById("reveal-display").textContent = state.myName ? "Revealing as " + state.myName + "." : "Log in above to reveal.";
     document.getElementById("gift-display").textContent = state.myName ? "Your gift list — " + state.myName + "." : "Log in above to edit your gift list.";
     document.getElementById("message-display").textContent = state.myName ? "Messaging as " + state.myName + "." : "Log in above to message the group.";
@@ -608,6 +654,7 @@
       recentLoaded = true;
       renderRecentChips();
     }
+    if (state.myEmail && state.myName) refreshSearchRemaining();
   }
 
   async function sendAuthCode() {
@@ -723,9 +770,9 @@
     }
     state.lastCount = state.participants.length;
     document.getElementById("empty-list").classList.toggle("hidden", state.participants.length > 0);
-    var status = "Open";
-    if (state.draw && state.draw.status === "locked") status = "Locked";
-    if (state.draw && state.draw.status === "drawn") status = "Drawn";
+    var status = "Open — add your name to join the list.";
+    if (state.draw && state.draw.status === "locked") status = "Locked — the list is closed.";
+    if (state.draw && state.draw.status === "drawn") status = "Drawn — reveal your person below.";
     document.getElementById("draw-state").textContent = status;
     document.getElementById("draw-button").disabled = !state.connected || !state.myName ||
       !(state.draw && state.draw.status === "locked") || state.participants.length < 3;
@@ -735,6 +782,7 @@
       !(state.draw && state.draw.status === "locked");
     document.getElementById("reveal-button").disabled = !state.connected || !state.myName ||
       !(state.draw && state.draw.status === "drawn") || state.participants.length === 0;
+    updateControlStates();
   }
 
   function voteCount(optionId) {
@@ -815,7 +863,7 @@
         }
       }
       var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
-      return '<div class="gift-item">' + thumb + '<div><strong>' + esc(w.item) + "</strong>" + note +
+      return '<div class="gift-item">' + thumb + '<div><strong>' + esc(trimTitle(w.item)) + "</strong>" + note +
         '</div><button type="button" class="secondary danger gift-delete" data-id="' + esc(w.id) + '">Delete</button></div>';
     }).join("");
     document.getElementById("gift-empty").classList.toggle("hidden", mine.length > 0 || !owner);
@@ -844,7 +892,7 @@
         }
       }
       var thumb = w.image_url ? ' <img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
-      return "<li><strong>" + esc(w.item) + "</strong>" + thumb + note + "</li>";
+      return "<li><strong>" + esc(trimTitle(w.item)) + "</strong>" + thumb + note + "</li>";
     }).join("") + "</ul>";
   }
 
@@ -869,8 +917,8 @@
   var FOR_WORDS = { men: "for men", women: "for women", kids: "for kids" };
   var AGE_WORDS = { "18-25": "for young adults", "26-35": "for adults", "36-50": "for adults", "50+": "for seniors" };
   var CATEGORY_WORDS = { electronics: "electronics", home: "home and kitchen", beauty: "beauty", toys: "toys and games", fashion: "fashion", sports: "sports and outdoors", books: "books", kitchen: "kitchen" };
-  var PRICE_RANGES = { "0-25": [0, 25], "20-30": [20, 30], "30-50": [30, 50], "50-100": [50, 100] };
-  var PRICE_LABELS = { "0-25": "Under $25", "20-30": "$20-$30", "30-50": "$30-$50", "50-100": "$50-$100" };
+  var PRICE_RANGES = { "0-25": [0, 25], "25-30": [25, 30], "30-50": [30, 50], "50-100": [50, 100] };
+  var PRICE_LABELS = { "0-25": "Under $25", "25-30": "$25-$30", "30-50": "$30-$50", "50-100": "$50-$100" };
   var CATEGORY_LABELS = { electronics: "Electronics", home: "Home & Kitchen", beauty: "Beauty", toys: "Toys & Games", fashion: "Fashion", sports: "Sports & Outdoors", books: "Books", kitchen: "Kitchen & Dining" };
   var FOR_LABELS = { men: "Men", women: "Women", kids: "Kids" };
   var AGE_LABELS = { "18-25": "18-25 years", "26-35": "26-35 years", "36-50": "36-50 years", "50+": "50+ years" };
@@ -958,7 +1006,7 @@
     if (!el) return;
     var queries = (await recentSearchQueries()).slice(0, 6);
     if (!queries.length) { el.innerHTML = ""; return; }
-    el.innerHTML = '<span class="small">Recent searches: </span>' + queries.map(function (q) {
+    el.innerHTML = '<span class="small">Recent searches in this group: </span>' + queries.map(function (q) {
       return '<button type="button" class="secondary recent-chip" data-q="' + esc(q) + '">' + esc(q) + '</button>';
     }).join("");
     el.querySelectorAll(".recent-chip").forEach(function (btn) {
@@ -1026,6 +1074,7 @@
   }
 
   async function addGiftDirect(it) {
+    if (!needGroup("finder-message")) return false;
     var owner = state.myName;
     if (!owner) { setMessage("finder-message", "Log in and join the list first.", true); return false; }
     try {
@@ -1106,6 +1155,7 @@
     if (!supa) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
     var sess = (await supa.auth.getSession()).data.session;
     if (!sess) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
+    if (!needGroup("finder-message")) return;
     setMessage("finder-message", "Searching Amazon...");
     var suffix = filterSuffix();
     var effectiveQ = (q + (suffix ? " " + suffix : "")).trim();
@@ -1143,19 +1193,20 @@
   function renderBuyingView() {
     var view = document.getElementById("buying-view");
     if (view.classList.contains("hidden")) return;
-    var owners = [];
+    var owners = state.participants.map(function (p) { return p.name; });
     state.wishlists.forEach(function (w) {
       if (owners.indexOf(w.owner_name) === -1) owners.push(w.owner_name);
     });
     view.innerHTML = owners.map(function (owner) {
       var items = state.wishlists.filter(function (w) { return w.owner_name === owner; });
+      if (!items.length) return '<div class="buying-owner">' + esc(owner) + '</div><p class="small">No gifts yet.</p>';
       return '<div class="buying-owner">' + esc(owner) + "</div>" + items.map(function (w) {
         var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
         var link = "";
         if (w.link_or_note && (w.link_or_note.indexOf("http://") === 0 || w.link_or_note.indexOf("https://") === 0)) {
           link = '<div><a href="' + esc(w.link_or_note) + '" target="_blank" rel="noopener">View link</a></div>';
         }
-        return '<div class="buying-item">' + thumb + '<div><strong>' + esc(w.item) + "</strong>" + link +
+        return '<div class="buying-item">' + thumb + '<div><strong>' + esc(trimTitle(w.item)) + "</strong>" + link +
           '</div><button type="button" class="secondary buying-amazon" data-query="' + esc(w.item) + '">Amazon</button></div>';
       }).join("");
     }).join("");
@@ -1423,7 +1474,6 @@
       if (!msgsRes.ok) throw new Error("Could not load messages.");
       state.messages = await msgsRes.json();
       state.connected = true;
-      setControlsEnabled(true);
       renderAll();
       refreshAuth();
     } catch (err) {
@@ -1436,6 +1486,7 @@
   }
 
   async function addParticipant() {
+    if (!needGroup("join-message")) return;
     if (!state.myEmail) { setMessage("join-message", "Log in with your email first.", true); return; }
     var input = document.getElementById("name-input");
     var name = input.value.trim();
@@ -1471,16 +1522,17 @@
       await loadAll();
       await refreshAuth();
     } catch (err) {
-      setMessage("join-message", err.message, true);
+      setMessage("join-message", friendlyError(err), true);
     }
   }
 
   async function setDrawStatus(status) {
+    if (!needGroup("join-message")) return;
     if (!state.draw) {
       var res = await apiFetch("/draws", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ status: status })
+        body: JSON.stringify({ status: status, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not create the draw record.");
       state.draw = (await res.json())[0];
@@ -1497,6 +1549,7 @@
   }
 
   async function runDraw() {
+    if (!needGroup("join-message")) return;
     if (!state.myName) { setMessage("join-message", "Log in and join the list first.", true); return; }
     if (!state.draw || state.draw.status !== "locked") {
       setMessage("join-message", "Lock the list first, then draw.", true); return;
@@ -1533,7 +1586,7 @@
       setMessage("join-message", "The draw is done. Each person can now reveal only their own person.");
     } catch (err) {
       shuffleEl.classList.add("hidden");
-      setMessage("join-message", err.message, true);
+      setMessage("join-message", friendlyError(err), true);
     }
   }
 
@@ -1553,6 +1606,7 @@
   }
 
   async function revealAssignment() {
+    if (!needGroup("reveal-message")) return;
     var giver = state.myName;
     if (!giver) { setMessage("reveal-message", "Log in and join the list first.", true); return; }
     if (!state.draw) return;
@@ -1580,6 +1634,7 @@
   }
 
   async function addGift() {
+    if (!needGroup("gift-message")) return;
     var owner = state.myName;
     var itemEl = document.getElementById("gift-item");
     var noteEl = document.getElementById("gift-note");
@@ -1617,6 +1672,7 @@
   }
 
   async function castVote(pollId, optionId) {
+    if (!needGroup("poll-message")) return;
     var voter = state.myName;
     if (!voter) { setMessage("poll-message", "Log in and join the list first, then vote.", true); return; }
     try {
@@ -1634,6 +1690,7 @@
   }
 
   async function suggestDate() {
+    if (!needGroup("suggest-message")) return;
     var input = document.getElementById("suggest-date");
     var value = input.value;
     if (!state.myName) { setMessage("suggest-message", "Log in and join the list first.", true); return; }
@@ -1653,6 +1710,7 @@
   }
 
   async function postMessage() {
+    if (!needGroup("message-message")) return;
     var author = state.myName;
     var input = document.getElementById("message-input");
     var text = input.value.trim();
