@@ -1584,6 +1584,27 @@
     state.groups = readMyGroups();
     renderGroups();
     if (!GROUP_SLUG || !GROUP_KEY) {
+      var saved = state.groups && state.groups.length ? state.groups[0] : null;
+      if (saved && saved.slug && saved.key) {
+        try {
+          var res0 = await apiFetch("/rpc/get_group_by_key", {
+            method: "POST",
+            body: JSON.stringify({ p_slug: saved.slug, p_key: saved.key })
+          });
+          if (res0.ok) {
+            var rows0 = await res0.json();
+            if (rows0.length) {
+              GROUP_SLUG = saved.slug;
+              GROUP_KEY = saved.key;
+              state.group = rows0[0];
+              saveMyGroup({ slug: state.group.slug, name: state.group.name, key: GROUP_KEY });
+              renderHero();
+              await loadAll();
+              return;
+            }
+          }
+        } catch (e) { /* saved group no longer opens — fall through to the no-group view */ }
+      }
       state.group = null;
       renderHero();
       renderAll();
