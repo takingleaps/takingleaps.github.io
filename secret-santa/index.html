@@ -21,6 +21,7 @@
     --gold:#f8d800; --gold-dark:#c8a800; --blue:#3b5bff;
   }
   *{box-sizing:border-box}
+  html, body{overflow-x:hidden; overflow-x:clip}
   html{scroll-behavior:smooth}
   body{
     margin:0; background:var(--night); color:var(--ink);
@@ -216,7 +217,7 @@
     .card.collapsed h2::after{content:" +"; float:right}
     .card.collapsed > :not(h2){display:none !important}
   }
-  .card h2 .card-drag{float:right; width:auto; font-family:inherit; font-size:14px; line-height:1; padding:4px 8px; margin:2px 0 0 4px; border:2px solid #000; background:#fff; color:#000; cursor:grab; box-shadow:2px 2px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none}
+  .card h2 .card-drag{float:right; width:auto; min-height:34px; height:34px; font-family:inherit; font-size:14px; line-height:1; padding:6px 8px; margin:2px 0 0 4px; border:2px solid #000; background:#fff; color:#000; cursor:grab; box-shadow:2px 2px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none}
   .card h2 .card-drag:active{cursor:grabbing; box-shadow:none; transform:translate(2px,2px)}
   .card.dragging{box-shadow:8px 8px 0 rgba(0,0,0,.45); opacity:.92}
   .card-placeholder{border:3px dashed #000; background:rgba(255,255,255,.22)}
@@ -256,6 +257,7 @@
   .gift-item a{color:var(--red-dark); font-weight:700}
   .shuffle{text-align:center; font-family:"Press Start 2P", monospace; font-size:13px; padding:14px 0 4px; color:var(--red); min-height:44px}
   .tree-row{grid-column:1 / -1; display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:10px 22px; margin:18px 0 0; padding:0 2px}
+  @media (max-width:520px){.tree-row svg:nth-child(n+6){display:none}}
   .tree-row svg{width:52px; height:64px; image-rendering:pixelated; shape-rendering:crispEdges}
   .tree-light{animation:twinkle 1s steps(2) infinite}
   .tree-light:nth-child(2){animation-delay:.3s} .tree-light:nth-child(3){animation-delay:.6s}
@@ -298,6 +300,7 @@
         <input id="auth-password" type="password" maxlength="72" autocomplete="current-password" placeholder="Your password" />
         <button id="auth-password-button" type="button">Log in with password</button>
         <button id="auth-signup-button" class="link-button" type="button">New here? Create an account</button>
+        <button id="auth-forgot-button" class="link-button" type="button">Forgot password?</button>
       </div>
       <button id="auth-mode-button" class="secondary" type="button">Use an email code instead</button>
     </div>
@@ -709,6 +712,12 @@
       if (me) state.myName = me.name;
     }
     renderAuth();
+    if (window.location.hash.indexOf("type=recovery") !== -1) {
+      document.getElementById("auth-set-password").classList.remove("hidden");
+      document.getElementById("auth-change-password").classList.add("hidden");
+      setMessage("auth-message", "Set your new password below.");
+      if (window.history && window.history.replaceState) window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
     renderAll();
     if (state.myEmail && state.myName && !suggestionsLoaded) {
       suggestionsLoaded = true;
@@ -792,6 +801,19 @@
       setMessage("auth-message", "Account created — check your email for a confirmation link, then log in with your password.");
     } catch (err) {
       setMessage("auth-message", (err && err.message) || "Could not create that account.", true);
+    }
+  }
+
+  async function sendPasswordReset() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.resetPasswordForEmail(email, { redirectTo: "https://byyystudio.me/secret-santa/" });
+      if (res.error) throw res.error;
+      setMessage("auth-message", "Reset link sent to " + email + ". Check your inbox, then tap the link to set a new password.");
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "Could not send that reset link.", true);
     }
   }
 
@@ -2122,6 +2144,7 @@
   document.getElementById("auth-mode-button").addEventListener("click", function () { setAuthMode(authMode === "code" ? "password" : "code"); });
   document.getElementById("auth-password-button").addEventListener("click", signInWithPassword);
   document.getElementById("auth-signup-button").addEventListener("click", signUpWithPassword);
+  document.getElementById("auth-forgot-button").addEventListener("click", sendPasswordReset);
   document.getElementById("auth-set-password-button").addEventListener("click", setPassword);
   document.getElementById("auth-change-password").addEventListener("click", function () {
     document.getElementById("auth-set-password").classList.remove("hidden");
