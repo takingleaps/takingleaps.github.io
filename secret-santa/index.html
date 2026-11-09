@@ -250,7 +250,7 @@
   .gift-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
   .gift-item a{color:var(--red-dark); font-weight:700}
   .shuffle{text-align:center; font-family:"Press Start 2P", monospace; font-size:13px; padding:14px 0 4px; color:var(--red); min-height:44px}
-  .tree-row{display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:10px 22px; margin:18px 0 0; padding:0 2px}
+  .tree-row{grid-column:1 / -1; display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:10px 22px; margin:18px 0 0; padding:0 2px}
   .tree-row svg{width:52px; height:64px; image-rendering:pixelated; shape-rendering:crispEdges}
   .tree-light{animation:twinkle 1s steps(2) infinite}
   .tree-light:nth-child(2){animation-delay:.3s} .tree-light:nth-child(3){animation-delay:.6s}
@@ -402,11 +402,13 @@
   <section class="card" aria-labelledby="join-heading">
     <h2 id="join-heading">Join the draw</h2>
     <p id="draw-state" class="small">Open</p>
-    <label for="name-input">Your name</label>
-    <input id="name-input" type="text" maxlength="40" autocomplete="off" placeholder="First name" />
-    <label for="email-input">Email for updates</label>
-    <input id="email-input" type="email" maxlength="120" autocomplete="off" placeholder="Email (optional)" />
-    <button id="add-button" type="button">Add me to the list</button>
+    <div id="join-form">
+      <label for="name-input">Your name</label>
+      <input id="name-input" type="text" maxlength="40" autocomplete="off" placeholder="First name" />
+      <label for="email-input">Email for updates</label>
+      <input id="email-input" type="email" maxlength="120" autocomplete="off" placeholder="Email (optional)" />
+      <button id="add-button" type="button">Add me to the list</button>
+    </div>
     <p id="join-message" aria-live="polite"></p>
     <h3>Who is in (<span id="participant-count" class="participant-count">0</span>)</h3>
     <div id="participant-list"></div>
@@ -516,6 +518,12 @@
 
 
   <div class="tree-row" aria-hidden="true">
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
@@ -636,10 +644,21 @@
     });
   }
 
+  function isAlreadyIn() {
+    return !!state.myName && state.participants.some(function (p) { return p.name === state.myName; });
+  }
+
+  function isOrganizer() {
+    if (!state.myName) return false;
+    if (!state.group || !state.group.created_by) return true;
+    return state.myName === state.group.created_by;
+  }
+
   function updateControlStates() {
     var ok = !!state.group && state.connected;
     setJoinEnabled(ok && !!state.myEmail);
     setControlsEnabled(ok && !!state.myName);
+    document.getElementById("join-form").classList.toggle("hidden", isAlreadyIn());
     document.getElementById("suggestions-heading").classList.toggle("hidden", !state.myName);
     document.getElementById("finder-suggestions").classList.toggle("hidden", !state.myName);
   }
@@ -812,16 +831,18 @@
     }
     state.lastCount = state.participants.length;
     document.getElementById("empty-list").classList.toggle("hidden", state.participants.length > 0);
-    var status = "Open — add your name to join the list.";
+    var status = isAlreadyIn() ? "Open — you're on the list." : "Open — add your name to join the list.";
     if (state.draw && state.draw.status === "locked") status = "Locked — the list is closed.";
     if (state.draw && state.draw.status === "drawn") status = "Drawn — reveal your person below.";
     document.getElementById("draw-state").textContent = status;
-    document.getElementById("draw-button").disabled = !state.connected || !state.myName ||
-      !(state.draw && state.draw.status === "locked") || state.participants.length < 3;
-    document.getElementById("lock-button").disabled = !state.connected || !state.myName ||
+    var canRunDraw = state.connected && !!state.myName && isOrganizer();
+    var drawReady = state.draw && (state.draw.status === "open" || state.draw.status === "locked");
+    document.getElementById("draw-button").disabled = !canRunDraw || !drawReady || state.participants.length < 3;
+    document.getElementById("lock-button").disabled = !canRunDraw ||
       !!(state.draw && state.draw.status !== "open");
-    document.getElementById("unlock-button").disabled = !state.connected || !state.myName ||
+    document.getElementById("unlock-button").disabled = !canRunDraw ||
       !(state.draw && state.draw.status === "locked");
+    document.getElementById("reset-button").disabled = !canRunDraw || !state.draw;
     document.getElementById("reveal-button").disabled = !state.connected || !state.myName ||
       !(state.draw && state.draw.status === "drawn") || state.participants.length === 0;
     updateControlStates();
@@ -973,6 +994,7 @@
   }
 
   var SEARCH_URL = API_BASE_URL + "/functions/v1/search-amazon";
+  var LINK_IMAGE_URL = API_BASE_URL + "/functions/v1/fetch-link-image";
 
   function searchLimit() {
     return Math.max(1, Math.floor(250 / Math.max(1, state.participants.length)));
@@ -1506,7 +1528,7 @@
     try {
       var res = await apiFetch("/rpc/create_group", {
         method: "POST",
-        body: JSON.stringify({ p_name: name, p_slug: base })
+        body: JSON.stringify({ p_name: name, p_slug: base, p_created_by: state.myName || null })
       });
       if (!res.ok) throw new Error("Could not start that group. Try again.");
       var created = await res.json();
@@ -1627,11 +1649,15 @@
   async function runDraw() {
     if (!needGroup("join-message")) return;
     if (!state.myName) { setMessage("join-message", "Log in and join the list first.", true); return; }
-    if (!state.draw || state.draw.status !== "locked") {
-      setMessage("join-message", "Lock the list first, then draw.", true); return;
+    if (!isOrganizer()) { setMessage("join-message", "Only the person who made this list can run the draw.", true); return; }
+    if (!state.draw || (state.draw.status !== "locked" && state.draw.status !== "open")) {
+      setMessage("join-message", "The draw is already done.", true); return;
     }
     if (state.participants.length < 3) {
       setMessage("join-message", "The draw needs at least 3 people.", true); return;
+    }
+    if (state.draw.status === "open") {
+      try { await setDrawStatus("locked"); } catch (err) { setMessage("join-message", friendlyError(err), true); return; }
     }
     var names = state.participants.map(function (p) { return p.name; });
     var shuffleEl = document.getElementById("draw-shuffle");
@@ -1709,20 +1735,39 @@
     }
   }
 
+  async function fetchLinkImage(targetUrl) {
+    try {
+      var sess = (await supa.auth.getSession()).data.session;
+      if (!sess) return null;
+      var res = await fetch(LINK_IMAGE_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + sess.access_token, "apikey": API_KEY }, body: JSON.stringify({ url: targetUrl }) });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) { return null; }
+  }
+
   async function addGift() {
     if (!needGroup("gift-message")) return;
     var owner = state.myName;
     var itemEl = document.getElementById("gift-item");
     var noteEl = document.getElementById("gift-note");
     var item = itemEl.value.trim();
+    var note = noteEl.value.trim();
     if (!owner) { setMessage("gift-message", "Log in and join the list first.", true); return; }
     if (!item) { setMessage("gift-message", "Type a gift idea first.", true); return; }
+    var isUrl = function (s) { return /^https?:\/\/\S+/i.test(s); };
+    if (isUrl(item) && !isUrl(note)) { var t = item; item = note || "Gift idea"; note = t; }
     try {
       var imageEl = document.getElementById("gift-image");
+      var imageUrl = imageEl.value.trim() || null;
+      if (!imageUrl && isUrl(note)) {
+        var preview = await fetchLinkImage(note);
+        if (preview && preview.image) imageUrl = preview.image;
+        if ((!item || item === "Gift idea") && preview && preview.title) item = preview.title;
+      }
       var res = await apiFetch("/wishlists", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ owner_name: owner, item: item, link_or_note: noteEl.value.trim() || null, image_url: imageEl.value.trim() || null, group_id: state.group.id })
+        body: JSON.stringify({ owner_name: owner, item: item, link_or_note: note || null, image_url: imageUrl, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not add that gift idea.");
       itemEl.value = "";
