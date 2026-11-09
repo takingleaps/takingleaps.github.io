@@ -1324,11 +1324,14 @@
       animation: cursor-blink 1.06s steps(1) infinite;
     }
     @keyframes cursor-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+    html.js-typing .command-line,
+    html.js-typing #hero-title,
     html.js-typing .hero-copy,
     html.js-typing .button-row { visibility: hidden; }
     html.typing-done .hero-copy,
     html.typing-done .button-row { visibility: visible; }
 </style>
+<script>document.documentElement.classList.add('js-typing');setTimeout(function(){document.documentElement.classList.remove('js-typing');},8000);</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -2288,7 +2291,10 @@
          Types the command line, then the headline, char by char, with a
          block cursor. Copy + buttons print after, no fade. Skipped entirely
          under prefers-reduced-motion: everything stays visible as authored.
-         Full text stays in the HTML, so no-JS and screen readers see it. */
+         Full text stays in the HTML, so no-JS and screen readers see it.
+         The head script adds js-typing before first paint so the full
+         headline never flashes; each line is unhidden the moment its
+         typing starts, so the page loads as it types. */
       (function () {
         var heroTitle = document.getElementById('hero-title');
         var commandLine = document.querySelector('.hero-main .command-line');
@@ -2335,8 +2341,10 @@
           }, rate);
         }
         window.setTimeout(function () {
+          commandLine.style.visibility = 'visible';
           typeInto(commandLine, cmdText, 16, false, function () {
             window.setTimeout(function () {
+              heroTitle.style.visibility = 'visible';
               typeInto(heroTitle, titleText, 30, true, function () {
                 window.setTimeout(function () {
                   rootEl.classList.remove('js-typing');
