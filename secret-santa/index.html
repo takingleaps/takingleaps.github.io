@@ -80,6 +80,7 @@
   h1{
     font-family:"Press Start 2P", monospace; font-size:clamp(28px, 8.5vw, 44px);
     line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55);
+    overflow-wrap:break-word;
   }
   h1 .red{color:#ff5a2a}
   h1 .rainbow{background:linear-gradient(90deg,#ff004c,#ff8a00,#f8d800,#00a800,#3b5bff,#b800ff,#ff004c); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; text-shadow:none; animation:rainbow 3s linear infinite; filter:drop-shadow(4px 4px 0 #000)}
@@ -148,7 +149,7 @@
   .gift-thumb{transition:transform .2s steps(3)}
   .gift-thumb:hover{transform:scale(1.15) rotate(-3deg)}
   button:hover{filter:brightness(1.12)}
-  .hero-location{font-family:"Press Start 2P", monospace; font-size:11px; line-height:1.7; color:#ffde00; margin:0 0 14px; text-transform:uppercase; animation:locationGlow 1.6s ease-in-out infinite}
+  .hero p.hero-location{font-family:"Press Start 2P", monospace; font-size:clamp(11px, 3.2vw, 16px); line-height:1.7; color:#ffde00; margin:0 0 14px; text-transform:uppercase; overflow-wrap:break-word; animation:locationGlow 1.6s ease-in-out infinite}
   .hero-date{display:inline-block; font-family:"VT323", monospace; font-size:22px; line-height:1; color:#1a1a2e; background:#ffd700; padding:8px 14px 6px; margin:0 0 18px; text-transform:uppercase; letter-spacing:2px}
   @keyframes locationGlow{0%,100%{text-shadow:0 0 6px rgba(255,222,0,.7)}50%{text-shadow:0 0 16px rgba(255,222,0,.95), 0 0 28px rgba(255,222,0,.55)}}
   .gift-thumb{width:72px; height:72px; object-fit:contain; background:#fff; border:3px solid #000; flex:none}
@@ -368,7 +369,7 @@
       <input id="auth-new-password" type="password" maxlength="72" autocomplete="new-password" placeholder="New password" />
       <button id="auth-set-password-button" type="button">Save password</button>
     </div>
-    <button id="auth-change-password" class="link-button hidden" type="button">Change password</button>
+    <button id="auth-change-password" class="link-button hidden" type="button">Set or change password</button>
     <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
     <p id="auth-message" aria-live="polite"></p>
   </section>
@@ -625,10 +626,8 @@
     var loggedIn = !!state.myEmail;
     document.getElementById("auth-form").classList.toggle("hidden", loggedIn);
     document.getElementById("auth-signout-button").classList.toggle("hidden", !loggedIn);
-    var pwSet = false;
-    try { pwSet = localStorage.getItem("ss-pw-set") === "1"; } catch (e) {}
-    document.getElementById("auth-set-password").classList.toggle("hidden", !loggedIn || pwSet);
-    document.getElementById("auth-change-password").classList.toggle("hidden", !loggedIn || !pwSet);
+    document.getElementById("auth-set-password").classList.add("hidden");
+    document.getElementById("auth-change-password").classList.toggle("hidden", !loggedIn);
     document.getElementById("auth-status").textContent = loggedIn
       ? "Signed in as " + state.myEmail + (state.myName ? " — you are " + state.myName + "." : " — add your name below to join the list.")
       : "Log in with your email to vote, reveal, and edit your gift list.";
@@ -747,7 +746,6 @@
       var res = await supa.auth.updateUser({ password: password });
       if (res.error) throw res.error;
       document.getElementById("auth-new-password").value = "";
-      try { localStorage.setItem("ss-pw-set", "1"); } catch (e) {}
       document.getElementById("auth-set-password").classList.add("hidden");
       document.getElementById("auth-change-password").classList.remove("hidden");
       setMessage("auth-message", "Password saved — next time log in with your password.");
