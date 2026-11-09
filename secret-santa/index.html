@@ -443,7 +443,7 @@
       <div id="filter-chips"></div>
       <button id="filter-clear" type="button" class="secondary hidden">Clear all filters</button>
     </div>
-    <p class="small">Each person gets 62 Amazon searches a month. After that, add gifts manually with a link below.</p>
+    <p class="small">Amazon searches are shared across the group — 250 a month split between everyone. After that, add gifts manually with a link below.</p>
     <p id="finder-remaining" class="small" aria-live="polite"></p>
     <p id="finder-message" aria-live="polite"></p>
     <div id="recent-searches"></div>
@@ -612,7 +612,7 @@
       var res = await apiFetch("/gift_searches?select=id&searcher_name=eq." + encodeURIComponent(state.myName) + "&created_at=gte." + encodeURIComponent(first.toISOString()));
       if (!res.ok) return;
       var rows = await res.json();
-      setSearchRemaining(Math.max(0, 62 - rows.length));
+      setSearchRemaining(Math.max(0, searchLimit() - rows.length));
     } catch (e) { /* leave the note as-is */ }
   }
 
@@ -902,9 +902,13 @@
 
   var SEARCH_URL = API_BASE_URL + "/functions/v1/search-amazon";
 
+  function searchLimit() {
+    return Math.max(1, Math.floor(250 / Math.max(1, state.participants.length)));
+  }
+
   function setSearchRemaining(n) {
     var el = document.getElementById("finder-remaining");
-    if (el) el.textContent = "Searches left this month: " + n + " of 62";
+    if (el) el.textContent = "Searches left this month: " + n + " of " + searchLimit();
   }
 
   var SUGGEST_QUERIES = ["gift under $25", "cozy gift", "funny gift"];
@@ -1168,7 +1172,7 @@
     if (res.status === 403) { setMessage("finder-message", "Join the draw first, then search.", true); return; }
     if (res.status === 429) {
       setSearchRemaining(0);
-      setMessage("finder-message", "You have used your 62 searches this month. Add gifts manually with a link in My gift list.", true);
+      setMessage("finder-message", "You have used your " + searchLimit() + " searches this month. Add gifts manually with a link in My gift list.", true);
       return;
     }
     if (!res.ok || !data || !data.items) {
