@@ -198,6 +198,13 @@
       .toggle-btn{ font:inherit; font-weight:800; padding:10px 22px; border-radius:999px; border:1.5px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; }
       .toggle-btn.active{ background:var(--olive); border-color:var(--olive); color:var(--cream); }
 
+      /* ---------- best sellers (actual flower photo placeholder) ---------- */
+      .best-art{ position:relative; margin:10px 10px 0; height:260px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:10px; border-radius:20px; background:var(--cream-2); border:1.5px dashed var(--line); color:var(--ink-soft); text-align:center; padding:20px; box-sizing:border-box; text-decoration:none; }
+      .best-art span{ font-weight:800; font-size:.85rem; }
+      @media (max-width:560px){
+        .best-art{ height:220px; }
+      }
+
       /* ---------- product grid ---------- */
       .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
       @media (max-width:900px){ .grid{ grid-template-columns:repeat(2,1fr); gap:18px; } }
@@ -604,6 +611,49 @@
             <button type="button" class="toggle-btn" data-format="preroll" role="tab" aria-selected="false">Prerolls</button>
           </div>
           <div class="grid" id="productGrid"></div>
+        </div>
+      </section>
+
+      <!-- BEST SELLERS -->
+      <section class="block" id="best-sellers" style="padding-top:0">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">Most loved</span>
+            <h2>Best sellers</h2>
+            <p>The flower itself, not the pouch. Actual flower photos are coming, so these are placeholders for now. Tap any one for its own page.</p>
+          </div>
+          <div class="grid reveal">
+            <article class="card">
+              <a class="best-art" href="thai-stick.html" aria-label="Thai Stick — its own page">
+                <svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#A7B995"></svg>
+                <span>Flower photo coming soon</span>
+              </a>
+              <div class="card-body"><h3><a href="thai-stick.html">Thai Stick</a></h3>
+              <div class="card-meta"><span class="chip type">Hybrid</span></div>
+              <p class="size">FLWRPWR · 4g Smalls</p>
+              <div class="card-foot"><span class="price-note">pricing at launch</span><button class="add-btn" type="button" data-add="thai-stick">Reserve ✿</button></div></div>
+            </article>
+            <article class="card">
+              <a class="best-art" href="northern-lights.html" aria-label="Northern Lights — its own page">
+                <svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#7CC3F6"></svg>
+                <span>Flower photo coming soon</span>
+              </a>
+              <div class="card-body"><h3><a href="northern-lights.html">Northern Lights</a></h3>
+              <div class="card-meta"><span class="chip type">Indica</span></div>
+              <p class="size">FLWRPWR · 4g Smalls</p>
+              <div class="card-foot"><span class="price-note">pricing at launch</span><button class="add-btn" type="button" data-add="northern-lights">Reserve ✿</button></div></div>
+            </article>
+            <article class="card">
+              <a class="best-art" href="maui-wowie.html" aria-label="Maui Wowie — its own page">
+                <svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#F4728E"></svg>
+                <span>Flower photo coming soon</span>
+              </a>
+              <div class="card-body"><h3><a href="maui-wowie.html">Maui Wowie</a></h3>
+              <div class="card-meta"><span class="chip type">Sativa</span></div>
+              <p class="size">FLWRPWR · 4g Smalls</p>
+              <div class="card-foot"><span class="price-note">pricing at launch</span><button class="add-btn" type="button" data-add="maui-wowie">Reserve ✿</button></div></div>
+            </article>
+          </div>
         </div>
       </section>
 
