@@ -216,9 +216,10 @@
     .card.collapsed h2::after{content:" +"; float:right}
     .card.collapsed > :not(h2){display:none !important}
   }
-  .card h2 .card-move{float:right; font-family:inherit; font-size:10px; line-height:1; padding:4px 6px; margin:2px 0 0 4px; border:2px solid #000; background:#fff; color:#000; cursor:pointer; box-shadow:2px 2px 0 #000}
-  .card h2 .card-move:active{box-shadow:none; transform:translate(2px,2px)}
-  .card h2 .card-move:disabled{opacity:.35; cursor:default; box-shadow:none}
+  .card h2 .card-drag{float:right; width:auto; font-family:inherit; font-size:14px; line-height:1; padding:4px 8px; margin:2px 0 0 4px; border:2px solid #000; background:#fff; color:#000; cursor:grab; box-shadow:2px 2px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none}
+  .card h2 .card-drag:active{cursor:grabbing; box-shadow:none; transform:translate(2px,2px)}
+  .card.dragging{box-shadow:8px 8px 0 rgba(0,0,0,.45); opacity:.92}
+  .card-placeholder{border:3px dashed #000; background:rgba(255,255,255,.22)}
   ul{padding-left:20px; margin:8px 0}
   li{margin:6px 0}
   .participant-count{display:inline-block; transition:transform .25s ease; color:var(--red)}
@@ -1383,51 +1384,78 @@
     placeCardsInOrder(ordered);
   }
 
-  function refreshMoveButtons() {
-    var cards = getCards();
-    cards.forEach(function (card, i) {
-      var btns = card.querySelectorAll("h2 .card-move");
-      if (btns.length === 2) {
-        btns[0].disabled = i === 0;
-        btns[1].disabled = i === cards.length - 1;
-      }
-    });
-  }
-
-  function moveCard(card, dir) {
-    var cards = getCards();
-    var i = cards.indexOf(card);
-    var j = i + dir;
-    if (j < 0 || j >= cards.length) return;
-    var tmp = cards[i]; cards[i] = cards[j]; cards[j] = tmp;
-    placeCardsInOrder(cards);
-    saveCardOrder();
-    refreshMoveButtons();
-  }
-
-  function initSectionOrder() {
+  function initSectionDrag() {
     applyCardOrder();
     getCards().forEach(function (card) {
       var h = card.querySelector("h2");
       if (!h) return;
-      var up = document.createElement("button");
-      up.type = "button";
-      up.className = "card-move";
-      up.textContent = "\u2191";
-      up.title = "Move this section up";
-      up.setAttribute("aria-label", "Move this section up");
-      var down = document.createElement("button");
-      down.type = "button";
-      down.className = "card-move";
-      down.textContent = "\u2193";
-      down.title = "Move this section down";
-      down.setAttribute("aria-label", "Move this section down");
-      up.addEventListener("click", function (e) { e.stopPropagation(); moveCard(card, -1); });
-      down.addEventListener("click", function (e) { e.stopPropagation(); moveCard(card, 1); });
-      h.appendChild(up);
-      h.appendChild(down);
+      var grip = document.createElement("button");
+      grip.type = "button";
+      grip.className = "card-drag";
+      grip.textContent = "\u22ee\u22ee";
+      grip.title = "Drag to move this section";
+      grip.setAttribute("aria-label", "Drag to move this section");
+      grip.addEventListener("pointerdown", function (e) { startCardDrag(e, card); });
+      grip.addEventListener("click", function (e) { e.stopPropagation(); });
+      h.appendChild(grip);
     });
-    refreshMoveButtons();
+  }
+
+  function startCardDrag(e, card) {
+    e.preventDefault();
+    e.stopPropagation();
+    var main = document.querySelector("main");
+    var rect = card.getBoundingClientRect();
+    var offsetY = e.clientY - rect.top;
+    var placeholder = document.createElement("div");
+    placeholder.className = "card-placeholder" + (card.classList.contains("wide-desktop") ? " wide-desktop" : "");
+    placeholder.style.height = rect.height + "px";
+    main.insertBefore(placeholder, card.nextSibling);
+    card.classList.add("dragging");
+    card.style.position = "fixed";
+    card.style.left = rect.left + "px";
+    card.style.top = rect.top + "px";
+    card.style.width = rect.width + "px";
+    card.style.zIndex = "100";
+    card.style.pointerEvents = "none";
+    card.style.margin = "0";
+
+    function onMove(ev) {
+      card.style.top = (ev.clientY - offsetY) + "px";
+      var others = getCards().filter(function (c) { return c !== card; });
+      var after = null;
+      for (var i = 0; i < others.length; i++) {
+        var r = others[i].getBoundingClientRect();
+        if (ev.clientY < r.top + r.height / 2) { after = others[i]; break; }
+      }
+      if (after) main.insertBefore(placeholder, after);
+      else {
+        var treeRow = main.querySelector(".tree-row");
+        if (treeRow) main.insertBefore(placeholder, treeRow);
+        else main.appendChild(placeholder);
+      }
+    }
+
+    function onUp() {
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+      document.removeEventListener("pointercancel", onUp);
+      main.insertBefore(card, placeholder);
+      placeholder.remove();
+      card.classList.remove("dragging");
+      card.style.position = "";
+      card.style.left = "";
+      card.style.top = "";
+      card.style.width = "";
+      card.style.zIndex = "";
+      card.style.pointerEvents = "";
+      card.style.margin = "";
+      saveCardOrder();
+    }
+
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onUp);
   }
 
   function renderAll() {
@@ -2115,7 +2143,7 @@
   })();
 
   initCollapsibles();
-  initSectionOrder();
+  initSectionDrag();
   startSnowfall();
   loadGroup();
   setInterval(function () {
