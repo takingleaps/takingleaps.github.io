@@ -21,7 +21,7 @@
     --gold:#f8d800; --gold-dark:#c8a800; --blue:#3b5bff;
   }
   *{box-sizing:border-box}
-  html, body{overflow-x:hidden; overflow-x:clip}
+  html, body{overflow-x:hidden}
   html{scroll-behavior:smooth}
   body{
     margin:0; background:var(--night); color:var(--ink);
@@ -217,7 +217,8 @@
     .card.collapsed h2::after{content:" +"; float:right}
     .card.collapsed > :not(h2){display:none !important}
   }
-  .card h2 .card-drag{float:right; width:auto; min-height:34px; height:34px; font-family:inherit; font-size:14px; line-height:1; padding:6px 8px; margin:2px 0 0 4px; border:2px solid #000; background:#fff; color:#000; cursor:grab; box-shadow:2px 2px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none}
+  .card h2{padding-right:52px}
+  .card h2 .card-drag{position:absolute; top:10px; right:10px; float:none; width:auto; min-height:34px; height:34px; font-family:inherit; font-size:14px; line-height:1; padding:6px 8px; margin:0; border:2px solid #000; background:#fff; color:#000; cursor:grab; box-shadow:2px 2px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none}
   .card h2 .card-drag:active{cursor:grabbing; box-shadow:none; transform:translate(2px,2px)}
   .card.dragging{box-shadow:8px 8px 0 rgba(0,0,0,.45); opacity:.92}
   .card-placeholder{border:3px dashed #000; background:rgba(255,255,255,.22)}
@@ -421,13 +422,16 @@
     <h3>Who is in (<span id="participant-count" class="participant-count">0</span>)</h3>
     <div id="participant-list"></div>
     <p id="empty-list" class="small"></p>
-    <div class="row two">
-      <button id="lock-button" class="secondary" type="button">Lock the list</button>
-      <button id="unlock-button" class="secondary" type="button">Reopen the list</button>
+    <div id="draw-controls">
+      <div class="row two">
+        <button id="lock-button" class="secondary" type="button">Lock the list</button>
+        <button id="unlock-button" class="secondary" type="button">Reopen the list</button>
+      </div>
+      <button id="draw-button" class="green" type="button">Draw names</button>
+      <div id="draw-shuffle" class="shuffle hidden" aria-live="polite"><span id="draw-shuffle-name"></span></div>
+      <button id="reset-button" class="secondary" type="button">Reset this draw</button>
     </div>
-    <button id="draw-button" class="green" type="button">Draw names</button>
-    <div id="draw-shuffle" class="shuffle hidden" aria-live="polite"><span id="draw-shuffle-name"></span></div>
-    <button id="reset-button" class="secondary" type="button">Reset this draw</button>
+    <p id="draw-waiting" class="small hidden">The list is still open — we're waiting for the group's admin to close it.</p>
   </section>
 
   <section class="card green" aria-labelledby="poll-heading">
@@ -854,6 +858,10 @@
     if (state.draw && state.draw.status === "locked") status = "Locked — the list is closed.";
     if (state.draw && state.draw.status === "drawn") status = "Drawn — reveal your person below.";
     document.getElementById("draw-state").textContent = status;
+    var isOrg = !!state.group && isOrganizer();
+    var drawOpen = !state.draw || state.draw.status === "open";
+    document.getElementById("draw-controls").classList.toggle("hidden", !isOrg);
+    document.getElementById("draw-waiting").classList.toggle("hidden", isOrg || !drawOpen);
     var canRunDraw = state.connected && !!state.myName && isOrganizer();
     var drawReady = state.draw && (state.draw.status === "open" || state.draw.status === "locked");
     document.getElementById("draw-button").disabled = !canRunDraw || !drawReady || state.participants.length < 3;
