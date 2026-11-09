@@ -368,6 +368,7 @@
       <input id="auth-new-password" type="password" maxlength="72" autocomplete="new-password" placeholder="New password" />
       <button id="auth-set-password-button" type="button">Save password</button>
     </div>
+    <button id="auth-change-password" class="link-button hidden" type="button">Change password</button>
     <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
     <p id="auth-message" aria-live="polite"></p>
   </section>
@@ -408,6 +409,10 @@
     <p id="suggest-message" aria-live="polite"></p>
     <h3>What is the budget?</h3>
     <div id="budget-poll"></div>
+    <label for="suggest-budget">Suggest a different budget</label>
+    <input id="suggest-budget" type="number" min="1" max="1000" step="1" placeholder="Amount in $" />
+    <button id="suggest-budget-button" class="secondary" type="button">Add this budget</button>
+    <p id="suggest-budget-message" aria-live="polite"></p>
     <p id="poll-message" aria-live="polite"></p>
   </section>
 
@@ -620,7 +625,10 @@
     var loggedIn = !!state.myEmail;
     document.getElementById("auth-form").classList.toggle("hidden", loggedIn);
     document.getElementById("auth-signout-button").classList.toggle("hidden", !loggedIn);
-    document.getElementById("auth-set-password").classList.toggle("hidden", !loggedIn);
+    var pwSet = false;
+    try { pwSet = localStorage.getItem("ss-pw-set") === "1"; } catch (e) {}
+    document.getElementById("auth-set-password").classList.toggle("hidden", !loggedIn || pwSet);
+    document.getElementById("auth-change-password").classList.toggle("hidden", !loggedIn || !pwSet);
     document.getElementById("auth-status").textContent = loggedIn
       ? "Signed in as " + state.myEmail + (state.myName ? " — you are " + state.myName + "." : " — add your name below to join the list.")
       : "Log in with your email to vote, reveal, and edit your gift list.";
@@ -739,6 +747,9 @@
       var res = await supa.auth.updateUser({ password: password });
       if (res.error) throw res.error;
       document.getElementById("auth-new-password").value = "";
+      try { localStorage.setItem("ss-pw-set", "1"); } catch (e) {}
+      document.getElementById("auth-set-password").classList.add("hidden");
+      document.getElementById("auth-change-password").classList.remove("hidden");
       setMessage("auth-message", "Password saved — next time log in with your password.");
     } catch (err) {
       setMessage("auth-message", (err && err.message) || "Could not save that password.", true);
@@ -841,12 +852,31 @@
     return customs.map(function (c) { return { id: c.id, label: c.label }; });
   }
 
+  function budgetOptionsWithCustoms() {
+    var amounts = {};
+    BUDGET_OPTIONS.forEach(function (o) {
+      var n = parseInt(o.label.replace(/[^0-9]/g, ""), 10);
+      if (!isNaN(n)) amounts[n] = o.id;
+    });
+    state.votes.forEach(function (v) {
+      if (v.poll_id === "budget" && v.option_id.indexOf("custom:") === 0) {
+        var n = parseInt(v.option_id.slice(7), 10);
+        if (!isNaN(n) && n > 0 && !amounts[n]) amounts[n] = v.option_id;
+      }
+    });
+    return Object.keys(amounts).map(Number).sort(function (a, b) { return a - b; }).map(function (n) {
+      return { id: amounts[n], label: "$" + n };
+    });
+  }
+
   function renderPolls() {
     renderOnePoll("date", dateOptionsWithCustoms(), "date-poll");
-    renderOnePoll("budget", BUDGET_OPTIONS, "budget-poll");
+    renderOnePoll("budget", budgetOptionsWithCustoms(), "budget-poll");
     var canSuggest = state.connected && !!state.myName;
     document.getElementById("suggest-date").disabled = !canSuggest;
     document.getElementById("suggest-date-button").disabled = !canSuggest;
+    document.getElementById("suggest-budget").disabled = !canSuggest;
+    document.getElementById("suggest-budget-button").disabled = !canSuggest;
   }
 
   function renderWishlists() {
@@ -1679,6 +1709,8 @@
     if (!needGroup("poll-message")) return;
     var voter = state.myName;
     if (!voter) { setMessage("poll-message", "Log in and join the list first, then vote.", true); return; }
+    var existingVote = state.votes.find(function (v) { return v.poll_id === pollId && v.voter_name === voter; });
+    if (existingVote && existingVote.option_id === optionId) { setMessage("poll-message", "That's already your vote — one vote per person."); return; }
     try {
       var res = await apiFetch("/poll_votes?on_conflict=voter_name,poll_id", {
         method: "POST",
@@ -1710,6 +1742,25 @@
     setMessage("suggest-message", existed
       ? "That date is already an option — your vote is on it."
       : "Added " + formatDateLabel(d) + " — your vote is on it.");
+    input.value = "";
+  }
+
+  async function suggestBudget() {
+    if (!needGroup("suggest-budget-message")) return;
+    var input = document.getElementById("suggest-budget");
+    var value = parseInt(input.value, 10);
+    if (!state.myName) { setMessage("suggest-budget-message", "Log in and join the list first.", true); return; }
+    if (isNaN(value) || value < 1 || value > 1000) { setMessage("suggest-budget-message", "Type a budget between $1 and $1000.", true); return; }
+    var fixed = null;
+    BUDGET_OPTIONS.forEach(function (o) {
+      if (parseInt(o.label.replace(/[^0-9]/g, ""), 10) === value) fixed = o;
+    });
+    var optionId = fixed ? fixed.id : "custom:" + value;
+    var existed = state.votes.some(function (v) { return v.poll_id === "budget" && v.option_id === optionId; });
+    await castVote("budget", optionId);
+    setMessage("suggest-budget-message", existed
+      ? "That budget is already an option — your vote is on it."
+      : "Added $" + value + " — your vote is on it.");
     input.value = "";
   }
 
@@ -1869,12 +1920,18 @@
   document.getElementById("auth-password-button").addEventListener("click", signInWithPassword);
   document.getElementById("auth-signup-button").addEventListener("click", signUpWithPassword);
   document.getElementById("auth-set-password-button").addEventListener("click", setPassword);
+  document.getElementById("auth-change-password").addEventListener("click", function () {
+    document.getElementById("auth-set-password").classList.remove("hidden");
+    document.getElementById("auth-change-password").classList.add("hidden");
+    document.getElementById("auth-new-password").focus();
+  });
   document.getElementById("auth-code").addEventListener("keydown", function (e) { if (e.key === "Enter") verifyAuthCode(); });
   document.addEventListener("error", function (e) {
     if (e.target && e.target.classList && e.target.classList.contains("gift-thumb")) e.target.style.display = "none";
   }, true);
   if (supa) supa.auth.onAuthStateChange(function () { refreshAuth(); });
   document.getElementById("suggest-date-button").addEventListener("click", suggestDate);
+  document.getElementById("suggest-budget-button").addEventListener("click", suggestBudget);
   document.getElementById("gift-item").addEventListener("input", function () { setMessage("gift-message", ""); });
   (function () {
     var t = new Date();
