@@ -107,22 +107,24 @@
       .hero{
         position:relative; overflow:hidden;
         background:
-          radial-gradient(640px 400px at 90% 0%, var(--rose-soft) 0%, transparent 65%),
-          radial-gradient(680px 460px at 0% 100%, var(--sky-soft) 0%, transparent 65%),
-          radial-gradient(480px 360px at 55% 115%, var(--sage-soft) 0%, transparent 60%),
-          linear-gradient(168deg, var(--rose-soft) 0%, var(--cream) 46%, var(--sky-soft) 100%);
+          linear-gradient(rgba(253,246,234,.88), rgba(253,246,234,.62) 45%, rgba(253,246,234,.9)),
+          url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
         border-bottom:1.5px solid var(--line);
       }
-      .hero-inner{ display:grid; grid-template-columns:1.05fr .95fr; gap:24px; align-items:center; padding:64px 20px 76px; position:relative; z-index:2; }
+      .hero-inner{ display:block; text-align:center; max-width:880px; margin:0 auto; padding:88px 20px 72px; position:relative; z-index:2; }
+      .hero-eyebrow{ display:inline-block; background:var(--paper); border:1.5px solid var(--edge); border-radius:999px; padding:7px 18px; font-weight:900; font-size:.8rem; letter-spacing:.28em; text-transform:uppercase; color:var(--rose-ink); }
+      .hero-badges{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:36px; }
+      .hero-badges span{ background:var(--paper); border:1.5px solid var(--line); border-radius:999px; padding:9px 16px; font-weight:800; font-size:.85rem; box-shadow:var(--soft-shadow); }
       .hero-kicker{
         display:inline-block; background:var(--paper); border:1.5px solid var(--edge); border-radius:999px;
         padding:6px 16px; font-weight:900; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
       }
-      .hero h1{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2.7rem,7.2vw,5.6rem); line-height:1; margin:6px 0 6px; color:var(--olive); overflow-wrap:break-word; }
+      .hero h1{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(3.6rem,11vw,7.5rem); line-height:.95; margin:18px 0 4px; color:var(--olive); overflow-wrap:break-word; }
       .hero h1 .line-pink{ color:var(--rose-ink); }
       .hero h1 .line-lav{ color:var(--olive); }
-      .hero .tagline{ font-size:1.2rem; font-weight:700; color:var(--ink-soft); max-width:44ch; margin-top:14px; }
-      .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
+      .hero .hero-sub{ font-weight:900; letter-spacing:.34em; text-transform:uppercase; font-size:.85rem; color:var(--ink); margin-top:10px; }
+      .hero .tagline{ font-size:1.2rem; font-weight:700; color:var(--ink-soft); max-width:52ch; margin:16px auto 0; }
+      .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; justify-content:center; }
       .btn{
         box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:9px; border-radius:999px; border:1.5px solid var(--olive);
         padding:14px 26px; min-height:48px; font-weight:900; font-size:1rem; text-decoration:none; text-align:center;
@@ -145,7 +147,7 @@
       .sparkle{ position:absolute; color:var(--lav); animation:twinkle 2.6s ease-in-out infinite; }
       @keyframes twinkle{ 0%,100%{ opacity:.3; transform:scale(.8); } 50%{ opacity:1; transform:scale(1.15); } }
       @media (max-width:900px){
-        .hero-inner{ grid-template-columns:1fr; padding:36px 20px 44px; gap:8px; }
+        .hero-inner{ padding:56px 20px 52px; }
         .hero-art{ min-height:320px; max-width:440px; width:100%; margin:0 auto; }
       }
       @media (max-width:480px){
@@ -161,7 +163,24 @@
       @keyframes tick{ to{ transform:translateX(-50%); } }
 
       /* ---------- sections ---------- */
-      section.block{ padding:72px 0; }
+      section.block{ padding:56px 0; }
+
+      /* ---------- vibe banners (mockup-style, big cards) ---------- */
+      .vibe-banners{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+      @media (max-width:760px){ .vibe-banners{ grid-template-columns:1fr; } }
+      .vibe-banner{ position:relative; overflow:hidden; text-align:left; border:1.5px solid var(--line); border-radius:28px; min-height:190px; padding:22px 22px 20px; cursor:pointer; box-shadow:var(--soft-shadow); color:var(--ink); font:inherit; display:flex; flex-direction:column; justify-content:flex-end; gap:4px; transition:transform .18s ease, box-shadow .18s ease; }
+      .vibe-banner:hover{ transform:translateY(-4px); box-shadow:0 18px 36px rgba(85,107,63,.2); }
+      .vibe-banner.v-sativa{ background:linear-gradient(150deg,#F9A8BC,#FDE6E5 70%); }
+      .vibe-banner.v-hybrid{ background:linear-gradient(150deg,#A7B995,#E0E5D4 70%); }
+      .vibe-banner.v-indica{ background:linear-gradient(150deg,#B9A7E7,#E0EEF6 70%); }
+      .vibe-banner b{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.9rem; line-height:1; color:var(--olive); }
+      .vibe-banner small{ font-weight:700; color:var(--ink-soft); font-size:.92rem; max-width:26ch; }
+      .vibe-banner .vibe-arrow{ position:absolute; top:16px; right:16px; width:44px; height:44px; border-radius:50%; background:var(--paper); border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.2rem; }
+      .vibe-banner.active{ outline:3px solid var(--rose); outline-offset:3px; }
+      .vibe-links{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:18px; }
+      .vibe-links a, .vibe-links button{ background:var(--paper); border:1.5px solid var(--line); border-radius:999px; padding:10px 20px; font-weight:800; font-size:.9rem; color:var(--olive); text-decoration:none; cursor:pointer; font:inherit; }
+      .best-art img{ width:100%; height:100%; object-fit:cover; display:block; }
+      .best-art .best-tag{ position:absolute; bottom:10px; left:10px; background:var(--paper); border:1.5px solid var(--line); border-radius:999px; padding:4px 12px; font-size:.72rem; font-weight:900; letter-spacing:.06em; }
       .mini{ font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.75rem; color:var(--rose-ink); }
       .sec-head{ text-align:center; max-width:640px; margin:0 auto 40px; }
       .sec-head h2{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.9rem,4.4vw,3rem); line-height:1.08; margin-top:10px; color:var(--olive); }
@@ -199,7 +218,7 @@
       .toggle-btn.active{ background:var(--olive); border-color:var(--olive); color:var(--cream); }
 
       /* ---------- best sellers (actual flower photo placeholder) ---------- */
-      .best-art{ position:relative; margin:10px 10px 0; height:260px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:10px; border-radius:20px; background:var(--cream-2); border:1.5px dashed var(--line); color:var(--ink-soft); text-align:center; padding:20px; box-sizing:border-box; text-decoration:none; }
+      .best-art{ position:relative; margin:10px 10px 0; height:260px; display:block; border-radius:20px; background:var(--cream-2); border:1.5px solid var(--line); overflow:hidden; box-sizing:border-box; text-decoration:none; }
       .best-art span{ font-weight:800; font-size:.85rem; }
       @media (max-width:560px){
         .best-art{ height:220px; }
@@ -564,28 +583,24 @@
     </header>
 
     <main id="top">
-      <!-- HERO -->
+      <!-- HERO (mockup-style: flower field, big lockup, badges) -->
       <section class="hero">
         <div class="wrap hero-inner">
-          <div>
-            <h1 data-split>Good <span class="line-pink">vibes,</span><br />great <span class="line-lav">flower.</span></h1>
-            <p class="tagline">FLWRPWR 4g Smalls, packed pretty and ready to reserve. The shop doors open soon — come peek inside before anyone else.</p>
-            <div class="hero-ctas">
-              <a class="btn btn-pink" href="shop.html">Shop the smalls</a>
-              <button class="btn btn-gold" type="button" data-enter-shop>▶ Enter the shop</button>
-            </div>
-            <span class="hero-note">psst — you can walk around inside ↑ it's a whole little store</span>
+          <span class="hero-eyebrow">Good vibes, great flower</span>
+          <h1>FLWR <span class="line-pink">PWR</span></h1>
+          <p class="hero-sub">Premium cannabis flower</p>
+          <p class="tagline">FLWRPWR 4g Smalls, packed pretty and ready to reserve. The shop doors open soon.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-pink" href="#shop">Shop flower →</a>
+            <button class="btn btn-gold" type="button" data-enter-shop>▶ Enter the shop</button>
           </div>
-          <div class="hero-art" aria-hidden="true">
-            <svg class="sun" viewBox="0 0 100 100"><g fill="#F4728E"><circle cx="50" cy="50" r="17"/><g id="rays"><path d="M50 4v12M50 84v12M4 50h12M84 50h12M17 17l8.5 8.5M74.5 74.5L83 83M83 17l-8.5 8.5M25.5 74.5L17 83" stroke="#F4728E" stroke-width="6" stroke-linecap="round"/></g></g></svg>
-            <img class="pouch p1" src="img/pouch-thai-stick.png" alt="Thai Stick 4g Smalls pouch" />
-            <img class="pouch p2" src="img/pouch-northern-lights.png" alt="Northern Lights 4g Smalls pouch" />
-            <img class="pouch p3" src="img/pouch-maui-wowie.png" alt="Maui Wowie 4g Smalls pouch" />
-            <svg class="hero-daisy" style="left:2%;bottom:12%;width:54px" viewBox="0 0 100 100" data-daisy></svg>
-            <svg class="hero-daisy" style="right:2%;top:44%;width:38px;animation-duration:34s" viewBox="0 0 100 100" data-daisy></svg>
-            <span class="sparkle" style="left:44%;top:4%;font-size:1.5rem">✦</span>
-            <span class="sparkle" style="left:8%;top:56%;font-size:1.1rem;animation-delay:.7s">✦</span>
-            <span class="sparkle" style="right:16%;bottom:6%;font-size:1.3rem;animation-delay:1.3s">✦</span>
+          <div class="hero-badges">
+            <span>✿ Premium Smalls</span>
+            <span>✓ Clean &amp; Consistent</span>
+            <span>🌿 Ethically Sourced</span>
+            <span>🌳 Gives Back</span>
+            <span>👥 Community &amp; Wellness</span>
+            <span>✿ Wellness Focused</span>
           </div>
         </div>
       </section>
@@ -601,27 +616,26 @@
             <span class="mini">Shop by feeling</span>
             <h2>Find your vibe</h2>
           </div>
-          <div class="cats reveal">
-            <button class="cat" type="button" data-vibe="Hybrid" style="background:none;border:none;color:inherit;font:inherit">
-              <span class="disc" style="background:var(--sage-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#FDF6EA"></svg></span>
-              <b>Hybrid</b><small>Thai Stick</small>
+          <div class="vibe-banners reveal">
+            <button class="vibe-banner v-sativa" type="button" data-vibe="Sativa">
+              <span class="vibe-arrow">→</span>
+              <b>Sativa</b>
+              <small>Uplifting energy, creativity and focus. Maui Wowie leads the way.</small>
             </button>
-            <button class="cat" type="button" data-vibe="Indica" style="background:none;border:none;color:inherit;font:inherit">
-              <span class="disc" style="background:var(--sky-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#FDF6EA"></svg></span>
-              <b>Indica</b><small>Northern Lights</small>
+            <button class="vibe-banner v-hybrid" type="button" data-vibe="Hybrid">
+              <span class="vibe-arrow">→</span>
+              <b>Hybrid</b>
+              <small>Balanced vibes for mind and body. Thai Stick leads the way.</small>
             </button>
-            <button class="cat" type="button" data-vibe="Sativa" style="background:none;border:none;color:inherit;font:inherit">
-              <span class="disc" style="background:var(--rose-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#FDF6EA"></svg></span>
-              <b>Sativa</b><small>Maui Wowie</small>
+            <button class="vibe-banner v-indica" type="button" data-vibe="Indica">
+              <span class="vibe-arrow">→</span>
+              <b>Indica</b>
+              <small>Deep relaxation, stress relief and full-body calm. Northern Lights leads the way.</small>
             </button>
-            <a class="cat" href="shop.html">
-              <span class="disc" style="background:var(--lav-soft)"><svg width="52" height="52" viewBox="0 0 100 100" data-bud></svg></span>
-              <b>Blooming Soon</b><small>3 more strains</small>
-            </a>
-            <button class="cat" type="button" data-enter-shop style="background:none;border:none;color:inherit;font:inherit">
-              <span class="disc" style="background:var(--cream-2)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A3620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg></span>
-              <b>The Shop IRL</b><small>walk in, virtually</small>
-            </button>
+          </div>
+          <div class="vibe-links reveal">
+            <a href="shop.html">Blooming soon: 3 more strains →</a>
+            <button type="button" data-enter-shop>The Shop IRL: walk in, virtually →</button>
           </div>
           <div class="vibe-preview" id="vibePreview" hidden>
             <img id="vibeImg" src="img/pouch-maui-wowie.png" alt="" />
@@ -657,13 +671,13 @@
           <div class="sec-head reveal">
             <span class="mini">Most loved</span>
             <h2>Best sellers</h2>
-            <p>The flower itself, not the pouch. Actual flower photos are coming, so these are placeholders for now. Tap any one for its own page.</p>
+            <p>The flower itself, not the pouch. These are preview photos for now. Real flower photos coming soon. Tap any one for its own page.</p>
           </div>
           <div class="grid reveal">
             <article class="card">
               <a class="best-art" href="thai-stick.html" aria-label="Thai Stick — its own page">
-                <svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#A7B995"></svg>
-                <span>Flower photo coming soon</span>
+                <img src="img/bud-thai-stick.webp" alt="Thai Stick flower bud, preview photo" />
+                <span class="best-tag">Preview photo</span>
               </a>
               <div class="card-body"><h3><a href="thai-stick.html">Thai Stick</a></h3>
               <div class="card-meta"><span class="chip type">Hybrid</span></div>
@@ -672,8 +686,8 @@
             </article>
             <article class="card">
               <a class="best-art" href="northern-lights.html" aria-label="Northern Lights — its own page">
-                <svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#7CC3F6"></svg>
-                <span>Flower photo coming soon</span>
+                <img src="img/bud-northern-lights.webp" alt="Northern Lights flower bud, preview photo" />
+                <span class="best-tag">Preview photo</span>
               </a>
               <div class="card-body"><h3><a href="northern-lights.html">Northern Lights</a></h3>
               <div class="card-meta"><span class="chip type">Indica</span></div>
@@ -682,8 +696,8 @@
             </article>
             <article class="card">
               <a class="best-art" href="maui-wowie.html" aria-label="Maui Wowie — its own page">
-                <svg width="52" height="52" viewBox="0 0 100 100" data-daisy data-c="#F4728E"></svg>
-                <span>Flower photo coming soon</span>
+                <img src="img/bud-maui-wowie.webp" alt="Maui Wowie flower bud, preview photo" />
+                <span class="best-tag">Preview photo</span>
               </a>
               <div class="card-body"><h3><a href="maui-wowie.html">Maui Wowie</a></h3>
               <div class="card-meta"><span class="chip type">Sativa</span></div>
@@ -2152,7 +2166,6 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="motion.js"></script>
     <script>
     /* ============ whole-page motion pass (mirrors the experience page) ============ */
@@ -2167,7 +2180,7 @@
       document.body.appendChild(bloom);
 
       var petalColors = ["#F4728E","#F9A8BC","#ffffff","#B9A7E7","#A7B995","#7CC3F6"];
-      if (!reduce){
+      if (false){
         var field = document.createElement("div");
         field.className = "petal-field"; field.setAttribute("aria-hidden","true");
         var petalSVG = function(c, s){
