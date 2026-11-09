@@ -310,6 +310,43 @@
       .mission .body{ color:var(--ink-soft); font-weight:600; margin-top:12px; }
       @media (max-width:640px){ .mission{ padding:44px 0; } }
 
+      /* ---------- about / gives back / find us / events / join (Nov 8 ChatGPT mockups, woven into the live cream/pastel design) ---------- */
+      .about{ background:var(--paper); border-block:1.5px solid var(--line); }
+      .about-badges{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:860px; margin:0 auto; }
+      @media (max-width:860px){ .about-badges{ grid-template-columns:repeat(2,1fr); } }
+      .about-badge{ background:var(--cream); border:1.5px solid var(--line); border-radius:22px; padding:20px 12px; text-align:center; box-shadow:var(--soft-shadow); }
+      .about-badge .about-ico{ display:flex; align-items:center; justify-content:center; width:56px; height:56px; margin:0 auto 10px; border-radius:50%; background:var(--sage-soft); border:1.5px solid var(--edge); font-size:1.5rem; }
+      .about-badge b{ display:block; font-size:.9rem; letter-spacing:.04em; color:var(--olive); }
+      .mission .quote{ font-family:"Caveat",cursive; font-size:1.7rem; color:var(--rose-ink); margin-top:18px; }
+      .gives-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:900px; margin:0 auto; }
+      @media (max-width:760px){ .gives-grid{ grid-template-columns:1fr; } }
+      .gives-card{ background:var(--paper); border:1.5px solid var(--line); border-radius:24px; padding:26px 20px; text-align:center; box-shadow:var(--soft-shadow); }
+      .gives-card .gives-ico{ display:flex; align-items:center; justify-content:center; width:60px; height:60px; margin:0 auto 12px; border-radius:50%; background:var(--rose-soft); border:1.5px solid var(--line); font-size:1.7rem; }
+      .gives-card b{ display:block; font-size:1rem; color:var(--olive); }
+      .gives-card p{ color:var(--ink-soft); font-weight:600; font-size:.92rem; margin-top:6px; }
+      .find-us{ background:var(--cream-2); border-block:1.5px solid var(--line); }
+      .weedmaps-card{ background:var(--paper); border:1.5px solid var(--line); border-radius:28px; padding:28px 24px; max-width:680px; margin:0 auto; text-align:center; box-shadow:var(--soft-shadow); }
+      .weedmaps-search{ display:flex; gap:10px; margin:18px 0 12px; flex-wrap:wrap; }
+      .weedmaps-search input{ flex:1; min-width:200px; min-height:48px; border-radius:999px; border:1.5px solid var(--edge); background:var(--cream); color:var(--ink); padding:12px 18px; font:inherit; font-weight:600; }
+      .weedmaps-search button{ border-radius:999px; border:1.5px solid var(--olive); background:var(--olive); color:var(--cream); font-weight:900; padding:12px 22px; min-height:48px; cursor:pointer; }
+      .weedmaps-note{ color:var(--ink-soft); font-weight:600; font-size:.92rem; }
+      .weedmaps-coming{ margin-top:16px; border:1.5px dashed var(--line); border-radius:18px; padding:16px; color:var(--ink-soft); font-weight:800; font-size:.9rem; background:var(--cream); }
+      .event-card{ display:flex; gap:20px; align-items:center; background:var(--paper); border:1.5px solid var(--line); border-radius:28px; padding:24px; max-width:680px; margin:0 auto; box-shadow:var(--soft-shadow); text-align:left; }
+      @media (max-width:560px){ .event-card{ flex-direction:column; text-align:center; } }
+      .event-date{ flex:none; width:92px; height:92px; border-radius:22px; background:linear-gradient(150deg,#7CC3F6,#F4728E); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+      .event-date span{ font-size:.78rem; font-weight:900; letter-spacing:.18em; text-transform:uppercase; }
+      .event-date b{ font-size:1.15rem; }
+      .event-card h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.45rem; color:var(--olive); line-height:1.15; }
+      .event-card p{ color:var(--ink-soft); font-weight:600; margin:8px 0 14px; }
+      .events-note{ text-align:center; color:var(--ink-soft); font-weight:600; margin-top:18px; }
+      .join{ background:var(--rose-soft); border-block:1.5px solid var(--line); }
+      .join-form{ justify-content:center; }
+      .join-form input{ background:var(--paper); }
+      .join .gallery{ margin-top:28px; grid-template-columns:repeat(6,1fr); }
+      @media (max-width:900px){ .join .gallery{ grid-template-columns:repeat(3,1fr); } }
+      @media (max-width:540px){ .join .gallery{ grid-template-columns:repeat(2,1fr); } }
+      .join .tile img{ width:100%; height:100%; object-fit:cover; }
+
       /* ---------- gallery ---------- */
       .gallery{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
       @media (max-width:900px){ .gallery{ grid-template-columns:repeat(3,1fr); } }
@@ -657,6 +694,23 @@
         </div>
       </section>
 
+      <!-- ABOUT FLWRPWR (Nov 8 mockup copy, live design) -->
+      <section class="block about" id="about">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">About FLWRPWR</span>
+            <h2>Good vibes, great flower, a deeper purpose</h2>
+            <p>FLWRPWR is a cannabis brand built on good vibes, great flower, and a deeper purpose: to connect people through high-quality, responsibly sourced flower and a community rooted in wellness.</p>
+          </div>
+          <div class="about-badges reveal">
+            <div class="about-badge"><span class="about-ico">✿</span><b>Premium Flower</b></div>
+            <div class="about-badge"><span class="about-ico">✓</span><b>Lab Tested</b></div>
+            <div class="about-badge"><span class="about-ico">🌿</span><b>No Harsh Chemicals</b></div>
+            <div class="about-badge"><span class="about-ico">✿</span><b>Smalls Focused</b></div>
+          </div>
+        </div>
+      </section>
+
       <!-- ENTER THE SHOP -->
       <section class="enter-banner" id="visit">
         <div class="wrap">
@@ -713,6 +767,89 @@
           <h2>People. Plants. Purpose.<br />A brighter tomorrow.</h2>
           <p class="lead">Rooted in wellness. Powered by women. Grown for community.</p>
           <p class="body">FLWRPWR is a women-owned flower company. Good vibes, great flower, and a shop that feels like walking into your favorite boutique.</p>
+          <p class="quote">Be present, feel better, grow together.</p>
+          <p class="body">We celebrate flower, creativity, and community: a lifestyle that encourages mindfulness, connection, and positive energy in everyday life.</p>
+        </div>
+      </section>
+
+      <!-- FLWRPWR GIVES BACK (Nov 8 mockup copy, live design) -->
+      <section class="block gives" id="gives-back">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">FLWRPWR gives back</span>
+            <h2>A portion of every purchase goes further</h2>
+            <p>A portion of our proceeds supports real impact, from tree planting initiatives to organizations that serve and empower survivors.</p>
+          </div>
+          <div class="gives-grid reveal">
+            <div class="gives-card"><span class="gives-ico">🌳</span><b>Tree Planting</b><p>Planting trees for a greater tomorrow.</p></div>
+            <div class="gives-card"><span class="gives-ico">🎗️</span><b>Supporting Survivors</b><p>Organizations that serve and empower survivors.</p></div>
+            <div class="gives-card"><span class="gives-ico">👥</span><b>Community Programs</b><p>Growing a kinder, more inclusive community.</p></div>
+          </div>
+          <div style="text-align:center;margin-top:28px" class="reveal"><a class="btn btn-pink" href="story.html">Learn more →</a></div>
+        </div>
+      </section>
+
+      <!-- FIND US ON WEEDMAPS (mockup layout, honest placeholder: not listed yet) -->
+      <section class="block find-us" id="find-us">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">Find us</span>
+            <h2>Find us on Weedmaps</h2>
+            <p>Explore FLWRPWR at dispensaries near you on Weedmaps.</p>
+          </div>
+          <div class="weedmaps-card reveal">
+            <a class="btn btn-pink" href="https://weedmaps.com/search?query=FLWRPWR" target="_blank" rel="noopener">View on Weedmaps ↗</a>
+            <form class="weedmaps-search" id="weedmapsSearch">
+              <input type="text" id="weedmapsQuery" placeholder="Enter city, ZIP, or address" aria-label="City, ZIP, or address" />
+              <button type="submit">Find a shop</button>
+            </form>
+            <p class="weedmaps-note">Our Weedmaps storefront is on its way. We are not listed yet, so check back at launch.</p>
+            <div class="weedmaps-coming">Dispensary list coming soon</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- UPCOMING EVENTS (Nov 8 mockup: San Diego, Thu Nov 12) -->
+      <section class="block events" id="events">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">Upcoming events</span>
+            <h2>Come say hi in person</h2>
+          </div>
+          <article class="event-card reveal">
+            <div class="event-date"><span>Thu</span><b>Nov 12</b></div>
+            <div>
+              <h3>San Diego FLWRPWR Event</h3>
+              <p>Thursday, November 12. Event details on our Instagram.</p>
+              <a class="btn btn-pink" href="#join">Event details →</a>
+            </div>
+          </article>
+          <p class="events-note">More dates coming soon.</p>
+        </div>
+      </section>
+
+      <!-- JOIN THE COMMUNITY (Nov 8 mockup) -->
+      <section class="block join" id="join">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <span class="mini">Join the community</span>
+            <h2>Be first to know</h2>
+            <p>Be the first to know about new drops, events, and exclusive releases.</p>
+          </div>
+          <form class="subscribe-form join-form reveal" id="joinForm">
+            <input type="email" id="joinEmail" placeholder="Enter your email" aria-label="Email address" required />
+            <button type="submit">Join the list</button>
+          </form>
+          <p class="subscribe-done" id="joinDone" hidden style="text-align:center">you're on the list ✿ see you at launch</p>
+          <p style="text-align:center;margin-top:14px;font-weight:700">Follow us <a href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener" style="color:var(--rose-ink)">@flwrpwr_co</a></p>
+          <div class="gallery reveal">
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0E5D4,#A7B995)" aria-label="FLWRPWR feed"><img src="img/pouch-thai-stick.png" alt="Thai Stick pouch" /></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDDEDF,#F4728E)" aria-label="FLWRPWR feed"><img src="img/pouch-maui-wowie.png" alt="Maui Wowie pouch" /></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0EEF6,#7CC3F6)" aria-label="FLWRPWR feed"><img src="img/pouch-northern-lights.png" alt="Northern Lights pouch" /></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDF6EA,#FAC2CA)" aria-label="FLWRPWR feed"><svg width="84" height="84" viewBox="0 0 100 100" data-daisy data-c="#ffffff"></svg></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0E5D4,#A7B995)" aria-label="FLWRPWR feed"><svg width="84" height="84" viewBox="0 0 100 100" data-bud></svg></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDF6EA,#CAD4BC)" aria-label="FLWRPWR feed"><svg width="84" height="84" viewBox="0 0 100 100" data-daisy data-c="#F4728E"></svg></a>
+          </div>
         </div>
       </section>
 
@@ -742,6 +879,10 @@
             <div class="foot-h">Explore</div>
             <div class="foot-links">
               <a href="shop.html">Shop the smalls</a>
+              <a href="#about">About FLWRPWR</a>
+              <a href="#gives-back">Gives back</a>
+              <a href="#events">Events</a>
+              <a href="#find-us">Find us on Weedmaps</a>
               <a href="story.html">Our story</a>
               <a href="#visit">Enter the shop</a>
               <a href="feed.html">The feed</a>
@@ -1147,6 +1288,22 @@
         document.getElementById("subscribeDone").hidden = false;
         em.value = "";
         toast("✿ You're on the list — see you at launch");
+      });
+
+      /* join the community (second signup, same list) */
+      document.getElementById("joinForm").addEventListener("submit", function(e){
+        e.preventDefault();
+        var em = document.getElementById("joinEmail");
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim())){ toast("Hmm — that email looks off. One more try?"); em.focus(); return; }
+        document.getElementById("joinDone").hidden = false;
+        em.value = "";
+        toast("✿ You're on the list — see you at launch");
+      });
+
+      /* weedmaps search — opens Weedmaps search for FLWRPWR (no fake listings) */
+      document.getElementById("weedmapsSearch").addEventListener("submit", function(e){
+        e.preventDefault();
+        window.open("https://weedmaps.com/search?query=FLWRPWR", "_blank", "noopener");
       });
 
       syncCartBadges(); renderCart();
