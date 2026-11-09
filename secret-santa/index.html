@@ -160,7 +160,13 @@
   .topbar #auth-set-password input{flex:1 1 130px; min-width:130px; max-width:210px; min-height:42px; font-size:19px; padding:8px 10px; margin:0}
   .topbar #auth-set-password button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
   .topbar #auth-change-password, .topbar #auth-signout-button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
-  .topbar .link-button{color:#ffd700; margin:0; padding:8px 4px}
+  .topbar .link-button, .topbar #auth-form .link-button{color:#ffd700; margin:0; padding:8px 4px; font-family:"VT323", monospace; font-size:19px; min-height:44px}
+  .topbar #auth-form button, .topbar #auth-set-password button, .topbar #auth-change-password, .topbar #auth-signout-button{min-height:44px}
+  .topbar #auth-form input, .topbar #auth-set-password input{min-height:44px}
+  @media (max-width:519px){
+    .topbar #auth-form input, .topbar #auth-set-password input{max-width:none; flex:1 1 100%}
+    .topbar #auth-password-button, .topbar #auth-mode-button, .topbar #auth-send-button, .topbar #auth-verify-button, .topbar #auth-set-password-button{flex:1 1 100%}
+  }
   .topbar #auth-message{margin:0; font-size:16px; color:#dfe6ff; flex-basis:100%}
   @keyframes cardIn{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:translateY(0)}}
   .gift-thumb{transition:transform .2s steps(3)}
@@ -212,13 +218,15 @@
     .topbar{max-width:1180px}
   }
   @media (max-width:899px){
-    .card h2{cursor:pointer}
+    .card h2{cursor:pointer; min-height:44px; display:flex; align-items:center; flex-wrap:nowrap}
+    .card h2::after, .card.collapsed h2::after{margin-left:auto; padding-left:8px}
     .card h2::after{content:" -"; float:right}
     .card.collapsed h2::after{content:" +"; float:right}
     .card.collapsed > :not(h2){display:none !important}
   }
   .card h2{padding-right:52px}
   .card h2 .card-drag{position:absolute; top:10px; right:10px; float:none; width:auto; min-height:34px; height:34px; font-family:inherit; font-size:14px; line-height:1; padding:6px 8px; margin:0; border:2px solid #000; background:#fff; color:#000; cursor:grab; box-shadow:2px 2px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none}
+  @media (pointer:coarse){.card h2 .card-drag{min-height:44px; height:44px; min-width:44px; top:6px; right:6px}}
   .card h2 .card-drag:active{cursor:grabbing; box-shadow:none; transform:translate(2px,2px)}
   .card.dragging{box-shadow:8px 8px 0 rgba(0,0,0,.45); opacity:.92}
   .card-placeholder{border:3px dashed #000; background:rgba(255,255,255,.22)}
@@ -861,7 +869,7 @@
     var isOrg = !!state.group && isOrganizer();
     var drawOpen = !state.draw || state.draw.status === "open";
     document.getElementById("draw-controls").classList.toggle("hidden", !isOrg);
-    document.getElementById("draw-waiting").classList.toggle("hidden", isOrg || !drawOpen);
+    document.getElementById("draw-waiting").classList.toggle("hidden", !state.group || isOrg || !drawOpen);
     var canRunDraw = state.connected && !!state.myName && isOrganizer();
     var drawReady = state.draw && (state.draw.status === "open" || state.draw.status === "locked");
     document.getElementById("draw-button").disabled = !canRunDraw || !drawReady || state.participants.length < 3;
@@ -1094,7 +1102,8 @@
 
   async function recentSearchQueries() {
     try {
-      var res = await apiFetch("/gift_searches?select=query&order=created_at.desc&limit=20");
+      if (!state.group) return [];
+      var res = await apiFetch("/gift_searches?select=query&group_id=eq." + state.group.id + "&order=created_at.desc&limit=20");
       if (!res.ok) return [];
       var rows = await res.json();
       var queries = [];
@@ -1558,7 +1567,7 @@
     var current = document.getElementById("current-group-name");
     if (current) current.textContent = state.group ? state.group.name : "No group open yet.";
     var sel = document.getElementById("group-switch");
-    sel.innerHTML = state.groups.map(function (g) {
+    sel.innerHTML = (state.group ? "" : '<option value="" selected disabled>' + (state.groups.length ? "Pick a group" : "No groups yet") + "</option>") + state.groups.map(function (g) {
       return '<option value="' + esc(g.slug) + '"' + (state.group && g.slug === state.group.slug ? " selected" : "") + ">" + esc(g.name) + "</option>";
     }).join("");
     var share = document.getElementById("group-share");
@@ -2056,9 +2065,10 @@
   }
 
   document.getElementById("start-button").addEventListener("click", function () {
-    var target = state.myEmail ? "join-heading" : "auth-heading";
+    var target = state.myEmail ? "join-heading" : "auth-topbar";
     openCard(target);
-    document.getElementById(target).scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    var targetEl = document.getElementById(target);
+    if (targetEl) targetEl.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     if (state.myEmail) document.getElementById("name-input").focus({ preventScroll: true });
     else document.getElementById("auth-email").focus({ preventScroll: true });
   });
