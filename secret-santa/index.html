@@ -1334,7 +1334,6 @@
     document.querySelectorAll(".card").forEach(function (card) {
       var h = card.querySelector("h2");
       if (!h) return;
-      if (card.getAttribute("aria-labelledby") !== "auth-heading") card.classList.add("collapsed");
       h.setAttribute("tabindex", "0");
       h.setAttribute("role", "button");
       h.setAttribute("aria-expanded", card.classList.contains("collapsed") ? "false" : "true");
@@ -1465,10 +1464,6 @@
     renderWishlists();
     renderMessages();
     renderBuyingView();
-    if (isMobileLayout() && state.draw && state.draw.status !== "open") {
-      var revealCard = document.querySelector('[aria-labelledby="reveal-heading"]');
-      if (revealCard && !revealCard.dataset.userCollapsed) revealCard.classList.remove("collapsed");
-    }
   }
 
   function derangement(names) {
