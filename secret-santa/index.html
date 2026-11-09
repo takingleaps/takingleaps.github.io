@@ -201,6 +201,16 @@
   .filter-chip{display:inline-flex; align-items:center; gap:6px; background:#f8d800; border:3px solid #000; box-shadow:3px 3px 0 #000; padding:2px 8px; margin:4px 6px 0 0; font-size:18px}
   .filter-chip button{width:auto; min-height:0; margin:0; padding:0 4px; font-size:16px; background:transparent; color:var(--ink); border:none; box-shadow:none}
   .recent-chip{width:auto; min-height:40px; margin:4px 6px 0 0; padding:6px 10px; font-size:11px}
+  #filter-toggle, #suggestions-more{display:none}
+  @media (max-width:899px){
+    #filter-toggle{display:block; min-height:44px; font-size:11px}
+    #gift-filters:not(.open) .filter-row{display:none}
+    #finder-suggestions:not(.show-all) > :nth-child(n+4){display:none}
+    #suggestions-more:not(.hidden){display:block; min-height:44px}
+    #recent-searches:not(.show-all) .recent-chip:nth-of-type(n+4){display:none}
+  }
+  .search-add{font-size:12px !important}
+  .filter-chip button{min-width:44px; min-height:44px !important}
   #filter-clear{width:auto; min-height:44px; margin-top:10px; padding:8px 12px; font-size:10px}
   button.secondary{background:#fff; color:var(--ink)}
   button.green{background:var(--green); color:#fff}
@@ -479,6 +489,7 @@
     <label for="finder-query">Search Amazon</label>
     <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
     <button id="finder-search-button" type="button">Search Amazon</button>
+    <button id="filter-toggle" class="secondary" type="button" aria-expanded="false" aria-controls="gift-filters">Filters: shop, for, age, price</button>
     <div id="gift-filters">
       <div class="filter-row">
         <div><label for="filter-shop">Shop</label><select id="filter-shop"><option value="amazon">Amazon</option></select></div>
@@ -497,6 +508,7 @@
     <div id="finder-results"></div>
     <h3 id="suggestions-heading">Suggestions for you</h3>
     <div id="finder-suggestions"></div>
+    <button id="suggestions-more" class="secondary hidden" type="button">Show more suggestions</button>
     <h3>Or add one manually</h3>
     <label for="gift-item">Gift idea</label>
     <input id="gift-item" type="text" maxlength="120" autocomplete="off" placeholder="Gift idea" />
@@ -673,6 +685,7 @@
     document.getElementById("join-form").classList.toggle("hidden", isAlreadyIn());
     document.getElementById("suggestions-heading").classList.toggle("hidden", !state.myName);
     document.getElementById("finder-suggestions").classList.toggle("hidden", !state.myName);
+    if (!state.myName) document.getElementById("suggestions-more").classList.add("hidden");
   }
 
   async function refreshSearchRemaining() {
@@ -1259,6 +1272,11 @@
     items = items.concat(recent);
     suggestionItems = items.slice(0, 8);
     if (suggestionItems.length) renderProductCards(document.getElementById("finder-suggestions"), suggestionItems);
+    var more = document.getElementById("suggestions-more");
+    var sugEl = document.getElementById("finder-suggestions");
+    sugEl.classList.remove("show-all");
+    more.classList.toggle("hidden", suggestionItems.length <= 3);
+    more.textContent = "Show " + Math.max(0, suggestionItems.length - 3) + " more suggestions";
   }
 
   function renderSearchResults(items) {
@@ -2059,6 +2077,17 @@
     requestAnimationFrame(tick);
   }
 
+  document.getElementById("filter-toggle").addEventListener("click", function () {
+    var box = document.getElementById("gift-filters");
+    var open = box.classList.toggle("open");
+    this.setAttribute("aria-expanded", open ? "true" : "false");
+    this.textContent = open ? "Hide filters" : "Filters: shop, for, age, price";
+  });
+  document.getElementById("suggestions-more").addEventListener("click", function () {
+    var sugEl = document.getElementById("finder-suggestions");
+    var all = sugEl.classList.toggle("show-all");
+    this.textContent = all ? "Show fewer suggestions" : "Show " + Math.max(0, sugEl.children.length - 3) + " more suggestions";
+  });
   document.getElementById("start-button").addEventListener("click", function () {
     var target = state.myEmail ? "join-heading" : "auth-topbar";
     openCard(target);
