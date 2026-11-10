@@ -1809,6 +1809,55 @@
           settle();
         }, undefined, function(err){ if (window.console) console.warn("shopper.glb did not load, procedural shoppers stay", err); settle(); });
       }
+      /* v3: clone + rebind a skinned GLB so the clone has its OWN skeleton
+         (three.js r128 has no SkeletonUtils). Clone meshes one-to-one from
+         the template so the bind map is exact. */
+      function cloneSkinned(template){
+        var clone = template.clone(true);
+        clone.updateMatrixWorld(true);
+        var srcBones = [], dstBones = [];
+        template.traverse(function(o){ if (o.isBone) srcBones.push(o); });
+        clone.traverse(function(o){ if (o.isBone) dstBones.push(o); });
+        var srcMeshes = [], dstMeshes = [];
+        template.traverse(function(o){ if (o.isSkinnedMesh) srcMeshes.push(o); });
+        clone.traverse(function(o){ if (o.isSkinnedMesh) dstMeshes.push(o); });
+        dstMeshes.forEach(function(mesh, i){
+          var srcMesh = srcMeshes[i];
+          if (!srcMesh) return;
+          var bones = srcMesh.skeleton.bones.map(function(b){
+            var idx = srcBones.indexOf(b);
+            return idx >= 0 ? dstBones[idx] : b;
+          });
+          mesh.bind(new THREE.Skeleton(bones));
+        });
+        return clone;
+      }
+      /* Pose a bone around its LOCAL X hinge, relative to its rest pose.
+         A bone's rest orientation is NOT identity (a downward bone rests at
+         ~-180 deg), so direct `bone.rotation.x = a` destroys the rest pose.
+         Negative = forward swing, shin positive = knee bends. */
+      function boneRotX(bone, angle){
+        bone.quaternion.copy(bone.userData.restQuat);
+        bone.rotateX(angle);
+      }
+      /* Pose a v3 rig with the walk cycle at phase `s` (sin of the step)
+         and amplitude `ga` (0 = rest, 1 = full stride). Thighs swing,
+         knees bend on the forward swing so the foot lifts, ankles flex,
+         elbows bend, spine counter-rotates. */
+      function poseBones(b, s, ga){
+        var thR = -s * .55 * ga, thL = s * .55 * ga;
+        var knR = .95 * Math.pow(Math.max(0, s), 1.3) * ga, knL = .95 * Math.pow(Math.max(0, -s), 1.3) * ga;
+        boneRotX(b.ThighR, thR); boneRotX(b.ThighL, thL);
+        boneRotX(b.ShinR, knR); boneRotX(b.ShinL, knL);
+        boneRotX(b.FootR, -(thR + knR) * .6 - .06 * ga);
+        boneRotX(b.FootL, -(thL + knL) * .6 - .06 * ga);
+        var aR = s * .42 * ga, aL = -s * .42 * ga;
+        boneRotX(b.UpperArmR, aR); boneRotX(b.UpperArmL, aL);
+        boneRotX(b.ForearmR, -(.18 + .30 * Math.max(0, -aR)) * ga);
+        boneRotX(b.ForearmL, -(.18 + .30 * Math.max(0, -aL)) * ga);
+        b.Spine.quaternion.copy(b.Spine.userData.restQuat); b.Spine.rotateY(-.06 * s * ga);
+        b.Head.quaternion.copy(b.Head.userData.restQuat); b.Head.rotateY(.05 * s * ga);
+      }
       function makeModelShopper(outfit, skin, hairC, rnd){
         /* prefer a v2 variant (parted limbs + built-in face + real hair cards);
            fall back to the old shopper.glb (blank head, runtime face). */
@@ -1816,7 +1865,10 @@
         var g, isV2 = false;
         if (v2Keys.length){
           var pick = rnd ? rnd() : Math.random();
-          g = shopperV2Templates[v2Keys[Math.floor(pick * v2Keys.length)]].clone(true);
+          /* v3 is a skinned rig: clone + rebind so each shopper has its own
+             skeleton (plain .clone() shares the template's skeleton and the
+             walk would pose every shopper at once). */
+          g = cloneSkinned(shopperV2Templates[v2Keys[Math.floor(pick * v2Keys.length)]]);
           isV2 = true;
         } else {
           g = shopperTemplate.clone(true);
@@ -1838,12 +1890,22 @@
             });
             m.material = Array.isArray(m.material) ? nm : nm[0];
           });
-          /* real limb pivots — the walk animation swings arms AND legs */
-          var parts = {};
-          g.traverse(function(o){ if (o.name) parts[o.name] = o; });
-          if (parts.ArmR && parts.ArmL && parts.LegR && parts.LegL){
-            g.userData.arms = [parts.ArmR, parts.ArmL];
-            g.userData.legs = [parts.LegR, parts.LegL];
+          /* v3 skinned rig: wire the bones (rest quaternion stored per bone
+             so boneRotX can pose around the local X hinge). Falls back to
+             the old parted-limb pivots if a template has no bones. */
+          var bones = {};
+          g.traverse(function(o){ if (o.isBone){ bones[o.name] = o; o.userData.restQuat = o.quaternion.clone(); } });
+          var need = ['ThighL','ShinL','FootL','ThighR','ShinR','FootR','UpperArmL','ForearmL','UpperArmR','ForearmR','Spine','Head'];
+          var hasBones = need.every(function(n){ return !!bones[n]; });
+          if (hasBones){
+            g.userData.bones = bones;
+          } else {
+            var parts = {};
+            g.traverse(function(o){ if (o.name) parts[o.name] = o; });
+            if (parts.ArmR && parts.ArmL && parts.LegR && parts.LegL){
+              g.userData.arms = [parts.ArmR, parts.ArmL];
+              g.userData.legs = [parts.LegR, parts.LegL];
+            }
           }
           /* face, hair, daisy pin are built into the v2 model — no runtime face */
           return g;
@@ -2005,6 +2067,11 @@
           n = npcs[i]; g = n.group;
           if (n.wait > 0){
             n.wait -= dt;
+            if (g.userData.bones){
+              /* ease the rig back to its rest pose while standing */
+              n.gait = Math.max(0, (n.gait || 0) - dt * 3);
+              poseBones(g.userData.bones, Math.sin(n.bob), n.gait);
+            }
             if (g.userData.arms){
               g.userData.arms[0].rotation.x *= .9;
               g.userData.arms[1].rotation.x *= .9;
@@ -2025,15 +2092,20 @@
               while (diff < -Math.PI) diff += Math.PI * 2;
               g.rotation.y += diff * Math.min(1, dt * 8);
               n.bob += dt * 7 * n.speed;
-              if (g.userData.arms){
-                var sw = Math.sin(n.bob) * .45;
-                g.userData.arms[0].rotation.x = sw;
-                g.userData.arms[1].rotation.x = -sw;
-              }
-              if (g.userData.legs){
-                var lsw = Math.sin(n.bob) * .5;
-                g.userData.legs[0].rotation.x = -lsw;
-                g.userData.legs[1].rotation.x = lsw;
+              n.gait = Math.min(1, (n.gait || 0) + dt * 3);
+              if (g.userData.bones){
+                poseBones(g.userData.bones, Math.sin(n.bob), n.gait);
+              } else {
+                if (g.userData.arms){
+                  var sw = Math.sin(n.bob) * .45;
+                  g.userData.arms[0].rotation.x = sw;
+                  g.userData.arms[1].rotation.x = -sw;
+                }
+                if (g.userData.legs){
+                  var lsw = Math.sin(n.bob) * .5;
+                  g.userData.legs[0].rotation.x = -lsw;
+                  g.userData.legs[1].rotation.x = lsw;
+                }
               }
             }
           }

@@ -91,18 +91,60 @@
   }
 
   /* tote bag on the right arm (arm pivot [1]), with the pendulum swing physics
-     driven by updatePeople — shared by the procedural person and the GLB person. */
-  function attachTote(root,options){
-    var tote=new T.Group();tote.position.set(0,-.57,.015);
+     driven by updatePeople — shared by the procedural person and the GLB person.
+     For a rigged (v3) person, pass the forearm bone + a hand-relative offset
+     so the bag hangs from the hand instead of the shoulder pivot. */
+  function attachTote(root,options,parent,pos){
+    var tote=new T.Group();
+    if(pos)tote.position.set(pos[0],pos[1],pos[2]);else tote.position.set(0,-.57,.015);
     var toteBodyPivot=new T.Group();toteBodyPivot.position.y=-.06;tote.add(toteBodyPivot);
     var toteBody=mesh(new T.BoxGeometry(.34,.38,.13),material(options.tote,.66));toteBody.position.y=-.19;toteBodyPivot.add(toteBody);
     var toteBand=mesh(new T.BoxGeometry(.345,.08,.135),material(options.accent,.6),false,false);toteBand.position.y=-.055;toteBodyPivot.add(toteBand);
     [-1,1].forEach(function(hs){var handle=mesh(new T.TorusGeometry(.078,.013,6,14,Math.PI),material(0x8a6b46,.82),false,false);handle.position.set(0,-.055,hs*.052);tote.add(handle);});
-    root.userData.arms[1].add(tote);root.userData.tote=tote;root.userData.toteBody=toteBodyPivot;
+    (parent||root.userData.arms[1]).add(tote);root.userData.tote=tote;root.userData.toteBody=toteBodyPivot;
     root.userData.swing={x:0,z:0,vx:0,vz:0,bx:0,bz:0,bvx:0,bvz:0};
   }
 
-  /* ---------- v2 GLB shoppers (Blender-built, parted limbs, real hair cards) ----------
+  /* Clone a skinned GLB template and rebind its skinned meshes to the cloned
+     bones. Plain .clone(true) leaves a clone's SkinnedMeshes bound to the
+     ORIGINAL skeleton (this three.js build has no SkeletonUtils), so the
+     bones would drive the wrong mesh. Mirrors SkeletonUtils.clone. */
+  function cloneSkinned(template){
+    var clone=template.clone(true);
+    clone.updateMatrixWorld(true);
+    var srcBones=[],dstBones=[];
+    template.traverse(function(o){if(o.isBone)srcBones.push(o);});
+    clone.traverse(function(o){if(o.isBone)dstBones.push(o);});
+    var srcMeshes=[],dstMeshes=[];
+    template.traverse(function(o){if(o.isSkinnedMesh)srcMeshes.push(o);});
+    clone.traverse(function(o){if(o.isSkinnedMesh)dstMeshes.push(o);});
+    dstMeshes.forEach(function(mesh,i){
+      var srcMesh=srcMeshes[i];
+      if(!srcMesh)return;
+      var bones=srcMesh.skeleton.bones.map(function(b){
+        var idx=srcBones.indexOf(b);
+        return idx>=0?dstBones[idx]:b;
+      });
+      mesh.bind(new T.Skeleton(bones));
+    });
+    return clone;
+  }
+
+  /* Pose a bone by rotating it around its LOCAL X hinge, relative to its
+     rest orientation. A bone's rest orientation is NOT identity (a downward
+     bone rests at ~-180 deg), so direct `bone.rotation.x = a` DESTROYS the
+     rest pose and flings the limb. Reset to the stored rest quaternion,
+     then rotateX (local X hinge). Verified in Node: negative = forward
+     swing, positive = backward; shin positive = knee bends. */
+  function boneRotX(bone,angle){
+    bone.quaternion.copy(bone.userData.restQuat);
+    bone.rotateX(angle);
+  }
+
+  /* ---------- v3 GLB shoppers (Blender-built, SKINNED armature) ----------
+     Realistic rigged humans: one skinned body mesh + hair, armature with
+     hips/spine/neck/head/shoulders/elbows/wrists/knees/ankles. Legs bend at
+     the knee, arms at the elbow — the walk drives BONES, not pivots.
      Variants live in ./models/ (same as the room GLBs) with the assets/models/
      fallback. Loading is NON-FATAL: a failed variant just is not used, and a
      walker whose GLB is missing falls back to the procedural createPerson,
@@ -112,21 +154,19 @@
   var shopperTemplates={};
   var shopperLoadPromise=null;
 
-  /* Build a person from a v2 GLB template. Returns null if the template or any
-     limb pivot is missing, so the caller falls back to createPerson.
-     The GLB's pivots are real joints (origin at shoulder/hip), so the same
-     updatePeople rotations that swing the procedural arms now swing the GLB
-     legs too. Arms/legs are mapped to match createPerson's convention
-     ([0]=right/-X, [1]=left/+X) so the contralateral gait reads right. */
+  /* Build a person from a v3 GLB template. Returns null if the template or any
+     required bone is missing, so the caller falls back to createPerson.
+     Bones are mapped to match createPerson's convention ([0]=right/-X,
+     [1]=left/+X) so the contralateral gait reads right. */
   function makeGlbPerson(options,variant){
     var template=shopperTemplates[variant];
     if(!template)return null;
     var root=new T.Group(),rig=new T.Group();
-    var clone=template.clone(true);
-    var parts={};
-    clone.traverse(function(o){if(o.name)parts[o.name]=o;});
-    var armL=parts.ArmL,armR=parts.ArmR,legL=parts.LegL,legR=parts.LegR;
-    if(!armL||!armR||!legL||!legR)return null;
+    var clone=cloneSkinned(template);
+    var bones={};
+    clone.traverse(function(o){if(o.isBone){bones[o.name]=o;o.userData.restQuat=o.quaternion.clone();}});
+    var need=['ThighL','ShinL','FootL','ThighR','ShinR','FootR','UpperArmL','ForearmL','UpperArmR','ForearmR','Spine','Head'];
+    for(var i=0;i<need.length;i++)if(!bones[need[i]])return null;
     var tint={OutfitMat:options.top,LegsMat:options.bottom,SkinMat:options.skin,HairMat:options.hair,ShoesMat:(options.shoe||0x251d22),AccentMat:options.accent};
     clone.traverse(function(o){
       if(!o.isMesh)return;
@@ -140,21 +180,22 @@
       o.castShadow=false;o.receiveShadow=true;
     });
     rig.add(clone);root.add(rig);
-    root.userData.arms=[armR,armL];
-    root.userData.legs=[legR,legL];
+    root.userData.bones=bones;
+    root.userData.arms=[bones.UpperArmR,bones.UpperArmL];
+    root.userData.legs=[bones.ThighR,bones.ThighL];
     root.userData.rig=rig;
-    root.userData.head=parts.Head||clone;
+    root.userData.head=bones.Head||clone;
     root.userData.glb=true;
     root.userData.baseY=options.y||0;
-    /* v2 is 1.708m; the procedural person is ~2.09 units tall unscaled, so at
-       the same options.scale the GLB needs 2.09/1.708 = 1.224x to match the room */
-    root.scale.setScalar((options.scale||.92)*1.224);
+    /* v3 is 1.709m; the procedural person is ~2.09 units tall unscaled, so at
+       the same options.scale the GLB needs 2.09/1.709 = 1.223x to match the room */
+    root.scale.setScalar((options.scale||.92)*1.223);
     if(options.hat){
       var hatMat=material(options.accent||0xf5e7c7,.66);
       var brim=mesh(new T.CylinderGeometry(.20,.20,.03,16),hatMat);brim.position.set(0,1.70,0);rig.add(brim);
       var dome=mesh(new T.CylinderGeometry(.12,.15,.12,14),hatMat);dome.position.set(0,1.76,0);rig.add(dome);
     }
-    if(options.tote)attachTote(root,options);
+    if(options.tote)attachTote(root,options,bones.ForearmL,[0,.28,-.02]);
     if(options.employee){
       var badge=mesh(new T.BoxGeometry(.24,.11,.025),material(options.accent||0xf5e7c7,.72),false,false);
       badge.position.set(.1,1.44,.14);rig.add(badge);
@@ -226,13 +267,39 @@
       else{var step=Math.min(dist,p.speed*dt),yaw=Math.atan2(dx,dz);p.root.rotation.y+=angleDelta(p.root.rotation.y,yaw)*Math.min(1,dt*7);p.root.position.x+=dx/dist*step;p.root.position.z+=dz/dist*step;p.walking=true;}
       var browseTarget=(!p.walking&&p.pause>0&&p.browse>0)?p.browse*Math.min(1,Math.max(0,(p.pauseTotal-p.pause)/.45),Math.max(0,p.pause/.45)):0;
       p.browseAmt=lerp(p.browseAmt||0,browseTarget,Math.min(1,dt*5));
-      /* gait ramps in/out so starts and stops are smooth, not snappy; the legs
-         now swing on real hip pivots (the old dummy pivots were a no-op) */
+      /* gait ramps in/out so starts and stops are smooth, not snappy */
       p.gaitAmt=lerp(p.gaitAmt||0,p.walking?1:0,Math.min(1,dt*6));
       var g=p.gaitAmt*Math.sin(t*7+p.phase);
       var bob=p.gaitAmt*Math.abs(Math.sin(t*7+p.phase))*.035+(1-p.gaitAmt)*Math.sin(t*1.6+p.phase)*.008;
-      u.rig.position.y=bob;u.arms[0].rotation.x=g*.42;u.arms[1].rotation.x=-g*.42*(p.hasBag?.35:1);u.legs[0].rotation.x=-g*.48;u.legs[1].rotation.x=g*.48;
-      if(p.browseAmt>.01){var reach=1.58+.34*Math.sin(t*.85+p.phase*2.3);u.arms[0].rotation.x=lerp(u.arms[0].rotation.x,-reach,p.browseAmt);}
+      u.rig.position.y=bob;
+      if(u.bones){
+        /* v3 rigged walk: thighs swing, knees bend on the forward swing so the
+           foot lifts and clears the ground, ankles flex to keep the foot
+           near-flat, elbows bend, spine counter-rotates so the torso stays
+           facing forward. Posed via boneRotX (rest quaternion + local X
+           hinge); negative = forward swing, shin positive = knee bends. */
+        var s=Math.sin(t*7+p.phase),ga=p.gaitAmt,b=u.bones;
+        var thR=-s*.55*ga,thL=s*.55*ga;
+        var knR=.95*Math.pow(Math.max(0,s),1.3)*ga,knL=.95*Math.pow(Math.max(0,-s),1.3)*ga;
+        boneRotX(b.ThighR,thR);boneRotX(b.ThighL,thL);
+        boneRotX(b.ShinR,knR);boneRotX(b.ShinL,knL);
+        boneRotX(b.FootR,-(thR+knR)*.6-.06*ga);
+        boneRotX(b.FootL,-(thL+knL)*.6-.06*ga);
+        var aR=s*.42*ga,aL=-s*.42*ga*(p.hasBag?.35:1);
+        boneRotX(b.UpperArmR,aR);boneRotX(b.UpperArmL,aL);
+        boneRotX(b.ForearmR,-(.18+.30*Math.max(0,-aR))*ga);
+        boneRotX(b.ForearmL,-(.18+.30*Math.max(0,-aL))*ga);
+        b.Spine.quaternion.copy(b.Spine.userData.restQuat);b.Spine.rotateY(-.06*s*ga);
+        b.Head.quaternion.copy(b.Head.userData.restQuat);b.Head.rotateY(.05*s*ga);
+        if(p.browseAmt>.01){
+          var reach=1.58+.34*Math.sin(t*.85+p.phase*2.3);
+          boneRotX(b.UpperArmR,lerp(aR,-reach,p.browseAmt));
+          boneRotX(b.ForearmR,lerp(-(.18+.30*Math.max(0,-aR))*ga,-.30,p.browseAmt));
+        }
+      }else{
+        u.arms[0].rotation.x=g*.42;u.arms[1].rotation.x=-g*.42*(p.hasBag?.35:1);u.legs[0].rotation.x=-g*.48;u.legs[1].rotation.x=g*.48;
+        if(p.browseAmt>.01){var reach=1.58+.34*Math.sin(t*.85+p.phase*2.3);u.arms[0].rotation.x=lerp(u.arms[0].rotation.x,-reach,p.browseAmt);}
+      }
       /* torso leans into the walk and sways side to side — it reads as a walk */
       u.rig.rotation.x=.045*p.gaitAmt+.07*p.browseAmt;
       u.rig.rotation.z=Math.sin(t*7+p.phase)*.022*p.gaitAmt;
