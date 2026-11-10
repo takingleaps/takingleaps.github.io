@@ -1,43 +1,88 @@
-/* FLWRPWR preview gate, shared password, client-side.
-   Keeps casual visitors out of the pre-launch shop. This is a soft
-   lock, not server security: the page source still lives in the browser,
-   so anyone determined can get around it. The real lock is the admin
-   side (Supabase accounts) when that lands.
-   Unlock is remembered per device; changing PASS_HASH below (via a new
-   push) locks everyone out again until they enter the new password. */
+/* FLWRPWR coming soon screen. Replaces the old gate (Nov 10):
+   no password anymore. The public face is a dynamic Coming Soon page
+   (drifting daisy field, floating daisies, sparkles, big logo, Notify Me).
+   "Preview the shop" dismisses it for the team; the dismissal is
+   remembered per device so the team only taps once. Add ?coming-soon to
+   the URL to see the Coming Soon screen again.
+   The Notify Me email is saved on-device (localStorage, the same
+   client-side approach as the shop basket). There is no backend here;
+   the list lives on the visitor's device until the team wires it up.
+   Scroll: the overlay scrolls itself (overflow-y:auto). Dismissing it
+   removes it from the DOM and clears any stuck scroll lock, so the
+   shop behind it scrolls normally. */
 (function(){
   "use strict";
-  var PASS_HASH = "649d473b8cdce01a2487f943785f258b7a85e289bf8e4e1f65ff6a8e050ebba6"; /* SHA-256 of the preview password */
-  var KEY = "flwrpwr-unlocked";
-  var gate = document.getElementById("flwrGate");
-  if (!gate) return;
-  function unlock(){
-    try { localStorage.setItem(KEY, PASS_HASH); } catch (e) {}
-    gate.remove();
+  var KEY = "flwrpwr-preview";
+  var LIST_KEY = "flwrpwr_notify_v1";
+  var overlay = document.getElementById("flwrGate");
+  if (!overlay) return;
+
+  function clearLocks(){
+    document.body.classList.remove("shop-locked");
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
   }
+  function removeOverlay(){
+    clearLocks();
+    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+  }
+
+  /* remembered preview: skip the Coming Soon screen, unless ?coming-soon is in the URL */
+  var forceSoon = /[?&]coming-soon\b/.test(location.search);
   try {
-    if (localStorage.getItem(KEY) === PASS_HASH) { gate.remove(); return; }
+    if (!forceSoon && localStorage.getItem(KEY) === "1"){ removeOverlay(); return; }
   } catch (e) {}
-  var form = document.getElementById("flwrGateForm");
-  var input = document.getElementById("flwrGateInput");
-  var err = document.getElementById("flwrGateError");
-  if (input) input.focus();
-  if (!form || !input) return;
-  form.addEventListener("submit", function(ev){
-    ev.preventDefault();
-    if (!window.crypto || !crypto.subtle) {
-      if (err) err.hidden = false;
-      return;
+
+  /* fill any daisy SVGs in the overlay that the page's own filler missed */
+  function daisySVG(petal){
+    var petals = "", i, a;
+    for (i = 0; i < 8; i++){ a = i * 45;
+      petals += '<ellipse cx="50" cy="26" rx="11" ry="20" fill="' + petal + '" transform="rotate(' + a + ' 50 50)"/>';
     }
-    crypto.subtle.digest("SHA-256", new TextEncoder().encode(input.value || "")).then(function(buf){
-      var hex = Array.prototype.map.call(new Uint8Array(buf), function(b){ return ("0" + b.toString(16)).slice(-2); }).join("");
-      if (hex === PASS_HASH) { unlock(); return; }
-      if (err) err.hidden = false;
-      input.select();
-      if (gate.animate) gate.animate(
-        [{ transform: "translateX(0)" }, { transform: "translateX(-8px)" }, { transform: "translateX(8px)" }, { transform: "translateX(0)" }],
-        { duration: 300 }
-      );
-    });
+    return petals + '<circle cx="50" cy="50" r="13" fill="#556B3F"/><circle cx="46" cy="47" r="2.4" fill="#A7B995"/><circle cx="54" cy="52" r="2" fill="#A7B995"/><circle cx="51" cy="44" r="1.6" fill="#A7B995"/>';
+  }
+  overlay.querySelectorAll("[data-daisy]").forEach(function(el){
+    if (!el.innerHTML) el.innerHTML = daisySVG(el.getAttribute("data-c") || "#ffffff");
   });
+
+  /* notify me: same email check as the shop Join form; save on-device */
+  var form = document.getElementById("flwrSoonForm");
+  var input = document.getElementById("flwrSoonEmail");
+  var done = document.getElementById("flwrSoonDone");
+  var err = document.getElementById("flwrSoonErr");
+  if (form && input){
+    form.addEventListener("submit", function(ev){
+      ev.preventDefault();
+      var v = (input.value || "").trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){
+        if (err) err.hidden = false;
+        if (done) done.hidden = true;
+        input.focus(); input.select();
+        if (overlay.animate) overlay.animate(
+          [{ transform:"translateX(0)" }, { transform:"translateX(-8px)" }, { transform:"translateX(8px)" }, { transform:"translateX(0)" }],
+          { duration:300 }
+        );
+        return;
+      }
+      try {
+        var list = [];
+        try { list = JSON.parse(localStorage.getItem(LIST_KEY) || "[]") || []; } catch (e2) { list = []; }
+        if (list.indexOf(v) === -1) list.push(v);
+        localStorage.setItem(LIST_KEY, JSON.stringify(list));
+      } catch (e) {}
+      if (err) err.hidden = true;
+      if (done) done.hidden = false;
+      form.hidden = true;
+    });
+  }
+
+  /* preview the shop: discreet team link, dismisses the overlay */
+  var preview = document.getElementById("flwrSoonPreview");
+  if (preview){
+    preview.addEventListener("click", function(ev){
+      ev.preventDefault();
+      try { localStorage.setItem(KEY, "1"); } catch (e) {}
+      removeOverlay();
+    });
+  }
 })();

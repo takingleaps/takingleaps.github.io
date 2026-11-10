@@ -659,19 +659,60 @@
       .grid > .reveal.in:nth-child(6n+4){ animation-delay:.15s; }
       .grid > .reveal.in:nth-child(6n+5){ animation-delay:.23s; }
       .grid > .reveal.in:nth-child(6n){ animation-delay:.26s; }
+      /* ---------- coming soon (replaces the old gate, Nov 10) ---------- */
+      .flwr-soon{ position:fixed; inset:0; z-index:99999; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#FDF6EA; }
+      .flwr-soon-bg{ position:fixed; inset:-12% 0; z-index:0; pointer-events:none; background:linear-gradient(rgba(253,246,234,.88), rgba(253,246,234,.62) 45%, rgba(253,246,234,.9)), url("img/hero-daisy-field.webp") center 30%/cover no-repeat; animation:flwrSoonDrift 26s ease-in-out infinite alternate; }
+      @keyframes flwrSoonDrift{ from{ background-position:center 28%; } to{ background-position:center 38%; } }
+      .flwr-soon-mid{ position:fixed; inset:0; z-index:1; pointer-events:none; }
+      .flwr-soon-mid i{ position:absolute; font-style:normal; color:#B9A7E7; font-size:var(--s,18px); animation:flwrSoonTwinkle var(--d,4s) ease-in-out var(--o,0s) infinite; }
+      @keyframes flwrSoonTwinkle{ 0%,100%{ opacity:.35; scale:.85; } 34%{ opacity:1; scale:1.12; } 52%{ opacity:.8; scale:1; } }
+      .flwr-soon-front{ position:fixed; inset:0; z-index:2; pointer-events:none; }
+      .flwr-soon-front svg{ position:absolute; width:var(--s,56px); height:var(--s,56px); filter:drop-shadow(0 8px 10px rgba(85,107,63,.18)); animation:flwrSoonSpin var(--d,16s) linear infinite; }
+      .flwr-soon-front svg:nth-child(2){ animation-direction:reverse; }
+      @keyframes flwrSoonSpin{ to{ rotate:360deg; } }
+      .flwr-soon-inner{ position:relative; z-index:3; min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:56px 20px 40px; box-sizing:border-box; }
+      .flwr-soon-logo{ width:min(300px,72vw); height:auto; display:block; filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)); animation:flwrSoonBreathe 8s ease-in-out infinite; }
+      @keyframes flwrSoonBreathe{ 0%,100%{ transform:translateY(0) rotate(0deg); } 38%{ transform:translateY(-4px) rotate(.4deg); } 71%{ transform:translateY(2px) rotate(-.3deg); } }
+      .flwr-soon-kicker{ font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:.8rem; color:#F45078; margin:20px 0 0; }
+      .flwr-soon-title{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2.8rem,9vw,4.6rem); line-height:1; color:#556B3F; margin:10px 0 0; }
+      .flwr-soon-sub{ font-weight:700; color:#5A6B52; max-width:460px; margin:14px 0 0; line-height:1.55; }
+      .flwr-soon-form{ display:flex; gap:10px; margin-top:24px; width:100%; max-width:440px; }
+      .flwr-soon-form input{ flex:1; min-width:0; box-sizing:border-box; border:1.5px solid #E3D9C6; border-radius:999px; padding:13px 20px; font:inherit; font-weight:700; background:#FFFDF7; color:#2A3620; outline:none; }
+      .flwr-soon-form input:focus{ border-color:#F4728E; }
+      .flwr-soon-form button{ border:none; border-radius:999px; padding:13px 24px; background:#F4728E; color:#fff; font:inherit; font-weight:900; cursor:pointer; white-space:nowrap; box-shadow:0 6px 16px rgba(244,114,142,.35); }
+      .flwr-soon-done{ font-weight:800; color:#556B3F; margin:18px 0 0; }
+      .flwr-soon-err{ font-weight:800; color:#D43D5E; font-size:.85rem; margin:12px 0 0; }
+      .flwr-soon-preview{ display:inline-block; margin-top:26px; font-size:.82rem; font-weight:800; letter-spacing:.06em; color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
+      .flwr-soon-preview:hover{ color:#556B3F; }
+      .flwr-soon-fine{ font-size:.78rem; color:#8A9A7E; margin:14px 0 0; }
+      @media (max-width:540px){
+        .flwr-soon-form{ flex-direction:column; }
+        .flwr-soon-form button{ width:100%; }
+        .flwr-soon-front svg{ width:calc(var(--s,56px) * .7); height:calc(var(--s,56px) * .7); }
+      }
+      @media (prefers-reduced-motion: reduce){
+        .flwr-soon-bg, .flwr-soon-mid i, .flwr-soon-front svg, .flwr-soon-logo{ animation:none !important; }
+      }
     </style>
   </head>
   <body>
-    <div id="flwrGate" style="position:fixed;inset:0;z-index:99999;background:#FDF6EA;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
-      <div style="max-width:420px;width:100%;text-align:center;background:#FFFDF7;border:1.5px solid #E3D9C6;border-radius:28px;padding:40px 28px 34px;box-shadow:0 24px 60px rgba(85,107,63,.18);">
-        <img src="img/logo-flwrpwr.svg" alt="FLWRPWR, Good vibes, great flower" style="height:150px;width:auto;display:block;margin:0 auto;" />
-        <p style="font-weight:700;color:#5A6B52;margin:18px 0 0;">This shop is still blooming.<br />Enter the password to peek inside.</p>
-        <form id="flwrGateForm" style="margin-top:22px;">
-          <input id="flwrGateInput" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;box-sizing:border-box;border:1.5px solid #E3D9C6;border-radius:999px;padding:13px 20px;font:inherit;font-weight:700;text-align:center;background:#FDF6EA;color:#2A3620;outline:none;" />
-          <button type="submit" style="width:100%;margin-top:12px;border:none;border-radius:999px;padding:13px 20px;background:#F4728E;color:#fff;font:inherit;font-weight:900;cursor:pointer;">Enter the shop</button>
+    <div id="flwrGate" class="flwr-soon" role="dialog" aria-modal="true" aria-label="FLWRPWR coming soon">
+      <div class="flwr-soon-bg" aria-hidden="true"></div>
+      <div class="flwr-soon-mid" aria-hidden="true"><i style="left:12%;top:20%;--s:20px;--d:4s">✦</i><i style="left:84%;top:32%;--s:14px;--d:2.6s;--o:-.7s">✦</i><i style="left:22%;top:74%;--s:12px;--d:5s;--o:-2s">✦</i><i style="left:70%;top:12%;--s:16px;--d:3.4s;--o:-1.2s">✦</i><i style="left:48%;top:88%;--s:13px;--d:4.4s;--o:-3s">✦</i></div>
+      <div class="flwr-soon-front" aria-hidden="true"><svg viewBox="0 0 100 100" data-daisy data-c="#ffffff" style="left:4%;top:56%;--s:64px;--d:16s"></svg><svg viewBox="0 0 100 100" data-daisy data-c="#F4728E" style="right:5%;top:14%;--s:48px;--d:16s"></svg><svg viewBox="0 0 100 100" data-daisy data-c="#ffffff" style="right:10%;bottom:8%;--s:38px;--d:10s"></svg></div>
+      <div class="flwr-soon-inner">
+        <img class="flwr-soon-logo" src="img/logo-flwrpwr.svg" alt="FLWRPWR, Good vibes, great flower" />
+        <p class="flwr-soon-kicker">Good vibes, great flower.</p>
+        <h1 class="flwr-soon-title">COMING SOON</h1>
+        <p class="flwr-soon-sub">The first drop is blooming soon. Leave your email and we will tell you the day the shop opens.</p>
+        <form id="flwrSoonForm" class="flwr-soon-form" novalidate>
+          <input type="email" id="flwrSoonEmail" placeholder="your@email.com" aria-label="Email address" required />
+          <button type="submit">Notify Me</button>
         </form>
-        <p id="flwrGateError" hidden style="color:#D43D5E;font-weight:800;font-size:.85rem;margin:12px 0 0;">That&apos;s not the password. Try again.</p>
-        <p style="font-size:.78rem;color:#8A9A7E;margin:16px 0 0;">21+ only &middot; Pre-launch preview</p>
+        <p class="flwr-soon-done" id="flwrSoonDone" hidden>you're on the list ✿ see you at launch</p>
+        <p class="flwr-soon-err" id="flwrSoonErr" hidden>Hmm, that email looks off. One more try?</p>
+        <a href="#" id="flwrSoonPreview" class="flwr-soon-preview">Preview the shop</a>
+        <p class="flwr-soon-fine">21+ only &middot; Pre-launch preview</p>
       </div>
     </div>
     <div class="grain" aria-hidden="true"></div>
