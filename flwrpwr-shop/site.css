@@ -316,7 +316,7 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .flwr-soon-front svg:nth-child(2){ animation-direction:reverse; }
 @keyframes flwrSoonSpin{ to{ rotate:360deg; } }
 .flwr-soon-inner{ position:relative; z-index:3; min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:56px 20px 40px; box-sizing:border-box; }
-.flwr-soon-logo{ width:min(300px,72vw); height:auto; display:block; filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)); animation:flwrSoonBreathe 8s ease-in-out infinite; }
+.flwr-soon-logo{ width:min(300px, 100%); height:auto; display:block; filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)); animation:flwrSoonBreathe 8s ease-in-out infinite; }
 @keyframes flwrSoonBreathe{ 0%,100%{ transform:translateY(0) rotate(0deg); } 38%{ transform:translateY(-4px) rotate(.4deg); } 71%{ transform:translateY(2px) rotate(-.3deg); } }
 .flwr-soon-kicker{ font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:.8rem; color:#F45078; margin:20px 0 0; }
 .flwr-soon-title{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(2.8rem,9vw,4.6rem); line-height:1; color:#556B3F; margin:10px 0 0; }
