@@ -223,12 +223,25 @@
     document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
   }
 
+  /* ---------- mobile tab bar: smooth-scroll in-page anchors ---------- */
+  function initTabbar(){
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelectorAll(".flwr-tabbar a[href^='#']").forEach(function(a){
+      a.addEventListener("click", function(ev){
+        var t = document.querySelector(a.getAttribute("href"));
+        if (!t) return;
+        ev.preventDefault();
+        t.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      });
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function(){
     buildDrawer();
     paintArt(document);
     fillTicker(document.getElementById("tickerTrack"));
     renderGrid(document.getElementById("productGrid"));
-    syncCartBadges(); renderCart(); initReveal();
+    syncCartBadges(); renderCart(); initReveal(); initTabbar();
   });
 
   window.FLWR = { addToCart:addToCart, openDrawer:openDrawer, closeDrawer:closeDrawer, toast:toast, byId:byId, PRODUCTS:PRODUCTS, pouchSVG:pouchSVG, daisySVG:daisySVG };

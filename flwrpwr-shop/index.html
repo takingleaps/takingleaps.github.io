@@ -569,6 +569,27 @@
       .card-art{ text-decoration:none; }
       .card-body h3 a{ text-decoration:none; display:inline-block; padding:12px 0; margin:-4px 0; } .card-body h3 a:hover{ color:var(--rose-ink); }
       .card-art .card-pouch{ border-radius:10px; }
+
+/* ---------- mobile bottom tab bar (app-style nav, phones only) ---------- */
+.flwr-tabbar{ display:none; }
+@media (max-width:899px){
+  body{ padding-bottom:calc(78px + env(safe-area-inset-bottom, 0px)); }
+  #top, #shop, #visit, #story, #join{ scroll-margin-top:112px; }
+  .flwr-tabbar{
+    display:flex; position:fixed; left:0; right:0; bottom:0; z-index:90;
+    background:var(--paper); border-top:2px solid var(--ink);
+    box-shadow:0 -8px 24px rgba(42,54,32,.14);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+  .flwr-tabbar a{
+    flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+    min-height:52px; padding:4px 2px; text-decoration:none; color:var(--ink-soft);
+    font-weight:900; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .flwr-tabbar a .tab-ico{ font-size:1.25rem; line-height:1; }
+  .flwr-tabbar a:active, .flwr-tabbar a:focus-visible{ color:var(--rose-ink); }
+  .toast{ bottom:calc(86px + env(safe-area-inset-bottom, 0px)); }
+}
     </style>
     <style id="fm-motion">
       /* ---------- motion layer (Nov 10). Everything sits behind .fm-on, which motion.js
@@ -2658,6 +2679,28 @@
         var im = new Image(); im.src = "img/box-" + id + ".webp";
       });
     });
+    </script>
+    <!-- mobile bottom tab bar (phones only; see .flwr-tabbar in the page styles) -->
+    <nav class="flwr-tabbar" aria-label="Shop sections">
+      <a href="#top"><span class="tab-ico" aria-hidden="true">⌂</span><span>Home</span></a>
+      <a href="#shop"><span class="tab-ico" aria-hidden="true">✿</span><span>Shop</span></a>
+      <a href="#visit"><span class="tab-ico" aria-hidden="true">▶</span><span>Visit</span></a>
+      <a href="#story"><span class="tab-ico" aria-hidden="true">❀</span><span>Story</span></a>
+      <a href="#join"><span class="tab-ico" aria-hidden="true">✉</span><span>Join</span></a>
+    </nav>
+    <script>
+    /* mobile tab bar: smooth-scroll to the section (instant when reduced motion is on) */
+    (function(){
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document.querySelectorAll(".flwr-tabbar a[href^='#']").forEach(function(a){
+        a.addEventListener("click", function(ev){
+          var t = document.querySelector(a.getAttribute("href"));
+          if (!t) return;
+          ev.preventDefault();
+          t.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+        });
+      });
+    })();
     </script>
   </body>
 </html>

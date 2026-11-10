@@ -343,3 +343,24 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 @media (prefers-reduced-motion: reduce){
   .flwr-soon-bg, .flwr-soon-mid i, .flwr-soon-front svg, .flwr-soon-logo{ animation:none !important; }
 }
+
+/* ---------- mobile bottom tab bar (app-style nav, phones only) ---------- */
+.flwr-tabbar{ display:none; }
+@media (max-width:899px){
+  body{ padding-bottom:calc(78px + env(safe-area-inset-bottom, 0px)); }
+  #top, #shop, #visit, #story, #join{ scroll-margin-top:112px; }
+  .flwr-tabbar{
+    display:flex; position:fixed; left:0; right:0; bottom:0; z-index:90;
+    background:var(--paper); border-top:2px solid var(--ink);
+    box-shadow:0 -8px 24px rgba(42,54,32,.14);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+  .flwr-tabbar a{
+    flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+    min-height:52px; padding:4px 2px; text-decoration:none; color:var(--ink-soft);
+    font-weight:900; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .flwr-tabbar a .tab-ico{ font-size:1.25rem; line-height:1; }
+  .flwr-tabbar a:active, .flwr-tabbar a:focus-visible{ color:var(--rose-ink); }
+  .toast{ bottom:calc(86px + env(safe-area-inset-bottom, 0px)); }
+}
