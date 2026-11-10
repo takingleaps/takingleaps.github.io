@@ -77,6 +77,8 @@ header.site{
 .logo .logo-word{ font-family:"Shrikhand",cursive; font-size:2rem; color:var(--coral); letter-spacing:.02em; }
 .logo .logo-sub{ font-size:.6rem; font-weight:900; letter-spacing:.42em; text-transform:uppercase; color:var(--ink-soft); margin-top:3px; }
 .logo-img{ height:64px; width:auto; display:block; }
+      .shop-btn{ display:inline-flex; align-items:center; justify-content:center; background:var(--rose); color:var(--ink); border:1.5px solid var(--olive); border-radius:999px; padding:10px 22px; min-height:44px; font-weight:900; font-size:.85rem; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; box-shadow:0 6px 16px rgba(244,114,142,.35); }
+      .shop-btn:hover{ transform:translateY(-1px); box-shadow:0 9px 20px rgba(244,114,142,.42); }
 .cart-btn{
   display:inline-flex; align-items:center; gap:8px; border:2px solid var(--ink);
   background:var(--gold-soft); color:var(--ink); border-radius:999px; padding:8px 16px;
@@ -86,7 +88,7 @@ header.site{
 .cart-count{ background:var(--coral); color:#fff; border-radius:999px; min-width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; font-size:.78rem; padding:0 5px; }
 @media (max-width:760px){
   .nav{ grid-template-columns:1fr auto; row-gap:8px; }
-  .logo{ grid-column:1; grid-row:1; justify-self:start; text-align:left; }
+  .shop-btn{ grid-column:1; grid-row:1; justify-self:start; }
   .logo .logo-word{ font-size:1.55rem; }
   .nav-links.right{ grid-column:2; grid-row:1; }
   .nav-links.left{ grid-column:1 / -1; grid-row:2; display:flex; justify-content:center; gap:22px; border-top:1.5px solid var(--line); padding-top:9px; }
