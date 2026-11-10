@@ -8,17 +8,17 @@
   <link rel="icon" href="favicon.png" type="image/png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://byyystudio.me/" />
-  <meta property="og:title" content="Byyy._ Studios | UGC, websites, marketing" />
+  <meta property="og:title" content="Byyy Studios | UGC, websites, marketing" />
   <meta property="og:description" content="Byyy Studios designs and builds websites, apps, automations, and short-form ads." />
   <meta property="og:image" content="https://byyystudio.me/favicon.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Byyy._ Studios | UGC, websites, marketing" />
+  <meta name="twitter:title" content="Byyy Studios | UGC, websites, marketing" />
   <meta name="twitter:description" content="Byyy Studios designs and builds websites, apps, automations, and short-form ads." />
   <meta name="twitter:image" content="https://byyystudio.me/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <title>Byyy._ Studios | UGC, websites, marketing</title>
+  <title>Byyy Studios | UGC, websites, marketing</title>
   <meta name="description" content="Byyy Studios designs and builds websites, apps, automations, and short-form ads." />
   <style>
     :root {
@@ -159,6 +159,22 @@
       justify-content: flex-end;
       gap: 4px;
     }
+    .site-brand {
+      margin-right: auto;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 6px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: .01em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .site-brand__gt { color: var(--accent); }
+    .site-brand:hover { color: var(--text); }
     .nav-link {
       min-height: 44px;
       padding: 11px 14px;
@@ -1116,7 +1132,8 @@
 
     @media (max-width: 640px) {
       html { scroll-padding-top: 76px; }
-      .site-nav__inner { min-height: 56px; justify-content: center; gap: 0; }
+      .site-nav__inner { min-height: 56px; justify-content: space-between; gap: 0; }
+      .site-nav__inner .nav-link:not(.nav-link--call) { display: none; }
       .nav-link { min-height: 48px; padding-inline: 12px; font-size: 12px; letter-spacing: .045em; }
       .nav-link--call { margin-left: 2px; }
       .page-shell { padding-top: 18px; }
@@ -1369,6 +1386,7 @@
 
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="site-nav__inner">
+      <a class="site-brand" href="#main" aria-label="Byyy Studios — back to top"><span class="site-brand__gt">&gt;</span> by³</a>
       <a class="nav-link" href="#work">Work</a>
       <a class="nav-link" href="#services">Services</a>
       <a class="nav-link nav-link--call" href="#contact">Start a project</a>
