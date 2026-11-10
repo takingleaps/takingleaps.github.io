@@ -195,6 +195,19 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
 footer{max-width:1180px;margin:0 auto;padding:24px 20px 40px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12px;font-weight:600}
 footer a{text-decoration:underline;text-underline-offset:3px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+/* mobile tab bar (app-style bottom nav, mobile only) */
+.tabbar{display:none}
+@media (max-width:899px){
+  body{padding-bottom:calc(68px + env(safe-area-inset-bottom, 0px))}
+  #top, .section{scroll-margin-top:64px}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:#111;color:#F3F0E8;border-top:1px solid #2B2B27;padding:6px 4px calc(8px + env(safe-area-inset-bottom, 0px));gap:2px}
+  .tabbar button{flex:1;min-width:0;position:relative;background:none;border:0;color:#9A968C;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .tabbar button .tab-ico{position:relative;display:block;line-height:0}
+  .tabbar button svg{width:22px;height:22px;flex:none}
+  .tabbar button.active{color:var(--acid)}
+  .tabbar button .tab-badge{position:absolute;top:-5px;right:-9px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--acid);color:#111;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;line-height:16px;text-align:center}
+  .drawer{bottom:calc(84px + env(safe-area-inset-bottom, 0px))}
+}
 </style>
 </head>
 <body>
@@ -479,6 +492,15 @@ footer a{text-decoration:underline;text-underline-offset:3px}
   <span>Sources: <a href="https://www.aliexpress.us/item/3256812422989770.html" target="_blank" rel="noopener">SHAUNA</a> · <a href="https://www.aliexpress.us/item/3256811679322770.html" target="_blank" rel="noopener">Polarized</a> · <a href="https://www.aliexpress.us/item/3256806541178221.html" target="_blank" rel="noopener">Cap</a> · <a href="https://www.aliexpress.us/item/2255800017165554.html" target="_blank" rel="noopener">Vnox</a></span>
 </footer>
 
+<!-- Mobile tab bar -->
+<nav class="tabbar" aria-label="Sections">
+  <button type="button" data-target="top" class="active" aria-label="Home"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg></span><span>Home</span></button>
+  <button type="button" data-target="drop" aria-label="The Drop"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg></span><span>Drop</span></button>
+  <button type="button" data-target="lab" aria-label="Margin Lab"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg></span><span>Lab</span></button>
+  <button type="button" data-target="next" aria-label="Next Up"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"/><path d="M13 5l7 7-7 7"/></svg></span><span>Next</span></button>
+  <button type="button" data-action="list" aria-label="Drop list"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3.5 6h.01"/><path d="M3.5 12h.01"/><path d="M3.5 18h.01"/></svg><span class="tab-badge" id="tabDropCount" style="display:none">0</span></span><span>List</span></button>
+</nav>
+
 <!-- Drop drawer -->
 <div class="drawer" id="drawer" role="dialog" aria-label="Your drop list">
   <h4>Your Drop List</h4>
@@ -504,6 +526,8 @@ footer a{text-decoration:underline;text-underline-offset:3px}
   function renderDrop(){
     var names = Object.keys(drop);
     countEl.textContent = names.length;
+    var tabCount = document.getElementById('tabDropCount');
+    if(tabCount){ tabCount.textContent = names.length; tabCount.style.display = names.length ? '' : 'none'; }
     if(!names.length){
       drawerList.innerHTML = '<li class="empty" style="border:none">Nothing added yet — tap + Drop List on any product.</li>';
       drawerTotal.textContent = '$0.00';
@@ -553,6 +577,31 @@ footer a{text-decoration:underline;text-underline-offset:3px}
     document.querySelectorAll('[data-add]').forEach(function(b){ b.textContent='+ Drop List'; b.setAttribute('data-added','false'); });
     renderDrop();
   });
+  /* mobile tab bar */
+  var tabBtns = Array.prototype.slice.call(document.querySelectorAll('.tabbar button'));
+  function reducedMotion(){ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  tabBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var action = b.getAttribute('data-action');
+      if(action === 'list'){ drawer.classList.toggle('open'); renderDrop(); return; }
+      var t = document.getElementById(b.getAttribute('data-target'));
+      if(t) t.scrollIntoView({behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start'});
+    });
+  });
+  if('IntersectionObserver' in window){
+    var tabMap = {};
+    tabBtns.forEach(function(b){ var k = b.getAttribute('data-target'); if(k) tabMap[k] = b; });
+    var tabObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          tabBtns.forEach(function(x){ x.classList.remove('active'); });
+          var btn = tabMap[en.target.id];
+          if(btn) btn.classList.add('active');
+        }
+      });
+    }, {rootMargin: '-40% 0px -55% 0px'});
+    ['top','drop','lab','next'].forEach(function(id){ var el = document.getElementById(id); if(el) tabObs.observe(el); });
+  }
   renderDrop();
 })();
 </script>
