@@ -1,18 +1,16 @@
-/* FLWRPWR coming soon screen. Replaces the old gate (Nov 10):
-   no password anymore. The public face is a dynamic Coming Soon page
+/* FLWRPWR coming soon screen. Hard gate (Nov 10):
+   no password, no preview. The public face is a dynamic Coming Soon page
    (drifting daisy field, floating daisies, sparkles, big logo, Notify Me).
-   "Preview the shop" dismisses it for the team; the dismissal is
-   remembered per device so the team only taps once. Add ?coming-soon to
-   the URL to see the Coming Soon screen again.
+   There is NO public way past it: no Preview link, no dismiss. Visitors
+   cannot reach the shop behind the overlay.
+   Team only: add ?preview to the URL to see the shop (not linked anywhere).
+   Add ?coming-soon to the URL to force the Coming Soon screen back.
    The Notify Me email is saved on-device (localStorage, the same
    client-side approach as the shop basket). There is no backend here;
    the list lives on the visitor's device until the team wires it up.
-   Scroll: the overlay scrolls itself (overflow-y:auto). Dismissing it
-   removes it from the DOM and clears any stuck scroll lock, so the
-   shop behind it scrolls normally. */
+   Scroll: the overlay scrolls itself (overflow-y:auto). */
 (function(){
   "use strict";
-  var KEY = "flwrpwr-preview";
   var LIST_KEY = "flwrpwr_notify_v1";
   var overlay = document.getElementById("flwrGate");
   if (!overlay) return;
@@ -27,11 +25,12 @@
     if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
   }
 
-  /* remembered preview: skip the Coming Soon screen, unless ?coming-soon is in the URL */
-  var forceSoon = /[?&]coming-soon\b/.test(location.search);
-  try {
-    if (!forceSoon && localStorage.getItem(KEY) === "1"){ removeOverlay(); return; }
-  } catch (e) {}
+  /* hard gate: the Coming Soon screen always shows. Team bypass is ?preview
+     (not linked anywhere). Clear any old remembered preview so past
+     visitors get the gate back. */
+  var teamPreview = /[?&]preview\b/.test(location.search);
+  try { localStorage.removeItem("flwrpwr-preview"); } catch (e) {}
+  if (teamPreview){ removeOverlay(); return; }
 
   /* fill any daisy SVGs in the overlay that the page's own filler missed */
   function daisySVG(petal){
@@ -73,16 +72,6 @@
       if (err) err.hidden = true;
       if (done) done.hidden = false;
       form.hidden = true;
-    });
-  }
-
-  /* preview the shop: discreet team link, dismisses the overlay */
-  var preview = document.getElementById("flwrSoonPreview");
-  if (preview){
-    preview.addEventListener("click", function(ev){
-      ev.preventDefault();
-      try { localStorage.setItem(KEY, "1"); } catch (e) {}
-      removeOverlay();
     });
   }
 
