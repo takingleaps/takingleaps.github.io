@@ -1324,12 +1324,43 @@
       animation: cursor-blink 1.06s steps(1) infinite;
     }
     @keyframes cursor-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
-    html.js-typing .command-line,
-    html.js-typing #hero-title,
-    html.js-typing .hero-copy,
-    html.js-typing .button-row { visibility: hidden; }
-    html.typing-done .hero-copy,
-    html.typing-done .button-row { visibility: visible; }
+    /* Nothing in the hero is hidden any more. Before typing starts the command
+       line and headline sit in dim ink, then type bright over themselves,
+       so the layout never moves and the copy + buttons are there from frame 1. */
+    html.js-typing .command-line:not(.t-done),
+    html.js-typing #hero-title:not(.t-done) { color: var(--dim); }
+    .t-off { color: var(--dim); }
+    #hero-title .t-on { color: var(--headline); }
+    .command-line .t-on { color: var(--accent); }
+    .t-caret { position: relative; display: inline-block; width: 0; }
+    .t-caret .type-cursor { position: absolute; left: .04em; bottom: -.1em; margin: 0; }
+    .command-line .t-caret .type-cursor { bottom: .05em; }
+
+    /* ---------- motion layer (Nov 10). Everything sits behind html.mo-on,
+       which only gets added when reduced motion is off. ---------- */
+    :root { --par: 1; }
+    @media (max-width: 760px) { :root { --par: .4; } }
+    .mo-on .terminal::after { translate: 0 calc(var(--scroll, 0) * .16px * var(--par)); }
+    .mo-on .hero-main { translate: 0 calc(var(--scroll, 0) * -.07px * var(--par)); }
+    .mo-on .hero-rail { translate: 0 calc(var(--scroll, 0) * -.025px * var(--par)); }
+    .mo-on .hero-rail .rail-readout strong { animation: mo-hold 8s steps(1) var(--mo-delay, 0s) infinite; }
+    @keyframes mo-hold { 0%, 100% { opacity: 1; } 91% { opacity: .55; } 93% { opacity: 1; } 95.5% { opacity: .75; } 97% { opacity: 1; } }
+
+    .button svg { transition: translate .32s cubic-bezier(.3, 1.6, .5, 1); }
+    @media (hover: hover) { .button:hover svg { translate: 3px 0; } }
+    .work-card .project-arrow { display: inline-block; transition: translate .3s cubic-bezier(.3, 1.6, .5, 1); }
+    @media (hover: hover) { .work-card:hover .project-arrow { translate: 3px -3px; } }
+    .mo-on .work-card .work-image { position: relative; }
+    .mo-on .work-card .work-image::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--project-color, #37ff00), transparent 84%) 50%, transparent 100%);
+      background-size: 100% 36%; background-repeat: no-repeat; background-position: 0 -40%; opacity: 0; }
+    @media (hover: hover) {
+      .mo-on .work-card:hover .work-image::after { opacity: 1; animation: mo-scan .9s cubic-bezier(.4, 0, .2, 1) 1; }
+    }
+    @keyframes mo-scan { from { background-position: 0 -40%; } 82% { opacity: 1; } to { background-position: 0 140%; opacity: 0; } }
+
+    .mo-tick { display: inline-block; width: .45em; height: .82em; margin-left: .12em; vertical-align: -.06em; background: var(--accent);
+      animation: cursor-blink .9s steps(1) 4 forwards; }
 </style>
 <script>document.documentElement.classList.add('js-typing');setTimeout(function(){document.documentElement.classList.remove('js-typing');},8000);</script>
 </head>
@@ -2304,9 +2335,11 @@
         var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var rootEl = document.documentElement;
         var finished = false;
+        var timers = [];
         function finish() {
           if (finished) return;
           finished = true;
+          timers.forEach(window.clearTimeout);
           heroTitle.textContent = titleText;
           commandLine.textContent = cmdText;
           rootEl.classList.remove('js-typing');
@@ -2314,47 +2347,108 @@
         }
         if (reduce) { finish(); return; }
         rootEl.classList.add('js-typing');
-        /* Safety: never leave the hero hidden, whatever else fails. */
+        /* Safety: never leave the hero half typed, whatever else fails. */
         window.setTimeout(finish, 8000);
-        function makeCursor() {
-          var cursor = document.createElement('span');
-          cursor.className = 'type-cursor';
-          cursor.setAttribute('aria-hidden', 'true');
-          return cursor;
-        }
+        /* The full line is always on screen: typed part bright, the rest dim,
+           cursor between them. Same text, same wrapping, no layout shift. */
         function typeInto(el, text, rate, keepCursor, done) {
           el.textContent = '';
-          var target = document.createElement('span');
-          target.setAttribute('aria-hidden', 'true');
-          var cursor = makeCursor();
-          el.appendChild(target);
-          el.appendChild(cursor);
+          var on = document.createElement('span');
+          var caret = document.createElement('span');
+          var off = document.createElement('span');
+          var cursor = document.createElement('span');
+          on.className = 't-on'; off.className = 't-off'; caret.className = 't-caret'; cursor.className = 'type-cursor';
+          [on, caret, off].forEach(function (n) { n.setAttribute('aria-hidden', 'true'); });
+          caret.appendChild(cursor);
+          off.textContent = text;
+          el.appendChild(on); el.appendChild(caret); el.appendChild(off);
           var i = 0;
-          var timer = window.setInterval(function () {
+          (function step() {
+            if (finished) return;
             i += 1;
-            target.textContent = text.slice(0, i);
+            on.textContent = text.slice(0, i);
+            off.textContent = text.slice(i);
             if (i >= text.length) {
-              window.clearInterval(timer);
-              if (!keepCursor) { cursor.remove(); target.remove(); el.textContent = text; }
+              if (!keepCursor) { el.textContent = text; }
+              else { off.remove(); }
+              el.classList.add('t-done');
               done();
+              return;
             }
-          }, rate);
+            /* Rhythm, not jitter: a beat after each comma, a breath at each
+               space, and a slow, steady pace for the rest of the line. */
+            var c = text.charAt(i - 1);
+            var wait = c === ',' ? rate * 7 : c === ' ' ? rate * 1.6 : c === '.' ? rate * 4 : rate;
+            timers.push(window.setTimeout(step, wait));
+          }());
         }
-        window.setTimeout(function () {
-          commandLine.style.visibility = 'visible';
+        timers.push(window.setTimeout(function () {
           typeInto(commandLine, cmdText, 10, false, function () {
-            window.setTimeout(function () {
-              heroTitle.style.visibility = 'visible';
+            timers.push(window.setTimeout(function () {
               typeInto(heroTitle, titleText, 18, true, function () {
-                window.setTimeout(function () {
+                timers.push(window.setTimeout(function () {
                   rootEl.classList.remove('js-typing');
                   rootEl.classList.add('typing-done');
                   finished = true;
-                }, 120);
+                }, 120));
               });
-            }, 150);
+            }, 150));
           });
-        }, 200);
+        }, 200));
+      }());
+
+  /* Motion layer (Nov 10). Native scroll only: one passive listener writes
+     --scroll (a registered number) on the hero, CSS turns it into three
+     depths. Section headings get a cursor that blinks four times and goes.
+     Nothing here hides or delays content. Off under reduced motion. */
+      (function () {
+        var mm = function (q) { return window.matchMedia ? window.matchMedia(q).matches : false; };
+        if (mm('(prefers-reduced-motion: reduce)')) return;
+        var rootEl = document.documentElement;
+        rootEl.classList.add('mo-on');
+        if (window.CSS && CSS.registerProperty) {
+          try { CSS.registerProperty({ name: '--scroll', syntax: '<number>', inherits: true, initialValue: '0' }); } catch (e) {}
+        }
+        var hero = document.querySelector('.terminal');
+        var heroH = hero ? hero.offsetHeight : 0;
+        var ticking = false;
+        function write() {
+          ticking = false;
+          if (hero) hero.style.setProperty('--scroll', Math.min(window.scrollY, heroH).toFixed(1));
+        }
+        window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(write); } }, { passive: true });
+        window.addEventListener('resize', function () { heroH = hero ? hero.offsetHeight : 0; }, { passive: true });
+        write();
+
+        /* readout values flicker once per 8 s loop, each on its own phase */
+        Array.prototype.forEach.call(document.querySelectorAll('.rail-readout strong'), function (el, i) {
+          el.style.setProperty('--mo-delay', (-((i * 2.9 + 1.3) % 8)).toFixed(2) + 's');
+        });
+
+        /* press: squash and spring back */
+        document.addEventListener('pointerdown', function (e) {
+          var b = e.target.closest && e.target.closest('.button, .nav-link, .bottom-nav__link, .status-toggle');
+          if (!b || !b.animate) return;
+          b.animate([{ scale: '1' }, { scale: '.96', offset: .25 }, { scale: '1.02', offset: .65 }, { scale: '1' }],
+            { duration: 420, easing: 'ease-out' });
+        });
+
+        /* section headings: a cursor ticks after the heading when it arrives */
+        if ('IntersectionObserver' in window) {
+          var heads = document.querySelectorAll('.section-heading h2, .systems-copy h2, .niche-copy h2, .call-panel h2');
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+              if (!en.isIntersecting) return;
+              io.unobserve(en.target);
+              var t = document.createElement('span');
+              t.className = 'mo-tick';
+              t.setAttribute('aria-hidden', 'true');
+              en.target.appendChild(t);
+              window.setTimeout(function () { t.remove(); }, 3700);
+            });
+          }, { threshold: .6 });
+          Array.prototype.forEach.call(heads, function (h) { io.observe(h); });
+        }
       }());
 </script>
 </body>
