@@ -111,6 +111,16 @@
   .start{background:#fff;color:#000;font-weight:900;font-style:italic;padding:7px 16px;border-radius:0 12px 12px 0;border:none;cursor:pointer}
   .taskbar .tb{font-size:12px;background:#222;border:1px solid #666;padding:6px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .taskbar .clock{margin-left:auto;font-size:12.5px;font-variant-numeric:tabular-nums}
+
+  /* MOBILE BOTTOM TAB BAR (app-style nav, mobile only) */
+  #mobile-nav{display:none}
+  @media (max-width:899px){
+    body{padding-bottom:78px}
+    #mobile-nav{display:flex; position:fixed; left:0; right:0; bottom:0; z-index:60; background:#111; border-top:3px solid #000; padding-bottom:env(safe-area-inset-bottom, 0px)}
+    #mobile-nav button{flex:1; width:auto; min-height:58px; padding:8px 2px 6px; background:none; border:none; box-shadow:none; color:#fff; font-family:inherit; font-size:11px; font-weight:700; line-height:1.4; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer}
+    #mobile-nav button .nav-ico{font-size:20px; line-height:1}
+    #mobile-nav button.active{background:#fff; color:#111}
+  }
 </style>
 </head>
 <body>
@@ -330,12 +340,14 @@ document.getElementById('services').innerHTML=services.map(function(s){
 function showPage(id){
  document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+id)});
  document.querySelectorAll('nav.tabs button').forEach(function(b){b.setAttribute('aria-selected', b.dataset.page===id?'true':'false')});
- window.scrollTo({top:0,behavior:'smooth'});
+ document.querySelectorAll('#mobile-nav button').forEach(function(b){b.classList.toggle('active',b.dataset.page===id)});
+ window.scrollTo({top:0,behavior:(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth'});
 }
 document.addEventListener('click',function(e){
  var t=e.target.closest('[data-goto]'); if(t){showPage(t.dataset.goto);}
 });
 document.querySelectorAll('nav.tabs button').forEach(function(b){b.addEventListener('click',function(){showPage(b.dataset.page)})});
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('#mobile-nav button').forEach(function(b){b.addEventListener('click',function(){showPage(b.dataset.page)})});});
 
 // clock
 function tick(){var d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});}
@@ -433,5 +445,12 @@ document.getElementById('downloadIcs').addEventListener('click',function(){
  var blob=new Blob([ics],{type:'text/calendar'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='septic-pump-reminder.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
 });
 </script>
+<nav id="mobile-nav" aria-label="Sections">
+  <button type="button" class="active" data-page="home"><span class="nav-ico">&#8962;</span>Home</button>
+  <button type="button" data-page="book"><span class="nav-ico">&#8862;</span>Book</button>
+  <button type="button" data-page="emergency"><span class="nav-ico">&#9888;</span>Emergency</button>
+  <button type="button" data-page="pricing"><span class="nav-ico">$</span>Pricing</button>
+  <button type="button" data-page="quote"><span class="nav-ico">&#9993;</span>Quote</button>
+</nav>
 </body>
 </html>

@@ -144,6 +144,16 @@
  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
  @media(max-width:900px){.hero-grid,.grid-3,.grid-2,.est{grid-template-columns:1fr}.icon-grid{grid-template-columns:1fr 1fr}.steps,.warn-grid{grid-template-columns:1fr 1fr}.taskbar{position:static}.start-btn{margin-left:0}}
  @media(max-width:540px){.icon-grid,.steps,.warn-grid,.area-slots,.form-grid{grid-template-columns:1fr}.window-body{padding:20px}.clock{display:none}h1{font-size:40px}}
+
+  /* MOBILE BOTTOM TAB BAR (app-style nav, mobile only) */
+  #mobile-nav{display:none}
+  @media (max-width:899px){
+    body{padding-bottom:78px}
+    #mobile-nav{display:flex; position:fixed; left:0; right:0; bottom:0; z-index:60; background:#000; border-top:3px solid #fff; padding-bottom:env(safe-area-inset-bottom, 0px)}
+    #mobile-nav button{flex:1; width:auto; min-height:58px; padding:8px 2px 6px; background:none; border:none; box-shadow:none; color:#fff; font-family:inherit; font-size:11px; font-weight:700; line-height:1.4; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer}
+    #mobile-nav button .nav-ico{font-size:20px; line-height:1}
+    #mobile-nav button.active{background:#fff; color:#000}
+  }
 </style>
 </head>
 <body>
@@ -470,9 +480,11 @@
  function show(id){
  pages.forEach(function(p){p.classList.toggle('active',p.id==='page-'+id)});
  navBtns.forEach(function(b){b.classList.toggle('active',b.dataset.page===id)});
- window.scrollTo({top:0,behavior:'smooth'});
+ document.querySelectorAll('#mobile-nav button').forEach(function(b){b.classList.toggle('active',b.dataset.page===id)});
+ window.scrollTo({top:0,behavior:(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth'});
  }
  navBtns.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.page)})});
+ document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('#mobile-nav button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.page)})});});
  document.querySelectorAll('[data-goto]').forEach(function(el){el.addEventListener('click',function(){show(el.dataset.goto)})});
 
  // Clock, XP taskbar style
@@ -530,5 +542,12 @@
  });
 })();
 </script>
-<div style="text-align:center;padding:24px 16px;font-family:Tahoma,Verdana,sans-serif"><a href="https://byyystudio.me/" style="color:#111">Back to byyystudio.me</a></div></body>
+<div style="text-align:center;padding:24px 16px;font-family:Tahoma,Verdana,sans-serif"><a href="https://byyystudio.me/" style="color:#111">Back to byyystudio.me</a></div><nav id="mobile-nav" aria-label="Sections">
+  <button type="button" class="active" data-page="home"><span class="nav-ico">&#127968;</span>Home</button>
+  <button type="button" data-page="services"><span class="nav-ico">&#128296;</span>Services</button>
+  <button type="button" data-page="how"><span class="nav-ico">&#128167;</span>How</button>
+  <button type="button" data-page="faq"><span class="nav-ico">&#10067;</span>FAQ</button>
+  <button type="button" data-page="quote"><span class="nav-ico">&#9993;</span>Quote</button>
+</nav>
+</body>
 </html>
