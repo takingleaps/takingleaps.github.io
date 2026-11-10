@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roblox Game Concept - Coin Yard | Byyy Studio</title>
+<meta name="description" content="An original Roblox simulator concept with a proven loop, fair monetization, and a Roblox Studio starter plan. No copied games, names, art, or music.">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:#111;color:#f2f2f2;line-height:1.6}
+a{color:#7dd3fc}.wrap{max-width:900px;margin:0 auto;padding:24px 18px 64px}
+.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px}
+.top a{color:#fff}.hero{padding:32px 0 8px}.hero h1{font-size:44px;line-height:1.05;margin:8px 0}.hero p{font-size:18px;color:#d4d4d4;max-width:62ch}
+.tag{display:inline-block;border:1px solid #555;padding:4px 10px;border-radius:999px;font-size:13px}
+h2{margin-top:40px;font-size:26px}h3{margin-top:24px}
+.card{background:#1c1c1c;border:1px solid #333;border-radius:12px;padding:18px;margin:16px 0}
+.card p{margin:6px 0}.num{font-weight:700}
+code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}pre{background:#000;border:1px solid #333;border-radius:8px;padding:14px;overflow:auto;white-space:pre-wrap;color:#e5e5e5}
+ul{padding-left:20px}li{margin:6px 0}.warn{border-left:4px solid #f59e0b;padding:12px 16px;background:#1f1a0f}
+.back{margin-top:40px}.small{color:#a3a3a3;font-size:14px}
+@media(max-width:600px){.hero h1{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><a href="https://byyystudio.me/">Back to byyystudio.me</a><span>Game concept, not a published Roblox game yet</span></div>
+<div class="hero">
+<span class="tag">Roblox game concept</span>
+<h1>Coin Yard</h1>
+<p>An original Roblox simulator. Collect coins, upgrade your tools, unlock new yards, and chase rebirths. The loop is proven, the game is not a copy of anyone else's game.</p>
+<p><strong>Status:</strong> Concept and Studio starter plan. It becomes a real Roblox game when it is built and published from Roblox Studio.</p>
+</div>
+
+<h2>The loop, in 60 seconds</h2>
+<div class="card">
+<p><span class="num">1.</span> Spawn in a yard. Walk over coins to collect them.</p>
+<p><span class="num">2.</span> Spend coins on a better collector, then a faster collector.</p>
+<p><span class="num">3.</span> Unlock the next yard when the current one feels too easy.</p>
+<p><span class="num">4.</span> Rebirth for a permanent multiplier, then do it faster next run.</p>
+<p><span class="num">5.</span> Come back daily for a streak bonus and a new short goal.</p>
+</div>
+
+<h2>Why this loop, and why not a dupe</h2>
+<p>Collect, upgrade, unlock, and rebirth is a generic game loop. No one owns that idea. What you cannot copy is another game's name, characters, art, music, maps, or code. The Instagram post that started this idea warned about exactly that: unauthorized browser versions of popular games get takedown notices from publishers.</p>
+<p class="warn"><strong>Rule for this build:</strong> original name, original art, original maps, original music. Borrow the loop, never the IP.</p>
+
+<h2>How it makes money, inside Roblox only</h2>
+<ul>
+<li><strong>Game Passes, one time purchase:</strong> 2x Coins, VIP Yard, Faster Start.</li>
+<li><strong>Developer Products, repeat purchase:</strong> small coin packs, skip a grind step. Price them so the grind still feels fair without paying.</li>
+<li><strong>Premium Payouts:</strong> Roblox pays for playtime from Premium members, on top of sales.</li>
+<li><strong>No outside Robux deals, no free Robux generators, no off-platform sales.</strong> Those are scams or rule violations, and they get accounts shut down.</li>
+</ul>
+
+<h2>The real cash-out math</h2>
+<div class="card">
+<p>Roblox only lets you cash out <strong>Earned Robux</strong> through Developer Exchange, called DevEx. Robux you bought yourself does not count.</p>
+<p>Minimum to request a cash-out: <strong>30,000 Earned Robux</strong>.</p>
+<p>Standard rate, as of the latest check: <strong>$0.0038 per Earned Robux</strong>, so 30,000 Earned Robux is <strong>$114</strong> before tax and any withholding.</p>
+<p>Roblox takes <strong>30% of Game Pass and Developer Product sales</strong>, so a 100 Robux sale leaves 70 Earned Robux. Price with that cut in mind, and check the current DevEx page in Creator Hub before you plan around a payout.</p>
+<p class="small">Eligibility also includes being 13 or older, a verified email, a DevEx portal account, and a tax form on file. Roblox decides eligibility when you apply, not before.</p>
+</div>
+
+<h2>Build it in Roblox Studio, week one</h2>
+<div class="card">
+<p><span class="num">Day 1.</span> Open Roblox Studio, start a Baseplate, save it as Coin Yard. Build one yard, coin spawns, and a spawn point. Nothing else.</p>
+<p><span class="num">Day 2.</span> Add leaderstats: Coins and Rebirths. Add the collect script below as a ServerScript in ServerScriptService.</p>
+<p><span class="num">Day 3.</span> Add one shop: buy a better collector with coins. Test it with a friend, fix the bugs, then publish as a private test.</p>
+<p><span class="num">Day 4.</span> Add the second yard, one rebirth button, and daily streak data. Keep it boring and working before you add pets, events, or cosmetics.</p>
+<p><span class="num">Day 5.</span> Publish, post one Short showing the loop, and watch where players quit. Fix that spot first.</p>
+</div>
+
+<h2>Starter script: collect coins</h2>
+<p>Put this in ServerScriptService. It gives every player a Coins leaderstat, and every coin part tagged "Coin" in the workspace gives 1 coin on touch, then respawns after 5 seconds.</p>
+<pre>-- Coin Yard starter, ServerScriptService
+local Players = game:GetService("Players")
+local CollectionService = game:GetService("CollectionService")
+
+Players.PlayerAdded:Connect(function(player)
+  local leaderstats = Instance.new("Folder")
+  leaderstats.Name = "leaderstats"
+  leaderstats.Parent = player
+  local coins = Instance.new("IntValue")
+  coins.Name = "Coins"
+  coins.Value = 0
+  coins.Parent = leaderstats
+end)
+
+local function giveCoin(part, player)
+  local leaderstats = player:FindFirstChild("leaderstats")
+  if not leaderstats then return end
+  local coins = leaderstats:FindFirstChild("Coins")
+  if coins then coins.Value += 1 end
+  part.CanTouch = false
+  part.Transparency = 1
+  task.wait(5)
+  part.CanTouch = true
+  part.Transparency = 0
+end
+
+for _, part in CollectionService:GetTagged("Coin") do
+  part.Touched:Connect(function(hit)
+    local player = Players:GetPlayerFromCharacter(hit.Parent)
+    if player then giveCoin(part, player) end
+  end)
+end</pre>
+
+<h2>Next steps</h2>
+<ul>
+<li>Pick the art style for the first yard, then build only that yard.</li>
+<li>Set Game Pass prices after the loop is fun without paying.</li>
+<li>Post a playtest clip before spending money on ads or thumbnails.</li>
+</ul>
+
+<div class="back"><a href="https://byyystudio.me/">Back to byyystudio.me</a></div>
+<p class="small">Byyy Studio game concept. Roblox, DevEx rates, and fees can change, check Creator Hub before publishing or cashing out.</p>
+</div>
+</body>
+</html>

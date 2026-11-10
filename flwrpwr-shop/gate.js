@@ -85,4 +85,30 @@
       removeOverlay();
     });
   }
+
+  /* live countdown: ticks every second to the San Diego launch event, Thu Nov 12, 2026 (midnight PT = event day) */
+  var cdTimer = null;
+  function cdTick(){
+    if (!overlay.parentNode){ if (cdTimer) clearInterval(cdTimer); return; }
+    var d = overlay.querySelector("[data-cd-d]"), h = overlay.querySelector("[data-cd-h]"),
+        m = overlay.querySelector("[data-cd-m]"), s = overlay.querySelector("[data-cd-s]"),
+        note = overlay.querySelector("[data-cd-note]");
+    if (!d || !h || !m || !s) return;
+    var target = new Date("2026-11-12T00:00:00-08:00").getTime();
+    function pad(n){ return (n < 10 ? "0" : "") + n; }
+    var diff = target - Date.now();
+    if (diff <= 0){
+      d.textContent = "0"; h.textContent = "00"; m.textContent = "00"; s.textContent = "00";
+      if (note) note.textContent = "the San Diego launch event is here \u2713 see you there";
+      if (cdTimer) clearInterval(cdTimer);
+      return;
+    }
+    var secs = Math.floor(diff / 1000);
+    d.textContent = Math.floor(secs / 86400);
+    h.textContent = pad(Math.floor(secs % 86400 / 3600));
+    m.textContent = pad(Math.floor(secs % 3600 / 60));
+    s.textContent = pad(secs % 60);
+  }
+  cdTick();
+  cdTimer = setInterval(cdTick, 1000);
 })();

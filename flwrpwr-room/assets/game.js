@@ -97,11 +97,26 @@
       var g=geo.index?geo.toNonIndexed():geo.clone(),m=new T.Matrix4(),q=new T.Quaternion().setFromEuler(new T.Euler((rotation&&rotation[0])||0,(rotation&&rotation[1])||0,(rotation&&rotation[2])||0)),sc=new T.Vector3((scale&&scale[0])||1,(scale&&scale[1])||1,(scale&&scale[2])||1),tr=new T.Vector3(pos[0],pos[1],pos[2]);m.compose(tr,q,sc);g.applyMatrix4(m);if(!g.attributes.normal)g.computeVertexNormals();var pa=g.attributes.position.array,na=g.attributes.normal.array,c=new T.Color(color);for(var i=0;i<pa.length;i++)positions.push(pa[i]);for(i=0;i<na.length;i++)normals.push(na[i]);for(i=0;i<pa.length/3;i++)colors.push(c.r,c.g,c.b);g.dispose();
     }
     var skin=options.skin||0xc98c69,hair=options.hair||0x2c2024,top=options.top||0xd95a86,bottom=options.bottom||0x476f68,shoe=options.shoe||0x251d22,accent=options.accent||0xf5e7c7;
-    append(new T.CylinderGeometry(.27,.36,.82,9),top,[0,1.14,0],[1,1,.76]);append(new T.SphereGeometry(.29,10,8),skin,[0,1.79,0],[.92,1.05,.92]);append(new T.SphereGeometry(.302,10,7,0,Math.PI*2,0,Math.PI*.57),hair,[0,1.89,0],[.94,.9,.96]);
+    var style=(options.hairStyle!=null)?options.hairStyle:Math.abs((options.top||0)^(options.hair||0))%5;
+    var dark=0x241a16,mouthC=0x8e3b4d,blushC=0xf2a0b5,petalC=0xfffdf9,goldC=0xf2b84b;
+    append(new T.CylinderGeometry(.085,.10,.14,8),skin,[0,1.52,0]);
+    append(new T.CylinderGeometry(.27,.36,.82,9),top,[0,1.14,0],[1,1,.76]);
+    append(new T.SphereGeometry(.022,8,6),goldC,[0,1.30,.24]);
+    [[0,1.348],[.043,1.314],[-.043,1.314],[.027,1.266],[-.027,1.266]].forEach(function(p){append(new T.SphereGeometry(.02,8,6),petalC,[p[0],p[1],.235],[1,1,.4]);});
+    append(new T.SphereGeometry(.29,10,8),skin,[0,1.79,0],[.92,1.05,.92]);
+    [-1,1].forEach(function(side){append(new T.SphereGeometry(.028,8,6),dark,[side*.105,1.82,.262]);append(new T.BoxGeometry(.085,.016,.02),hair,[side*.105,1.885,.25]);append(new T.SphereGeometry(.035,8,6),blushC,[side*.165,1.745,.21],[1,.65,.35]);});
+    append(new T.SphereGeometry(.022,8,6),skin,[0,1.765,.26]);
+    append(new T.BoxGeometry(.09,.016,.02),mouthC,[0,1.695,.245]);
+    append(new T.SphereGeometry(.302,10,7,0,Math.PI*2,0,Math.PI*.57),hair,[0,1.89,0],[.94,.9,.96]);
+    if(style===0){append(new T.SphereGeometry(.30,10,8),hair,[0,1.60,-.10],[1.02,1.25,.5]);append(new T.BoxGeometry(.09,.52,.07),hair,[-.25,1.52,.12],[1,1,1],[0,0,.10]);append(new T.BoxGeometry(.09,.52,.07),hair,[.25,1.52,.12],[1,1,1],[0,0,-.10]);}
+    else if(style===1){append(new T.BoxGeometry(.08,.36,.24),hair,[-.285,1.66,0]);append(new T.BoxGeometry(.08,.36,.24),hair,[.285,1.66,0]);append(new T.BoxGeometry(.52,.32,.12),hair,[0,1.64,-.15]);}
+    else if(style===2){append(new T.CylinderGeometry(.06,.10,.55,8),hair,[0,1.98,-.30],[1,1,1],[.55,0,0]);append(new T.SphereGeometry(.085,8,6),hair,[0,1.74,-.40]);}
+    else if(style===3){append(new T.SphereGeometry(.15,10,8),hair,[0,2.08,-.04]);}
+    else{[[-.28,1.95,0],[.28,1.95,0],[-.20,2.03,.10],[.20,2.03,.10],[0,2.05,-.10],[-.27,1.86,-.16],[.27,1.86,-.16]].forEach(function(p){append(new T.SphereGeometry(.085,8,6),hair,p);});}
     append(new T.CylinderGeometry(.095,.11,.66,8),bottom,[-.15,.43,0]);append(new T.CylinderGeometry(.095,.11,.66,8),bottom,[.15,.43,0]);append(new T.BoxGeometry(.21,.12,.32),shoe,[-.15,.08,.08]);append(new T.BoxGeometry(.21,.12,.32),shoe,[.15,.08,.08]);
     if(options.hat){append(new T.CylinderGeometry(.32,.32,.05,10),accent,[0,2.055,0]);append(new T.CylinderGeometry(.2,.25,.2,9),accent,[0,2.16,0]);}
     var bodyGeo=new T.BufferGeometry();bodyGeo.setAttribute('position',new T.Float32BufferAttribute(positions,3));bodyGeo.setAttribute('normal',new T.Float32BufferAttribute(normals,3));bodyGeo.setAttribute('color',new T.Float32BufferAttribute(colors,3));bodyGeo.computeBoundingSphere();var body=mesh(bodyGeo,new T.MeshStandardMaterial({vertexColors:true,roughness:.76,metalness:0}));rig.add(body);
-    root.userData.arms=[];[-1,1].forEach(function(side){var armPivot=new T.Group();armPivot.position.set(side*.31,1.43,0);var arm=mesh(new T.CylinderGeometry(.068,.082,.58,8),material(skin,.78));arm.position.y=-.27;armPivot.add(arm);rig.add(armPivot);root.userData.arms.push(armPivot);});
+    root.userData.arms=[];[-1,1].forEach(function(side){var armPivot=new T.Group();armPivot.position.set(side*.31,1.43,0);var arm=mesh(new T.CylinderGeometry(.068,.082,.58,8),material(skin,.78));arm.position.y=-.27;armPivot.add(arm);var hand=mesh(new T.SphereGeometry(.075,8,6),material(skin,.78));hand.position.y=-.60;armPivot.add(hand);rig.add(armPivot);root.userData.arms.push(armPivot);});
     if(options.tote){var tote=new T.Group();tote.position.set(0,-.57,.015);var toteBodyPivot=new T.Group();toteBodyPivot.position.y=-.06;tote.add(toteBodyPivot);var toteBody=mesh(new T.BoxGeometry(.34,.38,.13),material(options.tote,.66));toteBody.position.y=-.19;toteBodyPivot.add(toteBody);var toteBand=mesh(new T.BoxGeometry(.345,.08,.135),material(options.accent,.6),false,false);toteBand.position.y=-.055;toteBodyPivot.add(toteBand);[-1,1].forEach(function(hs){var handle=mesh(new T.TorusGeometry(.078,.013,6,14,Math.PI),material(0x8a6b46,.82),false,false);handle.position.set(0,-.055,hs*.052);tote.add(handle);});root.userData.arms[1].add(tote);root.userData.tote=tote;root.userData.toteBody=toteBodyPivot;root.userData.swing={x:0,z:0,vx:0,vz:0,bx:0,bz:0,bvx:0,bvz:0};}
     root.userData.legs=[new T.Object3D(),new T.Object3D()];
     if(options.employee){var badge=mesh(new T.BoxGeometry(.24,.11,.025),material(accent,.72),false,false);badge.position.set(.1,1.28,.226);rig.add(badge);}

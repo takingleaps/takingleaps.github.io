@@ -477,7 +477,6 @@
     .work-card--dreamstate { --project-color: #7dd3fc; }
     .work-card--escape { --project-color: #ff7a28; }
     .work-card--flwrpwr { --project-color: #ff4fa3; }
-    .work-card--rushlab { --project-color: #e53935; }
     .work-card--taco { --project-color: #e8a33d; }
     .work-card--raceline { --project-color: #d94f3d; }
     .work-card--dental { --project-color: #4fa8a0; }
@@ -509,8 +508,6 @@
     }
     .work-card--niteharts .work-image img { object-position: center 30%; }
     .work-card--escape .work-image img { object-position: center 36%; }
-    .work-card--dreamstate .work-image { display: grid; place-items: center; }
-    .work-card--dreamstate .work-image img { width: 72%; height: auto; object-fit: contain; }
     .work-card:hover .work-image img { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
     .work-card__copy {
       min-height: 200px;
@@ -1310,59 +1307,7 @@
       .work-panel__body { padding: 22px 18px; }
       .work-panel__body h2 { font-size: 27px; }
     }
-  /* Kinetic terminal typing hero (Motion Studio Stack).
-       One orchestrated motion moment: the command line and headline type
-       themselves, block cursor follows, copy + buttons print after. No
-       fade-up reveals anywhere else on the page. */
-    .type-cursor {
-      display: inline-block;
-      width: .52em;
-      height: .92em;
-      margin-left: .06em;
-      vertical-align: -.08em;
-      background: var(--accent);
-      animation: cursor-blink 1.06s steps(1) infinite;
-    }
-    @keyframes cursor-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
-    /* Nothing in the hero is hidden any more. Before typing starts the command
-       line and headline sit in dim ink, then type bright over themselves,
-       so the layout never moves and the copy + buttons are there from frame 1. */
-    html.js-typing .command-line:not(.t-done),
-    html.js-typing #hero-title:not(.t-done) { color: var(--dim); }
-    .t-off { color: var(--dim); }
-    #hero-title .t-on { color: var(--headline); }
-    .command-line .t-on { color: var(--accent); }
-    .t-caret { position: relative; display: inline-block; width: 0; }
-    .t-caret .type-cursor { position: absolute; left: .04em; bottom: -.1em; margin: 0; }
-    .command-line .t-caret .type-cursor { bottom: .05em; }
-
-    /* ---------- motion layer (Nov 10). Everything sits behind html.mo-on,
-       which only gets added when reduced motion is off. ---------- */
-    :root { --par: 1; }
-    @media (max-width: 760px) { :root { --par: .4; } }
-    .mo-on .terminal::after { translate: 0 calc(var(--scroll, 0) * .16px * var(--par)); }
-    .mo-on .hero-main { translate: 0 calc(var(--scroll, 0) * -.07px * var(--par)); }
-    .mo-on .hero-rail { translate: 0 calc(var(--scroll, 0) * -.025px * var(--par)); }
-    .mo-on .hero-rail .rail-readout strong { animation: mo-hold 8s steps(1) var(--mo-delay, 0s) infinite; }
-    @keyframes mo-hold { 0%, 100% { opacity: 1; } 91% { opacity: .55; } 93% { opacity: 1; } 95.5% { opacity: .75; } 97% { opacity: 1; } }
-
-    .button svg { transition: translate .32s cubic-bezier(.3, 1.6, .5, 1); }
-    @media (hover: hover) { .button:hover svg { translate: 3px 0; } }
-    .work-card .project-arrow { display: inline-block; transition: translate .3s cubic-bezier(.3, 1.6, .5, 1); }
-    @media (hover: hover) { .work-card:hover .project-arrow { translate: 3px -3px; } }
-    .mo-on .work-card .work-image { position: relative; }
-    .mo-on .work-card .work-image::after { content: ""; position: absolute; inset: 0; pointer-events: none;
-      background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--project-color, #37ff00), transparent 84%) 50%, transparent 100%);
-      background-size: 100% 36%; background-repeat: no-repeat; background-position: 0 -40%; opacity: 0; }
-    @media (hover: hover) {
-      .mo-on .work-card:hover .work-image::after { opacity: 1; animation: mo-scan .9s cubic-bezier(.4, 0, .2, 1) 1; }
-    }
-    @keyframes mo-scan { from { background-position: 0 -40%; } 82% { opacity: 1; } to { background-position: 0 140%; opacity: 0; } }
-
-    .mo-tick { display: inline-block; width: .45em; height: .82em; margin-left: .12em; vertical-align: -.06em; background: var(--accent);
-      animation: cursor-blink .9s steps(1) 4 forwards; }
-</style>
-<script>document.documentElement.classList.add('js-typing');setTimeout(function(){document.documentElement.classList.remove('js-typing');},8000);</script>
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -1394,11 +1339,11 @@
       <div class="hero-grid">
         <div class="hero-main">
           <p class="command-line">BYYY STUDIOS · DESIGN + BUILD + MARKET + AUTOMATE</p>
-          <h1 id="hero-title" aria-label="APPS, WEBSITES, AUTONOMOUS SYSTEMS, BUILT FOR BUSINESS.">APPS, WEBSITES, AUTONOMOUS SYSTEMS, BUILT FOR BUSINESS.</h1>
-          <p class="hero-copy">I design and build apps, websites, and autonomous systems that handle the busywork for you. Then I help you get seen. No templates. No fluff.</p>
+          <h1 id="hero-title">Websites, apps, and systems that do the busywork.</h1>
+          <p class="hero-copy">I design and build websites, apps, and systems for businesses. Festival apps, local business sites, and repeat work put on autopilot. No templates. No fluff.</p>
           <div class="button-row">
             <a class="button button--primary" href="#contact">
-              Talk about a project
+              Book a 30-minute quote call
               <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
             </a>
             <a class="button" href="#work">See work</a>
@@ -1431,14 +1376,7 @@
       </div>
 
       <div class="work-grid" aria-label="Selected projects">
-        <button class="work-card work-card--dreamstate" type="button" data-work-panel data-work-href="https://byyystudio.me/dreamstate/">
-          <div class="work-image"><img src="work-dreamstate.png" loading="lazy" decoding="async" alt="Dreamstate SoCal 2026 official logo" /></div>
-          <div class="work-card__copy">
-            <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
-            <h3>DREAMSTATE SOCAL '26</h3>
-            <p>A phone-first trance planner with lineup saves, a simple map, and set times to come.</p>
-          </div>
-        </button><button class="work-card work-card--escape" type="button" data-work-panel data-work-href="https://byyystudio.me/escape/"><span class="work-banner">Live &mdash; under construction</span>
+        <button class="work-card work-card--escape" type="button" data-work-panel data-work-href="https://byyystudio.me/escape/"><span class="work-banner">Live &mdash; under construction</span>
           <div class="work-image"><img src="work-escape.webp" loading="lazy" decoding="async" alt="Escape Halloween festival stage" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
@@ -1452,6 +1390,13 @@
             <h3>NITEHARTS '26</h3>
             <p>Mobile set times, artist previews, and a personal lineup builder.</p>
           </div>
+        </button><button class="work-card work-card--dreamstate" type="button" data-work-panel data-work-href="https://byyystudio.me/dreamstate/">
+          <div class="work-image"><div class="work-image__label">DREAMSTATE SOCAL 2026</div></div>
+          <div class="work-card__copy">
+            <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
+            <h3>DREAMSTATE SOCAL '26</h3>
+            <p>A phone-first trance planner with lineup saves, a simple map, and set times to come.</p>
+          </div>
         </button>
       </div>
     </section>
@@ -1459,7 +1404,7 @@
     <section id="concepts" class="section" aria-labelledby="concepts-title">
       <div class="section-heading">
         <h2 id="concepts-title">CONCEPTS</h2>
-        <p>13 directions and explorations, separate from shipped client work. Tap a card to look around.</p>
+        <p>12 directions and explorations, separate from shipped client work. Tap a card to look around.</p>
       </div>
 
       <div class="concepts-grid">
@@ -1472,7 +1417,7 @@
           </div>
         </button>
         <button class="work-card work-card--flwrpwr" type="button" data-concept-open aria-haspopup="dialog">
-          <div class="work-image"><img src="work-flwrpwr.jpg" loading="lazy" decoding="async" alt="FLWRPWR stocked store website concept" /></div>
+          <div class="work-image"><img src="work-flwrpwr.png" loading="lazy" decoding="async" alt="FLWRPWR stocked store website concept" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Four concepts</span><span class="project-arrow">+</span></span>
             <h3>FLWRPWR CONCEPTS</h3>
@@ -1551,20 +1496,12 @@
             <p>A custom cake request demo for a San Gabriel bakery. Pick a cake, name the occasion, send the request.</p>
           </div>
         </a>
-        <a class="work-card work-card--rushlab" href="https://byyystudio.me/rush-lab/">
-          <div class="work-image"><div class="work-image__label">RUSH LAB</div></div>
+        <a class="work-card" href="https://byyystudio.me/roblox-game-concepts/" target="_blank" rel="noopener noreferrer">
+          <div class="work-image"><img src="work-coinyard.jpg" loading="lazy" decoding="async" alt="Coin Yard Roblox game concept" /></div>
           <div class="work-card__copy">
-            <span class="project-meta"><span>Dropship store</span><span class="project-arrow">↗</span></span>
-            <h3>RUSH LAB</h3>
-            <p>Batch 01: Y2K cat-eye and polarized sports glasses, a retro cap, and a Cuban chain.</p>
-          </div>
-        </a>
-        <a class="work-card work-card--santa" href="https://byyystudio.me/secret-santa/">
-          <div class="work-image"><img src="work-secret-santa.jpg" loading="lazy" decoding="async" alt="Secret Santa page, retro 16-bit Christmas hero" /></div>
-          <div class="work-card__copy">
-            <span class="project-meta"><span>Live tool</span><span class="project-arrow">↗</span></span>
-            <h3>SECRET SANTA</h3>
-            <p>Run your own Secret Santa group: draw names, vote on the date, and build gift lists from Amazon.</p>
+            <span class="project-meta"><span>Game concept</span><span class="project-arrow">↗</span></span>
+            <h3>ROBLOX GAME CONCEPT: COIN YARD</h3>
+            <p>An original Roblox simulator concept: collect, upgrade, unlock, rebirth. Loop, monetization, and a Studio starter plan.</p>
           </div>
         </a>
         
@@ -2318,138 +2255,6 @@
         sections.forEach(function (section) { observer.observe(section); });
       }
     }());
-  /* Kinetic terminal typing hero (Motion Studio Stack).
-         Types the command line, then the headline, char by char, with a
-         block cursor. Copy + buttons print after, no fade. Skipped entirely
-         under prefers-reduced-motion: everything stays visible as authored.
-         Full text stays in the HTML, so no-JS and screen readers see it.
-         The head script adds js-typing before first paint so the full
-         headline never flashes; each line is unhidden the moment its
-         typing starts, so the page loads as it types. */
-      (function () {
-        var heroTitle = document.getElementById('hero-title');
-        var commandLine = document.querySelector('.hero-main .command-line');
-        if (!heroTitle || !commandLine) return;
-        var titleText = heroTitle.textContent;
-        var cmdText = commandLine.textContent;
-        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        var rootEl = document.documentElement;
-        var finished = false;
-        var timers = [];
-        function finish() {
-          if (finished) return;
-          finished = true;
-          timers.forEach(window.clearTimeout);
-          heroTitle.textContent = titleText;
-          commandLine.textContent = cmdText;
-          rootEl.classList.remove('js-typing');
-          rootEl.classList.add('typing-done');
-        }
-        if (reduce) { finish(); return; }
-        rootEl.classList.add('js-typing');
-        /* Safety: never leave the hero half typed, whatever else fails. */
-        window.setTimeout(finish, 8000);
-        /* The full line is always on screen: typed part bright, the rest dim,
-           cursor between them. Same text, same wrapping, no layout shift. */
-        function typeInto(el, text, rate, keepCursor, done) {
-          el.textContent = '';
-          var on = document.createElement('span');
-          var caret = document.createElement('span');
-          var off = document.createElement('span');
-          var cursor = document.createElement('span');
-          on.className = 't-on'; off.className = 't-off'; caret.className = 't-caret'; cursor.className = 'type-cursor';
-          [on, caret, off].forEach(function (n) { n.setAttribute('aria-hidden', 'true'); });
-          caret.appendChild(cursor);
-          off.textContent = text;
-          el.appendChild(on); el.appendChild(caret); el.appendChild(off);
-          var i = 0;
-          (function step() {
-            if (finished) return;
-            i += 1;
-            on.textContent = text.slice(0, i);
-            off.textContent = text.slice(i);
-            if (i >= text.length) {
-              if (!keepCursor) { el.textContent = text; }
-              else { off.remove(); }
-              el.classList.add('t-done');
-              done();
-              return;
-            }
-            /* Rhythm, not jitter: a beat after each comma, a breath at each
-               space, and a slow, steady pace for the rest of the line. */
-            var c = text.charAt(i - 1);
-            var wait = c === ',' ? rate * 7 : c === ' ' ? rate * 1.6 : c === '.' ? rate * 4 : rate;
-            timers.push(window.setTimeout(step, wait));
-          }());
-        }
-        timers.push(window.setTimeout(function () {
-          typeInto(commandLine, cmdText, 10, false, function () {
-            timers.push(window.setTimeout(function () {
-              typeInto(heroTitle, titleText, 18, true, function () {
-                timers.push(window.setTimeout(function () {
-                  rootEl.classList.remove('js-typing');
-                  rootEl.classList.add('typing-done');
-                  finished = true;
-                }, 120));
-              });
-            }, 150));
-          });
-        }, 200));
-      }());
-
-  /* Motion layer (Nov 10). Native scroll only: one passive listener writes
-     --scroll (a registered number) on the hero, CSS turns it into three
-     depths. Section headings get a cursor that blinks four times and goes.
-     Nothing here hides or delays content. Off under reduced motion. */
-      (function () {
-        var mm = function (q) { return window.matchMedia ? window.matchMedia(q).matches : false; };
-        if (mm('(prefers-reduced-motion: reduce)')) return;
-        var rootEl = document.documentElement;
-        rootEl.classList.add('mo-on');
-        if (window.CSS && CSS.registerProperty) {
-          try { CSS.registerProperty({ name: '--scroll', syntax: '<number>', inherits: true, initialValue: '0' }); } catch (e) {}
-        }
-        var hero = document.querySelector('.terminal');
-        var heroH = hero ? hero.offsetHeight : 0;
-        var ticking = false;
-        function write() {
-          ticking = false;
-          if (hero) hero.style.setProperty('--scroll', Math.min(window.scrollY, heroH).toFixed(1));
-        }
-        window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(write); } }, { passive: true });
-        window.addEventListener('resize', function () { heroH = hero ? hero.offsetHeight : 0; }, { passive: true });
-        write();
-
-        /* readout values flicker once per 8 s loop, each on its own phase */
-        Array.prototype.forEach.call(document.querySelectorAll('.rail-readout strong'), function (el, i) {
-          el.style.setProperty('--mo-delay', (-((i * 2.9 + 1.3) % 8)).toFixed(2) + 's');
-        });
-
-        /* press: squash and spring back */
-        document.addEventListener('pointerdown', function (e) {
-          var b = e.target.closest && e.target.closest('.button, .nav-link, .bottom-nav__link, .status-toggle');
-          if (!b || !b.animate) return;
-          b.animate([{ scale: '1' }, { scale: '.96', offset: .25 }, { scale: '1.02', offset: .65 }, { scale: '1' }],
-            { duration: 420, easing: 'ease-out' });
-        });
-
-        /* section headings: a cursor ticks after the heading when it arrives */
-        if ('IntersectionObserver' in window) {
-          var heads = document.querySelectorAll('.section-heading h2, .systems-copy h2, .niche-copy h2, .call-panel h2');
-          var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (en) {
-              if (!en.isIntersecting) return;
-              io.unobserve(en.target);
-              var t = document.createElement('span');
-              t.className = 'mo-tick';
-              t.setAttribute('aria-hidden', 'true');
-              en.target.appendChild(t);
-              window.setTimeout(function () { t.remove(); }, 3700);
-            });
-          }, { threshold: .6 });
-          Array.prototype.forEach.call(heads, function (h) { io.observe(h); });
-        }
-      }());
-</script>
+  </script>
 </body>
 </html>

@@ -118,7 +118,7 @@
       ], { duration: DUR[i % DUR.length], delay: GAPS[i % GAPS.length], easing: "cubic-bezier(.3,.7,.3,1)" });
     });
   }
-  /* wait for the password gate so the settle plays when it can be seen */
+  /* the coming-soon screen is in normal page flow now (no gate), so the settle plays right away */
   var gate = document.getElementById("flwrGate");
   if (gate && "MutationObserver" in window){
     var mo = new MutationObserver(function(){
