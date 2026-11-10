@@ -173,7 +173,7 @@
   .gift-item{align-items:center}
   .msg-item{border-top:3px solid #000; padding:10px 0}
   .msg-item .msg-author{font-family:"Press Start 2P", monospace; font-size:10px; text-transform:uppercase}
-  .buying-owner{font-family:"Press Start 2P", monospace; font-size:13px; margin:18px 0 8px; padding:10px; background:#f8d800; color:#101018; border:3px solid #000; box-shadow:4px 4px 0 #000; text-transform:uppercase}
+  .buying-owner{font-family:"Press Start 2P", monospace; font-size:13px; margin:18px 0 8px; padding:10px; background:#f8d800; color:#101018; border:3px solid #000; box-shadow:4px 4px 0 #000; text-transform:uppercase; display:flex; align-items:center; gap:10px}
   .buying-item{display:flex; gap:12px; align-items:center; border-top:3px solid #000; padding:10px 0}
   .buying-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
   .search-item{display:flex; flex-wrap:wrap; gap:12px; align-items:center; border:3px solid #000; background:#fff; padding:8px; margin-top:8px; box-shadow:4px 4px 0 #000}
@@ -227,10 +227,18 @@
   .participant-count{display:inline-block; transition:transform .25s ease; color:var(--red)}
   .participant-count.pulse{transform:scale(1.4)}
   .participant-chip{
-    display:inline-block; background:var(--gold); border:3px solid #000;
+    display:inline-flex; align-items:center; gap:8px; background:var(--gold); border:3px solid #000;
     box-shadow:3px 3px 0 #000; padding:6px 10px; margin:4px 6px 4px 0;
     font-family:"Press Start 2P", monospace; font-size:10px;
   }
+  .avatar-img{width:28px; height:28px; image-rendering:pixelated; border:2px solid #000; background:#fff; flex:none}
+  .avatar-img.sm{width:20px; height:20px}
+  .avatar-img.lg{width:36px; height:36px}
+  .avatar-picks{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0}
+  .avatar-pick{background:#fff; border:3px solid #000; box-shadow:3px 3px 0 #000; padding:4px; cursor:pointer; line-height:0}
+  .avatar-pick.selected{background:var(--gold); outline:3px solid var(--red); outline-offset:2px}
+  .avatar-pick img{width:44px; height:44px; image-rendering:pixelated; display:block}
+  .voter-chip{display:inline-flex; align-items:center; gap:6px; margin:2px 8px 2px 0}
   .result{
     border:4px solid #000; background:var(--gold); box-shadow:6px 6px 0 #000;
     padding:18px; margin-top:16px; font-size:23px; position:relative; overflow:hidden;
@@ -418,6 +426,11 @@
       <input id="email-input" type="email" maxlength="120" autocomplete="off" placeholder="Email (optional)" />
       <button id="add-button" type="button">Add me to the list</button>
     </div>
+    <div id="avatar-picker">
+      <label>Your avatar</label>
+      <div id="avatar-picks" class="avatar-picks"></div>
+      <p class="small">Tap one to pick it. It shows next to your name when voting and on gift lists.</p>
+    </div>
     <p id="join-message" aria-live="polite"></p>
     <h3>Who is in (<span id="participant-count" class="participant-count">0</span>)</h3>
     <div id="participant-list"></div>
@@ -603,6 +616,59 @@
 
   function reducedMotion() {
     return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function avatarUrl(seed) {
+    return "https://api.dicebear.com/9.x/pixel-art/svg?seed=" + encodeURIComponent(seed || "you");
+  }
+
+  function avatarImg(seed, cls) {
+    return '<img class="avatar-img ' + (cls || "") + '" src="' + esc(avatarUrl(seed)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" />';
+  }
+
+  function avatarSeedFor(name) {
+    var p = state.participants.find(function (x) { return x.name === name; });
+    return (p && p.avatar) ? p.avatar : name;
+  }
+
+  function avatarBaseName() {
+    var v = document.getElementById("name-input").value.trim();
+    return v || state.myName || "you";
+  }
+
+  function avatarOptions() {
+    var b = avatarBaseName();
+    return [b, b + "-2", b + "-3", b + "-4", b + "-5", b + "-6"];
+  }
+
+  function renderAvatarPicks() {
+    var el = document.getElementById("avatar-picks");
+    if (!el) return;
+    var opts = avatarOptions();
+    var current = state.pickedAvatar || avatarSeedFor(state.myName || avatarBaseName());
+    el.innerHTML = opts.map(function (seed) {
+      return '<button type="button" class="avatar-pick' + (seed === current ? " selected" : "") + '" data-seed="' + esc(seed) + '">' +
+        '<img src="' + esc(avatarUrl(seed)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" /></button>';
+    }).join("");
+    el.querySelectorAll(".avatar-pick").forEach(function (btn) {
+      btn.addEventListener("click", function () { pickAvatar(btn.dataset.seed); });
+    });
+  }
+
+  async function pickAvatar(seed) {
+    state.pickedAvatar = seed;
+    renderAvatarPicks();
+    var me = state.myName ? state.participants.find(function (p) { return p.name === state.myName; }) : null;
+    if (me && me.id) {
+      try {
+        var res = await apiFetch("/participants?id=eq." + me.id, {
+          method: "PATCH",
+          headers: { "Prefer": "return=representation" },
+          body: JSON.stringify({ avatar: seed })
+        });
+        if (res.ok) await loadAll();
+      } catch (e) { /* the pick still shows; the save retries on the next pick */ }
+    }
   }
 
   function setMessage(id, text, isError) {
@@ -844,8 +910,9 @@
   function renderParticipants() {
     var list = document.getElementById("participant-list");
     list.innerHTML = state.participants.map(function (p) {
-      return '<span class="participant-chip">' + esc(p.name) + "</span>";
+      return '<span class="participant-chip">' + avatarImg(avatarSeedFor(p.name)) + esc(p.name) + "</span>";
     }).join("");
+    renderAvatarPicks();
     var countEl = document.getElementById("participant-count");
     countEl.textContent = state.participants.length;
     if (state.lastCount !== null && state.lastCount !== state.participants.length && !reducedMotion()) {
@@ -900,7 +967,9 @@
       var pct = total ? Math.round((count / total) * 100) : 0;
       var pressed = mine && mine.option_id === opt.id ? "true" : "false";
       var names = state.votes.filter(function (v) { return v.poll_id === pollId && v.option_id === opt.id; }).map(function (v) { return v.voter_name; });
-      var voters = names.length ? '<span class="poll-voters">' + esc(names.join(", ")) + '</span>' : '';
+      var voters = names.length ? '<span class="poll-voters">' + names.map(function (n) {
+        return '<span class="voter-chip">' + avatarImg(avatarSeedFor(n), "sm") + esc(n) + "</span>";
+      }).join("") + '</span>' : '';
       return '<button type="button" class="poll-option" aria-pressed="' + pressed +
         '" data-poll="' + pollId + '" data-option="' + opt.id + '"><span class="poll-meta"><span>' + esc(opt.label) +
         "</span><span>" + count + " vote" + (count === 1 ? "" : "s") + " (" + pct + "%)</span></span>" +
@@ -984,7 +1053,7 @@
       el.innerHTML = '';
       return;
     }
-    el.innerHTML = "<h3>Their gift ideas</h3><ul>" + items.map(function (w) {
+    el.innerHTML = "<h3>" + avatarImg(avatarSeedFor(recipient), "lg") + " Their gift ideas</h3><ul>" + items.map(function (w) {
       var note = "";
       if (w.link_or_note) {
         if (w.link_or_note.indexOf("http://") === 0 || w.link_or_note.indexOf("https://") === 0) {
@@ -1306,8 +1375,8 @@
     });
     view.innerHTML = owners.map(function (owner) {
       var items = state.wishlists.filter(function (w) { return w.owner_name === owner; });
-      if (!items.length) return '<div class="buying-owner">' + esc(owner) + '</div><p class="small">No gifts yet.</p>';
-      return '<div class="buying-owner">' + esc(owner) + "</div>" + items.map(function (w) {
+      if (!items.length) return '<div class="buying-owner">' + avatarImg(avatarSeedFor(owner), "lg") + esc(owner) + '</div><p class="small">No gifts yet.</p>';
+      return '<div class="buying-owner">' + avatarImg(avatarSeedFor(owner), "lg") + esc(owner) + "</div>" + items.map(function (w) {
         var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
         var link = "";
         if (w.link_or_note && (w.link_or_note.indexOf("http://") === 0 || w.link_or_note.indexOf("https://") === 0)) {
@@ -1694,7 +1763,7 @@
       if (!drawsRes.ok) throw new Error("Could not load the draw.");
       var draws = await drawsRes.json();
       state.draw = draws.length ? draws[0] : null;
-      var partsRes = await apiFetch("/participants?select=id,name,email,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
+      var partsRes = await apiFetch("/participants?select=id,name,email,avatar,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
       if (!partsRes.ok) throw new Error("Could not load participants.");
       state.participants = await partsRes.json();
       var votesRes = await apiFetch("/poll_votes?select=poll_id,option_id,voter_name&group_id=eq." + state.group.id);
@@ -1747,7 +1816,7 @@
       var res = await apiFetch("/participants", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ name: name, email: state.myEmail, group_id: state.group.id })
+        body: JSON.stringify({ name: name, email: state.myEmail, avatar: state.pickedAvatar || name, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not add that name. It may already be on the list.");
       input.value = "";
@@ -2079,6 +2148,7 @@
     else document.getElementById("auth-email").focus({ preventScroll: true });
   });
   document.getElementById("add-button").addEventListener("click", addParticipant);
+  document.getElementById("name-input").addEventListener("input", function () { state.pickedAvatar = null; renderAvatarPicks(); });
   document.getElementById("lock-button").addEventListener("click", function () {
     setDrawStatus("locked").catch(function (e) { setMessage("join-message", e.message, true); });
   });
