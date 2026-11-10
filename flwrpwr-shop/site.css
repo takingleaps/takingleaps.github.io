@@ -76,6 +76,7 @@ header.site{
 .logo{ text-align:center; text-decoration:none; line-height:.9; }
 .logo .logo-word{ font-family:"Shrikhand",cursive; font-size:2rem; color:var(--coral); letter-spacing:.02em; }
 .logo .logo-sub{ font-size:.6rem; font-weight:900; letter-spacing:.42em; text-transform:uppercase; color:var(--ink-soft); margin-top:3px; }
+.logo-img{ width:64px; height:64px; object-fit:cover; mix-blend-mode:multiply; border-radius:10px; display:block; }
 .cart-btn{
   display:inline-flex; align-items:center; gap:8px; border:2px solid var(--ink);
   background:var(--gold-soft); color:var(--ink); border-radius:999px; padding:8px 16px;
