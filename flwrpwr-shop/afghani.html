@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
     <meta name="color-scheme" content="light dark" />
     <meta name="description" content="Afghani (Indica) — FLWRPWR 4g Smalls. Coming soon." />
     <link rel="icon" href="data:," />
@@ -14,6 +15,19 @@
     
   </head>
   <body>
+    <div id="flwrGate" style="position:fixed;inset:0;z-index:99999;background:#FDF6EA;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
+      <div style="max-width:420px;width:100%;text-align:center;background:#FFFDF7;border:1.5px solid #E3D9C6;border-radius:28px;padding:40px 28px 34px;box-shadow:0 24px 60px rgba(85,107,63,.18);">
+        <div style="font-family:'Shrikhand',cursive;font-size:2.2rem;color:#556B3F;letter-spacing:.02em;">FLWR<span style="color:#F4728E;">PWR</span></div>
+        <p style="font-weight:900;letter-spacing:.28em;text-transform:uppercase;font-size:.72rem;color:#F4728E;margin:10px 0 0;">Good vibes, great flower</p>
+        <p style="font-weight:700;color:#5A6B52;margin:18px 0 0;">This shop is still blooming.<br />Enter the password to peek inside.</p>
+        <form id="flwrGateForm" style="margin-top:22px;">
+          <input id="flwrGateInput" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;box-sizing:border-box;border:1.5px solid #E3D9C6;border-radius:999px;padding:13px 20px;font:inherit;font-weight:700;text-align:center;background:#FDF6EA;color:#2A3620;outline:none;" />
+          <button type="submit" style="width:100%;margin-top:12px;border:none;border-radius:999px;padding:13px 20px;background:#F4728E;color:#fff;font:inherit;font-weight:900;cursor:pointer;">Enter the shop</button>
+        </form>
+        <p id="flwrGateError" hidden style="color:#D43D5E;font-weight:800;font-size:.85rem;margin:12px 0 0;">That&apos;s not the password. Try again.</p>
+        <p style="font-size:.78rem;color:#8A9A7E;margin:16px 0 0;">21+ only &middot; Pre-launch preview</p>
+      </div>
+    </div>
     <div class="grain" aria-hidden="true"></div>
     <div class="announce">✿ Pre-launch — the first drop is blooming soon ✿ Good vibes, great flower ✿</div>
     <header class="site">
@@ -122,5 +136,6 @@
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="site.js"></script>
     <script src="motion.js"></script>
+      <script src="gate.js"></script>
   </body>
 </html>
