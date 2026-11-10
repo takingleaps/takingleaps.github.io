@@ -1441,7 +1441,7 @@
           </div>
         </button>
         <button class="work-card work-card--flwrpwr" type="button" data-concept-open aria-haspopup="dialog">
-          <div class="work-image"><img src="work-flwrpwr.png" loading="lazy" decoding="async" alt="FLWRPWR stocked store website concept" /></div>
+          <div class="work-image"><img src="work-flwrpwr.jpg" loading="lazy" decoding="async" alt="FLWRPWR stocked store website concept" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Four concepts</span><span class="project-arrow">+</span></span>
             <h3>FLWRPWR CONCEPTS</h3>
@@ -2342,19 +2342,19 @@
         }
         window.setTimeout(function () {
           commandLine.style.visibility = 'visible';
-          typeInto(commandLine, cmdText, 16, false, function () {
+          typeInto(commandLine, cmdText, 10, false, function () {
             window.setTimeout(function () {
               heroTitle.style.visibility = 'visible';
-              typeInto(heroTitle, titleText, 30, true, function () {
+              typeInto(heroTitle, titleText, 18, true, function () {
                 window.setTimeout(function () {
                   rootEl.classList.remove('js-typing');
                   rootEl.classList.add('typing-done');
                   finished = true;
-                }, 220);
+                }, 120);
               });
-            }, 260);
+            }, 150);
           });
-        }, 350);
+        }, 200);
       }());
 </script>
 </body>
