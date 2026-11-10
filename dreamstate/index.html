@@ -1,202 +1,508 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#060913">
+<meta name="description" content="Dreamstate SoCal 2026, November 20 to 21 at Queen Mary Waterfront, Long Beach. Lineup, plan, map, and info, built to the Niteharts and Escape standard.">
 <title>Dreamstate SoCal 2026 | Lineup, Plan, Map, Info</title>
-<meta name="description" content="A simple phone-first planner for Dreamstate SoCal 2026, November 20 to 21 at Queen Mary Waterfront, Long Beach. Save artists, build your plan, and find your way around.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js-boot")</script>
 <style>
-:root{--bg:#0b0b10;--panel:#14141c;--panel2:#1c1c28;--text:#f4f4f5;--muted:#a1a1aa;--line:#2a2a38;--accent:#7dd3fc;--accent-ink:#082f49}
+:root{
+  color-scheme:dark;
+  --night:#060913; --deep:#0a1122; --panel:#101830; --panel2:#16203a;
+  --paper:#eef2ff; --mist:#a7b0cc; --line:#26334f; --line-strong:#3d4f78;
+  --cyan:#7dd3fc; --cyan-strong:#d5f1ff; --ink:#062a3a;
+  --display:"Teko","Arial Narrow",sans-serif; --body:"Syne",sans-serif; --mono:"Syne Mono",monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --rise:18px; --stag:1; --pk:1;
+}
+@media(max-width:640px){:root{--rise:10px;--stag:.6;--pk:.5}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Arial,sans-serif;line-height:1.5}
-a{color:var(--accent)}
-header{padding:28px 20px 16px;max-width:900px;margin:0 auto}
-.eyebrow{letter-spacing:.14em;font-size:13px;color:var(--accent);font-weight:700;text-transform:uppercase}
-h1{font-size:44px;line-height:1.05;margin:10px 0 8px}
-h2{font-size:26px;margin:0 0 10px}
-h3{font-size:20px;margin:0}
-p{margin:8px 0}
-.sub{color:var(--muted);font-size:18px}
-.pillrow{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
-.pill{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:10px 14px;font-size:16px}
-.notice{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:12px;padding:16px;margin:16px 0}
-nav.tabs{position:sticky;top:0;z-index:10;background:rgba(11,11,16,.97);border-bottom:1px solid var(--line);display:flex;gap:8px;padding:10px;overflow-x:auto}
-nav.tabs button{flex:1;min-width:96px;min-height:56px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:17px;font-weight:700;cursor:pointer}
-nav.tabs button.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-main{max-width:900px;margin:0 auto;padding:20px 20px 60px}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:320px;padding-bottom:calc(84px + env(safe-area-inset-bottom));background:var(--night);color:var(--paper);font-family:var(--body);line-height:1.4;overflow-x:hidden}
+button,input,textarea{font:inherit;color:inherit}
+a{color:var(--cyan);text-underline-offset:4px}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+::selection{background:var(--cyan);color:var(--ink)}
+
+/* ---------- motion system (ported from Niteharts / Escape) ---------- */
+@keyframes bootStageIn{from{opacity:0}to{opacity:1}}
+@keyframes bootSweep{0%{transform:translateX(-110%)}100%{transform:translateX(110%)}}
+@keyframes bootLoad{0%{width:0%}100%{width:100%}}
+@keyframes bootScanline{0%{top:-10%}100%{top:110%}}
+@keyframes logoIn{0%{opacity:0;transform:translateY(26px) scale(.98);letter-spacing:.14em}100%{opacity:1;transform:none;letter-spacing:.01em}}
+@keyframes logoSweep{0%{transform:translateX(-160%) skewX(-18deg)}100%{transform:translateX(360%) skewX(-18deg)}}
+@keyframes logoSignal{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes heroBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes orbit{0%{transform:rotate(-18deg) scale(1)}50%{transform:rotate(-8deg) scale(1.04)}100%{transform:rotate(-18deg) scale(1)}}
+@keyframes starDrift{0%{background-position:0 0,60px 90px}100%{background-position:180px 120px,240px 210px}}
+@keyframes marqueeMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes marqueeFlicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.4}94%{opacity:1}97%{opacity:.6}98%{opacity:1}}
+@keyframes countBump{0%{transform:scale(1)}40%{transform:scale(1.18);color:var(--cyan-strong)}100%{transform:scale(1)}}
+@keyframes signalPulse{0%,100%{opacity:.35;box-shadow:0 0 0 0 rgba(125,211,252,.35)}50%{opacity:1;box-shadow:0 0 0 8px rgba(125,211,252,0)}}
+@keyframes pinGlow{0%,100%{box-shadow:0 0 0 0 rgba(125,211,252,.4)}50%{box-shadow:0 0 24px 4px rgba(125,211,252,.35)}}
+@keyframes beamPulse{0%,100%{opacity:.12;transform:scaleY(.6)}50%{opacity:.5;transform:scaleY(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(var(--rise))}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(calc(var(--rise) * .9))}to{opacity:1;transform:none}}
+@keyframes panelIn{from{opacity:0;transform:translate(calc(var(--dir,0) * var(--rise) * 1.4),calc(var(--rise) * .6))}to{opacity:1;transform:none}}
+@keyframes sheetOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(calc(var(--rise) * 2))}}
+@keyframes scrimOut{to{opacity:0}}
+@keyframes progress{to{transform:scaleX(1)}}
+@keyframes savePop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes tabPulse{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes titleFlicker{0%,100%{opacity:1}90%{opacity:1}91%{opacity:.55}92%{opacity:1}95%{opacity:.75}96%{opacity:1}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(125,211,252,0)}50%{box-shadow:0 0 28px 2px rgba(125,211,252,.28)}}
+
+/* ---------- boot screen ---------- */
+#boot{position:fixed;inset:0;z-index:100;background:var(--night);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;animation:bootStageIn .35s var(--ease) backwards;cursor:pointer}
+#boot.done{opacity:0;pointer-events:none;visibility:hidden;animation:none;transition:opacity .5s var(--ease),visibility 0s .5s}
+#boot .boot-logo{position:relative;overflow:hidden;width:min(520px,82vw);animation:logoIn .9s var(--ease) both;transition:scale .55s var(--ease),filter .55s var(--ease)}
+#boot.done .boot-logo{scale:1.06;filter:blur(2px)}
+#boot .boot-logo img{display:block;width:100%;height:auto}
+#boot .boot-logo::after{content:"";position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(213,241,255,.22),transparent);animation:bootSweep 1s var(--ease) infinite}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#boot .boot-bar{width:min(280px,70vw);height:4px;background:var(--panel2);overflow:hidden}
+#boot .boot-bar i{display:block;height:100%;background:var(--cyan);animation:bootLoad .9s var(--ease) both}
+#boot .boot-scan{position:absolute;left:0;right:0;height:120px;background:linear-gradient(180deg,transparent,rgba(125,211,252,.06),transparent);animation:bootScanline 1.4s linear infinite;pointer-events:none}
+#boot p{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);margin:0;animation:logoSignal 1.2s ease-in-out infinite}
+
+/* ---------- shell ---------- */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(#7dd3fc 1px,transparent 1px),radial-gradient(#eef2ff 1px,transparent 1px);background-size:180px 180px,260px 260px;background-position:0 0,60px 90px;opacity:.12;animation:starDrift 60s linear infinite}
+.app{width:min(1100px,100%);margin:auto;padding:0 clamp(16px,4vw,44px)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 6px;position:relative;z-index:1}
+.topbar a{color:var(--mist);text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.topbar .live-dot{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist)}
+.topbar .live-dot i{width:9px;height:9px;border-radius:50%;background:var(--cyan);animation:signalPulse 1.8s ease-in-out infinite}
+
+/* ---------- hero ---------- */
+.js-boot:not(.booted) .hero h1,.js-boot:not(.booted) .hero h1 .sweep::after,.js-boot:not(.booted) .hero .socal,.js-boot:not(.booted) .sub,.js-boot:not(.booted) .countdown,.js-boot:not(.booted) .pillrow,.js-boot:not(.booted) .notice{animation-play-state:paused}
+.hero{position:relative;z-index:1;padding:clamp(28px,6vw,72px) 0 0;border-bottom:1px solid var(--line);overflow:hidden}
+.hero::after{content:"";position:absolute;right:-14%;top:-30%;width:56%;aspect-ratio:1;border:1px solid rgba(125,211,252,.35);border-radius:50%;transform:rotate(-18deg);box-shadow:0 0 90px rgba(125,211,252,.14);animation:orbit 22s var(--ease) infinite,heroBreath 9s ease-in-out infinite;pointer-events:none;translate:0 calc(var(--par,0) * .22px * var(--pk))}
+.beam{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--cyan),transparent);transform-origin:top;animation:beamPulse 3.2s ease-in-out infinite;pointer-events:none;translate:0 calc(var(--par,0) * -.12px * var(--pk))}
+.beam:nth-child(1){left:22%;animation-delay:0s}
+.beam:nth-child(2){left:52%;animation-delay:.7s}
+.beam:nth-child(3){left:82%;animation-delay:1.4s}
+.eyebrow{margin:0;color:var(--cyan);font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;animation:logoSignal 2.4s ease-in-out infinite}
+.hero h1{margin:6px 0 0;animation:logoIn .9s var(--ease) both;position:relative;width:min(760px,94%)}
+.hero h1 img.title-logo{display:block;width:100%;height:auto}
+.hero h1 .sweep{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero h1 .sweep::after{content:"";position:absolute;top:0;bottom:0;width:34%;background:linear-gradient(90deg,transparent,rgba(213,241,255,.4),transparent);animation:logoSweep 1.6s var(--ease) .7s both}
+.hero .socal{font-family:var(--display);font-size:clamp(40px,8vw,84px);line-height:.9;text-transform:uppercase;letter-spacing:.04em;color:var(--paper);animation:rise .8s var(--ease) .15s both,titleFlicker 7s linear 2s infinite}
+.sub{max-width:62ch;color:var(--mist);font-size:clamp(17px,2.4vw,21px);line-height:1.55;margin:18px 0 0;animation:rise .8s var(--ease) .25s both}
+.countdown{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0;animation:rise .8s var(--ease) .35s both}
+.count{border:1px solid var(--line);background:var(--panel);padding:14px 16px;min-width:92px;transition:border-color .3s var(--ease),translate .35s var(--ease)}
+.count:hover{border-color:var(--line-strong);translate:0 -2px}
+.count b{display:block;font-family:var(--display);font-size:38px;line-height:1;color:var(--cyan-strong)}
+.count b.bump{animation:countBump .45s var(--ease)}
+.count span{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
+.pillrow{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0;animation:rise .8s var(--ease) .45s both}
+.pill{border:1px solid var(--line);background:var(--panel);padding:11px 14px;font-size:15px;font-weight:600;transition:border-color .3s var(--ease),transform .3s var(--ease),color .3s var(--ease)}
+.pill:hover{border-color:var(--cyan);transform:translateY(-2px);color:var(--cyan-strong)}
+.pillrow .pill{animation:rise .6s var(--ease) backwards;animation-delay:calc(.5s + var(--pi,0) * 70ms)}
+.pillrow .pill:nth-child(2){--pi:1}.pillrow .pill:nth-child(3){--pi:2}.pillrow .pill:nth-child(4){--pi:3}
+.js-boot:not(.booted) .pillrow .pill{animation-play-state:paused}
+.notice{border:1px solid var(--line);border-left:5px solid var(--cyan);background:var(--panel);padding:18px;margin:22px 0 0;max-width:72ch;animation:rise .8s var(--ease) .55s both}
+.notice strong{color:var(--cyan-strong)}
+.marquee{margin:28px calc(clamp(16px,4vw,44px) * -1) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;background:var(--deep)}
+.marquee-track{display:inline-block;padding:12px 0;font-family:var(--display);font-size:26px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);animation:marqueeMove 22s linear infinite,marqueeFlicker 9s linear infinite}
+.marquee-track b{color:var(--cyan);font-weight:600}
+@media(hover:hover) and (pointer:fine){.marquee:hover .marquee-track{animation-play-state:paused}}
+
+/* ---------- sections ---------- */
+main{position:relative;z-index:1;padding:28px 0 40px}
 section.panel{display:none}
-section.panel.active{display:block}
-.controls{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
-.controls button,.controls input{font-size:17px;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);min-height:56px}
-.controls input{flex:1;min-width:220px}
-.controls button.active{background:var(--accent);color:var(--accent-ink);font-weight:700}
-.artist{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;display:flex;gap:14px;align-items:center;justify-content:space-between}
-.artist .meta{color:var(--muted);font-size:15px}
-.savebtn{min-width:104px;min-height:56px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-size:17px;font-weight:700;cursor:pointer}
-.savebtn.saved{background:var(--accent);color:var(--accent-ink)}
-.mapbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
-.mapgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.mapcell{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;font-weight:700;min-height:88px;display:flex;align-items:center;justify-content:center}
-.mapcell.wide{grid-column:1/-1}
-label{display:block;font-weight:700;margin:14px 0 6px}
-input[type=text],textarea{width:100%;font-size:17px;padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text)}
-textarea{min-height:120px}
-.primary{min-height:56px;padding:14px 20px;border-radius:12px;background:var(--accent);color:var(--accent-ink);border:0;font-size:17px;font-weight:800;cursor:pointer}
-.small{color:var(--muted);font-size:15px}
-footer{border-top:1px solid var(--line);padding:24px 20px;color:var(--muted);max-width:900px;margin:0 auto}
-@media(max-width:560px){h1{font-size:36px}.mapgrid{grid-template-columns:1fr 1fr}.artist{flex-direction:column;align-items:stretch}.savebtn{width:100%}}
+section.panel.active{display:block;animation:panelIn .5s var(--ease) both}
+section.panel.active>:not(.reveal):not(#artistList):not(#planList){animation:rise .55s var(--ease) backwards}
+section.panel.active>:nth-child(2){animation-delay:.06s}section.panel.active>:nth-child(3){animation-delay:.12s}section.panel.active>:nth-child(4){animation-delay:.18s}section.panel.active>:nth-child(n+5){animation-delay:.24s}
+h2{margin:0 0 8px;font-family:var(--display);font-size:clamp(48px,8vw,76px);line-height:.95;text-transform:uppercase;letter-spacing:.02em}
+.lede{color:var(--mist);font-size:17px;line-height:1.6;max-width:64ch;margin:0 0 20px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal:not(.in) .spot,.reveal:not(.in) .mapcell{animation-play-state:paused}
+.spotlight{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 22px}
+.spot{border:1px solid var(--line);background:var(--panel);padding:18px;cursor:pointer;transition:border-color .3s var(--ease),transform .3s var(--ease),box-shadow .3s var(--ease),scale .18s var(--ease);animation:cardIn .6s var(--ease) backwards;animation-delay:calc(var(--d,0s) * var(--stag) + .1s)}
+.spot:hover{border-color:var(--cyan);transform:translateY(-3px);animation:cardIn .6s var(--ease) backwards,pinGlow 2s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
+.spot:hover h3{color:var(--cyan-strong)}.spot h3{transition:color .3s var(--ease)}
+.spot:active{scale:.985}
+.spot .tag{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.spot h3{margin:6px 0 0;font-family:var(--display);font-size:34px;line-height:1;text-transform:uppercase}
+.spot p{margin:6px 0 0;color:var(--mist);font-size:14px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+.controls button,.controls input{font-size:17px;padding:14px 16px;border:1px solid var(--line);background:var(--panel);min-height:60px;border-radius:4px;transition:border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease),color .25s var(--ease),scale .16s var(--ease)}
+.controls button:active{scale:.96}
+.controls input{flex:1;min-width:230px}
+.controls input:focus{border-color:var(--cyan)}
+.controls button{font-weight:700;cursor:pointer}
+.controls button:hover{border-color:var(--cyan)}
+.controls button.active{background:var(--cyan);color:var(--ink);border-color:var(--cyan);animation:tabPulse .45s var(--ease)}
+.artist{border:1px solid var(--line);background:var(--panel);padding:18px;margin:12px 0;display:flex;gap:16px;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .25s var(--ease),transform .25s var(--ease),box-shadow .25s var(--ease),scale .18s var(--ease);animation:cardIn .5s var(--ease) backwards;animation-delay:calc(var(--d,0s) * var(--stag))}
+.quick .artist{animation-duration:.3s;animation-delay:0s}
+.calm .artist{animation:none}
+.calm .savebtn.saved{animation:none}
+.calm .savebtn.saved.just{animation:savePop .45s var(--ease)}
+.artist:active{scale:.985}
+.artist h3{transition:color .25s var(--ease)}
+.artist:hover{border-color:var(--line-strong);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.28)}
+.artist:hover h3{color:var(--cyan-strong)}
+.artist h3{margin:0;font-family:var(--display);font-size:32px;line-height:1;letter-spacing:.02em;text-transform:uppercase}
+.artist .meta{color:var(--mist);font-family:var(--mono);font-size:13px;letter-spacing:.04em;margin-top:6px}
+.savebtn{min-width:118px;min-height:60px;border:1px solid var(--line-strong);background:var(--panel2);font-size:17px;font-weight:800;cursor:pointer;border-radius:4px;flex-shrink:0;transition:background .25s var(--ease),transform .25s var(--ease),border-color .25s var(--ease)}
+.savebtn:hover{border-color:var(--cyan)}
+.savebtn.saved{background:var(--cyan);color:var(--ink);border-color:var(--cyan);animation:savePop .45s var(--ease)}
+.savebtn:active{animation:savePop .45s var(--ease)}
+.mapbox{border:1px solid var(--line);background:var(--panel);padding:20px}
+.mapgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.mapcell{border:1px solid var(--line);background:var(--panel2);padding:20px;text-align:center;font-family:var(--display);font-size:28px;line-height:1;letter-spacing:.02em;text-transform:uppercase;min-height:112px;display:flex;align-items:center;justify-content:center;transition:border-color .3s var(--ease),box-shadow .3s var(--ease),translate .35s var(--ease);animation:cardIn .5s var(--ease) backwards;animation-delay:calc(var(--d,0s) * var(--stag) + .1s)}
+.mapcell:hover{border-color:var(--cyan);translate:0 -3px;animation:cardIn .5s var(--ease) backwards,pinGlow 2s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
+.mapcell.wide{grid-column:1/-1;background:var(--cyan);color:var(--ink);animation:cardIn .5s var(--ease) backwards,glowPulse 3s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
+.mapcell.wide:hover{animation:cardIn .5s var(--ease) backwards,glowPulse 3s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
+.inforow{border-top:1px solid var(--line);padding:18px 0;display:grid;grid-template-columns:170px 1fr;gap:16px;transition:border-color .3s var(--ease)}
+.inforow dt{transition:translate .35s var(--ease)}
+@media(hover:hover) and (pointer:fine){.inforow:hover dt{translate:6px 0}}
+section.panel.active .inforow{animation:rise .5s var(--ease) backwards;animation-delay:calc(.12s + var(--ri,0) * 45ms * var(--stag))}
+.inforow:nth-child(2){--ri:1}.inforow:nth-child(3){--ri:2}.inforow:nth-child(4){--ri:3}.inforow:nth-child(5){--ri:4}.inforow:nth-child(6){--ri:5}.inforow:nth-child(7){--ri:6}
+.inforow:last-of-type{border-bottom:1px solid var(--line)}
+.inforow dt{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
+.inforow dd{margin:0;font-size:18px;line-height:1.55}
+label{display:block;font-weight:700;margin:18px 0 8px}
+input[type=text],textarea{width:100%;font-size:17px;padding:16px;border:1px solid var(--line);background:var(--panel);min-height:60px;border-radius:4px;transition:border-color .25s var(--ease)}
+input[type=text]:focus,textarea:focus{border-color:var(--cyan)}
+textarea{min-height:140px;resize:vertical}
+.primary{min-height:60px;padding:14px 22px;background:var(--cyan);color:var(--ink);border:0;font-size:17px;font-weight:800;cursor:pointer;border-radius:4px;transition:transform .25s var(--ease),box-shadow .3s var(--ease)}
+.primary:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(125,211,252,.28)}
+.primary:active{animation:savePop .45s var(--ease)}
+.small{color:var(--mist);font-size:15px;line-height:1.6}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mist);position:relative;z-index:1}
+footer a{transition:color .25s var(--ease),text-underline-offset .3s var(--ease)}
+footer a:hover{color:var(--cyan-strong);text-underline-offset:7px}
+.small,#copyNote,#fbDone{transition:opacity .3s var(--ease)}
+.flash{animation:rise .4s var(--ease) backwards}
+/* scroll progress: a thin cyan signal along the top, scroll-driven, no JS loop */
+.scroll-signal{display:none}
+@supports(animation-timeline:scroll()){.scroll-signal{display:block;position:fixed;left:0;right:0;top:0;height:2px;z-index:30;pointer-events:none;background:linear-gradient(90deg,var(--cyan),var(--cyan-strong));box-shadow:0 0 12px rgba(125,211,252,.6);transform-origin:0 50%;transform:scaleX(0);animation:progress linear both;animation-timeline:scroll(root block)}}
+
+/* ---------- detail drawer ---------- */
+#detail{position:fixed;inset:0;z-index:60;display:none}
+#detail.open{display:block}
+#detail.closing .scrim{animation:scrimOut .28s var(--ease) both}
+#detail.closing .sheet{animation:sheetOut .3s var(--ease) both}
+#detail .sheet h3{animation:rise .5s var(--ease) .08s backwards}
+#detail .sheet .row{animation:rise .5s var(--ease) .16s backwards}
+#detail .scrim{position:absolute;inset:0;background:rgba(6,9,19,.78);animation:bootStageIn .3s var(--ease) both}
+#detail .sheet{position:absolute;left:0;right:0;bottom:0;margin:auto;max-width:640px;background:var(--deep);border:1px solid var(--line-strong);border-bottom:0;padding:26px clamp(18px,5vw,32px) calc(26px + env(safe-area-inset-bottom));animation:rise .45s var(--ease) both}
+#detail .sheet .tag{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+#detail .sheet h3{margin:8px 0;font-family:var(--display);font-size:52px;line-height:.95;text-transform:uppercase}
+#detail .sheet p{color:var(--mist);line-height:1.6}
+#detail .sheet .row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* ---------- bottom nav ---------- */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(6,9,19,.97);border-top:1px solid var(--line);display:flex;padding:8px 8px calc(8px + env(safe-area-inset-bottom));gap:6px}
+nav.tabs button{flex:1;min-width:0;min-height:64px;border:1px solid transparent;background:transparent;color:var(--paper);font-size:15px;font-weight:800;cursor:pointer;border-radius:6px;padding:6px 4px;transition:background .25s var(--ease),color .25s var(--ease),scale .16s var(--ease);position:relative;z-index:1}
+nav.tabs button:active{scale:.94}
+nav.tabs .tab-ink{position:absolute;left:0;top:0;width:0;height:0;border-radius:6px;background:var(--cyan);box-shadow:0 0 22px rgba(125,211,252,.35);pointer-events:none;opacity:0}
+nav.tabs.inked .tab-ink{opacity:1}
+nav.tabs.inked.ready .tab-ink{transition:translate .5s var(--ease),width .5s var(--ease),height .5s var(--ease)}
+nav.tabs.inked button.active{background:transparent}
+nav.tabs small.bump{animation:countBump .45s var(--ease)}
+nav.tabs button.active{background:var(--cyan);color:var(--ink);animation:tabPulse .45s var(--ease)}
+nav.tabs small{display:block;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+@media(max-width:640px){
+  .artist{align-items:flex-start}
+  .artist h3{font-size:27px}
+  .savebtn{min-width:96px}
+  .spotlight{grid-template-columns:1fr}
+  .mapgrid{grid-template-columns:1fr}
+  .mapcell.wide{grid-column:auto}
+  .inforow{grid-template-columns:1fr}
+  nav.tabs button{font-size:13px}
+  .countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .count{min-width:0;padding:12px 10px}
+  .count b{font-size:34px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.hero::after,.beam{translate:none!important}.scroll-signal{display:none}#boot.done .boot-logo{scale:1;filter:none}}
 </style>
 </head>
 <body>
-<header>
-<p class="eyebrow">Festival Planner</p>
-<h1>Dreamstate SoCal 2026</h1>
-<p class="sub">November 20 to 21, 2026. Queen Mary Waterfront, Long Beach, California.</p>
-<div class="pillrow">
-<span class="pill">Friday and Saturday</span>
-<span class="pill">4 PM to 1 AM each day</span>
-<span class="pill">18 and over</span>
-<span class="pill">70 plus artists</span>
+<div class="scroll-signal" aria-hidden="true"></div>
+<div id="boot" role="button" aria-label="Enter Dreamstate">
+  <div class="boot-scan"></div>
+  <div class="boot-logo"><img src="dreamstate-logo-white.png" alt="Dreamstate official logo" width="1080" height="300"></div>
+  <div class="boot-bar"><i></i></div>
+  <p>SoCal 2026 &middot; Tap to enter</p>
 </div>
-<div class="notice"><strong>Set times are not out yet.</strong> This app lists who plays each day. Times and stages will be added when Insomniac posts them. Nothing here is a guessed set time.</div>
-<p><a href="https://socal.dreamstateusa.com" target="_blank" rel="noopener">Official tickets and info: socal.dreamstateusa.com</a></p>
-</header>
+
+<div class="app">
+  <div class="topbar">
+    <a href="https://byyystudio.me/">Byyy Studio</a>
+    <span class="live-dot"><i></i>Nov 20 &ndash; 21, 2026</span>
+  </div>
+
+  <header class="hero" id="hero">
+    <div class="beam"></div><div class="beam"></div><div class="beam"></div>
+    <p class="eyebrow">Insomniac Presents</p>
+    <h1><img class="title-logo" src="dreamstate-logo-white.png" alt="Dreamstate" width="1080" height="300"><span class="sr-only">Dreamstate</span><span class="sweep"></span></h1>
+    <div class="socal">SoCal 2026</div>
+    <p class="sub">November 20 to 21, 2026. Queen Mary Waterfront, Long Beach, California. Trance, all weekend, by the water.</p>
+    <div class="countdown" aria-label="Countdown to Dreamstate">
+      <div class="count"><b id="cdD">--</b><span>Days</span></div>
+      <div class="count"><b id="cdH">--</b><span>Hours</span></div>
+      <div class="count"><b id="cdM">--</b><span>Mins</span></div>
+      <div class="count"><b id="cdS">--</b><span>Secs</span></div>
+    </div>
+    <div class="pillrow">
+      <span class="pill">Friday and Saturday</span>
+      <span class="pill">4 PM to 1 AM each day</span>
+      <span class="pill">18 and over</span>
+      <span class="pill">70 plus artists</span>
+    </div>
+    <div class="notice"><strong>Set times are not out yet.</strong> This app lists who plays each day. Times and stages will be added when Insomniac posts them. Nothing here is a guessed set time.</div>
+    <p><a href="https://socal.dreamstateusa.com" target="_blank" rel="noopener">Official tickets and info: socal.dreamstateusa.com</a></p>
+    <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>Dreamstate <b>&middot;</b> SoCal 2026 <b>&middot;</b> Nov 20 &ndash; 21 <b>&middot;</b> Queen Mary Waterfront <b>&middot;</b> Trance All Weekend <b>&middot;</b>&nbsp;</span><span>Dreamstate <b>&middot;</b> SoCal 2026 <b>&middot;</b> Nov 20 &ndash; 21 <b>&middot;</b> Queen Mary Waterfront <b>&middot;</b> Trance All Weekend <b>&middot;</b>&nbsp;</span></div></div>
+  </header>
+
+  <main>
+    <section id="lineup" class="panel active" aria-label="Lineup">
+      <h2>Lineup</h2>
+      <p class="lede">Tap an artist for details. Tap Save on anyone you want to see. Your plan is saved on this device only.</p>
+      <div class="spotlight reveal">
+        <div class="spot" style="--d:.05s" data-name="ARTBAT"><div class="tag">Friday spotlight</div><h3>ARTBAT</h3><p>Friday, Nov 20 &middot; Stage: TBD &middot; Time: TBD</p></div>
+        <div class="spot" style="--d:.15s" data-name="Infected Mushroom"><div class="tag">Friday spotlight</div><h3>Infected Mushroom</h3><p>Friday, Nov 20 &middot; Stage: TBD &middot; Time: TBD</p></div>
+        <div class="spot" style="--d:.25s" data-name="Above &amp; Beyond (Anjunabeats Classics)"><div class="tag">Saturday spotlight</div><h3>Above &amp; Beyond</h3><p>Saturday, Nov 21 &middot; Stage: TBD &middot; Time: TBD</p></div>
+        <div class="spot" style="--d:.35s" data-name="Paul van Dyk presents The Essence of Acid"><div class="tag">Saturday spotlight</div><h3>Paul van Dyk</h3><p>Saturday, Nov 21 &middot; Stage: TBD &middot; Time: TBD</p></div>
+      </div>
+      <div class="controls reveal">
+        <button type="button" data-day="fri" class="daybtn active">Friday, Nov 20</button>
+        <button type="button" data-day="sat" class="daybtn">Saturday, Nov 21</button>
+        <button type="button" data-day="all" class="daybtn">Full Lineup A to Z</button>
+        <input type="text" id="search" placeholder="Search an artist" aria-label="Search an artist">
+        <button type="button" id="savedOnly">Saved only</button>
+      </div>
+      <div id="artistList"></div>
+      <p class="small">Day splits above are the day splits published for the headliners and featured sets. The full A to Z list is the complete published lineup. Stage and time for each artist: TBD.</p>
+    </section>
+
+    <section id="plan" class="panel" aria-label="My plan">
+      <h2>My Plan</h2>
+      <p class="lede" id="planEmpty">No artists saved yet. Go to Lineup and tap Save.</p>
+      <div id="planList"></div>
+      <div class="controls">
+        <button type="button" class="primary" id="copyPlan">Copy my plan as text</button>
+        <button type="button" id="clearPlan">Clear my plan</button>
+      </div>
+      <p class="small" id="copyNote"></p>
+    </section>
+
+    <section id="map" class="panel" aria-label="Festival map">
+      <h2>Map</h2>
+      <p class="lede">Simple layout first. Follow on-site signs on the day. This diagram is not to scale.</p>
+      <div class="mapbox reveal">
+        <div class="mapgrid">
+          <div class="mapcell wide" style="--d:.05s">Entrance and Box Office</div>
+          <div class="mapcell" style="--d:.1s">The Dream</div>
+          <div class="mapcell" style="--d:.15s">The Sequence</div>
+          <div class="mapcell" style="--d:.2s">The Vision</div>
+          <div class="mapcell" style="--d:.25s">The Void</div>
+          <div class="mapcell" style="--d:.3s">Long Beach Amphitheater</div>
+          <div class="mapcell" style="--d:.35s">Beatbox Art Car</div>
+          <div class="mapcell wide" style="--d:.4s">Food, Water, Medical, and Shuttles</div>
+        </div>
+      </div>
+      <p><strong>Getting there:</strong> There is no parking at the festival grounds. Plan around free shuttles from the Long Beach Convention Center.</p>
+      <p><strong>Address:</strong> Queen Mary Waterfront, 1126 Queens Highway, Long Beach, CA.</p>
+    </section>
+
+    <section id="info" class="panel" aria-label="Info">
+      <h2>Info</h2>
+      <dl>
+        <div class="inforow"><dt>Dates</dt><dd>Friday, November 20 and Saturday, November 21, 2026.</dd></div>
+        <div class="inforow"><dt>Hours</dt><dd>4 PM to 1 AM each day.</dd></div>
+        <div class="inforow"><dt>Age</dt><dd>18 and over.</dd></div>
+        <div class="inforow"><dt>Ins and outs</dt><dd>Not allowed.</dd></div>
+        <div class="inforow"><dt>Afterparties</dt><dd>Official afterparties run from midnight to 6 AM, per published event details.</dd></div>
+        <div class="inforow"><dt>Stages</dt><dd>The Dream, The Sequence, The Vision, The Void, plus the Long Beach Amphitheater and the Beatbox Art Car.</dd></div>
+        <div class="inforow"><dt>Tickets</dt><dd><a href="https://socal.dreamstateusa.com" target="_blank" rel="noopener">socal.dreamstateusa.com</a></dd></div>
+      </dl>
+      <p class="small">This is a fan-made planner by Byyy Studio. It is not the official Dreamstate site. Check the official site for final set times, entry rules, and ticket terms.</p>
+    </section>
+
+    <section id="feedback" class="panel" aria-label="Feedback">
+      <h2>Feedback</h2>
+      <p class="lede">Tell us what is wrong, missing, or confusing. This form saves your note on this device and shows a confirmation. It does not send to a server in this version.</p>
+      <label for="fbName">Name (optional)</label>
+      <input type="text" id="fbName" placeholder="Your name">
+      <label for="fbText">Feedback</label>
+      <textarea id="fbText" placeholder="What should we fix?"></textarea>
+      <div class="controls"><button type="button" class="primary" id="fbSend">Send feedback</button></div>
+      <p id="fbDone"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Dreamstate SoCal 2026 planner. Built by Byyy Studio. Lineup source: published Dreamstate SoCal 2026 lineup. Set times: TBD.</p>
+    <p><a href="https://byyystudio.me/">Back to Byyy Studio</a></p>
+  </footer>
+</div>
+
+<div id="detail" aria-hidden="true">
+  <div class="scrim" id="detailScrim"></div>
+  <div class="sheet" role="dialog" aria-label="Artist details">
+    <div class="tag" id="detailTag">Artist</div>
+    <h3 id="detailName"></h3>
+    <p id="detailMeta"></p>
+    <div class="row">
+      <button type="button" class="primary" id="detailSave">Save</button>
+      <button type="button" class="primary" id="detailClose" style="background:var(--panel2);color:var(--paper);border:1px solid var(--line-strong)">Close</button>
+    </div>
+  </div>
+</div>
 
 <nav class="tabs" aria-label="Sections">
-<button type="button" data-tab="lineup" class="active">Lineup</button>
-<button type="button" data-tab="plan">My Plan <span id="planCount">(0)</span></button>
-<button type="button" data-tab="map">Map</button>
-<button type="button" data-tab="info">Info</button>
-<button type="button" data-tab="feedback">Feedback</button>
+  <span class="tab-ink" aria-hidden="true"></span>
+  <button type="button" data-tab="lineup" class="active">Lineup<small>Artists</small></button>
+  <button type="button" data-tab="plan">My Plan<small id="planCount">(0)</small></button>
+  <button type="button" data-tab="map">Map<small>Stages</small></button>
+  <button type="button" data-tab="info">Info<small>Need to know</small></button>
+  <button type="button" data-tab="feedback">Feedback<small>Tell us</small></button>
 </nav>
-
-<main>
-<section id="lineup" class="panel active" aria-label="Lineup">
-<h2>Lineup</h2>
-<p>Tap Save on anyone you want to see. Your plan is saved on this device only.</p>
-<div class="controls">
-<button type="button" data-day="fri" class="daybtn active">Friday, Nov 20</button>
-<button type="button" data-day="sat" class="daybtn">Saturday, Nov 21</button>
-<button type="button" data-day="all" class="daybtn">Full Lineup A to Z</button>
-<input type="text" id="search" placeholder="Search an artist" aria-label="Search an artist">
-<button type="button" id="savedOnly">Saved only</button>
-</div>
-<div id="artistList"></div>
-<p class="small">Day splits above are the day splits published for the headliners and featured sets. The full A to Z list is the complete published lineup. Stage and time for each artist: TBD.</p>
-</section>
-
-<section id="plan" class="panel" aria-label="My plan">
-<h2>My Plan</h2>
-<p id="planEmpty">No artists saved yet. Go to Lineup and tap Save.</p>
-<div id="planList"></div>
-<div class="controls">
-<button type="button" class="primary" id="copyPlan">Copy my plan as text</button>
-<button type="button" id="clearPlan">Clear my plan</button>
-</div>
-<p class="small" id="copyNote"></p>
-</section>
-
-<section id="map" class="panel" aria-label="Festival map">
-<h2>Map</h2>
-<p>Simple layout first. Follow on-site signs on the day. This diagram is not to scale.</p>
-<div class="mapbox">
-<div class="mapgrid">
-<div class="mapcell wide">Entrance and Box Office</div>
-<div class="mapcell">The Dream</div>
-<div class="mapcell">The Sequence</div>
-<div class="mapcell">The Vision</div>
-<div class="mapcell">The Void</div>
-<div class="mapcell">Long Beach Amphitheater</div>
-<div class="mapcell">Beatbox Art Car</div>
-<div class="mapcell wide">Food, Water, Medical, and Shuttles</div>
-</div>
-</div>
-<p><strong>Getting there:</strong> There is no parking at the festival grounds. Plan around free shuttles from the Long Beach Convention Center.</p>
-<p><strong>Address:</strong> Queen Mary Waterfront, 1126 Queens Highway, Long Beach, CA.</p>
-</section>
-
-<section id="info" class="panel" aria-label="Info">
-<h2>Info</h2>
-<p><strong>Dates:</strong> Friday, November 20 and Saturday, November 21, 2026.</p>
-<p><strong>Hours:</strong> 4 PM to 1 AM each day.</p>
-<p><strong>Age:</strong> 18 and over.</p>
-<p><strong>Ins and outs:</strong> Not allowed.</p>
-<p><strong>Afterparties:</strong> Official afterparties run from midnight to 6 AM, per published event details.</p>
-<p><strong>Stages:</strong> The Dream, The Sequence, The Vision, The Void, plus the Long Beach Amphitheater and the Beatbox Art Car.</p>
-<p><strong>Tickets:</strong> <a href="https://socal.dreamstateusa.com" target="_blank" rel="noopener">socal.dreamstateusa.com</a></p>
-<p class="small">This is a fan-made planner by Byyy Studio. It is not the official Dreamstate site. Check the official site for final set times, entry rules, and ticket terms.</p>
-</section>
-
-<section id="feedback" class="panel" aria-label="Feedback">
-<h2>Feedback</h2>
-<p>Tell us what is wrong, missing, or confusing. This form saves your note on this device and shows a confirmation. It does not send to a server in this version.</p>
-<label for="fbName">Name (optional)</label>
-<input type="text" id="fbName" placeholder="Your name">
-<label for="fbText">Feedback</label>
-<textarea id="fbText" placeholder="What should we fix?"></textarea>
-<button type="button" class="primary" id="fbSend">Send feedback</button>
-<p id="fbDone"></p>
-</section>
-</main>
-
-<footer>
-<p>Dreamstate SoCal 2026 planner. Built by Byyy Studio. Lineup source: published Dreamstate SoCal 2026 lineup. Set times: TBD.</p>
-<p><a href="https://byyystudio.me/">Back to Byyy Studio</a></p>
-</footer>
 
 <script>
 const fri = ["ARTBAT","Andrew Rayel presents Extasia","Astrix","Dash Berlin","Enrico Sangiuliano","Frankyeffe","GMS","Infected Mushroom","Marco V","MaRLo","Mauro Picotto","Neelix","Phaxe","Burn In Noise","Reinier Zonneveld (Live)","Schrotthagen","Shay De Castro","The Rocketman"];
 const sat = ["Above & Beyond (Anjunabeats Classics)","Aaron Hibell (Live)","Aly & Fila + Billy Gillies","Alpha 9 + Ilan Bluestone","Andy Moor","Bryan Kearney + John O'Callaghan presents Key4050","Cold Blue","Darren Porter + Sean Tyas","David Forbes + Mark Sherry presents Thick As Thieves","Eddie Halliwell + Judge Jules","Ferry Corsten + Marsh","John 00 Fleming","John Askew + Simon Patterson","Paul van Dyk presents The Essence of Acid","Solarstone","Vini Vici","Ace Ventura","4 Strings (Classics Set)"];
 const all = ["4 Strings (Classics Set)","A.N.I.","Aaron Hibell (Live)","Above & Beyond (Anjunabeats Classics)","Ace Ventura","Allen Watts + Talla 2XLC","Alpha 9 + Ilan Bluestone","Aly & Fila + Billy Gillies","Andrew Rayel presents Extasia","Andy Moor","Animato","ARTBAT","Astrix","Barakuda","BK","Bryan Kearney + John O'Callaghan presents Key4050","BT + Matt FAX","Burn In Noise","Chris Metcalfe","Cold Blue","Darren Porter + Sean Tyas","Das Pharaoh","Dash Berlin","David Forbes + Mark Sherry presents Thick As Thieves","David Rust + Olly James","Discovery Project","Eddie Halliwell + Judge Jules","Enrico Sangiuliano","Ferry Corsten + Marsh","Ferry Tayle + Tonks presents Mirage (Live)","Frankyeffe","Giorgia Angiuli","GMS","Hannah Laing + Marie Vaunt","Infected Mushroom","JOA","John 00 Fleming","John Askew + Simon Patterson","Karmå","Kaufmann (DE)","Key4050","Lee Ann Roberts","Marco V","Maria Healy","MaRLo","Matty Ralph","Mauro Picotto","Maximizer","Neelix","NRG2000","Nu Aspect","Panteros666","Paul Denton + Will Rees presents Parallel Worlds","Paul van Dyk presents The Essence of Acid","Pegassi","Perfect Stranger","Phaxe","Reinier Zonneveld (Live)","Rising Dust","Schrotthagen","Sequence Six","Shay De Castro","Sighter","Solarstone","Steve Dekay","Terra","TH;EN","The Rocketman","Vini Vici","VisionV","Warp Brothers"];
-let day = "fri", savedOnly = false;
+let day = "fri", savedOnly = false, detailName = "";
 function getSaved(){ try { return JSON.parse(localStorage.getItem("dreamstate_saved") || "[]"); } catch(e){ return []; } }
 function setSaved(v){ localStorage.setItem("dreamstate_saved", JSON.stringify(v)); }
 function esc(s){ return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
-function render(){
+function dayLabel(a){
+  if (day === "all") return fri.indexOf(a) > -1 ? "Friday, Nov 20" : sat.indexOf(a) > -1 ? "Saturday, Nov 21" : "Full weekend lineup";
+  return day === "fri" ? "Friday, Nov 20" : "Saturday, Nov 21";
+}
+let lastCount = -1;
+function render(mode, justName){
   const saved = getSaved();
   const q = (document.getElementById("search").value || "").toLowerCase();
   const list = day === "fri" ? fri : day === "sat" ? sat : all;
   let shown = list.filter(function(a){ return (!q || a.toLowerCase().indexOf(q) > -1) && (!savedOnly || saved.indexOf(a) > -1); });
   const el = document.getElementById("artistList");
-  el.innerHTML = shown.length ? shown.map(function(a){
+  el.classList.remove("calm","quick"); if (mode === "calm" || mode === "quick") el.classList.add(mode);
+  el.innerHTML = shown.length ? shown.map(function(a, i){
     const isSaved = saved.indexOf(a) > -1;
-    return '<div class="artist"><div><h3>' + esc(a) + '</h3><div class="meta">' + (day === "all" ? "Full weekend lineup" : day === "fri" ? "Friday, Nov 20" : "Saturday, Nov 21") + " | Stage: TBD | Time: TBD</div></div><button type=\"button\" class=\"savebtn" + (isSaved ? " saved" : "") + "\" data-name=\"" + esc(a) + "\">" + (isSaved ? "Saved" : "Save") + "</button></div>";
+    return '<div class="artist" style="--d:' + Math.min(i, 12) * 0.04 + 's" data-name="' + esc(a) + '"><div><h3>' + esc(a) + '</h3><div class="meta">' + dayLabel(a) + " | Stage: TBD | Time: TBD</div></div><button type=\"button\" class=\"savebtn" + (isSaved ? " saved" : "") + "\" data-name=\"" + esc(a) + "\">" + (isSaved ? "Saved" : "Save") + "</button></div>";
   }).join("") : "<p>No artists match that search.</p>";
-  document.querySelectorAll(".savebtn").forEach(function(b){
-    b.onclick = function(){
+  el.querySelectorAll(".artist").forEach(function(card){
+    card.addEventListener("click", function(e){
+      if (e.target.closest(".savebtn")) return;
+      openDetail(card.getAttribute("data-name"));
+    });
+  });
+  el.querySelectorAll(".savebtn").forEach(function(b){
+    b.onclick = function(e){
+      e.stopPropagation();
       let s = getSaved(); const n = b.getAttribute("data-name");
       if (s.indexOf(n) > -1) { s = s.filter(function(x){ return x !== n; }); } else { s.push(n); }
-      setSaved(s); render(); renderPlan();
+      setSaved(s); render("calm", n); renderPlan("calm");
     };
   });
-  document.getElementById("planCount").textContent = "(" + saved.length + ")";
+  if (justName) el.querySelectorAll(".savebtn").forEach(function(b){ if (b.getAttribute("data-name") === justName) b.classList.add("just"); });
+  const pc = document.getElementById("planCount");
+  pc.textContent = "(" + saved.length + ")";
+  if (lastCount > -1 && lastCount !== saved.length) { pc.classList.remove("bump"); void pc.offsetWidth; pc.classList.add("bump"); }
+  lastCount = saved.length;
 }
-function renderPlan(){
+function renderPlan(mode){
   const saved = getSaved();
+  document.getElementById("planList").classList.toggle("calm", mode === "calm");
   document.getElementById("planEmpty").style.display = saved.length ? "none" : "block";
   document.getElementById("planList").innerHTML = saved.map(function(a){
-    return '<div class="artist"><div><h3>' + esc(a) + '</h3><div class="meta">Saved | Time: TBD</div></div><button type="button" class="savebtn" data-name="' + esc(a) + '">Remove</button></div>';
+    return '<div class="artist" data-name="' + esc(a) + '"><div><h3>' + esc(a) + '</h3><div class="meta">Saved | Time: TBD</div></div><button type="button" class="savebtn" data-name="' + esc(a) + '">Remove</button></div>';
   }).join("");
+  document.querySelectorAll("#planList .artist").forEach(function(card){
+    card.addEventListener("click", function(e){
+      if (e.target.closest(".savebtn")) return;
+      openDetail(card.getAttribute("data-name"));
+    });
+  });
   document.querySelectorAll("#planList .savebtn").forEach(function(b){
-    b.onclick = function(){ setSaved(getSaved().filter(function(x){ return x !== b.getAttribute("data-name"); })); render(); renderPlan(); };
+    b.onclick = function(e){ e.stopPropagation(); const card = b.closest(".artist"), n = b.getAttribute("data-name"); const go = function(){ setSaved(getSaved().filter(function(x){ return x !== n; })); render("calm"); renderPlan("calm"); }; if (card && !reduceMotion && card.animate) { card.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateX(" + (window.innerWidth < 641 ? 24 : 48) + "px)"}], {duration:260, easing:"cubic-bezier(.16,1,.3,1)"}).onfinish = go; } else go(); };
   });
 }
-document.querySelectorAll("[data-tab]").forEach(function(b){
-  b.onclick = function(){
-    document.querySelectorAll("[data-tab]").forEach(function(x){ x.classList.remove("active"); });
-    document.querySelectorAll("section.panel").forEach(function(x){ x.classList.remove("active"); });
-    b.classList.add("active"); document.getElementById(b.getAttribute("data-tab")).classList.add("active");
-  };
+function openDetail(name){
+  detailName = name;
+  document.getElementById("detailName").textContent = name;
+  document.getElementById("detailTag").textContent = dayLabel(name) + " | Dreamstate SoCal 2026";
+  document.getElementById("detailMeta").textContent = "Stage: TBD. Time: TBD. Set times will be added when Insomniac posts them. Nothing here is a guessed set time.";
+  const saved = getSaved().indexOf(name) > -1;
+  document.getElementById("detailSave").textContent = saved ? "Saved" : "Save to my plan";
+  const dt = document.getElementById("detail");
+  dt.classList.remove("closing");
+  dt.classList.add("open");
+  dt.setAttribute("aria-hidden", "false");
+  document.getElementById("detailClose").focus({preventScroll: true});
+}
+function closeDetail(){
+  const dt = document.getElementById("detail");
+  if (!dt.classList.contains("open") || dt.classList.contains("closing")) return;
+  dt.setAttribute("aria-hidden", "true");
+  const finish = function(){ dt.classList.remove("open", "closing"); };
+  if (reduceMotion) { finish(); return; }
+  dt.classList.add("closing");
+  setTimeout(finish, 300);
+}
+document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeDetail(); });
+document.getElementById("detailClose").onclick = closeDetail;
+document.getElementById("detailScrim").onclick = closeDetail;
+document.getElementById("detailSave").onclick = function(){
+  let s = getSaved();
+  if (s.indexOf(detailName) > -1) { s = s.filter(function(x){ return x !== detailName; }); } else { s.push(detailName); }
+  setSaved(s); render("calm", detailName); renderPlan("calm");
+  const ds = document.getElementById("detailSave"); ds.classList.remove("flash"); void ds.offsetWidth; ds.classList.add("flash");
+  document.getElementById("detailSave").textContent = s.indexOf(detailName) > -1 ? "Saved" : "Save to my plan";
+};
+document.querySelectorAll(".spot").forEach(function(sp){
+  sp.addEventListener("click", function(){ openDetail(sp.getAttribute("data-name")); });
 });
+const reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+const tabOrder = ["lineup","plan","map","info","feedback"];
+let currentTab = "lineup";
+const tabsNav = document.querySelector("nav.tabs"), tabInk = tabsNav.querySelector(".tab-ink");
+function placeInk(){
+  const b = tabsNav.querySelector("button.active"); if (!b) return;
+  tabInk.style.translate = b.offsetLeft + "px " + b.offsetTop + "px";
+  tabInk.style.width = b.offsetWidth + "px"; tabInk.style.height = b.offsetHeight + "px";
+  tabsNav.classList.add("inked");
+}
+function showTab(id){
+  const from = tabOrder.indexOf(currentTab), to = tabOrder.indexOf(id);
+  document.querySelector("main").style.setProperty("--dir", to > from ? 1 : to < from ? -1 : 0);
+  currentTab = id;
+  document.querySelectorAll("[data-tab]").forEach(function(x){ x.classList.remove("active"); });
+  document.querySelectorAll("section.panel").forEach(function(x){ x.classList.remove("active"); });
+  document.querySelector('[data-tab="' + id + '"]').classList.add("active");
+  document.getElementById(id).classList.add("active");
+  placeInk();
+  window.scrollTo({top: 0, behavior: reduceMotion ? "auto" : "smooth"});
+  observeReveals();
+}
+placeInk();
+requestAnimationFrame(function(){ requestAnimationFrame(function(){ tabsNav.classList.add("ready"); }); });
+window.addEventListener("resize", placeInk);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeInk);
+document.addEventListener("touchstart", function(){}, {passive: true}); /* lets :active press states fire on iOS */
+document.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick = function(){ showTab(b.getAttribute("data-tab")); }; });
 document.querySelectorAll(".daybtn").forEach(function(b){
   b.onclick = function(){
     document.querySelectorAll(".daybtn").forEach(function(x){ x.classList.remove("active"); });
-    b.classList.add("active"); day = b.getAttribute("data-day"); render();
+    b.classList.add("active"); day = b.getAttribute("data-day"); render("stagger");
   };
 });
-document.getElementById("search").addEventListener("input", render);
-document.getElementById("savedOnly").onclick = function(){ savedOnly = !savedOnly; this.classList.toggle("active", savedOnly); this.textContent = savedOnly ? "Saved only: On" : "Saved only"; render(); };
-document.getElementById("clearPlan").onclick = function(){ setSaved([]); render(); renderPlan(); document.getElementById("copyNote").textContent = "Plan cleared."; };
+document.getElementById("search").addEventListener("input", function(){ render("quick"); });
+document.getElementById("savedOnly").onclick = function(){ savedOnly = !savedOnly; this.classList.toggle("active", savedOnly); this.textContent = savedOnly ? "Saved only: On" : "Saved only"; render("stagger"); };
+document.getElementById("clearPlan").onclick = function(){ setSaved([]); render("calm"); renderPlan("calm"); document.getElementById("copyNote").textContent = "Plan cleared."; };
 document.getElementById("copyPlan").onclick = function(){
   const s = getSaved();
   const text = "Dreamstate SoCal 2026 - My Plan\n" + (s.length ? s.map(function(a){ return "- " + a + " (time TBD)"; }).join("\n") : "No artists saved yet.");
@@ -210,7 +516,42 @@ document.getElementById("fbSend").onclick = function(){
   document.getElementById("fbDone").textContent = "Thanks. Your feedback is saved on this device.";
   document.getElementById("fbText").value = "";
 };
+["copyNote","fbDone"].forEach(function(id){ const el = document.getElementById(id); new MutationObserver(function(){ el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }).observe(el, {childList: true}); });
+let lastSec = -1;
+function tick(){
+  const target = new Date("2026-11-20T16:00:00-08:00").getTime();
+  let diff = target - Date.now();
+  if (diff < 0) diff = 0;
+  const d = Math.floor(diff / 86400000), h = Math.floor(diff / 3600000) % 24, m = Math.floor(diff / 60000) % 60, s = Math.floor(diff / 1000) % 60;
+  const set = function(id, v){ const el = document.getElementById(id); if (el.textContent !== String(v)) { el.textContent = v; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); } };
+  set("cdD", d); set("cdH", String(h).padStart(2, "0")); set("cdM", String(m).padStart(2, "0")); set("cdS", String(s).padStart(2, "0"));
+  lastSec = s;
+}
+tick(); setInterval(tick, 1000);
+const io = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+}, {threshold: 0.12});
+function observeReveals(){
+  document.querySelectorAll(".reveal:not(.in)").forEach(function(el){ io.observe(el); });
+}
+observeReveals();
+let ticking = false;
+window.addEventListener("scroll", function(){
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(function(){
+    const y = window.scrollY || 0;
+    const hero = document.getElementById("hero");
+    if (hero && !reduceMotion && y < hero.offsetHeight + 200) hero.style.setProperty("--par", y);
+    ticking = false;
+  });
+}, {passive: true});
+const boot = document.getElementById("boot");
+let bootGone = false;
+function dismissBoot(){ if (boot && !bootGone){ bootGone = true; boot.classList.add("done"); document.documentElement.classList.add("booted"); setTimeout(function(){ boot.style.display = "none"; }, 600); } }
+boot.addEventListener("click", dismissBoot);
+setTimeout(dismissBoot, 1100);
 render(); renderPlan();
+lastCount = getSaved().length;
 </script>
 </body>
 </html>

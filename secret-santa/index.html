@@ -3,10 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Crackheadz Secret Santa</title>
+<title id="page-title">Secret Santa</title>
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
-<meta name="description" content="Joinable Secret Santa: add your name, vote on the date, share gift ideas, and reveal only your own assignment." />
+<meta name="description" content="Make a Secret Santa group, share the link, draw names, vote on the date, and build gift lists from Amazon." />
+<meta property="og:title" content="Secret Santa" />
+<meta property="og:description" content="Make a Secret Santa group, share the link, draw names, vote on the date, and build gift lists from Amazon." />
+<meta property="og:image" content="https://byyystudio.me/work-secret-santa.jpg" />
+<meta property="og:url" content="https://byyystudio.me/secret-santa/" />
+<meta name="twitter:card" content="summary_large_image" />
 <style>
 :root{
     --night:#0d1030; --night2:#1b2350; --night3:#2a2a6a;
@@ -16,6 +21,7 @@
     --gold:#f8d800; --gold-dark:#c8a800; --blue:#3b5bff;
   }
   *{box-sizing:border-box}
+  html, body{overflow-x:hidden}
   html{scroll-behavior:smooth}
   body{
     margin:0; background:var(--night); color:var(--ink);
@@ -46,13 +52,21 @@
   .twinkle-star:nth-child(5n){animation-delay:.2s; width:5px; height:5px}
   @keyframes starBlink{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.05; transform:scale(.4)}}
   .elf-stage{position:absolute; left:0; right:0; bottom:8px; height:64px; overflow:hidden; pointer-events:none; z-index:2}
-  .elf-run{position:absolute; bottom:0; left:0; width:34px; height:44px; animation:elfRun 14s linear infinite}
-  .elf-run.late{animation-delay:-7s}
-  @keyframes elfRun{0%{transform:translateX(-50px)}100%{transform:translateX(720px)}}
-  .elf-run svg{width:34px; height:44px; image-rendering:pixelated; shape-rendering:crispEdges; animation:elfBob .35s steps(2) infinite}
+  .elf-duel{position:absolute; bottom:0; width:34px; height:44px}
+  .elf-duel.left{left:6%}
+  .elf-duel.right{right:6%; transform:scaleX(-1)}
+  .elf-flinch{width:34px; height:44px}
+  .flinch-l{animation:flinchL 5.6s linear infinite}
+  .flinch-r{animation:flinchR 5.6s linear infinite}
+  @keyframes flinchL{0%,92%{transform:translateY(0)}95%{transform:translateY(3px)}98%,100%{transform:translateY(0)}}
+  @keyframes flinchR{0%,42%{transform:translateY(0)}46%{transform:translateY(3px)}50%,100%{transform:translateY(0)}}
+  .elf-duel svg{width:34px; height:44px; image-rendering:pixelated; shape-rendering:crispEdges; animation:elfBob .35s steps(2) infinite}
   @keyframes elfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  .snowball{position:absolute; left:26px; top:14px; width:7px; height:7px; background:#fff; border:2px solid #000; animation:throwBall 1.4s ease-in infinite}
-  @keyframes throwBall{0%{transform:translate(0,0); opacity:1}55%{transform:translate(56px,-34px); opacity:1}100%{transform:translate(110px,6px); opacity:0}}
+  .snowball{position:absolute; bottom:30px; width:7px; height:7px; background:#fff; border:2px solid #000}
+  .ball-a{animation:throwRight 5.6s linear infinite}
+  .ball-b{animation:throwLeft 5.6s linear infinite; animation-delay:-2.8s}
+  @keyframes throwRight{0%{left:8%; transform:translateY(0); opacity:1}25%{left:50%; transform:translateY(-30px); opacity:1}44%{left:90%; transform:translateY(0); opacity:1}50%{left:90%; transform:translateY(0) scale(1.8); opacity:0}51%,100%{left:8%; transform:translateY(0); opacity:0}}
+  @keyframes throwLeft{0%{left:90%; transform:translateY(0); opacity:1}25%{left:50%; transform:translateY(-30px); opacity:1}44%{left:8%; transform:translateY(0); opacity:1}50%{left:8%; transform:translateY(0) scale(1.8); opacity:0}51%,100%{left:90%; transform:translateY(0); opacity:0}}
   .big-tree{position:absolute; right:14px; bottom:8px; width:118px; height:150px; z-index:1; image-rendering:pixelated; shape-rendering:crispEdges}
   .big-tree .tree-light{animation:twinkle 1s steps(2) infinite}
   .big-tree .tree-light:nth-child(2){animation-delay:.3s} .big-tree .tree-light:nth-child(3){animation-delay:.6s}
@@ -67,6 +81,7 @@
   h1{
     font-family:"Press Start 2P", monospace; font-size:clamp(28px, 8.5vw, 44px);
     line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55);
+    overflow-wrap:break-word;
   }
   h1 .red{color:#ff5a2a}
   h1 .rainbow{background:linear-gradient(90deg,#ff004c,#ff8a00,#f8d800,#00a800,#3b5bff,#b800ff,#ff004c); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; text-shadow:none; animation:rainbow 3s linear infinite; filter:drop-shadow(4px 4px 0 #000)}
@@ -119,6 +134,7 @@
     box-shadow:inset 4px 4px 0 #e8e8f0;
   }
   input:focus, select:focus{outline:4px solid var(--gold); outline-offset:2px}
+  input[type="date"]{height:56px; min-height:56px; font-size:19px; line-height:1.2; padding:8px 12px}
   button{
     min-height:56px; padding:14px 16px; font-family:"Press Start 2P", monospace; font-size:12px; line-height:1.5;
     border:4px solid #000; background:var(--red); color:#fff; cursor:pointer; width:100%; margin-top:14px;
@@ -129,37 +145,100 @@
   @keyframes startPulse{0%,100%{transform:scale(1); box-shadow:0 6px 0 #000, 0 0 0 rgba(232,56,0,0)}50%{transform:scale(1.04); box-shadow:0 6px 0 #000, 0 0 22px rgba(232,56,0,.65)}}
   .hero .moon{animation:moonBreathe 4s ease-in-out infinite}
   @keyframes moonBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-  .card{animation:cardIn .5s ease both}
-  @keyframes cardIn{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:translateY(0)}}
+  .card{animation:cardIn .4s steps(4) backwards}
+  .topbar{display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; max-width:680px; margin:0 auto 14px; padding:8px 12px; background:#141b3d; border:4px solid #000; box-shadow:8px 8px 0 #000; color:#dfe6ff; position:relative; z-index:2}
+  .topbar #auth-status{margin:0; font-size:18px; color:#dfe6ff; flex:1 1 200px}
+  .topbar #auth-form:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; flex:2 1 320px}
+  .topbar #auth-form label{display:none}
+  .topbar #auth-form input{width:auto; flex:1 1 130px; min-width:130px; max-width:210px; min-height:42px; font-size:19px; padding:8px 10px; margin:0}
+  .topbar #auth-form button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
+  .topbar #auth-password-row:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
+  .topbar #auth-code-row:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
+  .topbar #auth-code-row input{flex:1 1 120px}
+  .topbar #auth-set-password:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
+  .topbar #auth-set-password label{display:none}
+  .topbar #auth-set-password input{flex:1 1 130px; min-width:130px; max-width:210px; min-height:42px; font-size:19px; padding:8px 10px; margin:0}
+  .topbar #auth-set-password button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
+  .topbar #auth-change-password, .topbar #auth-signout-button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
+  .topbar .link-button{color:#ffd700; margin:0; padding:8px 4px}
+  .topbar #auth-message{margin:0; font-size:16px; color:#dfe6ff; flex-basis:100%}
+  @keyframes cardIn{from{transform:translateY(12px)}to{transform:translateY(0)}}
   .gift-thumb{transition:transform .2s steps(3)}
   .gift-thumb:hover{transform:scale(1.15) rotate(-3deg)}
   button:hover{filter:brightness(1.12)}
-  .hero-location{font-family:"Press Start 2P", monospace; font-size:11px; line-height:1.7; color:#ffde00; margin:0 0 18px; text-transform:uppercase; animation:flagColors 2.4s ease-in-out infinite alternate, locationGlow 1.6s ease-in-out infinite}
-  @keyframes flagColors{0%{color:#de2910}100%{color:#ffde00}}
-  @keyframes locationGlow{0%,100%{text-shadow:0 0 6px rgba(255,222,0,.7)}50%{text-shadow:0 0 18px rgba(222,41,16,.95), 0 0 30px rgba(255,222,0,.6)}}
+  .hero p.hero-location{font-family:"Press Start 2P", monospace; font-size:clamp(11px, 3.2vw, 16px); line-height:1.7; color:#ffde00; margin:0 0 14px; text-transform:uppercase; overflow-wrap:break-word; animation:locationGlow 1.6s ease-in-out infinite}
+  .hero p.hero-date{display:inline-block; font-family:"VT323", monospace; font-size:22px; line-height:1; color:#1a1a2e; background:#ffd700; padding:8px 14px 6px; margin:0 0 18px; text-transform:uppercase; letter-spacing:2px}
+  @keyframes locationGlow{0%,100%{text-shadow:0 0 6px rgba(255,222,0,.7)}50%{text-shadow:0 0 16px rgba(255,222,0,.95), 0 0 28px rgba(255,222,0,.55)}}
   .gift-thumb{width:72px; height:72px; object-fit:contain; background:#fff; border:3px solid #000; flex:none}
   .gift-item{align-items:center}
   .msg-item{border-top:3px solid #000; padding:10px 0}
   .msg-item .msg-author{font-family:"Press Start 2P", monospace; font-size:10px; text-transform:uppercase}
-  .buying-owner{font-family:"Press Start 2P", monospace; font-size:11px; margin:18px 0 6px; text-transform:uppercase}
+  .buying-owner{font-family:"Press Start 2P", monospace; font-size:13px; margin:18px 0 8px; padding:10px; background:#f8d800; color:#101018; border:3px solid #000; box-shadow:4px 4px 0 #000; text-transform:uppercase; display:flex; align-items:center; gap:10px}
   .buying-item{display:flex; gap:12px; align-items:center; border-top:3px solid #000; padding:10px 0}
   .buying-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
+  .search-item{display:flex; flex-wrap:wrap; gap:12px; align-items:center; border:3px solid #000; background:#fff; padding:8px; margin-top:8px; box-shadow:4px 4px 0 #000}
+  .search-item button{width:auto; min-height:44px; margin-top:8px; padding:8px 12px; font-size:10px; flex:1 1 100%}
+  .search-item strong{font-size:22px; line-height:1.2}
+  .search-item .search-title{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+  .search-item > div{flex:1; min-width:0}
+  .search-price{font-size:16px; color:#005800; margin-top:4px}
+  .search-rating{font-size:16px; color:#005800; margin-top:2px}
+  .search-popular{display:inline-block; background:#f8d800; border:2px solid #000; padding:1px 6px; font-size:15px; margin-left:6px; vertical-align:middle}
+  #finder-suggestions{display:grid; gap:8px}
+  #finder-suggestions .search-item{margin-top:0}
+  @media (min-width:900px){#finder-suggestions{grid-template-columns:1fr 1fr}}
+  #gift-filters{margin-top:14px}
+  .filter-row{display:grid; gap:10px}
+  @media (min-width:520px){.filter-row{grid-template-columns:1fr 1fr}}
+  #gift-filters label{margin:0 0 4px}
+  #gift-filters select{min-height:48px; font-size:21px; padding:8px 12px}
+  .filter-chip{display:inline-flex; align-items:center; gap:6px; background:#f8d800; border:3px solid #000; box-shadow:3px 3px 0 #000; padding:2px 8px; margin:4px 6px 0 0; font-size:18px}
+  .filter-chip button{width:auto; min-height:0; margin:0; padding:0 4px; font-size:16px; background:transparent; color:var(--ink); border:none; box-shadow:none}
+  .recent-chip{width:auto; min-height:40px; margin:4px 6px 0 0; padding:6px 10px; font-size:11px}
+  #filter-clear{width:auto; min-height:44px; margin-top:10px; padding:8px 12px; font-size:10px}
   button.secondary{background:#fff; color:var(--ink)}
   button.green{background:var(--green); color:#fff}
   button.danger{background:#fff; color:var(--red-dark); border-color:#000}
-  button:disabled{opacity:.45; cursor:not-allowed; box-shadow:0 6px 0 #000}
+  button:disabled{opacity:.6; filter:grayscale(.85); cursor:not-allowed; box-shadow:0 6px 0 #000}
+  .link-button{background:none; border:none; box-shadow:none; text-decoration:underline; color:#1a1a2e; font-family:"VT323", monospace; font-size:19px; padding:6px 0; margin:6px 0 0; width:auto; min-height:0}
   button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible{outline:4px solid var(--gold); outline-offset:2px}
   .row{display:grid; gap:12px}
   @media (min-width:520px){.row.two{grid-template-columns:1fr 1fr}}
+  @media (min-width:900px){
+    main{max-width:1180px; display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:18px 18px 0}
+    .hero{grid-column:1 / -1; margin-bottom:0}
+    .card{margin-bottom:0}
+    .wide-desktop{grid-column:1 / -1}
+    .topbar{max-width:1180px}
+  }
+  @media (max-width:899px){
+    .card h2{cursor:pointer}
+    .card h2::after{content:" -"; float:right}
+    .card.collapsed h2::after{content:" +"; float:right}
+    .card.collapsed > :not(h2){display:none !important}
+  }
+  .card h2{padding-right:52px}
+  .card h2 .card-drag{position:absolute; top:10px; right:10px; float:none; width:auto; min-height:34px; height:34px; font-family:inherit; font-size:14px; line-height:1; padding:6px 8px; margin:0; border:2px solid #000; background:#fff; color:#000; cursor:grab; box-shadow:2px 2px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none}
+  .card h2 .card-drag:active{cursor:grabbing; box-shadow:none; transform:translate(2px,2px)}
+  .card.dragging{box-shadow:8px 8px 0 rgba(0,0,0,.45); opacity:.92}
+  .card-placeholder{border:3px dashed #000; background:rgba(255,255,255,.22)}
   ul{padding-left:20px; margin:8px 0}
   li{margin:6px 0}
   .participant-count{display:inline-block; transition:transform .25s ease; color:var(--red)}
   .participant-count.pulse{transform:scale(1.4)}
   .participant-chip{
-    display:inline-block; background:var(--gold); border:3px solid #000;
+    display:inline-flex; align-items:center; gap:8px; background:var(--gold); border:3px solid #000;
     box-shadow:3px 3px 0 #000; padding:6px 10px; margin:4px 6px 4px 0;
     font-family:"Press Start 2P", monospace; font-size:10px;
   }
+  .avatar-img{width:28px; height:28px; image-rendering:pixelated; border:2px solid #000; background:#fff; flex:none}
+  .avatar-img.sm{width:20px; height:20px}
+  .avatar-img.lg{width:36px; height:36px}
+  .avatar-picks{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0}
+  .avatar-pick{background:#fff; border:3px solid #000; box-shadow:3px 3px 0 #000; padding:4px; cursor:pointer; line-height:0}
+  .avatar-pick.selected{background:var(--gold); outline:3px solid var(--red); outline-offset:2px}
+  .avatar-pick img{width:44px; height:44px; image-rendering:pixelated; display:block}
+  .voter-chip{display:inline-flex; align-items:center; gap:6px; margin:2px 8px 2px 0}
   .result{
     border:4px solid #000; background:var(--gold); box-shadow:6px 6px 0 #000;
     padding:18px; margin-top:16px; font-size:23px; position:relative; overflow:hidden;
@@ -175,15 +254,19 @@
   }
   .poll-option[aria-pressed="true"]{background:var(--green); color:#fff}
   .poll-option[aria-pressed="true"] .bar-track{background:rgba(255,255,255,.35)}
-  .poll-meta{display:flex; justify-content:space-between; gap:12px; font-size:21px}
-  .bar-track{height:12px; background:#e8e8f0; border:2px solid #000; margin-top:10px; overflow:hidden}
-  .bar-fill{height:100%; width:0%; background:repeating-linear-gradient(90deg, var(--gold) 0 8px, #e8b800 8px 16px); transition:width .6s steps(12)}
+  .poll-meta{display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; font-size:18px}
+  .poll-voters{display:block; font-size:16px; margin-top:8px; opacity:.85}
+  .plan-date{font-size:24px; margin:6px 0 4px}
+  #plan-text{margin:0 0 8px}
+  .bar-track{display:block; height:12px; background:#e8e8f0; border:2px solid #000; margin-top:10px; overflow:hidden}
+  .bar-fill{display:block; height:100%; width:0%; background:repeating-linear-gradient(90deg, var(--gold) 0 8px, #e8b800 8px 16px); transition:width .6s steps(12)}
   .poll-option[aria-pressed="true"] .bar-fill{background:repeating-linear-gradient(90deg, #fff 0 8px, var(--gold) 8px 16px)}
   .gift-item{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; border-top:3px solid #000; padding:12px 0}
   .gift-item button{width:auto; min-height:44px; margin-top:0; padding:8px 12px; font-size:10px}
   .gift-item a{color:var(--red-dark); font-weight:700}
   .shuffle{text-align:center; font-family:"Press Start 2P", monospace; font-size:13px; padding:14px 0 4px; color:var(--red); min-height:44px}
-  .tree-row{display:flex; justify-content:space-between; align-items:flex-end; gap:6px; margin:6px 0 0; padding:0 2px}
+  .tree-row{grid-column:1 / -1; display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:10px 22px; margin:18px 0 0; padding:0 2px}
+  @media (max-width:520px){.tree-row svg:nth-child(n+6){display:none}}
   .tree-row svg{width:52px; height:64px; image-rendering:pixelated; shape-rendering:crispEdges}
   .tree-light{animation:twinkle 1s steps(2) infinite}
   .tree-light:nth-child(2){animation-delay:.3s} .tree-light:nth-child(3){animation-delay:.6s}
@@ -198,6 +281,32 @@
     h1{font-size:26px}
     .sleigh{width:240px} .sleigh svg{width:240px}
     }
+
+  /* ---------- v47 motion layer. Lives behind html.ms-on, which is only set
+     when reduced motion is off. 16-bit rules: moves snap in steps, nothing
+     glides, nothing fades, and nothing waits to appear. ---------- */
+  :root{--par:1}
+  @media (max-width:600px){:root{--par:.4}}
+  .ms-on .hero .moon{translate:0 calc(var(--scroll,0) * .10px * var(--par))}
+  .ms-on .hero .twinkle-star{translate:0 calc(var(--scroll,0) * .22px * var(--par))}
+  .ms-on .hero .big-tree{translate:0 calc(var(--scroll,0) * -.06px * var(--par))}
+  /* SECRET SANTA letters: each hops once per 8 s loop, as an uneven wave */
+  .ms-ch{display:inline-block}
+  .ms-on .ms-ch{animation:ms-hop 8s steps(1) var(--ms-delay,0s) infinite}
+  @keyframes ms-hop{0%{translate:0 0}1%{translate:0 -4px}2.2%{translate:0 -1px}3%{translate:0 0}100%{translate:0 0}}
+  /* cards land on uneven beats */
+  main > .card:nth-of-type(2){animation-delay:.05s}
+  main > .card:nth-of-type(3){animation-delay:.12s}
+  main > .card:nth-of-type(4){animation-delay:.16s}
+  main > .card:nth-of-type(5){animation-delay:.25s}
+  main > .card:nth-of-type(6){animation-delay:.29s}
+  main > .card:nth-of-type(7){animation-delay:.37s}
+  main > .card:nth-of-type(n+8){animation-delay:.41s}
+  /* buttons: a 2-step lift on hover, the arcade press stays as it was */
+  .ms-on button{transition:translate .12s steps(2)}
+  @media (hover:hover){.ms-on button:not(:disabled):hover{translate:0 -2px}}
+  .ms-on .card h2{transition:translate .12s steps(2)}
+  @media (hover:hover){.ms-on .card.collapsed h2:hover{translate:2px 0}}
   @media (prefers-reduced-motion: reduce){
     *, *::before, *::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
     html{scroll-behavior:auto}
@@ -210,6 +319,35 @@
 </head>
 <body>
 <canvas id="snow-canvas" aria-hidden="true"></canvas>
+<div class="topbar" id="auth-topbar">
+    <p id="auth-status" class="small">Log in with your email to vote, reveal, and edit your gift list.</p>
+    <div id="auth-form">
+      <label for="auth-email">Email</label>
+      <input id="auth-email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" />
+      <button id="auth-send-button" class="hidden" type="button">Email me a code</button>
+      <div id="auth-code-row" class="hidden">
+        <label for="auth-code">8-digit code</label>
+        <input id="auth-code" type="text" inputmode="numeric" maxlength="8" autocomplete="one-time-code" placeholder="12345678" />
+        <button id="auth-verify-button" type="button">Verify code</button>
+      </div>
+      <div id="auth-password-row">
+        <label for="auth-password">Password</label>
+        <input id="auth-password" type="password" maxlength="72" autocomplete="current-password" placeholder="Your password" />
+        <button id="auth-password-button" type="button">Log in with password</button>
+        <button id="auth-signup-button" class="link-button" type="button">New here? Create an account</button>
+        <button id="auth-forgot-button" class="link-button" type="button">Forgot password?</button>
+      </div>
+      <button id="auth-mode-button" class="secondary" type="button">Use an email code instead</button>
+    </div>
+    <div id="auth-set-password" class="hidden">
+      <label for="auth-new-password">Set a password for next time</label>
+      <input id="auth-new-password" type="password" maxlength="72" autocomplete="new-password" placeholder="New password" />
+      <button id="auth-set-password-button" type="button">Save password</button>
+    </div>
+    <button id="auth-change-password" class="link-button hidden" type="button">Set or change password</button>
+    <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
+    <p id="auth-message" aria-live="polite"></p>
+</div>
 <main>
   <section class="hero">
     <div class="moon" aria-hidden="true"></div>
@@ -225,9 +363,10 @@
     <span class="twinkle-star" style="left:84%; top:38%"></span>
     <span class="twinkle-star gold" style="left:92%; top:22%"></span>
     <span class="twinkle-star" style="left:38%; top:48%"></span>
-    <h1><span class="rainbow">CRACKHEADZ</span><br />SECRET<br /><span class="red">SANTA</span></h1>
-    <button id="start-button" type="button" class="start-button">Start</button>
-    <p class="hero-location">Chinese Nate's House</p>
+    <h1><span id="hero-group-name" class="rainbow"></span><br />SECRET<br /><span class="red">SANTA</span></h1>
+    <button id="start-button" type="button" class="start-button">Get started</button>
+    <p id="hero-location" class="hero-location hidden"></p>
+    <p id="hero-date" class="hero-date hidden"></p>
     <svg class="big-tree" viewBox="0 0 118 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="52" y="0" width="14" height="14" fill="#f8d800"/><rect x="55" y="3" width="8" height="8" fill="#fff"/><rect x="44" y="14" width="30" height="14" fill="#005800"/><rect x="38" y="28" width="42" height="14" fill="#00a800"/><rect x="32" y="42" width="54" height="14" fill="#005800"/><rect x="26" y="56" width="66" height="14" fill="#00a800"/><rect x="20" y="70" width="78" height="14" fill="#005800"/><rect x="14" y="84" width="90" height="14" fill="#00a800"/><rect x="8" y="98" width="102" height="14" fill="#005800"/><rect x="50" y="112" width="18" height="26" fill="#7a3b12"/><rect class="tree-light" x="52" y="20" width="7" height="7" fill="#e83800"/><rect class="tree-light" x="66" y="34" width="7" height="7" fill="#f8d800"/><rect class="tree-light" x="46" y="48" width="7" height="7" fill="#3b5bff"/><rect class="tree-light" x="72" y="62" width="7" height="7" fill="#e83800"/><rect class="tree-light" x="40" y="76" width="7" height="7" fill="#f8d800"/><rect class="tree-light" x="62" y="90" width="7" height="7" fill="#fff"/><rect class="tree-light" x="82" y="76" width="7" height="7" fill="#3b5bff"/><rect class="tree-light" x="30" y="90" width="7" height="7" fill="#e83800"/></svg>
     <div class="sleigh-track" aria-hidden="true">
       <div class="sleigh" style="animation-delay:-6s, 0s">
@@ -268,8 +407,10 @@
       </div>
     </div>
     <div class="elf-stage" aria-hidden="true">
-      <div class="elf-run"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg><span class="snowball"></span></div>
-      <div class="elf-run late"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg><span class="snowball" style="animation-delay:.7s"></span></div>
+      <div class="elf-duel left"><div class="elf-flinch flinch-l"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg></div></div>
+      <div class="elf-duel right"><div class="elf-flinch flinch-r"><svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="2" width="10" height="6" fill="#00a800"/><rect x="20" y="0" width="4" height="4" fill="#f8d800"/><rect x="10" y="8" width="14" height="10" fill="#ffdbac"/><rect x="10" y="8" width="14" height="3" fill="#00a800"/><rect x="12" y="12" width="3" height="3" fill="#101018"/><rect x="19" y="12" width="3" height="3" fill="#101018"/><rect x="8" y="18" width="18" height="12" fill="#e83800"/><rect x="8" y="18" width="18" height="3" fill="#f8d800"/><rect x="6" y="20" width="4" height="8" fill="#e83800"/><rect x="24" y="20" width="4" height="8" fill="#e83800"/><rect x="11" y="30" width="5" height="10" fill="#101018"/><rect x="18" y="30" width="5" height="10" fill="#101018"/><rect x="9" y="40" width="7" height="3" fill="#7a3b12"/><rect x="18" y="40" width="7" height="3" fill="#7a3b12"/></svg></div></div>
+      <span class="snowball ball-a"></span>
+      <span class="snowball ball-b"></span>
     </div>
     <svg class="ground" viewBox="0 0 680 74" preserveAspectRatio="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="58" width="680" height="16" fill="#f4f6ff"/><rect x="0" y="54" width="680" height="6" fill="#dfe6ff"/>
@@ -280,54 +421,72 @@
     </svg>
   </section>
 
-  <section class="card green" aria-labelledby="poll-heading">
-    <h2 id="poll-heading">Vote on the date</h2>
-    <p id="voter-display" class="small">Log in below to vote.</p>
-    <h3>When should we do Secret Santa?</h3>
-    <div id="date-poll"></div>
-    <h3>What is the budget?</h3>
-    <div id="budget-poll"></div>
-    <p id="poll-message" aria-live="polite"></p>
+
+
+  <section class="card" aria-labelledby="groups-heading">
+    <h2 id="groups-heading">Groups</h2>
+    <p class="small">You are in <strong id="current-group-name">No group open yet.</strong></p>
+    <label for="group-switch">Your groups</label>
+    <select id="group-switch"></select>
+    <p id="group-share" class="small hidden">Your group's private link: <a id="group-share-link" href="#">…</a> <button id="group-copy-button" type="button">Copy link</button></p>
+    <h3>Start a new group</h3>
+    <label for="group-name-input">Group name</label>
+    <input id="group-name-input" type="text" maxlength="60" autocomplete="off" placeholder="e.g. Family Santa 2026" />
+    <button id="group-create-button" type="button">Create group</button>
+    <p id="group-message" aria-live="polite"></p>
   </section>
 
-  <section class="card gold" aria-labelledby="auth-heading">
-    <h2 id="auth-heading">Log in</h2>
-    <p id="auth-status" class="small">Log in with your email to vote, reveal, and edit your gift list.</p>
-    <div id="auth-form">
-      <label for="auth-email">Email</label>
-      <input id="auth-email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" />
-      <button id="auth-send-button" type="button">Email me a code</button>
-      <div id="auth-code-row" class="hidden">
-        <label for="auth-code">8-digit code</label>
-        <input id="auth-code" type="text" inputmode="numeric" maxlength="8" autocomplete="one-time-code" placeholder="12345678" />
-        <button id="auth-verify-button" type="button">Verify code</button>
-      </div>
-    </div>
-    <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
-    <p id="auth-message" aria-live="polite"></p>
-  </section>
+
+
+
 
   <div id="setup-notice" class="setup-notice hidden" role="status">Setting up your group, try reloading in a moment.</div>
 
   <section class="card" aria-labelledby="join-heading">
     <h2 id="join-heading">Join the draw</h2>
     <p id="draw-state" class="small">Open</p>
-    <label for="name-input">Your name</label>
-    <input id="name-input" type="text" maxlength="40" autocomplete="off" placeholder="First name" />
-    <label for="email-input">Email for updates</label>
-    <input id="email-input" type="email" maxlength="120" autocomplete="off" placeholder="Email (optional)" />
-    <button id="add-button" type="button">Add me to the list</button>
+    <div id="join-form">
+      <label for="name-input">Your name</label>
+      <input id="name-input" type="text" maxlength="40" autocomplete="off" placeholder="First name" />
+      <label for="email-input">Email for updates</label>
+      <input id="email-input" type="email" maxlength="120" autocomplete="off" placeholder="Email (optional)" />
+      <button id="add-button" type="button">Add me to the list</button>
+    </div>
+    <div id="avatar-picker">
+      <label>Your avatar</label>
+      <div id="avatar-picks" class="avatar-picks"></div>
+      <p class="small">Tap one to pick it. It shows next to your name when voting and on gift lists.</p>
+    </div>
     <p id="join-message" aria-live="polite"></p>
     <h3>Who is in (<span id="participant-count" class="participant-count">0</span>)</h3>
     <div id="participant-list"></div>
     <p id="empty-list" class="small"></p>
-    <div class="row two">
-      <button id="lock-button" class="secondary" type="button">Lock the list</button>
-      <button id="unlock-button" class="secondary" type="button">Reopen the list</button>
+    <div id="draw-controls">
+      <div class="row two">
+        <button id="lock-button" class="secondary" type="button">Lock the list</button>
+        <button id="unlock-button" class="secondary" type="button">Reopen the list</button>
+      </div>
+      <button id="draw-button" class="green" type="button">Draw names</button>
+      <div id="draw-shuffle" class="shuffle hidden" aria-live="polite"><span id="draw-shuffle-name"></span></div>
+      <button id="reset-button" class="secondary" type="button">Reset this draw</button>
     </div>
-    <button id="draw-button" class="green" type="button">Draw names</button>
-    <div id="draw-shuffle" class="shuffle hidden" aria-live="polite"><span id="draw-shuffle-name"></span></div>
-    <button id="reset-button" class="secondary" type="button">Reset this draw</button>
+    <p id="draw-waiting" class="small hidden">The list is still open — we're waiting for the group's admin to close it.</p>
+  </section>
+
+  <section class="card green" aria-labelledby="poll-heading">
+    <h2 id="poll-heading">The plan</h2>
+    <p id="voter-display" class="small">Log in above to vote.</p>
+    <div id="date-plan" class="hidden">
+      <p class="plan-date"><strong id="plan-date"></strong></p>
+      <p id="plan-text" class="small"></p>
+    </div>
+    <h3>What is the budget?</h3>
+    <div id="budget-poll"></div>
+    <label for="suggest-budget">Suggest a different budget</label>
+    <input id="suggest-budget" type="number" min="1" max="1000" step="1" placeholder="Amount in $" />
+    <button id="suggest-budget-button" class="secondary" type="button">Add this budget</button>
+    <p id="suggest-budget-message" aria-live="polite"></p>
+    <p id="poll-message" aria-live="polite"></p>
   </section>
 
   <section class="card green" aria-labelledby="reveal-heading">
@@ -343,31 +502,47 @@
     <p id="reveal-message" aria-live="polite"></p>
   </section>
 
-  <section class="card gold" aria-labelledby="gift-heading">
+  <section class="card gold wide-desktop" aria-labelledby="gift-heading">
     <h2 id="gift-heading">My gift list</h2>
     <p id="gift-display" class="small">Log in above to edit your gift list.</p>
+    <p id="gift-nudge" class="small" aria-live="polite"></p>
+    <h3>Search Amazon to add a gift</h3>
+    <label for="finder-query">Search Amazon</label>
+    <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
+    <button id="finder-search-button" type="button">Search Amazon</button>
+    <div id="gift-filters">
+      <div class="filter-row">
+        <div><label for="filter-shop">Shop</label><select id="filter-shop"><option value="amazon">Amazon</option></select></div>
+        <div><label for="filter-for">For</label><select id="filter-for"><option value="">Anyone</option><option value="men">Men</option><option value="women">Women</option><option value="kids">Kids</option></select></div>
+        <div><label for="filter-age">Age</label><select id="filter-age"><option value="">Any age</option><option value="18-25">18 - 25 years</option><option value="26-35">26 - 35 years</option><option value="36-50">36 - 50 years</option><option value="50+">50+ years</option></select></div>
+        <div><label for="filter-price">Price</label><select id="filter-price"><option value="">Any price</option><option value="0-25">Under $25</option><option value="25-30">$25 - $30</option><option value="30-50">$30 - $50</option><option value="50-100">$50 - $100</option></select></div>
+        <div><label for="filter-category">Category</label><select id="filter-category"><option value="">Any category</option><option value="electronics">Electronics</option><option value="home">Home &amp; Kitchen</option><option value="beauty">Beauty</option><option value="toys">Toys &amp; Games</option><option value="fashion">Fashion</option><option value="sports">Sports &amp; Outdoors</option><option value="books">Books</option><option value="kitchen">Kitchen &amp; Dining</option></select></div>
+      </div>
+      <div id="filter-chips"></div>
+      <button id="filter-clear" type="button" class="secondary hidden">Clear all filters</button>
+    </div>
+    <p class="small">Amazon searches are shared across the group — 250 a month split between everyone. After that, add gifts manually with a link below.</p>
+    <p id="finder-remaining" class="small" aria-live="polite"></p>
+    <p id="finder-message" aria-live="polite"></p>
+    <div id="recent-searches"></div>
+    <div id="finder-results"></div>
+    <h3 id="suggestions-heading">Suggestions for you</h3>
+    <div id="finder-suggestions"></div>
+    <h3>Or add one manually</h3>
     <label for="gift-item">Gift idea</label>
     <input id="gift-item" type="text" maxlength="120" autocomplete="off" placeholder="Gift idea" />
     <label for="gift-note">Link or note (optional)</label>
     <input id="gift-note" type="text" maxlength="300" autocomplete="off" placeholder="Link or note" />
-    <label for="gift-image">Image link (optional)</label>
-    <input id="gift-image" type="text" maxlength="500" autocomplete="off" placeholder="Image link" />
-    <button id="gift-amazon-search" class="secondary" type="button">Search Amazon</button>
+    <input id="gift-image" type="hidden" />
     <button id="gift-add-button" type="button">Add gift idea</button>
     <p id="gift-message" aria-live="polite"></p>
     <div id="gift-list"></div>
     <p id="gift-empty" class="small"></p>
   </section>
 
-  <section class="card" aria-labelledby="finder-heading">
-    <h2 id="finder-heading">Find a gift</h2>
-    <label for="finder-query">Search Amazon</label>
-    <input id="finder-query" type="text" maxlength="120" autocomplete="off" placeholder="What are you looking for?" />
-    <button id="finder-search-button" type="button">Search Amazon</button>
-    <p id="finder-message" aria-live="polite"></p>
-  </section>
 
-  <section class="card green" aria-labelledby="messages-heading">
+
+  <section class="card green wide-desktop" aria-labelledby="messages-heading">
     <h2 id="messages-heading">Group messages</h2>
     <div id="message-list"></div>
     <p id="message-display" class="small">Log in above to message the group.</p>
@@ -378,7 +553,7 @@
     <p id="message-message" aria-live="polite"></p>
   </section>
 
-  <section class="card gold" aria-labelledby="buying-heading">
+  <section class="card gold wide-desktop" aria-labelledby="buying-heading">
     <h2 id="buying-heading">Buying view</h2>
     <button id="buying-toggle-button" class="secondary" type="button">Show all gift lists</button>
     <div id="buying-view" class="hidden"></div>
@@ -386,6 +561,18 @@
 
 
   <div class="tree-row" aria-hidden="true">
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
+    <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="26" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="36" width="5" height="5" fill="#3b5bff"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
@@ -399,12 +586,6 @@
   var API_BASE_URL = "https://dqcoincagejyowqxqqnz.supabase.co";
   var API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxY29pbmNhZ2VqeW93cXhxcW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzY4NTQsImV4cCI6MjEwNjcxMjg1NH0.dG7GwddKfuoq08DX_SgtluxWKAU-hyAjMZcAc320ysI";
 
-  var DATE_OPTIONS = [
-    { id: "birthday-dec-5", label: "At my birthday, Sat Dec 5, 2026, house" },
-    { id: "new-years-dec-31", label: "At New Year's, Dec 31, 2026" },
-    { id: "separate-night", label: "A separate Secret Santa night, date TBD" }
-  ];
-
   var BUDGET_OPTIONS = [
     { id: "budget-25", label: "$25" },
     { id: "budget-50", label: "$50" },
@@ -414,6 +595,8 @@
   var state = {
     myEmail: null,
     myName: null,
+    group: null,
+    groups: [],
     participants: [],
     votes: [],
     wishlists: [],
@@ -461,6 +644,60 @@
     return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
+  function avatarUrl(seed) {
+    return "https://api.dicebear.com/9.x/pixel-art/svg?seed=" + encodeURIComponent(seed || "you");
+  }
+
+  function avatarImg(seed, cls) {
+    return '<img class="avatar-img ' + (cls || "") + '" src="' + esc(avatarUrl(seed)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" />';
+  }
+
+  function avatarSeedFor(name) {
+    var p = state.participants.find(function (x) { return x.name === name; });
+    return (p && p.avatar) ? p.avatar : name;
+  }
+
+  function avatarBaseName() {
+    var v = document.getElementById("name-input").value.trim();
+    return v || state.myName || "you";
+  }
+
+  function avatarOptions() {
+    var b = avatarBaseName();
+    return [b, b + "-2", b + "-3", b + "-4", b + "-5", b + "-6"];
+  }
+
+  function renderAvatarPicks() {
+    var el = document.getElementById("avatar-picks");
+    if (!el) return;
+    var opts = avatarOptions();
+    var current = state.pickedAvatar || avatarSeedFor(state.myName || avatarBaseName());
+    el.innerHTML = opts.map(function (seed) {
+      return '<button type="button" class="avatar-pick' + (seed === current ? " selected" : "") + '" data-seed="' + esc(seed) + '">' +
+        '<img src="' + esc(avatarUrl(seed)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" /></button>';
+    }).join("");
+    el.querySelectorAll(".avatar-pick").forEach(function (btn) {
+      btn.addEventListener("click", function () { pickAvatar(btn.dataset.seed); });
+    });
+  }
+
+  async function pickAvatar(seed) {
+    state.pickedAvatar = seed;
+    renderAvatarPicks();
+    var me = state.myName ? state.participants.find(function (p) { return p.name === state.myName; }) : null;
+    if (me && me.id) {
+      me.avatar = seed;
+      renderParticipants();
+      try {
+        var res = await apiFetch("/rpc/set_participant_avatar", {
+          method: "POST",
+          body: JSON.stringify({ p_id: me.id, p_avatar: seed })
+        });
+        if (res.ok) await loadAll();
+      } catch (e) { /* the pick still shows; the save retries on the next pick */ }
+    }
+  }
+
   function setMessage(id, text, isError) {
     var el = document.getElementById(id);
     el.textContent = text || "";
@@ -468,23 +705,82 @@
   }
 
   function setControlsEnabled(enabled) {
-    ["name-input", "add-button", "lock-button", "unlock-button", "draw-button",
-     "reset-button", "reveal-button", "gift-item",
-     "gift-note", "gift-image", "gift-amazon-search", "gift-add-button",
-     "finder-query", "finder-search-button", "message-input",
-     "message-send-button", "email-group-button", "buying-toggle-button"].forEach(function (id) {
+    ["reset-button", "gift-item",
+     "gift-note", "gift-image", "gift-add-button",
+     "finder-query", "finder-search-button", "filter-for", "filter-age",
+     "filter-price", "filter-category", "filter-clear", "filter-shop", "message-input",
+     "message-send-button", "email-group-button"].forEach(function (id) {
       document.getElementById(id).disabled = !enabled;
     });
+  }
+
+  function needGroup(msgId) {
+    if (state.group) return true;
+    setMessage(msgId, "Open your group's private link first — this page has no group open.", true);
+    return false;
+  }
+
+  function friendlyError(err) {
+    var m = (err && err.message) || "";
+    if (m.indexOf("Cannot read properties") !== -1) return "Something went wrong — try reloading the page.";
+    return m || "Something went wrong — try reloading the page.";
+  }
+
+  function trimTitle(t) {
+    t = String(t || "").replace(/…$/, "");
+    if (t.length <= 100) return t;
+    var cut = t.slice(0, 100);
+    var lastSpace = cut.lastIndexOf(" ");
+    if (lastSpace > 60) cut = cut.slice(0, lastSpace);
+    return cut + "…";
+  }
+
+  function setJoinEnabled(enabled) {
+    ["name-input", "add-button"].forEach(function (id) {
+      document.getElementById(id).disabled = !enabled;
+    });
+  }
+
+  function isAlreadyIn() {
+    return !!state.myName && state.participants.some(function (p) { return p.name === state.myName; });
+  }
+
+  function isOrganizer() {
+    if (!state.myName) return false;
+    if (!state.group || !state.group.created_by) return true;
+    return state.myName === state.group.created_by;
+  }
+
+  function updateControlStates() {
+    var ok = !!state.group && state.connected;
+    setJoinEnabled(ok && !!state.myEmail);
+    setControlsEnabled(ok && !!state.myName);
+    document.getElementById("join-form").classList.toggle("hidden", isAlreadyIn());
+    document.getElementById("suggestions-heading").classList.toggle("hidden", !state.myName);
+    document.getElementById("finder-suggestions").classList.toggle("hidden", !state.myName);
+  }
+
+  async function refreshSearchRemaining() {
+    if (!state.myName || !state.group) return;
+    try {
+      var first = new Date(); first.setDate(1); first.setHours(0, 0, 0, 0);
+      var res = await apiFetch("/gift_searches?select=id&searcher_name=eq." + encodeURIComponent(state.myName) + "&created_at=gte." + encodeURIComponent(first.toISOString()));
+      if (!res.ok) return;
+      var rows = await res.json();
+      setSearchRemaining(Math.max(0, searchLimit() - rows.length));
+    } catch (e) { /* leave the note as-is */ }
   }
 
   function renderAuth() {
     var loggedIn = !!state.myEmail;
     document.getElementById("auth-form").classList.toggle("hidden", loggedIn);
     document.getElementById("auth-signout-button").classList.toggle("hidden", !loggedIn);
+    document.getElementById("auth-set-password").classList.add("hidden");
+    document.getElementById("auth-change-password").classList.toggle("hidden", !loggedIn);
     document.getElementById("auth-status").textContent = loggedIn
       ? "Signed in as " + state.myEmail + (state.myName ? " — you are " + state.myName + "." : " — add your name below to join the list.")
       : "Log in with your email to vote, reveal, and edit your gift list.";
-    document.getElementById("voter-display").textContent = state.myName ? "Voting as " + state.myName + "." : (loggedIn ? "Add your name below to join, then vote." : "Log in below to vote.");
+    document.getElementById("voter-display").textContent = state.myName ? "Voting as " + state.myName + "." : (loggedIn ? "Add your name below to join, then vote." : "Log in above to vote.");
     document.getElementById("reveal-display").textContent = state.myName ? "Revealing as " + state.myName + "." : "Log in above to reveal.";
     document.getElementById("gift-display").textContent = state.myName ? "Your gift list — " + state.myName + "." : "Log in above to edit your gift list.";
     document.getElementById("message-display").textContent = state.myName ? "Messaging as " + state.myName + "." : "Log in above to message the group.";
@@ -505,7 +801,22 @@
       if (me) state.myName = me.name;
     }
     renderAuth();
+    if (window.location.hash.indexOf("type=recovery") !== -1) {
+      document.getElementById("auth-set-password").classList.remove("hidden");
+      document.getElementById("auth-change-password").classList.add("hidden");
+      setMessage("auth-message", "Set your new password below.");
+      if (window.history && window.history.replaceState) window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
     renderAll();
+    if (state.myEmail && state.myName && !suggestionsLoaded) {
+      suggestionsLoaded = true;
+      loadSuggestions();
+    }
+    if (!recentLoaded) {
+      recentLoaded = true;
+      renderRecentChips();
+    }
+    if (state.myEmail && state.myName) refreshSearchRemaining();
   }
 
   async function sendAuthCode() {
@@ -538,11 +849,86 @@
     }
   }
 
+  var authMode = "password";
+
+  function setAuthMode(mode) {
+    authMode = mode;
+    var code = mode === "code";
+    document.getElementById("auth-send-button").classList.toggle("hidden", !code);
+    document.getElementById("auth-code-row").classList.add("hidden");
+    document.getElementById("auth-password-row").classList.toggle("hidden", code);
+    document.getElementById("auth-mode-button").textContent = code ? "Use a password instead" : "Use an email code instead";
+    setMessage("auth-message", "");
+  }
+
+  async function signInWithPassword() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    var password = document.getElementById("auth-password").value;
+    if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
+    if (!password) { setMessage("auth-message", "Type your password.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.signInWithPassword({ email: email, password: password });
+      if (res.error) throw res.error;
+      document.getElementById("auth-password").value = "";
+      setMessage("auth-message", "");
+      await refreshAuth();
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "That password did not work.", true);
+    }
+  }
+
+  async function signUpWithPassword() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    var password = document.getElementById("auth-password").value;
+    if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
+    if (password.length < 6) { setMessage("auth-message", "Pick a password with at least 6 characters.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.signUp({ email: email, password: password, options: { emailRedirectTo: "https://byyystudio.me/secret-santa/" } });
+      if (res.error) throw res.error;
+      setMessage("auth-message", "Account created — check your email for a confirmation link, then log in with your password.");
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "Could not create that account.", true);
+    }
+  }
+
+  async function sendPasswordReset() {
+    var email = document.getElementById("auth-email").value.trim().toLowerCase();
+    if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.resetPasswordForEmail(email, { redirectTo: "https://byyystudio.me/secret-santa/" });
+      if (res.error) throw res.error;
+      setMessage("auth-message", "Reset link sent to " + email + ". Check your inbox, then tap the link to set a new password.");
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "Could not send that reset link.", true);
+    }
+  }
+
+  async function setPassword() {
+    var password = document.getElementById("auth-new-password").value;
+    if (password.length < 6) { setMessage("auth-message", "Pick a password with at least 6 characters.", true); return; }
+    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    try {
+      var res = await supa.auth.updateUser({ password: password });
+      if (res.error) throw res.error;
+      document.getElementById("auth-new-password").value = "";
+      document.getElementById("auth-set-password").classList.add("hidden");
+      document.getElementById("auth-change-password").classList.remove("hidden");
+      setMessage("auth-message", "Password saved — next time log in with your password.");
+    } catch (err) {
+      setMessage("auth-message", (err && err.message) || "Could not save that password.", true);
+    }
+  }
+
   async function signOutAuth() {
     if (supa) await supa.auth.signOut();
     state.myEmail = null;
     state.myName = null;
     document.getElementById("auth-code-row").classList.add("hidden");
+    document.getElementById("auth-password").value = "";
+    document.getElementById("auth-new-password").value = "";
     setMessage("auth-message", "");
     renderAuth();
     renderAll();
@@ -551,8 +937,9 @@
   function renderParticipants() {
     var list = document.getElementById("participant-list");
     list.innerHTML = state.participants.map(function (p) {
-      return '<span class="participant-chip">' + esc(p.name) + "</span>";
+      return '<span class="participant-chip">' + avatarImg(avatarSeedFor(p.name)) + esc(p.name) + "</span>";
     }).join("");
+    renderAvatarPicks();
     var countEl = document.getElementById("participant-count");
     countEl.textContent = state.participants.length;
     if (state.lastCount !== null && state.lastCount !== state.participants.length && !reducedMotion()) {
@@ -561,18 +948,25 @@
     }
     state.lastCount = state.participants.length;
     document.getElementById("empty-list").classList.toggle("hidden", state.participants.length > 0);
-    var status = "Open";
-    if (state.draw && state.draw.status === "locked") status = "Locked";
-    if (state.draw && state.draw.status === "drawn") status = "Drawn";
+    var status = isAlreadyIn() ? "Open — you're on the list." : "Open — add your name to join the list.";
+    if (state.draw && state.draw.status === "locked") status = "Locked — the list is closed.";
+    if (state.draw && state.draw.status === "drawn") status = "Drawn — reveal your person below.";
     document.getElementById("draw-state").textContent = status;
-    document.getElementById("draw-button").disabled = !state.connected || !state.myName ||
-      !(state.draw && state.draw.status === "locked") || state.participants.length < 3;
-    document.getElementById("lock-button").disabled = !state.connected || !state.myName ||
+    var isOrg = !!state.group && isOrganizer();
+    var drawOpen = !state.draw || state.draw.status === "open";
+    document.getElementById("draw-controls").classList.toggle("hidden", !isOrg);
+    document.getElementById("draw-waiting").classList.toggle("hidden", isOrg || !drawOpen);
+    var canRunDraw = state.connected && !!state.myName && isOrganizer();
+    var drawReady = state.draw && (state.draw.status === "open" || state.draw.status === "locked");
+    document.getElementById("draw-button").disabled = !canRunDraw || !drawReady || state.participants.length < 3;
+    document.getElementById("lock-button").disabled = !canRunDraw ||
       !!(state.draw && state.draw.status !== "open");
-    document.getElementById("unlock-button").disabled = !state.connected || !state.myName ||
+    document.getElementById("unlock-button").disabled = !canRunDraw ||
       !(state.draw && state.draw.status === "locked");
+    document.getElementById("reset-button").disabled = !canRunDraw || !state.draw;
     document.getElementById("reveal-button").disabled = !state.connected || !state.myName ||
       !(state.draw && state.draw.status === "drawn") || state.participants.length === 0;
+    updateControlStates();
   }
 
   function voteCount(optionId) {
@@ -591,24 +985,66 @@
     var mine = state.votes.find(function (v) {
       return v.poll_id === pollId && v.voter_name === voter;
     });
+    if (!options.length) {
+      document.getElementById(elId).innerHTML = '<p class="small">No options yet.</p>';
+      return;
+    }
     document.getElementById(elId).innerHTML = options.map(function (opt) {
       var count = voteCountFor(pollId, opt.id);
       var pct = total ? Math.round((count / total) * 100) : 0;
       var pressed = mine && mine.option_id === opt.id ? "true" : "false";
+      var names = state.votes.filter(function (v) { return v.poll_id === pollId && v.option_id === opt.id; }).map(function (v) { return v.voter_name; });
+      var voters = names.length ? '<span class="poll-voters">' + names.map(function (n) {
+        return '<span class="voter-chip">' + avatarImg(avatarSeedFor(n), "sm") + esc(n) + "</span>";
+      }).join("") + '</span>' : '';
       return '<button type="button" class="poll-option" aria-pressed="' + pressed +
         '" data-poll="' + pollId + '" data-option="' + opt.id + '"><span class="poll-meta"><span>' + esc(opt.label) +
         "</span><span>" + count + " vote" + (count === 1 ? "" : "s") + " (" + pct + "%)</span></span>" +
-        '<span class="bar-track"><span class="bar-fill" style="width:' + pct + '%"></span></span></button>';
+        '<span class="bar-track"><span class="bar-fill" style="width:' + pct + '%"></span></span>' + voters + '</button>';
     }).join("");
     document.getElementById(elId).querySelectorAll(".poll-option").forEach(function (btn) {
-      btn.disabled = !state.connected || !voter;
       btn.addEventListener("click", function () { castVote(btn.dataset.poll, btn.dataset.option); });
     });
   }
 
+  function formatDateLabel(d) {
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return days[d.getDay()] + " " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+  }
+
+  function budgetOptionsWithCustoms() {
+    var amounts = {};
+    BUDGET_OPTIONS.forEach(function (o) {
+      var n = parseInt(o.label.replace(/[^0-9]/g, ""), 10);
+      if (!isNaN(n)) amounts[n] = o.id;
+    });
+    state.votes.forEach(function (v) {
+      if (v.poll_id === "budget" && v.option_id.indexOf("custom:") === 0) {
+        var n = parseInt(v.option_id.slice(7), 10);
+        if (!isNaN(n) && n > 0 && !amounts[n]) amounts[n] = v.option_id;
+      }
+    });
+    return Object.keys(amounts).map(Number).sort(function (a, b) { return a - b; }).map(function (n) {
+      return { id: amounts[n], label: "$" + n };
+    });
+  }
+
   function renderPolls() {
-    renderOnePoll("date", DATE_OPTIONS, "date-poll");
-    renderOnePoll("budget", BUDGET_OPTIONS, "budget-poll");
+    var settled = !!(state.group && state.group.event_date);
+    document.getElementById("date-plan").classList.toggle("hidden", !settled);
+    var pollH = document.getElementById("poll-heading");
+    var pollLabel = settled ? "The plan" : "Vote on the budget";
+    if (pollH.firstChild && pollH.firstChild.nodeType === 3) pollH.firstChild.nodeValue = pollLabel;
+    else pollH.insertBefore(document.createTextNode(pollLabel), pollH.firstChild);
+    if (settled) {
+      document.getElementById("plan-date").textContent = formatEventDate(state.group.event_date);
+      document.getElementById("plan-text").textContent = state.group.plan || state.group.location || "";
+    }
+    renderOnePoll("budget", budgetOptionsWithCustoms(), "budget-poll");
+    var canSuggest = state.connected && !!state.myName;
+    document.getElementById("suggest-budget").disabled = !canSuggest;
+    document.getElementById("suggest-budget-button").disabled = !canSuggest;
   }
 
   function renderWishlists() {
@@ -625,10 +1061,12 @@
         }
       }
       var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
-      return '<div class="gift-item">' + thumb + '<div><strong>' + esc(w.item) + "</strong>" + note +
+      return '<div class="gift-item">' + thumb + '<div><strong>' + esc(trimTitle(w.item)) + "</strong>" + note +
         '</div><button type="button" class="secondary danger gift-delete" data-id="' + esc(w.id) + '">Delete</button></div>';
     }).join("");
     document.getElementById("gift-empty").classList.toggle("hidden", mine.length > 0 || !owner);
+    var nudge = document.getElementById("gift-nudge");
+    if (nudge) nudge.textContent = !owner ? "" : (mine.length >= 3 ? "You have " + mine.length + " gifts — nice, your Santa has options." : "Add at least 3 gifts so your Santa has options. You have " + mine.length + ".");
     document.querySelectorAll(".gift-delete").forEach(function (btn) {
       btn.disabled = !state.connected;
       btn.addEventListener("click", function () { deleteGift(btn.dataset.id); });
@@ -642,7 +1080,7 @@
       el.innerHTML = '';
       return;
     }
-    el.innerHTML = "<h3>Their gift ideas</h3><ul>" + items.map(function (w) {
+    el.innerHTML = "<h3>" + avatarImg(avatarSeedFor(recipient), "lg") + " Their gift ideas</h3><ul>" + items.map(function (w) {
       var note = "";
       if (w.link_or_note) {
         if (w.link_or_note.indexOf("http://") === 0 || w.link_or_note.indexOf("https://") === 0) {
@@ -652,12 +1090,300 @@
         }
       }
       var thumb = w.image_url ? ' <img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
-      return "<li><strong>" + esc(w.item) + "</strong>" + thumb + note + "</li>";
+      return "<li><strong>" + esc(trimTitle(w.item)) + "</strong>" + thumb + note + "</li>";
     }).join("") + "</ul>";
   }
 
   function amazonSearchUrl(q) {
     return "https://www.amazon.com/s?k=" + encodeURIComponent(q);
+  }
+
+  var SEARCH_URL = API_BASE_URL + "/functions/v1/search-amazon";
+  var LINK_IMAGE_URL = API_BASE_URL + "/functions/v1/fetch-link-image";
+
+  function searchLimit() {
+    return Math.max(1, Math.floor(250 / Math.max(1, state.participants.length)));
+  }
+
+  function setSearchRemaining(n) {
+    var el = document.getElementById("finder-remaining");
+    if (el) el.textContent = "Searches left this month: " + n + " of " + searchLimit();
+  }
+
+  var SUGGEST_QUERIES = ["gift under $25", "cozy gift", "funny gift"];
+  var suggestionsLoaded = false;
+
+  var giftFilters = { forWhom: "", age: "", price: "", category: "", shop: "amazon" };
+  var suggestionItems = [];
+  var recentLoaded = false;
+
+  var FOR_WORDS = { men: "for men", women: "for women", kids: "for kids" };
+  var AGE_WORDS = { "18-25": "for young adults", "26-35": "for adults", "36-50": "for adults", "50+": "for seniors" };
+  var CATEGORY_WORDS = { electronics: "electronics", home: "home and kitchen", beauty: "beauty", toys: "toys and games", fashion: "fashion", sports: "sports and outdoors", books: "books", kitchen: "kitchen" };
+  var PRICE_RANGES = { "0-25": [0, 25], "25-30": [25, 30], "30-50": [30, 50], "50-100": [50, 100] };
+  var PRICE_LABELS = { "0-25": "Under $25", "25-30": "$25-$30", "30-50": "$30-$50", "50-100": "$50-$100" };
+  var CATEGORY_LABELS = { electronics: "Electronics", home: "Home & Kitchen", beauty: "Beauty", toys: "Toys & Games", fashion: "Fashion", sports: "Sports & Outdoors", books: "Books", kitchen: "Kitchen & Dining" };
+  var FOR_LABELS = { men: "Men", women: "Women", kids: "Kids" };
+  var AGE_LABELS = { "18-25": "18-25 years", "26-35": "26-35 years", "36-50": "36-50 years", "50+": "50+ years" };
+
+  function filterSuffix() {
+    var parts = [];
+    if (FOR_WORDS[giftFilters.forWhom]) parts.push(FOR_WORDS[giftFilters.forWhom]);
+    if (AGE_WORDS[giftFilters.age]) parts.push(AGE_WORDS[giftFilters.age]);
+    if (CATEGORY_WORDS[giftFilters.category]) parts.push(CATEGORY_WORDS[giftFilters.category]);
+    return parts.join(" ");
+  }
+
+  function filterPrice() {
+    return PRICE_RANGES[giftFilters.price] || null;
+  }
+
+  function activeFilters() {
+    var list = [];
+    if (giftFilters.forWhom) list.push({ key: "forWhom", label: FOR_LABELS[giftFilters.forWhom] });
+    if (giftFilters.age) list.push({ key: "age", label: AGE_LABELS[giftFilters.age] });
+    if (giftFilters.price) list.push({ key: "price", label: PRICE_LABELS[giftFilters.price] });
+    if (giftFilters.category) list.push({ key: "category", label: CATEGORY_LABELS[giftFilters.category] });
+    return list;
+  }
+
+  function renderFilterChips() {
+    var el = document.getElementById("filter-chips");
+    var list = activeFilters();
+    el.innerHTML = list.map(function (f) {
+      return '<span class="filter-chip">' + esc(f.label) + '<button type="button" data-f="' + f.key + '" aria-label="Remove ' + esc(f.label) + ' filter">x</button></span>';
+    }).join("");
+    var clearBtn = document.getElementById("filter-clear");
+    clearBtn.classList.toggle("hidden", list.length === 0);
+    clearBtn.textContent = "Clear all filters (" + list.length + ")";
+    el.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var key = btn.dataset.f;
+        giftFilters[key] = "";
+        document.getElementById("filter-" + (key === "forWhom" ? "for" : key)).value = "";
+        renderFilterChips();
+        if (state.myEmail && state.myName) loadSuggestions();
+      });
+    });
+  }
+
+  function onFilterChange() {
+    giftFilters.forWhom = document.getElementById("filter-for").value;
+    giftFilters.age = document.getElementById("filter-age").value;
+    giftFilters.price = document.getElementById("filter-price").value;
+    giftFilters.category = document.getElementById("filter-category").value;
+    giftFilters.shop = document.getElementById("filter-shop").value;
+    renderFilterChips();
+    if (state.myEmail && state.myName) loadSuggestions();
+  }
+
+  function clearAllFilters() {
+    giftFilters = { forWhom: "", age: "", price: "", category: "", shop: "amazon" };
+    document.getElementById("filter-for").value = "";
+    document.getElementById("filter-age").value = "";
+    document.getElementById("filter-price").value = "";
+    document.getElementById("filter-category").value = "";
+    document.getElementById("filter-shop").value = "amazon";
+    renderFilterChips();
+    if (state.myEmail && state.myName) loadSuggestions();
+  }
+
+  async function recentSearchQueries() {
+    try {
+      var res = await apiFetch("/gift_searches?select=query&order=created_at.desc&limit=20");
+      if (!res.ok) return [];
+      var rows = await res.json();
+      var queries = [];
+      rows.forEach(function (r) {
+        var q = (r.query || "").trim();
+        if (q && queries.indexOf(q) === -1) queries.push(q);
+      });
+      return queries;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async function renderRecentChips() {
+    var el = document.getElementById("recent-searches");
+    if (!el) return;
+    var queries = (await recentSearchQueries()).slice(0, 6);
+    if (!queries.length) { el.innerHTML = ""; return; }
+    el.innerHTML = '<span class="small">Recent searches in this group: </span>' + queries.map(function (q) {
+      return '<button type="button" class="secondary recent-chip" data-q="' + esc(q) + '">' + esc(q) + '</button>';
+    }).join("");
+    el.querySelectorAll(".recent-chip").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.getElementById("finder-query").value = btn.dataset.q;
+        runAmazonSearch(btn.dataset.q);
+      });
+    });
+  }
+
+  async function recentSearchItems(seen, maxCount) {
+    if (maxCount <= 0) return [];
+    var queries = await recentSearchQueries();
+    var out = [];
+    for (var i = 0; i < queries.length && out.length < maxCount; i++) {
+      var c;
+      try {
+        c = await apiFetch("/gift_search_cache?select=items&query=eq." + encodeURIComponent(queries[i]));
+      } catch (e) {
+        continue;
+      }
+      if (!c.ok) continue;
+      var rows = await c.json();
+      if (!rows.length || !rows[0].items) continue;
+      rows[0].items.slice(0, 2).forEach(function (it) {
+        var key = it.asin || it.link || it.title;
+        if (!key || seen[key]) return;
+        seen[key] = true;
+        out.push(it);
+      });
+    }
+    return out;
+  }
+
+  function addToSuggestions(extra) {
+    var el = document.getElementById("finder-suggestions");
+    if (!el || !extra || !extra.length) return;
+    var seen = {};
+    suggestionItems.forEach(function (it) { seen[it.asin || it.link || it.title] = true; });
+    var fresh = [];
+    extra.forEach(function (it) {
+      var key = it.asin || it.link || it.title;
+      if (key && !seen[key]) { seen[key] = true; fresh.push(it); }
+    });
+    if (!fresh.length) return;
+    suggestionItems = fresh.concat(suggestionItems).slice(0, 8);
+    renderProductCards(el, suggestionItems);
+  }
+
+  async function callSearchApi(q, token, extra) {
+    var body = { q: q };
+    if (state.group) body.group_id = state.group.id;
+    if (extra) {
+      if (typeof extra.min_price === "number") body.min_price = extra.min_price;
+      if (typeof extra.max_price === "number") body.max_price = extra.max_price;
+    }
+    try {
+      var res = await fetch(SEARCH_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": API_KEY }, body: JSON.stringify(body) });
+      var data = null;
+      try { data = await res.json(); } catch (e) { data = null; }
+      return { res: res, data: data };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function addGiftDirect(it) {
+    if (!needGroup("finder-message")) return false;
+    var owner = state.myName;
+    if (!owner) { setMessage("finder-message", "Log in and join the list first.", true); return false; }
+    try {
+      var res = await apiFetch("/wishlists", {
+        method: "POST",
+        headers: { "Prefer": "return=representation" },
+        body: JSON.stringify({ owner_name: owner, item: (it.title || "Gift idea").slice(0, 120), link_or_note: it.link || null, image_url: it.thumbnail || null, group_id: state.group.id })
+      });
+      if (!res.ok) throw new Error("Could not add that gift.");
+      setMessage("finder-message", "Added to your gift list.");
+      await loadAll();
+      return true;
+    } catch (err) {
+      setMessage("finder-message", err.message, true);
+      return false;
+    }
+  }
+
+  function renderProductCards(el, items) {
+    el._items = items;
+    el.innerHTML = items.map(function (it, i) {
+      var thumb = it.thumbnail ? '<img class="gift-thumb" src="' + esc(it.thumbnail) + '" alt="" referrerpolicy="no-referrer" />' : "";
+      var price = it.price ? '<div class="search-price">' + esc(String(it.price)) + '</div>' : "";
+      var rating = (typeof it.rating === "number" && typeof it.reviews === "number")
+        ? '<div class="search-rating">' + it.rating + " stars, " + it.reviews.toLocaleString() + " reviews</div>" : "";
+      var popular = (typeof it.rating === "number" && typeof it.reviews === "number" && it.rating >= 4.5 && it.reviews >= 500)
+        ? '<span class="search-popular">Popular</span>' : "";
+      return '<div class="search-item">' + thumb + '<div><strong class="search-title" title="' + esc(it.title || "") + '">' + esc(trimTitle(it.title || "")) + '</strong>' + popular + price + rating + '</div><button type="button" class="secondary search-add" data-i="' + i + '">Add to my list</button></div>';
+    }).join("");
+    el.querySelectorAll(".search-add").forEach(function (btn) {
+      btn.addEventListener("click", async function () {
+        var it = el._items[Number(btn.dataset.i)];
+        if (!it || btn.disabled) return;
+        btn.disabled = true;
+        btn.textContent = "Adding...";
+        var ok = await addGiftDirect(it);
+        if (ok) { btn.textContent = "Added"; }
+        else { btn.disabled = false; btn.textContent = "Add to my list"; }
+      });
+    });
+  }
+
+  async function loadSuggestions() {
+    if (!supa) return;
+    var sess = (await supa.auth.getSession()).data.session;
+    if (!sess) return;
+    var seen = {};
+    var items = [];
+    var suffix = filterSuffix();
+    var price = filterPrice();
+    var extra = price ? { min_price: price[0], max_price: price[1] } : null;
+    for (var i = 0; i < SUGGEST_QUERIES.length; i++) {
+      var q = (SUGGEST_QUERIES[i] + (suffix ? " " + suffix : "")).trim();
+      var out = await callSearchApi(q, sess.access_token, extra);
+      if (!out || !out.data || !out.data.items) continue;
+      if (typeof out.data.remaining === "number") setSearchRemaining(out.data.remaining);
+      out.data.items.slice(0, 3).forEach(function (it) {
+        var key = it.asin || it.link || it.title;
+        if (!key || seen[key]) return;
+        seen[key] = true;
+        items.push(it);
+      });
+      if (items.length >= 8) break;
+    }
+    var recent = await recentSearchItems(seen, 8 - items.length);
+    items = items.concat(recent);
+    suggestionItems = items.slice(0, 8);
+    if (suggestionItems.length) renderProductCards(document.getElementById("finder-suggestions"), suggestionItems);
+  }
+
+  function renderSearchResults(items) {
+    renderProductCards(document.getElementById("finder-results"), items);
+  }
+
+  async function runAmazonSearch(q) {
+    var resultsEl = document.getElementById("finder-results");
+    resultsEl.innerHTML = "";
+    if (!supa) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
+    var sess = (await supa.auth.getSession()).data.session;
+    if (!sess) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
+    if (!needGroup("finder-message")) return;
+    setMessage("finder-message", "Searching Amazon...");
+    var suffix = filterSuffix();
+    var effectiveQ = (q + (suffix ? " " + suffix : "")).trim();
+    var price = filterPrice();
+    var extra = price ? { min_price: price[0], max_price: price[1] } : null;
+    var out = await callSearchApi(effectiveQ, sess.access_token, extra);
+    if (!out) { setMessage("finder-message", "Search failed. Try again, or add the gift manually with a link.", true); return; }
+    var res = out.res, data = out.data;
+    if (res.status === 401) { setMessage("finder-message", "Log in above to search Amazon.", true); return; }
+    if (res.status === 403) { setMessage("finder-message", "Join the draw first, then search.", true); return; }
+    if (res.status === 429) {
+      setSearchRemaining(0);
+      setMessage("finder-message", "You have used your " + searchLimit() + " searches this month. Add gifts manually with a link in My gift list.", true);
+      return;
+    }
+    if (!res.ok || !data || !data.items) {
+      setMessage("finder-message", "Search failed. Try again, or add the gift manually with a link.", true);
+      return;
+    }
+    if (typeof data.remaining === "number") setSearchRemaining(data.remaining);
+    if (!data.items.length) { setMessage("finder-message", "No results on Amazon for that. Try different words, or add it manually with a link.", true); return; }
+    setMessage("finder-message", data.cached ? "Results from cache, no search used." : "");
+    renderSearchResults(data.items);
+    addToSuggestions(data.items.slice(0, 3));
+    renderRecentChips();
   }
 
   function renderMessages() {
@@ -670,25 +1396,162 @@
   function renderBuyingView() {
     var view = document.getElementById("buying-view");
     if (view.classList.contains("hidden")) return;
-    var owners = [];
+    var owners = state.participants.map(function (p) { return p.name; });
     state.wishlists.forEach(function (w) {
       if (owners.indexOf(w.owner_name) === -1) owners.push(w.owner_name);
     });
     view.innerHTML = owners.map(function (owner) {
       var items = state.wishlists.filter(function (w) { return w.owner_name === owner; });
-      return '<div class="buying-owner">' + esc(owner) + "</div>" + items.map(function (w) {
+      if (!items.length) return '<div class="buying-owner">' + avatarImg(avatarSeedFor(owner), "lg") + esc(owner) + '</div><p class="small">No gifts yet.</p>';
+      return '<div class="buying-owner">' + avatarImg(avatarSeedFor(owner), "lg") + esc(owner) + "</div>" + items.map(function (w) {
         var thumb = w.image_url ? '<img class="gift-thumb" src="' + esc(w.image_url) + '" alt="" referrerpolicy="no-referrer" />' : "";
         var link = "";
         if (w.link_or_note && (w.link_or_note.indexOf("http://") === 0 || w.link_or_note.indexOf("https://") === 0)) {
           link = '<div><a href="' + esc(w.link_or_note) + '" target="_blank" rel="noopener">View link</a></div>';
         }
-        return '<div class="buying-item">' + thumb + '<div><strong>' + esc(w.item) + "</strong>" + link +
+        return '<div class="buying-item">' + thumb + '<div><strong>' + esc(trimTitle(w.item)) + "</strong>" + link +
           '</div><button type="button" class="secondary buying-amazon" data-query="' + esc(w.item) + '">Amazon</button></div>';
       }).join("");
     }).join("");
     view.querySelectorAll(".buying-amazon").forEach(function (btn) {
       btn.addEventListener("click", function () { window.open(amazonSearchUrl(btn.dataset.query), "_blank", "noopener"); });
     });
+  }
+
+  function isMobileLayout() { return window.matchMedia("(max-width: 899px)").matches; }
+
+  function openCard(headingId) {
+    var s = document.querySelector('[aria-labelledby="' + headingId + '"]');
+    if (s) s.classList.remove("collapsed");
+  }
+
+  function initCollapsibles() {
+    if (!isMobileLayout()) return;
+    document.querySelectorAll(".card").forEach(function (card) {
+      var h = card.querySelector("h2");
+      if (!h) return;
+      h.setAttribute("tabindex", "0");
+      h.setAttribute("role", "button");
+      h.setAttribute("aria-expanded", card.classList.contains("collapsed") ? "false" : "true");
+      h.addEventListener("click", function (e) {
+        if (e.target.closest("button")) return;
+        if (!isMobileLayout()) return;
+        card.classList.toggle("collapsed");
+        if (card.classList.contains("collapsed")) card.dataset.userCollapsed = "1";
+        else delete card.dataset.userCollapsed;
+        h.setAttribute("aria-expanded", card.classList.contains("collapsed") ? "false" : "true");
+      });
+      h.addEventListener("keydown", function (e) {
+        if (e.target.closest("button")) return;
+        if ((e.key === "Enter" || e.key === " ") && isMobileLayout()) { e.preventDefault(); h.click(); }
+      });
+    });
+  }
+
+  var CARD_ORDER_KEY = "ss-card-order";
+
+  function getCards() {
+    return Array.prototype.slice.call(document.querySelectorAll("main .card"));
+  }
+
+  function cardId(card) { return card.getAttribute("aria-labelledby") || ""; }
+
+  function saveCardOrder() {
+    try { localStorage.setItem(CARD_ORDER_KEY, JSON.stringify(getCards().map(cardId))); } catch (e) {}
+  }
+
+  function placeCardsInOrder(cards) {
+    var main = document.querySelector("main");
+    cards.forEach(function (c) { main.appendChild(c); });
+    var treeRow = main.querySelector(".tree-row");
+    if (treeRow) main.appendChild(treeRow);
+  }
+
+  function applyCardOrder() {
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(CARD_ORDER_KEY) || "null"); } catch (e) {}
+    if (!Array.isArray(saved) || !saved.length) return;
+    var cards = getCards();
+    var byId = {};
+    cards.forEach(function (c) { byId[cardId(c)] = c; });
+    var ordered = [];
+    saved.forEach(function (id) { if (byId[id] && ordered.indexOf(byId[id]) === -1) ordered.push(byId[id]); });
+    cards.forEach(function (c) { if (ordered.indexOf(c) === -1) ordered.push(c); });
+    placeCardsInOrder(ordered);
+  }
+
+  function initSectionDrag() {
+    applyCardOrder();
+    getCards().forEach(function (card) {
+      var h = card.querySelector("h2");
+      if (!h) return;
+      var grip = document.createElement("button");
+      grip.type = "button";
+      grip.className = "card-drag";
+      grip.textContent = "\u22ee\u22ee";
+      grip.title = "Drag to move this section";
+      grip.setAttribute("aria-label", "Drag to move this section");
+      grip.addEventListener("pointerdown", function (e) { startCardDrag(e, card); });
+      grip.addEventListener("click", function (e) { e.stopPropagation(); });
+      h.appendChild(grip);
+    });
+  }
+
+  function startCardDrag(e, card) {
+    e.preventDefault();
+    e.stopPropagation();
+    var main = document.querySelector("main");
+    var rect = card.getBoundingClientRect();
+    var offsetY = e.clientY - rect.top;
+    var placeholder = document.createElement("div");
+    placeholder.className = "card-placeholder" + (card.classList.contains("wide-desktop") ? " wide-desktop" : "");
+    placeholder.style.height = rect.height + "px";
+    main.insertBefore(placeholder, card.nextSibling);
+    card.classList.add("dragging");
+    card.style.position = "fixed";
+    card.style.left = rect.left + "px";
+    card.style.top = rect.top + "px";
+    card.style.width = rect.width + "px";
+    card.style.zIndex = "100";
+    card.style.pointerEvents = "none";
+    card.style.margin = "0";
+
+    function onMove(ev) {
+      card.style.top = (ev.clientY - offsetY) + "px";
+      var others = getCards().filter(function (c) { return c !== card; });
+      var after = null;
+      for (var i = 0; i < others.length; i++) {
+        var r = others[i].getBoundingClientRect();
+        if (ev.clientY < r.top + r.height / 2) { after = others[i]; break; }
+      }
+      if (after) main.insertBefore(placeholder, after);
+      else {
+        var treeRow = main.querySelector(".tree-row");
+        if (treeRow) main.insertBefore(placeholder, treeRow);
+        else main.appendChild(placeholder);
+      }
+    }
+
+    function onUp() {
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+      document.removeEventListener("pointercancel", onUp);
+      main.insertBefore(card, placeholder);
+      placeholder.remove();
+      card.classList.remove("dragging");
+      card.style.position = "";
+      card.style.left = "";
+      card.style.top = "";
+      card.style.width = "";
+      card.style.zIndex = "";
+      card.style.pointerEvents = "";
+      card.style.margin = "";
+      saveCardOrder();
+    }
+
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onUp);
   }
 
   function renderAll() {
@@ -731,6 +1594,181 @@
     }, 2200);
   }
 
+  var GROUP_SLUG = (function () {
+    var g = "";
+    try { g = (new URLSearchParams(window.location.search)).get("g") || ""; } catch (e) { g = ""; }
+    g = g.toLowerCase().replace(/[^a-z0-9-]/g, "");
+    return g;
+  })();
+
+  var GROUP_KEY = (function () {
+    var k = "";
+    try { k = (new URLSearchParams(window.location.search)).get("k") || ""; } catch (e) { k = ""; }
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(k) ? k : "";
+  })();
+
+  function slugify(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+  }
+
+  function formatEventDate(iso) {
+    var parts = String(iso).split("-");
+    if (parts.length !== 3) return String(iso);
+    var d = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    return days[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate();
+  }
+
+  function renderHero() {
+    var nameEl = document.getElementById("hero-group-name");
+    if (state.group) {
+      nameEl.textContent = state.group.name.toUpperCase();
+      nameEl.style.display = "";
+    } else {
+      nameEl.style.display = "none";
+    }
+    var loc = document.getElementById("hero-location");
+    if (state.group && state.group.location) {
+      loc.textContent = state.group.location;
+      loc.classList.remove("hidden");
+    } else {
+      loc.classList.add("hidden");
+    }
+    var dateEl = document.getElementById("hero-date");
+    if (state.group && state.group.event_date) {
+      dateEl.textContent = formatEventDate(state.group.event_date);
+      dateEl.classList.remove("hidden");
+    } else {
+      dateEl.classList.add("hidden");
+    }
+    document.getElementById("page-title").textContent = state.group ? state.group.name + " Secret Santa" : "Secret Santa";
+  }
+
+  function renderGroups() {
+    var current = document.getElementById("current-group-name");
+    if (current) current.textContent = state.group ? state.group.name : "No group open yet.";
+    var sel = document.getElementById("group-switch");
+    sel.innerHTML = state.groups.map(function (g) {
+      return '<option value="' + esc(g.slug) + '"' + (state.group && g.slug === state.group.slug ? " selected" : "") + ">" + esc(g.name) + "</option>";
+    }).join("");
+    var share = document.getElementById("group-share");
+    if (state.group) {
+      var url = window.location.origin + window.location.pathname + "?g=" + encodeURIComponent(state.group.slug) + "&k=" + encodeURIComponent(GROUP_KEY);
+      var link = document.getElementById("group-share-link");
+      link.href = url;
+      link.textContent = url;
+      share.classList.remove("hidden");
+    } else {
+      share.classList.add("hidden");
+    }
+  }
+
+  function readMyGroups() {
+    try { return JSON.parse(localStorage.getItem("ss-groups") || "[]"); } catch (e) { return []; }
+  }
+
+  function saveMyGroup(g) {
+    var list = readMyGroups().filter(function (x) { return x.slug !== g.slug; });
+    list.unshift({ slug: g.slug, name: g.name, key: g.key });
+    try { localStorage.setItem("ss-groups", JSON.stringify(list.slice(0, 20))); } catch (e) { /* private mode */ }
+    state.groups = list.slice(0, 20);
+    renderGroups();
+  }
+
+  async function loadGroup() {
+    state.groups = readMyGroups();
+    renderGroups();
+    if (!GROUP_SLUG || !GROUP_KEY) {
+      var saved = state.groups && state.groups.length ? state.groups[0] : null;
+      if (saved && saved.slug && saved.key) {
+        try {
+          var res0 = await apiFetch("/rpc/get_group_by_key", {
+            method: "POST",
+            body: JSON.stringify({ p_slug: saved.slug, p_key: saved.key })
+          });
+          if (res0.ok) {
+            var rows0 = await res0.json();
+            if (rows0.length) {
+              GROUP_SLUG = saved.slug;
+              GROUP_KEY = saved.key;
+              state.group = rows0[0];
+              saveMyGroup({ slug: state.group.slug, name: state.group.name, key: GROUP_KEY });
+              renderHero();
+              await loadAll();
+              return;
+            }
+          }
+        } catch (e) { /* saved group no longer opens — fall through to the no-group view */ }
+      }
+      state.group = null;
+      renderHero();
+      renderAll();
+      refreshAuth();
+      return;
+    }
+    try {
+      var res = await apiFetch("/rpc/get_group_by_key", {
+        method: "POST",
+        body: JSON.stringify({ p_slug: GROUP_SLUG, p_key: GROUP_KEY })
+      });
+      if (!res.ok) throw new Error("Could not load groups.");
+      var rows = await res.json();
+      state.group = rows.length ? rows[0] : null;
+      renderHero();
+      if (!state.group) {
+        setMessage("group-message", "That group link does not work — check the link or start a new group below.");
+        renderAll();
+        refreshAuth();
+        return;
+      }
+      saveMyGroup({ slug: state.group.slug, name: state.group.name, key: GROUP_KEY });
+      await loadAll();
+    } catch (err) {
+      setMessage("group-message", "Could not load groups. Try reloading the page.", true);
+      renderAll();
+    }
+  }
+
+  function switchGroup() {
+    var slug = document.getElementById("group-switch").value;
+    var g = state.groups.find(function (x) { return x.slug === slug; });
+    if (!g || !g.key) return;
+    window.location.href = window.location.pathname + "?g=" + encodeURIComponent(g.slug) + "&k=" + encodeURIComponent(g.key);
+  }
+
+  async function copyGroupLink() {
+    var url = document.getElementById("group-share-link").href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setMessage("group-message", "Link copied — send it to your group.");
+    } catch (e) {
+      setMessage("group-message", "Copy this link: " + url);
+    }
+  }
+
+  async function createGroup() {
+    if (!state.myEmail) { setMessage("group-message", "Log in above to start a group.", true); return; }
+    var input = document.getElementById("group-name-input");
+    var name = input.value.trim();
+    if (!name) { setMessage("group-message", "Type a group name first.", true); return; }
+    var base = slugify(name);
+    if (!base) { setMessage("group-message", "Pick a name with letters or numbers.", true); return; }
+    try {
+      var res = await apiFetch("/rpc/create_group", {
+        method: "POST",
+        body: JSON.stringify({ p_name: name, p_slug: base, p_created_by: state.myName || null })
+      });
+      if (!res.ok) throw new Error("Could not start that group. Try again.");
+      var created = await res.json();
+      var g = created[0];
+      saveMyGroup({ slug: g.slug, name: g.name, key: g.access_key });
+      window.location.href = window.location.pathname + "?g=" + encodeURIComponent(g.slug) + "&k=" + encodeURIComponent(g.access_key);
+    } catch (err) {
+      setMessage("group-message", err.message, true);
+    }
+  }
+
   async function loadAll() {
     if (!isConfigured()) {
       state.connected = false;
@@ -740,25 +1778,31 @@
       return;
     }
     document.getElementById("setup-notice").classList.add("hidden");
+    if (!state.group) {
+      state.connected = false;
+      document.getElementById("setup-notice").classList.remove("hidden");
+      document.getElementById("setup-notice").textContent = "Open your group's private link to see the gift lists and vote.";
+      renderAll();
+      return;
+    }
     try {
-      var drawsRes = await apiFetch("/draws?select=id,status,created_at&order=created_at.desc&limit=1");
+      var drawsRes = await apiFetch("/draws?select=id,status,created_at&group_id=eq." + state.group.id + "&order=created_at.desc&limit=1");
       if (!drawsRes.ok) throw new Error("Could not load the draw.");
       var draws = await drawsRes.json();
       state.draw = draws.length ? draws[0] : null;
-      var partsRes = await apiFetch("/participants?select=id,name,email,created_at&order=created_at.asc");
+      var partsRes = await apiFetch("/participants?select=id,name,email,avatar,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
       if (!partsRes.ok) throw new Error("Could not load participants.");
       state.participants = await partsRes.json();
-      var votesRes = await apiFetch("/poll_votes?select=poll_id,option_id,voter_name");
+      var votesRes = await apiFetch("/poll_votes?select=poll_id,option_id,voter_name&group_id=eq." + state.group.id);
       if (!votesRes.ok) throw new Error("Could not load votes.");
       state.votes = await votesRes.json();
-      var giftsRes = await apiFetch("/wishlists?select=id,owner_name,item,link_or_note,image_url,created_at&order=created_at.asc");
+      var giftsRes = await apiFetch("/wishlists?select=id,owner_name,item,link_or_note,image_url,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
       if (!giftsRes.ok) throw new Error("Could not load gift lists.");
       state.wishlists = await giftsRes.json();
-      var msgsRes = await apiFetch("/group_messages?select=id,author_name,message,created_at&order=created_at.asc");
+      var msgsRes = await apiFetch("/group_messages?select=id,author_name,message,created_at&group_id=eq." + state.group.id + "&order=created_at.asc");
       if (!msgsRes.ok) throw new Error("Could not load messages.");
       state.messages = await msgsRes.json();
       state.connected = true;
-      setControlsEnabled(true);
       renderAll();
       refreshAuth();
     } catch (err) {
@@ -771,6 +1815,7 @@
   }
 
   async function addParticipant() {
+    if (!needGroup("join-message")) return;
     if (!state.myEmail) { setMessage("join-message", "Log in with your email first.", true); return; }
     var input = document.getElementById("name-input");
     var name = input.value.trim();
@@ -798,7 +1843,7 @@
       var res = await apiFetch("/participants", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ name: name, email: state.myEmail })
+        body: JSON.stringify({ name: name, email: state.myEmail, avatar: state.pickedAvatar || name, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not add that name. It may already be on the list.");
       input.value = "";
@@ -806,16 +1851,17 @@
       await loadAll();
       await refreshAuth();
     } catch (err) {
-      setMessage("join-message", err.message, true);
+      setMessage("join-message", friendlyError(err), true);
     }
   }
 
   async function setDrawStatus(status) {
+    if (!needGroup("join-message")) return;
     if (!state.draw) {
       var res = await apiFetch("/draws", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ status: status })
+        body: JSON.stringify({ status: status, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not create the draw record.");
       state.draw = (await res.json())[0];
@@ -832,12 +1878,17 @@
   }
 
   async function runDraw() {
+    if (!needGroup("join-message")) return;
     if (!state.myName) { setMessage("join-message", "Log in and join the list first.", true); return; }
-    if (!state.draw || state.draw.status !== "locked") {
-      setMessage("join-message", "Lock the list first, then draw.", true); return;
+    if (!isOrganizer()) { setMessage("join-message", "Only the person who made this list can run the draw.", true); return; }
+    if (!state.draw || (state.draw.status !== "locked" && state.draw.status !== "open")) {
+      setMessage("join-message", "The draw is already done.", true); return;
     }
     if (state.participants.length < 3) {
       setMessage("join-message", "The draw needs at least 3 people.", true); return;
+    }
+    if (state.draw.status === "open") {
+      try { await setDrawStatus("locked"); } catch (err) { setMessage("join-message", friendlyError(err), true); return; }
     }
     var names = state.participants.map(function (p) { return p.name; });
     var shuffleEl = document.getElementById("draw-shuffle");
@@ -855,7 +1906,7 @@
     try {
       var recipients = derangement(names);
       var rows = names.map(function (giver, i) {
-        return { draw_id: state.draw.id, giver_name: giver, recipient_name: recipients[i] };
+        return { draw_id: state.draw.id, giver_name: giver, recipient_name: recipients[i], group_id: state.group.id };
       });
       var res = await apiFetch("/assignments", {
         method: "POST",
@@ -868,7 +1919,7 @@
       setMessage("join-message", "The draw is done. Each person can now reveal only their own person.");
     } catch (err) {
       shuffleEl.classList.add("hidden");
-      setMessage("join-message", err.message, true);
+      setMessage("join-message", friendlyError(err), true);
     }
   }
 
@@ -888,6 +1939,7 @@
   }
 
   async function revealAssignment() {
+    if (!needGroup("reveal-message")) return;
     var giver = state.myName;
     if (!giver) { setMessage("reveal-message", "Log in and join the list first.", true); return; }
     if (!state.draw) return;
@@ -914,19 +1966,39 @@
     }
   }
 
+  async function fetchLinkImage(targetUrl) {
+    try {
+      var sess = (await supa.auth.getSession()).data.session;
+      if (!sess) return null;
+      var res = await fetch(LINK_IMAGE_URL, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + sess.access_token, "apikey": API_KEY }, body: JSON.stringify({ url: targetUrl }) });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) { return null; }
+  }
+
   async function addGift() {
+    if (!needGroup("gift-message")) return;
     var owner = state.myName;
     var itemEl = document.getElementById("gift-item");
     var noteEl = document.getElementById("gift-note");
     var item = itemEl.value.trim();
+    var note = noteEl.value.trim();
     if (!owner) { setMessage("gift-message", "Log in and join the list first.", true); return; }
     if (!item) { setMessage("gift-message", "Type a gift idea first.", true); return; }
+    var isUrl = function (s) { return /^https?:\/\/\S+/i.test(s); };
+    if (isUrl(item) && !isUrl(note)) { var t = item; item = note || "Gift idea"; note = t; }
     try {
       var imageEl = document.getElementById("gift-image");
+      var imageUrl = imageEl.value.trim() || null;
+      if (!imageUrl && isUrl(note)) {
+        var preview = await fetchLinkImage(note);
+        if (preview && preview.image) imageUrl = preview.image;
+        if ((!item || item === "Gift idea") && preview && preview.title) item = preview.title;
+      }
       var res = await apiFetch("/wishlists", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ owner_name: owner, item: item, link_or_note: noteEl.value.trim() || null, image_url: imageEl.value.trim() || null })
+        body: JSON.stringify({ owner_name: owner, item: item, link_or_note: note || null, image_url: imageUrl, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not add that gift idea.");
       itemEl.value = "";
@@ -952,13 +2024,16 @@
   }
 
   async function castVote(pollId, optionId) {
+    if (!needGroup("poll-message")) return;
     var voter = state.myName;
     if (!voter) { setMessage("poll-message", "Log in and join the list first, then vote.", true); return; }
+    var existingVote = state.votes.find(function (v) { return v.poll_id === pollId && v.voter_name === voter; });
+    if (existingVote && existingVote.option_id === optionId) { setMessage("poll-message", "That's already your vote — one vote per person."); return; }
     try {
       var res = await apiFetch("/poll_votes?on_conflict=voter_name,poll_id", {
         method: "POST",
         headers: { "Prefer": "resolution=merge-duplicates,return=representation" },
-        body: JSON.stringify({ voter_name: voter, poll_id: pollId, option_id: optionId })
+        body: JSON.stringify({ voter_name: voter, poll_id: pollId, option_id: optionId, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not save that vote.");
       setMessage("poll-message", "Your vote was saved.");
@@ -968,7 +2043,27 @@
     }
   }
 
+  async function suggestBudget() {
+    if (!needGroup("suggest-budget-message")) return;
+    var input = document.getElementById("suggest-budget");
+    var value = parseInt(input.value, 10);
+    if (!state.myName) { setMessage("suggest-budget-message", "Log in and join the list first.", true); return; }
+    if (isNaN(value) || value < 1 || value > 1000) { setMessage("suggest-budget-message", "Type a budget between $1 and $1000.", true); return; }
+    var fixed = null;
+    BUDGET_OPTIONS.forEach(function (o) {
+      if (parseInt(o.label.replace(/[^0-9]/g, ""), 10) === value) fixed = o;
+    });
+    var optionId = fixed ? fixed.id : "custom:" + value;
+    var existed = state.votes.some(function (v) { return v.poll_id === "budget" && v.option_id === optionId; });
+    await castVote("budget", optionId);
+    setMessage("suggest-budget-message", existed
+      ? "That budget is already an option — your vote is on it."
+      : "Added $" + value + " — your vote is on it.");
+    input.value = "";
+  }
+
   async function postMessage() {
+    if (!needGroup("message-message")) return;
     var author = state.myName;
     var input = document.getElementById("message-input");
     var text = input.value.trim();
@@ -978,7 +2073,7 @@
       var res = await apiFetch("/group_messages", {
         method: "POST",
         headers: { "Prefer": "return=representation" },
-        body: JSON.stringify({ author_name: author, message: text })
+        body: JSON.stringify({ author_name: author, message: text, group_id: state.group.id })
       });
       if (!res.ok) throw new Error("Could not send that message.");
       input.value = "";
@@ -1074,11 +2169,13 @@
 
   document.getElementById("start-button").addEventListener("click", function () {
     var target = state.myEmail ? "join-heading" : "auth-heading";
+    openCard(target);
     document.getElementById(target).scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     if (state.myEmail) document.getElementById("name-input").focus({ preventScroll: true });
     else document.getElementById("auth-email").focus({ preventScroll: true });
   });
   document.getElementById("add-button").addEventListener("click", addParticipant);
+  document.getElementById("name-input").addEventListener("input", function () { state.pickedAvatar = null; renderAvatarPicks(); });
   document.getElementById("lock-button").addEventListener("click", function () {
     setDrawStatus("locked").catch(function (e) { setMessage("join-message", e.message, true); });
   });
@@ -1095,16 +2192,17 @@
     document.getElementById("reveal-gift-list").innerHTML = "";
   });
   document.getElementById("gift-add-button").addEventListener("click", addGift);
-  document.getElementById("gift-amazon-search").addEventListener("click", function () {
-    var q = document.getElementById("gift-item").value.trim();
-    if (!q) { setMessage("gift-message", "Type a gift idea first.", true); return; }
-    window.open(amazonSearchUrl(q), "_blank", "noopener");
+  ["filter-for", "filter-age", "filter-price", "filter-category", "filter-shop"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", onFilterChange);
   });
+  document.getElementById("filter-clear").addEventListener("click", clearAllFilters);
+  document.getElementById("group-switch").addEventListener("change", switchGroup);
+  document.getElementById("group-create-button").addEventListener("click", createGroup);
+  document.getElementById("group-copy-button").addEventListener("click", copyGroupLink);
   document.getElementById("finder-search-button").addEventListener("click", function () {
     var q = document.getElementById("finder-query").value.trim();
     if (!q) { setMessage("finder-message", "Type what you are looking for first.", true); return; }
-    window.open(amazonSearchUrl(q), "_blank", "noopener");
-    setMessage("finder-message", "Results opened on Amazon. Paste the link back in My gift list.");
+    runAmazonSearch(q);
   });
   document.getElementById("message-send-button").addEventListener("click", postMessage);
   document.getElementById("email-group-button").addEventListener("click", emailGroup);
@@ -1117,17 +2215,104 @@
   document.getElementById("auth-send-button").addEventListener("click", sendAuthCode);
   document.getElementById("auth-verify-button").addEventListener("click", verifyAuthCode);
   document.getElementById("auth-signout-button").addEventListener("click", signOutAuth);
+  document.getElementById("auth-mode-button").addEventListener("click", function () { setAuthMode(authMode === "code" ? "password" : "code"); });
+  document.getElementById("auth-password-button").addEventListener("click", signInWithPassword);
+  document.getElementById("auth-signup-button").addEventListener("click", signUpWithPassword);
+  document.getElementById("auth-forgot-button").addEventListener("click", sendPasswordReset);
+  document.getElementById("auth-set-password-button").addEventListener("click", setPassword);
+  document.getElementById("auth-change-password").addEventListener("click", function () {
+    document.getElementById("auth-set-password").classList.remove("hidden");
+    document.getElementById("auth-change-password").classList.add("hidden");
+    document.getElementById("auth-new-password").focus();
+  });
   document.getElementById("auth-code").addEventListener("keydown", function (e) { if (e.key === "Enter") verifyAuthCode(); });
   document.addEventListener("error", function (e) {
     if (e.target && e.target.classList && e.target.classList.contains("gift-thumb")) e.target.style.display = "none";
   }, true);
   if (supa) supa.auth.onAuthStateChange(function () { refreshAuth(); });
+  document.getElementById("suggest-budget-button").addEventListener("click", suggestBudget);
+  document.getElementById("gift-item").addEventListener("input", function () { setMessage("gift-message", ""); });
 
+  initCollapsibles();
+  initSectionDrag();
   startSnowfall();
-  loadAll();
+  loadGroup();
   setInterval(function () {
     if (!document.hidden) loadAll();
   }, 5000);
+</script>
+<script>
+/* v47 motion layer. Native scroll: one passive listener writes --scroll
+   (a registered number) on the hero and CSS turns it into three depths
+   (moon far, stars middle, tree near). The SECRET SANTA letters drop in
+   once in pixel steps, then hop in an uneven wave every 8 s. A card that
+   is opened drops its contents in by a few pixels. Nothing is hidden or
+   delayed, no data or backend code is touched, and none of it runs under
+   prefers-reduced-motion. */
+(function(){
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var root = document.documentElement;
+  root.classList.add("ms-on");
+  if (window.CSS && CSS.registerProperty){
+    try { CSS.registerProperty({ name:"--scroll", syntax:"<number>", inherits:true, initialValue:"0" }); } catch(e){}
+  }
+  var hero = document.querySelector(".hero");
+  var heroH = hero ? hero.offsetHeight : 0;
+  var ticking = false;
+  function write(){
+    ticking = false;
+    if (hero) hero.style.setProperty("--scroll", Math.min(window.scrollY, heroH).toFixed(1));
+  }
+  window.addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(write); } }, { passive:true });
+  window.addEventListener("resize", function(){ heroH = hero ? hero.offsetHeight : 0; }, { passive:true });
+  write();
+
+  /* letters of SECRET and SANTA (the group name above them is left alone) */
+  var h1 = hero ? hero.querySelector("h1") : null;
+  var letters = [];
+  function splitText(node){
+    var text = node.textContent;
+    if (!text.trim()) return;
+    var frag = document.createDocumentFragment();
+    text.split("").forEach(function(c){
+      if (/\s/.test(c)){ frag.appendChild(document.createTextNode(c)); return; }
+      var sp = document.createElement("span");
+      sp.className = "ms-ch"; sp.textContent = c;
+      frag.appendChild(sp); letters.push(sp);
+    });
+    node.parentNode.replaceChild(frag, node);
+  }
+  if (h1){
+    Array.prototype.slice.call(h1.childNodes).forEach(function(n){
+      if (n.nodeType === 3) splitText(n);
+      else if (n.nodeType === 1 && n.classList.contains("red") && n.firstChild) splitText(n.firstChild);
+    });
+    /* the wave runs left to right with a stutter after the T of SECRET */
+    letters.forEach(function(sp, i){
+      var d = i * .09 + (i > 5 ? .35 : 0);
+      sp.style.setProperty("--ms-delay", (1.2 + d).toFixed(2) + "s");
+      if (sp.animate) sp.animate([{ translate:"0 -10px" }, { translate:"0 0" }],
+        { duration:280 + (i % 3) * 60, delay:[0, 40, 110, 140, 230, 250, 330, 360, 450, 470, 560][i % 11], easing:"steps(3)", fill:"backwards" });
+    });
+  }
+
+  /* opening a collapsed card: its contents drop in by a few pixels */
+  if ("MutationObserver" in window){
+    Array.prototype.forEach.call(document.querySelectorAll("main > .card"), function(card){
+      var was = card.classList.contains("collapsed");
+      new MutationObserver(function(){
+        var now = card.classList.contains("collapsed");
+        if (was && !now){
+          Array.prototype.forEach.call(card.children, function(ch, i){
+            if (ch.tagName === "H2" || !ch.animate) return;
+            ch.animate([{ translate:"0 -8px" }, { translate:"0 0" }], { duration:200, delay:Math.min(i, 5) * 30, easing:"steps(3)" });
+          });
+        }
+        was = now;
+      }).observe(card, { attributes:true, attributeFilter:["class"] });
+    });
+  }
+})();
 </script>
 </body>
 </html>
