@@ -1,4 +1,4 @@
-/* FLWRPWR preview gate — shared password, client-side.
+/* FLWRPWR preview gate, shared password, client-side.
    Keeps casual visitors out of the pre-launch shop. This is a soft
    lock, not server security: the page source still lives in the browser,
    so anyone determined can get around it. The real lock is the admin
