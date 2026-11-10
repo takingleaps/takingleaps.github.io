@@ -660,11 +660,12 @@
     renderAvatarPicks();
     var me = state.myName ? state.participants.find(function (p) { return p.name === state.myName; }) : null;
     if (me && me.id) {
+      me.avatar = seed;
+      renderParticipants();
       try {
-        var res = await apiFetch("/participants?id=eq." + me.id, {
-          method: "PATCH",
-          headers: { "Prefer": "return=representation" },
-          body: JSON.stringify({ avatar: seed })
+        var res = await apiFetch("/rpc/set_participant_avatar", {
+          method: "POST",
+          body: JSON.stringify({ p_id: me.id, p_avatar: seed })
         });
         if (res.ok) await loadAll();
       } catch (e) { /* the pick still shows; the save retries on the next pick */ }
