@@ -1789,7 +1789,7 @@
         new THREE.GLTFLoader().load("./assets/shopper.glb", function(gltf){
           shopperTemplate = gltf.scene;
           if (built && npcGroup) buildCrowd(currentShop);
-        }, undefined, function(){ /* no model, procedural shoppers stay */ });
+        }, undefined, function(err){ if (window.console) console.warn("shopper.glb did not load, procedural shoppers stay", err); });
       }
       function makeModelShopper(outfit, skin, hairC){
         var g = shopperTemplate.clone(true);
@@ -1803,6 +1803,25 @@
           else if (m.name === "Hair") m.material.color.setHex(hairC);
           else if (m.name === "Legs") m.material.color.setHex(0x6E7B5E);
         });
+        /* face: the Blender human ships with a blank head, so add one here.
+           Front is +z (the shoe toe points +z, max 0.14); the face front
+           sits at z ~0.11, so these sit just proud of it. */
+        var faceDark = mat(0x241a16, .7), faceMouth = mat(0x8e3b4d, .7),
+            faceBlush = mat(0xf2a0b5, .7), faceSkin = mat(skin, .78), faceHair = mat(hairC, .8);
+        function faceMesh(geo, material, x, y, z, sx, sy, sz){
+          var f = new THREE.Mesh(geo, material);
+          f.position.set(x, y, z);
+          if (sx !== undefined) f.scale.set(sx, sy, sz);
+          f.castShadow = true;
+          g.add(f);
+        }
+        [-1, 1].forEach(function(side){
+          faceMesh(new THREE.SphereGeometry(.024, 8, 6), faceDark, side * .058, 1.585, .118);
+          faceMesh(new THREE.BoxGeometry(.07, .014, .015), faceHair, side * .058, 1.635, .115);
+          faceMesh(new THREE.SphereGeometry(.028, 8, 6), faceBlush, side * .105, 1.535, .11, 1, .65, .4);
+        });
+        faceMesh(new THREE.SphereGeometry(.016, 8, 6), faceSkin, 0, 1.55, .115);
+        faceMesh(new THREE.BoxGeometry(.075, .014, .015), faceMouth, 0, 1.505, .115);
         return g;
       }
       function makePersonMesh(options){
@@ -1836,12 +1855,12 @@
         /* head + face (eyes, brows, nose, mouth, blush — no more blank mannequin) */
         append(new THREE.SphereGeometry(.29, 10, 8), skin, [0, 1.79, 0], [.92, 1.05, .92]);
         [-1, 1].forEach(function(side){
-          append(new THREE.SphereGeometry(.028, 8, 6), dark, [side * .105, 1.82, .262]);
-          append(new THREE.BoxGeometry(.085, .016, .02), hair, [side * .105, 1.885, .25]);
-          append(new THREE.SphereGeometry(.035, 8, 6), blushC, [side * .165, 1.745, .21], [1, .65, .35]);
+          append(new THREE.SphereGeometry(.045, 8, 6), dark, [side * .105, 1.82, .262]);
+          append(new THREE.BoxGeometry(.11, .022, .02), hair, [side * .105, 1.885, .25]);
+          append(new THREE.SphereGeometry(.05, 8, 6), blushC, [side * .165, 1.745, .21], [1, .65, .35]);
         });
-        append(new THREE.SphereGeometry(.022, 8, 6), skin, [0, 1.765, .26]);
-        append(new THREE.BoxGeometry(.09, .016, .02), mouthC, [0, 1.695, .245]);
+        append(new THREE.SphereGeometry(.03, 8, 6), skin, [0, 1.765, .26]);
+        append(new THREE.BoxGeometry(.12, .022, .02), mouthC, [0, 1.695, .245]);
         /* hair: HairDeck-style — real styles, not a bald cap. Cap first, then the style. */
         append(new THREE.SphereGeometry(.302, 10, 7, 0, Math.PI * 2, 0, Math.PI * .57), hair, [0, 1.89, 0], [.94, .9, .96]);
         if (style === 0){ /* long + wavy: back length + front strands */

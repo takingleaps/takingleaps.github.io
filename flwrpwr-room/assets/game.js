@@ -104,9 +104,9 @@
     append(new T.SphereGeometry(.022,8,6),goldC,[0,1.30,.24]);
     [[0,1.348],[.043,1.314],[-.043,1.314],[.027,1.266],[-.027,1.266]].forEach(function(p){append(new T.SphereGeometry(.02,8,6),petalC,[p[0],p[1],.235],[1,1,.4]);});
     append(new T.SphereGeometry(.29,10,8),skin,[0,1.79,0],[.92,1.05,.92]);
-    [-1,1].forEach(function(side){append(new T.SphereGeometry(.028,8,6),dark,[side*.105,1.82,.262]);append(new T.BoxGeometry(.085,.016,.02),hair,[side*.105,1.885,.25]);append(new T.SphereGeometry(.035,8,6),blushC,[side*.165,1.745,.21],[1,.65,.35]);});
-    append(new T.SphereGeometry(.022,8,6),skin,[0,1.765,.26]);
-    append(new T.BoxGeometry(.09,.016,.02),mouthC,[0,1.695,.245]);
+    [-1,1].forEach(function(side){append(new T.SphereGeometry(.045,8,6),dark,[side*.105,1.82,.262]);append(new T.BoxGeometry(.11,.022,.02),hair,[side*.105,1.885,.25]);append(new T.SphereGeometry(.05,8,6),blushC,[side*.165,1.745,.21],[1,.65,.35]);});
+    append(new T.SphereGeometry(.03,8,6),skin,[0,1.765,.26]);
+    append(new T.BoxGeometry(.12,.022,.02),mouthC,[0,1.695,.245]);
     append(new T.SphereGeometry(.302,10,7,0,Math.PI*2,0,Math.PI*.57),hair,[0,1.89,0],[.94,.9,.96]);
     if(style===0){append(new T.SphereGeometry(.30,10,8),hair,[0,1.60,-.10],[1.02,1.25,.5]);append(new T.BoxGeometry(.09,.52,.07),hair,[-.25,1.52,.12],[1,1,1],[0,0,.10]);append(new T.BoxGeometry(.09,.52,.07),hair,[.25,1.52,.12],[1,1,1],[0,0,-.10]);}
     else if(style===1){append(new T.BoxGeometry(.08,.36,.24),hair,[-.285,1.66,0]);append(new T.BoxGeometry(.08,.36,.24),hair,[.285,1.66,0]);append(new T.BoxGeometry(.52,.32,.12),hair,[0,1.64,-.15]);}
