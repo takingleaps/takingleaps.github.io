@@ -90,6 +90,79 @@
     root.scale.setScalar(.93);root.traverse(function(o){if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});return root;
   }
 
+  /* tote bag on the right arm (arm pivot [1]), with the pendulum swing physics
+     driven by updatePeople — shared by the procedural person and the GLB person. */
+  function attachTote(root,options){
+    var tote=new T.Group();tote.position.set(0,-.57,.015);
+    var toteBodyPivot=new T.Group();toteBodyPivot.position.y=-.06;tote.add(toteBodyPivot);
+    var toteBody=mesh(new T.BoxGeometry(.34,.38,.13),material(options.tote,.66));toteBody.position.y=-.19;toteBodyPivot.add(toteBody);
+    var toteBand=mesh(new T.BoxGeometry(.345,.08,.135),material(options.accent,.6),false,false);toteBand.position.y=-.055;toteBodyPivot.add(toteBand);
+    [-1,1].forEach(function(hs){var handle=mesh(new T.TorusGeometry(.078,.013,6,14,Math.PI),material(0x8a6b46,.82),false,false);handle.position.set(0,-.055,hs*.052);tote.add(handle);});
+    root.userData.arms[1].add(tote);root.userData.tote=tote;root.userData.toteBody=toteBodyPivot;
+    root.userData.swing={x:0,z:0,vx:0,vz:0,bx:0,bz:0,bvx:0,bvz:0};
+  }
+
+  /* ---------- v2 GLB shoppers (Blender-built, parted limbs, real hair cards) ----------
+     Variants live in ./models/ (same as the room GLBs) with the assets/models/
+     fallback. Loading is NON-FATAL: a failed variant just is not used, and a
+     walker whose GLB is missing falls back to the procedural createPerson,
+     so the room never breaks. The loader promise lives with the model loading
+     below (it needs `loader`); the templates are read here. */
+  var SHOPPER_VARIANTS=['long','ponytail','bun'];
+  var shopperTemplates={};
+  var shopperLoadPromise=null;
+
+  /* Build a person from a v2 GLB template. Returns null if the template or any
+     limb pivot is missing, so the caller falls back to createPerson.
+     The GLB's pivots are real joints (origin at shoulder/hip), so the same
+     updatePeople rotations that swing the procedural arms now swing the GLB
+     legs too. Arms/legs are mapped to match createPerson's convention
+     ([0]=right/-X, [1]=left/+X) so the contralateral gait reads right. */
+  function makeGlbPerson(options,variant){
+    var template=shopperTemplates[variant];
+    if(!template)return null;
+    var root=new T.Group(),rig=new T.Group();
+    var clone=template.clone(true);
+    var parts={};
+    clone.traverse(function(o){if(o.name)parts[o.name]=o;});
+    var armL=parts.ArmL,armR=parts.ArmR,legL=parts.LegL,legR=parts.LegR;
+    if(!armL||!armR||!legL||!legR)return null;
+    var tint={OutfitMat:options.top,LegsMat:options.bottom,SkinMat:options.skin,HairMat:options.hair,ShoesMat:(options.shoe||0x251d22),AccentMat:options.accent};
+    clone.traverse(function(o){
+      if(!o.isMesh)return;
+      var mats=Array.isArray(o.material)?o.material:[o.material];
+      var nm=mats.map(function(m){
+        var c=tint[m.name];
+        if(c==null)return m;
+        var n2=m.clone();n2.color.setHex(c);return n2;
+      });
+      o.material=Array.isArray(o.material)?nm:nm[0];
+      o.castShadow=false;o.receiveShadow=true;
+    });
+    rig.add(clone);root.add(rig);
+    root.userData.arms=[armR,armL];
+    root.userData.legs=[legR,legL];
+    root.userData.rig=rig;
+    root.userData.head=parts.Head||clone;
+    root.userData.glb=true;
+    root.userData.baseY=options.y||0;
+    /* v2 is 1.708m; the procedural person is ~2.09 units tall unscaled, so at
+       the same options.scale the GLB needs 2.09/1.708 = 1.224x to match the room */
+    root.scale.setScalar((options.scale||.92)*1.224);
+    if(options.hat){
+      var hatMat=material(options.accent||0xf5e7c7,.66);
+      var brim=mesh(new T.CylinderGeometry(.20,.20,.03,16),hatMat);brim.position.set(0,1.70,0);rig.add(brim);
+      var dome=mesh(new T.CylinderGeometry(.12,.15,.12,14),hatMat);dome.position.set(0,1.76,0);rig.add(dome);
+    }
+    if(options.tote)attachTote(root,options);
+    if(options.employee){
+      var badge=mesh(new T.BoxGeometry(.24,.11,.025),material(options.accent||0xf5e7c7,.72),false,false);
+      badge.position.set(.1,1.44,.14);rig.add(badge);
+    }
+    return root;
+  }
+  var walkerVariantIdx=0;
+
   function createPerson(options){
     options=options||{};
     var root=new T.Group(),rig=new T.Group(),positions=[],normals=[],colors=[];root.add(rig);
@@ -117,14 +190,18 @@
     if(options.hat){append(new T.CylinderGeometry(.32,.32,.05,10),accent,[0,2.055,0]);append(new T.CylinderGeometry(.2,.25,.2,9),accent,[0,2.16,0]);}
     var bodyGeo=new T.BufferGeometry();bodyGeo.setAttribute('position',new T.Float32BufferAttribute(positions,3));bodyGeo.setAttribute('normal',new T.Float32BufferAttribute(normals,3));bodyGeo.setAttribute('color',new T.Float32BufferAttribute(colors,3));bodyGeo.computeBoundingSphere();var body=mesh(bodyGeo,new T.MeshStandardMaterial({vertexColors:true,roughness:.76,metalness:0}));rig.add(body);
     root.userData.arms=[];[-1,1].forEach(function(side){var armPivot=new T.Group();armPivot.position.set(side*.31,1.43,0);var arm=mesh(new T.CylinderGeometry(.068,.082,.58,8),material(skin,.78));arm.position.y=-.27;armPivot.add(arm);var hand=mesh(new T.SphereGeometry(.075,8,6),material(skin,.78));hand.position.y=-.60;armPivot.add(hand);rig.add(armPivot);root.userData.arms.push(armPivot);});
-    if(options.tote){var tote=new T.Group();tote.position.set(0,-.57,.015);var toteBodyPivot=new T.Group();toteBodyPivot.position.y=-.06;tote.add(toteBodyPivot);var toteBody=mesh(new T.BoxGeometry(.34,.38,.13),material(options.tote,.66));toteBody.position.y=-.19;toteBodyPivot.add(toteBody);var toteBand=mesh(new T.BoxGeometry(.345,.08,.135),material(options.accent,.6),false,false);toteBand.position.y=-.055;toteBodyPivot.add(toteBand);[-1,1].forEach(function(hs){var handle=mesh(new T.TorusGeometry(.078,.013,6,14,Math.PI),material(0x8a6b46,.82),false,false);handle.position.set(0,-.055,hs*.052);tote.add(handle);});root.userData.arms[1].add(tote);root.userData.tote=tote;root.userData.toteBody=toteBodyPivot;root.userData.swing={x:0,z:0,vx:0,vz:0,bx:0,bz:0,bvx:0,bvz:0};}
+    if(options.tote)attachTote(root,options);
     root.userData.legs=[new T.Object3D(),new T.Object3D()];
     if(options.employee){var badge=mesh(new T.BoxGeometry(.24,.11,.025),material(accent,.72),false,false);badge.position.set(.1,1.28,.226);rig.add(badge);}
     root.userData.rig=rig;root.userData.head=body;root.userData.baseY=options.y||0;root.scale.setScalar(options.scale||.92);root.traverse(function(o){if(o.isMesh){o.castShadow=false;o.receiveShadow=true;}});return root;
   }
   function addWalker(config){
-    var person=createPerson(config),start=config.path[0];person.position.set(start.x,config.y||0,start.z);person.rotation.y=start.lookYaw==null?0:start.lookYaw;peopleRoot.add(person);
-    people.push({root:person,path:config.path,target:1,speed:config.speed||.52,pause:config.startPause||0,pauseTotal:config.startPause||0,pauseYaw:start.lookYaw,browse:start.browse||0,browseAmt:0,hasBag:!!config.tote,phase:config.phase||0,inside:config.inside!==false,employee:false,walking:false});return person;
+    var variant=SHOPPER_VARIANTS[walkerVariantIdx%SHOPPER_VARIANTS.length];walkerVariantIdx++;
+    /* v2 GLB first; if its template or pivots are missing, the procedural
+       person keeps the room working — the walker still shows up. */
+    var person=makeGlbPerson(config,variant)||createPerson(config);
+    var start=config.path[0];person.position.set(start.x,config.y||0,start.z);person.rotation.y=start.lookYaw==null?0:start.lookYaw;peopleRoot.add(person);
+    people.push({root:person,path:config.path,target:1,speed:config.speed||.52,pause:config.startPause||0,pauseTotal:config.startPause||0,pauseYaw:start.lookYaw,browse:start.browse||0,browseAmt:0,hasBag:!!config.tote,phase:config.phase||0,inside:config.inside!==false,employee:false,walking:false,gaitAmt:0});return person;
   }
   function makePeople(){
     addWalker({top:0xd85884,bottom:0x3e746b,skin:0xb97858,hair:0x24191c,accent:0xf2d278,hat:true,tote:0xf5e7c7,phase:.2,speed:.48,startPause:2.6,path:[{x:-6.78,z:1.0,pause:3.2,lookYaw:-Math.PI*.5,browse:1},{x:-6.78,z:2.35,pause:2.4,lookYaw:-Math.PI*.5,browse:1},{x:-5.15,z:4.72,pause:3.4,lookYaw:0,browse:1},{x:-4.15,z:4.72,pause:2.2,lookYaw:0,browse:1},{x:-3.95,z:-1.35,pause:.05},{x:-2.35,z:-.72,pause:2.8,lookYaw:0,browse:1},{x:-5.9,z:-3.3,pause:.05}]});
@@ -149,10 +226,16 @@
       else{var step=Math.min(dist,p.speed*dt),yaw=Math.atan2(dx,dz);p.root.rotation.y+=angleDelta(p.root.rotation.y,yaw)*Math.min(1,dt*7);p.root.position.x+=dx/dist*step;p.root.position.z+=dz/dist*step;p.walking=true;}
       var browseTarget=(!p.walking&&p.pause>0&&p.browse>0)?p.browse*Math.min(1,Math.max(0,(p.pauseTotal-p.pause)/.45),Math.max(0,p.pause/.45)):0;
       p.browseAmt=lerp(p.browseAmt||0,browseTarget,Math.min(1,dt*5));
-      var gait=p.walking?Math.sin(t*7+p.phase):0,bob=p.walking?Math.abs(Math.sin(t*7+p.phase))*.035:Math.sin(t*1.6+p.phase)*.008;
-      u.rig.position.y=bob;u.arms[0].rotation.x=gait*.42;u.arms[1].rotation.x=-gait*.42*(p.hasBag?.35:1);u.legs[0].rotation.x=-gait*.36;u.legs[1].rotation.x=gait*.36;
+      /* gait ramps in/out so starts and stops are smooth, not snappy; the legs
+         now swing on real hip pivots (the old dummy pivots were a no-op) */
+      p.gaitAmt=lerp(p.gaitAmt||0,p.walking?1:0,Math.min(1,dt*6));
+      var g=p.gaitAmt*Math.sin(t*7+p.phase);
+      var bob=p.gaitAmt*Math.abs(Math.sin(t*7+p.phase))*.035+(1-p.gaitAmt)*Math.sin(t*1.6+p.phase)*.008;
+      u.rig.position.y=bob;u.arms[0].rotation.x=g*.42;u.arms[1].rotation.x=-g*.42*(p.hasBag?.35:1);u.legs[0].rotation.x=-g*.48;u.legs[1].rotation.x=g*.48;
       if(p.browseAmt>.01){var reach=1.58+.34*Math.sin(t*.85+p.phase*2.3);u.arms[0].rotation.x=lerp(u.arms[0].rotation.x,-reach,p.browseAmt);}
-      u.rig.rotation.x=.07*p.browseAmt;
+      /* torso leans into the walk and sways side to side — it reads as a walk */
+      u.rig.rotation.x=.045*p.gaitAmt+.07*p.browseAmt;
+      u.rig.rotation.z=Math.sin(t*7+p.phase)*.022*p.gaitAmt;
       if(!p.walking)u.rig.rotation.y=Math.sin(t*.7+p.phase)*.018;else u.rig.rotation.y=0;
       if(u.tote&&u.swing){
         var sw=u.swing,pos=p.root.position;
@@ -451,13 +534,27 @@
     function loaded(g){try{updateLoadProgress();resolve(prepareModel(g.scene));}catch(error){reject(error);}}
     loader.load(primary,loaded,undefined,function(){loader.load(fallback,loaded,undefined,function(){reject(new Error(name+': GLB load failed'));});});
   });});
+  /* v2 shopper GLBs: same primary/fallback pattern, but the promise NEVER
+     rejects — a missing variant just means that walker falls back to the
+     procedural person, and the store still loads. */
+  shopperLoadPromise=new Promise(function(resolve){
+    var settled=0;
+    SHOPPER_VARIANTS.forEach(function(variant){
+      var filename='shopper_'+variant+'.glb';
+      function ok(g){shopperTemplates[variant]=g.scene;if(++settled===SHOPPER_VARIANTS.length)resolve();}
+      function fail(){if(++settled===SHOPPER_VARIANTS.length)resolve();}
+      loader.load('./models/'+filename,ok,undefined,function(){
+        loader.load('assets/models/'+filename,ok,undefined,fail);
+      });
+    });
+  });
   var artworkPromise=Promise.all([
     loadTexture('assets/posters/logo-fixed.webp',true),
     loadTexture('assets/posters/poster-mindbodysoul.webp',true),
     loadTexture('assets/posters/poster-goodvibes.webp',true),
     loadTexture('assets/posters/poster-est2026.webp',true)
   ]);
-  Promise.all([Promise.all(files.map(function(n){return promises[n];})),artworkPromise]).then(function(results){
+  Promise.all([Promise.all(files.map(function(n){return promises[n];})),artworkPromise,shopperLoadPromise]).then(function(results){
     var models=results[0],artwork=results[1],m={};files.forEach(function(n,i){m[n]=models[i];});
     applyLogoTexture(m.logo_sign,artwork[0]);
     var shell=addModel(m.room_shell,[0,0,0],0);shell.userData.topHidden=[];shell.traverse(function(o){if(o.name==='ceiling'||o.name.indexOf('panel_')===0)shell.userData.topHidden.push(o);});modelRoot.userData.shell=shell;

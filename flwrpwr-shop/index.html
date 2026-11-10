@@ -1784,15 +1784,71 @@
          it is unavailable: a merged-geometry person ported from the FLWRPWR room's
          createPerson, either way the capsule people are gone. */
       var shopperTemplate = null;
+      /* v2 variants: Blender-built shoppers with parted limbs (real hip/shoulder
+         pivots), built-in faces, and real hair cards. The old shopper.glb stays
+         as a fallback if no v2 variant loads. */
+      var shopperV2Templates = {};
+      var SHOPPER_V2_VARIANTS = ["long", "ponytail", "bun"];
       function loadShopperModel(){
         if (typeof THREE === "undefined" || !THREE.GLTFLoader) return;
+        var settled = 0, total = SHOPPER_V2_VARIANTS.length + 1;
+        function settle(){
+          if (++settled < total) return;
+          if (built && npcGroup) buildCrowd(currentShop);
+        }
+        SHOPPER_V2_VARIANTS.forEach(function(variant){
+          new THREE.GLTFLoader().load("./assets/shopper_" + variant + ".glb", function(gltf){
+            shopperV2Templates[variant] = gltf.scene;
+            settle();
+          }, undefined, function(err){
+            if (window.console) console.warn("shopper_" + variant + ".glb did not load", err);
+            settle();
+          });
+        });
         new THREE.GLTFLoader().load("./assets/shopper.glb", function(gltf){
           shopperTemplate = gltf.scene;
-          if (built && npcGroup) buildCrowd(currentShop);
-        }, undefined, function(err){ if (window.console) console.warn("shopper.glb did not load, procedural shoppers stay", err); });
+          settle();
+        }, undefined, function(err){ if (window.console) console.warn("shopper.glb did not load, procedural shoppers stay", err); settle(); });
       }
-      function makeModelShopper(outfit, skin, hairC){
-        var g = shopperTemplate.clone(true);
+      function makeModelShopper(outfit, skin, hairC, rnd){
+        /* prefer a v2 variant (parted limbs + built-in face + real hair cards);
+           fall back to the old shopper.glb (blank head, runtime face). */
+        var v2Keys = Object.keys(shopperV2Templates);
+        var g, isV2 = false;
+        if (v2Keys.length){
+          var pick = rnd ? rnd() : Math.random();
+          g = shopperV2Templates[v2Keys[Math.floor(pick * v2Keys.length)]].clone(true);
+          isV2 = true;
+        } else {
+          g = shopperTemplate.clone(true);
+        }
+        if (isV2){
+          g.traverse(function(m){
+            if (!m.isMesh) return;
+            m.userData.sharedGeo = true;
+            m.castShadow = true;
+            var mats = Array.isArray(m.material) ? m.material : [m.material];
+            var nm = mats.map(function(mat){
+              var c = null;
+              if (mat.name === "OutfitMat") c = outfit;
+              else if (mat.name === "SkinMat") c = skin;
+              else if (mat.name === "HairMat") c = hairC;
+              else if (mat.name === "LegsMat") c = 0x6E7B5E;
+              if (c === null) return mat;
+              var n2 = mat.clone(); n2.color.setHex(c); return n2;
+            });
+            m.material = Array.isArray(m.material) ? nm : nm[0];
+          });
+          /* real limb pivots — the walk animation swings arms AND legs */
+          var parts = {};
+          g.traverse(function(o){ if (o.name) parts[o.name] = o; });
+          if (parts.ArmR && parts.ArmL && parts.LegR && parts.LegL){
+            g.userData.arms = [parts.ArmR, parts.ArmL];
+            g.userData.legs = [parts.LegR, parts.LegL];
+          }
+          /* face, hair, daisy pin are built into the v2 model — no runtime face */
+          return g;
+        }
         g.traverse(function(m){
           if (!m.isMesh) return;
           m.userData.sharedGeo = true;
@@ -1913,8 +1969,8 @@
         var outfit = OUTFITS[Math.floor(rnd() * OUTFITS.length)];
         var skin = SKIN_TONES[Math.floor(rnd() * SKIN_TONES.length)];
         var hairC = HAIR_COLORS[Math.floor(rnd() * HAIR_COLORS.length)];
-        var g = shopperTemplate
-          ? makeModelShopper(outfit, skin, hairC)
+        var g = (shopperTemplate || Object.keys(shopperV2Templates).length)
+          ? makeModelShopper(outfit, skin, hairC, rnd)
           : makePersonMesh({ skin:skin, hair:hairC, top:outfit, bottom:0x6E7B5E, shoe:0x282128, accent:0xf2b84b, hat: rnd() < .3, hairStyle: Math.floor(rnd() * 5) });
         var tote = new THREE.Mesh(new THREE.BoxGeometry(.3, .34, .13), mat(0xf2b84b, .7));
         tote.position.set(.34, .8, .06); g.add(tote);
@@ -1954,6 +2010,10 @@
               g.userData.arms[0].rotation.x *= .9;
               g.userData.arms[1].rotation.x *= .9;
             }
+            if (g.userData.legs){
+              g.userData.legs[0].rotation.x *= .9;
+              g.userData.legs[1].rotation.x *= .9;
+            }
           } else {
             var dx = n.tx - g.position.x, dz = n.tz - g.position.z;
             var d = Math.sqrt(dx * dx + dz * dz);
@@ -1970,6 +2030,11 @@
                 var sw = Math.sin(n.bob) * .45;
                 g.userData.arms[0].rotation.x = sw;
                 g.userData.arms[1].rotation.x = -sw;
+              }
+              if (g.userData.legs){
+                var lsw = Math.sin(n.bob) * .5;
+                g.userData.legs[0].rotation.x = -lsw;
+                g.userData.legs[1].rotation.x = lsw;
               }
             }
           }
