@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>FLWRPWR Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root{ --cream:#FDF6EA; --olive:#556B3F; --olive-deep:#2E3B22; --rose:#F4728E; --ink:#2A3620; --sage:#A7B995; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Nunito",sans-serif; background:var(--olive-deep); color:var(--cream); min-height:100vh; }
+  .wrap{ max-width:680px; margin:0 auto; padding:40px 20px 80px; }
+  .brand{ font-family:"Shrikhand",cursive; font-size:2rem; color:var(--cream); margin:0; }
+  .brand span{ color:var(--rose); }
+  .sub{ color:#C9D6B4; font-weight:700; margin:6px 0 0; }
+  .card{ background:var(--cream); color:var(--ink); border-radius:18px; padding:26px 24px; margin-top:26px; box-shadow:0 18px 40px rgba(0,0,0,.35); }
+  .card h2{ margin:0 0 6px; font-size:1.25rem; font-weight:900; }
+  .card p{ margin:8px 0; font-weight:600; line-height:1.55; }
+  .muted{ color:#5A6B4C; font-size:.92rem; }
+  label{ display:block; font-weight:800; font-size:.85rem; letter-spacing:.04em; text-transform:uppercase; margin:18px 0 6px; }
+  input[type=email], input[type=password], textarea{ width:100%; font-family:inherit; font-size:1rem; font-weight:600; color:var(--ink); background:#fff; border:2px solid #D8DECB; border-radius:12px; padding:12px 14px; }
+  input:focus, textarea:focus{ outline:none; border-color:var(--olive); }
+  textarea{ min-height:84px; resize:vertical; line-height:1.5; }
+  .btn{ display:inline-block; border:0; cursor:pointer; font-family:inherit; font-weight:900; font-size:1rem; background:var(--rose); color:#fff; border-radius:999px; padding:13px 26px; margin-top:20px; }
+  .btn.ghost{ background:transparent; color:var(--olive); border:2px solid var(--olive); }
+  .btn.small{ padding:9px 18px; font-size:.9rem; margin-top:10px; }
+  .tabs{ display:flex; gap:10px; margin-top:4px; }
+  .tabs button{ flex:1; border:2px solid var(--olive); background:transparent; color:var(--olive); font-family:inherit; font-weight:900; font-size:.95rem; border-radius:999px; padding:11px; cursor:pointer; }
+  .tabs button.on{ background:var(--olive); color:var(--cream); }
+  .status{ margin-top:16px; font-weight:800; min-height:1.4em; }
+  .status.err{ color:#A33327; }
+  .status.ok{ color:var(--olive); }
+  .row{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  .who{ font-weight:800; }
+  .setup{ background:#FFF3D6; border:2px solid #E3B505; border-radius:14px; padding:16px; margin-top:18px; }
+  .setup pre{ white-space:pre-wrap; word-break:break-word; background:#2A3620; color:#E8EEDC; border-radius:10px; padding:14px; font-size:.78rem; line-height:1.5; overflow:auto; }
+  .admins{ margin:10px 0 0; padding-left:20px; font-weight:700; }
+  .hidden{ display:none !important; }
+  a{ color:var(--olive); font-weight:800; }
+  .foot{ margin-top:26px; text-align:center; color:#9DB48A; font-weight:700; font-size:.9rem; }
+  .foot a{ color:#C9D6B4; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="brand">FLWR<span>PWR</span> Admin</p>
+  <p class="sub">Site admin. This login is separate from the shop password.</p>
+
+  <!-- LOGIN / SIGN UP -->
+  <div class="card" id="authCard">
+    <h2>Admin sign in</h2>
+    <p class="muted">Only the four admin emails can get in. First time here? Use the Create account tab and set your own password.</p>
+    <div class="tabs">
+      <button type="button" id="tabLogin" class="on">Log in</button>
+      <button type="button" id="tabSignup">Create account</button>
+    </div>
+    <form id="authForm">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="you@flwrpwr.co" autocomplete="email" required />
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="At least 8 characters" autocomplete="current-password" minlength="8" required />
+      <button class="btn" type="submit" id="authSubmit">Log in</button>
+      <button class="btn ghost" type="button" id="forgotBtn">Forgot password?</button>
+      <div class="status" id="authStatus"></div>
+    </form>
+  </div>
+
+  <!-- EDITOR -->
+  <div class="card hidden" id="editorCard">
+    <div class="row">
+      <div>
+        <h2>Edit site text</h2>
+        <p class="muted" style="margin:0">Signed in as <span class="who" id="whoEmail"></span></p>
+      </div>
+      <button class="btn ghost small" type="button" id="signOutBtn">Sign out</button>
+    </div>
+    <p class="muted" id="connNote">Loading the live copy.</p>
+    <form id="editForm">
+      <label for="f-about">About FLWRPWR</label>
+      <textarea id="f-about" data-key="about"></textarea>
+      <label for="f-story-intro">Our story, first paragraph</label>
+      <textarea id="f-story-intro" data-key="story-intro"></textarea>
+      <label for="f-story-drop">Our story, first drop paragraph</label>
+      <textarea id="f-story-drop" data-key="story-drop"></textarea>
+      <label for="f-mission-quote">Mission quote</label>
+      <textarea id="f-mission-quote" data-key="mission-quote"></textarea>
+      <label for="f-mission-body">Mission, second paragraph</label>
+      <textarea id="f-mission-body" data-key="mission-body"></textarea>
+      <label for="f-gives-intro">Gives Back intro</label>
+      <textarea id="f-gives-intro" data-key="gives-intro"></textarea>
+      <button class="btn" type="submit">Save to the live site</button>
+      <button class="btn ghost" type="button" id="downloadBtn">Download my edits</button>
+      <div class="status" id="saveStatus"></div>
+    </form>
+
+    <div class="setup hidden" id="setupBox">
+      <b>One time setup needed before saving works.</b>
+      <p style="margin:8px 0">The text table does not exist yet in Supabase. Paste this once in the Supabase dashboard, SQL Editor, then Run. Saving will work right after.</p>
+      <pre id="setupSql"></pre>
+    </div>
+
+    <div style="margin-top:22px">
+      <b>Admins on this site</b>
+      <ul class="admins">
+        <li>alexa@flwrpwr.co</li>
+        <li>cass@flwrpwr.co</li>
+        <li>ash@flwrpwr.co</li>
+        <li>nathanltwong@gmail.com</li>
+      </ul>
+      <p class="muted">To add someone, ask Nathan. The list lives in this page.</p>
+      <p class="muted"><a href="./">Back to the shop</a></p>
+    </div>
+  </div>
+
+  <p class="foot">FLWRPWR Flower Co. Admin. 21+ only.</p>
+</div>
+
+<script>
+(function () {
+  var ADMINS = ["alexa@flwrpwr.co", "cass@flwrpwr.co", "ash@flwrpwr.co", "nathanltwong@gmail.com"];
+  var SB_URL = "https://dqcoincagejyowqxqqnz.supabase.co";
+  var SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxY29pbmNhZ2VqeW93cXhxcW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMzY4NTQsImV4cCI6MjEwNjcxMjg1NH0.dG7GwddKfuoq08DX_SgtluxWKAU-hyAjMZcAc320ysI";
+  var client = window.supabase.createClient(SB_URL, SB_ANON);
+
+  var DEFAULTS = {
+    "about": "FLWRPWR is a cannabis brand built on good vibes, great flower, and a deeper purpose: to connect people through high-quality, responsibly sourced flower and a community rooted in wellness.",
+    "story-intro": "FLWRPWR is a women-owned flower company with one rule: good vibes, great flower. We think buying flower should feel like walking into your favorite boutique — soft colors, pretty shelves, zero intimidation.",
+    "story-drop": "The first drop is our 4g Smalls: Thai Stick, Northern Lights and Maui Wowie, with three more strains still blooming. Follow along at @flwrpwr_co — launch day is getting close.",
+    "mission-quote": "Be present, feel better, grow together.",
+    "mission-body": "We celebrate flower, creativity, and community: a lifestyle that encourages mindfulness, connection, and positive energy in everyday life.",
+    "gives-intro": "A portion of our proceeds supports real impact, from tree planting initiatives to organizations that serve and empower survivors."
+  };
+
+  var SETUP_SQL = [
+    "create table if not exists public.flwrpwr_content (",
+    "  key text primary key,",
+    "  value text not null,",
+    "  updated_at timestamptz not null default now()",
+    ");",
+    "alter table public.flwrpwr_content enable row level security;",
+    "drop policy if exists \"flwrpwr_content_read\" on public.flwrpwr_content;",
+    "create policy \"flwrpwr_content_read\" on public.flwrpwr_content",
+    "  for select to anon, authenticated using (true);",
+    "drop policy if exists \"flwrpwr_content_write\" on public.flwrpwr_content;",
+    "create policy \"flwrpwr_content_write\" on public.flwrpwr_content",
+    "  for all to authenticated",
+    "  using ((auth.jwt() ->> 'email') in ('alexa@flwrpwr.co','cass@flwrpwr.co','ash@flwrpwr.co','nathanltwong@gmail.com'))",
+    "  with check ((auth.jwt() ->> 'email') in ('alexa@flwrpwr.co','cass@flwrpwr.co','ash@flwrpwr.co','nathanltwong@gmail.com'));"
+  ].join("\n");
+
+  var mode = "login";
+  var authStatus = document.getElementById("authStatus");
+  var saveStatus = document.getElementById("saveStatus");
+  var connNote = document.getElementById("connNote");
+
+  function setStatus(el, msg, ok) {
+    el.textContent = msg || "";
+    el.className = "status" + (msg ? (ok ? " ok" : " err") : "");
+  }
+  function field(key) { return document.querySelector('[data-key="' + key + '"]'); }
+  function readFields() {
+    var out = {};
+    Object.keys(DEFAULTS).forEach(function (k) { out[k] = field(k).value; });
+    return out;
+  }
+  function fillFields(values) {
+    Object.keys(DEFAULTS).forEach(function (k) {
+      field(k).value = (values && typeof values[k] === "string") ? values[k] : DEFAULTS[k];
+    });
+  }
+  function saveDraft() {
+    try { localStorage.setItem("flwrpwr-admin-draft", JSON.stringify(readFields())); } catch (e) {}
+  }
+  function loadDraft() {
+    try {
+      var raw = localStorage.getItem("flwrpwr-admin-draft");
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  document.getElementById("tabLogin").addEventListener("click", function () {
+    mode = "login";
+    this.classList.add("on");
+    document.getElementById("tabSignup").classList.remove("on");
+    document.getElementById("authSubmit").textContent = "Log in";
+    document.getElementById("password").autocomplete = "current-password";
+    setStatus(authStatus, "");
+  });
+  document.getElementById("tabSignup").addEventListener("click", function () {
+    mode = "signup";
+    this.classList.add("on");
+    document.getElementById("tabLogin").classList.remove("on");
+    document.getElementById("authSubmit").textContent = "Create account";
+    document.getElementById("password").autocomplete = "new-password";
+    setStatus(authStatus, "");
+  });
+
+  document.getElementById("authForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim().toLowerCase();
+    var password = document.getElementById("password").value;
+    setStatus(authStatus, "Checking.");
+    if (ADMINS.indexOf(email) === -1) {
+      setStatus(authStatus, "This email is not on the admin list. Ask Nathan to add you.");
+      return;
+    }
+    try {
+      var res;
+      if (mode === "signup") {
+        res = await client.auth.signUp({ email: email, password: password });
+        if (res.error) throw res.error;
+        if (!res.data.session) {
+          setStatus(authStatus, "Account created. Check your inbox for the confirmation link, then log in.", true);
+          return;
+        }
+      } else {
+        res = await client.auth.signInWithPassword({ email: email, password: password });
+        if (res.error) throw res.error;
+      }
+      await enter(res.data.user || (await client.auth.getUser()).data.user);
+    } catch (err) {
+      setStatus(authStatus, err && err.message ? err.message : "Something went wrong. Try again.");
+    }
+  });
+
+  document.getElementById("forgotBtn").addEventListener("click", async function () {
+    var email = document.getElementById("email").value.trim().toLowerCase();
+    if (!email) { setStatus(authStatus, "Type your email above first, then tap Forgot password."); return; }
+    setStatus(authStatus, "Sending reset email.");
+    var res = await client.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
+    if (res.error) setStatus(authStatus, res.error.message);
+    else setStatus(authStatus, "Reset email sent. Check your inbox.", true);
+  });
+
+  document.getElementById("signOutBtn").addEventListener("click", async function () {
+    await client.auth.signOut();
+    document.getElementById("editorCard").classList.add("hidden");
+    document.getElementById("authCard").classList.remove("hidden");
+    setStatus(authStatus, "Signed out.", true);
+  });
+
+  async function enter(user) {
+    if (!user || !user.email) {
+      setStatus(authStatus, "Could not confirm your login. Try again.");
+      return;
+    }
+    var email = user.email.toLowerCase();
+    if (ADMINS.indexOf(email) === -1) {
+      await client.auth.signOut();
+      setStatus(authStatus, "This email is not on the admin list. Ask Nathan to add you.");
+      return;
+    }
+    document.getElementById("whoEmail").textContent = email;
+    document.getElementById("authCard").classList.add("hidden");
+    document.getElementById("editorCard").classList.remove("hidden");
+    setStatus(authStatus, "");
+    await loadLive();
+  }
+
+  async function loadLive() {
+    connNote.textContent = "Loading the live copy.";
+    var res = await client.from("flwrpwr_content").select("key,value");
+    if (res.error) {
+      var draft = loadDraft();
+      fillFields(draft || null);
+      connNote.textContent = draft
+        ? "The live table is not set up yet. Showing your saved draft from this browser."
+        : "The live table is not set up yet. Showing the copy that is on the site now.";
+      document.getElementById("setupSql").textContent = SETUP_SQL;
+      document.getElementById("setupBox").classList.remove("hidden");
+      return;
+    }
+    var values = {};
+    (res.data || []).forEach(function (r) { values[r.key] = r.value; });
+    var draft2 = loadDraft();
+    if (draft2) {
+      Object.keys(values).forEach(function (k) { if (draft2[k] !== undefined) values[k] = draft2[k]; });
+    }
+    fillFields(values);
+    connNote.textContent = "Connected. Saving here updates the live site.";
+    document.getElementById("setupBox").classList.add("hidden");
+  }
+
+  document.getElementById("editForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var values = readFields();
+    saveDraft();
+    setStatus(saveStatus, "Saving.");
+    var rows = Object.keys(values).map(function (k) { return { key: k, value: values[k] }; });
+    var res = await client.from("flwrpwr_content").upsert(rows);
+    if (res.error) {
+      setStatus(saveStatus, "Could not save to the live site: " + res.error.message + " Your edits are saved in this browser as a draft, and you can download them below.");
+      document.getElementById("setupSql").textContent = SETUP_SQL;
+      document.getElementById("setupBox").classList.remove("hidden");
+      return;
+    }
+    try { localStorage.removeItem("flwrpwr-admin-draft"); } catch (e2) {}
+    setStatus(saveStatus, "Saved. The live site shows the new copy on the next visit.", true);
+  });
+
+  document.getElementById("downloadBtn").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify(readFields(), null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "flwrpwr-edits.json";
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  client.auth.getSession().then(function (s) {
+    if (s && s.data && s.data.session && s.data.session.user) enter(s.data.session.user);
+  });
+})();
+</script>
+</body>
+</html>

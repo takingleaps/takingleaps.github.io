@@ -731,7 +731,7 @@
           <div class="sec-head reveal">
             <span class="mini">About FLWRPWR</span>
             <h2>Good vibes, great flower, a deeper purpose</h2>
-            <p>FLWRPWR is a cannabis brand built on good vibes, great flower, and a deeper purpose: to connect people through high-quality, responsibly sourced flower and a community rooted in wellness.</p>
+            <p data-content="about">FLWRPWR is a cannabis brand built on good vibes, great flower, and a deeper purpose: to connect people through high-quality, responsibly sourced flower and a community rooted in wellness.</p>
           </div>
           <div class="about-badges reveal">
             <div class="about-badge"><span class="about-ico">✿</span><b>Premium Flower</b></div>
@@ -773,8 +773,8 @@
           <div class="reveal">
             <span class="mini">Our story</span>
             <h2>Grown by women, <span class="pink">wrapped like a gift</span></h2>
-            <p>FLWRPWR is a women-owned flower company with one rule: good vibes, great flower. We think buying flower should feel like walking into your favorite boutique — soft colors, pretty shelves, zero intimidation.</p>
-            <p>The first drop is our 4g Smalls: Thai Stick, Northern Lights and Maui Wowie, with three more strains still blooming. Follow along at <b>@flwrpwr_co</b> — launch day is getting close.</p>
+            <p data-content="story-intro">FLWRPWR is a women-owned flower company with one rule: good vibes, great flower. We think buying flower should feel like walking into your favorite boutique — soft colors, pretty shelves, zero intimidation.</p>
+            <p data-content="story-drop">The first drop is our 4g Smalls: Thai Stick, Northern Lights and Maui Wowie, with three more strains still blooming. Follow along at <b>@flwrpwr_co</b> — launch day is getting close.</p>
             <span class="hand-note">— picked, packed &amp; posted with love ✿</span><div style="margin-top:18px"><a class="btn" href="story.html">Read the full story →</a></div>
           </div>
           <div class="props reveal">
@@ -798,8 +798,8 @@
           <h2>People. Plants. Purpose.<br />A brighter tomorrow.</h2>
           <p class="lead">Rooted in wellness. Powered by women. Grown for community.</p>
           <p class="body">FLWRPWR is a women-owned flower company. Good vibes, great flower, and a shop that feels like walking into your favorite boutique.</p>
-          <p class="quote">Be present, feel better, grow together.</p>
-          <p class="body">We celebrate flower, creativity, and community: a lifestyle that encourages mindfulness, connection, and positive energy in everyday life.</p>
+          <p class="quote" data-content="mission-quote">Be present, feel better, grow together.</p>
+          <p class="body" data-content="mission-body">We celebrate flower, creativity, and community: a lifestyle that encourages mindfulness, connection, and positive energy in everyday life.</p>
         </div>
       </section>
 
@@ -809,7 +809,7 @@
           <div class="sec-head reveal">
             <span class="mini">FLWRPWR gives back</span>
             <h2>A portion of every purchase goes further</h2>
-            <p>A portion of our proceeds supports real impact, from tree planting initiatives to organizations that serve and empower survivors.</p>
+            <p data-content="gives-intro">A portion of our proceeds supports real impact, from tree planting initiatives to organizations that serve and empower survivors.</p>
           </div>
           <div class="gives-grid reveal">
             <div class="gives-card"><span class="gives-ico">🌳</span><b>Tree Planting</b><p>Planting trees for a greater tomorrow.</p></div>
@@ -917,6 +917,7 @@
               <a href="story.html">Our story</a>
               <a href="#visit">Enter the shop</a>
               <a href="feed.html">The feed</a>
+              <a href="admin.html">Site admin</a>
             </div>
           </div>
           <div>
@@ -1114,12 +1115,13 @@
           var foot = p.soon
             ? '<span class="price-note">still growing…</span>'
             : '<span class="price-note">pricing at launch</span>';
+          var imgSrc = shopState.format === "preroll" ? "img/box-"+p.id+".webp" : "img/pouch-"+p.id+".png";
           var size = shopState.format === "preroll" ? "FLWRPWR · 8 x 0.5g Prerolls" : "FLWRPWR · 4g Smalls";
           var alt = shopState.format === "preroll" ? p.name + " preroll pack" : p.name + " 4g Smalls pouch";
           return '<article class="card reveal'+(animate?" in":"")+(p.soon?" soon":"")+'">'
             + '<a class="card-art" href="'+p.id+'.html" style="background:linear-gradient(160deg,'+p.c1+','+p.c2+')" aria-label="'+p.name+' — its own page">'
             + (p.soon ? '<span class="badge">Blooming soon</span>' : '<span class="badge">First drop</span>')
-            + '<img class="card-pouch" src="img/pouch-'+p.id+'.png" alt="'+alt+'" loading="lazy" /></a>'
+            + '<img class="card-pouch" src="'+imgSrc+'" alt="'+alt+'" loading="lazy" /></a>'
             + '<div class="card-body"><h3><a href="'+p.id+'.html">'+p.name+'</a></h3>'
             + '<div class="card-meta">'+chips+'</div>'
             + '<p class="size">'+size+'</p>'
@@ -2298,5 +2300,6 @@
     })();
     </script>
       <script src="gate.js"></script>
+      <script src="content.js"></script>
   </body>
 </html>
