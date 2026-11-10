@@ -63,7 +63,8 @@
   var h1 = document.querySelector(".hero h1");
   var letters = [];
   if (h1){
-    h1.setAttribute("aria-label", h1.textContent.replace(/\s+/g, " ").trim());
+    var h1Text = h1.textContent.replace(/\s+/g, " ").trim();
+    if (h1Text) h1.setAttribute("aria-label", h1Text);  /* keep an explicit aria-label (logo img) intact */
     (function split(node){
       Array.prototype.slice.call(node.childNodes).forEach(function(n){
         if (n.nodeType === 3){
@@ -97,6 +98,15 @@
   var GAPS = [0, 55, 150, 185, 300, 330, 430];
   var DUR = [820, 980, 760, 1040, 900, 1100, 860];
   function settle(){
+    /* the hero logo settles once, like the letters used to */
+    var logoImg = document.querySelector(".hero-logo img");
+    if (logoImg && logoImg.animate){
+      logoImg.animate([
+        { opacity: "0", translate: "0 -14px", scale: ".96" },
+        { opacity: "1", translate: "0 .04em", scale: "1.01", offset: .62 },
+        { opacity: "1", translate: "0 0", scale: "1" }
+      ], { duration: 950, delay: 120, easing: "cubic-bezier(.3,.7,.3,1)", fill: "backwards" });
+    }
     letters.forEach(function(s, i){
       if (!s.animate) return;
       var lift = (small ? .1 : .2) * (i % 2 ? 1 : .8);
