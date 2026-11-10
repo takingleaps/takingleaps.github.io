@@ -2392,5 +2392,13 @@
     </script>
       <script src="gate.js"></script>
       <script src="content.js"></script>
+    <script>
+    /* preload the preroll box renders after first paint, so the first Flower/Prerolls flip is instant */
+    window.addEventListener("load", function(){
+      ["thai-stick","northern-lights","maui-wowie","acapulco-gold","trainwreck","afghani"].forEach(function(id){
+        var im = new Image(); im.src = "img/box-" + id + ".webp";
+      });
+    });
+    </script>
   </body>
 </html>
