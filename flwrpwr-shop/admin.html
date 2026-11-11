@@ -111,7 +111,8 @@
         <li>nathanltwong@gmail.com</li>
       </ul>
       <p class="muted">To add someone, ask Nathan. The list lives in this page.</p>
-      <p class="muted"><a href="./?preview">Preview the shop</a> (admin only, opens the shop past the Coming Soon page) &middot; <a href="./">Back to the shop</a></p>
+      <p class="muted" id="previewRow"><a href="./">Preview the shop</a> (only you can see the shop for now)</p>
+      <p class="muted"><a href="./?coming-soon">Back to the shop</a></p>
     </div>
   </div>
 
@@ -256,6 +257,8 @@
     document.getElementById("whoEmail").textContent = email;
     document.getElementById("authCard").classList.add("hidden");
     document.getElementById("editorCard").classList.remove("hidden");
+    var pr = document.getElementById("previewRow");
+    if (pr) pr.classList.toggle("hidden", email !== "nathanltwong@gmail.com");
     setStatus(authStatus, "");
     await loadLive();
   }

@@ -1,10 +1,12 @@
-/* FLWRPWR coming soon screen. Hard gate (Nov 10):
+/* FLWRPWR coming soon screen. Hard gate (Nov 10, Nathan-only Nov 10):
    no password, no preview. The public face is a dynamic Coming Soon page
    (drifting daisy field, floating daisies, sparkles, big logo, Notify Me).
    There is NO public way past it: no Preview link, no dismiss. Visitors
    cannot reach the shop behind the overlay.
-   Team only: add ?preview to the URL to see the shop (not linked anywhere).
-   Add ?coming-soon to the URL to force the Coming Soon screen back.
+   Nathan only: the shop opens only in a browser signed in to admin.html
+   as nathanltwong@gmail.com. The old ?preview URL bypass is gone.
+   Add ?coming-soon to the URL to force the Coming Soon screen back
+   (even for Nathan).
    The Notify Me email is saved on-device (localStorage, the same
    client-side approach as the shop basket). There is no backend here;
    the list lives on the visitor's device until the team wires it up.
@@ -25,12 +27,29 @@
     if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
   }
 
-  /* hard gate: the Coming Soon screen always shows. Team bypass is ?preview
-     (not linked anywhere). Clear any old remembered preview so past
+  /* Nathan only: the shop opens only when this browser holds a Supabase
+     session for nathanltwong@gmail.com (set by signing in on admin.html).
+     We read the stored session directly so the check is instant and needs
+     no extra script. Anyone else, even with the old ?preview link, gets
+     the Coming Soon screen. */
+  function nathanSignedIn(){
+    try {
+      for (var i = 0; i < localStorage.length; i++){
+        var k = localStorage.key(i);
+        if (!/^sb-.*-auth-token$/.test(k)) continue;
+        var s = JSON.parse(localStorage.getItem(k) || "null");
+        if (s && s.user && s.user.email === "nathanltwong@gmail.com" && s.access_token) return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  /* hard gate: the Coming Soon screen always shows, unless this browser is
+     signed in as Nathan. Clear any old remembered preview so past
      visitors get the gate back. */
-  var teamPreview = /[?&]preview\b/.test(location.search);
   try { localStorage.removeItem("flwrpwr-preview"); } catch (e) {}
-  if (teamPreview){ removeOverlay(); return; }
+  var forceSoon = /[?&]coming-soon\b/.test(location.search);
+  if (!forceSoon && nathanSignedIn()){ removeOverlay(); return; }
 
   /* fill any daisy SVGs in the overlay that the page's own filler missed */
   function daisySVG(petal){
