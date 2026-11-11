@@ -246,3 +246,53 @@
 
   window.FLWR = { addToCart:addToCart, openDrawer:openDrawer, closeDrawer:closeDrawer, toast:toast, byId:byId, PRODUCTS:PRODUCTS, pouchSVG:pouchSVG, daisySVG:daisySVG };
 })();
+
+/* ---- mockup theme: theme toggle + hamburger in the header (Nov 11) ---- */
+(function(){
+  var nav = document.querySelector("header.site .nav");
+  if(!nav) return;
+  /* theme: saved choice wins, else the system setting */
+  try{
+    var saved = localStorage.getItem("flwrpwr-theme");
+    var t = saved || ((window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", t);
+  }catch(e){}
+  var themeBtn = document.createElement("button");
+  themeBtn.className = "theme-btn"; themeBtn.type = "button"; themeBtn.id = "themeBtn";
+  function paintThemeBtn(){
+    var t = document.documentElement.getAttribute("data-theme") || "light";
+    themeBtn.textContent = t === "dark" ? "☀" : "☾";
+    themeBtn.setAttribute("aria-label", t === "dark" ? "Switch to light mode" : "Switch to dark mode");
+  }
+  paintThemeBtn();
+  themeBtn.addEventListener("click", function(){
+    var next = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try{ localStorage.setItem("flwrpwr-theme", next); }catch(e){}
+    paintThemeBtn();
+  });
+  var cartBtn = nav.querySelector(".cart-btn");
+  if(cartBtn && cartBtn.parentNode){ cartBtn.parentNode.insertBefore(themeBtn, cartBtn); }
+  else { nav.appendChild(themeBtn); }
+  /* hamburger + mobile menu (phones only; CSS hides it on desktop) */
+  var menuBtn = document.createElement("button");
+  menuBtn.className = "menu-btn"; menuBtn.type = "button"; menuBtn.id = "menuBtn";
+  menuBtn.setAttribute("aria-label", "Open menu"); menuBtn.setAttribute("aria-expanded", "false");
+  menuBtn.textContent = "☰";
+  nav.insertBefore(menuBtn, nav.firstChild);
+  var header = nav.closest("header.site");
+  var mobileMenu = document.createElement("div");
+  mobileMenu.className = "mobile-menu"; mobileMenu.id = "mobileMenu"; mobileMenu.hidden = true;
+  mobileMenu.innerHTML = '<a href="shop.html">Shop</a><a href="story.html">Our Story</a><a href="feed.html">The Feed</a><a href="index.html#visit">Visit</a><a href="index.html#events">Events</a><a href="index.html#find-us">Find us</a>';
+  header.appendChild(mobileMenu);
+  menuBtn.addEventListener("click", function(){
+    var open = mobileMenu.classList.toggle("open");
+    mobileMenu.hidden = !open;
+    menuBtn.setAttribute("aria-expanded", String(open));
+    menuBtn.textContent = open ? "✕" : "☰";
+  });
+  mobileMenu.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", function(){
+    mobileMenu.classList.remove("open"); mobileMenu.hidden = true;
+    menuBtn.setAttribute("aria-expanded", "false"); menuBtn.textContent = "☰";
+  }); });
+})();

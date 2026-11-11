@@ -367,3 +367,275 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
   .flwr-tabbar a:active, .flwr-tabbar a:focus-visible{ color:var(--rose-ink); }
   .toast{ bottom:calc(86px + env(safe-area-inset-bottom, 0px)); }
 }
+
+/* ============ FLWRPWR mockup theme (Nov 11) — see index.html fm-mockup ============ */
+/* ============ FLWRPWR mockup theme (Nov 11): match the client ChatGPT mockup ============
+   Layered on top of the base design system. Same class names, later in the
+   stylesheet, so these win. Brand palette only: cream, olive, sage, dusty
+   pink, soft lavender, sky blue, pink #F45078, daisy #F2A22F, ink #2A3620. */
+
+/* ---- dark / light mode: [data-theme="dark"] on <html> ---- */
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --cream:#20291A; --paper:#2A3620; --bg:#20291A;
+  --ink:#FDF6EA; --ink-soft:#C9D6BD;
+  --olive:#A7B995; --olive-deep:#141A0E;
+  --line:#3C4D2C; --edge:#556B3F;
+  --cream-2:#2A3620; --sage-soft:#2A3620;
+  --rose-soft:#3A2A2E; --sky-soft:#22303A; --lav-soft:#2E2A3A;
+  --soft-shadow:0 12px 30px rgba(0,0,0,.45);
+  --card-shadow:0 12px 30px rgba(0,0,0,.45);
+  --rose-ink:#F4728E; --sky-ink:#7CC3F6; --lav-ink:#B9A7E7;
+  --rose:#F4728E;
+}
+html[data-theme="dark"] .toggle-btn.active,
+html[data-theme="dark"] .btn-gold,
+html[data-theme="dark"] .shop-toggle .toggle-btn.active{ background:#556B3F; border-color:#556B3F; color:#FDF6EA; }
+html[data-theme="dark"] .hero{
+  background:
+    linear-gradient(rgba(32,41,26,.86), rgba(32,41,26,.6) 45%, rgba(32,41,26,.88)),
+    url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
+}
+html[data-theme="dark"] .fm-on .hero{ background:none; }
+html[data-theme="dark"] .fm-bg{
+  background:
+    linear-gradient(rgba(32,41,26,.86), rgba(32,41,26,.6) 45%, rgba(32,41,26,.88)),
+    url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
+}
+html[data-theme="dark"] .enter-banner{ background:var(--olive-deep); }
+html[data-theme="dark"] .enter-banner p{ color:#C9D6BD; }
+html[data-theme="dark"] footer.site{ background:#141A0E; }
+html[data-theme="dark"] .announce{ background:#141A0E; }
+html[data-theme="dark"] .ticker{ background:#3C4D2C; }
+html[data-theme="dark"] .flwr-tabbar{ background:#2A3620; border-top-color:#3C4D2C; }
+html[data-theme="dark"] .drawer{ background:#2A3620; border-left-color:#3C4D2C; }
+html[data-theme="dark"] .toast{ background:#141A0E; }
+html[data-theme="dark"] .grain{ opacity:.03; }
+/* the Coming Soon gate follows the theme too */
+html[data-theme="dark"] .flwr-soon{ background:#20291A; }
+html[data-theme="dark"] .flwr-soon-bg{
+  background:linear-gradient(rgba(32,41,26,.88), rgba(32,41,26,.62) 45%, rgba(32,41,26,.9)), url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
+}
+html[data-theme="dark"] .flwr-soon-title{ color:#A7B995; }
+html[data-theme="dark"] .flwr-soon-sub{ color:#C9D6BD; }
+html[data-theme="dark"] .flwr-soon-form input{ background:#2A3620; border-color:#3C4D2C; color:#FDF6EA; }
+html[data-theme="dark"] .flwr-soon-count div{ background:#2A3620; border-color:#3C4D2C; }
+html[data-theme="dark"] .flwr-soon-fine, html[data-theme="dark"] .flwr-soon-cd-note{ color:#8A9A7E; }
+html[data-theme="dark"] .flwr-soon-done{ color:#A7B995; }
+
+/* ---- section headers: pink Shrikhand, daisies on both sides, uppercase ---- */
+.sec-head h2, .mission h2, .story h2{
+  color:var(--rose-ink);
+  text-transform:uppercase;
+  letter-spacing:.02em;
+}
+.sec-head h2::before, .mission h2::before, .story h2::before{ content:"✿ "; color:var(--rose); }
+.sec-head h2::after, .mission h2::after, .story h2::after{ content:" ✿"; color:var(--rose); }
+.sec-head .mini, .mission .mini, .story .mini{ color:var(--rose-ink); }
+/* the hero keeps its own look; the vibe/shop headings get the mockup treatment */
+#shop .sec-head h2, #best-sellers .sec-head h2{ font-size:clamp(2rem,5vw,3.2rem); }
+
+/* ---- wavy rainbow divider (mockup: pink / yellow / green waves) ---- */
+.wave{ height:34px; overflow:hidden; line-height:0; background:var(--bg); }
+.wave svg{ width:100%; height:34px; display:block; }
+.wave svg path{ fill:none; stroke-width:5; stroke-linecap:round; }
+
+/* ---- daisy field strip (mockup top/bottom flower border) ---- */
+.daisy-strip{
+  height:110px;
+  background:url("img/hero-daisy-field.webp") center 42%/cover no-repeat;
+  border-block:2px solid var(--line);
+}
+@media (max-width:640px){ .daisy-strip{ height:84px; } }
+
+/* ---- header: mockup layout (hamburger, centered logo, icons) ---- */
+header.site{ background:var(--paper); }
+.nav{ display:flex; align-items:center; gap:10px; max-width:1180px; margin:0 auto; padding:10px 20px; }
+.menu-btn{
+  display:none; flex:none; width:44px; height:44px; border-radius:50%;
+  border:1.5px solid var(--edge); background:var(--paper); color:var(--ink);
+  font-size:1.25rem; font-weight:900; align-items:center; justify-content:center;
+}
+.nav-links{ display:flex; gap:22px; font-weight:800; font-size:.86rem; letter-spacing:.08em; text-transform:uppercase; }
+.nav-links a{ text-decoration:none; padding:10px 2px; border-bottom:3px solid transparent; min-height:44px; display:inline-flex; align-items:center; }
+.nav-links a:hover{ border-bottom-color:var(--rose); }
+.nav-links.left{ flex:1; }
+.nav-links.right{ flex:1; justify-content:flex-end; align-items:center; gap:8px; }
+.logo-img-link{ flex:none; display:flex; align-items:center; justify-content:center; padding:2px 4px; min-height:44px; text-decoration:none; }
+.logo-img-link .logo-img{ height:52px; width:auto; }
+.theme-btn{
+  flex:none; width:44px; height:44px; border-radius:50%;
+  border:1.5px solid var(--edge); background:var(--paper); color:var(--ink);
+  font-size:1.15rem; font-weight:900; display:inline-flex; align-items:center; justify-content:center;
+}
+.theme-btn:hover{ border-color:var(--rose); }
+.search-btn{
+  flex:none; width:44px; height:44px; border-radius:50%;
+  border:1.5px solid var(--edge); background:var(--paper); color:var(--ink);
+  font-size:1.05rem; font-weight:900; display:inline-flex; align-items:center; justify-content:center;
+}
+.search-btn:hover{ border-color:var(--rose); }
+.header-search{ display:none; border-top:1.5px solid var(--line); background:var(--paper); padding:12px 20px; }
+.header-search.open{ display:block; }
+.header-search input{
+  width:100%; max-width:560px; margin:0 auto; display:block; min-height:48px;
+  border-radius:999px; border:1.5px solid var(--edge); background:var(--bg); color:var(--ink);
+  padding:12px 20px; font:inherit; font-weight:700;
+}
+.header-search input:focus{ outline:3px solid var(--rose); outline-offset:1px; border-color:transparent; }
+.mobile-menu{ display:none; border-top:1.5px solid var(--line); background:var(--paper); padding:8px 20px 14px; }
+.mobile-menu.open{ display:block; }
+.mobile-menu a{
+  display:flex; align-items:center; min-height:48px; font-weight:900; font-size:1rem;
+  letter-spacing:.06em; text-transform:uppercase; text-decoration:none; color:var(--ink);
+  border-bottom:1.5px solid var(--line); padding:10px 2px;
+}
+.mobile-menu a:last-child{ border-bottom:none; }
+@media (max-width:760px){
+  .menu-btn{ display:inline-flex; }
+  .nav-links.left{ display:none; }
+  .nav-links.right a{ display:none; }
+  .logo-img-link .logo-img{ height:46px; }
+  .nav{ padding:8px 14px; }
+}
+@media (min-width:761px){
+  .mobile-menu{ display:none !important; }
+}
+
+/* ---- hero: tighter, logo-forward, mockup badges ---- */
+.hero-inner{ padding:64px 20px 56px; }
+.hero-logo img{ width:min(560px, 92%); }
+.hero .hero-sub{ font-size:.95rem; letter-spacing:.3em; }
+.hero-badges span{
+  border:1.5px solid var(--rose); background:var(--paper); color:var(--ink);
+  font-weight:900;
+}
+.hero-badges span:nth-child(3n){ border-color:var(--olive); }
+.hero-badges span:nth-child(3n+2){ border-color:var(--sky); }
+
+/* ---- vibe banners: photo cards like the mockup ---- */
+.vibe-banner{ min-height:220px; border-width:2px; }
+.vibe-banner b{ font-size:2rem; color:#fff; text-shadow:0 2px 10px rgba(42,54,32,.55); position:relative; z-index:1; }
+.vibe-banner small{ color:#fff; text-shadow:0 1px 8px rgba(42,54,32,.6); position:relative; z-index:1; font-weight:800; }
+.vibe-banner .vibe-arrow{ z-index:2; }
+.vibe-banner.v-sativa{
+  background:linear-gradient(180deg, rgba(42,54,32,.08) 0%, rgba(42,54,32,.55) 100%), url("img/bud-maui-wowie.webp") center 35%/cover no-repeat;
+}
+.vibe-banner.v-hybrid{
+  background:linear-gradient(180deg, rgba(42,54,32,.08) 0%, rgba(42,54,32,.55) 100%), url("img/bud-thai-stick.webp") center 35%/cover no-repeat;
+}
+.vibe-banner.v-indica{
+  background:linear-gradient(180deg, rgba(42,54,32,.08) 0%, rgba(42,54,32,.55) 100%), url("img/bud-northern-lights.webp") center 35%/cover no-repeat;
+}
+.vibe-banner.active{ outline:3px solid var(--rose); outline-offset:3px; }
+
+/* ---- product cards: mockup arch + full-width pink button, no price line ---- */
+.card{ border-width:2px; border-radius:30px; }
+.card-art{ border-radius:220px 220px 20px 20px; }
+.card-body h3{ color:var(--rose-ink); }
+.card-foot{ flex-direction:column; align-items:stretch; gap:10px; }
+.card-foot .price-note{ text-align:center; }
+.card-foot .add-btn{ width:100%; justify-content:center; }
+.chip.type{ background:var(--rose); border-color:var(--rose); color:#fff; }
+.card.soon .chip.type{ background:var(--lav); border-color:var(--lav); color:var(--ink); }
+
+/* ---- best sellers: horizontal carousel on phones, like the mockup ---- */
+@media (max-width:760px){
+  #best-sellers .grid{
+    display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory;
+    padding-bottom:10px; -webkit-overflow-scrolling:touch;
+  }
+  #best-sellers .grid .card{ flex:0 0 78%; scroll-snap-align:start; }
+}
+.best-art{ height:280px; }
+
+/* ---- about badges: green circle icons, mockup style ---- */
+.about-badge{ border-width:2px; border-radius:26px; }
+.about-badge .about-ico{ background:var(--sage); border-color:var(--olive); color:#fff; }
+.about-badge:nth-child(2) .about-ico{ background:var(--sky); }
+.about-badge:nth-child(3) .about-ico{ background:var(--rose); }
+.about-badge:nth-child(4) .about-ico{ background:var(--lav); }
+
+/* ---- gives back cards ---- */
+.gives-card{ border-width:2px; border-radius:28px; }
+.gives-card .gives-ico{ background:var(--rose-soft); }
+
+/* ---- find us: mockup header + honest not-listed note ---- */
+.find-us .sec-head h2{ color:var(--rose-ink); }
+.weedmaps-word{
+  font-family:"Nunito",sans-serif; font-weight:900; font-size:clamp(2.2rem,7vw,3.4rem);
+  color:#00857A; letter-spacing:-.02em; line-height:1; display:block; margin-top:6px;
+}
+html[data-theme="dark"] .weedmaps-word{ color:#2EC4B6; }
+.weedmaps-card{ border-width:2px; border-radius:30px; }
+.weedmaps-card .btn{ width:100%; justify-content:center; }
+.weedmaps-coming{ background:var(--rose-soft); border-style:solid; }
+
+/* ---- events: image-top card like the mockup ---- */
+.event-card{ flex-direction:column; align-items:stretch; padding:0; overflow:hidden; text-align:center; }
+.event-card .event-img{
+  height:190px;
+  background:url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
+  border-bottom:2px solid var(--line); position:relative;
+  display:flex; align-items:flex-end; justify-content:center; padding-bottom:14px;
+}
+.event-card .event-img::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(42,54,32,0) 40%, rgba(42,54,32,.45));
+}
+.event-card .event-img span{
+  position:relative; z-index:1; color:#fff; font-family:"Shrikhand",cursive;
+  font-size:1.5rem; text-shadow:0 2px 10px rgba(42,54,32,.6);
+}
+.event-card .event-body{ padding:22px 24px 26px; }
+.event-card .event-body p{ margin:8px auto 14px; max-width:44ch; }
+.event-date{ margin:0 auto; }
+@media (max-width:560px){ .event-card{ flex-direction:column; text-align:center; } }
+
+/* ---- join + gallery ---- */
+.join .sec-head h2{ color:var(--rose-ink); }
+.tile{ border-width:2px; }
+
+/* ---- footer: mockup accordion + socials ---- */
+footer.site{ background:var(--olive-deep); }
+.foot-logo{ display:block; margin:0 auto; width:min(280px, 70%); height:auto; }
+.foot-tag{ text-align:center; font-weight:900; letter-spacing:.3em; text-transform:uppercase; font-size:.8rem; color:#C9D6BD; margin-top:10px; }
+.foot-acc{ border-bottom:1.5px solid rgba(253,246,234,.22); }
+.foot-acc summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+  min-height:52px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; font-size:.95rem;
+  color:var(--cream); padding:6px 2px;
+}
+.foot-acc summary::-webkit-details-marker{ display:none; }
+.foot-acc summary .acc-plus{ font-size:1.3rem; font-weight:900; color:var(--rose); transition:transform .2s ease; }
+.foot-acc[open ] summary .acc-plus{ transform:rotate(45deg); }
+.foot-acc-links{ display:grid; gap:2px; padding:2px 2px 14px; }
+.foot-acc-links a{ text-decoration:none; color:#E8EEDC; font-weight:700; padding:9px 0; min-height:44px; display:flex; align-items:center; }
+.foot-acc-links a:hover{ color:var(--rose); }
+.foot-social{ display:flex; gap:14px; justify-content:center; margin-top:26px; }
+.foot-social a{
+  width:48px; height:48px; border-radius:50%; border:1.5px solid rgba(253,246,234,.4);
+  display:inline-flex; align-items:center; justify-content:center; color:var(--cream);
+  text-decoration:none;
+}
+.foot-social a:hover{ border-color:var(--rose); color:var(--rose); }
+.foot-social svg{ width:22px; height:22px; display:block; }
+.foot-base{ text-align:center; justify-content:center; }
+.age-badge{
+  display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px;
+  border:2px solid var(--cream); border-radius:8px; font-weight:900; font-size:.8rem; color:var(--cream);
+}
+
+/* ---- buttons: pink pills, mockup weight ---- */
+.btn-pink, .add-btn, .checkout-btn{ box-shadow:0 8px 20px rgba(244,114,142,.38); }
+.shop-btn{ background:var(--rose); color:#fff; border-color:var(--rose); }
+.cart-btn{ background:var(--rose); border-color:var(--rose); color:#fff; }
+.cart-count{ background:var(--olive-deep); color:var(--cream); }
+html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
+
+/* ---- ticker: pink like the mockup dividers ---- */
+.ticker{ background:var(--rose); }
+.ticker.green{ background:var(--olive); }
+
+/* ---- tab bar follows theme ---- */
+.flwr-tabbar a[aria-current="page"]{ color:var(--rose-ink); }
