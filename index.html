@@ -1341,12 +1341,15 @@
       animation: cursor-blink 1.06s steps(1) infinite;
     }
     @keyframes cursor-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
-    /* Nothing in the hero is hidden any more. Before typing starts the command
-       line and headline sit in dim ink, then type bright over themselves,
-       so the layout never moves and the copy + buttons are there from frame 1. */
-    html.js-typing .command-line:not(.t-done),
-    html.js-typing #hero-title:not(.t-done) { color: var(--dim); }
-    .t-off { color: var(--dim); }
+    /* Nothing shows before it types. Each line stays invisible until its
+       typing starts, and the untyped remainder stays invisible too, so
+       text only ever appears as it types. visibility (not display) keeps
+       the layout fixed, so nothing jumps. The 8s head-script timeout is
+       the safety net: if typing never runs, js-typing lifts and the
+       lines show as authored. */
+    html.js-typing .command-line:not(.t-started),
+    html.js-typing #hero-title:not(.t-started) { visibility: hidden; }
+    .t-off { visibility: hidden; }
     #hero-title .t-on { color: var(--headline); }
     .command-line .t-on { color: var(--accent); }
     .t-caret { position: relative; display: inline-block; width: 0; }
@@ -2367,9 +2370,10 @@
         rootEl.classList.add('js-typing');
         /* Safety: never leave the hero half typed, whatever else fails. */
         window.setTimeout(finish, 8000);
-        /* The full line is always on screen: typed part bright, the rest dim,
-           cursor between them. Same text, same wrapping, no layout shift. */
+        /* Only the typed part shows; the rest stays invisible (same
+           wrapping, no layout shift), cursor between them. */
         function typeInto(el, text, rate, keepCursor, done) {
+          el.classList.add('t-started');
           el.textContent = '';
           var on = document.createElement('span');
           var caret = document.createElement('span');
