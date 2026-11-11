@@ -330,6 +330,9 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .flwr-soon-preview{ display:inline-block; margin-top:26px; font-size:.82rem; font-weight:800; letter-spacing:.06em; color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
 .flwr-soon-preview:hover{ color:#556B3F; }
 .flwr-soon-fine{ font-size:.78rem; color:#8A9A7E; margin:14px 0 0; }
+.flwr-soon-admin{ font-size:.78rem; margin:10px 0 0; }
+.flwr-soon-admin a{ color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
+.flwr-soon-admin a:hover{ color:#556B3F; }
 .flwr-soon-count{ display:flex; gap:10px; margin-top:22px; }
 .flwr-soon-count div{ background:#FFFDF7; border:1.5px solid #E3D9C6; border-radius:16px; padding:8px 12px 6px; min-width:66px; box-shadow:0 8px 20px rgba(85,107,63,.12); }
 .flwr-soon-count b{ display:block; font-family:"Shrikhand",cursive; font-weight:400; font-size:1.5rem; line-height:1; color:#F45078; font-variant-numeric:tabular-nums; }
