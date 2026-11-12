@@ -330,6 +330,10 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .flwr-soon-preview{ display:inline-block; margin-top:26px; font-size:.82rem; font-weight:800; letter-spacing:.06em; color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
 .flwr-soon-preview:hover{ color:#556B3F; }
 .flwr-soon-fine{ font-size:.78rem; color:#8A9A7E; margin:14px 0 0; }
+.flwr-soon-ig{ margin:18px 0 0; }
+.flwr-soon-ig a{ display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:999px; background:#FFFDF7; border:1.5px solid #E3D9C6; color:#F45078; font-weight:900; font-size:.9rem; text-decoration:none; box-shadow:0 8px 20px rgba(85,107,63,.12); }
+.flwr-soon-ig a:hover{ border-color:#F4728E; background:#FDF6EA; }
+.flwr-soon-ig svg{ width:18px; height:18px; display:block; }
 .flwr-soon-admin{ font-size:.78rem; margin:10px 0 0; }
 .flwr-soon-admin a{ color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
 .flwr-soon-admin a:hover{ color:#556B3F; }
@@ -421,6 +425,8 @@ html[data-theme="dark"] .flwr-soon-sub{ color:#C9D6BD; }
 html[data-theme="dark"] .flwr-soon-form input{ background:#2A3620; border-color:#3C4D2C; color:#FDF6EA; }
 html[data-theme="dark"] .flwr-soon-count div{ background:#2A3620; border-color:#3C4D2C; }
 html[data-theme="dark"] .flwr-soon-fine, html[data-theme="dark"] .flwr-soon-cd-note{ color:#8A9A7E; }
+html[data-theme="dark"] .flwr-soon-ig a{ background:#2A3620; border-color:#3C4D2C; color:#F4728E; }
+html[data-theme="dark"] .flwr-soon-ig a:hover{ border-color:#F4728E; background:#33402A; }
 html[data-theme="dark"] .flwr-soon-done{ color:#A7B995; }
 
 /* ---- section headers: pink Shrikhand, daisies on both sides, uppercase ---- */
