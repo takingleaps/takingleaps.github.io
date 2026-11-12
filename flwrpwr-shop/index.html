@@ -891,6 +891,43 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
       @keyframes fmSpin{ to{ rotate:360deg; } }
       @media (max-width:760px){ .fm-front .fd3, .fm-mid .fs4{ display:none; } .fm-front .fd1{ top:22% !important; left:5% !important; } .fm-front svg{ width:calc(var(--s,56px) * .7); height:calc(var(--s,56px) * .7); } }
 
+      /* falling daisy petals across the hero (front layer, pointer-events none) */
+      .fm-petals{ inset:0; z-index:4; overflow:hidden; }
+      .fm-petals i{ position:absolute; top:-8%; font-style:normal; color:#fff; font-size:var(--s,18px); line-height:1; opacity:0; text-shadow:0 2px 8px rgba(85,107,63,.35); animation:fmPetalFall var(--d,15s) linear var(--o,0s) infinite; will-change:top,transform,opacity; }
+      .fm-petals i.pk{ color:var(--rose); }
+      @keyframes fmPetalFall{
+        0%{ top:-8%; transform:translateX(0) rotate(0deg); opacity:0; }
+        6%{ opacity:.9; }
+        50%{ transform:translateX(var(--sw,26px)) rotate(180deg); }
+        94%{ opacity:.9; }
+        100%{ top:106%; transform:translateX(calc(var(--sw,26px) * -1)) rotate(340deg); opacity:0; }
+      }
+      @media (max-width:760px){ .fm-petals i:nth-child(n+6){ display:none; } }
+      /* mouse parallax: the hero content leans toward the pointer (desktop only, set by motion.js) */
+      .fm-on .hero-inner{ transform:translate3d(calc(var(--mx,0)*10px), calc(var(--my,0)*8px), 0); transition:transform .8s cubic-bezier(.2,.8,.3,1); }
+      /* logo shine: a gentle periodic brightening on top of the breathe */
+      .fm-on .hero-logo img{ animation:logoShine 7s ease-in-out 2.5s infinite; }
+      @keyframes logoShine{ 0%,60%,100%{ filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)) brightness(1); } 72%{ filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)) brightness(1.15) saturate(1.08); } }
+
+      /* "Enter the shop" is not available in the current plan: visible but greyed out, tooltip on hover/focus */
+      .shop-btn-wrap{ position:relative; display:inline-block; }
+      .shop-btn-wrap .shop-unavail{ opacity:.55; filter:saturate(.35); cursor:not-allowed; box-shadow:none; }
+      .shop-tip{ position:absolute; left:50%; bottom:calc(100% + 10px); transform:translateX(-50%) translateY(4px); background:#2A3620; color:#FDF6EA; font-weight:800; font-size:.82rem; white-space:nowrap; padding:8px 14px; border-radius:999px; box-shadow:0 8px 20px rgba(42,54,32,.3); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:5; }
+      .shop-tip::after{ content:""; position:absolute; left:50%; top:100%; transform:translateX(-50%); border:6px solid transparent; border-top-color:#2A3620; }
+      .shop-btn-wrap:hover .shop-tip, .shop-btn-wrap:focus-within .shop-tip{ opacity:1; transform:translateX(-50%) translateY(0); }
+      /* hero countdown: same cards as the Coming Soon countdown, centered */
+      .hero-count{ justify-content:center; margin-top:26px; }
+      .hero-count-note{ text-align:center; }
+      /* daisy cursor: the logo daisy follows the pointer, petals cycle brand colors (desktop only) */
+      html.has-daisy-cursor, html.has-daisy-cursor *{ cursor:none !important; }
+      .flwr-cursor{ position:fixed; left:0; top:0; width:44px; height:44px; margin:-22px 0 0 -22px; z-index:9999; pointer-events:none; opacity:0; transition:opacity .25s ease; }
+      .flwr-cursor.on{ opacity:1; }
+      .flwr-cursor svg{ display:block; width:44px; height:44px; filter:drop-shadow(0 2px 6px rgba(42,54,32,.35)); animation:flwrCursorSpin 14s linear infinite; }
+      .flwr-cursor svg ellipse{ animation:flwrCursorCycle 6s linear infinite; }
+      @keyframes flwrCursorSpin{ to{ transform:rotate(360deg); } }
+      @keyframes flwrCursorCycle{ 0%{ fill:#F4728E; } 20%{ fill:#556B3F; } 40%{ fill:#A7B995; } 60%{ fill:#B9A7E7; } 80%{ fill:#7CC3F6; } 100%{ fill:#F4728E; } }
+      @media (prefers-reduced-motion: reduce){ .flwr-cursor{ display:none; } }
+
       /* kinetic FLWR PWR: one settle (WAAPI in motion.js), then uneven breathing in the hold */
       .fm-w{ display:inline-block; white-space:nowrap; }
       .fm-ch{ display:inline-block; transform-origin:50% 85%;
@@ -1068,14 +1105,22 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
         <div class="fm-par fm-bg" aria-hidden="true"></div>
         <div class="fm-par fm-mid" aria-hidden="true"><i style="left:9%;top:22%;--s:20px;--d:4s">✦</i><i style="left:84%;top:40%;--s:14px;--d:2s;--o:-.7s">✦</i><i style="left:18%;top:78%;--s:12px;--d:8s;--o:-3.1s">✦</i><i class="fs4" style="left:70%;top:12%;--s:16px;--d:4s;--o:-2.3s">✦</i></div>
         <div class="fm-par fm-front" aria-hidden="true"><svg class="fd1" viewBox="0 0 100 100" data-daisy data-c="#ffffff" style="left:3%;top:58%;--s:64px;--d:16s"></svg><svg class="fd2" viewBox="0 0 100 100" data-daisy data-c="#F4728E" style="right:5%;top:16%;--s:48px;--d:16s"></svg><svg class="fd3" viewBox="0 0 100 100" data-daisy data-c="#ffffff" style="right:11%;bottom:6%;--s:38px;--d:8s"></svg></div>
+        <div class="fm-par fm-petals" aria-hidden="true"><i style="left:6%;--s:20px;--d:13s;--o:-2s;--sw:26px">✿</i><i class="pk" style="left:16%;--s:14px;--d:17s;--o:-8s;--sw:-20px">✿</i><i style="left:27%;--s:24px;--d:15s;--o:-5s;--sw:30px">✿</i><i style="left:41%;--s:15px;--d:19s;--o:-11s;--sw:-24px">✿</i><i class="pk" style="left:55%;--s:18px;--d:14s;--o:-1s;--sw:22px">✿</i><i style="left:68%;--s:22px;--d:16s;--o:-7s;--sw:-28px">✿</i><i style="left:79%;--s:13px;--d:18s;--o:-4s;--sw:20px">✿</i><i class="pk" style="left:90%;--s:19px;--d:15s;--o:-9s;--sw:-22px">✿</i></div>
         <div class="wrap hero-inner">
           <h1 class="hero-logo" aria-label="FLWRPWR"><img src="img/logo-flwrpwr.png" alt="FLWRPWR" /></h1>
           <p class="hero-sub">Premium cannabis flower</p>
           <p class="tagline">FLWRPWR 4g Smalls, packed pretty and ready to reserve. The shop doors open soon.</p>
           <div class="hero-ctas">
             <a class="btn btn-pink" href="#shop">Shop flower →</a>
-            <button class="btn btn-gold" type="button" data-enter-shop>▶ Enter the shop</button>
+            <span class="shop-btn-wrap"><button class="btn btn-gold shop-unavail" type="button" data-enter-shop aria-disabled="true">▶ Enter the shop</button><span class="shop-tip" role="tooltip">not available in current plan</span></span>
           </div>
+          <div class="flwr-soon-count hero-count" role="timer" aria-label="Countdown to the San Diego launch event">
+            <div><b data-cd-d>&ndash;</b><span>days</span></div>
+            <div><b data-cd-h>&ndash;</b><span>hours</span></div>
+            <div><b data-cd-m>&ndash;</b><span>mins</span></div>
+            <div><b data-cd-s>&ndash;</b><span>secs</span></div>
+          </div>
+          <p class="flwr-soon-cd-note hero-count-note" data-cd-note>until the San Diego launch event &middot; Thu Nov 12</p>
           <div class="hero-badges">
             <span>✿ Premium Smalls</span>
             <span>✓ Clean &amp; Consistent</span>
@@ -1118,7 +1163,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
           </div>
           <div class="vibe-links reveal">
             <a href="shop.html">Blooming soon: 3 more strains →</a>
-            <button type="button" data-enter-shop>The Shop IRL: walk in, virtually →</button>
+            <span class="shop-btn-wrap"><button type="button" data-enter-shop class="shop-unavail" aria-disabled="true">The Shop IRL: walk in, virtually →</button><span class="shop-tip" role="tooltip">not available in current plan</span></span>
           </div>
           <div class="vibe-preview" id="vibePreview" hidden>
             <img id="vibeImg" src="img/pouch-maui-wowie.png" alt="" />
@@ -1220,7 +1265,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
             <h2>Step inside the <span class="gold">flower shop</span></h2>
             <p>A first-person walk-through of the FLWRPWR shop, bright, sunny and shared with other shoppers wandering the aisles. Click a pouch on the shelf and it lands in your basket, same basket as this page.</p>
             <div class="hero-ctas">
-              <button class="btn btn-gold" type="button" data-enter-shop>▶ Enter the shop</button>
+              <span class="shop-btn-wrap"><button class="btn btn-gold shop-unavail" type="button" data-enter-shop aria-disabled="true">▶ Enter the shop</button><span class="shop-tip" role="tooltip">not available in current plan</span></span>
               <a class="btn" href="#shop" style="background:transparent;color:#FDF6EA;border-color:#FDF6EA;box-shadow:none">Shop the grid instead</a>
             </div>
           </div>
@@ -2924,7 +2969,10 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
       });
 
       document.querySelectorAll("[data-enter-shop]").forEach(function(b){
-        b.addEventListener("click", enterShop);
+        b.addEventListener("click", function(ev){
+          if (b.classList.contains("shop-unavail") || b.getAttribute("aria-disabled") === "true"){ ev.preventDefault(); ev.stopPropagation(); return; }
+          enterShop();
+        });
       });
       document.getElementById("exitShopBtn").addEventListener("click", exitShop);
       document.getElementById("fallbackExitBtn").addEventListener("click", exitShop);

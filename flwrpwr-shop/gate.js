@@ -47,6 +47,40 @@
   /* hard gate: the Coming Soon screen always shows, unless this browser is
      signed in as Nathan. Clear any old remembered preview so past
      visitors get the gate back. */
+  /* live countdown: ticks every second to the San Diego launch event, Thu Nov 12, 2026 (midnight PT = event day).
+     It updates every [data-cd-*] on the page (the Coming Soon overlay AND the shop hero countdown),
+     and keeps ticking after the overlay is removed. It only stops when the launch time is reached,
+     or when the page has no countdown on it at all. */
+  var cdTimer = null;
+  function cdTick(){
+    var ds = document.querySelectorAll("[data-cd-d]"),
+        hs = document.querySelectorAll("[data-cd-h]"),
+        ms = document.querySelectorAll("[data-cd-m]"),
+        ss = document.querySelectorAll("[data-cd-s]"),
+        notes = document.querySelectorAll("[data-cd-note]");
+    if (!ds.length || !hs.length || !ms.length || !ss.length){
+      if (cdTimer) clearInterval(cdTimer);
+      return;
+    }
+    var target = new Date("2026-11-12T00:00:00-08:00").getTime();
+    function pad(n){ return (n < 10 ? "0" : "") + n; }
+    function setAll(list, v){ for (var i = 0; i < list.length; i++) list[i].textContent = v; }
+    var diff = target - Date.now();
+    if (diff <= 0){
+      setAll(ds, "0"); setAll(hs, "00"); setAll(ms, "00"); setAll(ss, "00");
+      setAll(notes, "the San Diego launch event is here \u2713 see you there");
+      if (cdTimer) clearInterval(cdTimer);
+      return;
+    }
+    var secs = Math.floor(diff / 1000);
+    setAll(ds, String(Math.floor(secs / 86400)));
+    setAll(hs, pad(Math.floor(secs % 86400 / 3600)));
+    setAll(ms, pad(Math.floor(secs % 3600 / 60)));
+    setAll(ss, pad(secs % 60));
+  }
+  cdTick();
+  cdTimer = setInterval(cdTick, 1000);
+
   try { localStorage.removeItem("flwrpwr-preview"); } catch (e) {}
   var forceSoon = /[?&]coming-soon\b/.test(location.search);
   if (!forceSoon && nathanSignedIn()){ removeOverlay(); return; }
@@ -94,29 +128,5 @@
     });
   }
 
-  /* live countdown: ticks every second to the San Diego launch event, Thu Nov 12, 2026 (midnight PT = event day) */
-  var cdTimer = null;
-  function cdTick(){
-    if (!overlay.parentNode){ if (cdTimer) clearInterval(cdTimer); return; }
-    var d = overlay.querySelector("[data-cd-d]"), h = overlay.querySelector("[data-cd-h]"),
-        m = overlay.querySelector("[data-cd-m]"), s = overlay.querySelector("[data-cd-s]"),
-        note = overlay.querySelector("[data-cd-note]");
-    if (!d || !h || !m || !s) return;
-    var target = new Date("2026-11-12T00:00:00-08:00").getTime();
-    function pad(n){ return (n < 10 ? "0" : "") + n; }
-    var diff = target - Date.now();
-    if (diff <= 0){
-      d.textContent = "0"; h.textContent = "00"; m.textContent = "00"; s.textContent = "00";
-      if (note) note.textContent = "the San Diego launch event is here \u2713 see you there";
-      if (cdTimer) clearInterval(cdTimer);
-      return;
-    }
-    var secs = Math.floor(diff / 1000);
-    d.textContent = Math.floor(secs / 86400);
-    h.textContent = pad(Math.floor(secs % 86400 / 3600));
-    m.textContent = pad(Math.floor(secs % 3600 / 60));
-    s.textContent = pad(secs % 60);
-  }
-  cdTick();
-  cdTimer = setInterval(cdTick, 1000);
+
 })();

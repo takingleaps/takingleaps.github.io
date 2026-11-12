@@ -25,7 +25,7 @@
 
   /* ---- 1. --scroll: one number, three hero layers (CSS does the math) ---- */
   if (window.CSS && CSS.registerProperty){
-    ["--scroll", "--px", "--py"].forEach(function(name){
+    ["--scroll", "--px", "--py", "--mx", "--my"].forEach(function(name){
       /* registered numbers can be transitioned, which is what makes the pouch lag */
       try { CSS.registerProperty({ name:name, syntax:"<number>", inherits:true, initialValue:"0" }); } catch(e){}
     });
@@ -50,6 +50,19 @@
   function kick(){ if (!rafOn){ rafOn = true; requestAnimationFrame(frame); } }
   window.addEventListener("scroll", kick, { passive:true });
   window.addEventListener("resize", function(){ heroH = hero ? hero.offsetHeight : 0; kick(); measurePill(); }, { passive:true });
+
+  /* mouse parallax: the hero content leans toward the pointer (desktop only) */
+  if (fine && hero){
+    hero.addEventListener("pointermove", function(e){
+      var r = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", ((e.clientX - r.left) / r.width - .5).toFixed(3));
+      hero.style.setProperty("--my", ((e.clientY - r.top) / r.height - .5).toFixed(3));
+    }, { passive:true });
+    hero.addEventListener("pointerleave", function(){
+      hero.style.setProperty("--mx", 0);
+      hero.style.setProperty("--my", 0);
+    });
+  }
   if (ticker && ticker.getAnimations){
     tickAnim = ticker.getAnimations()[0] || null;
     if (fine && tickAnim){
@@ -280,4 +293,46 @@
       });
     });
   }
+})();
+
+/* ---- 6. daisy cursor: the logo daisy follows the pointer, petals cycle brand colors ---- */
+(function(){
+  "use strict";
+  var mm = function(q){ return window.matchMedia ? window.matchMedia(q).matches : false; };
+  if (mm("(prefers-reduced-motion: reduce)")) return;
+  if (!mm("(hover: hover) and (pointer: fine)")) return;
+  var root = document.documentElement;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "0 0 100 100");
+  svg.setAttribute("aria-hidden", "true");
+  var petals = "";
+  for (var i = 0; i < 8; i++){
+    petals += '<ellipse cx="50" cy="26" rx="11" ry="20" fill="#F4728E" transform="rotate(' + (i * 45) + ' 50 50)"/>';
+  }
+  svg.innerHTML = petals + '<circle cx="50" cy="50" r="13" fill="#F2A22F"/><circle cx="46" cy="47" r="2.4" fill="#A7B995"/><circle cx="54" cy="52" r="2" fill="#A7B995"/><circle cx="51" cy="44" r="1.6" fill="#A7B995"/>';
+  var cur = document.createElement("div");
+  cur.className = "flwr-cursor";
+  cur.setAttribute("aria-hidden", "true");
+  cur.appendChild(svg);
+  document.body.appendChild(cur);
+  root.classList.add("has-daisy-cursor");
+  var tx = -100, ty = -100, cx = -100, cy = -100, shown = false, raf = null;
+  function loop(){
+    cx += (tx - cx) * 0.18;
+    cy += (ty - cy) * 0.18;
+    cur.style.transform = "translate3d(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px,0)";
+    if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1){ raf = requestAnimationFrame(loop); }
+    else { raf = null; }
+  }
+  function kick(){ if (!raf) raf = requestAnimationFrame(loop); }
+  document.addEventListener("pointermove", function(e){
+    tx = e.clientX; ty = e.clientY;
+    if (!shown){ shown = true; cx = tx; cy = ty; cur.classList.add("on"); }
+    kick();
+  }, { passive:true });
+  document.addEventListener("pointerleave", function(){ cur.classList.remove("on"); shown = false; });
+  document.addEventListener("pointerlockchange", function(){
+    if (document.pointerLockElement){ cur.classList.remove("on"); }
+  });
 })();

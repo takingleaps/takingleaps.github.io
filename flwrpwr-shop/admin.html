@@ -52,7 +52,7 @@
   <!-- LOGIN / SIGN UP -->
   <div class="card" id="authCard">
     <h2>Admin sign in</h2>
-    <p class="muted">Only the four admin emails can get in. First time here? Use the Create account tab and set your own password.</p>
+    <p class="muted">Only the four admin emails can get in. First time here? Use the Create account tab and set your own password. New accounts wait for the site admin to approve them before they can edit.</p>
     <div class="tabs">
       <button type="button" id="tabLogin" class="on">Log in</button>
       <button type="button" id="tabSignup">Create account</button>
@@ -66,6 +66,15 @@
       <button class="btn ghost" type="button" id="forgotBtn">Forgot password?</button>
       <div class="status" id="authStatus"></div>
     </form>
+  </div>
+
+  <!-- WAITING FOR APPROVAL -->
+  <div class="card hidden" id="waitCard">
+    <h2>Waiting on the site admin</h2>
+    <p>You are in. Your account is set up and your password works.</p>
+    <p>The site admin needs to approve you before you can edit the site. You will get in once he approves you.</p>
+    <p class="muted">Signed in as <span class="who" id="waitEmail"></span></p>
+    <button class="btn ghost" type="button" id="waitSignOutBtn">Sign out</button>
   </div>
 
   <!-- EDITOR -->
@@ -96,6 +105,14 @@
       <div class="status" id="saveStatus"></div>
     </form>
 
+    <div id="approvePanel" class="hidden" style="margin-top:26px;border-top:2px solid #D8DECB;padding-top:18px">
+      <h2 style="margin:0 0 6px">Approve admins</h2>
+      <p class="muted" style="margin:0 0 10px">People who signed up wait here until you approve them. Approving lets them edit the site text.</p>
+      <div id="pendingList"></div>
+      <div id="approvedList" style="margin-top:14px"></div>
+      <div class="status" id="approveStatus"></div>
+    </div>
+
     <div class="setup hidden" id="setupBox">
       <b>One time setup needed before saving works.</b>
       <p style="margin:8px 0">The text table does not exist yet in Supabase. Paste this once in the Supabase dashboard, SQL Editor, then Run. Saving will work right after.</p>
@@ -111,7 +128,8 @@
         <li>nathanltwong@gmail.com</li>
       </ul>
       <p class="muted">To add someone, ask Nathan. The list lives in this page.</p>
-      <p class="muted" id="previewRow"><a href="./">Preview the shop</a> (only you can see the shop for now)</p>
+      <p style="margin-top:18px"><a class="btn" href="./" id="designBtn" style="text-decoration:none">Open site design &rarr;</a></p>
+      <p class="muted">This opens the shop. Only Nathan can see past the Coming Soon screen for now.</p>
       <p class="muted"><a href="./?coming-soon">Back to the shop</a></p>
     </div>
   </div>
@@ -239,9 +257,89 @@
   document.getElementById("signOutBtn").addEventListener("click", async function () {
     await client.auth.signOut();
     document.getElementById("editorCard").classList.add("hidden");
+    document.getElementById("waitCard").classList.add("hidden");
     document.getElementById("authCard").classList.remove("hidden");
     setStatus(authStatus, "Signed out.", true);
   });
+
+  document.getElementById("waitSignOutBtn").addEventListener("click", async function () {
+    await client.auth.signOut();
+    document.getElementById("waitCard").classList.add("hidden");
+    document.getElementById("authCard").classList.remove("hidden");
+    setStatus(authStatus, "Signed out.", true);
+  });
+
+  var NATHAN = "nathanltwong@gmail.com";
+
+  /* Approval gate: Nathan is always approved. Anyone else needs a row in
+     flwrpwr_admin_access with approved=true. A missing table or a failed
+     read is treated as not approved, never a crash. */
+  async function checkApproval(email) {
+    if (email === NATHAN) return true;
+    try {
+      var sel = await client.from("flwrpwr_admin_access").select("approved").eq("email", email).maybeSingle();
+      if (sel.data && sel.data.approved === true) return true;
+      if (!sel.data) {
+        await client.from("flwrpwr_admin_access").insert({ email: email, approved: false });
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  async function loadApprovals() {
+    var box = document.getElementById("pendingList");
+    var done = document.getElementById("approvedList");
+    var st = document.getElementById("approveStatus");
+    box.innerHTML = "";
+    done.innerHTML = "";
+    var wait = document.createElement("p");
+    wait.className = "muted"; wait.textContent = "Loading.";
+    box.appendChild(wait);
+    var res = await client.from("flwrpwr_admin_access").select("email,approved,created_at").order("created_at", { ascending: true });
+    box.innerHTML = "";
+    if (res.error) {
+      var err = document.createElement("p");
+      err.className = "muted"; err.textContent = "Could not load the list: " + res.error.message;
+      box.appendChild(err);
+      return;
+    }
+    var rows = res.data || [];
+    var pending = rows.filter(function (r) { return !r.approved; });
+    var ok = rows.filter(function (r) { return r.approved; });
+    if (!pending.length) {
+      var none = document.createElement("p");
+      none.className = "muted"; none.textContent = "Nobody is waiting.";
+      box.appendChild(none);
+    } else {
+      pending.forEach(function (r) {
+        var row = document.createElement("div");
+        row.className = "row";
+        row.style.marginTop = "10px";
+        var who = document.createElement("span");
+        who.className = "who";
+        who.textContent = r.email + (r.created_at ? "  \u00b7  " + new Date(r.created_at).toLocaleDateString() : "");
+        var btn = document.createElement("button");
+        btn.className = "btn small"; btn.type = "button"; btn.textContent = "Approve";
+        btn.addEventListener("click", async function () {
+          setStatus(st, "Approving " + r.email + ".");
+          var up = await client.from("flwrpwr_admin_access").update({ approved: true }).eq("email", r.email);
+          if (up.error) { setStatus(st, "Could not approve: " + up.error.message); return; }
+          setStatus(st, r.email + " is approved. They can edit the site now.", true);
+          loadApprovals();
+        });
+        row.appendChild(who);
+        row.appendChild(btn);
+        box.appendChild(row);
+      });
+    }
+    if (ok.length) {
+      var b = document.createElement("b"); b.textContent = "Approved";
+      var p = document.createElement("p");
+      p.className = "muted"; p.style.margin = "6px 0 0";
+      p.textContent = ok.map(function (r) { return r.email; }).join(", ");
+      done.appendChild(b); done.appendChild(p);
+    }
+  }
 
   async function enter(user) {
     if (!user || !user.email) {
@@ -254,12 +352,24 @@
       setStatus(authStatus, "This email is not on the admin list. Ask Nathan to add you.");
       return;
     }
+    var approved = await checkApproval(email);
     document.getElementById("whoEmail").textContent = email;
     document.getElementById("authCard").classList.add("hidden");
-    document.getElementById("editorCard").classList.remove("hidden");
-    var pr = document.getElementById("previewRow");
-    if (pr) pr.classList.toggle("hidden", email !== "nathanltwong@gmail.com");
     setStatus(authStatus, "");
+    if (!approved) {
+      document.getElementById("waitEmail").textContent = email;
+      document.getElementById("waitCard").classList.remove("hidden");
+      document.getElementById("editorCard").classList.add("hidden");
+      return;
+    }
+    document.getElementById("waitCard").classList.add("hidden");
+    document.getElementById("editorCard").classList.remove("hidden");
+    if (email === NATHAN) {
+      document.getElementById("approvePanel").classList.remove("hidden");
+      loadApprovals();
+    } else {
+      document.getElementById("approvePanel").classList.add("hidden");
+    }
     await loadLive();
   }
 

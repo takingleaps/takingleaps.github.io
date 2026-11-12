@@ -639,3 +639,13 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
 
 /* ---- tab bar follows theme ---- */
 .flwr-tabbar a[aria-current="page"]{ color:var(--rose-ink); }
+
+/* ---- daisy cursor: the logo daisy follows the pointer, petals cycle brand colors (desktop only) ---- */
+html.has-daisy-cursor, html.has-daisy-cursor *{ cursor:none !important; }
+.flwr-cursor{ position:fixed; left:0; top:0; width:44px; height:44px; margin:-22px 0 0 -22px; z-index:9999; pointer-events:none; opacity:0; transition:opacity .25s ease; }
+.flwr-cursor.on{ opacity:1; }
+.flwr-cursor svg{ display:block; width:44px; height:44px; filter:drop-shadow(0 2px 6px rgba(42,54,32,.35)); animation:flwrCursorSpin 14s linear infinite; }
+.flwr-cursor svg ellipse{ animation:flwrCursorCycle 6s linear infinite; }
+@keyframes flwrCursorSpin{ to{ transform:rotate(360deg); } }
+@keyframes flwrCursorCycle{ 0%{ fill:#F4728E; } 20%{ fill:#556B3F; } 40%{ fill:#A7B995; } 60%{ fill:#B9A7E7; } 80%{ fill:#7CC3F6; } 100%{ fill:#F4728E; } }
+@media (prefers-reduced-motion: reduce){ .flwr-cursor{ display:none; } }
