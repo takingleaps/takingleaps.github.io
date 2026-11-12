@@ -393,13 +393,13 @@ html[data-theme="dark"] .btn-gold,
 html[data-theme="dark"] .shop-toggle .toggle-btn.active{ background:#556B3F; border-color:#556B3F; color:#FDF6EA; }
 html[data-theme="dark"] .hero{
   background:
-    linear-gradient(rgba(32,41,26,.86), rgba(32,41,26,.6) 45%, rgba(32,41,26,.88)),
+    linear-gradient(rgba(32,41,26,.42), rgba(32,41,26,.22) 45%, rgba(32,41,26,.52)),
     url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
 }
 html[data-theme="dark"] .fm-on .hero{ background:none; }
 html[data-theme="dark"] .fm-bg{
   background:
-    linear-gradient(rgba(32,41,26,.86), rgba(32,41,26,.6) 45%, rgba(32,41,26,.88)),
+    linear-gradient(rgba(32,41,26,.42), rgba(32,41,26,.22) 45%, rgba(32,41,26,.52)),
     url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
 }
 html[data-theme="dark"] .enter-banner{ background:var(--olive-deep); }
@@ -519,13 +519,13 @@ header.site{ background:var(--paper); }
 .vibe-banner small{ color:#fff; text-shadow:0 1px 8px rgba(42,54,32,.6); position:relative; z-index:1; font-weight:800; }
 .vibe-banner .vibe-arrow{ z-index:2; }
 .vibe-banner.v-sativa{
-  background:linear-gradient(180deg, rgba(42,54,32,.08) 0%, rgba(42,54,32,.55) 100%), url("img/bud-maui-wowie.webp") center 35%/cover no-repeat;
+  background:linear-gradient(180deg, rgba(244,114,142,.30) 0%, rgba(190,40,90,.55) 100%), url("img/hero-daisy-field.webp") center 35%/cover no-repeat;
 }
 .vibe-banner.v-hybrid{
-  background:linear-gradient(180deg, rgba(42,54,32,.08) 0%, rgba(42,54,32,.55) 100%), url("img/bud-thai-stick.webp") center 35%/cover no-repeat;
+  background:linear-gradient(180deg, rgba(85,107,63,.30) 0%, rgba(60,77,44,.55) 100%), url("img/hero-daisy-field.webp") center 35%/cover no-repeat;
 }
 .vibe-banner.v-indica{
-  background:linear-gradient(180deg, rgba(42,54,32,.08) 0%, rgba(42,54,32,.55) 100%), url("img/bud-northern-lights.webp") center 35%/cover no-repeat;
+  background:linear-gradient(180deg, rgba(150,110,200,.30) 0%, rgba(90,50,140,.55) 100%), url("img/hero-daisy-field.webp") center 35%/cover no-repeat;
 }
 .vibe-banner.active{ outline:3px solid var(--rose); outline-offset:3px; }
 
