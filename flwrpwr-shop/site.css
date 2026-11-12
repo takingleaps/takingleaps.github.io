@@ -167,6 +167,16 @@ section.block{ padding:72px 0; }
 .card-foot{ margin-top:auto; padding-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
 .price-note{ font-family:"Caveat",cursive; font-size:1.2rem; color:var(--coral); }
 .card.soon .card-art{ filter:saturate(.8); }
+/* product-card packaging gallery: small clickable thumbs under the main art.
+   Without these rules the thumb buttons render at their images' natural size
+   (up to 1920px wide) and blow the card out, cutting the packaging off at the
+   card edge and burying the strain name thousands of pixels down. Thumbs stay
+   small, cover-cropped, and the active one gets the rose outline. */
+.card-thumbs{ display:flex; gap:8px; padding:12px 14px 0; }
+.card-thumb{ flex:1 1 0; min-width:0; height:64px; padding:0; border:2px solid var(--line); border-radius:12px; overflow:hidden; background:var(--cream-2); cursor:pointer; }
+.card-thumb img{ display:block; width:100%; height:100%; object-fit:cover; }
+.card-thumb.is-active{ border-color:var(--rose); box-shadow:0 0 0 2px var(--rose-soft); }
+@media (max-width:560px){ .card-thumb{ height:52px; } }
 
 /* strain detail */
 .strain-hero{ display:grid; grid-template-columns:.92fr 1.08fr; gap:36px; align-items:center; }
@@ -226,25 +236,40 @@ section.block{ padding:72px 0; }
 }
 
 /* feed */
+/* feed: Instagram-style 3-column grid at every width, like a profile grid.
+   6 posts = 2 rows of 3 on the feed page; 3 posts = 1 row of 3 in the
+   Coming Soon overlay and on subpages. Photos are square, captions clamp
+   so the rows stay even, the whole card links out to the post. */
 .feed-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
-@media (max-width:900px){ .feed-grid{ grid-template-columns:repeat(2,1fr); } }
-@media (max-width:560px){ .feed-grid{ grid-template-columns:1fr; } }
-.feed-card{ border:2px solid var(--ink); border-radius:22px; overflow:hidden; background:var(--paper); box-shadow:var(--card-shadow); display:flex; flex-direction:column; }
+@media (max-width:900px){ .feed-grid{ gap:14px; } }
+@media (max-width:560px){ .feed-grid{ gap:8px; } }
+.feed-card{ border:2px solid var(--ink); border-radius:22px; overflow:hidden; background:var(--paper); box-shadow:var(--card-shadow); display:flex; flex-direction:column; min-width:0; }
 /* instagram link cards: Instagram's embed endpoint returns "No Media Match"
    for every @flwrpwr_co post, so the iframe embeds only ever rendered the
    broken-link error box. The cards below show the real profile picture, the
    real caption verbatim, and a link out to the post. No iframe, no embed.js. */
-.ig-card{ display:flex; flex-direction:column; gap:10px; padding:18px; text-decoration:none; color:inherit; }
+.ig-card{ display:flex; flex-direction:column; gap:10px; padding:18px; text-decoration:none; color:inherit; min-width:0; }
 .feed-card .ig-card{ flex:1; }
-.ig-card-head{ display:flex; align-items:center; gap:12px; }
+.ig-card-head{ display:flex; align-items:center; gap:12px; min-width:0; }
 .ig-card-ava{ width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--ink); flex:none; }
 .ig-card-meta{ display:flex; flex-direction:column; gap:2px; min-width:0; }
-.ig-card-meta b{ font-weight:900; font-size:.95rem; }
-.ig-card-meta span{ font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
-.ig-card-cap{ font-weight:700; line-height:1.55; font-size:.95rem; overflow-wrap:break-word; }
-.ig-card-photo{ display:block; width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:12px; border:2px solid var(--line); background:var(--paper); }
+.ig-card-meta b{ font-weight:900; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ig-card-meta span{ font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); white-space:nowrap; }
+.ig-card-cap{ font-weight:700; line-height:1.55; font-size:.95rem; overflow-wrap:break-word; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.ig-card-photo{ display:block; width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:12px; border:2px solid var(--line); background:var(--paper); }
 .ig-card-open{ font-weight:900; color:var(--coral); font-size:.9rem; }
 .ig-card:hover .ig-card-open, .ig-card:focus-visible .ig-card-open{ text-decoration:underline; }
+@media (max-width:560px){
+  .feed-card{ border-radius:14px; }
+  .ig-card{ gap:6px; padding:8px; }
+  .ig-card-head{ gap:7px; }
+  .ig-card-ava{ width:26px; height:26px; }
+  .ig-card-meta b{ font-size:.68rem; }
+  .ig-card-meta span{ font-size:.55rem; letter-spacing:.04em; }
+  .ig-card-cap{ font-size:.72rem; line-height:1.4; -webkit-line-clamp:2; }
+  .ig-card-photo{ border-radius:8px; }
+  .ig-card-open{ font-size:.7rem; }
+}
 
 /* footer */
 footer.site{ background:var(--ink); color:var(--cream); padding:64px 0 34px; }
@@ -332,10 +357,20 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .flwr-soon-front svg:nth-child(2){ animation-direction:reverse; }
 @keyframes flwrSoonSpin{ to{ rotate:360deg; } }
 .flwr-soon-inner{ position:relative; z-index:3; min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:56px 20px 40px; box-sizing:border-box; }
-.flwr-soon-logo{ width:min(300px, 100%); height:auto; display:block; filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)); animation:flwrSoonBreathe 8s ease-in-out infinite; }
+.flwr-soon-logo{ width:min(300px, 100%); height:auto; display:block; filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)); animation:logoIn .9s cubic-bezier(.22,.9,.3,1) both, flwrSoonBreathe 8s ease-in-out 1s infinite; }
 @keyframes flwrSoonBreathe{ 0%,100%{ transform:translateY(0) rotate(0deg); } 38%{ transform:translateY(-4px) rotate(.4deg); } 71%{ transform:translateY(2px) rotate(-.3deg); } }
 .flwr-soon-kicker{ font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:.8rem; color:#F45078; margin:20px 0 0; }
-.flwr-soon-title{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.9rem,8vw,4.6rem); line-height:1; color:#556B3F; margin:10px 0 0; max-width:100%; overflow-wrap:break-word; }
+.flwr-soon-title{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.9rem,8vw,4.6rem); line-height:1; color:#556B3F; margin:10px 0 0; max-width:100%; overflow-wrap:break-word; animation:titleIn .8s cubic-bezier(.22,.9,.3,1) both, titleFloat 6s ease-in-out 1s infinite; }
+/* dynamic titles: smooth fade-and-rise entrance, then a gentle float on the
+   Coming Soon heading. Section headings animate when they scroll into view
+   (hooked to the existing .reveal.in trigger); hero titles animate on load.
+   Transform + opacity only, so no layout shift, and everything stays readable. */
+@keyframes titleIn{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes titleFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+@keyframes logoIn{ from{ opacity:0; transform:translateY(10px) scale(.94); } to{ opacity:1; transform:translateY(0) scale(1); } }
+.page-hero h1{ animation:titleIn .8s cubic-bezier(.22,.9,.3,1) both; }
+.sec-head.reveal.in h2{ animation:titleIn .7s cubic-bezier(.22,.9,.3,1) both; }
+.sec-head.reveal.in .mini{ animation:titleIn .6s ease both; }
 .flwr-soon-sub{ font-weight:700; color:#5A6B52; max-width:460px; margin:14px 0 0; line-height:1.55; }
 .flwr-soon-form{ display:flex; gap:10px; margin-top:24px; width:100%; max-width:440px; }
 .flwr-soon-form input{ flex:1; min-width:0; box-sizing:border-box; border:1.5px solid #E3D9C6; border-radius:999px; padding:13px 20px; font:inherit; font-weight:700; background:#FFFDF7; color:#2A3620; outline:none; }
@@ -358,10 +393,15 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .flwr-soon-blaze-copy{ margin:8px 0 0; font-weight:700; font-size:.88rem; line-height:1.55; color:#5A6B52; }
 .flwr-soon-admin{ font-size:.78rem; margin:10px 0 0; }
 .flwr-soon-admin a{ color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
-.flwr-soon-feed{ width:100%; max-width:540px; margin:20px auto 0; }
-.flwr-soon-feed-kicker{ margin:0 0 12px; font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; color:#F45078; text-align:center; }
-.flwr-soon-feed-item{ margin:0 0 16px; border-radius:20px; overflow:hidden; background:#FFFDF7; border:1.5px solid #E3D9C6; }
-.flwr-soon-feed-item .ig-card{ padding:16px 18px; }
+.flwr-soon-feed{ width:100%; max-width:720px; margin:20px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.flwr-soon-feed-kicker{ grid-column:1/-1; margin:0 0 2px; font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; color:#F45078; text-align:center; }
+.flwr-soon-feed-item{ margin:0; border-radius:20px; overflow:hidden; background:#FFFDF7; border:1.5px solid #E3D9C6; min-width:0; }
+.flwr-soon-feed-item .ig-card{ padding:12px; }
+@media (max-width:560px){
+  .flwr-soon-feed{ gap:8px; }
+  .flwr-soon-feed-item{ border-radius:14px; }
+  .flwr-soon-feed-item .ig-card{ padding:8px; }
+}
 .flwr-soon-admin a:hover{ color:#556B3F; }
 .flwr-soon-count{ display:flex; gap:10px; margin-top:22px; }
 .flwr-soon-count div{ background:#FFFDF7; border:1.5px solid #E3D9C6; border-radius:16px; padding:8px 12px 6px; min-width:66px; box-shadow:0 8px 20px rgba(85,107,63,.12); }
@@ -374,7 +414,7 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
   .flwr-soon-front svg{ width:calc(var(--s,56px) * .7); height:calc(var(--s,56px) * .7); }
 }
 @media (prefers-reduced-motion: reduce){
-  .flwr-soon-bg, .flwr-soon-mid i, .flwr-soon-front svg, .flwr-soon-logo{ animation:none !important; }
+  .flwr-soon-bg, .flwr-soon-mid i, .flwr-soon-front svg, .flwr-soon-logo, .flwr-soon-title, .page-hero h1, .sec-head h2, .sec-head .mini{ animation:none !important; }
 }
 
 /* ---------- mobile bottom tab bar (app-style nav, phones only) ---------- */
