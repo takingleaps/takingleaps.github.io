@@ -649,3 +649,8 @@ html.has-daisy-cursor, html.has-daisy-cursor *{ cursor:none !important; }
 @keyframes flwrCursorSpin{ to{ transform:rotate(360deg); } }
 @keyframes flwrCursorCycle{ 0%{ fill:#F4728E; } 20%{ fill:#556B3F; } 40%{ fill:#A7B995; } 60%{ fill:#B9A7E7; } 80%{ fill:#7CC3F6; } 100%{ fill:#F4728E; } }
 @media (prefers-reduced-motion: reduce){ .flwr-cursor{ display:none; } }
+
+/* ---- mobile header: icon-only basket at phone width so nothing is cut off ---- */
+@media (max-width:560px){ .cart-label{ display:none; } .cart-btn{ padding:10px 13px; } }
+/* ---- CA cannabis warning triangle (mockup footer) ---- */
+.ca-warn{ color:var(--cream); display:inline-flex; align-items:center; }
