@@ -242,6 +242,7 @@ section.block{ padding:72px 0; }
 .ig-card-meta b{ font-weight:900; font-size:.95rem; }
 .ig-card-meta span{ font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
 .ig-card-cap{ font-weight:700; line-height:1.55; font-size:.95rem; overflow-wrap:break-word; }
+.ig-card-photo{ display:block; width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:12px; border:2px solid var(--line); background:var(--paper); }
 .ig-card-open{ font-weight:900; color:var(--coral); font-size:.9rem; }
 .ig-card:hover .ig-card-open, .ig-card:focus-visible .ig-card-open{ text-decoration:underline; }
 
@@ -681,7 +682,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
 
 /* ---- daisy cursor: the logo daisy follows the pointer, petals cycle brand colors (desktop only) ---- */
 html.has-daisy-cursor, html.has-daisy-cursor *{ cursor:none !important; }
-.flwr-cursor{ position:fixed; left:0; top:0; width:44px; height:44px; margin:-22px 0 0 -22px; z-index:9999; pointer-events:none; opacity:0; transition:opacity .25s ease; }
+.flwr-cursor{ position:fixed; left:0; top:0; width:44px; height:44px; margin:-22px 0 0 -22px; z-index:100000; pointer-events:none; opacity:0; transition:opacity .25s ease; }
 .flwr-cursor.on{ opacity:1; }
 .flwr-cursor svg{ display:block; width:44px; height:44px; filter:drop-shadow(0 2px 6px rgba(42,54,32,.35)); animation:flwrCursorSpin 14s linear infinite; }
 .flwr-cursor svg ellipse{ animation:flwrCursorCycle 6s linear infinite; }
