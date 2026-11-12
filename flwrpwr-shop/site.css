@@ -654,3 +654,33 @@ html.has-daisy-cursor, html.has-daisy-cursor *{ cursor:none !important; }
 @media (max-width:560px){ .cart-label{ display:none; } .cart-btn{ padding:10px 13px; } }
 /* ---- CA cannabis warning triangle (mockup footer) ---- */
 .ca-warn{ color:var(--cream); display:inline-flex; align-items:center; }
+
+/* ---- disabled store icon (header Shop button + tab bar Shop tab): not clickable, greyed, tooltip ---- */
+.shop-btn-wrap{ position:relative; display:inline-block; }
+.shop-btn.shop-unavail{ opacity:.55; filter:saturate(.35); cursor:not-allowed; box-shadow:none; }
+.shop-btn.shop-unavail:hover{ transform:none; box-shadow:none; }
+.shop-btn .store-ico{ width:22px; height:22px; display:block; }
+.shop-tip{ position:absolute; left:50%; bottom:calc(100% + 10px); transform:translateX(-50%) translateY(4px); background:#2A3620; color:#FDF6EA; font-weight:800; font-size:.82rem; white-space:nowrap; padding:8px 14px; border-radius:999px; box-shadow:0 8px 20px rgba(42,54,32,.3); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:5; }
+.shop-tip::after{ content:""; position:absolute; left:50%; top:100%; transform:translateX(-50%); border:6px solid transparent; border-top-color:#2A3620; }
+.shop-btn-wrap:hover .shop-tip, .shop-btn-wrap:focus-within .shop-tip{ opacity:1; transform:translateX(-50%) translateY(0); }
+.shop-tip-below{ top:calc(100% + 10px); bottom:auto; transform:translateX(-50%) translateY(-4px); }
+.shop-tip-below::after{ top:auto; bottom:100%; border:6px solid transparent; border-bottom-color:#2A3620; border-top-color:transparent; }
+@media (max-width:760px){
+  .shop-btn-wrap{ grid-column:1; grid-row:1; justify-self:start; }
+}
+/* tab bar Shop tab, disabled: same store icon, greyed, tooltip fixed above the bar */
+.flwr-tabbar .tab-unavail{
+  flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  min-height:52px; padding:4px 2px; text-decoration:none; color:var(--ink-soft);
+  font-weight:900; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+  position:relative; cursor:not-allowed; opacity:.55; filter:saturate(.35);
+}
+.flwr-tabbar .tab-unavail .tab-ico{ font-size:1.25rem; line-height:1; display:flex; align-items:center; justify-content:center; }
+.flwr-tabbar .tab-unavail .tab-ico svg{ width:20px; height:20px; display:block; }
+.flwr-tabbar .tab-unavail .shop-tip{
+  position:fixed; left:50%; bottom:calc(86px + env(safe-area-inset-bottom, 0px));
+  transform:translateX(-50%) translateY(4px);
+}
+.flwr-tabbar .tab-unavail:hover .shop-tip, .flwr-tabbar .tab-unavail:focus-within .shop-tip, .flwr-tabbar .tab-unavail:focus-visible .shop-tip{
+  opacity:1; transform:translateX(-50%) translateY(0);
+}
