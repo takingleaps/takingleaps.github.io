@@ -63,8 +63,7 @@ a{ color:inherit; }
 /* header — frosted glass over scrolling content */
 header.site{
   position:sticky; top:0; z-index:60;
-  background:color-mix(in srgb, var(--paper) 88%, transparent);
-  backdrop-filter:blur(14px) saturate(1.3); -webkit-backdrop-filter:blur(14px) saturate(1.3);
+  background:#34AFFD;
 }
 .nav{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; max-width:1180px; margin:0 auto; padding:12px 20px; }
 .nav-links{ display:flex; gap:26px; font-weight:800; font-size:.86rem; letter-spacing:.08em; text-transform:uppercase; }
@@ -347,7 +346,7 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 /* ---------- coming soon (replaces the old gate, Nov 10) ---------- */
 /* ---------- coming soon (replaces the old gate, Nov 10) ---------- */
 .flwr-soon{ position:fixed; inset:0; z-index:99999; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; background:#EBE1D7; }
-.flwr-soon-bg{ position:fixed; inset:-12% 0; z-index:0; pointer-events:none; background:linear-gradient(rgba(253,246,234,.88), rgba(253,246,234,.62) 45%, rgba(253,246,234,.9)), url("img/hero-daisy-field.webp") center 30%/cover no-repeat; animation:flwrSoonDrift 26s ease-in-out infinite alternate; }
+.flwr-soon-bg{ position:fixed; inset:-12% 0; z-index:0; pointer-events:none; background:url("img/blue-sky-hero.webp") center 30%/cover no-repeat; animation:flwrSoonDrift 26s ease-in-out infinite alternate; }
 @keyframes flwrSoonDrift{ from{ background-position:center 28%; } to{ background-position:center 38%; } }
 .flwr-soon-mid{ position:fixed; inset:0; z-index:1; pointer-events:none; }
 .flwr-soon-mid i{ position:absolute; font-style:normal; color:#B9A7E7; font-size:var(--s,18px); animation:flwrSoonTwinkle var(--d,4s) ease-in-out var(--o,0s) infinite; }
@@ -461,6 +460,7 @@ html[data-theme="dark"]{
 html[data-theme="dark"] .toggle-btn.active,
 html[data-theme="dark"] .btn-gold,
 html[data-theme="dark"] .shop-toggle .toggle-btn.active{ background:#556B3F; border-color:#556B3F; color:#FDF6EA; }
+html[data-theme="dark"] .shop-btn.shop-unavail{ background:#FDF6EA; color:#2A3620; border-color:#FDF6EA; opacity:1; filter:none; }
 html[data-theme="dark"] .hero{
   background:
     linear-gradient(rgba(32,41,26,.42), rgba(32,41,26,.22) 45%, rgba(32,41,26,.52)),
@@ -484,10 +484,10 @@ html[data-theme="dark"] .grain{ opacity:.03; }
 /* the Coming Soon gate follows the theme too */
 html[data-theme="dark"] .flwr-soon{ background:#20291A; }
 html[data-theme="dark"] .flwr-soon-bg{
-  background:linear-gradient(rgba(32,41,26,.88), rgba(32,41,26,.62) 45%, rgba(32,41,26,.9)), url("img/hero-daisy-field.webp") center 30%/cover no-repeat;
+  background:url("img/blue-sky-hero.webp") center 30%/cover no-repeat;
 }
-html[data-theme="dark"] .flwr-soon-title{ color:#A7B995; }
-html[data-theme="dark"] .flwr-soon-sub{ color:#C9D6BD; }
+html[data-theme="dark"] .flwr-soon-title{ color:#556B3F; }
+html[data-theme="dark"] .flwr-soon-sub{ color:#5A6B52; }
 html[data-theme="dark"] .flwr-soon-form input{ background:#2A3620; border-color:#3C4D2C; color:#FDF6EA; }
 html[data-theme="dark"] .flwr-soon-count div{ background:#2A3620; border-color:#3C4D2C; }
 html[data-theme="dark"] .flwr-soon-fine, html[data-theme="dark"] .flwr-soon-cd-note{ color:#8A9A7E; }
@@ -526,7 +526,7 @@ html[data-theme="dark"] .flwr-soon-blaze-copy{ color:#C9D6BD; }
 @media (max-width:640px){ .daisy-strip{ height:84px; } }
 
 /* ---- header: mockup layout (hamburger, centered logo, icons) ---- */
-header.site{ background:var(--paper); }
+header.site{ background:#34AFFD; }
 .nav{ display:flex; align-items:center; gap:10px; max-width:1180px; margin:0 auto; padding:10px 20px; }
 .menu-btn{
   display:none; flex:none; width:44px; height:44px; border-radius:50%;
@@ -737,7 +737,7 @@ html.has-daisy-cursor, html.has-daisy-cursor *{ cursor:none !important; }
 
 /* ---- disabled store icon (header Shop button + tab bar Shop tab): not clickable, greyed, tooltip ---- */
 .shop-btn-wrap{ position:relative; display:inline-block; }
-.shop-btn.shop-unavail{ opacity:.55; filter:saturate(.35); cursor:not-allowed; box-shadow:none; }
+.shop-btn.shop-unavail{ opacity:1; filter:none; cursor:not-allowed; box-shadow:none; }
 .shop-btn.shop-unavail:hover{ transform:none; box-shadow:none; }
 .shop-btn .store-ico{ width:22px; height:22px; display:block; }
 .shop-btn .shop-btn-label{ margin-left:8px; font-weight:900; font-size:.82rem; letter-spacing:.1em; text-transform:uppercase; white-space:nowrap; }
