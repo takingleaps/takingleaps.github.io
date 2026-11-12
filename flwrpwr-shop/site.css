@@ -1,10 +1,10 @@
 /* FLWRPWR shared site styles — multi-page build (2026-10-22)
    Direction: cream + pastel, feminine. Six-color palette, same as the shop index.
-   Palette anchors: cream #FDF6EA, olive #556B3F, sage #A7B995, dusty pink #F4728E, soft lavender #B9A7E7, sky blue #7CC3F6 */
+   Palette anchors: cream #EBE1D7 (sandstone), olive #556B3F, sage #A7B995, dusty pink #F4728E, soft lavender #B9A7E7, sky blue #7CC3F6 */
 :root{
   color-scheme: light;
-  --cream:#FDF6EA; --olive:#556B3F; --sage:#A7B995; --rose:#F4728E; --lav:#B9A7E7; --sky:#7CC3F6;
-  --paper:#FFFCF6;
+  --cream:#EBE1D7; --olive:#556B3F; --sage:#A7B995; --rose:#F4728E; --lav:#B9A7E7; --sky:#7CC3F6;
+  --paper:#EBE1D7;
   --ink:#2A3620;            /* olive, darkened: body text */
   --ink-soft:#4A5C38;       /* olive, softened: secondary text */
   --olive-deep:#3C4D2C;     /* footer and banner ground */
@@ -305,7 +305,7 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 
 /* ---------- coming soon (replaces the old gate, Nov 10) ---------- */
 /* ---------- coming soon (replaces the old gate, Nov 10) ---------- */
-.flwr-soon{ position:fixed; inset:0; z-index:99999; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; background:#FDF6EA; }
+.flwr-soon{ position:fixed; inset:0; z-index:99999; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; background:#EBE1D7; }
 .flwr-soon-bg{ position:fixed; inset:-12% 0; z-index:0; pointer-events:none; background:linear-gradient(rgba(253,246,234,.88), rgba(253,246,234,.62) 45%, rgba(253,246,234,.9)), url("img/hero-daisy-field.webp") center 30%/cover no-repeat; animation:flwrSoonDrift 26s ease-in-out infinite alternate; }
 @keyframes flwrSoonDrift{ from{ background-position:center 28%; } to{ background-position:center 38%; } }
 .flwr-soon-mid{ position:fixed; inset:0; z-index:1; pointer-events:none; }
