@@ -52,7 +52,7 @@
   <!-- LOGIN / SIGN UP -->
   <div class="card" id="authCard">
     <h2>Admin sign in</h2>
-    <p class="muted">Only the four admin emails can get in. First time here? Use the Create account tab and set your own password. New accounts wait for the site admin to approve them before they can edit.</p>
+    <p class="muted">Admin access is closed right now. Only the site admin can log in. Check back after launch.</p>
     <div class="tabs">
       <button type="button" id="tabLogin" class="on">Log in</button>
       <button type="button" id="tabSignup">Create account</button>
@@ -221,11 +221,11 @@
     e.preventDefault();
     var email = document.getElementById("email").value.trim().toLowerCase();
     var password = document.getElementById("password").value;
-    setStatus(authStatus, "Checking.");
-    if (ADMINS.indexOf(email) === -1) {
-      setStatus(authStatus, "This email is not on the admin list. Ask Nathan to add you.");
+    if (email !== NATHAN) {
+      setStatus(authStatus, "Admin access is closed right now. Check back after launch.");
       return;
     }
+    setStatus(authStatus, "Checking.");
     try {
       var res;
       if (mode === "signup") {
@@ -248,6 +248,7 @@
   document.getElementById("forgotBtn").addEventListener("click", async function () {
     var email = document.getElementById("email").value.trim().toLowerCase();
     if (!email) { setStatus(authStatus, "Type your email above first, then tap Forgot password."); return; }
+    if (email !== NATHAN) { setStatus(authStatus, "Admin access is closed right now. Check back after launch."); return; }
     setStatus(authStatus, "Sending reset email.");
     var res = await client.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
     if (res.error) setStatus(authStatus, res.error.message);
@@ -347,9 +348,9 @@
       return;
     }
     var email = user.email.toLowerCase();
-    if (ADMINS.indexOf(email) === -1) {
+    if (email !== NATHAN) {
       await client.auth.signOut();
-      setStatus(authStatus, "This email is not on the admin list. Ask Nathan to add you.");
+      setStatus(authStatus, "Admin access is closed right now. Check back after launch.");
       return;
     }
     var approved = await checkApproval(email);

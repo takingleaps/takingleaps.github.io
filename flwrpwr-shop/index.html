@@ -740,6 +740,35 @@ header.site{ background:var(--paper); }
 .hero-badges span:nth-child(3n){ border-color:var(--olive); }
 .hero-badges span:nth-child(3n+2){ border-color:var(--sky); }
 
+/* ---- hero: sunburst glow + rays behind the logo (mockup sunburst feel) ---- */
+.hero-sun{ inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 62% 46% at 50% 26%, rgba(255,244,180,.6), rgba(255,244,180,0) 70%),
+    repeating-conic-gradient(from -90deg at 50% 26%, rgba(255,255,255,.17) 0deg 5deg, transparent 5deg 16deg);
+}
+/* ---- hero shop button: mockup outline pill ---- */
+.hero-shop-btn{ background:var(--paper) !important; color:var(--rose-ink) !important; border:2px solid var(--rose) !important; box-shadow:0 6px 16px rgba(244,114,142,.28) !important; }
+/* ---- hero badges: 3-col icon + label cells like the mockup ---- */
+.hero-badges{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:620px; margin-left:auto; margin-right:auto; }
+.hero-badges span{ display:flex; flex-direction:column; align-items:center; gap:7px; border-radius:20px; padding:14px 8px 12px; text-align:center; font-size:.8rem; line-height:1.25; }
+.hero-badges .hb-ico{ width:46px; height:46px; border-radius:50%; background:var(--rose-soft); color:var(--rose-ink); display:flex; align-items:center; justify-content:center; font-size:1.45rem; font-style:normal; }
+.hero-badges span:nth-child(3n+2) .hb-ico{ background:var(--sage-soft); color:var(--olive); }
+.hero-badges span:nth-child(3n) .hb-ico{ background:#E0EEF6; color:#3E7CB1; }
+@media (max-width:560px){ .hero-badges{ gap:9px; } .hero-badges span{ font-size:.72rem; padding:11px 6px 10px; } .hero-badges .hb-ico{ width:38px; height:38px; font-size:1.2rem; } }
+/* ---- shop: vibe filter chips ---- */
+.shop-chips{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:20px 0 6px; }
+.chip-btn{ border:1.5px solid var(--line); background:var(--paper); color:var(--ink); border-radius:999px; padding:9px 20px; font-weight:900; font-size:.85rem; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; font-family:inherit; box-shadow:var(--soft-shadow); }
+.chip-btn.active{ background:var(--rose); border-color:var(--rose); color:#fff; }
+/* ---- shop: format subhead (mockup PREMIUM FLOWER / CANNABIS PREROLLS) ---- */
+.shop-subhead{ text-align:center; margin:20px 0 4px; }
+.shop-subhead h3{ font-family:"Shrikhand",cursive; font-weight:400; font-size:1.6rem; color:var(--olive); }
+.shop-subhead p{ font-weight:800; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-top:4px; }
+/* ---- shop: vibe cards at the bottom of the grid ---- */
+.shop-vibes{ margin-top:28px; }
+/* ---- about: wide flower-field photo band ---- */
+.about-field{ height:210px; border-radius:28px; background:url("img/hero-daisy-field.webp") center 35%/cover no-repeat; border:2px solid var(--line); margin:24px 0 28px; box-shadow:var(--soft-shadow); }
+@media (max-width:640px){ .about-field{ height:170px; } }
+
 /* ---- vibe banners: photo cards like the mockup ---- */
 .vibe-banner{ min-height:220px; border-width:2px; }
 .vibe-banner b{ font-size:2rem; color:#fff; text-shadow:0 2px 10px rgba(42,54,32,.55); position:relative; z-index:1; }
@@ -1058,7 +1087,6 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
         <p class="flwr-soon-done" id="flwrSoonDone" hidden>you're on the list ✿ see you at launch</p>
         <p class="flwr-soon-err" id="flwrSoonErr" hidden>Hmm, that email looks off. One more try?</p>
         <p class="flwr-soon-fine">21+ only</p>
-        <p class="flwr-soon-admin"><a href="admin.html">Admin login</a></p>
       </div>
     </div>
     <div class="grain" aria-hidden="true"></div>
@@ -1103,6 +1131,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
       <!-- HERO (mockup-style: flower field, big lockup, badges) -->
       <section class="hero">
         <div class="fm-par fm-bg" aria-hidden="true"></div>
+        <div class="fm-par hero-sun" aria-hidden="true"></div>
         <div class="fm-par fm-mid" aria-hidden="true"><i style="left:9%;top:22%;--s:20px;--d:4s">✦</i><i style="left:84%;top:40%;--s:14px;--d:2s;--o:-.7s">✦</i><i style="left:18%;top:78%;--s:12px;--d:8s;--o:-3.1s">✦</i><i class="fs4" style="left:70%;top:12%;--s:16px;--d:4s;--o:-2.3s">✦</i></div>
         <div class="fm-par fm-front" aria-hidden="true"><svg class="fd1" viewBox="0 0 100 100" data-daisy data-c="#ffffff" style="left:3%;top:58%;--s:64px;--d:16s"></svg><svg class="fd2" viewBox="0 0 100 100" data-daisy data-c="#F4728E" style="right:5%;top:16%;--s:48px;--d:16s"></svg><svg class="fd3" viewBox="0 0 100 100" data-daisy data-c="#ffffff" style="right:11%;bottom:6%;--s:38px;--d:8s"></svg></div>
         <div class="fm-par fm-petals" aria-hidden="true"><i style="left:6%;--s:20px;--d:13s;--o:-2s;--sw:26px">✿</i><i class="pk" style="left:16%;--s:14px;--d:17s;--o:-8s;--sw:-20px">✿</i><i style="left:27%;--s:24px;--d:15s;--o:-5s;--sw:30px">✿</i><i style="left:41%;--s:15px;--d:19s;--o:-11s;--sw:-24px">✿</i><i class="pk" style="left:55%;--s:18px;--d:14s;--o:-1s;--sw:22px">✿</i><i style="left:68%;--s:22px;--d:16s;--o:-7s;--sw:-28px">✿</i><i style="left:79%;--s:13px;--d:18s;--o:-4s;--sw:20px">✿</i><i class="pk" style="left:90%;--s:19px;--d:15s;--o:-9s;--sw:-22px">✿</i></div>
@@ -1111,7 +1140,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
           <p class="hero-sub">Premium cannabis flower</p>
           <p class="tagline">FLWRPWR 4g Smalls, packed pretty and ready to reserve. The shop doors open soon.</p>
           <div class="hero-ctas">
-            <a class="btn btn-pink" href="#shop">Shop flower →</a>
+            <a class="btn btn-pink hero-shop-btn" href="#shop">Shop flower →</a>
             <span class="shop-btn-wrap"><button class="btn btn-gold shop-unavail" type="button" data-enter-shop aria-disabled="true">▶ Enter the shop</button><span class="shop-tip" role="tooltip">not available in current plan</span></span>
           </div>
           <div class="flwr-soon-count hero-count" role="timer" aria-label="Countdown to the San Diego launch event">
@@ -1122,12 +1151,12 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
           </div>
           <p class="flwr-soon-cd-note hero-count-note" data-cd-note>until the San Diego launch event &middot; Thu Nov 12</p>
           <div class="hero-badges">
-            <span>✿ Premium Smalls</span>
-            <span>✓ Clean &amp; Consistent</span>
-            <span>🌿 Ethically Sourced</span>
-            <span>🌳 Gives Back</span>
-            <span>👥 Community &amp; Wellness</span>
-            <span>✿ Wellness Focused</span>
+            <span><i class="hb-ico">✿</i><b>Premium Smalls</b></span>
+            <span><i class="hb-ico">✓</i><b>Clean &amp; Consistent</b></span>
+            <span><i class="hb-ico">🌿</i><b>Ethically Sourced</b></span>
+            <span><i class="hb-ico">🌳</i><b>Gives Back</b></span>
+            <span><i class="hb-ico">👥</i><b>Community &amp; Wellness</b></span>
+            <span><i class="hb-ico">✿</i><b>Wellness Focused</b></span>
           </div>
         </div>
       </section>
@@ -1142,7 +1171,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
         <div class="wrap">
           <div class="sec-head reveal">
             <span class="mini">Shop by feeling</span>
-            <h2>How do you want to feel?</h2>
+            <h2>✿ Find your vibe ✿</h2>
           </div>
           <div class="vibe-banners reveal">
             <button class="vibe-banner v-sativa" type="button" data-vibe="Sativa">
@@ -1182,15 +1211,42 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
       <section class="block" id="shop">
         <div class="wrap">
           <div class="sec-head reveal">
-            <span class="mini">The first drop</span>
-            <h2 id="shopTitle">4g Smalls, full-size cute</h2>
-            <p id="shopIntro">Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet, reserving just saves your spot for launch day. Tap any pouch for its own page.</p>
+            <span class="mini">Shop</span>
+            <h2>✿ Shop flower ✿</h2>
+            <p>Premium cannabis flower &amp; prerolls</p>
           </div>
           <div class="shop-toggle reveal" role="tablist" aria-label="Shop format">
-            <button type="button" class="toggle-btn active" data-format="flower" role="tab" aria-selected="true">Flower</button>
-            <button type="button" class="toggle-btn" data-format="preroll" role="tab" aria-selected="false">Prerolls</button>
+            <button type="button" class="toggle-btn active" data-format="flower" role="tab" aria-selected="true">🌸 Flower</button>
+            <button type="button" class="toggle-btn" data-format="preroll" role="tab" aria-selected="false">🖊️ Prerolls</button>
+          </div>
+          <div class="shop-chips reveal" role="group" aria-label="Filter by vibe">
+            <button type="button" class="chip-btn active" data-vibe="all">All</button>
+            <button type="button" class="chip-btn" data-vibe="Sativa">☀️ Sativa</button>
+            <button type="button" class="chip-btn" data-vibe="Hybrid">🌿 Hybrid</button>
+            <button type="button" class="chip-btn" data-vibe="Indica">🌙 Indica</button>
+          </div>
+          <div class="shop-subhead reveal">
+            <h3 id="shopTitle">Premium flower</h3>
+            <p id="shopIntro">4g Smalls · 6 flavors · 3 vibes. No price tag yet, reserving saves your spot for launch day.</p>
           </div>
           <div class="grid" id="productGrid"></div>
+          <div class="vibe-banners shop-vibes reveal">
+            <button class="vibe-banner v-sativa" type="button" data-vibe="Sativa">
+              <span class="vibe-arrow">→</span>
+              <b>Sativa</b>
+              <small>Uplifting energy, creativity &amp; focus</small>
+            </button>
+            <button class="vibe-banner v-hybrid" type="button" data-vibe="Hybrid">
+              <span class="vibe-arrow">→</span>
+              <b>Hybrid</b>
+              <small>Balanced vibes for mind &amp; body</small>
+            </button>
+            <button class="vibe-banner v-indica" type="button" data-vibe="Indica">
+              <span class="vibe-arrow">→</span>
+              <b>Indica</b>
+              <small>Deep relaxation, stress relief &amp; calm</small>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -1247,6 +1303,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
             <h2>Good vibes, great flower, a deeper purpose</h2>
             <p data-content="about">FLWRPWR is a cannabis brand built on good vibes, great flower, and a deeper purpose: to connect people through high-quality, responsibly sourced flower and a community rooted in wellness.</p>
           </div>
+          <div class="about-field reveal" role="img" aria-label="A field of daisies and wildflowers"></div>
           <div class="about-badges reveal">
             <div class="about-badge"><span class="about-ico">✿</span><b>Premium Flower</b></div>
             <div class="about-badge"><span class="about-ico">✓</span><b>Lab Tested</b></div>
@@ -1395,10 +1452,10 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
           <p class="subscribe-done" id="joinDone" hidden style="text-align:center">you're on the list ✿ see you at launch</p>
           <p style="text-align:center;margin-top:14px;font-weight:700">Follow us <a href="https://www.instagram.com/flwrpwr_co/" target="_blank" rel="noopener" style="color:var(--rose-ink)">@flwrpwr_co</a></p>
           <div class="gallery reveal">
-            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0E5D4,#A7B995)" aria-label="FLWRPWR feed"><img src="img/pouch-thai-stick.png" alt="Thai Stick pouch" /></a>
-            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDDEDF,#F4728E)" aria-label="FLWRPWR feed"><img src="img/pouch-maui-wowie.png" alt="Maui Wowie pouch" /></a>
-            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0EEF6,#7CC3F6)" aria-label="FLWRPWR feed"><img src="img/pouch-northern-lights.png" alt="Northern Lights pouch" /></a>
-            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDF6EA,#FAC2CA)" aria-label="FLWRPWR feed"><svg width="84" height="84" viewBox="0 0 100 100" data-daisy data-c="#ffffff"></svg></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0E5D4,#A7B995)" aria-label="FLWRPWR feed"><img src="img/bud-thai-stick.webp" alt="Thai Stick flower bud, preview photo" /></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDDEDF,#F4728E)" aria-label="FLWRPWR feed"><img src="img/bud-maui-wowie.webp" alt="Maui Wowie flower bud, preview photo" /></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0EEF6,#7CC3F6)" aria-label="FLWRPWR feed"><img src="img/bud-northern-lights.webp" alt="Northern Lights flower bud, preview photo" /></a>
+            <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDF6EA,#FAC2CA)" aria-label="FLWRPWR feed"><img src="img/hero-daisy-field.webp" alt="A field of daisies" /></a>
             <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#E0E5D4,#A7B995)" aria-label="FLWRPWR feed"><svg width="84" height="84" viewBox="0 0 100 100" data-bud></svg></a>
             <a class="tile" href="feed.html" style="background:linear-gradient(150deg,#FDF6EA,#CAD4BC)" aria-label="FLWRPWR feed"><svg width="84" height="84" viewBox="0 0 100 100" data-daisy data-c="#F4728E"></svg></a>
           </div>
@@ -1462,7 +1519,6 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
             <div class="foot-acc-links">
               <a href="#find-us">Find us on Weedmaps</a>
               <a href="#join">Join the list</a>
-              <a href="admin.html">Site admin</a>
             </div>
           </details>
         </div>
@@ -1690,7 +1746,7 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
       var vibePreview = document.getElementById("vibePreview");
       function setVibe(vibe){
         shopState.vibe = vibe;
-        document.querySelectorAll("[data-vibe]").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-vibe") === vibe); });
+        document.querySelectorAll("[data-vibe]").forEach(function(b){ var bv = b.getAttribute("data-vibe"); b.classList.toggle("active", bv === vibe || (bv === "all" && !vibe)); });
         if (!vibe){
           vibePreview.hidden = true;
         } else {
@@ -1707,14 +1763,15 @@ html[data-theme="dark"] .cart-count{ background:#F4728E; color:#fff; }
       document.querySelectorAll("[data-vibe]").forEach(function(b){
         b.addEventListener("click", function(){
           var v = b.getAttribute("data-vibe");
+          if (v === "all") v = null;
           setVibe(shopState.vibe === v ? null : v);
         });
       });
       document.getElementById("vibeAll").addEventListener("click", function(){ setVibe(null); });
       /* flower / prerolls toggle */
       var SHOP_COPY = {
-        flower: { title:"4g Smalls, full-size cute", intro:"Every pouch is FLWRPWR 4g Smalls. We're pre-launch, so there's no price tag yet, reserving just saves your spot for launch day. Tap any pouch for its own page." },
-        preroll: { title:"Prerolls, smooth and consistent", intro:"Eight 0.5g prerolls of the same flower, six flavors. We're pre-launch, so there's no price tag yet, reserving just saves your spot for launch day. Tap any pack for its own page." }
+        flower: { title:"Premium flower", intro:"4g Smalls · 6 flavors · 3 vibes. No price tag yet, reserving saves your spot for launch day." },
+        preroll: { title:"Cannabis prerolls", intro:"8 x 0.5g prerolls · 6 flavors · Smooth & consistent. No price tag yet, reserving saves your spot for launch day." }
       };
       document.querySelectorAll("[data-format]").forEach(function(b){
         b.addEventListener("click", function(){
