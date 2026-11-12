@@ -178,6 +178,17 @@ section.block{ padding:72px 0; }
 .pouch-stage .stage-pouch{ width:min(240px,60vw); filter:drop-shadow(0 18px 22px rgba(85,107,63,.3)); transition:opacity .25s ease, transform .25s ease; }
 .pouch-stage:hover .stage-pouch{ transform:scale(1.04) rotate(-1.6deg); }
 .stage-pouch{ border-radius:14px; }
+/* ---- product gallery: pouch, box, flower — click a thumb to swap the main photo ---- */
+.flwr-gallery{ display:flex; flex-direction:column; gap:12px; }
+.gallery-thumbs{ display:flex; gap:10px; flex-wrap:wrap; }
+.gallery-thumb{ padding:0; border:2px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper); cursor:pointer; width:72px; height:72px; flex:none; }
+.gallery-thumb img{ display:block; width:100%; height:100%; object-fit:cover; }
+.gallery-thumb.is-active{ border-color:var(--rose); box-shadow:0 0 0 2px var(--rose-soft); }
+.gallery-count{ margin:0; font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); }
+.card-thumbs{ display:flex; gap:8px; padding:12px 16px 0; }
+.card-thumb{ padding:0; border:2px solid var(--line); border-radius:10px; overflow:hidden; background:var(--paper); cursor:pointer; width:52px; height:52px; flex:none; }
+.card-thumb img{ display:block; width:100%; height:100%; object-fit:cover; }
+.card-thumb.is-active{ border-color:var(--rose); box-shadow:0 0 0 2px var(--rose-soft); }
 .pouch-stage .stage-hint{
   position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
   background:var(--paper); border:1.5px solid var(--ink); border-radius:999px; padding:4px 14px;
@@ -219,19 +230,20 @@ section.block{ padding:72px 0; }
 @media (max-width:900px){ .feed-grid{ grid-template-columns:repeat(2,1fr); } }
 @media (max-width:560px){ .feed-grid{ grid-template-columns:1fr; } }
 .feed-card{ border:2px solid var(--ink); border-radius:22px; overflow:hidden; background:var(--paper); box-shadow:var(--card-shadow); display:flex; flex-direction:column; }
-.feed-card .ig-embed{ position:relative; min-height:0; background:var(--paper); display:block; padding:0; }
-.feed-card .ig-embed blockquote{ margin:0 !important; border:0 !important; box-shadow:none !important; background:transparent !important; padding:18px; text-align:center; }
-.feed-card .ig-embed blockquote a{
-  display:inline-block; background:var(--paper); border:2px solid var(--ink); border-radius:999px;
-  padding:10px 20px; font-weight:900; text-decoration:none; box-shadow:3px 3px 0 var(--ink);
-}
-.feed-card .ig-embed iframe{ position:relative !important; display:block; width:100% !important; min-width:0 !important; min-height:540px; border:0 !important; margin:0 !important; }
-.feed-card .ig-embed:has(> iframe) > blockquote{ display:none; }
-.feed-cap{ padding:14px 18px 18px; display:flex; flex-direction:column; gap:6px; }
-.feed-cap .fc-date{ font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); }
-.feed-cap p{ font-weight:700; }
-.feed-cap a{ font-weight:900; color:var(--coral); text-decoration:none; }
-.feed-cap a:hover{ text-decoration:underline; }
+/* instagram link cards: Instagram's embed endpoint returns "No Media Match"
+   for every @flwrpwr_co post, so the iframe embeds only ever rendered the
+   broken-link error box. The cards below show the real profile picture, the
+   real caption verbatim, and a link out to the post. No iframe, no embed.js. */
+.ig-card{ display:flex; flex-direction:column; gap:10px; padding:18px; text-decoration:none; color:inherit; }
+.feed-card .ig-card{ flex:1; }
+.ig-card-head{ display:flex; align-items:center; gap:12px; }
+.ig-card-ava{ width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--ink); flex:none; }
+.ig-card-meta{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.ig-card-meta b{ font-weight:900; font-size:.95rem; }
+.ig-card-meta span{ font-family:"Space Mono",monospace; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+.ig-card-cap{ font-weight:700; line-height:1.55; font-size:.95rem; overflow-wrap:break-word; }
+.ig-card-open{ font-weight:900; color:var(--coral); font-size:.9rem; }
+.ig-card:hover .ig-card-open, .ig-card:focus-visible .ig-card-open{ text-decoration:underline; }
 
 /* footer */
 footer.site{ background:var(--ink); color:var(--cream); padding:64px 0 34px; }
@@ -348,10 +360,7 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .flwr-soon-feed{ width:100%; max-width:540px; margin:20px auto 0; }
 .flwr-soon-feed-kicker{ margin:0 0 12px; font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; color:#F45078; text-align:center; }
 .flwr-soon-feed-item{ margin:0 0 16px; border-radius:20px; overflow:hidden; background:#FFFDF7; border:1.5px solid #E3D9C6; }
-.flwr-soon-feed-item blockquote{ margin:0 !important; border:0 !important; box-shadow:none !important; background:transparent !important; padding:18px; text-align:center; }
-.flwr-soon-feed-item blockquote a{ display:inline-block; background:#FFFDF7; border:2px solid #2A3620; border-radius:999px; padding:10px 20px; font-weight:900; text-decoration:none; color:#2A3620; box-shadow:3px 3px 0 #2A3620; }
-.flwr-soon-feed-item iframe{ position:relative !important; display:block; width:100% !important; min-width:0 !important; min-height:540px; border:0 !important; margin:0 !important; }
-.flwr-soon-feed-item:has(> iframe) > blockquote{ display:none; }
+.flwr-soon-feed-item .ig-card{ padding:16px 18px; }
 .flwr-soon-admin a:hover{ color:#556B3F; }
 .flwr-soon-count{ display:flex; gap:10px; margin-top:22px; }
 .flwr-soon-count div{ background:#FFFDF7; border:1.5px solid #E3D9C6; border-radius:16px; padding:8px 12px 6px; min-width:66px; box-shadow:0 8px 20px rgba(85,107,63,.12); }
@@ -444,7 +453,7 @@ html[data-theme="dark"] .flwr-soon-fine, html[data-theme="dark"] .flwr-soon-cd-n
 html[data-theme="dark"] .flwr-soon-ig a{ background:#2A3620; border-color:#3C4D2C; color:#F4728E; }
 html[data-theme="dark"] .flwr-soon-ig a:hover{ border-color:#F4728E; background:#33402A; }
 html[data-theme="dark"] .flwr-soon-feed-item{ background:#2A3620; border-color:#3C4D2C; }
-html[data-theme="dark"] .flwr-soon-feed-item blockquote a{ background:#2A3620; border-color:#3C4D2C; color:#FDF6EA; box-shadow:3px 3px 0 #141A0E; }
+html[data-theme="dark"] .flwr-soon-feed-item .ig-card-ava{ border-color:#FDF6EA; }
 html[data-theme="dark"] .flwr-soon-done{ color:#A7B995; }
 html[data-theme="dark"] .flwr-soon-blaze{ background:#2A3620; border-color:#3C4D2C; }
 html[data-theme="dark"] .flwr-soon-blaze-details{ color:#FDF6EA; }
@@ -690,6 +699,8 @@ html.has-daisy-cursor, html.has-daisy-cursor *{ cursor:none !important; }
 .shop-btn.shop-unavail{ opacity:.55; filter:saturate(.35); cursor:not-allowed; box-shadow:none; }
 .shop-btn.shop-unavail:hover{ transform:none; box-shadow:none; }
 .shop-btn .store-ico{ width:22px; height:22px; display:block; }
+.shop-btn .shop-btn-label{ margin-left:8px; font-weight:900; font-size:.82rem; letter-spacing:.1em; text-transform:uppercase; white-space:nowrap; }
+@media (max-width:560px){ .shop-btn .shop-btn-label{ font-size:.72rem; margin-left:6px; } }
 .shop-tip{ position:absolute; left:50%; bottom:calc(100% + 10px); transform:translateX(-50%) translateY(4px); background:#2A3620; color:#FDF6EA; font-weight:800; font-size:.82rem; white-space:nowrap; padding:8px 14px; border-radius:999px; box-shadow:0 8px 20px rgba(42,54,32,.3); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:5; }
 .shop-tip::after{ content:""; position:absolute; left:50%; top:100%; transform:translateX(-50%); border:6px solid transparent; border-top-color:#2A3620; }
 .shop-btn-wrap:hover .shop-tip, .shop-btn-wrap:focus-within .shop-tip{ opacity:1; transform:translateX(-50%) translateY(0); }
