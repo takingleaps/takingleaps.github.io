@@ -248,6 +248,9 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .subscribe-form button{ border-radius:999px; border:2px solid var(--gold); background:var(--gold); color:var(--ink); font-weight:900; padding:12px 22px; }
 .subscribe-done{ margin-top:12px; font-family:"Caveat",cursive; font-size:1.35rem; color:var(--gold); }
 .foot-base{ border-top:1px solid rgba(255,255,255,.18); margin-top:44px; padding-top:20px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:.82rem; color:var(--sage-soft); font-weight:600; }
+.foot-credit{ text-align:center; margin-top:16px; font-size:.82rem; color:var(--sage-soft); font-weight:600; }
+.foot-credit a{ color:#E8EEDC; text-decoration:underline; text-underline-offset:2px; }
+.foot-credit a:hover{ color:var(--rose); }
 .age-note{ font-weight:800; color:var(--gold); }
 
 /* reveal garnish (content always visible without JS) */
