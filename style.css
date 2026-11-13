@@ -615,8 +615,7 @@
     }
     .work-card--niteharts .work-image img { object-position: center 30%; }
     .work-card--escape .work-image img { object-position: center 36%; }
-    .work-card--dreamstate .work-image { display: grid; place-items: center; }
-    .work-card--dreamstate .work-image img { width: 72%; height: auto; object-fit: contain; }
+    .work-card--dreamstate .work-image img { object-position: center 42%; }
     .work-card:hover .work-image img { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
     .work-card__copy {
       min-height: 200px;
