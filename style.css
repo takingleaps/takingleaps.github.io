@@ -589,6 +589,18 @@
       .flwrpwr-live__copy { padding: 22px; }
     }
     .flwrpwr-concepts__title { margin: 28px 0 14px; font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .concepts-banner {
+      margin: 28px 0 14px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
     .flwrpwr-concepts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
     .flwrpwr-concepts .work-card__copy { min-height: 0; padding: 18px; }
     .flwrpwr-concepts .work-card h3 { padding-top: 12px; font-size: 18px; }
