@@ -479,12 +479,13 @@
     }());
   /* Kinetic terminal typing hero (Motion Studio Stack).
          Types the command line, then the headline, char by char, with a
-         block cursor. Copy + buttons print after, no fade. Skipped entirely
-         under prefers-reduced-motion: everything stays visible as authored.
-         Full text stays in the HTML, so no-JS and screen readers see it.
-         The head script adds js-typing before first paint so the full
-         headline never flashes; each line is unhidden the moment its
-         typing starts, so the page loads as it types. */
+         block cursor. Copy + buttons fade in after (CSS, once js-typing
+         lifts). Skipped entirely under prefers-reduced-motion: everything
+         stays visible as authored. Full text stays in the HTML, so no-JS
+         and screen readers see it. The head script adds js-typing before
+         first paint so the full headline never flashes; each line is
+         unhidden the moment its typing starts, so the page loads as it
+         types. */
       (function () {
         var heroTitle = document.getElementById('hero-title');
         var commandLine = document.querySelector('.hero-main .command-line');

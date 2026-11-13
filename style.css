@@ -1435,8 +1435,8 @@
     }
   /* Kinetic terminal typing hero (Motion Studio Stack).
        One orchestrated motion moment: the command line and headline type
-       themselves, block cursor follows, copy + buttons print after. No
-       fade-up reveals anywhere else on the page. */
+       themselves, block cursor follows, copy + buttons fade in after the
+       headline finishes. No fade-up reveals anywhere else on the page. */
     .type-cursor {
       display: inline-block;
       width: .52em;
@@ -1461,6 +1461,17 @@
     .t-caret { position: relative; display: inline-block; width: 0; }
     .t-caret .type-cursor { position: absolute; left: .04em; bottom: -.1em; margin: 0; }
     .command-line .t-caret .type-cursor { bottom: .05em; }
+    /* Hero copy + buttons fade in after the headline finishes typing,
+       instead of sitting there fully visible while it types. Hidden
+       while js-typing is on; the transition fades them in the moment
+       it lifts (typing done, reduced-motion finish, or the 8s safety
+       timeout). No js-typing (no JS) means visible as authored. */
+    .hero-copy, .button-row { transition: opacity .7s ease .1s; }
+    html.js-typing .hero-copy, html.js-typing .button-row { opacity: 0; }
+    html.js-typing .button-row { pointer-events: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-copy, .button-row { transition: none; }
+    }
 
     /* ---------- motion layer (Nov 10). Everything sits behind html.mo-on,
        which only gets added when reduced motion is off. ---------- */
