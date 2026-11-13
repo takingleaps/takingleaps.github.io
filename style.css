@@ -616,6 +616,19 @@
     .work-card--niteharts .work-image img { object-position: center 30%; }
     .work-card--escape .work-image img { object-position: center 36%; }
     .work-card--dreamstate .work-image img { object-position: center 42%; }
+    .work-card--dreamstate .work-image { position: relative; }
+    .work-card--dreamstate .work-image__logo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 58%;
+      height: auto;
+      object-fit: contain;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .7));
+      pointer-events: none;
+    }
+    .work-card--dreamstate:hover .work-image__logo { transform: translate(-50%, -50%); filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .7)); }
     .work-card:hover .work-image img { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
     .work-card__copy {
       min-height: 200px;
