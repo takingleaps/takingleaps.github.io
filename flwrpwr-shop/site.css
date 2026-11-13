@@ -346,8 +346,13 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 /* ---------- coming soon (replaces the old gate, Nov 10) ---------- */
 /* ---------- coming soon (replaces the old gate, Nov 10) ---------- */
 .flwr-soon{ position:fixed; inset:0; z-index:99999; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; background:#EBE1D7; }
-.flwr-soon-bg{ position:fixed; inset:-12% 0; z-index:0; pointer-events:none; background:url("img/blue-sky-hero.webp") center 30%/cover no-repeat; animation:flwrSoonDrift 26s ease-in-out infinite alternate; }
-@keyframes flwrSoonDrift{ from{ background-position:center 28%; } to{ background-position:center 38%; } }
+.flwr-soon-bg{ position:fixed; inset:-12% 0; z-index:0; pointer-events:none; background:url("img/blue-sky-hero.webp") center 75%/cover no-repeat; animation:flwrSoonDrift 26s ease-in-out infinite alternate; }
+@keyframes flwrSoonDrift{ from{ background-position:center 70%; } to{ background-position:center 80%; } }
+
+/* falling flower petals across the Coming Soon overlay (behind content) */
+.flwr-soon-petals{ position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+.flwr-soon-petals i{ position:absolute; top:-48px; left:var(--x,50%); font-style:normal; font-size:var(--s,16px); color:var(--c,#F4728E); opacity:.75; animation:flwrPetalFall var(--d,14s) linear var(--dl,0s) infinite; will-change:transform,opacity; }
+@keyframes flwrPetalFall{ 0%{ transform:translate3d(0,-6vh,0) rotate(0deg); opacity:0; } 8%{ opacity:.8; } 88%{ opacity:.75; } 100%{ transform:translate3d(var(--sway,24px),112vh,0) rotate(340deg); opacity:0; } }
 .flwr-soon-mid{ position:fixed; inset:0; z-index:1; pointer-events:none; }
 .flwr-soon-mid i{ position:absolute; font-style:normal; color:#B9A7E7; font-size:var(--s,18px); animation:flwrSoonTwinkle var(--d,4s) ease-in-out var(--o,0s) infinite; }
 @keyframes flwrSoonTwinkle{ 0%,100%{ opacity:.35; scale:.85; } 34%{ opacity:1; scale:1.12; } 52%{ opacity:.8; scale:1; } }
@@ -358,8 +363,8 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .flwr-soon-inner{ position:relative; z-index:3; min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:56px 20px 40px; box-sizing:border-box; }
 .flwr-soon-logo{ width:min(300px, 100%); height:auto; display:block; filter:drop-shadow(0 10px 28px rgba(85,107,63,.28)); animation:logoIn .9s cubic-bezier(.22,.9,.3,1) both, flwrSoonBreathe 8s ease-in-out 1s infinite; }
 @keyframes flwrSoonBreathe{ 0%,100%{ transform:translateY(0) rotate(0deg); } 38%{ transform:translateY(-4px) rotate(.4deg); } 71%{ transform:translateY(2px) rotate(-.3deg); } }
-.flwr-soon-kicker{ font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:.8rem; color:#F45078; margin:20px 0 0; }
-.flwr-soon-title{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.9rem,8vw,4.6rem); line-height:1; color:#556B3F; margin:10px 0 0; max-width:100%; overflow-wrap:break-word; animation:titleIn .8s cubic-bezier(.22,.9,.3,1) both, titleFloat 6s ease-in-out 1s infinite; }
+.flwr-soon-kicker{ font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:.8rem; color:#FFFFFF; margin:20px 0 0; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
+.flwr-soon-title{ font-family:"Shrikhand",cursive; font-weight:400; font-size:clamp(1.9rem,8vw,4.6rem); line-height:1; color:#EA386C; margin:10px 0 0; max-width:100%; overflow-wrap:break-word; animation:titleIn .8s cubic-bezier(.22,.9,.3,1) both, titleFloat 6s ease-in-out 1s infinite; }
 /* dynamic titles: smooth fade-and-rise entrance, then a gentle float on the
    Coming Soon heading. Section headings animate when they scroll into view
    (hooked to the existing .reveal.in trigger); hero titles animate on load.
@@ -370,30 +375,30 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 .page-hero h1{ animation:titleIn .8s cubic-bezier(.22,.9,.3,1) both; }
 .sec-head.reveal.in h2{ animation:titleIn .7s cubic-bezier(.22,.9,.3,1) both; }
 .sec-head.reveal.in .mini{ animation:titleIn .6s ease both; }
-.flwr-soon-sub{ font-weight:700; color:#5A6B52; max-width:460px; margin:14px 0 0; line-height:1.55; }
+.flwr-soon-sub{ font-weight:700; color:#FFFDF7; max-width:460px; margin:14px 0 0; line-height:1.55; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 .flwr-soon-form{ display:flex; gap:10px; margin-top:24px; width:100%; max-width:440px; }
 .flwr-soon-form input{ flex:1; min-width:0; box-sizing:border-box; border:1.5px solid #E3D9C6; border-radius:999px; padding:13px 20px; font:inherit; font-weight:700; background:#FFFDF7; color:#2A3620; outline:none; }
 .flwr-soon-form input:focus{ border-color:#F4728E; }
 .flwr-soon-form button{ border:none; border-radius:999px; padding:13px 24px; background:#F4728E; color:#fff; font:inherit; font-weight:900; cursor:pointer; white-space:nowrap; box-shadow:0 6px 16px rgba(244,114,142,.35); }
-.flwr-soon-done{ font-weight:800; color:#556B3F; margin:18px 0 0; }
+.flwr-soon-done{ font-weight:800; color:#FFFDF7; margin:18px 0 0; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 .flwr-soon-err{ font-weight:800; color:#D43D5E; font-size:.85rem; margin:12px 0 0; }
-.flwr-soon-preview{ display:inline-block; margin-top:26px; font-size:.82rem; font-weight:800; letter-spacing:.06em; color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
-.flwr-soon-preview:hover{ color:#556B3F; }
-.flwr-soon-fine{ font-size:.78rem; color:#8A9A7E; margin:14px 0 0; }
+.flwr-soon-preview{ display:inline-block; margin-top:26px; font-size:.82rem; font-weight:800; letter-spacing:.06em; color:#FFFDF7; text-decoration:underline; text-underline-offset:3px; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
+.flwr-soon-preview:hover{ color:#FFFFFF; }
+.flwr-soon-fine{ font-size:.78rem; color:#FFFDF7; margin:14px 0 0; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 .flwr-soon-ig{ margin:18px 0 0; }
 .flwr-soon-ig a{ display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:999px; background:#FFFDF7; border:1.5px solid #E3D9C6; color:#F45078; font-weight:900; font-size:.9rem; text-decoration:none; box-shadow:0 8px 20px rgba(85,107,63,.12); }
 .flwr-soon-ig a:hover{ border-color:#F4728E; background:#FDF6EA; }
 .flwr-soon-ig svg{ width:18px; height:18px; display:block; }
 /* ---- coming soon: autumn blaze booth showcase ---- */
-.flwr-soon-blaze{ width:100%; max-width:460px; margin:0 0 6px; padding:18px 18px 16px; border-radius:24px; background:#FFFDF7; border:1.5px solid #E3D9C6; box-shadow:0 8px 20px rgba(85,107,63,.12); box-sizing:border-box; }
+.flwr-soon-blaze{ width:100%; max-width:460px; margin:0 auto 6px; padding:18px 18px 16px; border-radius:24px; background:#FFFDF7; border:1.5px solid #E3D9C6; box-shadow:0 8px 20px rgba(85,107,63,.12); box-sizing:border-box; }
 .flwr-soon-blaze-kicker{ margin:0; font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; color:#F45078; }
 .flwr-soon-blaze-logo{ display:block; width:min(320px,100%); height:auto; margin:10px auto 0; border-radius:16px; }
 .flwr-soon-blaze-details{ margin:12px 0 0; font-weight:900; font-size:.88rem; line-height:1.5; color:#2A3620; }
 .flwr-soon-blaze-copy{ margin:8px 0 0; font-weight:700; font-size:.88rem; line-height:1.55; color:#5A6B52; }
 .flwr-soon-admin{ font-size:.78rem; margin:10px 0 0; }
-.flwr-soon-admin a{ color:#8A9A7E; text-decoration:underline; text-underline-offset:3px; }
+.flwr-soon-admin a{ color:#FFFDF7; text-decoration:underline; text-underline-offset:3px; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 .flwr-soon-feed{ width:100%; max-width:720px; margin:20px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.flwr-soon-feed-kicker{ grid-column:1/-1; margin:0 0 2px; font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; color:#F45078; text-align:center; }
+.flwr-soon-feed-kicker{ grid-column:1/-1; margin:0 0 2px; font-weight:900; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; color:#FFFFFF; text-align:center; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 .flwr-soon-feed-item{ margin:0; border-radius:20px; overflow:hidden; background:#FFFDF7; border:1.5px solid #E3D9C6; min-width:0; }
 .flwr-soon-feed-item .ig-card{ padding:12px; }
 @media (max-width:560px){
@@ -401,12 +406,12 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
   .flwr-soon-feed-item{ border-radius:14px; }
   .flwr-soon-feed-item .ig-card{ padding:8px; }
 }
-.flwr-soon-admin a:hover{ color:#556B3F; }
+.flwr-soon-admin a:hover{ color:#FFFFFF; }
 .flwr-soon-count{ display:flex; gap:10px; margin-top:22px; }
 .flwr-soon-count div{ background:#FFFDF7; border:1.5px solid #E3D9C6; border-radius:16px; padding:8px 12px 6px; min-width:66px; box-shadow:0 8px 20px rgba(85,107,63,.12); }
 .flwr-soon-count b{ display:block; font-family:"Shrikhand",cursive; font-weight:400; font-size:1.5rem; line-height:1; color:#F45078; font-variant-numeric:tabular-nums; }
 .flwr-soon-count span{ font-size:.62rem; font-weight:900; letter-spacing:.18em; text-transform:uppercase; color:#8A9A7E; }
-.flwr-soon-cd-note{ font-weight:800; font-size:.82rem; color:#8A9A7E; margin:10px 0 0; }
+.flwr-soon-cd-note{ font-weight:800; font-size:.82rem; color:#FFFDF7; margin:10px 0 0; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); } .flwr-soon-cd-note::first-letter{ text-transform:uppercase; }
 @media (max-width:540px){
   .flwr-soon-form{ flex-direction:column; }
   .flwr-soon-form button{ width:100%; }
@@ -414,6 +419,7 @@ footer.site p{ color:var(--cream-2); font-weight:600; margin-top:10px; max-width
 }
 @media (prefers-reduced-motion: reduce){
   .flwr-soon-bg, .flwr-soon-mid i, .flwr-soon-front svg, .flwr-soon-logo, .flwr-soon-title, .page-hero h1, .sec-head h2, .sec-head .mini{ animation:none !important; }
+  .flwr-soon-petals{ display:none !important; }
 }
 
 /* ---------- mobile bottom tab bar (app-style nav, phones only) ---------- */
@@ -484,18 +490,18 @@ html[data-theme="dark"] .grain{ opacity:.03; }
 /* the Coming Soon gate follows the theme too */
 html[data-theme="dark"] .flwr-soon{ background:#20291A; }
 html[data-theme="dark"] .flwr-soon-bg{
-  background:url("img/blue-sky-hero.webp") center 30%/cover no-repeat;
+  background:url("img/blue-sky-hero.webp") center 75%/cover no-repeat;
 }
-html[data-theme="dark"] .flwr-soon-title{ color:#556B3F; }
-html[data-theme="dark"] .flwr-soon-sub{ color:#5A6B52; }
+html[data-theme="dark"] .flwr-soon-title{ color:#EA386C; }
+html[data-theme="dark"] .flwr-soon-sub{ color:#FFFDF7; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 html[data-theme="dark"] .flwr-soon-form input{ background:#2A3620; border-color:#3C4D2C; color:#FDF6EA; }
 html[data-theme="dark"] .flwr-soon-count div{ background:#2A3620; border-color:#3C4D2C; }
-html[data-theme="dark"] .flwr-soon-fine, html[data-theme="dark"] .flwr-soon-cd-note{ color:#8A9A7E; }
+html[data-theme="dark"] .flwr-soon-fine, html[data-theme="dark"] .flwr-soon-cd-note{ color:#FFFDF7; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 html[data-theme="dark"] .flwr-soon-ig a{ background:#2A3620; border-color:#3C4D2C; color:#F4728E; }
 html[data-theme="dark"] .flwr-soon-ig a:hover{ border-color:#F4728E; background:#33402A; }
 html[data-theme="dark"] .flwr-soon-feed-item{ background:#2A3620; border-color:#3C4D2C; }
 html[data-theme="dark"] .flwr-soon-feed-item .ig-card-ava{ border-color:#FDF6EA; }
-html[data-theme="dark"] .flwr-soon-done{ color:#A7B995; }
+html[data-theme="dark"] .flwr-soon-done{ color:#FFFDF7; text-shadow:0 1px 6px rgba(20,26,14,.55), 0 0 3px rgba(20,26,14,.35); }
 html[data-theme="dark"] .flwr-soon-blaze{ background:#2A3620; border-color:#3C4D2C; }
 html[data-theme="dark"] .flwr-soon-blaze-details{ color:#FDF6EA; }
 html[data-theme="dark"] .flwr-soon-blaze-copy{ color:#C9D6BD; }
