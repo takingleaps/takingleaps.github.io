@@ -651,19 +651,30 @@
       height: auto;
       object-fit: contain;
       transform: translate(-50%, -50%);
-      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85)) drop-shadow(0 0 14px rgba(125, 211, 252, .3));
-      animation: ds-logo-glow 3.2s ease-in-out infinite alternate;
+      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85));
       pointer-events: none;
       z-index: 2;
     }
-    @keyframes ds-logo-glow {
-      from { filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85)) drop-shadow(0 0 12px rgba(125, 211, 252, .25)); }
-      to { filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85)) drop-shadow(0 0 30px rgba(125, 211, 252, .6)); }
+    /* Hover: the logo digitizes in place. Transform is locked to translate(-50%,-50%) here so the generic card hover zoom can never move it. Only clip-path slices and filter flicker animate. */
+    .work-card--dreamstate:hover .work-image__logo {
+      transform: translate(-50%, -50%);
+      animation: ds-logo-digitize .7s steps(1, end) infinite;
+    }
+    @keyframes ds-logo-digitize {
+      0%   { clip-path: inset(0 0 0 0);     filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85)) brightness(1); }
+      12%  { clip-path: inset(8% 0 64% 0);  filter: drop-shadow(3px 0 0 rgba(125, 211, 252, .9)) brightness(1.5); }
+      24%  { clip-path: inset(52% 0 6% 0);  filter: drop-shadow(-3px 0 0 rgba(255, 79, 163, .9)) brightness(.75); }
+      36%  { clip-path: inset(0 0 0 0);      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85)) brightness(1.25); }
+      48%  { clip-path: inset(28% 0 34% 0);  filter: drop-shadow(3px 0 0 rgba(125, 211, 252, .9)) brightness(1.5); }
+      60%  { clip-path: inset(74% 0 0 0);    filter: drop-shadow(-3px 0 0 rgba(255, 79, 163, .9)) brightness(.7); }
+      72%  { clip-path: inset(0 0 0 0);      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85)) brightness(1); }
+      84%  { clip-path: inset(40% 0 22% 0);  filter: drop-shadow(2px 0 0 rgba(125, 211, 252, .85)) brightness(1.4); }
+      100% { clip-path: inset(0 0 0 0);      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85)) brightness(1); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .work-card--dreamstate .work-image__logo { animation: none; }
+      .work-card--dreamstate:hover .work-image__logo { animation: none; }
     }
-    .work-card:hover .work-image img { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
+    .work-card:hover .work-image img:not(.work-image__logo) { filter: saturate(1) contrast(1.08); transform: scale(1.015); }
     .work-card__copy {
       min-height: 200px;
       padding: 22px;
