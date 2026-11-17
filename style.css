@@ -1616,6 +1616,12 @@
     .next-thread__here { color: var(--dim); }
     .next-thread__sep { color: var(--accent); }
     @media (max-width: 640px) {
+      .next-thread { margin-bottom: 28px; }
+      .next-thread__hero { padding: 18px 20px; }
+      .next-thread__kicker { margin-bottom: 8px; }
+      .next-thread__name { font-size: 30px; }
+      .next-thread__desc { margin-top: 8px; font-size: 13px; }
+      .next-thread__trail { padding: 10px 20px; gap: 8px 12px; }
       .next-thread__trail a {
         min-height: 44px;
         display: inline-flex;
