@@ -1553,6 +1553,8 @@
       border: 1px solid var(--border-strong);
       background: var(--surface);
     }
+    /* Contact page: the thread sits inside the form section, so give it room above. */
+    #contact .next-thread { margin-top: 48px; }
     .next-thread__hero {
       padding: clamp(28px, 5vw, 44px);
       display: block;
