@@ -1544,3 +1544,81 @@
 
     .mo-tick { display: inline-block; width: .45em; height: .82em; margin-left: .12em; vertical-align: -.06em; background: var(--accent);
       animation: cursor-blink .9s steps(1) 4 forwards; }
+
+    /* ---------- next-page thread (Nov 17). Terminal-style signpost above the
+       footer so visitors see there are more pages even if they miss the top
+       nav. Pure links, no JS. ---------- */
+    .next-thread {
+      margin: 0 0 44px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+    }
+    .next-thread__hero {
+      padding: clamp(28px, 5vw, 44px);
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: background .2s var(--ease), border-color .2s var(--ease);
+    }
+    .next-thread__hero:hover {
+      background: var(--accent-faint);
+      border-color: rgba(55,255,0,.4);
+    }
+    .next-thread__kicker {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .next-thread__name {
+      display: block;
+      color: var(--headline);
+      font-family: var(--display);
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: .02em;
+    }
+    .next-thread__arrow {
+      display: inline-block;
+      color: var(--accent);
+      transition: translate .25s var(--ease);
+    }
+    .next-thread__hero:hover .next-thread__arrow { translate: 10px 0; }
+    .next-thread__desc {
+      display: block;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .next-thread__trail {
+      padding: 16px clamp(20px, 4vw, 32px);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .next-thread__trail a {
+      padding: 4px 0;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s var(--ease);
+    }
+    .next-thread__trail a:hover { color: var(--accent); }
+    .next-thread__here { color: var(--dim); }
+    .next-thread__sep { color: var(--accent); }
+    @media (max-width: 640px) {
+      .next-thread__trail a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+    }
