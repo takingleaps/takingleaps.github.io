@@ -118,11 +118,33 @@
   }
   .rudolph{animation:rudolph 0.9s steps(2) infinite}
   @keyframes rudolph{50%{opacity:.25}}
-  /* Big snow monster in the background */
-  .snow-monster{position:absolute; left:50%; bottom:6px; width:190px; height:253px; margin-left:-95px; z-index:-1; pointer-events:none; image-rendering:pixelated; shape-rendering:crispEdges; animation:monsterBreathe 3.2s ease-in-out infinite}
-  .snow-monster svg{width:190px; height:253px; image-rendering:pixelated; shape-rendering:crispEdges}
-  @keyframes monsterBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-  @media (max-width:420px){.snow-monster{width:110px; height:147px; margin-left:-55px; bottom:4px} .snow-monster svg{width:110px; height:147px}}
+  /* Big snow monster in the background: patrols the middle of the hero,
+     walks with a snap-step waddle, and every 12 s (in time with the
+     sleigh flyover) it hops, throws both arms up, and lobs a snowball
+     at Santa. The patrol is timed so the swat lands when the sleigh
+     is overhead on the left, around 50% of the 12 s loop. */
+  .snow-monster{--walk-l:34%; --walk-r:68%; position:absolute; left:50%; bottom:6px; width:190px; height:253px; margin-left:-95px; z-index:-1; pointer-events:none; image-rendering:pixelated; shape-rendering:crispEdges; animation:monsterWalk 12s ease-in-out infinite, monsterSwat 12s ease-in-out infinite}
+  .snow-monster svg{width:190px; height:253px; image-rendering:pixelated; shape-rendering:crispEdges; animation:monsterStep .55s steps(2) infinite}
+  @keyframes monsterWalk{0%{left:var(--walk-r)}50%{left:var(--walk-l)}100%{left:var(--walk-r)}}
+  @keyframes monsterSwat{0%,46%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(-2.5deg)}57%,100%{transform:translateY(0) rotate(0deg)}}
+  @keyframes monsterStep{0%,100%{transform:translateY(0) rotate(-1.4deg)}50%{transform:translateY(-6px) rotate(1.4deg)}}
+  .snow-monster .arm-l, .snow-monster .arm-r{transform-box:fill-box; transform-origin:50% 0%}
+  .snow-monster .arm-l{animation:swatArmL 12s ease-in-out infinite}
+  .snow-monster .arm-r{animation:swatArmR 12s ease-in-out infinite}
+  @keyframes swatArmL{0%,46%{transform:rotate(0deg)}50%{transform:rotate(-62deg)}57%,100%{transform:rotate(0deg)}}
+  @keyframes swatArmR{0%,46%{transform:rotate(0deg)}50%{transform:rotate(62deg)}57%,100%{transform:rotate(0deg)}}
+  .monster-ball{position:absolute; left:84%; top:47%; width:14px; height:14px; background:#fff; border:3px solid #000; opacity:0; pointer-events:none; animation:monsterThrow 12s ease-in-out infinite}
+  .monster-ball::after{content:""; position:absolute; left:2px; top:2px; width:4px; height:4px; background:#dfe6ff}
+  @keyframes monsterThrow{
+    0%,38%{opacity:0; transform:translate(0,0)}
+    42%{opacity:1; transform:translate(0,0)}
+    46%{opacity:1; transform:translate(-8px,12px)}
+    50%{opacity:1; transform:translate(-40px,-120px)}
+    56%{opacity:1; transform:translate(-90px,-220px)}
+    60%{opacity:0; transform:translate(-110px,-250px)}
+    61%,100%{opacity:0; transform:translate(0,0)}
+  }
+  @media (max-width:420px){.snow-monster{--walk-r:60%; width:110px; height:147px; margin-left:-55px; bottom:4px} .snow-monster svg{width:110px; height:147px} .monster-ball{width:10px; height:10px; border-width:2px}}
   .ground{
     display:block; width:calc(100% + 36px); margin:0 -18px; height:74px;
   }
@@ -335,6 +357,7 @@
     *, *::before, *::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
     html{scroll-behavior:auto}
     .sleigh{animation:none; transform:translateX(20px)}
+    .snow-monster, .snow-monster svg, .snow-monster .arm-l, .snow-monster .arm-r, .monster-ball{animation:none}
   }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -375,7 +398,7 @@
 <main>
   <section class="hero">
     <div class="moon" aria-hidden="true"></div>
-    <div class="snow-monster" aria-hidden="true"><svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="4" width="10" height="16" fill="#e8b800"/><rect x="32" y="0" width="6" height="6" fill="#f8d800"/><rect x="80" y="4" width="10" height="16" fill="#e8b800"/><rect x="82" y="0" width="6" height="6" fill="#f8d800"/><rect x="34" y="14" width="52" height="12" fill="#fff"/><rect x="26" y="24" width="68" height="30" fill="#fff"/><rect x="20" y="28" width="8" height="18" fill="#fff"/><rect x="92" y="28" width="8" height="18" fill="#fff"/><rect x="30" y="16" width="6" height="6" fill="#dfe6ff"/><rect x="84" y="16" width="6" height="6" fill="#dfe6ff"/><rect x="36" y="28" width="48" height="30" fill="#fff7e0"/><rect x="38" y="30" width="14" height="4" fill="#101018"/><rect x="68" y="30" width="14" height="4" fill="#101018"/><rect x="40" y="36" width="10" height="12" fill="#101018"/><rect x="70" y="36" width="10" height="12" fill="#101018"/><rect x="42" y="38" width="3" height="3" fill="#fff"/><rect x="72" y="38" width="3" height="3" fill="#fff"/><rect x="55" y="48" width="10" height="5" fill="#101018"/><rect x="46" y="53" width="28" height="5" fill="#101018"/><rect x="50" y="53" width="4" height="5" fill="#fff"/><rect x="66" y="53" width="4" height="5" fill="#fff"/><rect x="24" y="58" width="72" height="20" fill="#fff"/><rect x="18" y="74" width="84" height="28" fill="#fff"/><rect x="14" y="98" width="92" height="30" fill="#fff"/><rect x="18" y="124" width="84" height="18" fill="#fff"/><rect x="38" y="80" width="44" height="52" fill="#eef2ff"/><rect x="38" y="80" width="44" height="6" fill="#dfe6ff"/><rect x="98" y="80" width="8" height="44" fill="#dfe6ff"/><rect x="14" y="98" width="6" height="30" fill="#dfe6ff"/><rect x="24" y="78" width="6" height="6" fill="#dfe6ff"/><rect x="90" y="78" width="6" height="6" fill="#dfe6ff"/><rect x="20" y="102" width="6" height="6" fill="#dfe6ff"/><rect x="94" y="102" width="6" height="6" fill="#dfe6ff"/><rect x="0" y="66" width="16" height="50" fill="#fff"/><rect x="0" y="110" width="16" height="12" fill="#dfe6ff"/><rect x="2" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="7" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="12" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="104" y="66" width="16" height="50" fill="#fff"/><rect x="104" y="110" width="16" height="12" fill="#dfe6ff"/><rect x="106" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="111" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="116" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="22" y="140" width="26" height="14" fill="#dfe6ff"/><rect x="72" y="140" width="26" height="14" fill="#dfe6ff"/><rect x="24" y="150" width="5" height="4" fill="#fff"/><rect x="31" y="150" width="5" height="4" fill="#fff"/><rect x="38" y="150" width="5" height="4" fill="#fff"/><rect x="74" y="150" width="5" height="4" fill="#fff"/><rect x="81" y="150" width="5" height="4" fill="#fff"/><rect x="88" y="150" width="5" height="4" fill="#fff"/></svg></div>
+    <div class="snow-monster" aria-hidden="true"><svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="4" width="10" height="16" fill="#e8b800"/><rect x="32" y="0" width="6" height="6" fill="#f8d800"/><rect x="80" y="4" width="10" height="16" fill="#e8b800"/><rect x="82" y="0" width="6" height="6" fill="#f8d800"/><rect x="34" y="14" width="52" height="12" fill="#fff"/><rect x="26" y="24" width="68" height="30" fill="#fff"/><rect x="20" y="28" width="8" height="18" fill="#fff"/><rect x="92" y="28" width="8" height="18" fill="#fff"/><rect x="30" y="16" width="6" height="6" fill="#dfe6ff"/><rect x="84" y="16" width="6" height="6" fill="#dfe6ff"/><rect x="36" y="28" width="48" height="30" fill="#fff7e0"/><rect x="38" y="30" width="14" height="4" fill="#101018"/><rect x="68" y="30" width="14" height="4" fill="#101018"/><rect x="40" y="36" width="10" height="12" fill="#101018"/><rect x="70" y="36" width="10" height="12" fill="#101018"/><rect x="42" y="38" width="3" height="3" fill="#fff"/><rect x="72" y="38" width="3" height="3" fill="#fff"/><rect x="55" y="48" width="10" height="5" fill="#101018"/><rect x="46" y="53" width="28" height="5" fill="#101018"/><rect x="50" y="53" width="4" height="5" fill="#fff"/><rect x="66" y="53" width="4" height="5" fill="#fff"/><rect x="24" y="58" width="72" height="20" fill="#fff"/><rect x="18" y="74" width="84" height="28" fill="#fff"/><rect x="14" y="98" width="92" height="30" fill="#fff"/><rect x="18" y="124" width="84" height="18" fill="#fff"/><rect x="38" y="80" width="44" height="52" fill="#eef2ff"/><rect x="38" y="80" width="44" height="6" fill="#dfe6ff"/><rect x="98" y="80" width="8" height="44" fill="#dfe6ff"/><rect x="14" y="98" width="6" height="30" fill="#dfe6ff"/><rect x="24" y="78" width="6" height="6" fill="#dfe6ff"/><rect x="90" y="78" width="6" height="6" fill="#dfe6ff"/><rect x="20" y="102" width="6" height="6" fill="#dfe6ff"/><rect x="94" y="102" width="6" height="6" fill="#dfe6ff"/><g class="arm-l"><rect x="0" y="66" width="16" height="50" fill="#fff"/><rect x="0" y="110" width="16" height="12" fill="#dfe6ff"/><rect x="2" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="7" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="12" y="122" width="3" height="6" fill="#dfe6ff"/></g><g class="arm-r"><rect x="104" y="66" width="16" height="50" fill="#fff"/><rect x="104" y="110" width="16" height="12" fill="#dfe6ff"/><rect x="106" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="111" y="122" width="3" height="6" fill="#dfe6ff"/><rect x="116" y="122" width="3" height="6" fill="#dfe6ff"/></g><rect x="22" y="140" width="26" height="14" fill="#dfe6ff"/><rect x="72" y="140" width="26" height="14" fill="#dfe6ff"/><rect x="24" y="150" width="5" height="4" fill="#fff"/><rect x="31" y="150" width="5" height="4" fill="#fff"/><rect x="38" y="150" width="5" height="4" fill="#fff"/><rect x="74" y="150" width="5" height="4" fill="#fff"/><rect x="81" y="150" width="5" height="4" fill="#fff"/><rect x="88" y="150" width="5" height="4" fill="#fff"/></svg><div class="monster-ball" aria-hidden="true"></div></div>
     <span class="twinkle-star" style="left:6%; top:12%"></span>
     <span class="twinkle-star gold" style="left:14%; top:38%"></span>
     <span class="twinkle-star" style="left:24%; top:8%"></span>
