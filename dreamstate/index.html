@@ -5,553 +5,1180 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#060913">
-<meta name="description" content="Dreamstate SoCal 2026, November 20 to 21 at Queen Mary Waterfront, Long Beach. Lineup, plan, map, and info, built to the Niteharts and Escape standard.">
-<title>Dreamstate SoCal 2026 | Lineup, Plan, Map, Info</title>
+<meta name="description" content="Plan Dreamstate SoCal 2026 at Queen Mary Waterfront. Browse the lineup, save your artists, and find festival information.">
+<title>Dreamstate SoCal 2026 | Festival Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add("js-boot")</script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Teko:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 :root{
-  color-scheme:dark;
   --night:#060913; --deep:#0a1122; --panel:#101830; --panel2:#16203a;
   --paper:#eef2ff; --mist:#a7b0cc; --line:#26334f; --line-strong:#3d4f78;
   --cyan:#7dd3fc; --cyan-strong:#d5f1ff; --ink:#062a3a;
   --display:"Teko","Arial Narrow",sans-serif; --body:"Syne",sans-serif; --mono:"Syne Mono",monospace;
   --ease:cubic-bezier(.16,1,.3,1);
-  --rise:18px; --stag:1; --pk:1;
+  --width:1200px; --gutter:clamp(18px,5vw,76px); --tabs:68px;
+  color-scheme:dark;
 }
-@media(max-width:640px){:root{--rise:10px;--stag:.6;--pk:.5}}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;min-width:320px;padding-bottom:calc(84px + env(safe-area-inset-bottom));background:var(--night);color:var(--paper);font-family:var(--body);line-height:1.4;overflow-x:hidden}
-button,input,textarea{font:inherit;color:inherit}
+html{scroll-padding:24px 0 calc(var(--tabs) + 36px)}
+body{margin:0;background:var(--night);color:var(--paper);font:500 16px/1.55 var(--body);padding-bottom:calc(var(--tabs) + 12px + env(safe-area-inset-bottom))}
+body:has(dialog[open]){overflow:hidden}
+[hidden]{display:none!important}
+button,input,textarea,summary{font:inherit;color:inherit}
+button,summary{cursor:pointer}
 a{color:var(--cyan);text-underline-offset:4px}
-:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+a:hover{color:var(--cyan-strong)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 ::selection{background:var(--cyan);color:var(--ink)}
-
-/* ---------- motion system (ported from Niteharts / Escape) ---------- */
-@keyframes bootStageIn{from{opacity:0}to{opacity:1}}
-@keyframes bootSweep{0%{transform:translateX(-110%)}100%{transform:translateX(110%)}}
-@keyframes bootLoad{0%{width:0%}100%{width:100%}}
-@keyframes bootScanline{0%{top:-10%}100%{top:110%}}
-@keyframes logoIn{0%{opacity:0;transform:translateY(26px) scale(.98);letter-spacing:.14em}100%{opacity:1;transform:none;letter-spacing:.01em}}
-@keyframes logoSweep{0%{transform:translateX(-160%) skewX(-18deg)}100%{transform:translateX(360%) skewX(-18deg)}}
-@keyframes logoSignal{0%,100%{opacity:.25}50%{opacity:1}}
-@keyframes heroBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
-@keyframes orbit{0%{transform:rotate(-18deg) scale(1)}50%{transform:rotate(-8deg) scale(1.04)}100%{transform:rotate(-18deg) scale(1)}}
-@keyframes starDrift{0%{background-position:0 0,60px 90px}100%{background-position:180px 120px,240px 210px}}
-@keyframes marqueeMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes marqueeFlicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.4}94%{opacity:1}97%{opacity:.6}98%{opacity:1}}
-@keyframes countBump{0%{transform:scale(1)}40%{transform:scale(1.18);color:var(--cyan-strong)}100%{transform:scale(1)}}
-@keyframes signalPulse{0%,100%{opacity:.35;box-shadow:0 0 0 0 rgba(125,211,252,.35)}50%{opacity:1;box-shadow:0 0 0 8px rgba(125,211,252,0)}}
-@keyframes pinGlow{0%,100%{box-shadow:0 0 0 0 rgba(125,211,252,.4)}50%{box-shadow:0 0 24px 4px rgba(125,211,252,.35)}}
-@keyframes beamPulse{0%,100%{opacity:.12;transform:scaleY(.6)}50%{opacity:.5;transform:scaleY(1)}}
-@keyframes rise{from{opacity:0;transform:translateY(var(--rise))}to{opacity:1;transform:none}}
-@keyframes cardIn{from{opacity:0;transform:translateY(calc(var(--rise) * .9))}to{opacity:1;transform:none}}
-@keyframes panelIn{from{opacity:0;transform:translate(calc(var(--dir,0) * var(--rise) * 1.4),calc(var(--rise) * .6))}to{opacity:1;transform:none}}
-@keyframes sheetOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(calc(var(--rise) * 2))}}
+h1,h2,h3,p,dl,dd{margin:0}
+h2,h3{font-family:var(--display);font-weight:500;line-height:.96;overflow-wrap:anywhere}
+h2{font-size:clamp(3.8rem,8vw,7.1rem);letter-spacing:-.022em}
+h3{font-size:clamp(1.9rem,3vw,2.9rem)}
+small,.mono{font:400 .78rem/1.45 var(--mono);letter-spacing:.04em}
+.muted{color:var(--mist)}
+.wrap{width:min(var(--width),calc(100% - var(--gutter)*2));margin-inline:auto}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.progress{position:fixed;z-index:8;top:0;left:0;width:100%;height:2px;background:var(--cyan);transform:scaleX(var(--progress,0));transform-origin:left;pointer-events:none}
+.topbar{position:relative;z-index:2;border-bottom:1px solid var(--line);background:var(--night)}
+.topbar .wrap{height:65px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:inline-flex;align-items:center;gap:10px;color:var(--paper);font-weight:700;text-decoration:none;min-height:60px;white-space:nowrap;transition:transform .25s var(--ease)}
+.brand:active{transform:scale(.97)}
+.brand-mark{width:18px;height:18px;border:1px solid var(--cyan);transform:rotate(45deg);position:relative}
+.brand-mark::after{content:"";position:absolute;inset:4px;background:var(--cyan)}
+.top-date{color:var(--mist);text-align:right}
+.hero{isolation:isolate;position:relative;overflow:hidden;background:var(--night);border-bottom:1px solid var(--line)}
+.hero .wrap{position:relative;z-index:1}
+.hero-content{min-height:clamp(590px,50vw,720px);display:grid;align-content:center;justify-items:start;padding:52px 0 44px;max-width:650px;transform:translateY(var(--subject-y,0px))}
+.with-boot .hero{--hero-delay:.36s}
+.hero-copy.is-in{animation:logoIn .95s var(--hero-delay,0s) var(--ease) backwards}
+.hero-label{color:var(--cyan);text-transform:uppercase;margin-bottom:17px;animation:signalPulse 7s var(--ease) infinite}
+.logo{position:relative;width:min(100%,560px);isolation:isolate;line-height:0;animation:logoIn .95s calc(.04s + var(--hero-delay,0s)) var(--ease) backwards}
+.logo img{width:100%;height:auto;display:block}
+.logo::before,.logo::after,.logo-sweep{content:"";position:absolute;inset:0;pointer-events:none}
+.logo::before,.logo::after{background:url("dreamstate-logo-white.png") center/100% 100% no-repeat;opacity:0}
+.logo::before{animation:logoSignal 9s steps(1,end) infinite}
+.logo::after{animation:logoSignalB 11s steps(1,end) infinite}
+.logo-sweep{mask:url("dreamstate-logo-white.png") center/100% 100%;overflow:hidden}
+.logo-sweep::after{content:"";position:absolute;inset:0 60% 0 0;background:linear-gradient(90deg,transparent,#fff8,transparent);animation:logoSweep 6.8s calc(var(--hero-delay,0s) - .38s) var(--ease) infinite backwards}
+.hero-date{font:600 clamp(6rem,11vw,10.3rem)/.78 var(--display);letter-spacing:-.034em;margin-top:20px;animation:datePressure 8s var(--ease) infinite}
+.hero-place{font-size:clamp(.96rem,2vw,1.2rem);margin-top:10px;color:var(--paper)}
+.hero-facts{width:fit-content;color:var(--cyan-strong);margin-top:5px}
+.countdown{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(60px,82px);margin:28px 0 24px;border-block:1px solid var(--line);animation:countRail .65s .12s var(--ease) backwards}
+.clock-unit{padding:9px 13px 10px;border-left:1px solid var(--line)}
+.clock-unit:last-child{border-right:1px solid var(--line)}
+.clock-unit b{font:500 2rem/1 var(--display);font-variant-numeric:tabular-nums;display:block;color:var(--cyan-strong)}
+.clock-unit small{font-size:.68rem;color:var(--mist)}
+.clock-unit b.bump{animation:countBump .36s var(--ease)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;animation:actionLand .65s .18s var(--ease) backwards}
+.button,button.control,summary.control{min-height:60px;display:inline-flex;justify-content:center;align-items:center;gap:8px;padding:0 19px;border:1px solid var(--line-strong);border-radius:3px;color:var(--paper);background:var(--panel);font-weight:700;text-decoration:none;line-height:1.16;text-align:center;transition:transform .25s var(--ease),opacity .25s var(--ease)}
+.button:hover,button.control:hover,summary.control:hover{background:var(--panel2);color:var(--cyan-strong);transform:translateY(-2px)}
+.button:active,button.control:active,summary.control:active{transform:scale(.97)}
+.button.primary,button.primary{background:var(--cyan);border-color:var(--cyan);color:var(--night)}
+.button.primary:hover,button.primary:hover{background:var(--cyan-strong);color:var(--night)}
+button:disabled{opacity:.42;cursor:default;transform:none!important}
+.scene,.plane{position:absolute;inset:0;pointer-events:none}
+.scene{overflow:hidden;background:linear-gradient(90deg,var(--night) 3%,transparent 78%)}
+.sky{inset:-8% -4%;transform:translateY(var(--sky-y,0px));background:radial-gradient(ellipse at 74% 43%,#25445b 0%,#10243a 29%,#0a1122 49%,#060913 70%)}
+.sky::after{content:"";position:absolute;inset:-12%;opacity:.52;background-image:radial-gradient(circle,var(--cyan-strong) 0 .65px,transparent 1.25px),radial-gradient(circle,#7dd3fcbb 0 .85px,transparent 1.4px),radial-gradient(circle,#a7b0cc88 0 .55px,transparent 1.3px);background-size:91px 103px,151px 127px,53px 73px;background-position:13px 31px,58px 16px,3px 27px;animation:starDrift 46s linear infinite}
+.atmosphere{transform:translateY(var(--air-y,0px))}
+.haze{position:absolute;left:33%;right:-8%;top:14%;height:71%;background:radial-gradient(ellipse at center,#7dd3fc65,transparent 66%);opacity:.58;animation:heroBreath 9s var(--ease) infinite}
+.portal-plane{transform:translateY(var(--portal-y,0px)) scale(var(--portal-scale,1)) rotate(var(--portal-angle,0deg));transform-origin:72% 45%}
+.portal{position:absolute;left:72%;top:45%;width:min(43vw,610px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#b2e9ff5c 0%,#7dd3fc36 14%,#7dd3fc08 29%,transparent 61%);mask-image:linear-gradient(#000 0 83%,transparent)}
+.portal::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from -3deg,#d5f1ff70 0 .18deg,transparent .23deg 6deg);mask:radial-gradient(circle,transparent 65%,#000 65.2% 65.9%,transparent 66.2%);opacity:.63}
+.portal::after{content:"";position:absolute;inset:43%;border-radius:50%;border:1px solid #d5f1ff47}
+.portal-ring{position:absolute;inset:9%;border:1px solid #b8eaff7d;border-radius:50%;transform:rotate(-30deg) scaleY(.76);animation:orbit 18s var(--ease) infinite}
+.portal-ring:nth-child(2){inset:15%;border-style:dashed;opacity:.54;animation:orbitCounter 24s var(--ease) infinite}
+.portal-ring:nth-child(3){inset:23%;border-color:#d5f1ffb0;animation:orbitInner 15s var(--ease) infinite}
+.portal-ring:nth-child(4){inset:2%;border-color:#7dd3fc42;animation:orbitOuter 21s var(--ease) infinite}
+.portal-axis{position:absolute;inset:20% -3%;background:linear-gradient(transparent 49.7%,#7dd3fc83 50%,transparent 50.3%);transform:rotate(-24deg);animation:beamPulse 6.2s var(--ease) infinite}
+.portal-axis:nth-child(6){transform:rotate(58deg);animation:crossBeam 8s -2s var(--ease) infinite}
+.portal-rift{position:absolute;inset:1%;border-radius:50%;border:solid #b7eaff;border-width:1px 2px;transform:rotate(-37deg) scale(var(--rift-scale,.72));opacity:var(--rift-opacity,.13)}
+.portal-rift::after{content:"";position:absolute;inset:7%;border:1px solid #9adfff84;border-radius:50%}
+.foreground{transform:translateY(var(--front-y,0px))}
+.horizon{position:absolute;inset:64% 0 auto;height:1px;background:linear-gradient(90deg,transparent 24%,#7dd3fc24 40%,#d5f1ffae 73%,#7dd3fc1a 100%);animation:horizonLife 8s var(--ease) infinite}
+.water{position:absolute;inset:64% -10% -40% 30%;perspective:170px;overflow:hidden;mask-image:linear-gradient(#000 8%,#000b 60%,transparent 84%)}
+.water::after{content:"";position:absolute;inset:-8% -30% -10%;transform-origin:top;background:repeating-linear-gradient(0deg,#7dd3fc44 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,#7dd3fc33 0 1px,transparent 1px 55px),radial-gradient(ellipse at 63% 38%,#7dd3fc54,transparent 55%);transform:rotateX(47deg);animation:waterFlow 10s var(--ease) infinite}
+.hero-shade{background:linear-gradient(90deg,#060913 0%,#060913ec 23%,#06091394 42%,transparent 68%),linear-gradient(0deg,var(--night),transparent 33%);z-index:0}
+.hero.offscreen .scene *, .hero.offscreen .scene *::after{animation-play-state:paused}
+.marquee{overflow:hidden;border-top:1px solid var(--line);background:var(--deep);color:var(--cyan-strong);position:relative;z-index:1}
+.marquee-set{display:flex}
+.marquee-track{display:flex;width:max-content;animation:marqueeMove 30s linear infinite}
+.marquee span{white-space:nowrap;padding:14px 14px 14px 0;color:var(--cyan-strong);animation:marqueeFlicker 12s steps(1,end) infinite}
+.marquee b{color:var(--cyan);margin-inline:12px}
+.next{border-bottom:1px solid var(--line);position:relative;overflow:hidden;background:var(--deep)}
+.next::after{content:"";position:absolute;inset:0 75% 0 0;background:linear-gradient(90deg,transparent,#7dd3fc15,transparent);animation:bannerScan 8s var(--ease) infinite;pointer-events:none}
+.next .next-content{min-height:68px;padding-inline:14px;display:flex;align-items:center;justify-content:space-between;gap:8px 20px;flex-wrap:wrap;padding-block:4px}
+.next a,.text-link{min-height:60px;display:inline-flex;align-items:center;font-weight:700;transition:transform .24s var(--ease)}
+.next a:hover,.text-link:hover{transform:translateX(3px)}
+.section{padding:clamp(52px,7vw,96px) 0;border-bottom:1px solid var(--line)}
+.section:nth-of-type(even){background:var(--deep)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:24px}
+.section-head p{max-width:405px;color:var(--mist)}
+#lineup{padding-top:clamp(22px,3.4vw,48px)}
+.featured-head{display:flex;align-items:end;justify-content:space-between;gap:10px 20px;margin-bottom:12px}
+.featured-head h2{font-size:clamp(2.55rem,6.1vw,5.2rem)}
+.featured-head .text-link{min-height:56px;text-align:right;font-size:.87rem}
+.spotlight{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 24px}
+.spot-card{min-width:0;display:grid;grid-template-rows:1fr auto;background:var(--panel);border:1px solid var(--line-strong)}
+.spot-card:focus-within{border-color:var(--cyan)}
+.spot-card .control{border:0;border-radius:0;border-top:1px solid var(--line-strong)}
+.spot-card .control[aria-pressed=true]{border-top-color:var(--cyan)}
+.spot-card .control:focus-visible{outline-offset:-4px}
+.spot-detail{align-self:end;color:var(--cyan-strong);font-size:.78rem}
+.artboard{position:absolute;z-index:-1;inset:0;overflow:hidden;pointer-events:none;background:var(--art,linear-gradient(135deg,#111c35 34%,#2c5168 100%));opacity:var(--card-art,.83)}
+.artboard::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--panel) 5%,#101830ed 35%,transparent 85%)}
+.spot-card:nth-child(2){--art:linear-gradient(155deg,#17233e 14%,#426d82 51%,#111a31 83%)}
+.spot-card:nth-child(3){--art:linear-gradient(60deg,#142039 16%,#345b75 68%,#223752 91%)}
+.spot-card:nth-child(4){--art:linear-gradient(20deg,#101b32 20%,#3b627b 77%,#223650 94%)}
+.lineup-browser{margin-top:28px}
+.lineup-browser .section-head{margin-bottom:16px}
+.lineup-browser h3{font-size:clamp(2.15rem,5vw,4.5rem)}
+.spot{position:relative;isolation:isolate;overflow:hidden;min-height:220px;display:grid;align-content:end;justify-items:start;text-align:left;gap:8px;padding:18px;background:var(--panel);border:0;color:var(--paper);transition:transform .36s var(--ease),opacity .36s var(--ease)}
+.spot::before{content:"";position:absolute;z-index:0;pointer-events:none;width:110%;aspect-ratio:1;border-radius:50%;top:-70%;right:-38%;background:repeating-radial-gradient(circle,#7dd3fc00 0 8px,#7dd3fc3b 9px 10px,#7dd3fc00 11px 17px);mask-image:linear-gradient(135deg,#000,transparent 83%);transform:translateY(var(--art-y,0px)) rotateX(35deg) rotate(-24deg);transition:transform .22s var(--ease),opacity .35s var(--ease)}
+.spot > :not(.artboard){position:relative;z-index:1}
+.spot-card:nth-child(2) .spot::before{top:-52%;right:-18%;transform:rotateX(58deg) rotate(-28deg)}
+.spot-card:nth-child(3) .spot::before{top:-72%;right:-10%;transform:rotateX(30deg) rotate(20deg)}
+.spot-card:nth-child(4) .spot::before{top:-41%;right:-48%;transform:rotateX(45deg) rotate(45deg)}
+.spot:hover{transform:translateY(-2px);color:var(--cyan-strong)}
+.spot:hover::before{transform:rotateX(42deg) scale(1.14);opacity:.8}
+.spot:active{transform:scale(.985)}
+.spot .mono{color:var(--cyan)}
+.spot .meta{color:var(--mist)}
+.filterbar{display:grid;grid-template-columns:auto minmax(170px,1fr) auto;gap:8px;margin-bottom:12px}
+.day-group{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+button.filter{padding-inline:16px;white-space:nowrap}
+button[aria-pressed=true].filter{background:var(--cyan);color:var(--night);border-color:var(--cyan)}
+input,textarea{width:100%;min-height:60px;min-width:0;padding:12px 15px;background:var(--night);border:1px solid var(--line-strong);border-radius:3px;font-family:var(--body);font-size:16px;transition:opacity .25s var(--ease)}
+textarea{min-height:130px;resize:vertical}
+input::placeholder,textarea::placeholder{color:var(--mist);opacity:1}
+input:hover,textarea:hover{border-color:var(--cyan)}
+.resultbar{display:flex;justify-content:space-between;gap:10px;color:var(--mist);margin:8px 0}
+.artist-list,.schedule-list{list-style:none;margin:0;padding:0}
+.artist-row{min-height:84px;padding:8px 10px 8px 17px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;background:var(--deep);transition:transform .34s var(--ease),opacity .34s var(--ease)}
+.artist-row:nth-child(even){background:var(--night)}
+.artist-row:last-child{border-bottom:1px solid var(--line)}
+.artist-row:hover{border-color:var(--line-strong)}
+.artist-name{border:0;background:transparent;text-align:left;min-height:60px;padding:4px 0;display:grid;align-content:center;gap:4px;transition:transform .25s var(--ease)}
+.artist-name:hover{color:var(--cyan-strong);transform:translateX(3px)}
+.artist-name:active{transform:scale(.98)}
+.artist-name strong{font:500 clamp(1.75rem,3vw,2.45rem)/.94 var(--display);overflow-wrap:anywhere}
+.meta{font:400 .75rem/1.4 var(--mono);letter-spacing:.015em;color:var(--mist)}
+button.save{min-width:95px}
+button.save[aria-pressed=true]{border-color:var(--cyan);color:var(--cyan-strong);background:var(--panel2)}
+button.save.pop{animation:savePop .4s var(--ease)}
+.empty{padding:26px 18px;border:1px dashed var(--line-strong);color:var(--mist);animation:emptyBreath .38s var(--ease) backwards}
+.schedule-block{margin-top:40px;padding-top:25px;border-top:1px solid var(--line-strong)}
+.schedule-block h3{margin-bottom:6px}
+.schedule-block p{color:var(--mist)}
+.schedule-block details{margin-top:15px}
+.schedule-block details[open] summary{margin-bottom:12px}
+.schedule-block details[open] .schedule-list{animation:scheduleOpen .4s var(--ease) backwards}
+.schedule-list{max-height:440px;overflow:auto;border:1px solid var(--line)}
+.schedule-row{padding:13px 17px;border-bottom:1px solid var(--line);display:grid;gap:4px}
+.schedule-row:last-child{border-bottom:0}
+.plan-actions,.inline-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.status{min-height:1.55em;margin-top:7px;color:var(--cyan-strong)}
+.status:empty{display:none}
+.status:not(:empty){animation:statusIn .35s var(--ease) backwards}
+.map-layout{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.map-cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start}
+.map-cell{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:end;align-items:start;text-align:left;gap:6px;min-height:115px;padding:12px 14px;background:var(--panel);border:1px solid var(--line-strong);transition:transform .34s var(--ease),opacity .34s var(--ease)}
+.map-cell::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(145deg,#7dd3fc3d,transparent 74%);opacity:0;transition:opacity .48s var(--ease)}
+.map-cell .mono{font-size:.68rem;color:var(--mist);transition:transform .26s var(--ease)}
+.map-cell strong{font:500 clamp(1.55rem,2.7vw,2.2rem)/.97 var(--display);overflow-wrap:anywhere}
+.map-cell.wide{grid-column:1/-1;min-height:67px;justify-content:center}
+.map-cell:hover,.map-cell.is-lit,.map-cell[aria-pressed=true]{border-color:var(--cyan)}
+.map-cell:hover::after,.map-cell.is-lit::after,.map-cell[aria-pressed=true]::after{opacity:1}
+.map-cell.is-lit:not([aria-pressed=true]) strong{animation:stageRelay .48s var(--ease) backwards}
+.map-cell[aria-pressed=true]::after{animation:pinGlow 3.8s var(--ease) infinite}
+.map-cell[aria-pressed=true] .mono{transform:translateX(3px);color:var(--cyan-strong)}
+.map-cell:active{transform:scale(.97)}
+.map-readout{background:var(--panel);border:1px solid var(--line-strong);padding:20px;align-self:start}
+.map-readout h3{margin:4px 0 8px}
+.map-readout p+p{margin-top:12px}
+.map-readout.flash{animation:mapRead .42s var(--ease) backwards}
+.info-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+.info-rows{border-top:1px solid var(--line-strong)}
+.info-row{display:grid;grid-template-columns:minmax(100px,.4fr) 1fr;gap:12px;align-items:center;min-height:62px;padding:9px 0;border-bottom:1px solid var(--line)}
+dt{color:var(--cyan);font-family:var(--mono);font-size:.82rem}
+.info-row .text-link{min-height:56px}
+.side-card{border:1px solid var(--line-strong);padding:20px;background:var(--panel);align-self:start}
+.side-card h3{margin-bottom:10px}
+.game{margin-top:18px}
+.game-board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.game-board .control{min-width:0;padding-inline:5px;min-height:66px}
+.game-board .signal{background:var(--cyan);color:var(--night);animation:signalReady .6s var(--ease) backwards}
+.game-board .signal:hover{background:var(--cyan-strong);color:var(--night)}
+.game-board .miss{animation:signalMiss .32s var(--ease)}
+.game-score{display:flex;justify-content:space-between;gap:6px}
+.feedback-form{display:grid;gap:8px;max-width:650px}
+.feedback-form button{justify-self:start}
+.feedback-form label{transform-origin:left;transition:transform .28s var(--ease)}
+.feedback-form label:has(+ :focus){transform:translateX(3px)}
+.footer{padding:25px 0 33px;background:var(--night)}
+.footer .wrap{display:flex;justify-content:space-between;gap:14px;align-items:center}
+.tabs{position:fixed;z-index:7;bottom:0;inset-inline:0;padding:0 max(0px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(0px,env(safe-area-inset-left));background:var(--deep);border-top:1px solid var(--line-strong)}
+.tabs-inner{width:min(750px,100%);margin:auto;position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.tab{display:flex;min-height:var(--tabs);align-items:center;justify-content:center;flex-direction:column;gap:1px;padding:0 3px;border-inline-start:1px solid var(--line);text-decoration:none;text-align:center;color:var(--mist);font-weight:700;transition:transform .25s var(--ease),opacity .25s var(--ease)}
+.tab:last-child{border-inline-end:1px solid var(--line)}
+.tab:hover{background:var(--panel)}
+.tab:active{transform:scale(.96)}
+.tab[aria-current=true]{color:var(--cyan-strong);background:var(--panel)}
+.tab small{font-size:.64rem}
+.tab-ink{position:absolute;pointer-events:none;top:-1px;left:0;width:20%;height:2px;background:var(--cyan);transform:translateX(calc(100% * var(--active-tab,0)));transition:transform .42s var(--ease);opacity:0}
+.tabs:has([aria-current]) .tab-ink{opacity:1}
+.tab.bump{animation:tabPulse .44s var(--ease)}
+#planCount.bump{animation:planCountPulse .42s var(--ease)}
+dialog{margin:auto auto 0;width:min(620px,100%);max-width:100%;max-height:90dvh;padding:24px 23px calc(23px + env(safe-area-inset-bottom));border:1px solid var(--line-strong);border-bottom:0;border-radius:12px 12px 0 0;background:var(--deep);color:var(--paper);overflow:auto;transition:transform .22s var(--ease),opacity .22s var(--ease)}
+dialog[open]{animation:sheetIn .42s var(--ease) backwards}
+dialog::backdrop{background:#060913cc;transition:opacity .22s var(--ease)}
+dialog[open]::backdrop{animation:scrimIn .34s var(--ease) backwards}
+dialog.closing{animation:sheetOut .21s var(--ease) forwards}
+dialog.closing::backdrop{animation:scrimOut .21s var(--ease) forwards}
+dialog h2{font-size:clamp(2.6rem,7vw,4.2rem);margin:4px 0 12px}
+.sheet-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:10px 0;border-block:1px solid var(--line)}
+.sheet-meta dd{overflow-wrap:anywhere}
+.boot{position:fixed;inset:0;z-index:12;width:100%;border:0;background:var(--night);color:var(--paper);display:grid;place-content:center;justify-items:center;gap:18px;overflow:hidden;animation:bootStageIn .26s var(--ease) backwards}
+.boot.done{animation:none;visibility:hidden;pointer-events:none}
+.boot::before{content:"";position:absolute;inset:-40%;background-image:linear-gradient(#7dd3fc16 1px,transparent 1px),linear-gradient(90deg,#7dd3fc16 1px,transparent 1px);background-size:32px 32px;animation:bootGrid 2s var(--ease) backwards}
+.boot::after{content:"";position:absolute;inset:0 0 auto;height:22%;background:linear-gradient(transparent,#7dd3fc15,transparent);animation:bootScanline .95s linear backwards}
+.boot-title{position:relative;isolation:isolate;width:min(72vw,460px);overflow:hidden}
+.boot-title img{display:block;width:100%;height:auto}
+.boot-title::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 33%,#7dd3fc25,transparent 67%);animation:bootSweep .92s var(--ease) backwards}
+.boot-meter{position:relative;width:min(38vw,220px);height:2px;background:var(--line-strong)}
+.boot-meter i{display:block;width:100%;height:100%;background:var(--cyan);transform-origin:left;animation:bootLoad .9s var(--ease) backwards}
+.boot .mono{position:relative;color:var(--cyan-strong);animation:bootPixelSignal .9s steps(1,end) backwards}
+.reveal.is-in[data-motion=heading]{animation:headingKinetic .54s var(--ease) backwards}
+.reveal.is-in[data-motion=spot]{animation:cardIn .68s calc(var(--i,0)*50ms) var(--ease) backwards}
+.reveal.is-in[data-motion=row]{animation:rowIn .54s calc(var(--i,0)*24ms) var(--ease) backwards}
+.reveal.is-in[data-motion=filters]{animation:trackSlice .66s var(--ease) backwards}
+.reveal.is-in[data-motion=plan]{animation:planFold .56s var(--ease) backwards}
+.reveal.is-in[data-motion=map]{animation:mapIn .5s var(--ease) backwards}
+.reveal.is-in[data-motion=info]{animation:infoIn .48s calc(var(--i,0)*24ms) var(--ease) backwards}
+.reveal.is-in[data-motion=game]{animation:gameIn .56s var(--ease) backwards}
+.reveal.is-in[data-motion=feedback]{animation:formIn .48s var(--ease) backwards}
+@keyframes bootStageIn{from{opacity:.55}to{opacity:1}}
+@keyframes bootGrid{from{transform:translateY(26px) scale(.98);opacity:.18}to{transform:none;opacity:1}}
+@keyframes bootSweep{from{transform:translateX(-100%)}to{transform:translateX(105%)}}
+@keyframes bootLoad{from{transform:scaleX(.06)}to{transform:scaleX(1)}}
+@keyframes bootScanline{from{transform:translateY(-100%)}to{transform:translateY(470%)}}
+@keyframes bootPixelSignal{0%,25%,65%{opacity:.6}18%,55%,85%,100%{opacity:1}}
+@keyframes logoIn{from{opacity:.42;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes logoSweep{0%,10%{transform:translateX(-110%) skewX(-18deg)}30%,100%{transform:translateX(280%) skewX(-18deg)}}
+@keyframes logoSignal{0%,25%,82%,86%,100%{opacity:0}83%{opacity:.25;transform:translateX(4px);clip-path:inset(30% 0 49%)}85%{opacity:.2;transform:translateX(-5px);clip-path:inset(53% 0 27%)}}
+@keyframes logoSignalB{0%,32%,88%,92%,100%{opacity:0}89%{opacity:.22;transform:translateY(3px);clip-path:inset(14% 0 68%)}91%{opacity:.15;transform:translateX(-4px);clip-path:inset(65% 0 10%)}}
+@keyframes datePressure{0%,100%{transform:none}50%{transform:scaleY(1.026)}}
+@keyframes actionLand{from{opacity:.4;transform:translateY(15px)}to{opacity:1;transform:none}}
+@keyframes countRail{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+@keyframes countBump{0%,100%{transform:none}40%{transform:translateY(-3px) scale(1.075)}}
+@keyframes heroBreath{0%,100%{transform:scale(.98);opacity:.5}50%{transform:scale(1.17);opacity:.67}}
+@keyframes starDrift{from{transform:translate(-12px,4px)}to{transform:translate(49px,63px)}}
+@keyframes orbit{0%,100%{transform:rotate(-30deg) scaleY(.76)}50%{transform:rotate(-13deg) scaleY(.85)}}
+@keyframes orbitCounter{0%,100%{transform:rotate(27deg) scaleY(.7)}50%{transform:rotate(52deg) scaleY(.77)}}
+@keyframes orbitInner{0%,100%{transform:rotate(-12deg) scaleY(.92)}50%{transform:rotate(-40deg) scaleY(.8)}}
+@keyframes orbitOuter{0%,100%{transform:rotate(-43deg) scaleY(.62)}50%{transform:rotate(-33deg) scaleY(.77)}}
+@keyframes beamPulse{0%,100%{transform:rotate(-24deg) scaleX(.9);opacity:.65}50%{transform:rotate(-18deg) scaleX(1.05);opacity:1}}
+@keyframes crossBeam{0%,100%{transform:rotate(58deg);opacity:.28}50%{transform:rotate(64deg);opacity:.52}}
+@keyframes horizonLife{0%,100%{opacity:.64}50%{opacity:1}}
+@keyframes waterFlow{0%,100%{transform:rotateX(47deg) translateY(-3px);opacity:.68}50%{transform:rotateX(47deg) translateY(12px);opacity:1}}
+@keyframes signalPulse{0%,100%{opacity:1}50%{opacity:.9}}
+@keyframes marqueeMove{to{transform:translateX(-50%)}}
+@keyframes marqueeFlicker{0%,100%,95%{opacity:1}94%{opacity:.67}}
+@keyframes bannerScan{0%,20%{transform:translateX(-106%)}50%,100%{transform:translateX(430%)}}
+@keyframes headingKinetic{from{clip-path:inset(0 0 92% 0);transform:translateY(9px)}to{clip-path:inset(0);transform:none}}
+@keyframes cardIn{from{transform:translateY(21px) scale(.97);opacity:.35}to{transform:none;opacity:1}}
+@keyframes rowIn{from{transform:translateX(-10px);opacity:.45}to{transform:none;opacity:1}}
+@keyframes trackSlice{from{clip-path:inset(0 90% 0 0)}to{clip-path:inset(0)}}
+@keyframes emptyBreath{from{opacity:.35}to{opacity:1}}
+@keyframes savePop{0%,100%{transform:none}35%{transform:scale(1.07)}}
+@keyframes scheduleOpen{from{transform:translateY(-7px);opacity:.45}to{transform:none;opacity:1}}
+@keyframes planFold{from{transform:perspective(600px) rotateX(-7deg);opacity:.52}to{transform:none;opacity:1}}
+@keyframes mapIn{from{opacity:.45;transform:scale(.976)}to{opacity:1;transform:none}}
+@keyframes stageRelay{from{transform:translateX(-5px);opacity:.62}to{transform:none;opacity:1}}
+@keyframes pinGlow{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes mapRead{from{clip-path:inset(0 10% 0 0);opacity:.56}to{clip-path:inset(0);opacity:1}}
+@keyframes infoIn{from{clip-path:inset(0 0 54% 0);transform:translateY(-3px)}to{clip-path:inset(0);transform:none}}
+@keyframes gameIn{from{transform:rotate(-1.4deg) scale(.97);opacity:.55}to{transform:none;opacity:1}}
+@keyframes signalReady{0%,100%{transform:none}38%{transform:scale(1.055)}}
+@keyframes signalMiss{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+@keyframes formIn{from{transform:translateY(12px);opacity:.5}to{transform:none;opacity:1}}
+@keyframes statusIn{from{transform:translateX(-8px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes tabPulse{0%,100%{transform:none}38%{transform:translateY(-3px)}}
+@keyframes planCountPulse{0%,100%{transform:none}40%{transform:scale(1.2)}}
+@keyframes sheetIn{from{transform:translateY(100%)}to{transform:none}}
+@keyframes sheetOut{to{transform:translateY(100%);opacity:0}}
+@keyframes scrimIn{from{opacity:0}to{opacity:1}}
 @keyframes scrimOut{to{opacity:0}}
-@keyframes progress{to{transform:scaleX(1)}}
-@keyframes savePop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
-@keyframes tabPulse{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
-@keyframes titleFlicker{0%,100%{opacity:1}90%{opacity:1}91%{opacity:.55}92%{opacity:1}95%{opacity:.75}96%{opacity:1}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(125,211,252,0)}50%{box-shadow:0 0 28px 2px rgba(125,211,252,.28)}}
-
-/* ---------- boot screen ---------- */
-#boot{position:fixed;inset:0;z-index:100;background:var(--night);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;animation:bootStageIn .35s var(--ease) backwards;cursor:pointer}
-#boot.done{opacity:0;pointer-events:none;visibility:hidden;animation:none;transition:opacity .5s var(--ease),visibility 0s .5s}
-#boot .boot-logo{position:relative;overflow:hidden;width:min(520px,82vw);animation:logoIn .9s var(--ease) both;transition:scale .55s var(--ease),filter .55s var(--ease)}
-#boot.done .boot-logo{scale:1.06;filter:blur(2px)}
-#boot .boot-logo img{display:block;width:100%;height:auto}
-#boot .boot-logo::after{content:"";position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(213,241,255,.22),transparent);animation:bootSweep 1s var(--ease) infinite}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-#boot .boot-bar{width:min(280px,70vw);height:4px;background:var(--panel2);overflow:hidden}
-#boot .boot-bar i{display:block;height:100%;background:var(--cyan);animation:bootLoad .9s var(--ease) both}
-#boot .boot-scan{position:absolute;left:0;right:0;height:120px;background:linear-gradient(180deg,transparent,rgba(125,211,252,.06),transparent);animation:bootScanline 1.4s linear infinite;pointer-events:none}
-#boot p{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);margin:0;animation:logoSignal 1.2s ease-in-out infinite}
-
-/* ---------- shell ---------- */
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(#7dd3fc 1px,transparent 1px),radial-gradient(#eef2ff 1px,transparent 1px);background-size:180px 180px,260px 260px;background-position:0 0,60px 90px;opacity:.12;animation:starDrift 60s linear infinite}
-.app{width:min(1100px,100%);margin:auto;padding:0 clamp(16px,4vw,44px)}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 6px;position:relative;z-index:1}
-.topbar a{color:var(--mist);text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
-.topbar .live-dot{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist)}
-.topbar .live-dot i{width:9px;height:9px;border-radius:50%;background:var(--cyan);animation:signalPulse 1.8s ease-in-out infinite}
-
-/* ---------- hero ---------- */
-.js-boot:not(.booted) .hero h1,.js-boot:not(.booted) .hero h1 .sweep::after,.js-boot:not(.booted) .hero .socal,.js-boot:not(.booted) .sub,.js-boot:not(.booted) .countdown,.js-boot:not(.booted) .pillrow,.js-boot:not(.booted) .notice{animation-play-state:paused}
-.hero{position:relative;z-index:1;padding:clamp(28px,6vw,72px) 0 0;border-bottom:1px solid var(--line);overflow:hidden}
-.hero::after{content:"";position:absolute;right:-14%;top:-30%;width:56%;aspect-ratio:1;border:1px solid rgba(125,211,252,.35);border-radius:50%;transform:rotate(-18deg);box-shadow:0 0 90px rgba(125,211,252,.14);animation:orbit 22s var(--ease) infinite,heroBreath 9s ease-in-out infinite;pointer-events:none;translate:0 calc(var(--par,0) * .22px * var(--pk))}
-.beam{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--cyan),transparent);transform-origin:top;animation:beamPulse 3.2s ease-in-out infinite;pointer-events:none;translate:0 calc(var(--par,0) * -.12px * var(--pk))}
-.beam:nth-child(1){left:22%;animation-delay:0s}
-.beam:nth-child(2){left:52%;animation-delay:.7s}
-.beam:nth-child(3){left:82%;animation-delay:1.4s}
-.eyebrow{margin:0;color:var(--cyan);font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;animation:logoSignal 2.4s ease-in-out infinite}
-.hero h1{margin:6px 0 0;animation:logoIn .9s var(--ease) both;position:relative;width:min(760px,94%)}
-.hero h1 img.title-logo{display:block;width:100%;height:auto}
-.hero h1 .sweep{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.hero h1 .sweep::after{content:"";position:absolute;top:0;bottom:0;width:34%;background:linear-gradient(90deg,transparent,rgba(213,241,255,.4),transparent);animation:logoSweep 1.6s var(--ease) .7s both}
-.hero .socal{font-family:var(--display);font-size:clamp(40px,8vw,84px);line-height:.9;text-transform:uppercase;letter-spacing:.04em;color:var(--paper);animation:rise .8s var(--ease) .15s both,titleFlicker 7s linear 2s infinite}
-.sub{max-width:62ch;color:var(--mist);font-size:clamp(17px,2.4vw,21px);line-height:1.55;margin:18px 0 0;animation:rise .8s var(--ease) .25s both}
-.countdown{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0;animation:rise .8s var(--ease) .35s both}
-.count{border:1px solid var(--line);background:var(--panel);padding:14px 16px;min-width:92px;transition:border-color .3s var(--ease),translate .35s var(--ease)}
-.count:hover{border-color:var(--line-strong);translate:0 -2px}
-.count b{display:block;font-family:var(--display);font-size:38px;line-height:1;color:var(--cyan-strong)}
-.count b.bump{animation:countBump .45s var(--ease)}
-.count span{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
-.pillrow{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0;animation:rise .8s var(--ease) .45s both}
-.pill{border:1px solid var(--line);background:var(--panel);padding:11px 14px;font-size:15px;font-weight:600;transition:border-color .3s var(--ease),transform .3s var(--ease),color .3s var(--ease)}
-.pill:hover{border-color:var(--cyan);transform:translateY(-2px);color:var(--cyan-strong)}
-.pillrow .pill{animation:rise .6s var(--ease) backwards;animation-delay:calc(.5s + var(--pi,0) * 70ms)}
-.pillrow .pill:nth-child(2){--pi:1}.pillrow .pill:nth-child(3){--pi:2}.pillrow .pill:nth-child(4){--pi:3}
-.js-boot:not(.booted) .pillrow .pill{animation-play-state:paused}
-.notice{border:1px solid var(--line);border-left:5px solid var(--cyan);background:var(--panel);padding:18px;margin:22px 0 0;max-width:72ch;animation:rise .8s var(--ease) .55s both}
-.notice strong{color:var(--cyan-strong)}
-.marquee{margin:28px calc(clamp(16px,4vw,44px) * -1) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;background:var(--deep)}
-.marquee-track{display:inline-block;padding:12px 0;font-family:var(--display);font-size:26px;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);animation:marqueeMove 22s linear infinite,marqueeFlicker 9s linear infinite}
-.marquee-track b{color:var(--cyan);font-weight:600}
-@media(hover:hover) and (pointer:fine){.marquee:hover .marquee-track{animation-play-state:paused}}
-
-/* ---------- sections ---------- */
-main{position:relative;z-index:1;padding:28px 0 40px}
-section.panel{display:none}
-section.panel.active{display:block;animation:panelIn .5s var(--ease) both}
-section.panel.active>:not(.reveal):not(#artistList):not(#planList){animation:rise .55s var(--ease) backwards}
-section.panel.active>:nth-child(2){animation-delay:.06s}section.panel.active>:nth-child(3){animation-delay:.12s}section.panel.active>:nth-child(4){animation-delay:.18s}section.panel.active>:nth-child(n+5){animation-delay:.24s}
-h2{margin:0 0 8px;font-family:var(--display);font-size:clamp(48px,8vw,76px);line-height:.95;text-transform:uppercase;letter-spacing:.02em}
-.lede{color:var(--mist);font-size:17px;line-height:1.6;max-width:64ch;margin:0 0 20px}
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-.reveal.in{opacity:1;transform:none}
-.reveal:not(.in) .spot,.reveal:not(.in) .mapcell{animation-play-state:paused}
-.spotlight{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 22px}
-.spot{border:1px solid var(--line);background:var(--panel);padding:18px;cursor:pointer;transition:border-color .3s var(--ease),transform .3s var(--ease),box-shadow .3s var(--ease),scale .18s var(--ease);animation:cardIn .6s var(--ease) backwards;animation-delay:calc(var(--d,0s) * var(--stag) + .1s)}
-.spot:hover{border-color:var(--cyan);transform:translateY(-3px);animation:cardIn .6s var(--ease) backwards,pinGlow 2s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
-.spot:hover h3{color:var(--cyan-strong)}.spot h3{transition:color .3s var(--ease)}
-.spot:active{scale:.985}
-.spot .tag{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
-.spot h3{margin:6px 0 0;font-family:var(--display);font-size:34px;line-height:1;text-transform:uppercase}
-.spot p{margin:6px 0 0;color:var(--mist);font-size:14px}
-.controls{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
-.controls button,.controls input{font-size:17px;padding:14px 16px;border:1px solid var(--line);background:var(--panel);min-height:60px;border-radius:4px;transition:border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease),color .25s var(--ease),scale .16s var(--ease)}
-.controls button:active{scale:.96}
-.controls input{flex:1;min-width:230px}
-.controls input:focus{border-color:var(--cyan)}
-.controls button{font-weight:700;cursor:pointer}
-.controls button:hover{border-color:var(--cyan)}
-.controls button.active{background:var(--cyan);color:var(--ink);border-color:var(--cyan);animation:tabPulse .45s var(--ease)}
-.artist{border:1px solid var(--line);background:var(--panel);padding:18px;margin:12px 0;display:flex;gap:16px;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .25s var(--ease),transform .25s var(--ease),box-shadow .25s var(--ease),scale .18s var(--ease);animation:cardIn .5s var(--ease) backwards;animation-delay:calc(var(--d,0s) * var(--stag))}
-.quick .artist{animation-duration:.3s;animation-delay:0s}
-.calm .artist{animation:none}
-.calm .savebtn.saved{animation:none}
-.calm .savebtn.saved.just{animation:savePop .45s var(--ease)}
-.artist:active{scale:.985}
-.artist h3{transition:color .25s var(--ease)}
-.artist:hover{border-color:var(--line-strong);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.28)}
-.artist:hover h3{color:var(--cyan-strong)}
-.artist h3{margin:0;font-family:var(--display);font-size:32px;line-height:1;letter-spacing:.02em;text-transform:uppercase}
-.artist .meta{color:var(--mist);font-family:var(--mono);font-size:13px;letter-spacing:.04em;margin-top:6px}
-.savebtn{min-width:118px;min-height:60px;border:1px solid var(--line-strong);background:var(--panel2);font-size:17px;font-weight:800;cursor:pointer;border-radius:4px;flex-shrink:0;transition:background .25s var(--ease),transform .25s var(--ease),border-color .25s var(--ease)}
-.savebtn:hover{border-color:var(--cyan)}
-.savebtn.saved{background:var(--cyan);color:var(--ink);border-color:var(--cyan);animation:savePop .45s var(--ease)}
-.savebtn:active{animation:savePop .45s var(--ease)}
-.mapbox{border:1px solid var(--line);background:var(--panel);padding:20px}
-.mapgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.mapcell{border:1px solid var(--line);background:var(--panel2);padding:20px;text-align:center;font-family:var(--display);font-size:28px;line-height:1;letter-spacing:.02em;text-transform:uppercase;min-height:112px;display:flex;align-items:center;justify-content:center;transition:border-color .3s var(--ease),box-shadow .3s var(--ease),translate .35s var(--ease);animation:cardIn .5s var(--ease) backwards;animation-delay:calc(var(--d,0s) * var(--stag) + .1s)}
-.mapcell:hover{border-color:var(--cyan);translate:0 -3px;animation:cardIn .5s var(--ease) backwards,pinGlow 2s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
-.mapcell.wide{grid-column:1/-1;background:var(--cyan);color:var(--ink);animation:cardIn .5s var(--ease) backwards,glowPulse 3s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
-.mapcell.wide:hover{animation:cardIn .5s var(--ease) backwards,glowPulse 3s ease-in-out infinite;animation-delay:calc(var(--d,0s) * var(--stag) + .1s),0s}
-.inforow{border-top:1px solid var(--line);padding:18px 0;display:grid;grid-template-columns:170px 1fr;gap:16px;transition:border-color .3s var(--ease)}
-.inforow dt{transition:translate .35s var(--ease)}
-@media(hover:hover) and (pointer:fine){.inforow:hover dt{translate:6px 0}}
-section.panel.active .inforow{animation:rise .5s var(--ease) backwards;animation-delay:calc(.12s + var(--ri,0) * 45ms * var(--stag))}
-.inforow:nth-child(2){--ri:1}.inforow:nth-child(3){--ri:2}.inforow:nth-child(4){--ri:3}.inforow:nth-child(5){--ri:4}.inforow:nth-child(6){--ri:5}.inforow:nth-child(7){--ri:6}
-.inforow:last-of-type{border-bottom:1px solid var(--line)}
-.inforow dt{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
-.inforow dd{margin:0;font-size:18px;line-height:1.55}
-label{display:block;font-weight:700;margin:18px 0 8px}
-input[type=text],textarea{width:100%;font-size:17px;padding:16px;border:1px solid var(--line);background:var(--panel);min-height:60px;border-radius:4px;transition:border-color .25s var(--ease)}
-input[type=text]:focus,textarea:focus{border-color:var(--cyan)}
-textarea{min-height:140px;resize:vertical}
-.primary{min-height:60px;padding:14px 22px;background:var(--cyan);color:var(--ink);border:0;font-size:17px;font-weight:800;cursor:pointer;border-radius:4px;transition:transform .25s var(--ease),box-shadow .3s var(--ease)}
-.primary:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(125,211,252,.28)}
-.primary:active{animation:savePop .45s var(--ease)}
-.small{color:var(--mist);font-size:15px;line-height:1.6}
-footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mist);position:relative;z-index:1}
-footer a{transition:color .25s var(--ease),text-underline-offset .3s var(--ease)}
-footer a:hover{color:var(--cyan-strong);text-underline-offset:7px}
-.small,#copyNote,#fbDone{transition:opacity .3s var(--ease)}
-.flash{animation:rise .4s var(--ease) backwards}
-/* scroll progress: a thin cyan signal along the top, scroll-driven, no JS loop */
-.scroll-signal{display:none}
-@supports(animation-timeline:scroll()){.scroll-signal{display:block;position:fixed;left:0;right:0;top:0;height:2px;z-index:30;pointer-events:none;background:linear-gradient(90deg,var(--cyan),var(--cyan-strong));box-shadow:0 0 12px rgba(125,211,252,.6);transform-origin:0 50%;transform:scaleX(0);animation:progress linear both;animation-timeline:scroll(root block)}}
-
-/* ---------- detail drawer ---------- */
-#detail{position:fixed;inset:0;z-index:60;display:none}
-#detail.open{display:block}
-#detail.closing .scrim{animation:scrimOut .28s var(--ease) both}
-#detail.closing .sheet{animation:sheetOut .3s var(--ease) both}
-#detail .sheet h3{animation:rise .5s var(--ease) .08s backwards}
-#detail .sheet .row{animation:rise .5s var(--ease) .16s backwards}
-#detail .scrim{position:absolute;inset:0;background:rgba(6,9,19,.78);animation:bootStageIn .3s var(--ease) both}
-#detail .sheet{position:absolute;left:0;right:0;bottom:0;margin:auto;max-width:640px;background:var(--deep);border:1px solid var(--line-strong);border-bottom:0;padding:26px clamp(18px,5vw,32px) calc(26px + env(safe-area-inset-bottom));animation:rise .45s var(--ease) both}
-#detail .sheet .tag{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
-#detail .sheet h3{margin:8px 0;font-family:var(--display);font-size:52px;line-height:.95;text-transform:uppercase}
-#detail .sheet p{color:var(--mist);line-height:1.6}
-#detail .sheet .row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-
-/* ---------- bottom nav ---------- */
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(6,9,19,.97);border-top:1px solid var(--line);display:flex;padding:8px 8px calc(8px + env(safe-area-inset-bottom));gap:6px}
-nav.tabs button{flex:1;min-width:0;min-height:64px;border:1px solid transparent;background:transparent;color:var(--paper);font-size:15px;font-weight:800;cursor:pointer;border-radius:6px;padding:6px 4px;transition:background .25s var(--ease),color .25s var(--ease),scale .16s var(--ease);position:relative;z-index:1}
-nav.tabs button:active{scale:.94}
-nav.tabs .tab-ink{position:absolute;left:0;top:0;width:0;height:0;border-radius:6px;background:var(--cyan);box-shadow:0 0 22px rgba(125,211,252,.35);pointer-events:none;opacity:0}
-nav.tabs.inked .tab-ink{opacity:1}
-nav.tabs.inked.ready .tab-ink{transition:translate .5s var(--ease),width .5s var(--ease),height .5s var(--ease)}
-nav.tabs.inked button.active{background:transparent}
-nav.tabs small.bump{animation:countBump .45s var(--ease)}
-nav.tabs button.active{background:var(--cyan);color:var(--ink);animation:tabPulse .45s var(--ease)}
-nav.tabs small{display:block;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
-@media(max-width:640px){
-  .artist{align-items:flex-start}
-  .artist h3{font-size:27px}
-  .savebtn{min-width:96px}
-  .spotlight{grid-template-columns:1fr}
-  .mapgrid{grid-template-columns:1fr}
-  .mapcell.wide{grid-column:auto}
-  .inforow{grid-template-columns:1fr}
-  nav.tabs button{font-size:13px}
-  .countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
-  .count{min-width:0;padding:12px 10px}
-  .count b{font-size:34px}
+.brand-mark::after{transition:transform .35s var(--ease),opacity .35s var(--ease)}
+.brand:hover .brand-mark::after{transform:scale(.62);opacity:.8}
+.hero-actions .button span{transition:transform .32s var(--ease)}
+.hero-actions .button:hover span{transform:translate(2px,-2px)}
+.button.primary{transition:transform .3s var(--ease),opacity .22s var(--ease)}
+.button.primary:active{opacity:.87}
+.next a{transition:transform .32s var(--ease),opacity .28s var(--ease)}
+.next a:active{opacity:.74}
+.spot h3{transition:transform .38s var(--ease)}
+.spot:hover h3{transform:translateY(-2px)}
+.spot .meta{transition:opacity .34s var(--ease)}
+.spot:active .meta{opacity:.77}
+button.filter{transition:transform .23s var(--ease),opacity .23s var(--ease)}
+button.filter:active{opacity:.84}
+button.save{transition:transform .28s var(--ease),opacity .28s var(--ease)}
+button.save:active{opacity:.8}
+.schedule-block summary{transition:transform .24s var(--ease),opacity .36s var(--ease)}
+.schedule-block details[open] summary{opacity:.85}
+.map-cell strong{transition:transform .36s var(--ease)}
+.map-cell:hover strong{transform:translateY(-2px)}
+.game-board .control{transition:transform .21s var(--ease),opacity .28s var(--ease)}
+.game-board .control:active{opacity:.64}
+.tab small{transition:transform .26s var(--ease),opacity .29s var(--ease)}
+.tab:hover small{transform:translateY(-2px)}
+.tab-ink{transition:transform .42s var(--ease),opacity .26s var(--ease)}
+.footer .text-link{transition:transform .3s var(--ease),opacity .27s var(--ease)}
+.footer .text-link:active{opacity:.75}
+@media(max-width:900px){
+  .filterbar{grid-template-columns:minmax(0,1fr) auto}
+  .day-group{grid-column:1/-1}
+  .spot{min-height:172px;padding:13px}
+  .map-layout{grid-template-columns:1fr}
 }
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.hero::after,.beam{translate:none!important}.scroll-signal{display:none}#boot.done .boot-logo{scale:1;filter:none}}
+@media(max-width:640px){
+  .topbar .wrap{height:60px}
+  .top-date{font-size:.69rem}
+  .hero-content{min-height:0;max-width:none;justify-items:center;text-align:center;padding:148px 0 29px}
+  .hero-label{margin-bottom:13px;font-size:.72rem;color:var(--cyan-strong)}
+  .logo{width:min(100%,480px)}
+  .hero-date{font-size:clamp(4.8rem,21vw,7.4rem);margin-top:16px}
+  .hero-place{margin-top:10px}
+  .hero-facts{font-size:.72rem;margin-inline:auto}
+  .countdown{margin:20px 0 17px;grid-auto-columns:minmax(55px,67px)}
+  .clock-unit{padding-inline:7px}
+  .hero-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  .hero-actions .button{padding-inline:6px;font-size:.89rem}
+  .sky{background:radial-gradient(ellipse at 51% 29%,#25445b 0%,#10243a 31%,#0a1122 50%,#060913 86%)}
+  .portal{left:50%;top:21%;width:min(88vw,455px)}
+  .haze{left:0;right:0;top:0;height:55%}
+  .hero-shade{background:linear-gradient(180deg,transparent 0%,#06091320 12%,#0609139e 22%,#060913b8 27%,#060913bd 51%,#060913ee 65%,var(--night) 100%)}
+  .horizon,.water{top:37%}
+  .water{left:-19%}
+  .marquee span{padding-block:11px}
+  .next .next-content{padding-block:7px;display:flex;gap:0 12px}
+  .next a{min-height:56px}
+  .section-head{display:grid;align-items:start;gap:5px;margin-bottom:19px}
+  .section{padding-block:47px}
+  .portal-plane{transform-origin:50% 25%}
+  .spotlight{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 18px}
+  .featured-head{align-items:center}
+  .featured-head h2{font-size:clamp(2.25rem,7vw,3.75rem)}
+  .featured-head .text-link{flex-shrink:0;font-size:.78rem}
+  .spot{min-height:145px;padding:10px}
+  .spot h3{font-size:clamp(1.65rem,7vw,2.2rem)}
+  .spot .meta{font-size:.64rem}
+  .spot .mono{font-size:.67rem}
+  button.filter{padding-inline:6px;font-size:.82rem}
+  .resultbar{font-size:.71rem}
+  .artist-row{gap:7px;padding-left:10px}
+  button.save{min-width:78px;padding-inline:7px}
+  .artist-name .meta{font-size:.66rem}
+  .map-cells{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .map-cell{min-height:96px}
+  .info-grid{grid-template-columns:1fr}
+  .info-row{grid-template-columns:minmax(85px,.42fr) 1fr}
+  .footer .wrap{align-items:start;flex-direction:column}
+  .tab{font-size:.77rem;white-space:nowrap}
+  .tab small{font-size:.58rem}
+}
+@media(max-width:640px) and (max-height:740px){
+  .hero-content{padding-top:52px;padding-bottom:22px}
+  .logo{width:min(100%,370px)}
+  .hero-label{margin-bottom:7px}
+  .hero-date{font-size:clamp(3.9rem,16vw,6.05rem);margin-top:10px}
+  .hero-place{margin-top:7px}
+  .countdown{margin:12px 0 13px}
+  .clock-unit{padding-block:6px}
+  .portal{top:30%;width:min(79vw,435px)}
+}
+@media(max-height:520px) and (min-width:641px){
+  .hero-content{padding-block:35px}
+  .hero-date{font-size:clamp(5rem,10vw,7rem)}
+  .logo{width:min(100%,440px)}
+}
+@media(max-width:360px){
+  .hero-date{font-size:clamp(3.6rem,21vw,5rem)}
+  .tab{font-size:.67rem}
+  .tab small{letter-spacing:0}
+}
+@media(max-height:480px) and (min-width:641px){
+  .hero-content{min-height:490px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after,*::backdrop{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .hero-content,.sky,.atmosphere,.portal-plane,.foreground{transform:none!important}
+  .marquee-track,.spot::before{transform:none!important}
+}
 </style>
 </head>
 <body>
-<div class="scroll-signal" aria-hidden="true"></div>
-<div id="boot" role="button" aria-label="Enter Dreamstate">
-  <div class="boot-scan"></div>
-  <div class="boot-logo"><img src="dreamstate-logo-white.png" alt="Dreamstate official logo" width="1080" height="300"></div>
-  <div class="boot-bar"><i></i></div>
-  <p>SoCal 2026 &middot; Tap to enter</p>
-</div>
-
-<div class="app">
-  <div class="topbar">
-    <a href="https://byyystudio.me/">Byyy Studio</a>
-    <span class="live-dot"><i></i>Nov 20 &ndash; 21, 2026</span>
+<div class="progress" aria-hidden="true"></div>
+<button class="boot" id="boot" type="button" aria-label="Enter Dreamstate" hidden>
+  <span class="boot-title"><img src="dreamstate-logo-white.png" width="1080" height="300" alt=""><span class="sr-only">Dreamstate</span></span>
+  <span class="boot-meter" aria-hidden="true"><i></i></span>
+  <span class="mono">SoCal 2026 · Tap to enter</span>
+</button>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="https://byyystudio.me/"><span class="brand-mark" aria-hidden="true"></span> Byyy Studio</a>
+    <span class="top-date mono">Nov 20–21, 2026</span>
   </div>
-
-  <header class="hero" id="hero">
-    <div class="beam"></div><div class="beam"></div><div class="beam"></div>
-    <p class="eyebrow">Insomniac Presents</p>
-    <h1><img class="title-logo" src="dreamstate-logo-white.png" alt="Dreamstate" width="1080" height="300"><span class="sr-only">Dreamstate</span><span class="sweep"></span></h1>
-    <div class="socal">SoCal 2026</div>
-    <p class="sub">November 20 to 21, 2026. Queen Mary Waterfront, Long Beach, California. Trance, all weekend, by the water.</p>
-    <div class="countdown" aria-label="Countdown to Dreamstate">
-      <div class="count"><b id="cdD">--</b><span>Days</span></div>
-      <div class="count"><b id="cdH">--</b><span>Hours</span></div>
-      <div class="count"><b id="cdM">--</b><span>Mins</span></div>
-      <div class="count"><b id="cdS">--</b><span>Secs</span></div>
+</header>
+<header class="hero" id="hero">
+  <div class="scene" aria-hidden="true">
+    <div class="plane sky"></div>
+    <div class="plane atmosphere"><div class="haze"></div></div>
+    <div class="plane portal-plane">
+      <div class="portal">
+        <i class="portal-ring"></i><i class="portal-ring"></i><i class="portal-ring"></i><i class="portal-ring"></i>
+        <i class="portal-axis"></i><i class="portal-axis"></i><i class="portal-rift"></i>
+      </div>
     </div>
-    <div class="pillrow">
-      <span class="pill">Friday and Saturday</span>
-      <span class="pill">4 PM to 1 AM each day</span>
-      <span class="pill">18 and over</span>
-      <span class="pill">70 plus artists</span>
+    <div class="plane foreground"><div class="horizon"></div><div class="water"></div></div>
+    <div class="plane hero-shade"></div>
+  </div>
+  <div class="wrap">
+    <div class="hero-content">
+      <p class="hero-label mono">Insomniac presents</p>
+      <h1 class="logo"><img src="dreamstate-logo-white.png" width="1080" height="300" alt=""><span class="sr-only">Dreamstate</span><span class="logo-sweep" aria-hidden="true"></span></h1>
+      <div class="hero-copy reveal" data-motion="hero">
+        <p class="hero-date">SoCal 2026</p>
+        <p class="hero-place">November 20–21 · Queen Mary Waterfront</p>
+        <p class="hero-facts mono">Long Beach, CA · 4 PM to 1 AM · 18+</p>
+      </div>
+      <div class="countdown" aria-label="Countdown to Friday doors">
+        <div class="clock-unit"><b>00</b><small>Days</small></div>
+        <div class="clock-unit"><b>00</b><small>Hours</small></div>
+        <div class="clock-unit"><b>00</b><small>Mins</small></div>
+        <div class="clock-unit"><b>00</b><small>Secs</small></div>
+      </div>
+      <div class="hero-actions">
+        <a class="button primary" href="#lineup">See artist cards <span aria-hidden="true">↗</span></a>
+        <a class="button" href="https://socal.dreamstateusa.com">Official site <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
-    <div class="notice"><strong>Set times are not out yet.</strong> This app lists who plays each day. Times and stages will be added when Insomniac posts them. Nothing here is a guessed set time.</div>
-    <p><a href="https://socal.dreamstateusa.com" target="_blank" rel="noopener">Official tickets and info: socal.dreamstateusa.com</a></p>
-    <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>Dreamstate <b>&middot;</b> SoCal 2026 <b>&middot;</b> Nov 20 &ndash; 21 <b>&middot;</b> Queen Mary Waterfront <b>&middot;</b> Trance All Weekend <b>&middot;</b>&nbsp;</span><span>Dreamstate <b>&middot;</b> SoCal 2026 <b>&middot;</b> Nov 20 &ndash; 21 <b>&middot;</b> Queen Mary Waterfront <b>&middot;</b> Trance All Weekend <b>&middot;</b>&nbsp;</span></div></div>
-  </header>
-
-  <main>
-    <section id="lineup" class="panel active" aria-label="Lineup">
-      <h2>Lineup</h2>
-      <p class="lede">Tap an artist for details. Tap Save on anyone you want to see. Your plan is saved on this device only.</p>
-      <div class="spotlight reveal">
-        <div class="spot" style="--d:.05s" data-name="ARTBAT"><div class="tag">Friday spotlight</div><h3>ARTBAT</h3><p>Friday, Nov 20 &middot; Stage: TBD &middot; Time: TBD</p></div>
-        <div class="spot" style="--d:.15s" data-name="Infected Mushroom"><div class="tag">Friday spotlight</div><h3>Infected Mushroom</h3><p>Friday, Nov 20 &middot; Stage: TBD &middot; Time: TBD</p></div>
-        <div class="spot" style="--d:.25s" data-name="Above &amp; Beyond (Anjunabeats Classics)"><div class="tag">Saturday spotlight</div><h3>Above &amp; Beyond</h3><p>Saturday, Nov 21 &middot; Stage: TBD &middot; Time: TBD</p></div>
-        <div class="spot" style="--d:.35s" data-name="Paul van Dyk presents The Essence of Acid"><div class="tag">Saturday spotlight</div><h3>Paul van Dyk</h3><p>Saturday, Nov 21 &middot; Stage: TBD &middot; Time: TBD</p></div>
+  </div>
+  <div class="marquee" aria-hidden="true"><div class="marquee-track mono">
+    <div class="marquee-set">
+      <span>Dreamstate SoCal <b>◆</b> November 20–21 <b>◆</b> Queen Mary Waterfront <b>◆</b> Long Beach, California <b>◆</b></span>
+      <span>Dreamstate SoCal <b>◆</b> November 20–21 <b>◆</b> Queen Mary Waterfront <b>◆</b> Long Beach, California <b>◆</b></span>
+      <span>Dreamstate SoCal <b>◆</b> November 20–21 <b>◆</b> Queen Mary Waterfront <b>◆</b> Long Beach, California <b>◆</b></span>
+    </div>
+    <div class="marquee-set">
+      <span>Dreamstate SoCal <b>◆</b> November 20–21 <b>◆</b> Queen Mary Waterfront <b>◆</b> Long Beach, California <b>◆</b></span>
+      <span>Dreamstate SoCal <b>◆</b> November 20–21 <b>◆</b> Queen Mary Waterfront <b>◆</b> Long Beach, California <b>◆</b></span>
+      <span>Dreamstate SoCal <b>◆</b> November 20–21 <b>◆</b> Queen Mary Waterfront <b>◆</b> Long Beach, California <b>◆</b></span>
+    </div>
+  </div></div>
+</header>
+<main>
+  <section class="section" id="lineup" aria-labelledby="lineupTitle">
+    <div class="wrap">
+      <div class="featured-head">
+        <h2 id="lineupTitle">Featured artists</h2>
+        <a class="text-link" href="#artist-browser">Full lineup ↗</a>
       </div>
-      <div class="controls reveal">
-        <button type="button" data-day="fri" class="daybtn active">Friday, Nov 20</button>
-        <button type="button" data-day="sat" class="daybtn">Saturday, Nov 21</button>
-        <button type="button" data-day="all" class="daybtn">Full Lineup A to Z</button>
-        <input type="text" id="search" placeholder="Search an artist" aria-label="Search an artist">
-        <button type="button" id="savedOnly">Saved only</button>
+      <div class="spotlight" id="spotlight"></div>
+      <div class="next">
+        <div class="next-content"><p id="nextMessage">Set times in this planner are TBD.</p><a href="#schedule">View set times ↗</a></div>
       </div>
-      <div id="artistList"></div>
-      <p class="small">Day splits above are the day splits published for the headliners and featured sets. The full A to Z list is the complete published lineup. Stage and time for each artist: TBD.</p>
-    </section>
-
-    <section id="plan" class="panel" aria-label="My plan">
-      <h2>My Plan</h2>
-      <p class="lede" id="planEmpty">No artists saved yet. Go to Lineup and tap Save.</p>
-      <div id="planList"></div>
-      <div class="controls">
-        <button type="button" class="primary" id="copyPlan">Copy my plan as text</button>
-        <button type="button" id="clearPlan">Clear my plan</button>
-      </div>
-      <p class="small" id="copyNote"></p>
-    </section>
-
-    <section id="map" class="panel" aria-label="Festival map">
-      <h2>Map</h2>
-      <p class="lede">Simple layout first. Follow on-site signs on the day. This diagram is not to scale.</p>
-      <div class="mapbox reveal">
-        <div class="mapgrid">
-          <div class="mapcell wide" style="--d:.05s">Entrance and Box Office</div>
-          <div class="mapcell" style="--d:.1s">The Dream</div>
-          <div class="mapcell" style="--d:.15s">The Sequence</div>
-          <div class="mapcell" style="--d:.2s">The Vision</div>
-          <div class="mapcell" style="--d:.25s">The Void</div>
-          <div class="mapcell" style="--d:.3s">Long Beach Amphitheater</div>
-          <div class="mapcell" style="--d:.35s">Beatbox Art Car</div>
-          <div class="mapcell wide" style="--d:.4s">Food, Water, Medical, and Shuttles</div>
+      <div class="lineup-browser" id="artist-browser">
+        <div class="section-head">
+          <h3 class="reveal" data-motion="heading">Browse the lineup</h3>
         </div>
+      <div class="filterbar reveal" data-motion="filters">
+        <div class="day-group" aria-label="Lineup filter">
+          <button class="control filter" type="button" data-day="fri" aria-pressed="true">Fri, Nov 20</button>
+          <button class="control filter" type="button" data-day="sat" aria-pressed="false">Sat, Nov 21</button>
+          <button class="control filter" type="button" data-day="all" aria-pressed="false">All A–Z</button>
+        </div>
+        <input type="search" id="search" placeholder="Search artists" aria-label="Search artists">
+        <button type="button" class="control filter" id="savedOnly" aria-pressed="false">Saved only</button>
       </div>
-      <p><strong>Getting there:</strong> There is no parking at the festival grounds. Plan around free shuttles from the Long Beach Convention Center.</p>
-      <p><strong>Address:</strong> Queen Mary Waterfront, 1126 Queens Highway, Long Beach, CA.</p>
-    </section>
-
-    <section id="info" class="panel" aria-label="Info">
-      <h2>Info</h2>
-      <dl>
-        <div class="inforow"><dt>Dates</dt><dd>Friday, November 20 and Saturday, November 21, 2026.</dd></div>
-        <div class="inforow"><dt>Hours</dt><dd>4 PM to 1 AM each day.</dd></div>
-        <div class="inforow"><dt>Age</dt><dd>18 and over.</dd></div>
-        <div class="inforow"><dt>Ins and outs</dt><dd>Not allowed.</dd></div>
-        <div class="inforow"><dt>Afterparties</dt><dd>Official afterparties run from midnight to 6 AM, per published event details.</dd></div>
-        <div class="inforow"><dt>Stages</dt><dd>The Dream, The Sequence, The Vision, The Void, plus the Long Beach Amphitheater and the Beatbox Art Car.</dd></div>
-        <div class="inforow"><dt>Tickets</dt><dd><a href="https://socal.dreamstateusa.com" target="_blank" rel="noopener">socal.dreamstateusa.com</a></dd></div>
-      </dl>
-      <p class="small">This is a fan-made planner by Byyy Studio. It is not the official Dreamstate site. Check the official site for final set times, entry rules, and ticket terms.</p>
-    </section>
-
-    <section id="feedback" class="panel" aria-label="Feedback">
-      <h2>Feedback</h2>
-      <p class="lede">Tell us what is wrong, missing, or confusing. This form saves your note on this device and shows a confirmation. It does not send to a server in this version.</p>
-      <label for="fbName">Name (optional)</label>
-      <input type="text" id="fbName" placeholder="Your name">
-      <label for="fbText">Feedback</label>
-      <textarea id="fbText" placeholder="What should we fix?"></textarea>
-      <div class="controls"><button type="button" class="primary" id="fbSend">Send feedback</button></div>
-      <p id="fbDone"></p>
-    </section>
-  </main>
-
-  <footer>
-    <p>Dreamstate SoCal 2026 planner. Built by Byyy Studio. Lineup source: published Dreamstate SoCal 2026 lineup. Set times: TBD.</p>
-    <p><a href="https://byyystudio.me/">Back to Byyy Studio</a></p>
-  </footer>
-</div>
-
-<div id="detail" aria-hidden="true">
-  <div class="scrim" id="detailScrim"></div>
-  <div class="sheet" role="dialog" aria-label="Artist details">
-    <div class="tag" id="detailTag">Artist</div>
-    <h3 id="detailName"></h3>
-    <p id="detailMeta"></p>
-    <div class="row">
-      <button type="button" class="primary" id="detailSave">Save</button>
-      <button type="button" class="primary" id="detailClose" style="background:var(--panel2);color:var(--paper);border:1px solid var(--line-strong)">Close</button>
+      <p class="resultbar mono"><span id="resultCount" role="status"></span><span id="resultScope">Featured sets</span></p>
+      <ul id="artistList" class="artist-list"></ul>
+      <p id="lineupEmpty" class="empty" hidden></p>
+      <div class="inline-actions">
+        <button type="button" class="control" id="showMore" hidden>Show more artists</button>
+        <a class="text-link" href="https://socal.dreamstateusa.com/lineup/">Official day-by-day lineup ↗</a>
+      </div>
+      </div>
+      <div id="schedule" class="schedule-block">
+        <h3>Set times</h3>
+        <p id="scheduleStatus">Times and stage assignments are TBD in this planner. See Insomniac for the official schedule.</p>
+        <details>
+          <summary class="control">Browse set listings</summary>
+          <ul class="schedule-list" id="scheduleList" tabindex="0" aria-label="Set listings"></ul>
+        </details>
+        <a class="text-link" href="https://www.insomniac.com/the-insomniac-app/">Insomniac app ↗</a>
+      </div>
     </div>
+  </section>
+  <section class="section" id="plan" aria-labelledby="planTitle">
+    <div class="wrap reveal" data-motion="plan">
+      <div class="section-head"><h2 id="planTitle">My Plan</h2><p>Saved on this device. Copy a text version before you head out.</p></div>
+      <ul class="artist-list" id="planList"></ul>
+      <p class="empty" id="planEmpty">Your plan is empty. Save an artist from the lineup to start it.</p>
+      <div class="plan-actions">
+        <button type="button" class="control primary" id="copyPlan">Copy my plan</button>
+        <button type="button" class="control" id="clearPlan">Clear my plan</button>
+        <a href="#lineup" class="text-link">Find artists ↗</a>
+      </div>
+      <p class="status" id="planStatus" role="status"></p>
+    </div>
+  </section>
+  <section class="section" id="map" aria-labelledby="mapTitle">
+    <div class="wrap">
+      <div class="section-head"><h2 id="mapTitle">Festival map</h2><p>Browse the stage and services directory. Use the official map for walking routes.</p></div>
+      <div class="map-layout reveal" data-motion="map">
+        <div class="map-cells" id="mapCells" role="group" aria-label="Stages and services"></div>
+        <aside class="map-readout" id="mapReadout" aria-live="polite">
+          <p class="mono muted" id="mapType">Queen Mary Waterfront</p>
+          <h3 id="mapPlace">Stages and services</h3>
+          <p class="muted" id="mapDetails">Select a place to view details.</p>
+          <p>1126 Queens Highway, Long Beach, CA</p>
+          <a class="text-link" href="https://socal.dreamstateusa.com/experience/festival-map/">Official venue map ↗</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="info" aria-labelledby="infoTitle">
+    <div class="wrap">
+      <div class="section-head"><h2 id="infoTitle">Before you go</h2><p>Entry, shuttles, and the afterparty.</p></div>
+      <div class="info-grid">
+        <dl class="info-rows">
+          <div class="info-row reveal" data-motion="info"><dt>Dates</dt><dd>Friday, November 20 and Saturday, November 21, 2026.</dd></div>
+          <div class="info-row reveal" data-motion="info"><dt>Hours</dt><dd>4 PM to 1 AM each day.</dd></div>
+          <div class="info-row reveal" data-motion="info"><dt>Age</dt><dd>18 and over.</dd></div>
+          <div class="info-row reveal" data-motion="info"><dt>Re-entry</dt><dd>No re-entry on the same day.</dd></div>
+          <div class="info-row reveal" data-motion="info"><dt>Afterparties</dt><dd>Midnight to 6 AM aboard the Queen Mary each night.</dd></div>
+          <div class="info-row reveal" data-motion="info"><dt>Stages</dt><dd>See the <a class="text-link" href="#map">stage directory</a>.</dd></div>
+          <div class="info-row reveal" data-motion="info"><dt>Tickets</dt><dd><a class="text-link" href="https://socal.dreamstateusa.com">Official tickets and info ↗</a></dd></div>
+          <div class="info-row reveal" data-motion="info"><dt>Travel</dt><dd>No on-site parking. Free shuttles pick up at Rainbow Lagoon near the Long Beach Convention Center.</dd></div>
+        </dl>
+        <aside class="side-card">
+          <h3>Plan for weak signal</h3>
+          <p class="muted">Loading this page offline is unsupported. Copy your plan or take a screenshot before you leave.</p>
+          <a class="text-link" href="#plan">Go to My Plan ↗</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="signal" aria-labelledby="signalTitle">
+    <div class="wrap reveal" data-motion="game">
+      <div class="section-head"><h2 id="signalTitle">Signal Catch</h2><p>Catch the highlighted channel before it switches. Play eight rounds and beat your best score.</p></div>
+      <div class="side-card game">
+        <div class="game-score mono"><span id="gameScore">Score 0 / 8</span><span id="gameBest">Best 0 / 8</span></div>
+        <div class="game-board" role="group" aria-label="Signal channels">
+          <button type="button" class="control" data-lane="0" disabled>Left</button>
+          <button type="button" class="control" data-lane="1" disabled>Center</button>
+          <button type="button" class="control" data-lane="2" disabled>Right</button>
+        </div>
+        <button type="button" class="control primary" id="gameStart">Start game</button>
+        <p class="status" id="gameStatus" role="status"></p>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="feedback" aria-labelledby="feedbackTitle">
+    <div class="wrap reveal" data-motion="feedback">
+      <div class="section-head"><h2 id="feedbackTitle">Feedback</h2><p>Save a note on this device.</p></div>
+      <form class="feedback-form" id="feedbackForm">
+        <label for="fbName">Name (optional)</label>
+        <input type="text" id="fbName" maxlength="100" autocomplete="name">
+        <label for="fbText">Your note</label>
+        <textarea id="fbText" required maxlength="2000"></textarea>
+        <button type="submit" class="control primary">Save feedback</button>
+        <p class="status" id="fbDone" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <p class="muted">Fan-made Dreamstate SoCal 2026 planner by Byyy Studio.</p>
+    <a class="text-link" href="https://byyystudio.me/">Back to Byyy Studio ↗</a>
   </div>
-</div>
-
-<nav class="tabs" aria-label="Sections">
-  <span class="tab-ink" aria-hidden="true"></span>
-  <button type="button" data-tab="lineup" class="active">Lineup<small>Artists</small></button>
-  <button type="button" data-tab="plan">My Plan<small id="planCount">(0)</small></button>
-  <button type="button" data-tab="map">Map<small>Stages</small></button>
-  <button type="button" data-tab="info">Info<small>Need to know</small></button>
-  <button type="button" data-tab="feedback">Feedback<small>Tell us</small></button>
+</footer>
+<nav class="tabs" aria-label="Festival planner">
+  <div class="tabs-inner">
+    <span class="tab-ink" aria-hidden="true"></span>
+    <a class="tab" href="#lineup" aria-current="true">Lineup<small>Artists</small></a>
+    <a class="tab" href="#plan">My Plan<small id="planCount">0 saved</small></a>
+    <a class="tab" href="#map">Map<small>Stages</small></a>
+    <a class="tab" href="#info">Info<small>Travel</small></a>
+    <a class="tab" href="#feedback">Feedback<small>Notes</small></a>
+  </div>
 </nav>
-
+<dialog id="detail" aria-labelledby="detailName">
+  <p class="mono muted">Artist details</p>
+  <h2 id="detailName"></h2>
+  <dl class="sheet-meta">
+    <div><dt>Day</dt><dd id="detailDay"></dd></div>
+    <div><dt>Stage</dt><dd id="detailStage"></dd></div>
+    <div><dt>Time</dt><dd id="detailTime"></dd></div>
+  </dl>
+  <div class="inline-actions">
+    <button type="button" class="control primary" id="detailSave">Save</button>
+    <button type="button" class="control" id="detailClose" autofocus>Close</button>
+  </div>
+</dialog>
+<dialog id="clearDialog" aria-labelledby="clearTitle">
+  <h2 id="clearTitle">Clear your plan?</h2>
+  <p>Remove all saved artists from this device.</p>
+  <form method="dialog" class="inline-actions">
+    <button class="control" value="cancel" autofocus>Keep my plan</button>
+    <button class="control primary" value="clear">Clear my plan</button>
+  </form>
+</dialog>
 <script>
+/* Preserved Dreamstate v5 lineup order and names for saved-plan compatibility. */
 const fri = ["ARTBAT","Andrew Rayel presents Extasia","Astrix","Dash Berlin","Enrico Sangiuliano","Frankyeffe","GMS","Infected Mushroom","Marco V","MaRLo","Mauro Picotto","Neelix","Phaxe","Burn In Noise","Reinier Zonneveld (Live)","Schrotthagen","Shay De Castro","The Rocketman"];
 const sat = ["Above & Beyond (Anjunabeats Classics)","Aaron Hibell (Live)","Aly & Fila + Billy Gillies","Alpha 9 + Ilan Bluestone","Andy Moor","Bryan Kearney + John O'Callaghan presents Key4050","Cold Blue","Darren Porter + Sean Tyas","David Forbes + Mark Sherry presents Thick As Thieves","Eddie Halliwell + Judge Jules","Ferry Corsten + Marsh","John 00 Fleming","John Askew + Simon Patterson","Paul van Dyk presents The Essence of Acid","Solarstone","Vini Vici","Ace Ventura","4 Strings (Classics Set)"];
 const all = ["4 Strings (Classics Set)","A.N.I.","Aaron Hibell (Live)","Above & Beyond (Anjunabeats Classics)","Ace Ventura","Allen Watts + Talla 2XLC","Alpha 9 + Ilan Bluestone","Aly & Fila + Billy Gillies","Andrew Rayel presents Extasia","Andy Moor","Animato","ARTBAT","Astrix","Barakuda","BK","Bryan Kearney + John O'Callaghan presents Key4050","BT + Matt FAX","Burn In Noise","Chris Metcalfe","Cold Blue","Darren Porter + Sean Tyas","Das Pharaoh","Dash Berlin","David Forbes + Mark Sherry presents Thick As Thieves","David Rust + Olly James","Discovery Project","Eddie Halliwell + Judge Jules","Enrico Sangiuliano","Ferry Corsten + Marsh","Ferry Tayle + Tonks presents Mirage (Live)","Frankyeffe","Giorgia Angiuli","GMS","Hannah Laing + Marie Vaunt","Infected Mushroom","JOA","John 00 Fleming","John Askew + Simon Patterson","Karmå","Kaufmann (DE)","Key4050","Lee Ann Roberts","Marco V","Maria Healy","MaRLo","Matty Ralph","Mauro Picotto","Maximizer","Neelix","NRG2000","Nu Aspect","Panteros666","Paul Denton + Will Rees presents Parallel Worlds","Paul van Dyk presents The Essence of Acid","Pegassi","Perfect Stranger","Phaxe","Reinier Zonneveld (Live)","Rising Dust","Schrotthagen","Sequence Six","Shay De Castro","Sighter","Solarstone","Steve Dekay","Terra","TH;EN","The Rocketman","Vini Vici","VisionV","Warp Brothers"];
-let day = "fri", savedOnly = false, detailName = "";
-function getSaved(){ try { return JSON.parse(localStorage.getItem("dreamstate_saved") || "[]"); } catch(e){ return []; } }
-function setSaved(v){ localStorage.setItem("dreamstate_saved", JSON.stringify(v)); }
-function esc(s){ return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
-function dayLabel(a){
-  if (day === "all") return fri.indexOf(a) > -1 ? "Friday, Nov 20" : sat.indexOf(a) > -1 ? "Saturday, Nov 21" : "Full weekend lineup";
-  return day === "fri" ? "Friday, Nov 20" : "Saturday, Nov 21";
-}
-let lastCount = -1;
-function render(mode, justName){
-  const saved = getSaved();
-  const q = (document.getElementById("search").value || "").toLowerCase();
-  const list = day === "fri" ? fri : day === "sat" ? sat : all;
-  let shown = list.filter(function(a){ return (!q || a.toLowerCase().indexOf(q) > -1) && (!savedOnly || saved.indexOf(a) > -1); });
-  const el = document.getElementById("artistList");
-  el.classList.remove("calm","quick"); if (mode === "calm" || mode === "quick") el.classList.add(mode);
-  el.innerHTML = shown.length ? shown.map(function(a, i){
-    const isSaved = saved.indexOf(a) > -1;
-    return '<div class="artist" style="--d:' + Math.min(i, 12) * 0.04 + 's" data-name="' + esc(a) + '"><div><h3>' + esc(a) + '</h3><div class="meta">' + dayLabel(a) + " | Stage: TBD | Time: TBD</div></div><button type=\"button\" class=\"savebtn" + (isSaved ? " saved" : "") + "\" data-name=\"" + esc(a) + "\">" + (isSaved ? "Saved" : "Save") + "</button></div>";
-  }).join("") : "<p>No artists match that search.</p>";
-  el.querySelectorAll(".artist").forEach(function(card){
-    card.addEventListener("click", function(e){
-      if (e.target.closest(".savebtn")) return;
-      openDetail(card.getAttribute("data-name"));
-    });
-  });
-  el.querySelectorAll(".savebtn").forEach(function(b){
-    b.onclick = function(e){
-      e.stopPropagation();
-      let s = getSaved(); const n = b.getAttribute("data-name");
-      if (s.indexOf(n) > -1) { s = s.filter(function(x){ return x !== n; }); } else { s.push(n); }
-      setSaved(s); render("calm", n); renderPlan("calm");
-    };
-  });
-  if (justName) el.querySelectorAll(".savebtn").forEach(function(b){ if (b.getAttribute("data-name") === justName) b.classList.add("just"); });
-  const pc = document.getElementById("planCount");
-  pc.textContent = "(" + saved.length + ")";
-  if (lastCount > -1 && lastCount !== saved.length) { pc.classList.remove("bump"); void pc.offsetWidth; pc.classList.add("bump"); }
-  lastCount = saved.length;
-}
-function renderPlan(mode){
-  const saved = getSaved();
-  document.getElementById("planList").classList.toggle("calm", mode === "calm");
-  document.getElementById("planEmpty").style.display = saved.length ? "none" : "block";
-  document.getElementById("planList").innerHTML = saved.map(function(a){
-    return '<div class="artist" data-name="' + esc(a) + '"><div><h3>' + esc(a) + '</h3><div class="meta">Saved | Time: TBD</div></div><button type="button" class="savebtn" data-name="' + esc(a) + '">Remove</button></div>';
-  }).join("");
-  document.querySelectorAll("#planList .artist").forEach(function(card){
-    card.addEventListener("click", function(e){
-      if (e.target.closest(".savebtn")) return;
-      openDetail(card.getAttribute("data-name"));
-    });
-  });
-  document.querySelectorAll("#planList .savebtn").forEach(function(b){
-    b.onclick = function(e){ e.stopPropagation(); const card = b.closest(".artist"), n = b.getAttribute("data-name"); const go = function(){ setSaved(getSaved().filter(function(x){ return x !== n; })); render("calm"); renderPlan("calm"); }; if (card && !reduceMotion && card.animate) { card.animate([{opacity:1,transform:"none"},{opacity:0,transform:"translateX(" + (window.innerWidth < 641 ? 24 : 48) + "px)"}], {duration:260, easing:"cubic-bezier(.16,1,.3,1)"}).onfinish = go; } else go(); };
-  });
-}
-function openDetail(name){
-  detailName = name;
-  document.getElementById("detailName").textContent = name;
-  document.getElementById("detailTag").textContent = dayLabel(name) + " | Dreamstate SoCal 2026";
-  document.getElementById("detailMeta").textContent = "Stage: TBD. Time: TBD. Set times will be added when Insomniac posts them. Nothing here is a guessed set time.";
-  const saved = getSaved().indexOf(name) > -1;
-  document.getElementById("detailSave").textContent = saved ? "Saved" : "Save to my plan";
-  const dt = document.getElementById("detail");
-  dt.classList.remove("closing");
-  dt.classList.add("open");
-  dt.setAttribute("aria-hidden", "false");
-  document.getElementById("detailClose").focus({preventScroll: true});
-}
-function closeDetail(){
-  const dt = document.getElementById("detail");
-  if (!dt.classList.contains("open") || dt.classList.contains("closing")) return;
-  dt.setAttribute("aria-hidden", "true");
-  const finish = function(){ dt.classList.remove("open", "closing"); };
-  if (reduceMotion) { finish(); return; }
-  dt.classList.add("closing");
-  setTimeout(finish, 300);
-}
-document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeDetail(); });
-document.getElementById("detailClose").onclick = closeDetail;
-document.getElementById("detailScrim").onclick = closeDetail;
-document.getElementById("detailSave").onclick = function(){
-  let s = getSaved();
-  if (s.indexOf(detailName) > -1) { s = s.filter(function(x){ return x !== detailName; }); } else { s.push(detailName); }
-  setSaved(s); render("calm", detailName); renderPlan("calm");
-  const ds = document.getElementById("detailSave"); ds.classList.remove("flash"); void ds.offsetWidth; ds.classList.add("flash");
-  document.getElementById("detailSave").textContent = s.indexOf(detailName) > -1 ? "Saved" : "Save to my plan";
-};
-document.querySelectorAll(".spot").forEach(function(sp){
-  sp.addEventListener("click", function(){ openDetail(sp.getAttribute("data-name")); });
-});
-const reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-const tabOrder = ["lineup","plan","map","info","feedback"];
-let currentTab = "lineup";
-const tabsNav = document.querySelector("nav.tabs"), tabInk = tabsNav.querySelector(".tab-ink");
-function placeInk(){
-  const b = tabsNav.querySelector("button.active"); if (!b) return;
-  tabInk.style.translate = b.offsetLeft + "px " + b.offsetTop + "px";
-  tabInk.style.width = b.offsetWidth + "px"; tabInk.style.height = b.offsetHeight + "px";
-  tabsNav.classList.add("inked");
-}
-function showTab(id){
-  const from = tabOrder.indexOf(currentTab), to = tabOrder.indexOf(id);
-  document.querySelector("main").style.setProperty("--dir", to > from ? 1 : to < from ? -1 : 0);
-  currentTab = id;
-  document.querySelectorAll("[data-tab]").forEach(function(x){ x.classList.remove("active"); });
-  document.querySelectorAll("section.panel").forEach(function(x){ x.classList.remove("active"); });
-  document.querySelector('[data-tab="' + id + '"]').classList.add("active");
-  document.getElementById(id).classList.add("active");
-  placeInk();
-  window.scrollTo({top: 0, behavior: reduceMotion ? "auto" : "smooth"});
-  observeReveals();
-}
-placeInk();
-requestAnimationFrame(function(){ requestAnimationFrame(function(){ tabsNav.classList.add("ready"); }); });
-window.addEventListener("resize", placeInk);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeInk);
-document.addEventListener("touchstart", function(){}, {passive: true}); /* lets :active press states fire on iOS */
-document.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick = function(){ showTab(b.getAttribute("data-tab")); }; });
-document.querySelectorAll(".daybtn").forEach(function(b){
-  b.onclick = function(){
-    document.querySelectorAll(".daybtn").forEach(function(x){ x.classList.remove("active"); });
-    b.classList.add("active"); day = b.getAttribute("data-day"); render("stagger");
-  };
-});
-document.getElementById("search").addEventListener("input", function(){ render("quick"); });
-document.getElementById("savedOnly").onclick = function(){ savedOnly = !savedOnly; this.classList.toggle("active", savedOnly); this.textContent = savedOnly ? "Saved only: On" : "Saved only"; render("stagger"); };
-document.getElementById("clearPlan").onclick = function(){ setSaved([]); render("calm"); renderPlan("calm"); document.getElementById("copyNote").textContent = "Plan cleared."; };
-document.getElementById("copyPlan").onclick = function(){
-  const s = getSaved();
-  const text = "Dreamstate SoCal 2026 - My Plan\n" + (s.length ? s.map(function(a){ return "- " + a + " (time TBD)"; }).join("\n") : "No artists saved yet.");
-  if (navigator.clipboard) { navigator.clipboard.writeText(text).then(function(){ document.getElementById("copyNote").textContent = "Copied. Paste it to your group."; }); }
-  else { document.getElementById("copyNote").textContent = text; }
-};
-document.getElementById("fbSend").onclick = function(){
-  const t = document.getElementById("fbText").value.trim();
-  if (!t) { document.getElementById("fbDone").textContent = "Write a short note first, then tap Send feedback."; return; }
-  try { const arr = JSON.parse(localStorage.getItem("dreamstate_feedback") || "[]"); arr.push({name: document.getElementById("fbName").value, text: t, at: new Date().toISOString()}); localStorage.setItem("dreamstate_feedback", JSON.stringify(arr)); } catch(e){}
-  document.getElementById("fbDone").textContent = "Thanks. Your feedback is saved on this device.";
-  document.getElementById("fbText").value = "";
-};
-["copyNote","fbDone"].forEach(function(id){ const el = document.getElementById(id); new MutationObserver(function(){ el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }).observe(el, {childList: true}); });
-let lastSec = -1;
-function tick(){
-  const target = new Date("2026-11-20T16:00:00-08:00").getTime();
-  let diff = target - Date.now();
-  if (diff < 0) diff = 0;
-  const d = Math.floor(diff / 86400000), h = Math.floor(diff / 3600000) % 24, m = Math.floor(diff / 60000) % 60, s = Math.floor(diff / 1000) % 60;
-  const set = function(id, v){ const el = document.getElementById(id); if (el.textContent !== String(v)) { el.textContent = v; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); } };
-  set("cdD", d); set("cdH", String(h).padStart(2, "0")); set("cdM", String(m).padStart(2, "0")); set("cdS", String(s).padStart(2, "0"));
-  lastSec = s;
-}
-tick(); setInterval(tick, 1000);
-const io = new IntersectionObserver(function(entries){
-  entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
-}, {threshold: 0.12});
-function observeReveals(){
-  document.querySelectorAll(".reveal:not(.in)").forEach(function(el){ io.observe(el); });
-}
-observeReveals();
-let ticking = false;
-window.addEventListener("scroll", function(){
-  if (ticking) return; ticking = true;
-  requestAnimationFrame(function(){
-    const y = window.scrollY || 0;
-    const hero = document.getElementById("hero");
-    if (hero && !reduceMotion && y < hero.offsetHeight + 200) hero.style.setProperty("--par", y);
-    ticking = false;
-  });
-}, {passive: true});
-const boot = document.getElementById("boot");
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+const savedKey = "dreamstate_saved";
+const feedbackKey = "dreamstate_feedback";
+const bestKey = "dreamstate_signal_best";
+const dayNames = {fri:"Friday, Nov 20", sat:"Saturday, Nov 21"};
+const dayLists = {fri, sat, all};
+const timeFormat = new Intl.DateTimeFormat("en-US", {hour:"numeric", minute:"2-digit", timeZone:"America/Los_Angeles"});
+
+/* Populate stage, start and end with verified data. Timestamps use ISO 8601 with an offset. */
+const schedule = all.map(name => ({
+  name,
+  day: fri.includes(name) ? "fri" : sat.includes(name) ? "sat" : null,
+  stage: null,
+  start: null,
+  end: null
+}));
+const byName = new Map(schedule.map(set => [set.name, set]));
+const allFeatured = [
+  ["ARTBAT", "ARTBAT"],
+  ["Infected Mushroom", "Infected Mushroom"],
+  ["Above & Beyond (Anjunabeats Classics)", "Above & Beyond"],
+  ["Paul van Dyk presents The Essence of Acid", "Paul van Dyk"]
+];
+const boot = $("#boot");
 let bootGone = false;
-function dismissBoot(){ if (boot && !bootGone){ bootGone = true; boot.classList.add("done"); document.documentElement.classList.add("booted"); setTimeout(function(){ boot.style.display = "none"; }, 600); } }
+let bootTimer;
+function dismissBoot() {
+  if (bootGone) return;
+  bootGone = true;
+  clearTimeout(bootTimer);
+  boot.classList.add("done");
+  if (document.activeElement === boot) $(".hero-actions a").focus({preventScroll:true});
+  setTimeout(() => { boot.hidden = true; }, 600);
+}
+if (!reduced.matches && !location.hash && scrollY < 10) {
+  document.documentElement.classList.add("with-boot");
+  boot.hidden = false;
+  bootTimer = setTimeout(dismissBoot, 760);
+}
 boot.addEventListener("click", dismissBoot);
-setTimeout(dismissBoot, 1100);
-render(); renderPlan();
-lastCount = getSaved().length;
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && !boot.hidden) dismissBoot();
+});
+
+function read(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value === null ? fallback : JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+function write(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
+}
+function fromStorage() {
+  const value = read(savedKey, []);
+  return new Set(Array.isArray(value) ? value.filter(name => typeof name === "string") : []);
+}
+let saved = fromStorage();
+const filters = {day:"fri", savedOnly:false, limit:12};
+const list = $("#artistList");
+const planList = $("#planList");
+const showMore = $("#showMore");
+const detail = $("#detail");
+const clearDialog = $("#clearDialog");
+let detailArtist = "";
+let detailTrigger;
+
+function make(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function animate(node, className = "bump") {
+  node.classList.remove(className);
+  if (reduced.matches) return;
+  void node.offsetWidth;
+  node.classList.add(className);
+}
+function metadata(name) {
+  const set = byName.get(name);
+  const day = dayNames[set?.day] || "TBD";
+  const stage = set?.stage || "TBD";
+  const time = set?.start
+    ? timeFormat.format(new Date(set.start)) + (set.end ? " to " + timeFormat.format(new Date(set.end)) : "")
+    : "TBD";
+  return {day, stage, time};
+}
+function metaText(name) {
+  const {day, stage, time} = metadata(name);
+  return day + " · Stage: " + stage + " · Time: " + time;
+}
+
+const observer = "IntersectionObserver" in window ? new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    observer.unobserve(entry.target);
+    if (!reduced.matches) entry.target.classList.add("is-in");
+  }
+}, {threshold: .08}) : null;
+function observe(root = document) {
+  $$(".reveal:not(.is-in)", root).forEach(node => observer?.observe(node));
+}
+function unobserveRows(container) {
+  for (const child of container.children) observer?.unobserve(child);
+}
+function saveState(button, name, isPlan = false) {
+  const isSaved = saved.has(name);
+  button.textContent = isSaved ? "Unsave" : "Save";
+  button.setAttribute("aria-pressed", isSaved);
+  button.setAttribute("aria-label", (isSaved ? "Unsave " : "Save ") + name);
+  if (isPlan) button.classList.remove("primary");
+}
+function row(name, index, inPlan) {
+  const item = make("li", "artist-row" + (inPlan ? "" : " reveal"));
+  item.dataset.motion = "row";
+  item.style.setProperty("--i", index % 4);
+  const open = make("button", "artist-name");
+  open.type = "button";
+  open.dataset.artist = name;
+  open.append(make("strong", "", name), make("span", "meta", metaText(name)));
+  const toggle = make("button", "control save");
+  toggle.type = "button";
+  toggle.dataset.save = name;
+  saveState(toggle, name, inPlan);
+  item.append(open, toggle);
+  return item;
+}
+function resultNames() {
+  const query = $("#search").value.trim().toLocaleLowerCase();
+  return dayLists[filters.day].filter(name => (
+    name.toLocaleLowerCase().includes(query) && (!filters.savedOnly || saved.has(name))
+  ));
+}
+function renderLineup({append = false} = {}) {
+  const names = resultNames();
+  const start = append ? list.children.length : 0;
+  if (!append) {
+    unobserveRows(list);
+    list.replaceChildren();
+  }
+  const items = names.slice(start, filters.limit).map((name, i) => row(name, start + i, false));
+  list.append(...items);
+  items.forEach(item => observer?.observe(item));
+  $("#resultCount").textContent = names.length + (names.length === 1 ? " artist" : " artists");
+  $("#resultScope").textContent = filters.day === "all" ? "Full lineup" : "Featured sets";
+  const empty = $("#lineupEmpty");
+  empty.hidden = !!names.length;
+  empty.textContent = filters.savedOnly ? "No saved artists match. Try All A–Z or turn off Saved only." : "No artists match that search.";
+  showMore.hidden = names.length <= filters.limit;
+  if (append && items.length) $("button", items[0]).focus({preventScroll:true});
+}
+function renderPlan(bump = false) {
+  planList.replaceChildren(...[...saved].map((name, i) => row(name, i, true)));
+  $("#planEmpty").hidden = !!saved.size;
+  $("#copyPlan").disabled = $("#clearPlan").disabled = !saved.size;
+  const count = $("#planCount");
+  count.textContent = saved.size + " saved";
+  if (bump) {
+    animate(count);
+    animate(count.closest(".tab"));
+  }
+}
+function renderSchedule() {
+  const entries = schedule.map(set => {
+    const item = make("li", "schedule-row");
+    item.append(make("strong", "", set.name), make("span", "meta", metaText(set.name)));
+    return item;
+  });
+  $("#scheduleList").replaceChildren(...entries);
+  const hasTimes = schedule.some(set => set.start);
+  $("#scheduleStatus").textContent = hasTimes
+    ? "Set times are shown in Pacific time. Unconfirmed details are marked TBD."
+    : "Times and stage assignments are TBD in this planner. See Insomniac for the official schedule.";
+}
+const featured = $("#spotlight");
+function renderFeatured() {
+  featured.replaceChildren(...allFeatured.map(([name, display]) => {
+    const card = make("article", "spot-card");
+    const button = make("button", "spot");
+    const art = make("span", "artboard");
+    art.setAttribute("aria-hidden", "true");
+    const {day, stage, time} = metadata(name);
+    button.type = "button";
+    button.dataset.artist = name;
+    button.append(
+      art,
+      make("span", "mono", day),
+      make("h3", "", display),
+      make("span", "meta", "Stage: " + stage + " · Time: " + time),
+      make("span", "spot-detail", "Artist details ↗")
+    );
+    const toggle = make("button", "control save");
+    toggle.type = "button";
+    toggle.dataset.save = name;
+    saveState(toggle, name);
+    card.append(button, toggle);
+    return card;
+  }));
+}
+function syncSaveButtons(container) {
+  $$("[data-save]", container).forEach(button => saveState(button, button.dataset.save));
+}
+function toggleSaved(name, source) {
+  if (!name) return;
+  const next = new Set(saved);
+  if (next.has(name)) next.delete(name);
+  else next.add(name);
+  const stored = write(savedKey, [...next]);
+  saved = next;
+  $("#planStatus").textContent = stored ? "" : "Browser storage is unavailable. Copy your plan before closing the page.";
+  const wasPlan = planList.contains(source);
+  const previousIndex = wasPlan ? [...planList.children].indexOf(source.closest("li")) : -1;
+  renderPlan(true);
+  if (filters.savedOnly) renderLineup();
+  else syncSaveButtons(list);
+  syncSaveButtons(featured);
+  if (wasPlan) {
+    const nextButtons = $$("[data-save]", planList);
+    (nextButtons[Math.min(previousIndex, nextButtons.length - 1)] || $(".plan-actions a")).focus({preventScroll:true});
+  } else if (!source.isConnected && !detail.open) {
+    $("#savedOnly").focus({preventScroll:true});
+  }
+  if (source.isConnected) animate(source, "pop");
+  if (detail.open) saveState($("#detailSave"), detailArtist);
+}
+function openSheet(name, trigger) {
+  if (detail.open) return;
+  detailArtist = name;
+  detailTrigger = trigger;
+  const {day, stage, time} = metadata(name);
+  $("#detailName").textContent = name;
+  $("#detailDay").textContent = day;
+  $("#detailStage").textContent = stage;
+  $("#detailTime").textContent = time;
+  saveState($("#detailSave"), name);
+  detail.showModal();
+}
+function closeSheet() {
+  if (!detail.open || detail.classList.contains("closing")) return;
+  if (reduced.matches) detail.close();
+  else {
+    detail.classList.add("closing");
+    setTimeout(() => detail.close(), 210);
+  }
+}
+detail.addEventListener("close", () => {
+  detail.classList.remove("closing");
+  (detailTrigger?.isConnected ? detailTrigger : $("#savedOnly")).focus({preventScroll:true});
+});
+detail.addEventListener("cancel", event => {
+  event.preventDefault();
+  closeSheet();
+});
+detail.addEventListener("click", event => {
+  if (event.target !== detail) return;
+  const rect = detail.getBoundingClientRect();
+  if (event.clientY < rect.top || event.clientX < rect.left || event.clientX > rect.right) closeSheet();
+});
+$("#detailClose").addEventListener("click", closeSheet);
+$("#detailSave").addEventListener("click", event => toggleSaved(detailArtist, event.currentTarget));
+document.addEventListener("click", event => {
+  const button = event.target.closest("button[data-artist],button[data-save]");
+  if (!button) return;
+  if (button.dataset.artist) openSheet(button.dataset.artist, button);
+  else toggleSaved(button.dataset.save, button);
+});
+function resetResults() {
+  filters.limit = 12;
+  renderLineup();
+}
+$$("[data-day]").forEach(button => button.addEventListener("click", () => {
+  filters.day = button.dataset.day;
+  $$("[data-day]").forEach(item => item.setAttribute("aria-pressed", item === button));
+  resetResults();
+}));
+$("#search").addEventListener("input", resetResults);
+$("#savedOnly").addEventListener("click", event => {
+  filters.savedOnly = !filters.savedOnly;
+  event.currentTarget.setAttribute("aria-pressed", filters.savedOnly);
+  resetResults();
+});
+showMore.addEventListener("click", () => {
+  filters.limit += 12;
+  renderLineup({append:true});
+});
+window.addEventListener("storage", event => {
+  if (event.key !== savedKey && event.key !== null) return;
+  saved = fromStorage();
+  syncSaveButtons(featured);
+  renderPlan();
+  renderLineup();
+  if (detail.open) saveState($("#detailSave"), detailArtist);
+});
+$("#copyPlan").addEventListener("click", async () => {
+  const text = ["Dreamstate SoCal 2026 · My Plan", ...[...saved].map(name => name + " (" + metaText(name) + ")")].join("\n");
+  const status = $("#planStatus");
+  try {
+    await navigator.clipboard.writeText(text);
+    status.textContent = "Plan copied.";
+  } catch {
+    const file = URL.createObjectURL(new Blob([text], {type:"text/plain;charset=utf-8"}));
+    const link = document.createElement("a");
+    link.href = file;
+    link.download = "dreamstate-my-plan.txt";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(file), 1000);
+    status.textContent = "Plan saved as a text file.";
+  }
+});
+$("#clearPlan").addEventListener("click", () => {
+  clearDialog.returnValue = "";
+  clearDialog.showModal();
+});
+clearDialog.addEventListener("close", () => {
+  if (clearDialog.returnValue !== "clear") return;
+  const stored = write(savedKey, []);
+  saved.clear();
+  renderPlan(true);
+  renderLineup();
+  $("#planStatus").textContent = stored ? "Plan cleared." : "Cleared for this session. Browser storage is unavailable.";
+  $(".plan-actions a").focus({preventScroll:true});
+});
+
+const places = [
+  {name:"Entrance and Box Office", type:"Access", wide:true, info:"Box office and will call run from 3 PM to midnight each festival day."},
+  ...["The Dream","The Sequence","The Vision","The Void","Long Beach Amphitheater","Beatbox Art Car"].map(name => ({name, type:"Stage", info:"Artists and set times: TBD."})),
+  {name:"Food, Water, Medical, and Shuttles", type:"Services", wide:true, info:"See the official map for services. Free shuttles run between Rainbow Lagoon and the festival grounds."}
+];
+const mapReadout = $("#mapReadout");
+const mapCells = places.map((place, index) => {
+  const cell = make("button", "map-cell" + (place.wide ? " wide" : ""));
+  cell.type = "button";
+  cell.setAttribute("aria-pressed", "false");
+  cell.setAttribute("aria-controls", "mapReadout");
+  cell.append(make("span", "mono", place.type), make("strong", "", place.name));
+  cell.addEventListener("click", () => {
+    mapCells.forEach((node, i) => node.setAttribute("aria-pressed", i === index));
+    $("#mapType").textContent = place.type;
+    $("#mapPlace").textContent = place.name;
+    const assigned = schedule.filter(set => set.stage === place.name);
+    $("#mapDetails").textContent = assigned.length
+      ? assigned.map(set => set.name + " · " + metadata(set.name).time).join(" / ")
+      : place.info;
+    animate(mapReadout, "flash");
+    if (mapReadout.getBoundingClientRect().top > innerHeight - 100) {
+      mapReadout.scrollIntoView({block:"center", behavior:reduced.matches ? "auto" : "smooth"});
+    }
+  });
+  return cell;
+});
+$("#mapCells").append(...mapCells);
+
+const lanes = $$("[data-lane]");
+const gameStart = $("#gameStart");
+let best = Math.max(0, Math.min(8, Number(read(bestKey, 0)) || 0));
+let game = null;
+let roundTimer;
+$("#gameBest").textContent = "Best " + best + " / 8";
+function nextRound() {
+  clearTimeout(roundTimer);
+  if (!game) return;
+  if (game.round >= 8) {
+    best = Math.max(best, game.score);
+    const stored = write(bestKey, best);
+    $("#gameBest").textContent = "Best " + best + " / 8";
+    $("#gameStatus").textContent = "Final score " + game.score + " / 8." + (stored ? "" : " Browser storage is unavailable.");
+    lanes.forEach(button => {
+      button.classList.remove("signal");
+      button.textContent = button.dataset.label;
+      button.disabled = true;
+    });
+    game = null;
+    gameStart.disabled = false;
+    gameStart.textContent = "Play again";
+    if (document.activeElement === document.body) gameStart.focus({preventScroll:true});
+    return;
+  }
+  game.round += 1;
+  game.target = (game.target + 1 + Math.floor(Math.random() * 2)) % lanes.length;
+  lanes.forEach((button, index) => {
+    const active = index === game.target;
+    button.classList.toggle("signal", active);
+    button.textContent = button.dataset.label + (active ? " ◆" : "");
+  });
+  $("#gameStatus").textContent = "Round " + game.round + " of 8. Catch " + lanes[game.target].dataset.label + ".";
+  roundTimer = setTimeout(nextRound, 2300);
+}
+lanes.forEach((button, index) => {
+  button.dataset.label = button.textContent;
+  button.addEventListener("click", () => {
+    if (!game) return;
+    if (index === game.target) game.score += 1;
+    else animate(button, "miss");
+    $("#gameScore").textContent = "Score " + game.score + " / 8";
+    nextRound();
+  });
+});
+gameStart.addEventListener("click", () => {
+  game = {round:0, score:0, target:0};
+  $("#gameScore").textContent = "Score 0 / 8";
+  gameStart.disabled = true;
+  lanes.forEach(button => { button.disabled = false; });
+  lanes[0].focus({preventScroll:true});
+  nextRound();
+});
+$("#feedbackForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = $("#fbName").value.trim();
+  const text = $("#fbText").value.trim();
+  const status = $("#fbDone");
+  if (!text) {
+    status.textContent = "Enter a note before saving.";
+    $("#fbText").focus();
+    return;
+  }
+  const history = read(feedbackKey, []);
+  const stored = write(feedbackKey, [...(Array.isArray(history) ? history : []), {name, text, time:new Date().toISOString()}]);
+  status.textContent = stored ? "Feedback saved on this device." : "Browser storage is unavailable. Your note is still in the form.";
+  if (stored) event.currentTarget.reset();
+});
+
+const hero = $("#hero");
+const clock = $$(".clock-unit b");
+const doors = Date.parse("2026-11-20T16:00:00-08:00");
+const timed = schedule.filter(set => set.start).sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+function tick() {
+  const now = Date.now();
+  const seconds = Math.max(0, Math.ceil((doors - now) / 1000));
+  const values = [Math.floor(seconds / 86400), Math.floor(seconds / 3600) % 24, Math.floor(seconds / 60) % 60, seconds % 60];
+  values.forEach((value, i) => {
+    const text = String(value).padStart(2, "0");
+    if (clock[i].textContent === text) return;
+    clock[i].textContent = text;
+    if (hero.getBoundingClientRect().bottom > 0) animate(clock[i]);
+  });
+  if (timed.length) {
+    const set = timed.find(entry => Date.parse(entry.start) > now);
+    const message = set ? "Next up: " + set.name + " · " + (set.stage || "Stage TBD") + " · " + timeFormat.format(new Date(set.start)) + " PT" : "No upcoming sets in this planner.";
+    if ($("#nextMessage").textContent !== message) $("#nextMessage").textContent = message;
+  }
+}
+const tabs = $$(".tab");
+const targets = tabs.map(tab => $(tab.hash));
+const stageCells = $("#mapCells");
+const sceneRates = {sky:.09, air:.21, portal:.32, front:.43, subject:.055};
+const clamp01 = value => Math.min(1, Math.max(0, value));
+const motionRange = (value, start, end) => clamp01((value - start) / (end - start));
+function paintHero(depth) {
+  const span = Math.min(210, Math.max(105, innerHeight * .27));
+  const open = Math.pow(motionRange(depth, 0, span), .75);
+  const release = motionRange(depth, span * 1.28, span * 2.65);
+  const arrival = motionRange(innerHeight - 68 - featured.getBoundingClientRect().top, 0, 205);
+  hero.style.setProperty("--portal-scale", 1 + open * .31 + release * .27);
+  hero.style.setProperty("--portal-angle", (open * -12 - release * 8) + "deg");
+  hero.style.setProperty("--rift-scale", .72 + open * .43 + release * .21);
+  hero.style.setProperty("--rift-opacity", .13 + open * .65 - release * .35);
+  featured.style.setProperty("--card-art", .63 + arrival * .37);
+  featured.style.setProperty("--art-y", (1 - arrival) * -12 + "px");
+}
+let frame = 0;
+let activeTab = -1;
+let litCell = -1;
+function paintScroll() {
+  frame = 0;
+  const y = scrollY;
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const root = document.documentElement;
+  const rect = hero.getBoundingClientRect();
+  const depth = Math.min(470, Math.max(0, -rect.top));
+  if (!reduced.matches) {
+    root.style.setProperty("--progress", max > 0 ? y / max : 0);
+    for (const [plane, rate] of Object.entries(sceneRates)) hero.style.setProperty("--" + plane + "-y", depth * rate + "px");
+    paintHero(Math.min(470, Math.max(0, y)));
+  }
+  hero.classList.toggle("offscreen", rect.bottom < 0);
+  const readingLine = Math.min(185, innerHeight * .28);
+  const desired = max > 0 && y >= max - 3
+    ? tabs.length - 1
+    : Math.max(0, targets.findLastIndex(section => section.getBoundingClientRect().top <= readingLine));
+  if (desired !== activeTab) {
+    activeTab = desired;
+    tabs.forEach((tab, index) => {
+      if (index === activeTab) tab.setAttribute("aria-current", "true");
+      else tab.removeAttribute("aria-current");
+    });
+    root.style.setProperty("--active-tab", activeTab);
+  }
+  const mapRect = stageCells.getBoundingClientRect();
+  const amount = (innerHeight * .87 - mapRect.top) / Math.max(1, mapRect.height * .88);
+  const nextCell = !reduced.matches && mapRect.bottom > 0 && amount >= 0
+    ? Math.min(mapCells.length - 1, Math.floor(amount * mapCells.length))
+    : -1;
+  if (nextCell !== litCell) {
+    mapCells[litCell]?.classList.remove("is-lit");
+    mapCells[nextCell]?.classList.add("is-lit");
+    litCell = nextCell;
+  }
+}
+function requestPaint() {
+  if (!frame) frame = requestAnimationFrame(paintScroll);
+}
+window.addEventListener("scroll", requestPaint, {passive:true});
+window.addEventListener("resize", requestPaint);
+reduced.addEventListener("change", () => {
+  if (reduced.matches) dismissBoot();
+  requestPaint();
+});
+$$('a[href^="#"]').forEach(link => link.addEventListener("click", event => {
+  if (event.altKey || event.metaKey || event.shiftKey || event.ctrlKey) return;
+  const target = $(link.hash);
+  if (!target) return;
+  event.preventDefault();
+  history.replaceState(null, "", link.hash);
+  target.setAttribute("tabindex", "-1");
+  target.focus({preventScroll:true});
+  target.scrollIntoView({behavior:reduced.matches ? "auto" : "smooth"});
+}));
+renderFeatured();
+renderLineup();
+renderPlan();
+renderSchedule();
+observe();
+tick();
+setInterval(tick, 1000);
+requestPaint();
 </script>
 </body>
 </html>
