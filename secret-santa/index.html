@@ -138,7 +138,7 @@
   button{
     min-height:56px; padding:14px 16px; font-family:"Press Start 2P", monospace; font-size:12px; line-height:1.5;
     border:4px solid #000; background:var(--red); color:#fff; cursor:pointer; width:100%; margin-top:14px;
-    box-shadow:0 6px 0 #000; text-transform:uppercase;
+    box-shadow:0 6px 0 #000; text-transform:uppercase; touch-action:manipulation;
   }
   button:active{transform:translateY(4px); box-shadow:0 2px 0 #000}
   .start-button{width:auto; min-width:220px; margin:16px 0 8px; background:var(--red); animation:startPulse 1.6s ease-in-out infinite}
@@ -1323,7 +1323,11 @@
         btn.textContent = "Adding...";
         var ok = await addGiftDirect(it);
         if (ok) { btn.textContent = "Added"; }
-        else { btn.disabled = false; btn.textContent = "Add to my list"; }
+        else {
+          btn.disabled = false; btn.textContent = "Add to my list";
+          var fm = document.getElementById("finder-message");
+          if (fm) fm.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
       });
     });
   }
