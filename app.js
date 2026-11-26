@@ -170,10 +170,24 @@
           bctx.globalAlpha = 1;
           requestAnimationFrame(tickBurst);
         }
+        /* Tap-only burst: a swipe or scroll starts with pointerdown too, so
+           on touch wait for pointerup and skip it if the finger moved.
+           Mouse keeps the instant pointerdown burst. */
+        var burstDown = null;
         document.addEventListener('pointerdown', function (event) {
           if (event.button !== undefined && event.button !== 0) return;
+          if (event.pointerType === 'mouse') { spawnBurst(event.clientX, event.clientY); return; }
+          burstDown = { x: event.clientX, y: event.clientY };
+        });
+        document.addEventListener('pointerup', function (event) {
+          if (!burstDown) return;
+          var dx = event.clientX - burstDown.x;
+          var dy = event.clientY - burstDown.y;
+          burstDown = null;
+          if (Math.sqrt(dx * dx + dy * dy) > 12) return;
           spawnBurst(event.clientX, event.clientY);
         });
+        document.addEventListener('pointercancel', function () { burstDown = null; });
       }
 
       var workPanel = document.querySelector('[data-work-panel-root]');
