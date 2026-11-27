@@ -1678,7 +1678,7 @@
       transition: color .2s var(--ease);
     }
     .next-thread__trail a:hover { color: var(--accent); }
-    .next-thread__here { color: var(--dim); }
+    .next-thread__here { color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
     .next-thread__sep { color: var(--accent); }
     @media (max-width: 640px) {
       .next-thread { margin-bottom: 28px; }
