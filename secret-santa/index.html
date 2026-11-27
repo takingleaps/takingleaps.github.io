@@ -80,7 +80,7 @@
   .hero .moon::after{content:""; position:absolute; left:8px; top:10px; width:8px; height:8px; background:#c8a800; box-shadow:18px 12px 0 #c8a800, 6px 26px 0 #c8a800}
   h1{
     font-family:"Press Start 2P", monospace; font-size:clamp(28px, 8.5vw, 44px);
-    line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55);
+    line-height:1.25; margin:0 0 14px; color:#fff; text-shadow:4px 4px 0 #000, 8px 8px 0 rgba(232,56,0,.55), 0 0 26px rgba(248,216,0,.35);
     overflow-wrap:break-word;
   }
   h1 .red{color:#ff5a2a}
@@ -221,6 +221,7 @@
   @media (min-width:900px){
     main{max-width:1180px; display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:18px 18px 0}
     .hero{grid-column:1 / -1; margin-bottom:0}
+    .hero h1{font-size:clamp(40px, 5vw, 56px)}
     .card{margin-bottom:0}
     .wide-desktop{grid-column:1 / -1}
     .topbar{max-width:1180px}
@@ -232,7 +233,7 @@
     .card.collapsed h2::after{content:" +"; float:right}
     .card.collapsed > :not(h2){display:none !important}
     body{padding-bottom:78px}
-    #mobile-nav{display:flex; position:fixed; left:0; right:0; bottom:0; z-index:60; background:#101018; border-top:3px solid #000; padding-bottom:env(safe-area-inset-bottom, 0px)}
+    #mobile-nav{display:flex; position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(16,16,24,.82); -webkit-backdrop-filter:blur(12px) saturate(1.25); backdrop-filter:blur(12px) saturate(1.25); border-top:3px solid #000; padding-bottom:env(safe-area-inset-bottom, 0px)}
     #mobile-nav button{flex:1; width:auto; min-height:58px; padding:8px 2px 6px; background:none; border:none; box-shadow:none; color:#fff; font-family:"Press Start 2P", monospace; font-size:8px; line-height:1.5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px}
     #mobile-nav button .nav-ico{font-size:20px; line-height:1}
     #mobile-nav button.active{color:var(--gold)}
@@ -294,7 +295,22 @@
   @keyframes twinkle{50%{opacity:.15}}
   footer{margin:0 0 28px; padding:18px 16px; border:4px solid #000; background:var(--paper); box-shadow:8px 8px 0 #000}
   footer h2{font-size:12px}
-  footer a{display:block; margin-top:12px; font-family:"Press Start 2P", monospace; font-size:10px; line-height:1.7; color:var(--red-dark)}
+  footer a{display:block; margin-top:12px; font-family:"Press Start 2P", monospace; font-size:10px; line-height:1.7; color:var(--red-dark); text-decoration:underline; text-underline-offset:3px}
+  footer a:hover, footer a:focus-visible{background:var(--gold); color:#101018; text-decoration:none}
+  /* ---- tinsel garland: the pixel translation of FLWRPWR's flowing ribbon.
+     Drifts on its own in steps and slides with scroll (via --scroll, set on
+     :root by the v47 motion layer). Sharp corners and hard shadow stay. ---- */
+  .tinsel{
+    grid-column:1 / -1; height:14px; margin:0 0 14px;
+    width:calc(100% + 160px); margin-left:-80px;
+    border-top:3px solid #000; border-bottom:3px solid #000;
+    background:repeating-linear-gradient(90deg, #e83800 0 12px, #f8d800 12px 24px, #00a800 24px 36px, #fff 36px 48px);
+    background-size:48px 100%;
+    box-shadow:4px 4px 0 #000;
+    animation:tinselDrift 9s steps(6) infinite;
+  }
+  @keyframes tinselDrift{to{background-position-x:48px}}
+  .ms-on .tinsel{translate:calc(var(--scroll,0) * -.12px * var(--par,1)) 0}
   .error{color:var(--red-dark); font-weight:700}
   .hidden{display:none}
   @media (max-width:420px){
@@ -423,6 +439,8 @@
       <g><rect x="120" y="42" width="14" height="12" fill="#3b5bff"/><rect x="120" y="42" width="14" height="3" fill="#f8d800"/></g>
     </svg>
   </section>
+
+  <div class="tinsel" aria-hidden="true"></div>
 
   <section class="auth-card" id="auth-form" aria-labelledby="auth-heading">
     <div class="auth-gift" aria-hidden="true">
@@ -614,6 +632,15 @@
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="28" y="16" width="5" height="5" fill="#f8d800"/><rect class="tree-light" x="18" y="26" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="30" y="36" width="5" height="5" fill="#fff"/></svg>
     <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="4" width="8" height="8" fill="#f8d800"/><rect x="16" y="12" width="20" height="10" fill="#005800"/><rect x="12" y="22" width="28" height="10" fill="#00a800"/><rect x="8" y="32" width="36" height="10" fill="#005800"/><rect x="20" y="42" width="12" height="14" fill="#7a3b12"/><rect class="tree-light" x="20" y="26" width="5" height="5" fill="#fff"/><rect class="tree-light" x="30" y="16" width="5" height="5" fill="#e83800"/><rect class="tree-light" x="24" y="36" width="5" height="5" fill="#f8d800"/></svg>
   </div>
+
+  <div class="tinsel" aria-hidden="true"></div>
+
+  <footer class="wide-desktop">
+    <h2>Secret Santa</h2>
+    <p class="small">Ollie Molly's House · Dec 20</p>
+    <a href="https://byyystudio.me/">Made by Byyy Studio ↗</a>
+    <a href="#">Back to top ↑</a>
+  </footer>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2318,7 +2345,9 @@
   var ticking = false;
   function write(){
     ticking = false;
-    if (hero) hero.style.setProperty("--scroll", Math.min(window.scrollY, heroH).toFixed(1));
+    var s = Math.min(window.scrollY, heroH).toFixed(1);
+    if (hero) hero.style.setProperty("--scroll", s);
+    root.style.setProperty("--scroll", s);
   }
   window.addEventListener("scroll", function(){ if (!ticking){ ticking = true; requestAnimationFrame(write); } }, { passive:true });
   window.addEventListener("resize", function(){ heroH = hero ? hero.offsetHeight : 0; }, { passive:true });
