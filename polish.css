@@ -79,12 +79,12 @@ h3 { text-shadow: 0 0 18px rgba(55, 255, 0, .12); }
 :root[data-theme="light"] .flow-lines .fl-run { filter: none; }
 
 /* ---------- hero rail: pipeline sits higher, wires connect the steps ---------- */
-.rail-stack { align-items: center; }
+.rail-stack { align-items: center; transform: translateY(-12px); }
 /* short wires live only in the gaps between steps, never through a box */
 .stack-node { background: var(--surface-raised); }
 .stack-node.is-complete { background: linear-gradient(var(--accent-faint), var(--accent-faint)), var(--surface-raised); }
 .stack-node.is-running { background: linear-gradient(rgba(55, 255, 0, .075), rgba(55, 255, 0, .075)), var(--surface-raised); }
-.stack-node + .stack-node::before { content: ""; position: absolute; left: 50%; top: -25px; width: 2px; height: 24px; margin-left: -1px; border-radius: 2px; background: linear-gradient(180deg, rgba(55, 255, 0, .05), rgba(55, 255, 0, .6), rgba(55, 255, 0, .05)); background-size: 100% 200%; animation: wire-flow 1.6s linear infinite; pointer-events: none; }
+.stack-node + .stack-node::before { content: ""; position: absolute; left: 50%; top: -25px; width: 2px; height: 24px; margin-left: -1px; border-radius: 2px; background: linear-gradient(180deg, rgba(55, 255, 0, .25), rgba(55, 255, 0, .95), rgba(55, 255, 0, .25)); background-size: 100% 200%; box-shadow: 0 0 10px rgba(55, 255, 0, .5); animation: wire-flow 1.6s linear infinite; pointer-events: none; }
 @keyframes wire-flow { from { background-position: 0 100%; } to { background-position: 0 -100%; } }
 
 /* ---------- ticker: smooth, GPU-only, fades at the edges ---------- */
@@ -124,7 +124,6 @@ h3 { text-shadow: 0 0 18px rgba(55, 255, 0, .12); }
   .work-section .work-grid, .packages { grid-template-columns: 1fr; }
   .packages .package:last-child { grid-column: auto; }
   .package { padding: 24px 20px; }
-  .stack-node + .stack-node::before { top: -13px; height: 12px; }
   .flow-lines { opacity: .4; }
   .ticker__track { animation-duration: 28s; }
 }
