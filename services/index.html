@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark" />
-  <meta name="theme-color" content="#070908" />
+  <meta name="theme-color" content="#131a16" />
   <link rel="icon" href="../favicon.png" type="image/png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://byyystudio.me/services/" />
@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../polish.css" />
   <title>Byyy Studios | Services</title>
   <meta name="description" content="Byyy Studios designs and builds websites, apps, automations, and short-form ads." />
 <script>document.documentElement.classList.add('js-typing');setTimeout(function(){document.documentElement.classList.remove('js-typing');},8000);</script>
@@ -28,7 +29,7 @@
 
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="site-nav__inner">
-      <a class="site-brand" href="../" aria-label="Byyy Studios — home"><span class="site-brand__gt">&gt;</span> by³</a>
+      <a class="site-brand" href="../" aria-label="Byyy Studios, home"><span class="site-brand__gt">&gt;</span> by³</a>
       <a class="nav-link" href="../">Home</a>
       <a class="nav-link" href="../work/">Work</a>
       <a class="nav-link" href="../concepts/">Concepts</a>
@@ -61,7 +62,7 @@
   </nav>
 
   <main id="main" class="page-shell">
-    <section id="services" class="section" aria-labelledby="services-title">
+    <section id="services" class="section" aria-labelledby="services-title" data-nav-tint="55, 255, 0" data-nav-tint-light="22, 130, 59">
       <div class="section-heading">
         <h2 id="services-title">WHAT YOU GET</h2>
       </div>
@@ -144,7 +145,50 @@
       <div class="service-close"><b>ONE PERSON.</b><span>I handle the design, build, and launch.</span></div>
     </section>
 
-    <section id="systems" class="section" aria-labelledby="systems-title">
+    <section id="packages" class="section packages-section" aria-labelledby="packages-title" data-nav-tint="55, 255, 0" data-nav-tint-light="22, 130, 59">
+      <div class="section-heading">
+        <h2 id="packages-title">PACKAGES</h2>
+        <p>Fixed scope, fixed price, quoted before I start. You pay for what ships, not for hours.</p>
+      </div>
+      <div class="packages">
+        <article class="package">
+          <span class="package__tag">get found</span>
+          <h3>LAUNCH SITE</h3>
+          <p class="package__outcome">A custom site that looks like your business and works on every phone.</p>
+          <ul>
+            <li>Custom design, no template</li>
+            <li>Phone first, tested on real devices</li>
+            <li>Contact or booking that reaches you</li>
+          </ul>
+          <a class="button" href="../contact/">Start a launch site</a>
+        </article>
+        <article class="package package--featured">
+          <span class="package__tag">most picked</span>
+          <h3>SITE + SYSTEM</h3>
+          <p class="package__outcome">The site, plus one flow that does the busywork for you.</p>
+          <ul>
+            <li>Everything in launch site</li>
+            <li>Booking, payments, inbox, or inventory, connected</li>
+            <li>You approve every step before it ships</li>
+          </ul>
+          <a class="button button--primary" href="../contact/">Start site + system</a>
+        </article>
+        <article class="package">
+          <span class="package__tag">get customers</span>
+          <h3>FULL LAUNCH</h3>
+          <p class="package__outcome">Site, system, and the short-form videos that send people to it.</p>
+          <ul>
+            <li>Everything in site + system</li>
+            <li>UGC-style ads for TikTok, Reels, and Shorts</li>
+            <li>Video files ready to post or run</li>
+          </ul>
+          <a class="button" href="../contact/">Start a full launch</a>
+        </article>
+      </div>
+      <p class="packages-note">Upkeep, new drops, and live feeds are add-ons, quoted on their own.</p>
+    </section>
+
+    <section id="systems" class="section" aria-labelledby="systems-title" data-nav-tint="55, 255, 0" data-nav-tint-light="22, 130, 59">
       <div class="systems-layout">
         <div class="flow-panel" aria-label="Connected business systems diagram">
           <div class="flow-panel__bar"><span>system_map.json</span><span>connected</span></div>
@@ -215,5 +259,6 @@
   <canvas id="pixel-burst" aria-hidden="true"></canvas>
 
   <script src="../app.js"></script>
+  <script src="../polish.js"></script>
 </body>
 </html>

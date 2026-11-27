@@ -1,0 +1,130 @@
+/* polish.css: studio pages only (home, work, concepts, services, contact).
+   Loaded after style.css. Softer dark, curved corners, feathered shadows,
+   glowing titles, flowing lines, ticker, packages, adaptive nav. */
+
+:root {
+  --bg: #131a16;
+  --bg-deep: #0f1512;
+  --surface: #18211c;
+  --surface-raised: #1e2923;
+  --surface-soft: #24312a;
+  --border: #2f3d35;
+  --border-strong: #42554a;
+  --muted: #aab6ae;
+  --dim: #7d8c82;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --section: clamp(56px, 7vw, 104px);
+  --soft-shadow: 0 22px 48px -22px rgba(0, 0, 0, .7), 0 4px 14px -6px rgba(0, 0, 0, .45);
+  --soft-shadow-hover: 0 30px 60px -24px rgba(0, 0, 0, .78), 0 0 0 1px rgba(55, 255, 0, .16), 0 12px 32px -14px rgba(55, 255, 0, .2);
+  --nav-tint: 55, 255, 0;
+}
+:root[data-theme="light"] {
+  --soft-shadow: 0 22px 44px -24px rgba(16, 40, 24, .32), 0 4px 12px -6px rgba(16, 40, 24, .16);
+  --soft-shadow-hover: 0 30px 56px -24px rgba(16, 40, 24, .38), 0 0 0 1px rgba(22, 130, 59, .2);
+  --nav-tint: 22, 130, 59;
+}
+
+/* a soft glow sits behind the whole page so the dark never reads as flat black */
+body { background: radial-gradient(1200px 700px at 78% -10%, rgba(55, 255, 0, .07), transparent 60%), radial-gradient(900px 600px at -10% 40%, rgba(80, 200, 160, .05), transparent 60%), var(--bg); background-attachment: fixed; }
+:root[data-theme="light"] body { background: radial-gradient(1200px 700px at 78% -10%, rgba(22, 130, 59, .08), transparent 60%), var(--bg); }
+
+/* ---------- corners: every box gets a small curve ---------- */
+.terminal, .flwrpwr-live, .work-card, .concept-option, .next-thread, .next-thread__hero,
+.call-panel, .booking-card, .message-panel, .flow-panel, .work-panel__sheet, .concept-modal__panel,
+.quote-cta, .package { border-radius: var(--radius-lg); }
+.button, .nav-link, .stack-node, .status-toggle, .concepts-banner, .flow-item, .flow-core,
+.field input, .field textarea, .field select, .work-panel__close, .concept-modal__close,
+.work-panel__arrow, .flwrpwr-live__badge, .work-banner, .bottom-nav__link, .skip-link,
+.service-mark, .rail-readout span { border-radius: var(--radius-sm); }
+.flwrpwr-live, .work-card, .concept-option, .next-thread__hero, .message-panel, .flow-panel { overflow: hidden; }
+.work-image, .concept-option__image, .flwrpwr-live__media { overflow: hidden; }
+.work-image img, .concept-option__image img { transition: transform .6s var(--ease); }
+.work-card:hover .work-image img, .concept-option:hover .concept-option__image img { transform: scale(1.04); }
+
+/* ---------- soft feathered shadows ---------- */
+.terminal, .flwrpwr-live, .work-card, .concept-option, .next-thread__hero, .call-panel,
+.booking-card, .message-panel, .flow-panel, .package { box-shadow: var(--soft-shadow); }
+.work-card, .concept-option, .next-thread__hero, .package { transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease); }
+.work-card:hover, .concept-option:hover, .next-thread__hero:hover, .package:hover { transform: translateY(-4px); box-shadow: var(--soft-shadow-hover); }
+.button:hover { box-shadow: 0 14px 30px -14px rgba(55, 255, 0, .45); }
+
+/* ---------- titles stand out: thick, with a feathered glow ---------- */
+h1, h2 { font-weight: 700; text-shadow: 0 0 1px rgba(255, 255, 255, .35), 0 0 26px rgba(55, 255, 0, .2), 0 0 60px rgba(55, 255, 0, .08); }
+h3 { text-shadow: 0 0 18px rgba(55, 255, 0, .12); }
+:root[data-theme="light"] h1, :root[data-theme="light"] h2 { text-shadow: 0 0 1px rgba(255, 255, 255, .9), 0 0 22px rgba(255, 255, 255, .95), 0 0 40px rgba(22, 130, 59, .14); }
+:root[data-theme="light"] h3 { text-shadow: none; }
+
+/* ---------- nav blends into the hero, then tints to the section behind it ---------- */
+.site-nav { background: linear-gradient(180deg, rgba(var(--nav-tint), .05), transparent); border-bottom-color: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; transition: background .45s var(--ease), border-color .45s var(--ease), box-shadow .45s var(--ease); }
+.site-nav.is-scrolled { background: linear-gradient(180deg, rgba(var(--nav-tint), .1), rgba(var(--nav-tint), .03)), rgba(19, 26, 22, .66); border-bottom-color: rgba(var(--nav-tint), .2); box-shadow: 0 14px 34px -22px rgba(0, 0, 0, .8); -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5); }
+:root[data-theme="light"] .site-nav { background: linear-gradient(180deg, rgba(var(--nav-tint), .06), transparent); }
+:root[data-theme="light"] .site-nav.is-scrolled { background: linear-gradient(180deg, rgba(var(--nav-tint), .1), rgba(var(--nav-tint), .03)), rgba(238, 243, 239, .78); border-bottom-color: rgba(var(--nav-tint), .25); box-shadow: 0 14px 30px -22px rgba(16, 40, 24, .35); -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5); }
+.site-nav .nav-link[aria-current="page"] { border-color: rgba(var(--nav-tint), .55); color: rgb(var(--nav-tint)); }
+:root[data-theme="light"] .site-nav .nav-link[aria-current="page"] { color: #0d5f2a; }
+
+/* ---------- flowing lines behind everything ---------- */
+.flow-lines { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; opacity: .55; }
+.flow-lines path { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.flow-lines .fl-base { stroke: url(#fl-grad); opacity: .35; }
+.flow-lines .fl-run { stroke: url(#fl-grad); stroke-dasharray: 140 1400; animation: fl-run 11s linear infinite; filter: drop-shadow(0 0 6px rgba(55, 255, 0, .55)); }
+.flow-lines .fl-run.d2 { animation-duration: 15s; animation-delay: -6s; }
+.flow-lines .fl-run.d3 { animation-duration: 19s; animation-delay: -11s; }
+.flow-lines g { animation: fl-drift 26s ease-in-out infinite alternate; transform-origin: 50% 50%; }
+.flow-lines g + g { animation-duration: 34s; animation-direction: alternate-reverse; }
+@keyframes fl-run { from { stroke-dashoffset: 1540; } to { stroke-dashoffset: 0; } }
+@keyframes fl-drift { from { transform: translate3d(-2%, -1.5%, 0); } to { transform: translate3d(2%, 1.5%, 0); } }
+:root[data-theme="light"] .flow-lines { opacity: .7; }
+:root[data-theme="light"] .flow-lines .fl-run { filter: none; }
+
+/* ---------- hero rail: pipeline sits higher, wires connect the steps ---------- */
+.rail-stack { align-items: center; }
+.stack-map::before { content: ""; position: absolute; left: 22px; top: 52px; bottom: 26px; width: 2px; border-radius: 2px; background: linear-gradient(180deg, transparent, rgba(55, 255, 0, .35), transparent); background-size: 100% 200%; animation: wire-flow 3.2s linear infinite; }
+@keyframes wire-flow { from { background-position: 0 100%; } to { background-position: 0 -100%; } }
+.stack-node { background: var(--surface-raised); }
+
+/* ---------- ticker: smooth, GPU-only, fades at the edges ---------- */
+.ticker { position: relative; margin: 22px 0 0; overflow: hidden; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); box-shadow: var(--soft-shadow); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.ticker__track { display: flex; width: max-content; gap: 0; padding: 13px 0; animation: ticker 38s linear infinite; will-change: transform; }
+.ticker:hover .ticker__track { animation-play-state: paused; }
+.ticker__item { display: inline-flex; align-items: center; gap: 14px; padding: 0 22px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: lowercase; white-space: nowrap; }
+.ticker__item::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+@keyframes ticker { to { transform: translate3d(-50%, 0, 0); } }
+
+/* ---------- packages ---------- */
+.packages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.package { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 28px 26px 26px; border: 1px solid var(--border); background: linear-gradient(180deg, var(--surface-raised), var(--surface)); }
+.package--featured { border-color: rgba(55, 255, 0, .45); background: linear-gradient(180deg, rgba(55, 255, 0, .08), var(--surface) 55%); }
+.package__tag { align-self: flex-start; padding: 4px 10px; border-radius: 999px; color: var(--accent); background: var(--accent-soft); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: lowercase; }
+.package h3 { margin: 0; font-family: var(--display); font-size: 26px; letter-spacing: .03em; color: var(--headline); }
+.package__outcome { margin: 0; color: var(--text); }
+.package ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--muted); font-size: 14px; }
+.package li { display: flex; gap: 10px; }
+.package li::before { content: ">"; color: var(--accent); }
+.package .button { margin-top: auto; justify-content: center; }
+.packages-note { margin: 18px 0 0; color: var(--dim); font-size: 13px; }
+
+/* ---------- even, tight spacing ---------- */
+.section-heading { margin-bottom: 30px; }
+.work-section .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.flwrpwr-concepts { gap: 16px; }
+.next-thread { margin-top: 12px; }
+
+@media (max-width: 1100px) {
+  .work-section .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .packages { grid-template-columns: 1fr 1fr; }
+  .packages .package:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .work-section .work-grid, .packages { grid-template-columns: 1fr; }
+  .packages .package:last-child { grid-column: auto; }
+  .package { padding: 24px 20px; }
+  .stack-map::before { display: none; }
+  .flow-lines { opacity: .4; }
+  .ticker__track { animation-duration: 28s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-lines .fl-run, .flow-lines g, .stack-map::before, .ticker__track { animation: none; }
+  .work-card:hover, .concept-option:hover, .next-thread__hero:hover, .package:hover { transform: none; }
+}
