@@ -164,28 +164,28 @@
       </div>
 
       <div class="work-grid" aria-label="Selected projects">
-        <a class="work-card work-card--dreamstate" href="work/">
+        <button class="work-card work-card--dreamstate" type="button" data-work-panel data-work-id="dreamstate" data-work-href="https://byyystudio.me/dreamstate/">
           <div class="work-image"><img src="work-dreamstate.jpg" loading="lazy" decoding="async" alt="Dreamstate SoCal 2026 at the Queen Mary Waterfront, stages lit up at night" /><img class="work-image__logo" src="work-dreamstate.png" loading="lazy" decoding="async" alt="Dreamstate SoCal 2026 official logo" /></div>
           <div class="work-card__copy">
-            <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
+            <span class="project-meta"><span>Past event</span><span class="project-arrow">↗</span></span>
             <h3>DREAMSTATE SOCAL '26</h3>
-            <p>A phone-first trance planner with lineup saves, a simple map, and set times to come.</p>
+            <p>A phone-first trance planner with lineup saves, a simple map, and set times via the official Insomniac schedule.</p>
           </div>
-        </a><a class="work-card work-card--escape" href="work/"><span class="work-banner">Past event</span>
+        </button><button class="work-card work-card--escape" type="button" data-work-panel data-work-id="escape" data-work-href="https://byyystudio.me/escape/"><span class="work-banner">Past event</span>
           <div class="work-image"><img src="work-escape.webp" loading="lazy" decoding="async" alt="Escape Halloween festival stage" /></div>
           <div class="work-card__copy">
-            <span class="project-meta"><span>Live project</span><span class="project-arrow">↗</span></span>
+            <span class="project-meta"><span>Past event</span><span class="project-arrow">↗</span></span>
             <h3>ESCAPE HALLOWEEN '26</h3>
             <p>A phone-first festival planner with lineup saves and clash checks.</p>
           </div>
-        </a><a class="work-card work-card--niteharts" href="work/">
+        </button><button class="work-card work-card--niteharts" type="button" data-work-panel data-work-id="niteharts" data-work-href="https://byyystudio.me/niteharts/">
           <div class="work-image"><img src="work-niteharts.jpg" loading="lazy" decoding="async" alt="Niteharts 2026 lineup artwork" /></div>
           <div class="work-card__copy">
             <span class="project-meta"><span>Past event</span><span class="project-arrow">↗</span></span>
             <h3>NITEHARTS '26</h3>
             <p>Mobile set times, artist previews, and a personal lineup builder.</p>
           </div>
-        </a>
+        </button>
       </div>
     </section>
 
@@ -229,6 +229,26 @@
       </div>
     </footer>
   </main>
+
+  <div class="work-panel" data-work-panel-root role="dialog" aria-modal="true" aria-labelledby="work-panel-title" aria-hidden="true">
+    <div class="work-panel__backdrop" data-work-panel-close></div>
+    <div class="work-panel__sheet" role="document">
+      <div class="work-panel__bar"><span>Project details</span><button class="work-panel__close" type="button" data-work-panel-close aria-label="Close project details">×</button></div>
+      <div class="work-panel__body">
+        <div class="work-image"><img data-work-panel-image alt="" /></div>
+        <p class="work-panel__banner" data-work-panel-banner></p>
+        <p class="work-panel__meta" data-work-panel-meta></p>
+        <h2 id="work-panel-title" data-work-panel-title></h2>
+        <p data-work-panel-desc></p>
+        <div class="work-panel__details" data-work-panel-details hidden></div>
+        <div class="work-panel__actions">
+          <a class="button button--primary" data-work-panel-link target="_blank" rel="noopener noreferrer">Open live site</a>
+          <button class="button" type="button" data-work-panel-close>Close details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <canvas id="pixel-burst" aria-hidden="true"></canvas>
 

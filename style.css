@@ -1412,6 +1412,13 @@
     .work-panel__body p { color: var(--muted); font-size: 13px; }
     .work-panel__actions { margin-top: 28px; display: grid; gap: 12px; }
     .work-panel__actions .button { width: 100%; }
+    .work-panel__details { margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px; }
+    .work-panel__details[hidden] { display: none; }
+    .work-panel__event { margin: 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .work-panel__label { margin: 0 0 10px; color: var(--dim); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+    .work-panel__features { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .work-panel__features li { margin-bottom: 6px; }
+    .work-panel__features li:last-child { margin-bottom: 0; }
 
     .booking-status {
       position: absolute; inset: 0; z-index: 2;

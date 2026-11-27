@@ -190,6 +190,56 @@
         document.addEventListener('pointercancel', function () { burstDown = null; });
       }
 
+      /* Project details for the work panel. Every fact here is verified
+         against the live app at byyystudio.me/<project>/ — do not add
+         dates, venues, or features without checking the app first.
+         Dreamstate set times: the planner itself lists them as TBD and
+         links out to Insomniac, so the copy says so instead of
+         claiming live set times. */
+      var WORK_DETAILS = {
+        dreamstate: {
+          event: 'Nov 20–21, 2026 · Queen Mary Waterfront, Long Beach, CA · 4 PM–1 AM · 18+',
+          label: 'Inside the app',
+          features: [
+            'Day-by-day lineup with artist cards',
+            'Save artists to My Plan on your device, copy your plan as text',
+            'Festival map with stages and services',
+            'Set times via the official Insomniac schedule',
+            'Afterparties aboard the Queen Mary, midnight–6 AM'
+          ]
+        },
+        escape: {
+          event: 'Oct 30–31, 2026 · NOS Events Center, San Bernardino, CA · 4 PM–2 AM · 18+',
+          label: 'Inside the app',
+          features: [
+            'Official set times, ready to browse',
+            'Save sets to My Lineup with a name and 5-digit PIN',
+            'Offline schedule download, works with no signal',
+            'Grounds map, plus The Afterlife, 2–6 AM',
+            'Festival games and the Kandi gambling meet-up, 5:30 PM'
+          ]
+        },
+        niteharts: {
+          event: 'Oct 9–11, 2026 · Snapdragon Stadium, San Diego, CA · 18+ GA · 21+ VIP',
+          label: 'Inside the app',
+          features: [
+            'Set times with a live up-next view',
+            'Build your lineup, save it with a code or a cloud PIN',
+            'Interactive grounds map with nearest bathroom, water, bar, food, and first aid',
+            'Afters guide with Partiful RSVP',
+            'Lost & Found board and Niteharts Lens frames'
+          ]
+        },
+        flwrpwr: {
+          event: 'Live now · flwrpwr.co',
+          label: 'Inside the shop',
+          features: [
+            'Browse the shop and reserve products',
+            'Catch the drops',
+            'Pull up to the events'
+          ]
+        }
+      };
       var workPanel = document.querySelector('[data-work-panel-root]');
       var workPanelOpeners = Array.prototype.slice.call(document.querySelectorAll('[data-work-panel]'));
       var lastPanelFocus = null;
@@ -219,6 +269,33 @@
           else { panelImage.removeAttribute('src'); panelImage.alt = ''; }
         }
         if (panelLink) panelLink.href = card.getAttribute('data-work-href') || '#';
+        var panelDetails = workPanel.querySelector('[data-work-panel-details]');
+        if (panelDetails) {
+          var details = WORK_DETAILS[card.getAttribute('data-work-id') || ''];
+          if (details) {
+            panelDetails.innerHTML = '';
+            var eventEl = document.createElement('p');
+            eventEl.className = 'work-panel__event';
+            eventEl.textContent = details.event;
+            panelDetails.appendChild(eventEl);
+            var detailsLabel = document.createElement('p');
+            detailsLabel.className = 'work-panel__label';
+            detailsLabel.textContent = details.label;
+            panelDetails.appendChild(detailsLabel);
+            var featureList = document.createElement('ul');
+            featureList.className = 'work-panel__features';
+            details.features.forEach(function (feature) {
+              var item = document.createElement('li');
+              item.textContent = feature;
+              featureList.appendChild(item);
+            });
+            panelDetails.appendChild(featureList);
+            panelDetails.hidden = false;
+          } else {
+            panelDetails.innerHTML = '';
+            panelDetails.hidden = true;
+          }
+        }
         workPanel.classList.add('is-open');
         workPanel.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
