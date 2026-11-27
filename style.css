@@ -465,13 +465,13 @@
       text-decoration: none;
       border: 1px solid color-mix(in srgb, var(--project-color), transparent 36%);
       background: var(--surface);
-      box-shadow: 0 0 20px color-mix(in srgb, var(--project-color), transparent 92%);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--project-color), transparent 89%);
       transition: border-color .24s var(--ease), background .24s var(--ease), box-shadow .24s var(--ease), transform .24s var(--ease);
     }
     .work-card:hover {
       border-color: var(--project-color);
       background: color-mix(in srgb, var(--project-color), var(--surface) 96%);
-      box-shadow: 0 14px 34px color-mix(in srgb, var(--project-color), transparent 88%);
+      box-shadow: 0 14px 34px color-mix(in srgb, var(--project-color), transparent 84%);
       transform: translateY(-4px);
     }
     .work-card--niteharts { --project-color: #58a6ff; }
@@ -503,13 +503,13 @@
       text-decoration: none;
       border: 1px solid color-mix(in srgb, var(--project-color), transparent 36%);
       background: var(--surface);
-      box-shadow: 0 0 20px color-mix(in srgb, var(--project-color), transparent 92%);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--project-color), transparent 89%);
       overflow: hidden;
       transition: border-color .24s var(--ease), box-shadow .24s var(--ease), transform .24s var(--ease);
     }
     .showcase-panel:hover {
       border-color: var(--project-color);
-      box-shadow: 0 14px 34px color-mix(in srgb, var(--project-color), transparent 88%);
+      box-shadow: 0 14px 34px color-mix(in srgb, var(--project-color), transparent 84%);
       transform: translateY(-4px);
     }
     .showcase-panel__media { overflow: hidden; border-right: 1px solid color-mix(in srgb, var(--project-color), transparent 54%); }
@@ -1229,13 +1229,15 @@
       align-items: center;
       color: var(--muted);
       font-size: 13px;
-      text-decoration: none;
+      text-decoration: underline;
+      text-decoration-color: var(--dim);
+      text-underline-offset: .22em;
       border: 0;
       background: transparent;
       cursor: pointer;
       transition: color .2s var(--ease);
     }
-    .contact-link:hover, .copy-link:hover { color: var(--accent); }
+    .contact-link:hover, .copy-link:hover { color: var(--accent); text-decoration-color: var(--accent); }
     .footer-note { color: var(--dim); font-size: 11px; line-height: 1.6; text-align: right; }
     .copy-status { min-height: 24px; margin-top: 8px; color: var(--accent); font-size: 11px; }
     .footer-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-bottom: 12px; }
@@ -1420,6 +1422,53 @@
     .work-panel__features { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
     .work-panel__features li { margin-bottom: 6px; }
     .work-panel__features li:last-child { margin-bottom: 0; }
+
+    /* Swipeable project gallery (Duet FLWRPWR principle, translated):
+       mid-edge arrows on the photo, clean dots underneath. Instant
+       content swap, no motion — fits the motion budget. */
+    .work-panel__gallery { position: relative; }
+    .work-panel__gallery .work-image { margin-bottom: 0; }
+    .work-panel__arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 2;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-size: 24px;
+      line-height: 1;
+      border: 1px solid var(--border-strong);
+      background: rgba(5, 5, 5, .72);
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+    }
+    .work-panel__arrow:hover { color: var(--accent); border-color: var(--accent); background: rgba(5, 5, 5, .88); }
+    .work-panel__arrow--prev { left: 8px; }
+    .work-panel__arrow--next { right: 8px; }
+    .work-panel__dots { display: flex; justify-content: center; gap: 4px; margin: 14px 0 20px; }
+    .work-panel__dots[hidden] { display: none; }
+    .work-panel__dot {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .work-panel__dot::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--dim);
+      transition: background .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .work-panel__dot[aria-selected="true"]::before { background: var(--accent); box-shadow: 0 0 8px rgba(55, 255, 0, .5); }
 
     .booking-status {
       position: absolute; inset: 0; z-index: 2;

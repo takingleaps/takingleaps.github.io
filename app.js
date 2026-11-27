@@ -243,9 +243,16 @@
       var workPanel = document.querySelector('[data-work-panel-root]');
       var workPanelOpeners = Array.prototype.slice.call(document.querySelectorAll('[data-work-panel]'));
       var lastPanelFocus = null;
-      function openWorkPanel(card) {
+      var panelIndex = 0;
+      var panelPrev = workPanel ? workPanel.querySelector('[data-work-panel-prev]') : null;
+      var panelNext = workPanel ? workPanel.querySelector('[data-work-panel-next]') : null;
+      var panelDots = workPanel ? workPanel.querySelector('[data-work-panel-dots]') : null;
+      var panelGallery = workPanel ? workPanel.querySelector('.work-panel__gallery') : null;
+      /* Swipeable project gallery: the panel shows one project at a time;
+         arrows, dots, swipe, or left/right keys move between the cards
+         on the page. Instant swap, no motion. */
+      function fillWorkPanel(card) {
         if (!workPanel) return;
-        lastPanelFocus = document.activeElement;
         var title = card.querySelector('h3');
         var desc = card.querySelector('.work-card__copy p');
         var meta = card.querySelector('.project-meta span');
@@ -263,6 +270,9 @@
         if (panelBanner) {
           if (banner) { panelBanner.textContent = banner.textContent; panelBanner.style.display = ''; }
           else { panelBanner.textContent = ''; panelBanner.style.display = 'none'; }
+        }
+        if (panelBanner && panelMeta && panelBanner.textContent.trim() && panelBanner.textContent.trim().toLowerCase() === panelMeta.textContent.trim().toLowerCase()) {
+          panelBanner.style.display = 'none';
         }
         if (panelImage) {
           if (image && image.getAttribute('src')) { panelImage.src = image.getAttribute('src'); panelImage.alt = image.getAttribute('alt') || ''; panelImage.style.display = ''; }
@@ -296,6 +306,47 @@
             panelDetails.hidden = true;
           }
         }
+      }
+      function renderPanelNav() {
+        if (!panelDots) return;
+        if (workPanelOpeners.length < 2) {
+          panelDots.hidden = true;
+          if (panelPrev) panelPrev.style.display = 'none';
+          if (panelNext) panelNext.style.display = 'none';
+          return;
+        }
+        panelDots.hidden = false;
+        if (panelPrev) panelPrev.style.display = '';
+        if (panelNext) panelNext.style.display = '';
+        if (!panelDots.querySelectorAll('.work-panel__dot').length) {
+          workPanelOpeners.forEach(function (card, i) {
+            var dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'work-panel__dot';
+            dot.setAttribute('role', 'tab');
+            var dotTitle = card.querySelector('h3');
+            dot.setAttribute('aria-label', 'Show ' + (dotTitle ? dotTitle.textContent : 'project ' + (i + 1)));
+            dot.addEventListener('click', function () { showPanelProject(i); });
+            panelDots.appendChild(dot);
+          });
+        }
+        Array.prototype.forEach.call(panelDots.querySelectorAll('.work-panel__dot'), function (dot, i) {
+          dot.setAttribute('aria-selected', String(i === panelIndex));
+        });
+      }
+      function showPanelProject(index) {
+        if (!workPanelOpeners.length) return;
+        panelIndex = ((index % workPanelOpeners.length) + workPanelOpeners.length) % workPanelOpeners.length;
+        fillWorkPanel(workPanelOpeners[panelIndex]);
+        renderPanelNav();
+      }
+      function openWorkPanel(card) {
+        if (!workPanel) return;
+        lastPanelFocus = document.activeElement;
+        panelIndex = workPanelOpeners.indexOf(card);
+        if (panelIndex < 0) panelIndex = 0;
+        fillWorkPanel(card);
+        renderPanelNav();
         workPanel.classList.add('is-open');
         workPanel.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
@@ -319,8 +370,30 @@
           control.addEventListener('click', closeWorkPanel);
         });
       }
+      if (panelPrev) panelPrev.addEventListener('click', function () { showPanelProject(panelIndex - 1); });
+      if (panelNext) panelNext.addEventListener('click', function () { showPanelProject(panelIndex + 1); });
+      if (panelGallery) {
+        var swipeStart = null;
+        panelGallery.addEventListener('touchstart', function (event) {
+          if (!event.changedTouches.length) return;
+          var touch = event.changedTouches[0];
+          swipeStart = { x: touch.clientX, y: touch.clientY };
+        }, { passive: true });
+        panelGallery.addEventListener('touchend', function (event) {
+          if (!swipeStart || !event.changedTouches.length) return;
+          var touch = event.changedTouches[0];
+          var dx = touch.clientX - swipeStart.x;
+          var dy = touch.clientY - swipeStart.y;
+          swipeStart = null;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) showPanelProject(panelIndex + (dx < 0 ? 1 : -1));
+        }, { passive: true });
+      }
       document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && workPanel && workPanel.classList.contains('is-open')) closeWorkPanel();
+        if (workPanel && workPanel.classList.contains('is-open')) {
+          if (event.key === 'ArrowLeft') showPanelProject(panelIndex - 1);
+          if (event.key === 'ArrowRight') showPanelProject(panelIndex + 1);
+        }
       });
 
       var bookingEmbed = document.querySelector('[data-booking-embed]');
