@@ -640,11 +640,11 @@
       left: 50%;
       top: 50%;
       width: 68%;
-      height: 38%;
+      height: 46%;
       transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, .55);
+      background: rgba(0, 0, 0, .7);
       border-radius: 18px;
-      box-shadow: 0 0 44px 22px rgba(0, 0, 0, .38);
+      box-shadow: 0 0 36px 18px rgba(0, 0, 0, .45);
       z-index: 1;
       pointer-events: none;
     }
@@ -652,11 +652,11 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 58%;
+      width: 84%;
       height: auto;
       object-fit: contain;
       transform: translate(-50%, -50%);
-      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .85));
+      filter: drop-shadow(0 2px 16px rgba(0, 0, 0, .9));
       pointer-events: none;
       z-index: 2;
     }
