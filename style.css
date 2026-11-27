@@ -559,6 +559,7 @@
     .flwrpwr-live__copy h3 { margin: 0; font-family: var(--display); font-size: 32px; font-weight: 700; letter-spacing: .035em; }
     .flwrpwr-live__copy p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
     .flwrpwr-live__button { background: #ff4fa3; color: #fff; border-color: #ff4fa3; animation: flwrpwr-glow 2.2s ease-in-out infinite; }
+    .flwrpwr-live__button:hover { background: #ff7ab8; border-color: #ff7ab8; color: #fff; }
     @keyframes flwrpwr-glow {
       0%, 100% { box-shadow: 0 0 0 0 rgba(255,79,163,.45), 0 8px 24px rgba(255,79,163,.2); }
       50% { box-shadow: 0 0 0 9px rgba(255,79,163,0), 0 8px 32px rgba(255,79,163,.36); }
