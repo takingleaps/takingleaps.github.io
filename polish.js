@@ -84,7 +84,29 @@
     pickTint();
   }
 
-  function start() { flowLines(); adaptiveNav(); }
+  function customCursor() {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var root = document.documentElement;
+    var ring = document.createElement('div');
+    ring.setAttribute('class', 'byyy-cursor');
+    ring.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(ring);
+    var shown = false;
+    /* 1:1 tracking, no smoothing lag: the ring moves exactly with the pointer. */
+    document.addEventListener('mousemove', function (e) {
+      ring.style.transform = 'translate3d(' + e.clientX + 'px,' + e.clientY + 'px,0)';
+      if (!shown) { shown = true; root.classList.add('byyy-cursor-on'); ring.classList.add('is-visible'); }
+    }, { passive: true });
+    document.addEventListener('mouseleave', function () { ring.classList.remove('is-visible'); });
+    document.addEventListener('mouseenter', function () { if (shown) ring.classList.add('is-visible'); });
+    document.addEventListener('mouseover', function (e) {
+      var t = e.target && e.target.closest ? e.target.closest('a, button, [data-work-panel], [role="button"], input, select, textarea, label, summary') : null;
+      ring.classList.toggle('is-hover', !!t);
+    }, { passive: true });
+  }
+
+  function start() { flowLines(); adaptiveNav(); customCursor(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();

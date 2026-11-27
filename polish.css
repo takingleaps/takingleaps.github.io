@@ -132,3 +132,16 @@ h3 { text-shadow: 0 0 18px rgba(55, 255, 0, .12); }
   .flow-lines .fl-run, .flow-lines g, .stack-node + .stack-node::before, .ticker__track { animation: none; }
   .work-card:hover, .concept-option:hover, .next-thread__hero:hover, .package:hover { transform: none; }
 }
+
+/* ---------- special cursor: lime ring that follows the pointer 1:1 ---------- */
+/* 1:1 tracking on purpose, no smoothing lag (Nathan: the old follower was too slow).
+   Desktop fine-pointer only; touch and reduced-motion keep the native cursor. */
+@media (pointer: fine) {
+  html.byyy-cursor-on, html.byyy-cursor-on * { cursor: none !important; }
+}
+.byyy-cursor { position: fixed; left: 0; top: 0; z-index: 9999; width: 14px; height: 14px; margin: -7px 0 0 -7px; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .2s var(--ease), width .18s var(--ease), height .18s var(--ease), margin .18s var(--ease), background-color .18s var(--ease); }
+.byyy-cursor::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--accent); }
+.byyy-cursor.is-visible { opacity: 1; }
+.byyy-cursor.is-hover { width: 34px; height: 34px; margin: -17px 0 0 -17px; background: rgba(55, 255, 0, .08); }
+@media (pointer: coarse) { .byyy-cursor { display: none; } }
+@media (prefers-reduced-motion: reduce) { .byyy-cursor { display: none; } }
