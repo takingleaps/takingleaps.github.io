@@ -58,16 +58,30 @@
     onScroll();
 
     var tinted = Array.prototype.slice.call(document.querySelectorAll('[data-nav-tint]'));
-    if (!tinted.length || !('IntersectionObserver' in window)) return;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var light = root.getAttribute('data-theme') === 'light';
-        var tint = entry.target.getAttribute(light ? 'data-nav-tint-light' : 'data-nav-tint') || entry.target.getAttribute('data-nav-tint');
-        if (/^\d{1,3},\s*\d{1,3},\s*\d{1,3}$/.test(tint)) nav.style.setProperty('--nav-tint', tint);
-      });
-    }, { rootMargin: '-60px 0px -85% 0px' });
-    tinted.forEach(function (el) { io.observe(el); });
+    if (!tinted.length) return;
+    var current = '';
+    function pickTint() {
+      var probe = nav.getBoundingClientRect().bottom + 12;
+      var light = root.getAttribute('data-theme') === 'light';
+      for (var i = tinted.length - 1; i >= 0; i--) {
+        var r = tinted[i].getBoundingClientRect();
+        if (r.top <= probe && r.bottom > probe) {
+          var tint = tinted[i].getAttribute(light ? 'data-nav-tint-light' : 'data-nav-tint') || tinted[i].getAttribute('data-nav-tint');
+          if (tint !== current && /^\d{1,3},\s*\d{1,3},\s*\d{1,3}$/.test(tint)) { current = tint; nav.style.setProperty('--nav-tint', tint); }
+          return;
+        }
+      }
+    }
+    var queued = false;
+    function onMove() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () { queued = false; pickTint(); });
+    }
+    window.addEventListener('scroll', onMove, { passive: true });
+    window.addEventListener('resize', onMove, { passive: true });
+    document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-theme-toggle]')) { current = ''; setTimeout(pickTint, 0); } });
+    pickTint();
   }
 
   function start() { flowLines(); adaptiveNav(); }

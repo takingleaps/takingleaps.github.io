@@ -106,6 +106,7 @@ h3 { text-shadow: 0 0 18px rgba(55, 255, 0, .12); }
 .packages-note { margin: 18px 0 0; color: var(--dim); font-size: 13px; }
 
 /* ---------- even, tight spacing ---------- */
+.section { padding: calc(var(--section) * .62) 0; }
 .section-heading { margin-bottom: 30px; }
 .work-section .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .flwrpwr-concepts { gap: 16px; }
