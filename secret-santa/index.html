@@ -148,20 +148,34 @@
   .card{animation:cardIn .4s steps(4) backwards}
   .topbar{display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; max-width:680px; margin:0 auto 14px; padding:8px 12px; background:#141b3d; border:4px solid #000; box-shadow:8px 8px 0 #000; color:#dfe6ff; position:relative; z-index:2}
   .topbar #auth-status{margin:0; font-size:18px; color:#dfe6ff; flex:1 1 200px}
-  .topbar #auth-form:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; flex:2 1 320px}
-  .topbar #auth-form label{display:none}
-  .topbar #auth-form input{width:auto; flex:1 1 130px; min-width:130px; max-width:210px; min-height:42px; font-size:19px; padding:8px 10px; margin:0}
-  .topbar #auth-form button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
-  .topbar #auth-password-row:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
-  .topbar #auth-code-row:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
-  .topbar #auth-code-row input{flex:1 1 120px}
   .topbar #auth-set-password:not(.hidden){display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px}
   .topbar #auth-set-password label{display:none}
   .topbar #auth-set-password input{flex:1 1 130px; min-width:130px; max-width:210px; min-height:42px; font-size:19px; padding:8px 10px; margin:0}
   .topbar #auth-set-password button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
   .topbar #auth-change-password, .topbar #auth-signout-button{width:auto; margin:0; min-height:42px; padding:8px 12px; font-size:10px}
   .topbar .link-button{color:#ffd700; margin:0; padding:8px 4px}
-  .topbar #auth-message{margin:0; font-size:16px; color:#dfe6ff; flex-basis:100%}
+  .topbar #auth-top-message{margin:0; font-size:16px; color:#dfe6ff; flex-basis:100%}
+  /* ---- login card (logged-out view): same pixel-card look as the rest of the app ---- */
+  .auth-card{
+    background:var(--card); border:4px solid #000; box-shadow:8px 8px 0 #000;
+    padding:20px 16px; margin:0 0 22px; position:relative;
+    animation:cardIn .4s steps(4) backwards;
+  }
+  .auth-card::before{
+    content:""; position:absolute; left:-4px; top:-4px; width:28px; height:8px;
+    background:var(--gold); border:4px solid #000; border-left:0; border-top:0;
+  }
+  .auth-card .auth-gift{display:flex; justify-content:center; margin:2px 0 8px}
+  .auth-card .auth-gift svg{width:56px; height:56px; image-rendering:pixelated; shape-rendering:crispEdges}
+  .auth-card .level, .auth-card h2, .auth-card .auth-tag{text-align:center}
+  .auth-card .auth-tag{color:var(--muted)}
+  .auth-card #auth-message{margin:0}
+  .auth-card #auth-message:not(:empty){margin-top:14px}
+  .auth-divider{display:flex; align-items:center; gap:10px; margin:20px 0 4px; font-family:"Press Start 2P", monospace; font-size:10px; color:var(--muted); text-transform:uppercase}
+  .auth-divider::before, .auth-divider::after{content:""; flex:1; border-top:3px solid #000}
+  .auth-links{display:flex; flex-wrap:wrap; gap:2px 20px; justify-content:space-between}
+  .auth-steps{color:var(--muted)}
+  @media (min-width:900px){.auth-card{margin-bottom:0}}
   @keyframes cardIn{from{transform:translateY(12px)}to{transform:translateY(0)}}
   .gift-thumb{transition:transform .2s steps(3)}
   .gift-thumb:hover{transform:scale(1.15) rotate(-3deg)}
@@ -328,24 +342,6 @@
 <canvas id="snow-canvas" aria-hidden="true"></canvas>
 <div class="topbar" id="auth-topbar">
     <p id="auth-status" class="small">Log in with your email to vote, reveal, and edit your gift list.</p>
-    <div id="auth-form">
-      <label for="auth-email">Email</label>
-      <input id="auth-email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" />
-      <button id="auth-send-button" class="hidden" type="button">Email me a code</button>
-      <div id="auth-code-row" class="hidden">
-        <label for="auth-code">8-digit code</label>
-        <input id="auth-code" type="text" inputmode="numeric" maxlength="8" autocomplete="one-time-code" placeholder="12345678" />
-        <button id="auth-verify-button" type="button">Verify code</button>
-      </div>
-      <div id="auth-password-row">
-        <label for="auth-password">Password</label>
-        <input id="auth-password" type="password" maxlength="72" autocomplete="current-password" placeholder="Your password" />
-        <button id="auth-password-button" type="button">Log in with password</button>
-        <button id="auth-signup-button" class="link-button" type="button">New here? Create an account</button>
-        <button id="auth-forgot-button" class="link-button" type="button">Forgot password?</button>
-      </div>
-      <button id="auth-mode-button" class="secondary" type="button">Use an email code instead</button>
-    </div>
     <div id="auth-set-password" class="hidden">
       <label for="auth-new-password">Set a password for next time</label>
       <input id="auth-new-password" type="password" maxlength="72" autocomplete="new-password" placeholder="New password" />
@@ -353,7 +349,7 @@
     </div>
     <button id="auth-change-password" class="link-button hidden" type="button">Set or change password</button>
     <button id="auth-signout-button" class="secondary hidden" type="button">Log out</button>
-    <p id="auth-message" aria-live="polite"></p>
+    <p id="auth-top-message" aria-live="polite"></p>
 </div>
 <main>
   <section class="hero">
@@ -428,7 +424,41 @@
     </svg>
   </section>
 
-
+  <section class="auth-card" id="auth-form" aria-labelledby="auth-heading">
+    <div class="auth-gift" aria-hidden="true">
+      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <rect x="16" y="2" width="7" height="9" fill="#f8d800"/><rect x="25" y="2" width="7" height="9" fill="#f8d800"/>
+        <rect x="19" y="6" width="10" height="6" fill="#c8a800"/>
+        <rect x="5" y="11" width="38" height="9" fill="#e83800"/>
+        <rect x="21" y="11" width="6" height="9" fill="#f8d800"/>
+        <rect x="8" y="20" width="32" height="22" fill="#e83800"/>
+        <rect x="8" y="20" width="32" height="5" fill="#a81e00"/>
+        <rect x="21" y="20" width="6" height="22" fill="#f8d800"/>
+        <rect x="8" y="20" width="32" height="22" fill="none" stroke="#000" stroke-width="2"/>
+      </svg>
+    </div>
+    <p class="level">Ollie Molly's House · Dec 20</p>
+    <h2 id="auth-heading">Log in</h2>
+    <p class="auth-tag">Vote on the budget, reveal who you got, and edit your gift list.</p>
+    <label for="auth-email">Email</label>
+    <input id="auth-email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" />
+    <div id="auth-password-row">
+      <label for="auth-password">Password</label>
+      <input id="auth-password" type="password" maxlength="72" autocomplete="current-password" placeholder="Your password" />
+      <button id="auth-password-button" type="button">Log in with password</button>
+      <div class="auth-links">
+        <button id="auth-signup-button" class="link-button" type="button">New here? Create an account</button>
+        <button id="auth-forgot-button" class="link-button" type="button">Forgot password?</button>
+      </div>
+    </div>
+    <div id="auth-link-row" class="hidden">
+      <p class="auth-steps">No password? No problem. We will email you a sign-in link. Tap it and you are in. The link works for 1 hour.</p>
+      <button id="auth-send-button" class="green" type="button">Email me a sign-in link</button>
+    </div>
+    <div class="auth-divider"><span>or</span></div>
+    <button id="auth-mode-button" class="secondary" type="button">Email me a sign-in link instead</button>
+    <p id="auth-message" aria-live="polite"></p>
+  </section>
 
   <section class="card" aria-labelledby="groups-heading">
     <h2 id="groups-heading">Groups</h2>
@@ -812,7 +842,7 @@
     if (window.location.hash.indexOf("type=recovery") !== -1) {
       document.getElementById("auth-set-password").classList.remove("hidden");
       document.getElementById("auth-change-password").classList.add("hidden");
-      setMessage("auth-message", "Set your new password below.");
+      setMessage("auth-top-message", "Set your new password below.");
       if (window.history && window.history.replaceState) window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
     renderAll();
@@ -827,33 +857,16 @@
     if (state.myEmail && state.myName) refreshSearchRemaining();
   }
 
-  async function sendAuthCode() {
+  async function sendMagicLink() {
     var email = document.getElementById("auth-email").value.trim().toLowerCase();
     if (!email || email.indexOf("@") === -1) { setMessage("auth-message", "Type your email first.", true); return; }
     if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
     try {
       var res = await supa.auth.signInWithOtp({ email: email, options: { emailRedirectTo: "https://byyystudio.me/secret-santa/" } });
       if (res.error) throw res.error;
-      document.getElementById("auth-code-row").classList.remove("hidden");
-      setMessage("auth-message", "Code sent to " + email + ". It is 8 digits and works for 1 hour. You can also tap the link in the same email.");
+      setMessage("auth-message", "Sign-in link sent to " + email + ". Tap the link in your email to log in. It works for 1 hour.");
     } catch (err) {
-      setMessage("auth-message", (err && err.message) || "Could not send the code.", true);
-    }
-  }
-
-  async function verifyAuthCode() {
-    var email = document.getElementById("auth-email").value.trim().toLowerCase();
-    var token = document.getElementById("auth-code").value.trim();
-    if (token.length !== 8) { setMessage("auth-message", "The code is 8 digits.", true); return; }
-    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
-    try {
-      var res = await supa.auth.verifyOtp({ email: email, token: token, type: "email" });
-      if (res.error) throw res.error;
-      document.getElementById("auth-code").value = "";
-      setMessage("auth-message", "");
-      await refreshAuth();
-    } catch (err) {
-      setMessage("auth-message", (err && err.message) || "That code did not work.", true);
+      setMessage("auth-message", (err && err.message) || "Could not send that link.", true);
     }
   }
 
@@ -861,11 +874,10 @@
 
   function setAuthMode(mode) {
     authMode = mode;
-    var code = mode === "code";
-    document.getElementById("auth-send-button").classList.toggle("hidden", !code);
-    document.getElementById("auth-code-row").classList.add("hidden");
-    document.getElementById("auth-password-row").classList.toggle("hidden", code);
-    document.getElementById("auth-mode-button").textContent = code ? "Use a password instead" : "Use an email code instead";
+    var link = mode === "link";
+    document.getElementById("auth-link-row").classList.toggle("hidden", !link);
+    document.getElementById("auth-password-row").classList.toggle("hidden", link);
+    document.getElementById("auth-mode-button").textContent = link ? "Use a password instead" : "Email me a sign-in link instead";
     setMessage("auth-message", "");
   }
 
@@ -916,17 +928,17 @@
 
   async function setPassword() {
     var password = document.getElementById("auth-new-password").value;
-    if (password.length < 6) { setMessage("auth-message", "Pick a password with at least 6 characters.", true); return; }
-    if (!supa) { setMessage("auth-message", "Login is not available right now. Try reloading the page.", true); return; }
+    if (password.length < 6) { setMessage("auth-top-message", "Pick a password with at least 6 characters.", true); return; }
+    if (!supa) { setMessage("auth-top-message", "Login is not available right now. Try reloading the page.", true); return; }
     try {
       var res = await supa.auth.updateUser({ password: password });
       if (res.error) throw res.error;
       document.getElementById("auth-new-password").value = "";
       document.getElementById("auth-set-password").classList.add("hidden");
       document.getElementById("auth-change-password").classList.remove("hidden");
-      setMessage("auth-message", "Password saved — next time log in with your password.");
+      setMessage("auth-top-message", "Password saved. Next time log in with your password.");
     } catch (err) {
-      setMessage("auth-message", (err && err.message) || "Could not save that password.", true);
+      setMessage("auth-top-message", (err && err.message) || "Could not save that password.", true);
     }
   }
 
@@ -934,10 +946,11 @@
     if (supa) await supa.auth.signOut();
     state.myEmail = null;
     state.myName = null;
-    document.getElementById("auth-code-row").classList.add("hidden");
+    setAuthMode("password");
     document.getElementById("auth-password").value = "";
     document.getElementById("auth-new-password").value = "";
     setMessage("auth-message", "");
+    setMessage("auth-top-message", "");
     renderAuth();
     renderAll();
   }
@@ -2212,7 +2225,8 @@
   document.getElementById("start-button").addEventListener("click", function () {
     var target = state.myEmail ? "join-heading" : "auth-heading";
     openCard(target);
-    document.getElementById(target).scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    var targetEl = document.getElementById(target);
+    if (targetEl) targetEl.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     if (state.myEmail) document.getElementById("name-input").focus({ preventScroll: true });
     else document.getElementById("auth-email").focus({ preventScroll: true });
   });
@@ -2254,11 +2268,12 @@
     document.getElementById("buying-toggle-button").textContent = view.classList.contains("hidden") ? "Show all gift lists" : "Hide all gift lists";
     renderBuyingView();
   });
-  document.getElementById("auth-send-button").addEventListener("click", sendAuthCode);
-  document.getElementById("auth-verify-button").addEventListener("click", verifyAuthCode);
+  document.getElementById("auth-send-button").addEventListener("click", sendMagicLink);
   document.getElementById("auth-signout-button").addEventListener("click", signOutAuth);
-  document.getElementById("auth-mode-button").addEventListener("click", function () { setAuthMode(authMode === "code" ? "password" : "code"); });
+  document.getElementById("auth-mode-button").addEventListener("click", function () { setAuthMode(authMode === "link" ? "password" : "link"); });
   document.getElementById("auth-password-button").addEventListener("click", signInWithPassword);
+  document.getElementById("auth-email").addEventListener("keydown", function (e) { if (e.key === "Enter") { if (authMode === "link") sendMagicLink(); else document.getElementById("auth-password").focus(); } });
+  document.getElementById("auth-password").addEventListener("keydown", function (e) { if (e.key === "Enter") signInWithPassword(); });
   document.getElementById("auth-signup-button").addEventListener("click", signUpWithPassword);
   document.getElementById("auth-forgot-button").addEventListener("click", sendPasswordReset);
   document.getElementById("auth-set-password-button").addEventListener("click", setPassword);
@@ -2267,7 +2282,6 @@
     document.getElementById("auth-change-password").classList.add("hidden");
     document.getElementById("auth-new-password").focus();
   });
-  document.getElementById("auth-code").addEventListener("keydown", function (e) { if (e.key === "Enter") verifyAuthCode(); });
   document.addEventListener("error", function (e) {
     if (e.target && e.target.classList && e.target.classList.contains("gift-thumb")) e.target.style.display = "none";
   }, true);
